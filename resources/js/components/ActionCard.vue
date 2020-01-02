@@ -28,7 +28,7 @@ i.icon {
 }
 
 .action-button-card {
-  height: 180px;
+  height: 170px;
   background: #FFFFFF;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   border-radius: 2px;
