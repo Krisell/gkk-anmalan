@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +19,7 @@ Route::get('/', function () {
 
 Route::get('/admin', function () {
     return view('admin');
-})->middleware('auth');
+})->middleware(['auth', AdminMiddleware::class]);
 
 Auth::routes();
 

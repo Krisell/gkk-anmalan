@@ -3,7 +3,7 @@
     <action-card description="Tävlingsanmälan för GKK-aktiv" icon="trophy"></action-card>
     <action-card description="Funktionärsanmälan för GKK-aktiva" icon="users"></action-card>
     <action-card description="Intresseanmälan från andra föreningar att tävla med GKK" icon="lightbulb-o"></action-card>
-    <action-card @click="admin" description="Admin" icon="lock"></action-card>
+    <action-card @click="admin" description="Admin (endast administratörer)" icon="lock"></action-card>
   </div>
 </template>
 
