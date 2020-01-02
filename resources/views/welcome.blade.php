@@ -81,12 +81,12 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    GKK – Anmälan
+                    GKK
                 </div>
 
                 <div class="links">
                     <a href="#">Tävlingsanmälan för GKK-aktiv</a>
-                    <a href="#">Funktionärsanmälan för GKK-area</a>
+                    <a href="#">Funktionärsanmälan för GKK-aktiva</a>
                     <a href="#">Intresseanmälan från andra föreningar att tävla med GKK</a>
                 </div>
             </div>
