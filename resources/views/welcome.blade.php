@@ -1,95 +1,43 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-        <title>GKK – Anmälan</title>
+@section('css')
+<style>
+.actions {
+    display: flex;
+    margin: 30px;
+    flex-direction: row;
+}
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+.actions div {
+    margin: 10px;
+}
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
+@media (max-width: 1100px) {
+  .actions {
+    flex-direction: column;
+  }
+}
 
-            .full-height {
-                height: 100vh;
-            }
+</style>
+@endsection
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Start</a>
-                    @else
-                        <a href="{{ route('login') }}">Logga in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Skapa konto</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    GKK
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div style="text-align: center;">
+                <div>
+                    <img style="height: 300px;" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png">
                 </div>
 
-                <div class="links">
-                    <a href="#">Tävlingsanmälan för GKK-aktiv</a>
-                    <a href="#">Funktionärsanmälan för GKK-aktiva</a>
-                    <a href="#">Intresseanmälan från andra föreningar att tävla med GKK</a>
+                <div class="links actions">
+                    <action-card description="Tävlingsanmälan för GKK-aktiv" icon="trophy"></action-card>
+                    <action-card description="Funktionärsanmälan för GKK-aktiva" icon="users"></action-card>
+                    <action-card description="Intresseanmälan från andra föreningar att tävla med GKK" icon="lightbulb-o"></action-card>
+                    <action-card description="Admin" icon="lock"></action-card>
                 </div>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+</div>
+@endsection
