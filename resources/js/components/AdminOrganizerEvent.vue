@@ -16,7 +16,7 @@
           <tr v-for="registration in event.registrations" :key="registration.id" style="cursor: pointer;">
             <td>{{ registration.name }}</td>
             <td>{{ registration.created_at }}</td>
-            <td>{{ event.comment }}</td>
+            <td>{{ registration.comment }}</td>
           </tr>
         </tbody>
       </table>
