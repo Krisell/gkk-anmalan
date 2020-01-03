@@ -87,7 +87,7 @@
     background: orange;
     color: white;
     padding: 5px;">
-            Testläge aktiverat. All testdata kommer att raderas.
+            Testläge aktiverat. Testdata (inkl. konton) kan raderas när som helst.
             <br>
             Alla användare har admin-access. Välkommen att testa fritt.
         </div>

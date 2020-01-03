@@ -16,4 +16,8 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 Route::get('/admin', 'AdminController@index')->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class]);
 
+Route::get('/admin/organizer-events/{event}', 'OrganizerEventController@admin')->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class]);
+Route::get('organizer-events', 'OrganizerEventController@index');
+Route::get('organizer-events/{event}', 'OrganizerEventController@show');
+Route::post('organizer-events/{event}/registrations', 'OrganizerEventRegistrationController@store');
 Route::post('organizer-events', 'OrganizerEventController@store')->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class]);

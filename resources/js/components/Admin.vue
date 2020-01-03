@@ -2,11 +2,30 @@
   <div>
     <h1 style="text-align: center;">Admin</h1>
 
-    <div style="margin: 10px;">
+    <div class="type">
       <h3>Funktionärsanmälningar</h3>
-      <div v-for="event in organizerEvents" :key="event.id">
-        {{ event.name }}
-      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Event</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Tid</th>
+            <th scope="col">Plats</th>
+            <th scope="col">Antal anmälda</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="event in organizerEvents" :key="event.id" @click="administrateOrganizerEvent(event)" style="cursor: pointer;">
+            <td>{{ event.name }}</td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.time }}</td>
+            <td>{{ event.location }}</td>
+            <td>3</td>
+            <th scope="row"><i class="fa fa-th-list"></i></th>
+          </tr>
+        </tbody>
+      </table>
 
       <button @click="showNewOrganizationEvent = !showNewOrganizationEvent" type="button" class="btn btn-primary">
         <i class="fa fa-plus"></i>&nbsp;Nytt event för funktionärsanmälningar
@@ -35,7 +54,7 @@
       </form>
     </div>
 
-    <div style="margin: 10px;">
+    <div class="type">
       <h3>Tävlingsanmälningar</h3>
 
       <!-- <div v-for="event in organizerEvents" :key="event.id">
@@ -47,7 +66,7 @@
       </button>
     </div>
 
-    <div style="margin: 10px;">
+    <div class="type">
       <h3>Intresseanmälningar</h3>
 <!--
       <div v-for="event in organizerEvents" :key="event.id">
@@ -76,9 +95,9 @@ export default {
         description: '',
       },
     }
-},
-methods: {
-  createEvent () {
+  },
+  methods: {
+    createEvent () {
       this.newOrganizationEventError = false
 
       window.axios({
@@ -90,11 +109,16 @@ methods: {
       }).catch(err => {
         this.newOrganizationEventError = true
       })
+    },
+    administrateOrganizerEvent (event) {
+      window.location = `/admin/organizer-events/${event.id}`
     }
   }
 }
 </script>
 
 <style scoped lang="less">
-
+  .type {
+    margin-bottom: 40px;
+  }
 </style>

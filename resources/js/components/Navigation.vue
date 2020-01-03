@@ -1,9 +1,9 @@
 <template>
   <div class="actions">
-    <action-card description="Tävlingsanmälan för GKK-aktiv" icon="trophy"></action-card>
-    <action-card description="Funktionärsanmälan för GKK-aktiva" icon="users"></action-card>
-    <action-card description="Intresseanmälan från andra föreningar att tävla med GKK" icon="lightbulb-o"></action-card>
-    <action-card @click="admin" description="Admin (endast administratörer)" icon="lock"></action-card>
+    <gkk-action-card description="Tävlingsanmälan för GKK-aktiv" icon="trophy"></gkk-action-card>
+    <gkk-action-card @click="organizer" description="Funktionärsanmälan för GKK-aktiva" icon="users"></gkk-action-card>
+    <gkk-action-card description="Intresseanmälan från andra föreningar att tävla med GKK" icon="lightbulb-o"></gkk-action-card>
+    <gkk-action-card @click="admin" description="Admin (endast administratörer)" icon="lock"></gkk-action-card>
   </div>
 </template>
 
@@ -11,9 +11,11 @@
 export default {
   methods: {
     admin () {
-      console.log("ADMIN")
       window.location = '/admin'
-    }
+    },
+    organizer () {
+      window.location = '/organizer-events'
+    },
   }
 }
 </script>
