@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Middleware\AdminMiddleware;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,14 +11,9 @@ use App\Http\Middleware\AdminMiddleware;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/admin', function () {
-    return view('admin');
-})->middleware(['auth', AdminMiddleware::class]);
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index');
+Route::get('/admin', 'AdminController@index')->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class]);
+
+Route::post('organizer-events', 'OrganizerEventController@store')->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class]);

@@ -9,7 +9,7 @@
                     <img style="height: 200px;" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png">
                 </div>
 
-                <navigation></navigation>
+                <gkk-navigation></gkk-navigation>
             </div>
         </div>
     </div>

@@ -4,9 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div style="text-align: center;">
-                <h1>Admin</h1>
-            </div>
+            <gkk-admin :organizer-events='@json($organizerEvents)'></gkk-admin>
         </div>
     </div>
 </div>
