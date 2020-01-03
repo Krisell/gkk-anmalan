@@ -79,6 +79,18 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <div style="position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background: orange;
+    color: white;
+    padding: 5px;">
+            Testläge aktiverat. All testdata kommer att raderas.
+            <br>
+            Alla användare har admin-access. Välkommen att testa fritt.
+        </div>
     </div>
 </body>
 </html>
