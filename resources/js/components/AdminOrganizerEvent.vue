@@ -9,6 +9,7 @@
           <tr>
             <th scope="col">Namn</th>
             <th scope="col">Datum</th>
+            <th scope="col">Kan hjälpa till</th>
             <th scope="col">Kommentar</th>
           </tr>
         </thead>
@@ -16,6 +17,7 @@
           <tr v-for="registration in event.registrations" :key="registration.id" style="cursor: pointer;">
             <td>{{ registration.name }}</td>
             <td>{{ registration.created_at }}</td>
+            <td>{{ registration.status == 1 ? 'Ja' : 'Nej' }}</td>
             <td>{{ registration.comment }}</td>
           </tr>
         </tbody>
