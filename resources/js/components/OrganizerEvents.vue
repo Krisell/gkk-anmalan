@@ -3,7 +3,7 @@
     <h1 style="text-align: center;">Funktionärsanmälan</h1>
 
     <div class="type">
-      <gkk-action-card @click="choose(event)" v-for="event in events" :description="event.name" icon="users" :key="event.id"></gkk-action-card>
+      <gkk-action-card style="min-width: 180px; margin-bottom: 10px;" @click="choose(event)" v-for="event in events" :description="event.name" icon="users" :key="event.id"></gkk-action-card>
     </div>
   </div>
 </template>
@@ -22,5 +22,7 @@ export default {
 <style scoped lang="less">
   .type {
     margin-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
   }
 </style>
