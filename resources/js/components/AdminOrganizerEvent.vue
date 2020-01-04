@@ -18,7 +18,7 @@
             <td>{{ registration.name }}</td>
             <td>{{ registration.created_at }}</td>
             <td>{{ registration.status == 1 ? 'Ja' : 'Nej' }}</td>
-            <td>{{ registration.comment }}</td>
+            <td style="max-width: 200px;">{{ registration.comment }}</td>
           </tr>
         </tbody>
       </table>
