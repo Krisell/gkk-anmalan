@@ -10,7 +10,7 @@ class AdminController extends Controller
     public function index()
     {
         return view('admin', [
-            'organizerEvents' => OrganizerEvent::all()
+            'organizerEvents' => OrganizerEvent::with('registrations')->get()
         ]);
     }
 }

@@ -21,7 +21,7 @@
             <td>{{ event.date }}</td>
             <td>{{ event.time }}</td>
             <td>{{ event.location }}</td>
-            <td>3</td>
+            <td>{{ event.registrations.length }}</td>
             <th scope="row"><i class="fa fa-th-list"></i></th>
           </tr>
         </tbody>
