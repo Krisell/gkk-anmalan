@@ -64,6 +64,8 @@ i.icon {
     border: 1px solid #d84a38;
     color: #d84a38;
   }
+
+  border-top: 3px solid #243868;
 }
 
  .action-button-card .description {
