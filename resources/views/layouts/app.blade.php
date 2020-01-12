@@ -22,7 +22,7 @@
 @yield('content')
 </main>
 
-<gkk-testbar></gkk-testbar>
+<!-- <gkk-testbar></gkk-testbar> -->
 </div>
 </body>
 </html>
