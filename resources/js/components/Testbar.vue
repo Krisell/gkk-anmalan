@@ -1,9 +1,13 @@
 <template>
   <div v-show="show">
-    Testläge aktiverat. Testdata (inkl. konton) kan raderas när som helst.
+    Testläge aktiverat.
     <br>
-    Alla användare har admin-access. Välkommen att testa fritt.
-    <i class="fa fa-close close-button" @click="show = false"></i>
+    All data kan raderas när som helst.
+    <br>
+    Alla användare har admin-access.
+    <br>
+    Välkommen att testa fritt.
+    <i class="fa fa-close close-button" @click="hide"></i>
   </div>
 </template>
 
@@ -14,6 +18,17 @@ export default {
       show: true,
     }
   },
+  mounted () {
+    if (window.sessionStorage.getItem('hide-test-bar') === 'true') {
+      this.show = false
+    }
+  },
+  methods: {
+    hide () {
+      window.sessionStorage.setItem('hide-test-bar', 'true')
+      this.show = false
+    }
+  }
 }
 </script>
 
@@ -30,9 +45,9 @@ export default {
 
   .close-button {
     position: absolute;
-    right: 10px;
-    top: 10px;
-    font-size: 30px;
     cursor: pointer;
+    right: 3px;
+    top: 0px;
+    font-size: 40px;
   }
 </style>
