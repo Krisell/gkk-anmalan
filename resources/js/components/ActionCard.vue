@@ -19,6 +19,7 @@ export default {
 <style scoped lang="less">
 .icon {
   min-height: 50px;
+  color: #19274a;
 }
 
 i.icon {

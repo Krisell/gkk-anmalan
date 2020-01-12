@@ -54,12 +54,8 @@
       </form>
     </div>
 
-    <div class="type">
+    <!-- <div class="type">
       <h3>Tävlingsanmälningar</h3>
-
-      <!-- <div v-for="event in organizerEvents" :key="event.id">
-        {{ event }}
-      </div> -->
 
       <button @click="showNewOrganizationEvent = !showNewOrganizationEvent" type="button" class="btn btn-primary">
         <i class="fa fa-plus"></i>&nbsp;Nytt event för tävlingsanmälan
@@ -68,15 +64,11 @@
 
     <div class="type">
       <h3>Intresseanmälningar</h3>
-<!--
-      <div v-for="event in organizerEvents" :key="event.id">
-        {{ event }}
-      </div> -->
 
       <button @click="showNewOrganizationEvent = !showNewOrganizationEvent" type="button" class="btn btn-primary">
         <i class="fa fa-plus"></i>&nbsp;Nytt event för intresseanmälningar (??)
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div style="max-width: 600px; margin: auto;">
     <h1>Funktionärsanmälan</h1>
 
     <div class="type" v-if="events.length">
-      <gkk-action-card style="min-width: 180px; margin-bottom: 10px;" @click="choose(event)" v-for="event in events" :description="event.name" icon="users" :key="event.id"></gkk-action-card>
+      <gkk-action-card style="min-height: 180px; margin-bottom: 10px;" @click="choose(event)" v-for="event in events" :description="event.name" icon="users" :key="event.id"></gkk-action-card>
     </div>
 
     <div v-else>
@@ -29,6 +29,7 @@ export default {
   .type {
     margin-bottom: 40px;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    // flex-wrap: wrap;
   }
 </style>
