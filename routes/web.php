@@ -18,6 +18,6 @@ Route::get('/admin', 'AdminController@index')->middleware(['auth', \App\Http\Mid
 
 Route::get('/admin/organizer-events/{event}', 'OrganizerEventController@admin')->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class]);
 Route::get('organizer-events', 'OrganizerEventController@index');
-Route::get('organizer-events/{event}', 'OrganizerEventController@show');
+Route::get('organizer-events/{event}', 'OrganizerEventController@show')->middleware(['auth']);
 Route::post('organizer-events/{event}/registrations', 'OrganizerEventRegistrationController@store');
 Route::post('organizer-events', 'OrganizerEventController@store')->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class]);

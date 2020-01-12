@@ -18,6 +18,8 @@ class OrganizerEventController extends Controller
     {
         return view('organizer-event', [
             'event' => $event,
+            'user' => auth()->user(),
+            'registration' => auth()->user()->organizerRegistrations()->whereOrganizerEventId($event->id)->first(),
         ]);
     }
 
@@ -37,7 +39,7 @@ class OrganizerEventController extends Controller
     public function admin(OrganizerEvent $event)
     {
         return view('admin-organizer-event', [
-            'event' => $event->load('registrations'),
+            'event' => $event->load('registrations.user'),
         ]);
     }
 }

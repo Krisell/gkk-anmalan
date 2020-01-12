@@ -1,10 +1,16 @@
 <template>
   <div>
-    <h1 style="text-align: center;">Funktionärsanmälan</h1>
+    <h1>Funktionärsanmälan</h1>
 
-    <div class="type">
+    <div class="type" v-if="events.length">
       <gkk-action-card style="min-width: 180px; margin-bottom: 10px;" @click="choose(event)" v-for="event in events" :description="event.name" icon="users" :key="event.id"></gkk-action-card>
     </div>
+
+    <div v-else>
+      <h3>Just nu finns inga events att anmäla sig till.</h3>
+    </div>
+
+    <GkkLink to="/" text="Tillbaka till startsidan" />
   </div>
 </template>
 
@@ -14,7 +20,7 @@ export default {
   methods: {
     choose (event) {
       window.location = `/organizer-events/${event.id}`
-    }
+    },
   }
 }
 </script>

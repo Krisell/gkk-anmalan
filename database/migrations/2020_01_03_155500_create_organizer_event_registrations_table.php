@@ -15,11 +15,13 @@ class CreateOrganizerEventRegistrationsTable extends Migration
     {
         Schema::create('organizer_event_registrations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('organizer_event_id');
-            $table->string('name');
+            $table->unsignedBigInteger('organizer_event_id');
+            $table->unsignedBigInteger('user_id');
             $table->integer('status');
             $table->text('comment')->nullable();
             $table->timestamps();
+
+            $table->unique(['user_id', 'organizer_event_id']);
         });
     }
 

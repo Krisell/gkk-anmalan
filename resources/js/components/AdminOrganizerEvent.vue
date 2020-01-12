@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 style="text-align: center;">Administrera funktionärsanmälan</h1>
+    <h1>Administrera funktionärsanmälan</h1>
 
     <div class="type">
       <h3>Anmälningar</h3>
@@ -15,7 +15,7 @@
         </thead>
         <tbody>
           <tr v-for="registration in event.registrations" :key="registration.id" style="cursor: pointer;">
-            <td>{{ registration.name }}</td>
+            <td>{{ registration.user.first_name }} {{ registration.user.last_name }}</td>
             <td>{{ registration.created_at }}</td>
             <td>{{ registration.status == 1 ? 'Ja' : 'Nej' }}</td>
             <td style="max-width: 200px;">{{ registration.comment }}</td>
@@ -23,6 +23,8 @@
         </tbody>
       </table>
     </div>
+
+    <GkkLink to="/admin" text="Tillbaka till adminsidan" />
   </div>
 </template>
 
