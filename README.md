@@ -18,7 +18,7 @@ Administratören skapar tillfället och besökare skapar en `CooperationRegistra
 Detta är inte implementerat ännu.
 
 ## Uppdatera webben
-Efter att önskade ändringar är pushade hit, logga in på servern och kör `git pull` från projektets mapp. Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`. Observera också att index.php har justerats för att hitta rätt, så uppdatera *inte* den. Typiskt är det innehållet i js/ och css/ som behöver kopieras, ifall justeringar har gjorts i frontend. Dessa flyttas automatiskt genom att köra `bash bin/update.sh`.
+Efter att önskade ändringar är pushade hit, logga in på servern och kör kommanot `deployanm` som i sin tur kör `git pull` från projektets mapp samt uppdaterar publika assets. Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt. Observera att index.php har justerats för att hitta rätt, så den ska *inte* uppdateras. För tillfället är det endast innehållet i js/ och css/, samt `mix-manifest.json`, som kopieras.
 
 ## Köra lokalt
 Klona projektet och kopiera innehållet i .env.example till .env. Denna fil ska inte läggas under source-control. Hosta sedan public-mappen på valfritt sätt, ex. genom att köra `php artisan serve`.
