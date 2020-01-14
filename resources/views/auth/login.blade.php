@@ -7,6 +7,12 @@
             <div class="card">
                 <div class="card-header">Logga in</div>
 
+                <div style="margin: 30px; margin-bottom: 10px;">
+                    <gkk-login></gkk-login>
+                </div>
+
+                <hr>
+
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
@@ -55,9 +61,6 @@
                             </div>
                         </div>
                     </form>
-                    <div style="margin-top: 40px;">
-                        <gkk-login></gkk-login>
-                    </div>
                 </div>
             </div>
         </div>
