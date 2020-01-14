@@ -50,6 +50,8 @@
                                         Glömt ditt lösenord?
                                     </a>
                                 @endif
+
+                                <a class="btn btn-link" href="/register">Skapa konto</a>
                             </div>
                         </div>
                     </form>
