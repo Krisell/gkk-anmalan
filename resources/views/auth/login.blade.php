@@ -8,7 +8,7 @@
                 <div class="card-header">Logga in</div>
 
                 <div style="margin: 30px; margin-bottom: 10px;">
-                    <gkk-login></gkk-login>
+                    <gkk-login to="{{ session('url.intended', '') }}"></gkk-login>
                 </div>
 
                 <hr>

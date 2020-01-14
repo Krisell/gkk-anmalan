@@ -13,6 +13,7 @@
 
 <script>
 export default {
+  props: ['to'],
   data () {
     return {
       googleIsLoggingIn: false,
@@ -23,7 +24,7 @@ export default {
       this.googleIsLoggingIn = true
       firebase.auth().languageCode = 'sv'
       firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(result => {
-        window.location = `/auth/google/${result.credential.idToken}`
+        window.location = `/auth/google/${result.credential.idToken}?to=${this.to}`
       })
     },
   }

@@ -17,7 +17,7 @@ class AuthController extends Controller
 
         if ($user) {
             auth()->login($user);
-            return redirect('/');
+            return redirect(request('to', '/'));
         }
 
         dd("NO USER");
