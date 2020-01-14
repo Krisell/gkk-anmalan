@@ -55,6 +55,9 @@
                             </div>
                         </div>
                     </form>
+                    <div style="margin-top: 40px;">
+                        <gkk-login></gkk-login>
+                    </div>
                 </div>
             </div>
         </div>

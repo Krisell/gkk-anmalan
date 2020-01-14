@@ -16,3 +16,7 @@ Route::group(['prefix' => 'events', 'middleware' => 'auth'], function () {
 
   Route::post('{event}/registrations', 'EventRegistrationController@store');
 });
+
+Route::group(['prefix' => 'auth'], function () {
+  Route::get('google/{token}', 'AuthController@google');
+});
