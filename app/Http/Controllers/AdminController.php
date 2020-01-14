@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\OrganizerEvent;
+use App\Event;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin', [
-            'organizerEvents' => OrganizerEvent::with('registrations')->get()
+        return view('admin.admin', [
+            'events' => Event::with('registrations')->get()
         ]);
     }
 }

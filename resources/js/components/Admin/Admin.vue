@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="event in organizerEvents" :key="event.id" @click="administrateOrganizerEvent(event)" style="cursor: pointer;">
+          <tr v-for="event in events" :key="event.id" @click="administrateEvent(event)" style="cursor: pointer;">
             <td>{{ event.name }}</td>
             <td>{{ event.date }}</td>
             <td>{{ event.time }}</td>
@@ -27,11 +27,11 @@
         </tbody>
       </table>
 
-      <button @click="showNewOrganizationEvent = !showNewOrganizationEvent" type="button" class="btn btn-primary">
+      <button @click="showNewEvent = !showNewEvent" type="button" class="btn btn-primary">
         <i class="fa fa-plus"></i>&nbsp;Nytt event för funktionärsanmälningar
       </button>
 
-      <form style="margin-top: 20px;" v-show="showNewOrganizationEvent">
+      <form style="margin-top: 20px;" v-show="showNewEvent">
         <div class="form-group">
           <input v-model="event.name" class="form-control" name="name" placeholder="Namn på event">
         </div>
@@ -48,7 +48,7 @@
           <textarea v-model="event.description" class="form-control" name="description" placeholder="Ev. ytterligare info"></textarea>
         </div>
         <button @click="createEvent" type="button" class="btn btn-primary">Skapa event</button>
-        <div v-if="newOrganizationEventError" style="color: red;">
+        <div v-if="newEventError" style="color: red;">
           Kunde inte skapa event, kontrollera inmatning och anlutning.
         </div>
       </form>
@@ -57,7 +57,7 @@
     <!-- <div class="type">
       <h3>Tävlingsanmälningar</h3>
 
-      <button @click="showNewOrganizationEvent = !showNewOrganizationEvent" type="button" class="btn btn-primary">
+      <button @click="showNewEvent = !showNewEvent" type="button" class="btn btn-primary">
         <i class="fa fa-plus"></i>&nbsp;Nytt event för tävlingsanmälan
       </button>
     </div>
@@ -65,7 +65,7 @@
     <div class="type">
       <h3>Intresseanmälningar</h3>
 
-      <button @click="showNewOrganizationEvent = !showNewOrganizationEvent" type="button" class="btn btn-primary">
+      <button @click="showNewEvent = !showNewEvent" type="button" class="btn btn-primary">
         <i class="fa fa-plus"></i>&nbsp;Nytt event för intresseanmälningar (??)
       </button>
     </div> -->
@@ -74,11 +74,11 @@
 
 <script>
 export default {
-  props: ['organizer-events'],
+  props: ['events'],
   data () {
     return {
-      showNewOrganizationEvent: false,
-      newOrganizationEventError: false,
+      showNewEvent: false,
+      newEventError: false,
       event: {
         name: '',
         date: '',
@@ -90,20 +90,20 @@ export default {
   },
   methods: {
     createEvent () {
-      this.newOrganizationEventError = false
+      this.newEventError = false
 
       window.axios({
         method: 'post',
-        url: '/organizer-events',
+        url: '/admin/events',
         data: this.event
       }).then(response => {
         window.location.reload()
       }).catch(err => {
-        this.newOrganizationEventError = true
+        this.newEventError = true
       })
     },
-    administrateOrganizerEvent (event) {
-      window.location = `/admin/organizer-events/${event.id}`
+    administrateEvent (event) {
+      window.location = `/admin/events/${event.id}`
     }
   }
 }

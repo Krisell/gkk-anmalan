@@ -10,16 +10,17 @@ window.Vue = require('vue')
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-const files = require.context('./', true, /\.vue$/i)
+let files = require.context('./components', false, /\.vue$/i)
 files.keys().map(key => {
     console.log('registering', 'Gkk' + key.split('/').pop().split('.')[0])
     Vue.component('Gkk' + key.split('/').pop().split('.')[0], files(key).default)
 })
 
-// Vue.component('gkk-admin', require('./components/Admin.vue').default)
-// Vue.component('gkk-admin-organizer-event', require('./components/AdminOrganizerEvent.vue').default)
-// Vue.component('gkk-navigation', require('./components/Navigation.vue').default)
-// Vue.component('action-card', require('./components/ActionCard.vue').default)
+files = require.context('./components/admin', false, /\.vue$/i)
+files.keys().map(key => {
+    console.log('registering', 'Gkk' + key.split('/').pop().split('.')[0])
+    Vue.component('GkkAdmin' + key.split('/').pop().split('.')[0], files(key).default)
+})
 
 const app = new Vue({
     el: '#app',

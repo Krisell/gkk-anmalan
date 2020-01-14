@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\OrganizerEvent;
+use App\Event;
 use Illuminate\Http\Request;
 
-class OrganizerEventController extends Controller
+class EventController extends Controller
 {
     public function index()
     {
-        return view('organizer-events', [
-            'events' => OrganizerEvent::all(),
+        return view('events', [
+            'events' => Event::all(),
         ]);
     }
 
-    public function show(OrganizerEvent $event)
+    public function show(Event $event)
     {
-        return view('organizer-event', [
+        return view('event', [
             'event' => $event,
             'user' => auth()->user(),
-            'registration' => auth()->user()->organizerRegistrations()->whereOrganizerEventId($event->id)->first(),
+            'registration' => auth()->user()->eventRegistrations()->whereEventId($event->id)->first(),
         ]);
     }
 
@@ -33,12 +33,12 @@ class OrganizerEventController extends Controller
             'description' => '',
         ]);
 
-        return OrganizerEvent::create($data);
+        return Event::create($data);
     }
 
-    public function admin(OrganizerEvent $event)
+    public function admin(Event $event)
     {
-        return view('admin-organizer-event', [
+        return view('admin.event', [
             'event' => $event->load('registrations.user'),
         ]);
     }

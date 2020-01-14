@@ -5,7 +5,7 @@ namespace App;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
-class OrganizerEventRegistration extends Model
+class EventRegistration extends Model
 {
     protected $guarded = [];
 

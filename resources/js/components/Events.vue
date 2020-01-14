@@ -19,7 +19,7 @@ export default {
   props: ['events'],
   methods: {
     choose (event) {
-      window.location = `/organizer-events/${event.id}`
+      window.location = `/events/${event.id}`
     },
   }
 }

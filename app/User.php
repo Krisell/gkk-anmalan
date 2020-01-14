@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\OrganizerEventRegistration;
+use App\EventRegistration;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -38,8 +38,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function organizerRegistrations()
+    public function eventRegistrations()
     {
-        return $this->hasMany(OrganizerEventRegistration::class);
+        return $this->hasMany(EventRegistration::class);
     }
 }
