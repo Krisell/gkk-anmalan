@@ -18,5 +18,6 @@ Route::group(['prefix' => 'events', 'middleware' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'auth'], function () {
-  Route::get('google/{token}', 'AuthController@google');
+  Route::post('google', 'AuthController@google');
+  Route::post('microsoft', 'AuthController@microsoft');
 });
