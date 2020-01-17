@@ -27,7 +27,7 @@ class AuthController extends Controller
         $data = json_decode($json);
 
         if (! $data) {
-            return "NO RESPONSE";
+            return redirect('/');
         }
 
         $email = $data->mail ?? $data->userPrincipalName;
@@ -44,6 +44,6 @@ class AuthController extends Controller
             return redirect(request('to', '/'));
         }
 
-        return "NO USER";
+        return redirect("/register?email={$email}");
     }
 }

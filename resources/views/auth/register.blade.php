@@ -8,6 +8,13 @@
                 <div class="card-header">Skapa konto</div>
 
                 <div class="card-body">
+
+                @if (request('email'))
+                    <el-message style="margin-bottom: 20px;" info>
+                        Välkommen att skapa ett konto!
+                    </el-message>
+                @endif
+
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
@@ -43,7 +50,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">Epost</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') ?? request('email') }}" required autocomplete="email">
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
