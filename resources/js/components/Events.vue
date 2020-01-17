@@ -3,7 +3,7 @@
     <h1>Funktionärsanmälan</h1>
 
     <div class="type" v-if="events.length">
-      <gkk-action-card style="min-height: 180px; margin-bottom: 10px;" @click="choose(event)" v-for="event in events" :description="event.name" icon="users" :key="event.id"></gkk-action-card>
+      <gkk-event-card style="min-height: 180px; margin-bottom: 10px;" @click="choose(event)" v-for="event in events" :event="event" :registration="registrationFor(event)" :key="event.id"></gkk-event-card>
     </div>
 
     <div v-else>
@@ -16,11 +16,14 @@
 
 <script>
 export default {
-  props: ['events'],
+  props: ['events', 'user-registrations'],
   methods: {
     choose (event) {
       window.location = `/events/${event.id}`
     },
+    registrationFor (event) {
+      return this.userRegistrations.find(registration => Number(registration.event_id) === Number(event.id))
+    }
   }
 }
 </script>

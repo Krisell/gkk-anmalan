@@ -11,6 +11,7 @@ class EventController extends Controller
     {
         return view('events', [
             'events' => Event::all(),
+            'userRegistrations' => auth()->user()->eventRegistrations,
         ]);
     }
 
