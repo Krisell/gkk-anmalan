@@ -4,10 +4,10 @@
       <img style="height: 150px;" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png">
     </div>
     <div class="actions">
-      <gkk-action-card @click="competition" description="Tävlingsanmälan för GKK-aktiv (ej implementerat)" icon="trophy"></gkk-action-card>
-      <gkk-action-card @click="event" description="Funktionärsanmälan för GKK-aktiva" icon="users"></gkk-action-card>
-      <gkk-action-card @click="cooperation" description="Intresseanmälan från andra föreningar att tävla med GKK (ej implementerat)" icon="lightbulb-o"></gkk-action-card>
-      <gkk-action-card @click="admin" description="Admin (endast administratörer)" icon="lock"></gkk-action-card>
+      <gkk-action-card @click="competition" description="Tävlingsanmälan" icon="trophy"></gkk-action-card>
+      <gkk-action-card @click="event" description="Funktionärsanmälan" icon="users"></gkk-action-card>
+      <gkk-action-card @click="cooperation" description="Intresseanmälan" icon="lightbulb-o"></gkk-action-card>
+      <gkk-action-card @click="admin" description='Admin<br><span style="font-size: 10px;">(Endast administratörer)</span>' icon="lock"></gkk-action-card>
     </div>
   </div>
 </template>

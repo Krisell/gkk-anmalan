@@ -4,9 +4,7 @@
       <i v-if="icon" class="icon fa" :class="'fa-' + icon"></i>
       <slot v-else></slot>
     </div>
-    <div class="description">
-      {{ description }}
-    </div>
+    <div class="description" v-html="description"></div>
   </div>
 </template>
 
