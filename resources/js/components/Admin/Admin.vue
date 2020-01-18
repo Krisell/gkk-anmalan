@@ -69,6 +69,8 @@
         <i class="fa fa-plus"></i>&nbsp;Nytt event för intresseanmälningar (??)
       </button>
     </div> -->
+
+    <GkkLink to="/" text="Tillbaka till startsidan" />
   </div>
 </template>
 
