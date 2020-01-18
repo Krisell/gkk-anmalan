@@ -22,3 +22,6 @@ Efter att önskade ändringar är pushade hit, logga in på servern och kör kom
 
 ## Köra lokalt
 Klona projektet och kopiera innehållet i .env.example till .env. Denna fil ska inte läggas under source-control. Hosta sedan public-mappen på valfritt sätt, ex. genom att köra `php artisan serve`.
+
+## Epost
+Just nu används Mailgun för att skicka epost (ex. vid registrering, ifall vi vill göra det). Mailgun är gratis upp till 10 000 epost per månad om jag förstår det rätt, vilket vi aldrig kommer uppnå. API-nycklar för mailgun behöver sättas i .env-filen för att aktiveras (se .env.example).
