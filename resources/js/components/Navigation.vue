@@ -15,7 +15,7 @@
         <h3 style="text-align: center;">Denna funktion är under utveckling</h3>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
         <el-button @click="$modal.hide('not-implemented')">Stäng</el-button>
       </div>
     </modal>

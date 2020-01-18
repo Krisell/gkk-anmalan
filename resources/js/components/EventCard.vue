@@ -11,27 +11,13 @@
 </template>
 
 <script>
-import moment from 'moment'
+import Date from '../modules/Date.js'
 
 export default {
   props: ['event', 'registration'],
   computed: {
     dateString () {
-      if (!this.event.date) {
-        return 'Datum ännu ej bestämt'
-      }
-
-      let day = {
-        1: 'Måndag',
-        2: 'Tisdag',
-        3: 'Onsdag',
-        4: 'Torsdag',
-        5: 'Fredag',
-        6: 'Lördag',
-        7: 'Söndag'
-      }[moment(this.event.date).isoWeekday(1).weekday()]
-
-      return `${day}, ${moment(this.event.date).date()} ${moment(this.event.date).locale('sv').format('MMMM')}`
+      return Date.string(this.event.date)
     }
   },
 }
