@@ -11,7 +11,7 @@
     </div>
 
     <modal name="not-implemented" :adaptive="true" height="auto">
-      <div style="padding: 30px;">
+      <div style="padding: 30px; margin-top: 20px;">
         <h3 style="text-align: center;">Denna funktion är under utveckling</h3>
       </div>
 
