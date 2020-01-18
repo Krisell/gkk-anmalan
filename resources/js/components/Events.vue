@@ -3,7 +3,9 @@
     <h1>Funktionärsanmälan</h1>
 
     <div class="type" v-if="events.length">
-      <gkk-event-card style="min-height: 180px; margin-bottom: 10px;" @click="choose(event)" v-for="event in events" :event="event" :registration="registrationFor(event)" :key="event.id"></gkk-event-card>
+      <div v-for="event in events" :key="event.id" style="display: flex; align-items: center; margin-bottom: 20px;">
+        <gkk-event-card style="" @click="choose(event)" :event="event" :registration="registrationFor(event)"></gkk-event-card>
+      </div>
     </div>
 
     <div v-else>
@@ -31,8 +33,5 @@ export default {
 <style scoped lang="less">
   .type {
     margin-bottom: 40px;
-    display: flex;
-    flex-direction: column;
-    // flex-wrap: wrap;
   }
 </style>

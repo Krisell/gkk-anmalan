@@ -1,14 +1,11 @@
 <template>
   <div class="action-button-card" @click="$emit('click')">
-    <div style="display: flex; flex-direction: row; justify-content: space-around; align-items: center;">
-      <div class="icon" style="margin-right: 20px;"><i class="icon fa fa-users"></i></div>
+    <div class="description">{{ event.name }} ({{ dateString }})</div>
+    <div class="description" style="font-size: 12px; margin-top: 0;">{{ event.description }}</div>
+    <div style="margin-top: 30px;">
       <el-message danger v-if="registration && registration.status == 0">Du har anmält att du inte kan komma.</el-message>
       <el-message success v-else-if="registration && registration.status == 1">Du är anmäld som funktionär, tack!</el-message>
       <el-message info v-else>Du har inte meddelat om du kan delta ännu.</el-message>
-    </div>
-    <div>
-      <div class="description">{{ event.name }} ({{ dateString }})</div>
-      <div class="description" style="font-size: 12px; margin-top: 0;">{{ event.description }}</div>
     </div>
   </div>
 </template>
@@ -20,6 +17,10 @@ export default {
   props: ['event', 'registration'],
   computed: {
     dateString () {
+      if (!this.event.date) {
+        return 'Datum ännu ej bestämt'
+      }
+
       let day = {
         1: 'Måndag',
         2: 'Tisdag',
@@ -49,7 +50,6 @@ i.icon {
 }
 
 .action-button-card {
-  height: 170px;
   background: #FFFFFF;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   border-radius: 2px;
@@ -57,11 +57,7 @@ i.icon {
   cursor: pointer;
   flex: 1;
   margin-right: 10px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding: 30px;
   color: #ff9e02;
   color: black;
   border: none;
@@ -90,7 +86,7 @@ i.icon {
 }
 
  .action-button-card .description {
-   margin-top: 20px;
+  //  margin-top: 20px;
    font-size: 16px;
    color: black;
    text-align: center;
