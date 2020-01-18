@@ -1,6 +1,10 @@
+import Vue from 'vue'
+import VModal from 'vue-js-modal'
+
 require('./bootstrap')
 
-window.Vue = require('vue')
+window.Vue = Vue
+Vue.use(VModal)
 
 /**
  * The following block of code may be used to automatically register your
