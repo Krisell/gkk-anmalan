@@ -20,12 +20,6 @@ files.keys().map(key => {
     Vue.component('Gkk' + key.split('/').pop().split('.')[0], files(key).default)
 })
 
-files = require.context('./components/admin', false, /\.vue$/i)
-files.keys().map(key => {
-    console.log('registering', 'Gkk' + key.split('/').pop().split('.')[0])
-    Vue.component('GkkAdmin' + key.split('/').pop().split('.')[0], files(key).default)
-})
-
 const app = new Vue({
     el: '#app',
 })

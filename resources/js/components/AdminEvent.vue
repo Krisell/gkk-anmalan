@@ -16,7 +16,7 @@
         <tbody>
           <tr v-for="registration in event.registrations" :key="registration.id" style="cursor: pointer;">
             <td>{{ registration.user.first_name }} {{ registration.user.last_name }}</td>
-            <td>{{ registration.created_at }}</td>
+            <td>{{ registration.created_at | dateString}}</td>
             <td>{{ registration.status == 1 ? 'Ja' : 'Nej' }}</td>
             <td style="max-width: 200px;">{{ registration.comment }}</td>
           </tr>
@@ -31,6 +31,11 @@
 <script>
 export default {
   props: ['event'],
+  filters: {
+    dateString (date) {
+      return date.substr(0, 10)
+    }
+  },
 }
 </script>
 

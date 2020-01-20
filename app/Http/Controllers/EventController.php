@@ -43,4 +43,9 @@ class EventController extends Controller
             'event' => $event->load('registrations.user'),
         ]);
     }
+
+    public function destroy(Event $event)
+    {
+        $event->delete();
+    }
 }

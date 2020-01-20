@@ -11,8 +11,8 @@
             <th scope="col">Datum</th>
             <th scope="col">Tid</th>
             <th scope="col">Plats</th>
-            <th scope="col">Antal anmälda</th>
-            <th scope="col"></th>
+            <th scope="col">Antal tackat ja</th>
+            <th scope="col">Åtgärder</th>
           </tr>
         </thead>
         <tbody>
@@ -21,8 +21,8 @@
             <td>{{ event.date }}</td>
             <td>{{ event.time }}</td>
             <td>{{ event.location }}</td>
-            <td>{{ event.registrations.length }}</td>
-            <th scope="row"><i class="fa fa-th-list"></i></th>
+            <td>{{ countYes(event) }} (av {{ event.registrations.length }})</td>
+            <th @click="e => e.stopPropagation()" scope="row"><i @click="confirmDelete(event)" style="color: red;" class="fa fa-trash"></i></th>
           </tr>
         </tbody>
       </table>
@@ -71,6 +71,17 @@
     </div> -->
 
     <GkkLink to="/" text="Tillbaka till startsidan" />
+
+    <modal name="delete-event" :adaptive="true" height="auto">
+      <div style="padding: 30px; margin-top: 20px;">
+        <h3 style="text-align: center;">Är du säker på att du vill radera {{ selectedEvent && selectedEvent.name }}?</h3>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
+        <el-button secondary @click="$modal.hide('delete-event')">Nej</el-button>
+        <el-button style="margin-left: 10px;" danger primary @click="deleteEvent">Radera</el-button>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -81,6 +92,7 @@ export default {
     return {
       showNewEvent: false,
       newEventError: false,
+      selectedEvent: null,
       event: {
         name: '',
         date: '',
@@ -91,6 +103,17 @@ export default {
     }
   },
   methods: {
+    confirmDelete (event) {
+      this.selectedEvent = event
+      console.log(event)
+      this.$modal.show('delete-event')
+    },
+    deleteEvent () {
+      window.axios.delete(`/admin/events/${this.selectedEvent.id}`).then(() => window.location.reload())
+    },
+    countYes (event) {
+      return event.registrations.filter(registration => registration.status == 1).length
+    },
     createEvent () {
       this.newEventError = false
 
