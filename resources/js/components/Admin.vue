@@ -7,22 +7,25 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Event</th>
-            <th scope="col">Datum</th>
-            <th scope="col">Tid</th>
-            <th scope="col">Plats</th>
-            <th scope="col">Antal tackat ja</th>
-            <th scope="col">Åtgärder</th>
+            <th class="gkk" scope="col">Event</th>
+            <th class="gkk" scope="col">Datum</th>
+            <th class="gkk" scope="col">Tid</th>
+            <th class="gkk" scope="col">Plats</th>
+            <th class="gkk" scope="col">Antal tackat ja</th>
+            <th class="gkk" scope="col">Åtgärder</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="event in events" :key="event.id" @click="administrateEvent(event)" style="cursor: pointer;">
+          <tr class="event-row" v-for="event in events" :key="event.id" @click="administrateEvent(event)" style="cursor: pointer;">
             <td>{{ event.name }}</td>
             <td>{{ event.date }}</td>
             <td>{{ event.time }}</td>
             <td>{{ event.location }}</td>
             <td>{{ countYes(event) }} (av {{ event.registrations.length }})</td>
-            <th @click="e => e.stopPropagation()" scope="row"><i @click="confirmDelete(event)" style="color: red;" class="fa fa-trash"></i></th>
+            <td @click="e => e.stopPropagation()" scope="row">
+              <i data-toggle="tooltip" data-placement="top" title="Redigera event" @click="edit(event)" class="fa fa-cogs"></i>
+              <i style="margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="Radera detta event" @click="confirmDelete(event)" class="fa fa-trash"></i>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -102,6 +105,11 @@ export default {
       },
     }
   },
+  mounted () {
+    $(() => {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  },
   methods: {
     confirmDelete (event) {
       this.selectedEvent = event
@@ -137,5 +145,17 @@ export default {
 <style scoped lang="less">
   .type {
     margin-bottom: 40px;
+  }
+
+  .event-row:hover {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  th, td, thead, table {
+    border: none;
+  }
+
+  th.gkk {
+    border-bottom: 1px solid black;
   }
 </style>
