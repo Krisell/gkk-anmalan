@@ -4,7 +4,7 @@
           <a class="navbar-brand" href="/">
             <div style="display: flex; align-items: center;">
               <img style="height: 30px; margin-right: 5px;" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png">
-              GKK – Start
+              GKK
             </div>
           </a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
