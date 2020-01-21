@@ -5,12 +5,15 @@
       <slot v-else></slot>
     </div>
     <div class="description" v-html="description"></div>
+    <div style="position: absolute; left: -8px; bottom: -8px;" @click.stop="$emit('admin')" v-if="admin">
+      <el-button danger style="padding: 5px; font-size: 10px;">Admin</el-button>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['description', 'icon', 'danger'],
+  props: ['description', 'icon', 'danger', 'admin'],
 }
 </script>
 
@@ -27,6 +30,7 @@ i.icon {
 }
 
 .action-button-card {
+  position: relative;
   height: 170px;
   background: #FFFFFF;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);

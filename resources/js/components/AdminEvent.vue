@@ -1,9 +1,7 @@
 <template>
   <div>
-    <h1>Administrera funktionärsanmälan</h1>
-
     <div class="type">
-      <h3>Anmälningar</h3>
+      <h2>Anmälningar till {{ event.name }}</h2>
       <table class="table">
         <thead>
           <tr>
@@ -24,7 +22,7 @@
       </table>
     </div>
 
-    <GkkLink to="/admin" text="Tillbaka till adminsidan" />
+    <GkkLink to="/admin/events" text="Tillbaka till alla event" />
   </div>
 </template>
 

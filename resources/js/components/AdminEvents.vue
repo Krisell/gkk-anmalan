@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="event-row" v-for="event in events" :key="event.id" @click="administrateEvent(event)" style="cursor: pointer;">
+          <tr class="event-row" v-for="event in events" :key="event.id" @click="location(`/admin/events/${event.id}`)" style="cursor: pointer;">
             <td>{{ event.name }}</td>
             <td>{{ event.date }}</td>
             <td>{{ event.time }}</td>
@@ -56,22 +56,6 @@
         </div>
       </form>
     </div>
-
-    <!-- <div class="type">
-      <h3>Tävlingsanmälningar</h3>
-
-      <button @click="showNewEvent = !showNewEvent" type="button" class="btn btn-primary">
-        <i class="fa fa-plus"></i>&nbsp;Nytt event för tävlingsanmälan
-      </button>
-    </div>
-
-    <div class="type">
-      <h3>Intresseanmälningar</h3>
-
-      <button @click="showNewEvent = !showNewEvent" type="button" class="btn btn-primary">
-        <i class="fa fa-plus"></i>&nbsp;Nytt event för intresseanmälningar (??)
-      </button>
-    </div> -->
 
     <GkkLink to="/" text="Tillbaka till startsidan" />
 
@@ -134,9 +118,6 @@ export default {
       }).catch(err => {
         this.newEventError = true
       })
-    },
-    administrateEvent (event) {
-      window.location = `/admin/events/${event.id}`
     }
   }
 }
@@ -156,6 +137,6 @@ export default {
   }
 
   th.gkk {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #253969;
   }
 </style>

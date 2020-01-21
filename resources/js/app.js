@@ -6,6 +6,14 @@ require('./bootstrap')
 window.Vue = Vue
 Vue.use(VModal)
 
+Vue.mixin({
+  methods: {
+    location(url) {
+      window.location = url
+    }
+  }
+})
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

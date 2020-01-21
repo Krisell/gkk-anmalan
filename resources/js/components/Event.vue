@@ -58,9 +58,6 @@ export default {
     }
   },
   methods: {
-    back () {
-      window.location = '/'
-    },
     save () {
       this.register(this.canHelp)
     },

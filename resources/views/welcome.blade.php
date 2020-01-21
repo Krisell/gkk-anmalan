@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <gkk-navigation></gkk-navigation>
+            <gkk-navigation :user='@json($user)'></gkk-navigation>
         </div>
     </div>
 </div>

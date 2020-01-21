@@ -4,7 +4,7 @@
 
     <div class="type" v-if="events.length">
       <div v-for="event in events" :key="event.id" style="display: flex; align-items: center; margin-bottom: 20px;">
-        <gkk-event-card style="" @click="choose(event)" :event="event" :registration="registrationFor(event)"></gkk-event-card>
+        <gkk-event-card style="" @click="location(`/events/${event.id}`)" :event="event" :registration="registrationFor(event)"></gkk-event-card>
       </div>
     </div>
 
@@ -20,9 +20,6 @@
 export default {
   props: ['events', 'user-registrations'],
   methods: {
-    choose (event) {
-      window.location = `/events/${event.id}`
-    },
     registrationFor (event) {
       return this.userRegistrations.find(registration => Number(registration.event_id) === Number(event.id))
     }
