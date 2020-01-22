@@ -8,6 +8,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
   Route::get('events/{event}', 'EventController@admin');
   Route::get('events', 'AdminController@index');
   Route::post('events', 'EventController@store');
+  Route::patch('events/{event}', 'EventController@update');
   Route::delete('events/{event}', 'EventController@destroy');
 });
 

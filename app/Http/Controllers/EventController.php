@@ -26,15 +26,12 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'time' => '',
-            'date' => '',
-            'location' => '',
-            'description' => '',
-        ]);
+        return Event::create($this->validated($request));
+    }
 
-        return Event::create($data);
+    public function update(Request $request, Event $event)
+    {
+        $event->update($this->validated($request));
     }
 
     public function admin(Event $event)
@@ -47,5 +44,16 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         $event->delete();
+    }
+
+    private function validated(Request $request)
+    {
+        return $request->validate([
+            'name' => 'required',
+            'time' => '',
+            'date' => '',
+            'location' => '',
+            'description' => '',
+        ]);
     }
 }

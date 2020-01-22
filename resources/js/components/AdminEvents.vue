@@ -30,9 +30,9 @@
         </tbody>
       </table>
 
-      <button @click="showNewEvent = !showNewEvent" type="button" class="btn btn-primary">
+      <el-button v-if="!editing" @click="showNewEvent = !showNewEvent">
         <i class="fa fa-plus"></i>&nbsp;Nytt event för funktionärsanmälningar
-      </button>
+      </el-button>
 
       <form style="margin-top: 20px;" v-show="showNewEvent">
         <div class="form-group">
@@ -50,7 +50,13 @@
         <div class="form-group">
           <textarea v-model="event.description" class="form-control" name="description" placeholder="Ev. ytterligare info"></textarea>
         </div>
-        <button @click="createEvent" type="button" class="btn btn-primary">Skapa event</button>
+
+        <div style="display: flex">
+          <el-button v-if="!editing" @click="createEvent" primary>Skapa event</el-button>
+          <el-button style="margin-right: 10px;" secondary v-if="editing" @click="cancelUpdate">Ångra</el-button>
+          <el-button primary v-if="editing" @click="updateEvent">Uppdatera event</el-button>
+        </div>
+
         <div v-if="newEventError" style="color: red;">
           Kunde inte skapa event, kontrollera inmatning och anlutning.
         </div>
@@ -77,6 +83,7 @@ export default {
   props: ['events'],
   data () {
     return {
+      editing: false,
       showNewEvent: false,
       newEventError: false,
       selectedEvent: null,
@@ -104,6 +111,11 @@ export default {
     countYes (event) {
       return event.registrations.filter(registration => registration.status == 1).length
     },
+    edit (event) {
+      Object.assign(this.event, event)
+      this.showNewEvent = true
+      this.editing = true
+    },
     createEvent () {
       this.newEventError = false
 
@@ -111,9 +123,21 @@ export default {
         method: 'post',
         url: '/admin/events',
         data: this.event
-      }).then(response => {
-        window.location.reload()
-      }).catch(err => {
+      }).then(this.reload).catch(err => {
+        this.newEventError = true
+      })
+    },
+    cancelUpdate () {
+      this.reload()
+    },
+    updateEvent () {
+      this.newEventError = false
+
+      window.axios({
+        method: 'patch',
+        url: `/admin/events/${this.event.id}`,
+        data: this.event
+      }).then(this.reload).catch(err => {
         this.newEventError = true
       })
     }

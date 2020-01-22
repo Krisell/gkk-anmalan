@@ -10,7 +10,10 @@ Vue.mixin({
   methods: {
     location(url) {
       window.location = url
-    }
+    },
+    reload () {
+      window.location.reload()
+    },
   }
 })
 
