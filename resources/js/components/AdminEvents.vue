@@ -90,9 +90,7 @@ export default {
     }
   },
   mounted () {
-    $(() => {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
+    $(() => { $('[data-toggle="tooltip"]').tooltip() })
   },
   methods: {
     confirmDelete (event) {
