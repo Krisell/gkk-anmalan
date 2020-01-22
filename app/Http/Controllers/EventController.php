@@ -34,6 +34,13 @@ class EventController extends Controller
         $event->update($this->validated($request));
     }
 
+    public function adminIndex()
+    {
+        return view('admin.events', [
+            'events' => Event::with('registrations')->get()
+        ]);
+    }
+
     public function admin(Event $event)
     {
         return view('admin.event', [

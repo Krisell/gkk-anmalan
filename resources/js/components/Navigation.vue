@@ -4,7 +4,7 @@
       <img style="height: 150px;" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png">
     </div>
     <div class="actions">
-      <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="competition" description="Tävlingsanmälan" icon="trophy"></gkk-action-card>
+      <gkk-action-card :admin="isAdmin" @admin="location('/admin/competitions')" @click="location('/competitions')" description="Tävlingsanmälan" icon="trophy"></gkk-action-card>
       <gkk-action-card :admin="isAdmin" @admin="location('/admin/events')" @click="location('/events')" description="Funktionärsanmälan" icon="users"></gkk-action-card>
       <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="cooperation" description="Intresseanmälan" icon="lightbulb-o"></gkk-action-card>
       <gkk-action-card v-if="isAdmin" @click="$modal.show('not-implemented')" description="Kontohantering<br>(Endast administratörer)" icon="user"></gkk-action-card>
@@ -31,9 +31,6 @@ export default {
     },
   },
   methods: {
-    competition () {
-      this.$modal.show('not-implemented')
-    },
     cooperation () {
       this.$modal.show('not-implemented')
     },

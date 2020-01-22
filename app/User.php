@@ -3,6 +3,7 @@
 namespace App;
 
 use App\EventRegistration;
+use App\CompetitionRegistration;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,5 +42,10 @@ class User extends Authenticatable
     public function eventRegistrations()
     {
         return $this->hasMany(EventRegistration::class);
+    }
+
+    public function competitionRegistrations()
+    {
+        return $this->hasMany(CompetitionRegistration::class);
     }
 }
