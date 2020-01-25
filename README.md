@@ -7,15 +7,13 @@ Vi får diskutera om medlemmarna ska kunna registrera sig själva, eller om för
 ## Kort om namngivning
 En `Competition` är ett tävlingstillfälle som GKK-medlemmar kan anmäla sig till.
 Administratören skapar tillfället och respektive medlem skapar en `CompetitionRegistration`.
-Detta är inte implementerat ännu.
 
 Ett `Event` är ett tillfälle där medlemmar kan anmäla sig till att hjälpa till som funktionär.
 Administratören skapar tillfället och respektive medlem skapar en `EventRegistration`.
-Detta är delvis implementerat.
 
 Ett `Cooperation` är ett tillfälle där andra föreningar kan anmäla intresse att delta (ex. skicka tävlande till våra serieomgångar).
 Administratören skapar tillfället och besökare skapar en `CooperationRegistration`. Detta bör till skillnad från de andra två fallen inte kräva inlogg.
-Detta är inte implementerat ännu.
+**Detta är inte implementerat ännu.**
 
 ## Uppdatera webben
 Efter att önskade ändringar är pushade hit, logga in på servern och kör kommanot `deployanm` som i sin tur kör `git pull` från projektets mapp samt uppdaterar publika assets. Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt. Observera att index.php har justerats för att hitta rätt, så den ska *inte* uppdateras. För tillfället är det endast innehållet i js/ och css/, samt `mix-manifest.json`, som kopieras.
