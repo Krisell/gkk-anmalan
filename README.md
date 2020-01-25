@@ -28,5 +28,7 @@ Följande kommandon kan sedan användas för att sätta upp en utvecklingsmiljö
  * `php artisan key:generate` för att skapa en unik app-nyckel
  * `php artisan serve` för att starta en lokal server
 
+Om du vill göra ändringar i frontend krävs att `Node.js` är installerat, att du installerar beroenden med `npm install` samt att du bygger för utveckling (`npm run watch`) eller för produktion (`npm run production`).
+
 ## Epost
 Just nu används Mailgun för att skicka epost (ex. vid registrering, ifall vi vill göra det). Mailgun är gratis upp till 10 000 epost per månad om jag förstår det rätt, vilket vi aldrig kommer uppnå. API-nycklar för mailgun behöver sättas i .env-filen för att aktiveras (se .env.example).
