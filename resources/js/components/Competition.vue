@@ -8,8 +8,9 @@
       <div class="form-group">
         <h3>{{ competition.description }}</h3>
       </div>
+      Licensenummer: <input class="form-group" v-model="licenceNumber"> <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap"></i>
       <div class="form-group">
-        <textarea v-model="comment" class="form-control" name="description" placeholder="Ev. kommentar/ytterligare info, exempelvis om du måste gå tidigare" rows="5"></textarea>
+        <textarea v-model="comment" class="form-control" name="description" placeholder="Ev. kommentar/ytterligare info." rows="5"></textarea>
       </div>
       <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
         <el-button v-if="registration && canHelp" style="margin-bottom: 10px;" @click="register(true)"><i class="fa fa-check-circle-o" style="margin-right: 10px;"></i>Ja, jag vill tävla</el-button>
@@ -28,7 +29,7 @@
         </el-message>
       </div>
       <div v-if="registrationStatus === 'completed'">
-        <el-message v-if="!canHelp" info style="margin-top: 20px;">Synd, men tack för informationen!</el-message>
+        <el-message v-if="!canHelp" info style="margin-top: 20px;">Tack för informationen!</el-message>
         <el-message v-else success style="margin-top: 20px;">Grymt, vi ses där!</el-message>
       </div>
     </form>
@@ -50,7 +51,11 @@ export default {
       registration: this._registration,
       comment: this._registration ? this._registration.comment : '',
       canHelp: this._registration ? this._registration.status == 1 : null,
+      licenceNumber: this.user.licence_number || '',
     }
+  },
+  mounted () {
+    $(() => { $('[data-toggle="tooltip"]').tooltip() })
   },
   computed: {
     dateString () {
@@ -70,6 +75,7 @@ export default {
         data: {
           status: canHelp,
           comment: this.comment,
+          licenceNumber: this.licenceNumber,
         }
       }).then(response => {
         this.canHelp = canHelp
