@@ -61,6 +61,7 @@ class CompetitionController extends Controller
             'date' => '',
             'location' => '',
             'description' => '',
+            'events' => 'json',
         ]);
     }
 }

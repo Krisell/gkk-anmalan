@@ -41,6 +41,27 @@
         <div class="form-group">
           <input v-model="competition.date" class="form-control" type="date" name="date">
         </div>
+
+        <div style="display: flex; margin-bottom: 5px; align-items: center;">
+          <el-toggle-button v-model="events.ksl" />
+          <div style="margin-left: 5px;">KSL</div>
+        </div>
+
+        <div style="display: flex; margin-bottom: 5px; align-items: center;">
+          <el-toggle-button v-model="events.kbp" />
+          <div style="margin-left: 5px;">KBP</div>
+        </div>
+
+        <div style="display: flex; margin-bottom: 5px; align-items: center;">
+          <el-toggle-button v-model="events.sl" />
+          <div style="margin-left: 5px;">SL</div>
+        </div>
+
+        <div style="display: flex; margin-bottom: 15px; align-items: center;">
+          <el-toggle-button v-model="events.bp" />
+          <div style="margin-left: 5px;">BP</div>
+        </div>
+
         <div class="form-group">
           <input v-model="competition.time" class="form-control" name="time" placeholder="Ungefärlig tid, ex. 8 – 15">
         </div>
@@ -87,6 +108,12 @@ export default {
       showNewCompetition: false,
       newCompetitionError: false,
       selectedCompetition: null,
+      events: {
+        ksl: true,
+        kbp: true,
+        sl: false,
+        bp: false,
+      },
       competition: {
         name: '',
         date: '',
@@ -113,6 +140,11 @@ export default {
     },
     edit (competition) {
       Object.assign(this.competition, competition)
+
+      if (this.competition.events) {
+        this.events = JSON.parse(this.competition.events)
+      }
+
       this.showNewCompetition = true
       this.editing = true
     },
@@ -122,7 +154,10 @@ export default {
       window.axios({
         method: 'post',
         url: '/admin/competitions',
-        data: this.competition
+        data: {
+          ...this.competition,
+          events: JSON.stringify(this.events),
+        }
       }).then(this.reload).catch(err => {
         this.newCompetitionError = true
       })
@@ -136,7 +171,10 @@ export default {
       window.axios({
         method: 'patch',
         url: `/admin/competitions/${this.competition.id}`,
-        data: this.competition
+        data: {
+          ...this.competition,
+          events: JSON.stringify(this.events),
+        }
       }).then(this.reload).catch(err => {
         this.newCompetitionError = true
       })

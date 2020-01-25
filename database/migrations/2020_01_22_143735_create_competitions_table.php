@@ -16,6 +16,7 @@ class CreateCompetitionsTable extends Migration
         Schema::create('competitions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->text('events');
             $table->date('date')->nullable();
             $table->string('time')->nullable();
             $table->string('location')->nullable();
