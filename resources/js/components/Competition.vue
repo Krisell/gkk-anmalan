@@ -8,7 +8,47 @@
       <div class="form-group">
         <h3>{{ competition.description }}</h3>
       </div>
-      Licensnummer: <input class="form-group" v-model="licenceNumber"> <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap"></i>
+      <h4>Licensnummer: <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap"></i></h4>
+      <input class="form-group" v-model="licenceNumber">
+
+      <el-radio-button
+        style="margin-bottom: 20px;"
+        v-model="gender"
+        :options="[ { value: 'Kvinnor', label: 'Kvinnor' }, { value: 'Män', label: 'Män' } ]"
+      />
+
+      <h4>Viktklass: <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Mästerskap har i regel klassfast anmälan, medan serie-tävlingar inte har viktklasser (men kan ordna gupperna baserat på detta, så välj gärna en uppskattning)."></i></h4>
+
+      <el-dropdown v-show="gender === 'Män'"
+        v-model="weightClass['Män']"
+        :options="[
+          { value: '53', label: '53 kg' },
+          { value: '59', label: '59 kg' },
+          { value: '66', label: '66 kg' },
+          { value: '74', label: '74 kg' },
+          { value: '83', label: '83 kg' },
+          { value: '93', label: '93 kg' },
+          { value: '105', label: '105 kg' },
+          { value: '120', label: '120 kg' },
+          { value: '120+', label: '120+ kg' },
+        ]"
+      />
+
+      <el-dropdown v-show="gender === 'Kvinnor'"
+        v-model="weightClass['Kvinnor']"
+        :options="[
+          { value: '43', label: '43 kg' },
+          { value: '47', label: '47 kg' },
+          { value: '52', label: '52 kg' },
+          { value: '57', label: '57 kg' },
+          { value: '63', label: '63 kg' },
+          { value: '72', label: '72 kg' },
+          { value: '84', label: '84 kg' },
+          { value: '84+', label: '84+ kg' },
+        ]"
+      />
+
+      <div style="margin-bottom: 20px;"></div>
 
       <div v-if="hasEvent('ksl')" style="display: flex; margin-bottom: 5px; align-items: center;">
         <el-toggle-button v-model="events.ksl" />
@@ -73,12 +113,17 @@ export default {
       comment: this._registration ? this._registration.comment : '',
       canHelp: this._registration ? this._registration.status == 1 : null,
       licenceNumber: this.user.licence_number || '',
+      weightClass: {
+        'Män': '93',
+        'Kvinnor': '63',
+      },
       events: {
         ksl: false,
         kbp: false,
         sl: false,
         bp: false,
       },
+      gender: this.user.gender ? this.user.gender : 'Kvinnor',
     }
   },
   mounted () {
@@ -86,6 +131,10 @@ export default {
 
     if (this.registration) {
       this.events = JSON.parse(this.registration.events)
+    }
+
+    if (this.user.weight_class) {
+      this.weightClass[this.gender] = this.user.weight_class
     }
   },
   computed: {
@@ -111,6 +160,8 @@ export default {
           comment: this.comment,
           licence_number: this.licenceNumber,
           events: JSON.stringify(this.events),
+          gender: this.gender,
+          weight_class: this.weightClass[this.gender],
         }
       }).then(response => {
         this.canHelp = canHelp
