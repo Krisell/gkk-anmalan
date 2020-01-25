@@ -8,6 +8,9 @@
             <th scope="col">Namn</th>
             <th scope="col">Datum</th>
             <th scope="col">Vill tävla</th>
+            <th scope="col">Kön</th>
+            <th scope="col">Gren</th>
+            <th scope="col">Viktklass</th>
             <th scope="col">Kommentar</th>
           </tr>
         </thead>
@@ -16,6 +19,9 @@
             <td>{{ registration.user.first_name }} {{ registration.user.last_name }}</td>
             <td>{{ registration.created_at | dateString}}</td>
             <td>{{ registration.status == 1 ? 'Ja' : 'Nej' }}</td>
+            <td>{{ registration.gender }}</td>
+            <td>{{ registration.events | eventsString }}</td>
+            <td>{{ registration.weight_class }}</td>
             <td style="max-width: 200px;">{{ registration.comment }}</td>
           </tr>
         </tbody>
@@ -40,7 +46,10 @@ export default {
   filters: {
     dateString (date) {
       return date.substr(0, 10)
-    }
+    },
+    eventsString (events) {
+      return Object.entries(JSON.parse(events)).filter(([event, status]) => status).map(([event]) => event.toUpperCase()).join(', ')
+    },
   },
   mounted () {
     $(() => { $('[data-toggle="tooltip"]').tooltip() })
@@ -59,6 +68,9 @@ export default {
               { value: 'Namn', type: 'string' },
               { value: 'Datum', type: 'string' },
               { value: 'Vill tävla', type: 'string' },
+              { value: 'Kön', type: 'string' },
+              { value: 'Gren', type: 'string' },
+              { value: 'Viktklass', type: 'string' },
               { value: 'Kommentar', type: 'string' },
             ],
             ...this.competition.registrations.map(registration => {
@@ -66,6 +78,9 @@ export default {
                 { value: `${registration.user.first_name} ${registration.user.last_name}`, type: 'string' },
                 { value: this.$options.filters.dateString(registration.created_at), type: 'string' },
                 { value: registration.status == 1 ? 'Ja' : 'Nej', type: 'string' },
+                { value: registration.gender, type: 'string' },
+                { value: this.$options.filters.eventsString(registration.events), type: 'string' },
+                { value: registration.weight_class, type: 'string' },
                 { value: registration.comment, type: 'string' },
               ]
             })
