@@ -8,8 +8,29 @@
       <div class="form-group">
         <h3>{{ competition.description }}</h3>
       </div>
-      Licensenummer: <input class="form-group" v-model="licenceNumber"> <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap"></i>
-      <div class="form-group">
+      Licensnummer: <input class="form-group" v-model="licenceNumber"> <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap"></i>
+
+      <div v-if="hasEvent('ksl')" style="display: flex; margin-bottom: 5px; align-items: center;">
+        <el-toggle-button v-model="events.ksl" />
+        <div style="margin-left: 10px;">Klassisk Styrkelyft</div>
+      </div>
+
+      <div v-if="hasEvent('kbp')" style="display: flex; margin-bottom: 5px; align-items: center;">
+        <el-toggle-button v-model="events.kbp" />
+        <div style="margin-left: 10px;">Klassisk Bänkpress</div>
+      </div>
+
+      <div v-if="hasEvent('sl')" style="display: flex; margin-bottom: 5px; align-items: center;">
+        <el-toggle-button v-model="events.sl" />
+        <div style="margin-left: 10px;">Styrkelyft (utrustat)</div>
+      </div>
+
+      <div v-if="hasEvent('bp')" style="display: flex; margin-bottom: 5px; align-items: center;">
+        <el-toggle-button v-model="events.bp" />
+        <div style="margin-left: 10px;">Bänkpress (utrustat)</div>
+      </div>
+
+      <div class="form-group" style="margin-top: 20px;">
         <textarea v-model="comment" class="form-control" name="description" placeholder="Ev. kommentar/ytterligare info." rows="5"></textarea>
       </div>
       <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -52,10 +73,20 @@ export default {
       comment: this._registration ? this._registration.comment : '',
       canHelp: this._registration ? this._registration.status == 1 : null,
       licenceNumber: this.user.licence_number || '',
+      events: {
+        ksl: false,
+        kbp: false,
+        sl: false,
+        bp: false,
+      },
     }
   },
   mounted () {
     $(() => { $('[data-toggle="tooltip"]').tooltip() })
+
+    if (this.registration) {
+      this.events = JSON.parse(this.registration.events)
+    }
   },
   computed: {
     dateString () {
@@ -63,6 +94,9 @@ export default {
     }
   },
   methods: {
+    hasEvent (event) {
+      return JSON.parse(this.competition.events)[event]
+    },
     save () {
       this.register(this.canHelp)
     },
@@ -75,7 +109,8 @@ export default {
         data: {
           status: canHelp,
           comment: this.comment,
-          licenceNumber: this.licenceNumber,
+          licence_number: this.licenceNumber,
+          events: JSON.stringify(this.events),
         }
       }).then(response => {
         this.canHelp = canHelp

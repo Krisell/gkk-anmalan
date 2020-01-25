@@ -13,14 +13,15 @@ class CompetitionRegistrationController extends Controller
         $data = $request->validate([
             'status' => '',
             'comment' => '',
-            'licenceNumber' => '',
+            'licence_number' => '',
+            'events' => 'json',
         ]);
 
-        auth()->user()->update(['licence_number' => $data['licenceNumber']]);
+        auth()->user()->update(['licence_number' => $data['licence_number']]);
 
         return CompetitionRegistration::updateOrCreate(
             ['competition_id' => $competition->id, 'user_id' => auth()->id()],
-            ['status' => $data['status'], 'comment' => $data['comment']],
+            $data,
         );
     }
 }

@@ -44,22 +44,22 @@
 
         <div style="display: flex; margin-bottom: 5px; align-items: center;">
           <el-toggle-button v-model="events.ksl" />
-          <div style="margin-left: 5px;">KSL</div>
+          <div style="margin-left: 10px;">KSL</div>
         </div>
 
         <div style="display: flex; margin-bottom: 5px; align-items: center;">
           <el-toggle-button v-model="events.kbp" />
-          <div style="margin-left: 5px;">KBP</div>
+          <div style="margin-left: 10px;">KBP</div>
         </div>
 
         <div style="display: flex; margin-bottom: 5px; align-items: center;">
           <el-toggle-button v-model="events.sl" />
-          <div style="margin-left: 5px;">SL</div>
+          <div style="margin-left: 10px;">SL</div>
         </div>
 
         <div style="display: flex; margin-bottom: 15px; align-items: center;">
           <el-toggle-button v-model="events.bp" />
-          <div style="margin-left: 5px;">BP</div>
+          <div style="margin-left: 10px;">BP</div>
         </div>
 
         <div class="form-group">
