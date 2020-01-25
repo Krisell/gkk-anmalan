@@ -20,6 +20,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::patch('/{competition}', 'CompetitionController@update');
         Route::delete('/{competition}', 'CompetitionController@destroy');
     });
+
+    Route::get('/accounts', 'AccountController@index');
 });
 
 Route::group(['prefix' => 'events', 'middleware' => 'auth'], function () {

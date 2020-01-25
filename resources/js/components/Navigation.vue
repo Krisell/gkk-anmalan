@@ -6,8 +6,8 @@
     <div class="actions">
       <gkk-action-card :admin="isAdmin" @admin="location('/admin/competitions')" @click="location('/competitions')" description="Tävlingsanmälan" icon="trophy"></gkk-action-card>
       <gkk-action-card :admin="isAdmin" @admin="location('/admin/events')" @click="location('/events')" description="Funktionärsanmälan" icon="users"></gkk-action-card>
-      <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="cooperation" description="Intresseanmälan" icon="lightbulb-o"></gkk-action-card>
-      <gkk-action-card v-if="isAdmin" @click="$modal.show('not-implemented')" description="Kontohantering<br>(Endast administratörer)" icon="user"></gkk-action-card>
+      <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="cooperation" description="Intresseanmälan<br>(Under utveckling)" icon="lightbulb-o"></gkk-action-card>
+      <gkk-action-card v-if="isAdmin" @click="location('/admin/accounts')" description="Administrera konton" icon="user"></gkk-action-card>
     </div>
 
     <modal name="not-implemented" :adaptive="true" height="auto">
