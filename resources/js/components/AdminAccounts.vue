@@ -6,6 +6,7 @@
             <th class="gkk" scope="col">Namn</th>
             <th class="gkk" scope="col">Epost</th>
             <th class="gkk" scope="col">Registreringsdatum</th>
+            <th class="gkk" scope="col"></th>
           </tr>
         </thead>
         <tbody>
@@ -13,6 +14,7 @@
             <td>{{ account.first_name }} {{ account.last_name }}</td>
             <td>{{ account.email }}</td>
             <td>{{ account.created_at | dateString }}</td>
+            <td><i v-if="account.role === 'admin'" class="fa fa-star" data-toggle="tooltip" data-placement="top" title="Administratör"></i></td>
           </tr>
         </tbody>
       </table>
@@ -22,6 +24,9 @@
 <script>
 export default {
   props: ['accounts'],
+  mounted () {
+    $(() => { $('[data-toggle="tooltip"]').tooltip() })
+  },
   filters: {
     dateString (date) {
       return date.substr(0, 10)
