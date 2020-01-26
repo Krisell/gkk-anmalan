@@ -27,7 +27,6 @@ Vue.mixin({
 
 let files = require.context('./components', false, /\.vue$/i)
 files.keys().map(key => {
-    console.log('registering', 'Gkk' + key.split('/').pop().split('.')[0])
     Vue.component('Gkk' + key.split('/').pop().split('.')[0], files(key).default)
 })
 
