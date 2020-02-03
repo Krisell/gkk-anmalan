@@ -11,6 +11,12 @@ class AccountController extends Controller
     {
         return view('admin.accounts', [
             'accounts' => User::all(),
+            'user' => auth()->user(),
         ]);
+    }
+
+    public function promote(User $user)
+    {
+        $user->update(['role' => 'admin']);
     }
 }
