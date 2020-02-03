@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'role', 'licence_number', 'gender', 'weight_class',
+        'first_name', 'last_name', 'email', 'password', 'role', 'licence_number', 'gender', 'weight_class', 'visits', 'last_visited_at',
     ];
 
     /**
@@ -37,6 +37,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'edited_at' => 'datetime',
     ];
 
     public function eventRegistrations()
