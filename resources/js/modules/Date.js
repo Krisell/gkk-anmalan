@@ -14,7 +14,7 @@ const Date = {
       5: 'Fredag',
       6: 'Lördag',
       7: 'Söndag'
-    }[moment(date).isoWeekday(1).weekday()]
+    }[moment(date).weekday()]
 
     return `${day}, ${moment(date).date()} ${moment(date).locale('sv').format('MMMM')}`
   }
