@@ -39,6 +39,13 @@ Route::group(['prefix' => 'competitions', 'middleware' => 'auth'], function () {
     Route::post('{competition}/registrations', 'CompetitionRegistrationController@store');
 });
 
+Route::group(['prefix' => 'profile', 'middleware' => 'auth'], function () {
+    Route::get('/', 'ProfileController@index');
+    Route::post('/name', 'ProfileController@updateName');
+    Route::post('/email', 'ProfileController@updateEmail');
+    Route::post('/password', 'ProfileController@updatePassword');
+});
+
 Route::group(['prefix' => 'auth'], function () {
     Route::post('google', 'AuthController@google');
     Route::post('microsoft', 'AuthController@microsoft');

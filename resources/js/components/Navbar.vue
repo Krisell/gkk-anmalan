@@ -26,6 +26,7 @@
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a @click="location('/profile')" class="dropdown-item" href="#">Profil</a>
                         <a @click="logout" class="dropdown-item" href="#">Logga ut</a>
                     </div>
                   </li>
