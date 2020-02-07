@@ -3,11 +3,15 @@
     <div>
       <img style="height: 150px;" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png">
     </div>
-    <div class="actions">
-      <gkk-action-card :admin="isAdmin" @admin="location('/admin/competitions')" @click="location('/competitions')" :description="'Tävlingsanmälan' + (user ? '' : '<br>(Kräver inloggning)')" icon="trophy"></gkk-action-card>
-      <gkk-action-card :admin="isAdmin" @admin="location('/admin/events')" @click="location('/events')" :description="'Funktionärsanmälan' + (user ? '' : '<br>(Kräver inloggning)')" icon="users"></gkk-action-card>
+    <div class="actions" v-if="user">
+      <gkk-action-card :admin="isAdmin" @admin="location('/admin/competitions')" @click="location('/competitions')" description="Tävlingsanmälan" icon="trophy"></gkk-action-card>
+      <gkk-action-card :admin="isAdmin" @admin="location('/admin/events')" @click="location('/events')" description="Funktionärsanmälan" icon="users"></gkk-action-card>
       <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="cooperation" description="Intresseanmälan<br>(Under utveckling)" icon="lightbulb-o"></gkk-action-card>
       <gkk-action-card v-if="isAdmin" @click="location('/admin/accounts')" description="Administrera konton" icon="user"></gkk-action-card>
+    </div>
+    <div class="actions" v-if="!user">
+      <gkk-action-card :admin="isAdmin" @click="location('/login')" description="Logga in" icon="sign-in"></gkk-action-card>
+      <gkk-action-card :admin="isAdmin" @click="location('/register')" description="Skapa konto" icon="user"></gkk-action-card>
     </div>
 
     <modal name="not-implemented" :adaptive="true" height="auto">
