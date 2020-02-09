@@ -1,5 +1,8 @@
 <template>
   <div class="action-button-card" :class="{ danger }" @click="$emit('click')">
+    <div v-if="unanswered > 0" class="unanswered">
+      {{ unanswered }}
+    </div>
     <div class="icon">
       <i v-if="icon" class="icon fa" :class="'fa-' + icon"></i>
       <slot v-else></slot>
@@ -13,7 +16,7 @@
 
 <script>
 export default {
-  props: ['description', 'icon', 'danger', 'admin'],
+  props: ['description', 'icon', 'danger', 'admin', 'unanswered'],
 }
 </script>
 
@@ -95,6 +98,22 @@ i.icon {
    color: #D84A38;
    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.20);
    border-radius: 2px;
+ }
+
+ .unanswered {
+   position: absolute;
+    top: -9px;
+    right: -7px;
+    background: #243868;
+    color: #f9fafc;
+    border: 1px solid #243868;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
  }
 </style>
 
