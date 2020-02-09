@@ -9,14 +9,28 @@ class EventController extends Controller
 {
     public function index()
     {
+        $events = Event::all();
+
+        foreach ($events as $event) {
+            if ($event->publish_count) {
+                $event->publish_count_value = $event->registrations()->whereStatus(1)->count();
+            }
+        }
+
         return view('events', [
-            'events' => Event::all(),
+            'events' => $events,
             'userRegistrations' => auth()->user()->eventRegistrations,
         ]);
     }
 
     public function show(Event $event)
     {
+        if ($event->publish_list) {
+            $event->publish_list_value = $event->registrations()->whereStatus(1)->with(['user' => function ($query) {
+                $query->select('id', 'first_name', 'last_name');
+            }])->get();
+        }
+
         return view('event', [
             'event' => $event,
             'user' => auth()->user(),
@@ -61,6 +75,8 @@ class EventController extends Controller
             'date' => '',
             'location' => '',
             'description' => '',
+            'publish_count' => '',
+            'publish_list' => '',
         ]);
     }
 }

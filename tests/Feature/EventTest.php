@@ -19,7 +19,9 @@ class EventTest extends TestCase
             'time' => '9–13',
             'date' => '2020-02-23',
             'location' => 'Hos mig',
-            'description' => 'Det blir kul!'
+            'description' => 'Det blir kul!',
+            'publish_count' => false,
+            'publish_list' => false,
         ], $overrides);
     }
 
@@ -61,9 +63,10 @@ class EventTest extends TestCase
         $event = factory(Event::class)->create();
 
         $this->patch("/admin/events/{$event->id}", $this->data([
-            'name' => 'Nytt namn'
+            'name' => 'Nytt namn',
+            'publish_count' => true,
         ]))->assertOk();
 
-        $this->assertDatabaseHas('events', $this->data(['name' => 'Nytt namn']));
+        $this->assertDatabaseHas('events', $this->data(['name' => 'Nytt namn', 'publish_count' => true]));
     }
 }

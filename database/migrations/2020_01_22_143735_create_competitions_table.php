@@ -21,6 +21,8 @@ class CreateCompetitionsTable extends Migration
             $table->string('time')->nullable();
             $table->string('location')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('publish_count')->default(false);
+            $table->boolean('publish_list')->default(false);
 
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();

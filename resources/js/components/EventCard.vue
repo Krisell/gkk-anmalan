@@ -6,6 +6,10 @@
       <el-message danger v-if="registration && registration.status == 0">Du har anmält att du inte kan komma.</el-message>
       <el-message success v-else-if="registration && registration.status == 1">Du är anmäld som funktionär, tack!</el-message>
       <el-message info v-else>Du har inte meddelat om du kan delta ännu.</el-message>
+
+      <el-message style="margin-top: 10px;" v-if="event.publish_count_value > 0">
+        Totalt har {{ event.publish_count_value }} GKK-medlemmar tackat ja till detta event.
+      </el-message>
     </div>
   </div>
 </template>

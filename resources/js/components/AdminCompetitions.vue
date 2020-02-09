@@ -72,6 +72,16 @@
           <textarea v-model="competition.description" class="form-control" name="description" placeholder="Ev. ytterligare info"></textarea>
         </div>
 
+        <div style="display: flex; margin-bottom: 5px; align-items: center;">
+          <el-toggle-button v-model="competition.publish_count" />
+          <div style="margin-left: 10px;">Visa antal anmälda för medlemmar</div>
+        </div>
+
+        <div style="display: flex; margin-bottom: 20px; align-items: center;">
+          <el-toggle-button v-model="competition.publish_list" />
+          <div style="margin-left: 10px;">Visa anmälningslista för medlemmar (endast namn)</div>
+        </div>
+
         <div style="display: flex">
           <el-button v-if="!editing" @click="createCompetition" primary>Skapa tävling</el-button>
           <el-button style="margin-right: 10px;" secondary v-if="editing" @click="cancelUpdate">Ångra</el-button>
@@ -120,6 +130,8 @@ export default {
         time: '',
         location: '',
         description: '',
+        publish_count: false,
+        publish_list: false,
       },
     }
   },

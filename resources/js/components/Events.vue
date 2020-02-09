@@ -4,7 +4,11 @@
 
     <div class="type" v-if="events.length">
       <div v-for="event in events" :key="event.id" style="display: flex; align-items: center; margin-bottom: 20px;">
-        <gkk-event-card style="" @click="location(`/events/${event.id}`)" :event="event" :registration="registrationFor(event)"></gkk-event-card>
+        <gkk-event-card
+          @click="location(`/events/${event.id}`)"
+          :event="event"
+          :registration="registrationFor(event)"
+        ></gkk-event-card>
       </div>
     </div>
 

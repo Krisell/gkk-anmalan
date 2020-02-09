@@ -96,6 +96,23 @@
     </form>
 
     <GkkLink to="/competitions" text="Tillbaka till alla tävlingar" />
+
+    <el-delimiter></el-delimiter>
+    <div v-if="competition.publish_list_value.length > 0">
+      <h3>Följande medlemmar har tackat ja</h3>
+      <table class="table" v-if="competition.publish_list">
+        <thead>
+          <tr><th scope="col">Namn</th></tr>
+        </thead>
+        <tbody>
+          <tr v-for="registration in competition.publish_list_value" :key="registration.id">
+            <td>{{ registration.user.first_name }} {{ registration.user.last_name }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <GkkLink to="/competitions" text="Tillbaka till alla tävlingar" />
+    </div>
   </div>
 </template>
 

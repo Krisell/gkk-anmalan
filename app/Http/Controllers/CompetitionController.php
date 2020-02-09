@@ -9,14 +9,28 @@ class CompetitionController extends Controller
 {
     public function index()
     {
+        $competitions = Competition::all();
+
+        foreach ($competitions as $competition) {
+            if ($competition->publish_count) {
+                $competition->publish_count_value = $competition->registrations()->whereStatus(1)->count();
+            }
+        }
+
         return view('competitions', [
-            'competitions' => Competition::all(),
+            'competitions' => $competitions,
             'userRegistrations' => auth()->user()->competitionRegistrations,
         ]);
     }
 
     public function show(Competition $competition)
     {
+        if ($competition->publish_list) {
+            $competition->publish_list_value = $competition->registrations()->whereStatus(1)->with(['user' => function ($query) {
+                $query->select('id', 'first_name', 'last_name');
+            }])->get();
+        }
+
         return view('competition', [
             'competition' => $competition,
             'user' => auth()->user(),
@@ -62,6 +76,8 @@ class CompetitionController extends Controller
             'location' => '',
             'description' => '',
             'events' => 'json',
+            'publish_count' => '',
+            'publish_list' => '',
         ]);
     }
 }
