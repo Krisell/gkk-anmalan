@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 style="margin: 20px;">Totalt har {{ accounts.length }} medlemmar skapat konto</h2>
+    <h2 style="margin: 20px;">{{ accounts.length }} medlemmar har registrerat ett konto</h2>
     <table class="table">
         <thead>
           <tr>

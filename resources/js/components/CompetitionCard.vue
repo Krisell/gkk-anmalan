@@ -8,7 +8,7 @@
       <el-message info v-else>Du har inte meddelat om du vill tävla ännu.</el-message>
 
       <el-message style="margin-top: 10px;" v-if="competition.publish_count_value > 0">
-        Totalt har {{ competition.publish_count_value }} GKK-medlemmar tackat ja till denna tävling.
+        Hittills har {{ competition.publish_count_value }} GKK-medlemmar tackat ja till denna tävling.
       </el-message>
     </div>
   </div>

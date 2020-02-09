@@ -8,7 +8,7 @@
       <el-message info v-else>Du har inte meddelat om du kan delta ännu.</el-message>
 
       <el-message style="margin-top: 10px;" v-if="event.publish_count_value > 0">
-        Totalt har {{ event.publish_count_value }} GKK-medlemmar tackat ja till detta event.
+        Hittills har {{ event.publish_count_value }} GKK-medlemmar tackat ja till detta event.
       </el-message>
     </div>
   </div>
