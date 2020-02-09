@@ -36,7 +36,7 @@
     <GkkLink to="/events" text="Tillbaka till alla event" />
 
     <el-delimiter></el-delimiter>
-    <div v-if="event.publish_list_value.length > 0">
+    <div v-if="event.publish_list_value && event.publish_list_value.length > 0">
       <h3>Följande medlemmar har tackat ja</h3>
       <table class="table" id="datatable" v-if="event.publish_list">
           <thead>

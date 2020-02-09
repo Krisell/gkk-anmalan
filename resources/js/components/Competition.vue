@@ -98,7 +98,7 @@
     <GkkLink to="/competitions" text="Tillbaka till alla tävlingar" />
 
     <el-delimiter></el-delimiter>
-    <div v-if="competition.publish_list_value.length > 0">
+    <div v-if="competition.publish_list_value && competition.publish_list_value.length > 0">
       <h3>Följande medlemmar har tackat ja</h3>
       <table class="table" v-if="competition.publish_list">
         <thead>
