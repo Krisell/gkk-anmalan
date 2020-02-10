@@ -1,8 +1,9 @@
 # Göteborg Kraftsportklubb (GKK) Anmälningsweb
 
-## Inlogg
-Tanken är just nu att kräva att GKK-medlemmar loggar in för att kunna anmäla sig. Detta ger fördelen att de inte kommer behöva ange persondata och licensnummer varje gång, utan endast ev. viktklass.
-Vi får diskutera om medlemmarna ska kunna registrera sig själva, eller om föreningen ska skapa konton (ex. att en registreringslänk skickas automatiskt via epost).
+## Teknisk översikt
+Applikationen använder ramverken Vue.js och Laravel (php). Hostingen sker på One.com där ordinarie GKK-hemsida ligger. Datan sparas i den MySQL-databas som ingår i One-hostingen.
+
+Vissa grafiska delar använder https://github.com/Naartti/vue-el-element, thanks @naartti!
 
 ## Kort om namngivning
 En `Competition` är ett tävlingstillfälle som GKK-medlemmar kan anmäla sig till.
@@ -30,5 +31,11 @@ Följande kommandon kan sedan användas för att sätta upp en utvecklingsmiljö
 
 Om du vill göra ändringar i frontend krävs att `Node.js` är installerat, att du installerar beroenden med `npm install` samt att du bygger för utveckling (`npm run watch`) eller för produktion (`npm run production`).
 
+## Konton
+Registreringen är i nuläget helt öppen, och innebär att medlemmarna sjävla kan registrera sig. Det sker ingen verifiering av angiven epostadress, men det kan vi koppla på om det blir aktuellt. I ett senare skede vill vi kanske stänga registreringen och istället låta administratörer enkelt maila ut en inbjudan till nya medlemmar.
+
 ## Epost
 Just nu används Mailgun för att skicka epost (ex. vid registrering, ifall vi vill göra det). Mailgun är gratis upp till 10 000 epost per månad om jag förstår det rätt, vilket vi aldrig kommer uppnå. API-nycklar för mailgun behöver sättas i .env-filen för att aktiveras (se .env.example).
+
+## Bidrag
+Idéer och hjälp mottages tacksamt. Du kan antingen skapa en Issue/PR direkt här, eller kontakta mig via epost.
