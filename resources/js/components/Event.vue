@@ -6,7 +6,7 @@
 
     <form style="margin-top: 20px;">
       <div class="form-group">
-        <h3>{{ event.description }}</h3>
+        <h3 style="line-height: 1.4; font-size: 16px;">{{ event.description }}</h3>
       </div>
       <div class="form-group">
         <textarea v-model="comment" class="form-control" name="description" placeholder="Ev. kommentar/ytterligare info, exempelvis om du måste gå tidigare" rows="5"></textarea>

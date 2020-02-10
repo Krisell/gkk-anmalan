@@ -6,7 +6,7 @@
 
     <form style="margin-top: 20px;">
       <div class="form-group">
-        <h3>{{ competition.description }}</h3>
+        <h3 style="line-height: 1.4; font-size: 16px;">{{ competition.description }}</h3>
       </div>
       <h4>Licensnummer: <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap"></i></h4>
       <input class="form-group" v-model="licenceNumber">
