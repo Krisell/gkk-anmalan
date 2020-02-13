@@ -2,6 +2,7 @@
   <div class="action-button-card" :class="{ danger }" @click="$emit('click')">
     <div v-if="unanswered > 0" class="unanswered">
       {{ unanswered }}
+      <div class="unanswered inside"></div>
     </div>
     <div class="icon">
       <i v-if="icon" class="icon fa" :class="'fa-' + icon"></i>
@@ -114,6 +115,19 @@ i.icon {
     display: flex;
     align-items: center;
     justify-content: center;
+ }
+
+ .inside {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    border-color: white;
+    z-index: 999;
+    width: 26px;
+    height: 26px;
+    background: none;
+    color: none;
+    border-width: 1px;
  }
 </style>
 
