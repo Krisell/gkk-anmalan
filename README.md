@@ -3,7 +3,7 @@
 ## Teknisk översikt
 Applikationen använder ramverken Vue.js och Laravel (php). Hostingen sker på One.com där ordinarie GKK-hemsida ligger. Datan sparas i den MySQL-databas som ingår i One-hostingen.
 
-Vissa grafiska delar använder https://github.com/Naartti/vue-el-element, thanks @naartti!
+Vissa grafiska delar använder https://github.com/Naartti/vue-el-element, tack @naartti!
 
 ## Kort om namngivning
 En `Competition` är ett tävlingstillfälle som GKK-medlemmar kan anmäla sig till.
