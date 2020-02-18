@@ -44,6 +44,23 @@ class RegisterController extends Controller
     }
 
     /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        if (request('data')) {
+            $json = base64_decode(request('data'));
+            $data = json_decode($json);
+
+            return view('auth.register', ['data' => $data]);
+        }
+
+        return view('auth.register');
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
