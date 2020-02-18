@@ -11,7 +11,7 @@ class CreateRegistrationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public string $link;
+    public $link;
 
     /**
      * Create a new message instance.
