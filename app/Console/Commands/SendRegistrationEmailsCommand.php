@@ -14,14 +14,14 @@ class SendRegistrationEmailsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'gkk:send-registration-emails';
+    protected $signature = 'gkk:send-registration-emails {--confirm}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Send registration emails';
 
     /**
      * Create a new command instance.
@@ -40,16 +40,22 @@ class SendRegistrationEmailsCommand extends Command
      */
     public function handle()
     {
-        $receivers = [
-            ['email' => 'martin.krisell@gmail.com', 'firstName' => 'Martin', 'lastName' => 'Krisell'],
-        ];
+        $receivers = json_decode(file_get_contents(base_path('recipients.json')), true);
+
+        if (!$this->option('confirm')) {
+            foreach ($receivers as $receiver) {
+                $this->info("Will send email to {$receiver['email']}");
+            }
+
+            return;
+        }
 
         foreach ($receivers as $receiver) {
             Mail::to($receiver['email'])->send(new CreateRegistrationMail(
                 app(SignUpLink::class)->make($receiver['email'], $receiver['firstName'], $receiver['lastName'])
             ));
 
-            $this->info("Send email to {$receiver['email']}");
+            $this->info("Sent email to {$receiver['email']}");
         }
     }
 }
