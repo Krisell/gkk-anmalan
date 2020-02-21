@@ -13,10 +13,10 @@ class CompetitionRegistrationController extends Controller
         $data = $request->validate([
             'status' => '',
             'comment' => '',
-            'licence_number' => '',
-            'events' => 'json',
-            'gender' => '',
-            'weight_class' => '',
+            'licence_number' => 'required',
+            'events' => 'json|required',
+            'gender' => 'required',
+            'weight_class' => 'required',
         ]);
 
         auth()->user()->update([
@@ -24,6 +24,10 @@ class CompetitionRegistrationController extends Controller
             'gender' => $data['gender'],
             'weight_class' => $data['weight_class'],
         ]);
+
+        if ($competition->last_registration_at) {
+            abort_if(now() > $competition->last_registration_at, 401);
+        }
 
         return CompetitionRegistration::updateOrCreate(
             ['competition_id' => $competition->id, 'user_id' => auth()->id()],

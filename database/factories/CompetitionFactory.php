@@ -7,6 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Competition::class, function (Faker $faker) {
     return [
-        //
+        'name' => $faker->name,
+        'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
     ];
 });

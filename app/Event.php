@@ -14,6 +14,7 @@ class Event extends Model
     protected $casts = [
         'publish_count' => 'boolean',
         'publish_list' => 'boolean',
+        'last_registration_at' => 'date',
     ];
 
     public function registrations()

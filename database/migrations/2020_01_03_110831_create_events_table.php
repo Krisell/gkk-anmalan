@@ -22,6 +22,7 @@ class CreateEventsTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('publish_count')->default(false);
             $table->boolean('publish_list')->default(false);
+            $table->date('last_registration_at')->nullable();
 
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
