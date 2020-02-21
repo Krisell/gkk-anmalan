@@ -1,6 +1,7 @@
 <template>
   <div class="action-button-card" @click="$emit('click')">
     <div class="description">{{ event.name }} ({{ dateString }})</div>
+    <div v-if="event.last_registration_at" style="text-align: center;">Sista anmälningsdag: {{ event.last_registration_at }}</div>
     <div class="description" style="font-size: 12px; margin-top: 0;">{{ event.description }}</div>
     <div style="margin-top: 30px;">
       <el-message warning v-if="registration && registration.status == 0">
