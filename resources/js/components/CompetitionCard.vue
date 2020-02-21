@@ -1,11 +1,21 @@
 <template>
   <div class="action-button-card" @click="$emit('click')">
     <div class="description">{{ competition.name }} ({{ dateString }})</div>
+    <div v-if="competition.last_registration_at" style="text-align: center;">Sista anmälningsdag: {{ competition.last_registration_at }}</div>
     <div class="description" style="font-size: 12px; margin-top: 0;">{{ competition.description }}</div>
     <div style="margin-top: 30px;">
-      <el-message danger v-if="registration && registration.status == 0">Du har tackat nej till denna tävling.</el-message>
-      <el-message success v-else-if="registration && registration.status == 1">Du har anmält intresse att tävla!</el-message>
-      <el-message info v-else>Du har inte meddelat om du vill tävla ännu.</el-message>
+      <el-message warning v-if="registration && registration.status == 0">
+        <div>Du har tackat nej till denna tävling.</div>
+        <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
+      </el-message>
+      <el-message success v-else-if="registration && registration.status == 1">
+        <div>Du har anmält intresse att tävla!</div>
+        <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
+      </el-message>
+      <el-message info v-else>
+        <div>Du har inte meddelat om du vill tävla ännu.</div>
+        <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
+      </el-message>
 
       <el-message style="margin-top: 10px;" v-if="competition.publish_count_value > 0">
         Hittills har {{ competition.publish_count_value }} GKK-medlemmar tackat ja till denna tävling.
@@ -24,6 +34,15 @@ export default {
       return Date.string(this.competition.date)
     }
   },
+  methods: {
+    afterLastRegistration (competition) {
+      if (!competition.last_registration_at) {
+        return false
+      }
+
+      return (new window.Date().setHours(0,0,0,0)) > (new window.Date(competition.last_registration_at))
+    },
+  }
 }
 </script>
 
@@ -100,6 +119,10 @@ i.icon {
    color: #D84A38;
    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.20);
    border-radius: 2px;
+ }
+
+ .lastDatePassed {
+   font-size: 12px;
  }
 </style>
 

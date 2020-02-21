@@ -8,6 +8,7 @@
         <thead>
           <tr>
             <th class="gkk" scope="col">Event</th>
+            <th class="gkk" scope="col">Sista anmälningsdag</th>
             <th class="gkk" scope="col">Datum</th>
             <th class="gkk" scope="col">Tid</th>
             <th class="gkk" scope="col">Plats</th>
@@ -18,6 +19,7 @@
         <tbody>
           <tr class="event-row" v-for="event in events" :key="event.id" @click="location(`/admin/events/${event.id}`)" style="cursor: pointer;">
             <td>{{ event.name }}</td>
+            <td>{{ (event.last_registration_at || '').slice(0, 10) }}</td>
             <td>{{ event.date }}</td>
             <td>{{ event.time }}</td>
             <td>{{ event.location }}</td>
@@ -39,7 +41,13 @@
           <input v-model="event.name" class="form-control" name="name" placeholder="Namn på event">
         </div>
         <div class="form-group">
+          <div>Datum</div>
           <input v-model="event.date" class="form-control" type="date" name="date">
+        </div>
+
+        <div class="form-group">
+          <div>Ev. sista anmälningsdag</div>
+          <input v-model="event.last_registration_at" class="form-control" type="date" name="date">
         </div>
         <div class="form-group">
           <input v-model="event.time" class="form-control" name="time" placeholder="Ungefärlig tid, ex. 8 – 15">

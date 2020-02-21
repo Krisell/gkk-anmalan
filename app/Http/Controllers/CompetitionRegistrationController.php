@@ -26,7 +26,7 @@ class CompetitionRegistrationController extends Controller
         ]);
 
         if ($competition->last_registration_at) {
-            abort_if(now() > $competition->last_registration_at, 401);
+            abort_if(now()->toDateString() > $competition->last_registration_at->toDateString(), 401);
         }
 
         return CompetitionRegistration::updateOrCreate(

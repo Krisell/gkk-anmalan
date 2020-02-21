@@ -3,9 +3,18 @@
     <div class="description">{{ event.name }} ({{ dateString }})</div>
     <div class="description" style="font-size: 12px; margin-top: 0;">{{ event.description }}</div>
     <div style="margin-top: 30px;">
-      <el-message danger v-if="registration && registration.status == 0">Du har anmält att du inte kan komma.</el-message>
-      <el-message success v-else-if="registration && registration.status == 1">Du är anmäld som funktionär, tack!</el-message>
-      <el-message info v-else>Du har inte meddelat om du kan delta ännu.</el-message>
+      <el-message warning v-if="registration && registration.status == 0">
+        <div>Du har anmält att du inte kan komma.</div>
+        <div v-if="afterLastRegistration(event)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
+      </el-message>
+      <el-message success v-else-if="registration && registration.status == 1">
+        <div>Du är anmäld som funktionär, tack!</div>
+        <div v-if="afterLastRegistration(event)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
+      </el-message>
+      <el-message info v-else>
+        <div>Du har inte meddelat om du kan delta ännu.</div>
+        <div v-if="afterLastRegistration(event)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
+      </el-message>
 
       <el-message style="margin-top: 10px;" v-if="event.publish_count_value > 0">
         Hittills har {{ event.publish_count_value }} GKK-medlemmar tackat ja till detta event.
@@ -24,6 +33,15 @@ export default {
       return Date.string(this.event.date)
     }
   },
+  methods: {
+    afterLastRegistration (event) {
+      if (!event.last_registration_at) {
+        return false
+      }
+
+      return (new window.Date().setHours(0,0,0,0)) > (new window.Date(event.last_registration_at))
+    },
+  }
 }
 </script>
 
@@ -100,6 +118,10 @@ i.icon {
    color: #D84A38;
    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.20);
    border-radius: 2px;
+ }
+
+.lastDatePassed {
+   font-size: 12px;
  }
 </style>
 

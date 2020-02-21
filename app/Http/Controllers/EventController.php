@@ -77,6 +77,7 @@ class EventController extends Controller
             'description' => '',
             'publish_count' => '',
             'publish_list' => '',
+            'last_registration_at' => '',
         ]);
     }
 }

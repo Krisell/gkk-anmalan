@@ -8,6 +8,7 @@
         <thead>
           <tr>
             <th class="gkk" scope="col">Tävlingsnamn</th>
+            <th class="gkk" scope="col">Sista anmälningsdag</th>
             <th class="gkk" scope="col">Datum</th>
             <th class="gkk" scope="col">Tid</th>
             <th class="gkk" scope="col">Plats</th>
@@ -18,6 +19,7 @@
         <tbody>
           <tr class="competition-row" v-for="competition in competitions" :key="competition.id" @click="location(`/admin/competitions/${competition.id}`)" style="cursor: pointer;">
             <td>{{ competition.name }}</td>
+            <td>{{ (competition.last_registration_at || '').slice(0, 10) }}</td>
             <td>{{ competition.date }}</td>
             <td>{{ competition.time }}</td>
             <td>{{ competition.location }}</td>
@@ -39,7 +41,13 @@
           <input v-model="competition.name" class="form-control" name="name" placeholder="Namn på tävling">
         </div>
         <div class="form-group">
+          <div>Datum</div>
           <input v-model="competition.date" class="form-control" type="date" name="date">
+        </div>
+
+        <div class="form-group">
+          <div>Ev. sista anmälningsdag</div>
+          <input v-model="competition.last_registration_at" class="form-control" type="date" name="last_registration_at">
         </div>
 
         <div style="display: flex; margin-bottom: 5px; align-items: center;">
@@ -132,6 +140,7 @@ export default {
         description: '',
         publish_count: false,
         publish_list: false,
+        last_registration_at: null,
       },
     }
   },

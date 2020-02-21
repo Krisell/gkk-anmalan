@@ -78,6 +78,7 @@ class CompetitionController extends Controller
             'events' => 'json',
             'publish_count' => '',
             'publish_list' => '',
+            'last_registration_at' => '',
         ]);
     }
 }
