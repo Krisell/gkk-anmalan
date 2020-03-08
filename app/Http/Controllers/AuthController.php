@@ -5,12 +5,18 @@ namespace App\Http\Controllers;
 use App\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
+use Illuminate\Support\Facades\Http;
+use Cache\Adapter\Filesystem\FilesystemCachePool;
 
 class AuthController extends Controller
 {
     public function google()
     {
-        $payload = app(\Google_Client::class)->verifyIdToken(request('idToken'));
+        $client = app(\Google_Client::class);
+        $client->setCache(new FilesystemCachePool(new Filesystem(new Local(__DIR__.'/'))));
+        $payload = $client->verifyIdToken(request('idToken'));
 
         abort_if($payload['aud'] !== '52915573324-bn4g8a0iuv4r9mbgmi23sd8464g0j0mv.apps.googleusercontent.com', 401);
 
@@ -20,17 +26,14 @@ class AuthController extends Controller
     public function microsoft()
     {
         $token = request('accessToken');
-        $json = app(Client::class)->request('GET', 'https://graph.microsoft.com/v1.0/me/', [
-            'headers' => ['Authorization' => "Bearer $token"],
-        ])->getBody()->getContents();
 
-        $data = json_decode($json);
+        $data = Http::withHeaders(['Authorization' => "Bearer $token"])->get('https://graph.microsoft.com/v1.0/me/')->json();
 
         if (! $data) {
             return redirect('/');
         }
 
-        $email = $data->mail ?? $data->userPrincipalName;
+        $email = $data['mail'] ?? $data['userPrincipalName'] ?? null;
 
         return $this->login($email);
     }
