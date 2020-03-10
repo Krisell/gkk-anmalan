@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class AdminMiddleware
+class SuperadminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        abort_unless(collect(['admin', 'superadmin'])->contains(auth()->user()->role), 401);
+        abort_unless(collect(['superadmin'])->contains(auth()->user()->role), 401);
 
         return $next($request);
     }

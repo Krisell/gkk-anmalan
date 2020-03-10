@@ -19,4 +19,9 @@ class AccountController extends Controller
     {
         $user->update(['role' => 'admin']);
     }
+
+    public function demote(User $user)
+    {
+        $user->update(['role' => null]);
+    }
 }

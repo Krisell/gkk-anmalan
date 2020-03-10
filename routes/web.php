@@ -23,8 +23,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     Route::group(['prefix' => 'accounts'], function () {
         Route::get('', 'AccountController@index');
-        Route::post('/promote/{user}', 'AccountController@promote');
     });
+});
+
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'superadmin']], function () {
+    Route::post('/accounts/promote/{user}', 'AccountController@promote');
+    Route::post('/accounts/demote/{user}', 'AccountController@demote');
 });
 
 Route::group(['prefix' => 'events', 'middleware' => 'auth'], function () {
