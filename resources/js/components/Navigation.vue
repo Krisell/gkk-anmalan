@@ -31,7 +31,7 @@ export default {
   props: ['user', 'unanswered'],
   computed: {
     isAdmin () {
-      return this.user && this.user.role === 'admin'
+      return this.user && ['admin', 'superadmin'].includes(this.user.role)
     },
   },
   methods: {
