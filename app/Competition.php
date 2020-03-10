@@ -16,10 +16,16 @@ class Competition extends Model
         'publish_count' => 'boolean',
         'publish_list' => 'boolean',
         'last_registration_at' => 'datetime:Y-m-d',
+        'date' => 'datetime:Y-m-d',
     ];
 
     public function registrations()
     {
         return $this->hasMany(CompetitionRegistration::class);
+    }
+
+    public function scopeUpcoming($query)
+    {
+        return $query->where('date', '>=', now()->format('Y-m-d'))->orWhere('date', null);
     }
 }

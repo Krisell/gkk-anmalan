@@ -9,7 +9,7 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::all();
+        $events = Event::upcoming()->get();
 
         foreach ($events as $event) {
             if ($event->publish_count) {

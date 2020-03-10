@@ -21,4 +21,9 @@ class Event extends Model
     {
         return $this->hasMany(EventRegistration::class);
     }
+
+    public function scopeUpcoming($query)
+    {
+        return $query->where('date', '>=', now()->format('Y-m-d'))->orWhere('date', null);
+    }
 }
