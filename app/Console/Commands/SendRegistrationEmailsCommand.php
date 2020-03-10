@@ -6,6 +6,7 @@ use App\SignUpLink;
 use Illuminate\Console\Command;
 use App\Mail\CreateRegistrationMail;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\CompetitionInformationMail;
 
 class SendRegistrationEmailsCommand extends Command
 {
@@ -51,7 +52,7 @@ class SendRegistrationEmailsCommand extends Command
         }
 
         foreach ($receivers as $receiver) {
-            Mail::to($receiver['email'])->send(new CreateRegistrationMail(
+            Mail::to($receiver['email'])->send(new CompetitionInformationMail(
                 app(SignUpLink::class)->make($receiver['email'], $receiver['firstName'], $receiver['lastName'])
             ));
 
