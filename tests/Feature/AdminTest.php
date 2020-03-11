@@ -18,6 +18,7 @@ class AdminTest extends TestCase
             'date' => '2020-02-03',
             'location' => 'Friskis majorna',
             'description' => 'Alla behövs!',
+            'show_status' => 'default',
         ] + $overrides;
     }
 

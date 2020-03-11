@@ -69,6 +69,11 @@
           <div style="margin-left: 10px;">Visa anmälningslista för medlemmar (endast namn)</div>
         </div>
 
+        <div style="display: flex; margin-bottom: 20px; align-items: center;">
+          <div style="margin-right: 10px;">Visningsalternativ</div>
+          <el-dropdown wide v-model="event.show_status" :options="showStatusOptions" />
+        </div>
+
         <div style="display: flex">
           <el-button v-if="!editing" @click="createEvent" primary>Skapa event</el-button>
           <el-button style="margin-right: 10px;" secondary v-if="editing" @click="cancelUpdate">Ångra</el-button>
@@ -113,7 +118,13 @@ export default {
         description: '',
         publish_count: false,
         publish_list: false,
+        show_status: 'default',
       },
+      showStatusOptions: [
+        { value: 'default', label: 'Default (visas tills datum passerat)' },
+        { value: 'show', label: 'Visa' },
+        { value: 'hide', label: 'Dölj' }
+      ],
     }
   },
   mounted () {

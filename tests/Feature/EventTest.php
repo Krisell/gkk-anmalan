@@ -22,6 +22,7 @@ class EventTest extends TestCase
             'description' => 'Det blir kul!',
             'publish_count' => false,
             'publish_list' => false,
+            'show_status' => 'default',
         ], $overrides);
     }
 

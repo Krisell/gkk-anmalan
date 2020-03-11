@@ -13,8 +13,8 @@ class HomeController extends Controller
         return view('welcome', [
             'user' => auth()->user(),
             'unanswered' => [
-                'events' => auth()->user() ? Event::upcoming()->count() - auth()->user()->eventRegistrations()->count() : 0,
-                'competitions' => auth()->user() ? Competition::upcoming()->count() - auth()->user()->competitionRegistrations()->count() : 0,
+                'events' => auth()->user() ? Event::visible()->count() - auth()->user()->eventRegistrations()->count() : 0,
+                'competitions' => auth()->user() ? Competition::visible()->count() - auth()->user()->competitionRegistrations()->count() : 0,
             ],
         ]);
     }

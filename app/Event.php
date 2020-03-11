@@ -22,8 +22,12 @@ class Event extends Model
         return $this->hasMany(EventRegistration::class);
     }
 
-    public function scopeUpcoming($query)
+    public function scopeVisible($query)
     {
-        return $query->where('date', '>=', now()->format('Y-m-d'))->orWhere('date', null);
+        return $query->where('show_status', 'show')->orWhere(function ($query) {
+            $query->where('show_status', '!=', 'hide')->where(function ($query) {
+                $query->where('date', '>=', now()->format('Y-m-d'))->orWhere('date', null);
+            });
+        });
     }
 }

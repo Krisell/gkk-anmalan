@@ -9,7 +9,7 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::upcoming()->get();
+        $events = Event::visible()->get();
 
         foreach ($events as $event) {
             if ($event->publish_count) {
@@ -78,6 +78,7 @@ class EventController extends Controller
             'publish_count' => '',
             'publish_list' => '',
             'last_registration_at' => '',
+            'show_status' => 'required',
         ]);
     }
 }
