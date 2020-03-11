@@ -87,7 +87,7 @@
 
         <div style="display: flex; margin-bottom: 20px; align-items: center;">
           <el-toggle-button v-model="competition.publish_list" />
-          <div style="margin-left: 10px;">Visa anmälningslista för medlemmar (endast namn)</div>
+          <div style="margin-left: 10px;">Visa anmälningslista för medlemmar (namn, vikt, gren)</div>
         </div>
 
         <div style="display: flex">

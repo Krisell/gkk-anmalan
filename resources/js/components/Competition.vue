@@ -120,11 +120,17 @@
       <h3>Följande medlemmar har tackat ja</h3>
       <table class="table" v-if="competition.publish_list">
         <thead>
-          <tr><th scope="col">Namn</th></tr>
+          <tr>
+            <th scope="col">Namn</th>
+            <th scope="col">Viktklass</th>
+            <th scope="col">Gren</th>
+          </tr>
         </thead>
         <tbody>
           <tr v-for="registration in competition.publish_list_value" :key="registration.id">
             <td>{{ registration.user.first_name }} {{ registration.user.last_name }}</td>
+            <td>{{ registration.weight_class }}</td>
+            <td>{{ registration.events | eventsString }}</td>
           </tr>
         </tbody>
       </table>
@@ -171,6 +177,11 @@ export default {
     if (this.user.weight_class) {
       this.weightClass[this.gender] = this.user.weight_class
     }
+  },
+  filters: {
+    eventsString (events) {
+      return Object.entries(JSON.parse(events)).filter(([event, status]) => status).map(([event]) => event.toUpperCase()).join(', ')
+    },
   },
   computed: {
     dateString () {
