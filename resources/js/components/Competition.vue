@@ -2,7 +2,7 @@
   <div style="max-width: 600px; margin: auto;">
     <h1 style="margin-bottom: 20px;">Tävlingsanmälan</h1>
     <h2>{{ competition.name }}</h2>
-    <h4>{{ dateString }} ({{ competition.date }})</h4>
+    <h4>{{ dateString }}</h4>
     <h3 style="line-height: 1.4; font-size: 16px;">{{ competition.description }}</h3>
 
     <div v-if="passedLastRegistration" style="margin-top: 20px;">
@@ -185,7 +185,11 @@ export default {
   },
   computed: {
     dateString () {
-      return Date.string(this.competition.date)
+      if (this.competition.end_date) {
+        return `${Date.string(this.competition.date)} – ${Date.string(this.competition.end_date)} (${this.competition.date} – ${this.competition.end_date})`
+      }
+
+      return `${Date.string(this.competition.date)} (${this.competition.date})`
     },
     eventsString () {
       return Object.entries(this.events).map(([key, value]) => {

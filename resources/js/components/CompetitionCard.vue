@@ -31,6 +31,10 @@ export default {
   props: ['competition', 'registration'],
   computed: {
     dateString () {
+      if (this.competition.end_date) {
+        return `${Date.string(this.competition.date)} – ${Date.string(this.competition.end_date)}`
+      }
+
       return Date.string(this.competition.date)
     }
   },

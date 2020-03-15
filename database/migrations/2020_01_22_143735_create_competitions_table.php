@@ -18,6 +18,7 @@ class CreateCompetitionsTable extends Migration
             $table->string('name');
             $table->text('events');
             $table->date('date')->nullable();
+            $table->date('end_date')->nullable();
             $table->string('time')->nullable();
             $table->string('location')->nullable();
             $table->text('description')->nullable();

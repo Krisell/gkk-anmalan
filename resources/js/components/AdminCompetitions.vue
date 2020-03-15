@@ -20,7 +20,7 @@
           <tr class="competition-row" v-for="competition in competitions" :key="competition.id" @click="location(`/admin/competitions/${competition.id}`)" style="cursor: pointer;">
             <td>{{ competition.name }}</td>
             <td>{{ (competition.last_registration_at || '').slice(0, 10) }}</td>
-            <td>{{ competition.date }}</td>
+            <td>{{ competition | dateString }}</td>
             <td>{{ competition.time }}</td>
             <td>{{ competition.location }}</td>
             <td>{{ countYes(competition) }} (av {{ competition.registrations.length }})</td>
@@ -43,6 +43,9 @@
         <div class="form-group">
           <div>Datum</div>
           <input v-model="competition.date" class="form-control" type="date" name="date">
+
+          <div>till (lämna tom för endagstävling)</div>
+          <input v-model="competition.end_date" class="form-control" type="date" name="date">
         </div>
 
         <div class="form-group">
@@ -153,6 +156,15 @@ export default {
         { value: 'show', label: 'Visa' },
         { value: 'hide', label: 'Dölj' }
       ],
+    }
+  },
+  filters: {
+    dateString (competition) {
+      if (!competition.end_date) {
+        return competition.date
+      }
+
+      return `${competition.date} – ${competition.end_date}`
     }
   },
   mounted () {

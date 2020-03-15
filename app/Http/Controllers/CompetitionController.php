@@ -73,6 +73,7 @@ class CompetitionController extends Controller
             'name' => 'required',
             'time' => '',
             'date' => '',
+            'end_date' => '',
             'location' => '',
             'description' => '',
             'events' => 'json',
