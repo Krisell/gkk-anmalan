@@ -4,6 +4,7 @@ import VModal from 'vue-js-modal'
 require('./bootstrap')
 
 window.Vue = Vue
+Vue.config.ignoredElements = ['trix-editor']
 Vue.use(VModal)
 
 Vue.mixin({

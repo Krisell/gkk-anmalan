@@ -24,6 +24,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::group(['prefix' => 'accounts'], function () {
         Route::get('', 'AccountController@index');
     });
+
+    Route::get('/news', 'NewsController@index');
+    Route::post('/news', 'NewsController@store');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'superadmin']], function () {
