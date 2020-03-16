@@ -38,5 +38,6 @@ export default {
     margin-bottom: 15px;
     /* padding-left: 20px; */
     border-top: 2px solid #243868;
+    background: white;
   }
 </style>
