@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $news = Auth()->id() ? NewsItem::all() : [];
+        $news = Auth()->id() ? NewsItem::latest()->get() : [];
 
         return view('welcome', [
             'user' => auth()->user(),
