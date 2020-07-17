@@ -3,7 +3,7 @@
     <h1 style="margin-bottom: 20px;">Tävlingsanmälan</h1>
     <h2>{{ competition.name }}</h2>
     <h4>{{ dateString }}</h4>
-    <h3 style="line-height: 1.4; font-size: 16px;">{{ competition.description }}</h3>
+    <h3 style="line-height: 1.4; font-size: 16px; white-space: pre-wrap;">{{ competition.description }}</h3>
 
     <div v-if="passedLastRegistration" style="margin-top: 20px;">
 

@@ -80,7 +80,7 @@
           <input v-model="competition.location" class="form-control" name="location" placeholder="Plats, ex Friskis Majorna">
         </div>
         <div class="form-group">
-          <textarea v-model="competition.description" class="form-control" name="description" placeholder="Ev. ytterligare info"></textarea>
+          <textarea rows="6" v-model="competition.description" class="form-control" name="description" placeholder="Ev. ytterligare info"></textarea>
         </div>
 
         <div style="display: flex; margin-bottom: 5px; align-items: center;">

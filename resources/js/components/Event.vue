@@ -3,7 +3,7 @@
     <h1 style="margin-bottom: 20px;">Funktionärsanmälan</h1>
     <h2>{{ event.name }}</h2>
     <h4>{{ dateString }} ({{ event.date }})</h4>
-    <h3 style="line-height: 1.4; font-size: 16px;">{{ event.description }}</h3>
+    <h3 style="line-height: 1.4; font-size: 16px; white-space: pre-wrap;">{{ event.description }}</h3>
 
     <div v-if="passedLastRegistration" style="margin-top: 20px;">
       <div v-if="!this.registration">

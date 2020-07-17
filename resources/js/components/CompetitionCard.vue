@@ -2,7 +2,7 @@
   <div class="action-button-card" @click="$emit('click')">
     <div class="description">{{ competition.name }} ({{ dateString }})</div>
     <div v-if="competition.last_registration_at" style="text-align: center;">Sista anmälningsdag: {{ competition.last_registration_at }}</div>
-    <div class="description" style="font-size: 12px; margin-top: 0;">{{ competition.description }}</div>
+    <div class="description" style="font-size: 12px; margin-top: 0; white-space: pre-wrap;">{{ competition.description }}</div>
     <div style="margin-top: 30px;">
       <el-message warning v-if="registration && registration.status == 0">
         <div>Du har tackat nej till denna tävling.</div>

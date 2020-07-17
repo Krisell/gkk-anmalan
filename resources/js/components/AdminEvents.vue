@@ -56,7 +56,7 @@
           <input v-model="event.location" class="form-control" name="location" placeholder="Plats, ex Friskis Majorna">
         </div>
         <div class="form-group">
-          <textarea v-model="event.description" class="form-control" name="description" placeholder="Ev. ytterligare info"></textarea>
+          <textarea rows="6" v-model="event.description" class="form-control" name="description" placeholder="Ev. ytterligare info"></textarea>
         </div>
 
         <div style="display: flex; margin-bottom: 5px; align-items: center;">
