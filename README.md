@@ -5,19 +5,14 @@ Applikationen använder ramverken Vue.js och Laravel (php). Hostingen sker på O
 
 Vissa grafiska delar använder https://github.com/Naartti/vue-el-element, tack @naartti!
 
-## Kort om namngivning i källkoden
-En `Competition` är ett tävlingstillfälle som GKK-medlemmar kan anmäla sig till.
-Administratören skapar tillfället och respektive medlem skapar en `CompetitionRegistration`.
-
-Ett `Event` är ett tillfälle där medlemmar kan anmäla sig till att hjälpa till som funktionär.
-Administratören skapar tillfället och respektive medlem skapar en `EventRegistration`.
-
-Ett `Cooperation` är ett tillfälle där andra föreningar kan anmäla intresse att delta (ex. skicka tävlande till våra serieomgångar).
-Administratören skapar tillfället och besökare skapar en `CooperationRegistration`. Detta bör till skillnad från de andra två fallen inte kräva inlogg.
-**Detta är inte implementerat ännu.**
-
 ## Uppdatera webben
-Efter att önskade ändringar är pushade hit, logga in på servern och kör kommanot `deployanm` som i sin tur kör `git pull` från projektets mapp samt uppdaterar publika assets. Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt. Observera att index.php har justerats för att hitta rätt, så den ska *inte* uppdateras. För tillfället är det endast innehållet i js/ och css/, samt `mix-manifest.json`, som kopieras.
+Efter att önskade ändringar är pushade hit, logga in på servern och kör kommanot 
+```
+deployanm
+``` 
+Detta gör en `git pull` från projektets mapp samt uppdaterar publika assets och kör optimeringskommandona `php artisan route:cache` och `php artisan config:cache`.
+
+Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt. Observera att index.php har justerats för att hitta rätt, så den ska *inte* uppdateras. För tillfället är det endast innehållet i js/ och css/, samt `mix-manifest.json`, som kopieras.
 
 ## Köra lokalt
 Se till att php och composer finns installerat på din enhet (eller ex. i din docker-kontainer).
@@ -30,6 +25,17 @@ Följande kommandon kan sedan användas för att sätta upp en utvecklingsmiljö
  * `php artisan serve` för att starta en lokal server
 
 Om du vill göra ändringar i frontend krävs att `Node.js` är installerat, att du installerar beroenden med `npm install` samt att du bygger för utveckling (`npm run watch`) eller för produktion (`npm run production`).
+
+## Kort om namngivning i källkoden
+En `Competition` är ett tävlingstillfälle som GKK-medlemmar kan anmäla sig till.
+Administratören skapar tillfället och respektive medlem skapar en `CompetitionRegistration`.
+
+Ett `Event` är ett tillfälle där medlemmar kan anmäla sig till att hjälpa till som funktionär.
+Administratören skapar tillfället och respektive medlem skapar en `EventRegistration`.
+
+Ett `Cooperation` är ett tillfälle där andra föreningar kan anmäla intresse att delta (ex. skicka tävlande till våra serieomgångar).
+Administratören skapar tillfället och besökare skapar en `CooperationRegistration`. Detta bör till skillnad från de andra två fallen inte kräva inlogg.
+**Detta är inte implementerat ännu.**
 
 ## Konton
 Registreringen är i nuläget helt öppen, och innebär att medlemmarna sjävla kan registrera sig. Det sker ingen verifiering av angiven epostadress, men det kan vi koppla på om det blir aktuellt. I ett senare skede vill vi kanske stänga registreringen och istället låta administratörer enkelt maila ut en inbjudan till nya medlemmar.
