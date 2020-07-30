@@ -14,29 +14,21 @@
           <span class="rounded-md shadow-sm">
             <div v-if="!user">
               <a href="/login">
-                <button type="button" class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-gkk hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-600 active:bg-gkk transition duration-150 ease-in-out">
-                  <span>Logga in</span>
-                </button>
+                <ui-button>Logga in</ui-button>
               </a>
 
               <a href="/register">
-                <button type="button" class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-gkk hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-600 active:bg-gkk transition duration-150 ease-in-out">
-                  <span>Skapa konto</span>
-                </button>
+                <ui-button>Skapa konto</ui-button>
               </a>
             </div>
 
             <div v-if="user">
               <a @click="logout">
-                <button type="button" class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
-                  <span>Logga ut</span>
-                </button>
+                <ui-button type="secondary">Logga ut</ui-button>
               </a>
 
               <a href="/profile">
-                <button type="button" class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-gkk hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-600 active:bg-gkk transition duration-150 ease-in-out">
-                  <span>Profil ({{ user.first_name }} {{ user.last_name }})</span>
-                </button>
+                <ui-button>Profil ({{ user.first_name }} {{ user.last_name }})</ui-button>
               </a>
             </div>
           </span>

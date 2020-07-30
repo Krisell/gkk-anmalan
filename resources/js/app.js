@@ -31,6 +31,13 @@ files.keys().map(key => {
     Vue.component('Gkk' + key.split('/').pop().split('.')[0], files(key).default)
 })
 
+files = require.context('./components/ui', false, /\.vue$/i)
+files.keys().map(key => {
+    Vue.component('ui' + key.split('/').pop().split('.')[0], files(key).default)
+})
+
+console.log(files.keys())
+
 const app = new Vue({
     el: '#app',
 })
