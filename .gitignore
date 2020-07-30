@@ -13,5 +13,6 @@ npm-debug.log
 yarn-error.log
 recipients.json
 app/Http/Controllers/cache
+reports/
 
 public/js/app.js.LICENSE.txt
