@@ -1,52 +1,56 @@
 <template>
-  <div>
-    <h1>Profil</h1>
+  <!-- <div>
+    <div>
+  <label for="email" class="block text-sm font-medium leading-5 text-gray-700">Email</label>
+  <div class="mt-1 relative rounded-md shadow-sm">
+    <input id="email" class="form-input block w-full sm:text-sm sm:leading-5" placeholder="you@example.com">
+  </div>
+</div>
+
+  </div> -->
+
+
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-hairline mb-2">Profil</h1>
     <div style="margin-top: 30px;"></div>
-    <el-header>Namn</el-header>
-    <div v-if="!isAdjusted.name">
-        <el-info class="mb-2">{{ user.first_name }} {{ user.last_name }}</el-info>
-        <el-button @click="startEdit('name')" secondary>Redigera</el-button>
-    </div>
-    <div v-else>
-        <el-input class="mb-2" placeholder="Förnamn" v-model="name.first"></el-input>
-        <el-input class="mb-2" placeholder="Efternamn" v-model="name.last"></el-input>
+    <h2 class="font-thin">Namn</h2>
+    <input v-model="name.first" class="form-input block w-full sm:text-sm sm:leading-5">
+    <input v-model="name.last" class="mt-1 form-input block w-full sm:text-sm sm:leading-5">
+    <button @click="updateName" class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
+      <span>Uppdatera namn</span>
+    </button>
 
-        <div style="display: flex">
-          <el-button class="mr-2" @click="reset()" secondary>Ångra</el-button>
-          <el-button @click="updateName">Ändra namn</el-button>
-        </div>
-    </div>
+    <div class="m-8 border"></div>
 
-    <el-delimiter></el-delimiter>
+    <h2 class="font-thin">Epost</h2>
+    <input v-model="email" type="email" class="form-input block w-full sm:text-sm sm:leading-5">
+    <button @click="updateEmail" class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
+      <span>Uppdatera epost</span>
+    </button>
 
-    <div v-if="!isAdjusted.email">
-      <el-info class="mb-2">{{ user.email }}</el-info>
-      <el-button @click="startEdit('email')" secondary>Redigera</el-button>
-    </div>
-    <div v-else>
-      <el-input class="mb-2" placeholder="E-post" v-model="email"></el-input>
-
-      <div style="display: flex">
-        <el-button class="mr-2" @click="reset()" secondary>Ångra</el-button>
-        <el-button @click="updateEmail">Ändra e-post</el-button>
-      </div>
-    </div>
-
-    <el-delimiter></el-delimiter>
+    <div class="m-8 border"></div>
 
     <div v-if="!isAdjusted.password">
-      <el-button @click="startEdit('password')" secondary>Redigera lösenord</el-button>
+    <button @click="startEdit('password')" class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
+      <span>Redigera lösenord</span>
+    </button>
     </div>
-    <div v-else>
-      <el-input class="mb-2" placeholder="Nytt lösenord" type="password" v-model="password.new"></el-input>
-      <el-input class="mb-2" placeholder="Bekräfta lösenord" type="password" v-model="password.new_confirmation"></el-input>
 
+    <div v-else>
+      <input v-model="password.new" type="password" placeholder="Nytt lösenord" class="form-input block w-full sm:text-sm sm:leading-5">
+      <input v-model="password.new_confirmation" type="password" placeholder="Bekräfta lösenord" class="mt-1 form-input block w-full sm:text-sm sm:leading-5">
       <div style="display: flex">
-        <el-button class="mr-2" @click="reset()" secondary>Ångra</el-button>
-        <el-button @click="updatePassword">Byt lösenord</el-button>
+        <button @click="reset" class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
+          <span class="text-red-400">Ångra</span>
+        </button>
+
+        <button @click="updatePassword" class="ml-2 mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
+          <span>Byt lösenord</span>
+        </button>
       </div>
-      <p v-if="errors.password" style="color: red;">Kunde inte uppdatera lösenordet. Kontrollera inmatning.</p>
     </div>
+
+    <GkkLink to="/" text="Tillbaka till startsidan" />
   </div>
 </template>
 

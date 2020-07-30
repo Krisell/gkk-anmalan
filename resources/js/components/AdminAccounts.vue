@@ -32,6 +32,8 @@
         </tbody>
       </table>
 
+    <GkkLink to="/" text="Tillbaka till startsidan" />
+
     <modal name="promote" :adaptive="true" height="auto">
       <div style="padding: 30px; margin-top: 20px;">
         <h3 style="text-align: center;">Är du säker på att du vill göra {{ selectedAccount && selectedAccount.email }} till administratör?</h3>
