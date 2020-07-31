@@ -1,10 +1,78 @@
 <template>
-  <div>
-    <h1 style="text-align: center;">Admin</h1>
+  <div class="container mx-auto">
+    <h1 class="text-center text-3xl font-hairline mb-6">Admin</h1>
+    <h2 class="text-center text-xl font-thin mb-6">Tävlingsanmälan</h2>
+    <div class="flex flex-col">
+      <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+          <table class="min-w-full">
+            <thead>
+              <tr>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Tävling
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Anmälan senast
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Tid
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Plats
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Antal anmälda
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Åtgärder
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <tr v-for="competition in competitions" :key="competition.id" @click="location(`/admin/competitions/${competition.id}`)" style="cursor: pointer;">
+                <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="flex items-center">
+                    <div class="ml-4">
+                      <div class="text-sm leading-5 font-medium text-gray-900">{{ competition.name }}</div>
+                      <div class="text-sm leading-5 text-gray-500">{{ competition | dateString }}</div>
+                    </div>
+                  </div>
+                </td>
+                <!-- <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ competition.name }}</div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ (competition.last_registration_at || '').slice(0, 10) }}</div>
+                </td> -->
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ (competition.last_registration_at || '').slice(0, 10) }}</div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ competition.time }}</div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ competition.location }}</div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ countYes(competition) }} (av {{ competition.registrations.length }})</div>
+                </td>
+                <td @click="e => e.stopPropagation()" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="flex items-center justify-center">
+                    <svg class="w-6 text-gkk-light hover:text-gkk" @click="edit(competition)" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <!-- <i data-toggle="tooltip" data-placement="top" title="Redigera tävling"  class="fa fa-cogs"></i> -->
+                    <svg class="w-6 ml-2 text-gkk-light hover:text-gkk" @click="confirmDelete(competition)" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <!-- <i style="margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="Radera denna tävling" @click="confirmDelete(competition)" class="fa fa-trash"></i> -->
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-    <div class="type">
-      <h3>Tävlingsanmälan</h3>
-      <table class="table">
+
+      <!-- <table class="table">
         <thead>
           <tr>
             <th class="gkk" scope="col">Tävlingsnamn</th>
@@ -17,7 +85,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="competition-row" v-for="competition in competitions" :key="competition.id" @click="location(`/admin/competitions/${competition.id}`)" style="cursor: pointer;">
+          <tr class="competition-row" v-for="competition in competitions" :key="competition.id" @click="location(`/admin/competitions/${competition.id}`)">
             <td>{{ competition.name }}</td>
             <td>{{ (competition.last_registration_at || '').slice(0, 10) }}</td>
             <td>{{ competition | dateString }}</td>
@@ -30,11 +98,15 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> -->
 
-      <el-button v-if="!editing" @click="showNewCompetition = !showNewCompetition">
-        <i class="fa fa-plus"></i>&nbsp;Ny tävling
-      </el-button>
+      <ui-button class="mt-2" v-if="!editing" @click="showNewCompetition = !showNewCompetition">
+        <div class="flex items-center justify-center">
+          <svg class="w-6 -ml-2 mr-2" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <div>Ny tävling</div>
+        </div>
+      </ui-button>
+
 
       <form style="margin-top: 20px;" v-show="showNewCompetition">
         <div class="form-group">
@@ -108,7 +180,6 @@
           Kunde inte skapa tävling, kontrollera inmatning och anlutning.
         </div>
       </form>
-    </div>
 
     <GkkLink to="/" text="Tillbaka till startsidan" />
 
@@ -161,7 +232,7 @@ export default {
   filters: {
     dateString (competition) {
       if (!competition.end_date) {
-        return competition.date
+        return competition.date || '&nbsp;'
       }
 
       return `${competition.date} – ${competition.end_date}`
@@ -228,19 +299,16 @@ export default {
 </script>
 
 <style scoped lang="less">
-  .type {
-    margin-bottom: 40px;
-  }
 
-  .competition-row:hover {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  }
+  // .competition-row:hover {
+  //   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  // }
 
-  th, td, thead, table {
-    border: none;
-  }
+  // th, td, thead, table {
+  //   border: none;
+  // }
 
-  th.gkk {
-    border-bottom: 1px solid #253969;
-  }
+  // th.gkk {
+  //   border-bottom: 1px solid #253969;
+  // }
 </style>
