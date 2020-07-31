@@ -28,13 +28,13 @@ export default {
       googleIsLoggingIn: false,
     }
   },
-  methods: {
-    google () {
+  created () {
+    if (window.location.hash === '#redirecting-google') {
       this.googleIsLoggingIn = true
-      firebase.auth().languageCode = 'sv'
-      const provider = new firebase.auth.GoogleAuthProvider()
-      provider.addScope('email')
-      firebase.auth().signInWithPopup(provider).then(result => {
+    }
+
+    firebase.auth().getRedirectResult().then(result => {
+      if (result.credential) {
         PostRedirect.send({
           url: '/auth/google',
           data: {
@@ -42,7 +42,17 @@ export default {
             to: this.to
           }
         })
-      })
+      }
+    })
+  },
+  methods: {
+    google () {
+      this.googleIsLoggingIn = true
+      firebase.auth().languageCode = 'sv'
+      const provider = new firebase.auth.GoogleAuthProvider()
+      provider.addScope('email')
+      window.location.hash = 'redirecting-google'
+      firebase.auth().signInWithRedirect(provider)
     },
     microsoft () {
       firebase.auth().signInWithPopup(new firebase.auth.OAuthProvider('microsoft.com')).then(result => {
