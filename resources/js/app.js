@@ -9,11 +9,14 @@ Vue.use(VModal)
 
 Vue.mixin({
   methods: {
-    location(url) {
+    location (url) {
       window.location = url
     },
     reload () {
       window.location.reload()
+    },
+    log (text) {
+      console.log(text)
     },
   }
 })
@@ -35,8 +38,6 @@ files = require.context('./components/ui', false, /\.vue$/i)
 files.keys().map(key => {
     Vue.component('ui' + key.split('/').pop().split('.')[0], files(key).default)
 })
-
-console.log(files.keys())
 
 const app = new Vue({
     el: '#app',
