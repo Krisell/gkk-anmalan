@@ -1,15 +1,4 @@
 <template>
-  <!-- <div>
-    <div>
-  <label for="email" class="block text-sm font-medium leading-5 text-gray-700">Email</label>
-  <div class="mt-1 relative rounded-md shadow-sm">
-    <input id="email" class="form-input block w-full sm:text-sm sm:leading-5" placeholder="you@example.com">
-  </div>
-</div>
-
-  </div> -->
-
-
   <div class="max-w-2xl mx-auto">
     <h1 class="text-3xl font-hairline mb-2">Profil</h1>
     <div style="margin-top: 30px;"></div>
@@ -20,7 +9,7 @@
       <span>Uppdatera namn</span>
     </button>
 
-    <div class="m-8 border"></div>
+    <div class="my-8 border-b border-gray-200 border-1"></div>
 
     <h2 class="font-thin">Epost</h2>
     <input v-model="email" type="email" class="form-input block w-full sm:text-sm sm:leading-5">
@@ -28,7 +17,7 @@
       <span>Uppdatera epost</span>
     </button>
 
-    <div class="m-8 border"></div>
+    <div class="my-8 border-b border-gray-200 border-1"></div>
 
     <div v-if="!isAdjusted.password">
     <button @click="startEdit('password')" class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">

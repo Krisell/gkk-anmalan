@@ -27,7 +27,6 @@
 @yield('content')
 </main>
 
-<!-- <gkk-testbar></gkk-testbar> -->
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
