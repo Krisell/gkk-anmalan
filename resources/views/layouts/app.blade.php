@@ -17,7 +17,7 @@
 
     @yield('head')
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50">
 @yield('css')
 
 <div id="app">
