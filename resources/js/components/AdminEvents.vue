@@ -25,8 +25,8 @@
             <td>{{ event.location }}</td>
             <td>{{ countYes(event) }} (av {{ event.registrations.length }})</td>
             <td @click="e => e.stopPropagation()" scope="row">
-              <i data-toggle="tooltip" data-placement="top" title="Redigera event" @click="edit(event)" class="fa fa-cogs"></i>
-              <i style="margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="Radera detta event" @click="confirmDelete(event)" class="fa fa-trash"></i>
+              <i v-tooltip="'Redigera event'" @click="edit(event)" class="fa fa-cogs"></i>
+              <i v-tooltip="'Radera event'" style="margin-left: 5px;" @click="confirmDelete(event)" class="fa fa-trash"></i>
             </td>
           </tr>
         </tbody>
@@ -126,9 +126,6 @@ export default {
         { value: 'hide', label: 'Dölj' }
       ],
     }
-  },
-  mounted () {
-    $(() => { $('[data-toggle="tooltip"]').tooltip() })
   },
   methods: {
     confirmDelete (event) {

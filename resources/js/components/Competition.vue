@@ -25,7 +25,11 @@
     </div>
     <div v-else>
       <form class="mt-2">
-        <h4 class="text-md font-thin">Licensnummer: <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap"></i></h4>
+        <div class="flex mb-2">
+          <svg v-tooltip="'Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap'" class="w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <h4 class="ml-2 text-md font-thin">Licensnummer</h4>
+        </div>
+
         <input class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" v-model="licenceNumber">
 
         <div class="mt-4">
@@ -43,8 +47,9 @@
           </div>
         </div>
 
-        <div class="mt-4">
-          <h4 class="text-md font-thin">Viktklass (kg): <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Mästerskap har i regel klassfast anmälan, medan serie-tävlingar inte har viktklasser (men kan ordna gupperna baserat på detta, så välj gärna en uppskattning)."></i></h4>
+        <div class="flex mb-2 mt-6">
+          <svg v-tooltip="'Mästerskap har i regel klassfast anmälan, medan serie-tävlingar inte har viktklasser (men kan ordna gupperna baserat på detta, så välj gärna en uppskattning).'" class="w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <h4 class="ml-2 text-md font-thin">Viktklass (kg)</h4>
         </div>
 
         <select v-model="weightClass['Män']" v-show="gender === 'Män'" class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
@@ -173,8 +178,6 @@ export default {
     }
   },
   mounted () {
-    $(() => { $('[data-toggle="tooltip"]').tooltip() })
-
     if (this.registration) {
       this.events = JSON.parse(this.registration.events)
     }

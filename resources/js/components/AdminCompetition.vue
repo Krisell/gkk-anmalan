@@ -28,7 +28,7 @@
       </table>
     </div>
 
-    <div style="text-align: center; cursor: pointer;" @click="excel" data-toggle="tooltip" data-placement="top" title="Hämta Excel-fil">
+    <div style="text-align: center; cursor: pointer;" @click="excel" v-tooltip="'Hämta Excel-fil'">
       <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
 width="60" height="60"
 viewBox="0 0 100 100"
@@ -50,9 +50,6 @@ export default {
     eventsString (events) {
       return Object.entries(JSON.parse(events)).filter(([event, status]) => status).map(([event]) => event.toUpperCase()).join(', ')
     },
-  },
-  mounted () {
-    $(() => { $('[data-toggle="tooltip"]').tooltip() })
   },
   methods: {
     excel () {

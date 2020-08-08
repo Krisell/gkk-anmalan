@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import VModal from 'vue-js-modal'
+import VTooltip from 'v-tooltip'
 
 require('./bootstrap')
 
 window.Vue = Vue
 Vue.config.ignoredElements = ['trix-editor']
 Vue.use(VModal)
+Vue.use(VTooltip)
 
 Vue.mixin({
   methods: {

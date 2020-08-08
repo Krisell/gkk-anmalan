@@ -58,10 +58,8 @@
                 </td>
                 <td @click="e => e.stopPropagation()" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center justify-center">
-                    <svg class="w-6 text-gkk-light hover:text-gkk" @click="edit(competition)" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <!-- <i data-toggle="tooltip" data-placement="top" title="Redigera tävling"  class="fa fa-cogs"></i> -->
-                    <svg class="w-6 ml-2 text-gkk-light hover:text-gkk" @click="confirmDelete(competition)" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    <!-- <i style="margin-left: 5px;" data-toggle="tooltip" data-placement="top" title="Radera denna tävling" @click="confirmDelete(competition)" class="fa fa-trash"></i> -->
+                    <svg v-tooltip="'Redigera tävling'" class="w-6 text-gkk-light hover:text-gkk" @click="edit(competition)" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <svg v-tooltip="'Radera tävling'" class="w-6 ml-2 text-gkk-light hover:text-gkk" @click="confirmDelete(competition)" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                   </div>
                 </td>
               </tr>
@@ -237,10 +235,6 @@ export default {
 
       return `${competition.date} – ${competition.end_date}`
     }
-  },
-  mounted () {
-    console.log(this.competitions)
-    $(() => { $('[data-toggle="tooltip"]').tooltip() })
   },
   methods: {
     confirmDelete (competition) {

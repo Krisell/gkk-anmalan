@@ -44,13 +44,13 @@
                 </td>
                 <td class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                   <div v-if="user.role === 'superadmin'">
-                    <i @click="confirmDemotion(account)" v-if="account.role === 'admin'" style="cursor: pointer;"  class="fa fa-star" data-toggle="tooltip" data-placement="top" title="Administratör, klicka för att ta bort rollen"></i>
-                    <i v-else-if="account.role === 'superadmin'" class="fa fa-star" data-toggle="tooltip" data-placement="top" title="Superadministratör"></i>
-                    <i @click="confirmPromotion(account)" v-else class="fa fa-star-o" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Gör till administratör"></i>
+                    <i @click="confirmDemotion(account)" v-if="account.role === 'admin'" style="cursor: pointer;"  class="fa fa-star" v-tooltip="'Administratör, klicka för att ta bort rollen'"></i>
+                    <i v-else-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
+                    <i @click="confirmPromotion(account)" v-else class="fa fa-star-o" style="cursor: pointer;" v-tooltip="'Gör till administratör'"></i>
                   </div>
                   <div v-else>
-                    <i v-if="account.role === 'admin'" class="fa fa-star" data-toggle="tooltip" data-placement="top" title="Administratör"></i>
-                    <i v-if="account.role === 'superadmin'" class="fa fa-star" data-toggle="tooltip" data-placement="top" title="Superadministratör"></i>
+                    <i v-if="account.role === 'admin'" class="fa fa-star" v-tooltip="'Administratör'"></i>
+                    <i v-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
                   </div>
                 </td>
               </tr>
@@ -93,9 +93,6 @@ export default {
     return {
       selectedAccount: null,
     }
-  },
-  mounted () {
-    $(() => { $('[data-toggle="tooltip"]').tooltip() })
   },
   filters: {
     dateString (date) {
