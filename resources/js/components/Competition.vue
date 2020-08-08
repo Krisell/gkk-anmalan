@@ -1,96 +1,101 @@
 <template>
-  <div style="max-width: 600px; margin: auto;">
-    <h1 style="margin-bottom: 20px;">Tävlingsanmälan</h1>
-    <h2>{{ competition.name }}</h2>
-    <h4>{{ dateString }}</h4>
-    <h3 style="line-height: 1.4; font-size: 16px; white-space: pre-wrap;">{{ competition.description }}</h3>
+  <div class="container mx-auto max-w-lg">
+    <h1 class="text-center text-3xl font-hairline mb-6">Tävlingsanmälan</h1>
+    <h2 class="text-2xl font-hairline text-center m-4">{{ competition.name }}</h2>
+    <h2 class="text-sm font-hairline text-center -mt-4">{{ dateString }}</h2>
+    <h3 class="text-md font-hairline text-center mt-2 whitespace-pre-wrap">{{ competition.description }}</h3>
 
-    <div v-if="passedLastRegistration" style="margin-top: 20px;">
+    <div v-if="passedLastRegistration" class="mt-2">
 
       <div v-if="!this.registration">
-        <h3 style="color: orange;">Sista anmälningsdatum har passerat.</h3>
+        <h3 class="text-orange-400 text-lg font-thin text-center">Sista anmälningsdatum har passerat</h3>
       </div>
 
       <div v-if="this.registration && this.registration.status == 0">
-        <h3 style="color: orange;">Sista anmälningsdatum har passerat, och du har anmält att du inte vill/kan delta.</h3>
+        <h3 class="text-orange-400 text-lg font-thin text-center">Sista anmälningsdatum har passerat, och du har anmält att du inte vill/kan delta.</h3>
       </div>
 
       <div v-if="this.registration && this.registration.status == 1">
-        <h3 style="color: green;">Sista anmälningsdatum har passerat, och du är anmäld.</h3>
-        <div>Licensnummer: {{ licenceNumber }}</div>
-        <div>{{ gender }}, {{ weightClass[gender] }} kg</div>
-        <div>{{ eventsString }}</div>
-        <div>{{ comment }}</div>
+        <h3 class="text-green-400 text-lg font-thin text-center">Sista anmälningsdatum har passerat, och du är anmäld.</h3>
+        <h3 class="text-gkk text-lg font-thin text-center">Licensnummer: {{ licenceNumber }}</h3>
+        <h3 class="text-gkk text-lg font-thin text-center">{{ gender }}, {{ weightClass[gender] }} kg</h3>
+        <h3 class="text-gkk text-lg font-thin text-center">{{ eventsString }}</h3>
+        <h3 class="text-gkk text-lg font-thin text-center">{{ comment }}</h3>
       </div>
     </div>
     <div v-else>
-      <form style="margin-top: 20px;">
-        <h4>Licensnummer: <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap"></i></h4>
-        <input class="form-group" v-model="licenceNumber">
+      <form class="mt-2">
+        <h4 class="text-md font-thin">Licensnummer: <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap"></i></h4>
+        <input class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" v-model="licenceNumber">
 
-        <el-radio-button
-          style="margin-bottom: 20px;"
-          v-model="gender"
-          :options="[ { value: 'Kvinnor', label: 'Kvinnor' }, { value: 'Män', label: 'Män' } ]"
-        />
-
-        <h4>Viktklass: <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Mästerskap har i regel klassfast anmälan, medan serie-tävlingar inte har viktklasser (men kan ordna gupperna baserat på detta, så välj gärna en uppskattning)."></i></h4>
-
-        <el-dropdown v-show="gender === 'Män'"
-          v-model="weightClass['Män']"
-          :options="[
-            { value: '53', label: '53 kg' },
-            { value: '59', label: '59 kg' },
-            { value: '66', label: '66 kg' },
-            { value: '74', label: '74 kg' },
-            { value: '83', label: '83 kg' },
-            { value: '93', label: '93 kg' },
-            { value: '105', label: '105 kg' },
-            { value: '120', label: '120 kg' },
-            { value: '120+', label: '120+ kg' },
-          ]"
-        />
-
-        <el-dropdown v-show="gender === 'Kvinnor'"
-          v-model="weightClass['Kvinnor']"
-          :options="[
-            { value: '43', label: '43 kg' },
-            { value: '47', label: '47 kg' },
-            { value: '52', label: '52 kg' },
-            { value: '57', label: '57 kg' },
-            { value: '63', label: '63 kg' },
-            { value: '72', label: '72 kg' },
-            { value: '84', label: '84 kg' },
-            { value: '84+', label: '84+ kg' },
-          ]"
-        />
-
-        <div style="margin-bottom: 20px;"></div>
-
-        <div v-if="hasEvent('ksl')" style="display: flex; margin-bottom: 5px; align-items: center;">
-          <el-toggle-button v-model="events.ksl" />
-          <div style="margin-left: 10px;">Klassisk Styrkelyft</div>
+        <div class="mt-4">
+          <div class="flex items-center">
+            <input value="Kvinnor" v-model="gender" type="radio" class="form-radio h-6 w-6 text-gkk transition duration-150 ease-in-out">
+            <label class="ml-3">
+              <span class="block text-sm leading-5 font-medium text-gray-700">Kvinnor</span>
+            </label>
+          </div>
+          <div class="mt-4 flex items-center">
+            <input value="Män" v-model="gender" type="radio" class="form-radio h-6 w-6 text-gkk transition duration-150 ease-in-out">
+            <label class="ml-3">
+              <span class="block text-sm leading-5 font-medium text-gray-700">Män</span>
+            </label>
+          </div>
         </div>
 
-        <div v-if="hasEvent('kbp')" style="display: flex; margin-bottom: 5px; align-items: center;">
-          <el-toggle-button v-model="events.kbp" />
-          <div style="margin-left: 10px;">Klassisk Bänkpress</div>
+        <div class="mt-4">
+          <h4 class="text-md font-thin">Viktklass (kg): <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Mästerskap har i regel klassfast anmälan, medan serie-tävlingar inte har viktklasser (men kan ordna gupperna baserat på detta, så välj gärna en uppskattning)."></i></h4>
         </div>
 
-        <div v-if="hasEvent('sl')" style="display: flex; margin-bottom: 5px; align-items: center;">
-          <el-toggle-button v-model="events.sl" />
-          <div style="margin-left: 10px;">Styrkelyft (utrustat)</div>
+        <select v-model="weightClass['Män']" v-show="gender === 'Män'" class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+          <option>52</option>
+          <option>59</option>
+          <option>66</option>
+          <option>74</option>
+          <option>83</option>
+          <option>93</option>
+          <option>105</option>
+          <option>120</option>
+          <option>120+</option>
+        </select>
+
+        <select v-model="weightClass['Kvinnor']" v-show="gender === 'Kvinnor'" class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+          <option>43</option>
+          <option>47</option>
+          <option>52</option>
+          <option>57</option>
+          <option>63</option>
+          <option>72</option>
+          <option>84</option>
+          <option>84+</option>
+        </select>
+
+        <div class="mt-4">
+          <div v-if="hasEvent('ksl')" class="flex mb-2 items-center">
+            <el-toggle-button v-model="events.ksl" />
+            <div class="ml-2 font-thin">Klassisk Styrkelyft</div>
+          </div>
+
+          <div v-if="hasEvent('kbp')" class="flex mb-2 items-center">
+            <el-toggle-button v-model="events.kbp" />
+            <div class="ml-2 font-thin">Klassisk Bänkpress</div>
+          </div>
+
+          <div v-if="hasEvent('sl')" class="flex mb-2 items-center">
+            <el-toggle-button v-model="events.sl" />
+            <div class="ml-2 font-thin">Styrkelyft (utrustat)</div>
+          </div>
+
+          <div v-if="hasEvent('bp')" class="flex mb-2 items-center">
+            <el-toggle-button v-model="events.bp" />
+            <div class="ml-2 font-thin">Bänkpress (utrustat)</div>
+          </div>
         </div>
 
-        <div v-if="hasEvent('bp')" style="display: flex; margin-bottom: 5px; align-items: center;">
-          <el-toggle-button v-model="events.bp" />
-          <div style="margin-left: 10px;">Bänkpress (utrustat)</div>
+        <div class="mt-2">
+          <textarea v-model="comment" rows="5" placeholder="Ev. kommentar/ytterligare info." class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"></textarea>
         </div>
-
-        <div class="form-group" style="margin-top: 20px;">
-          <textarea v-model="comment" class="form-control" name="description" placeholder="Ev. kommentar/ytterligare info." rows="5"></textarea>
-        </div>
-        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div class="mt-2 flex flex-col justify-center items-center">
           <el-button v-if="registration && canHelp" style="margin-bottom: 10px;" @click="register(true)"><i class="fa fa-check-circle-o" style="margin-right: 10px;"></i>Ja, jag vill tävla</el-button>
           <el-button secondary v-if="!registration || !canHelp" style="margin-bottom: 10px;" @click="register(true)">Ja, jag vill tävla</el-button>
 
