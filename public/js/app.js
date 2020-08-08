@@ -2429,16 +2429,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['competitions'],
   data: function data() {
@@ -81701,47 +81691,58 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      !_vm.editing
-        ? _c(
-            "ui-button",
-            {
-              staticClass: "mt-2",
-              on: {
-                click: function($event) {
-                  _vm.showNewCompetition = !_vm.showNewCompetition
-                }
-              }
-            },
-            [
-              _c("div", { staticClass: "flex items-center justify-center" }, [
-                _c(
-                  "svg",
-                  {
-                    staticClass: "w-6 -ml-2 mr-2",
-                    attrs: {
-                      fill: "none",
-                      "stroke-linecap": "round",
-                      "stroke-linejoin": "round",
-                      "stroke-width": "2",
-                      viewBox: "0 0 24 24",
-                      stroke: "currentColor"
+      _c(
+        "div",
+        { staticClass: "w-full flex justify-center items-center" },
+        [
+          !_vm.editing
+            ? _c(
+                "ui-button",
+                {
+                  staticClass: "mt-2 mx-auto",
+                  on: {
+                    click: function($event) {
+                      _vm.showNewCompetition = !_vm.showNewCompetition
                     }
-                  },
-                  [
-                    _c("path", {
-                      attrs: {
-                        d:
-                          "M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                      }
-                    })
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", [_vm._v("Ny tävling")])
-              ])
-            ]
-          )
-        : _vm._e(),
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "flex items-center justify-center" },
+                    [
+                      _c(
+                        "svg",
+                        {
+                          staticClass: "w-6 -ml-2 mr-2",
+                          attrs: {
+                            fill: "none",
+                            "stroke-linecap": "round",
+                            "stroke-linejoin": "round",
+                            "stroke-width": "2",
+                            viewBox: "0 0 24 24",
+                            stroke: "currentColor"
+                          }
+                        },
+                        [
+                          _c("path", {
+                            attrs: {
+                              d:
+                                "M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                            }
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", [_vm._v("Ny tävling")])
+                    ]
+                  )
+                ]
+              )
+            : _vm._e()
+        ],
+        1
+      ),
       _vm._v(" "),
       _c(
         "form",
@@ -81754,10 +81755,14 @@ var render = function() {
               expression: "showNewCompetition"
             }
           ],
-          staticStyle: { "margin-top": "20px" }
+          staticClass: "mt-4 mb-6 max-w-xl mx-auto"
         },
         [
-          _c("div", { staticClass: "form-group" }, [
+          _c("div", [
+            _c("div", { staticClass: "text-lg font-thin mt-2" }, [
+              _vm._v("Tävlingsnamn")
+            ]),
+            _vm._v(" "),
             _c("input", {
               directives: [
                 {
@@ -81767,8 +81772,9 @@ var render = function() {
                   expression: "competition.name"
                 }
               ],
-              staticClass: "form-control",
-              attrs: { name: "name", placeholder: "Namn på tävling" },
+              staticClass:
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
+              attrs: { name: "name" },
               domProps: { value: _vm.competition.name },
               on: {
                 input: function($event) {
@@ -81781,8 +81787,10 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("div", [_vm._v("Datum")]),
+          _c("div", [
+            _c("div", { staticClass: "text-lg font-thin mt-2" }, [
+              _vm._v("Datum")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -81793,7 +81801,8 @@ var render = function() {
                   expression: "competition.date"
                 }
               ],
-              staticClass: "form-control",
+              staticClass:
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { type: "date", name: "date" },
               domProps: { value: _vm.competition.date },
               on: {
@@ -81806,7 +81815,9 @@ var render = function() {
               }
             }),
             _vm._v(" "),
-            _c("div", [_vm._v("till (lämna tom för endagstävling)")]),
+            _c("div", { staticClass: "text-lg font-thin mt-2" }, [
+              _vm._v("till (lämna tom för endagstävling)")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -81817,7 +81828,8 @@ var render = function() {
                   expression: "competition.end_date"
                 }
               ],
-              staticClass: "form-control",
+              staticClass:
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { type: "date", name: "date" },
               domProps: { value: _vm.competition.end_date },
               on: {
@@ -81831,8 +81843,10 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("div", [_vm._v("Ev. sista anmälningsdag")]),
+          _c("div", [
+            _c("div", { staticClass: "text-lg font-thin mt-2" }, [
+              _vm._v("Ev. sista anmälningsdag")
+            ]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -81843,7 +81857,8 @@ var render = function() {
                   expression: "competition.last_registration_at"
                 }
               ],
-              staticClass: "form-control",
+              staticClass:
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { type: "date", name: "last_registration_at" },
               domProps: { value: _vm.competition.last_registration_at },
               on: {
@@ -81863,13 +81878,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            {
-              staticStyle: {
-                display: "flex",
-                "margin-bottom": "5px",
-                "align-items": "center"
-              }
-            },
+            { staticClass: "flex mt-4 mb-2 items-center" },
             [
               _c("el-toggle-button", {
                 model: {
@@ -81881,7 +81890,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("div", { staticStyle: { "margin-left": "10px" } }, [
+              _c("div", { staticClass: "ml-2 text-lg font-thin" }, [
                 _vm._v("KSL")
               ])
             ],
@@ -81890,13 +81899,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            {
-              staticStyle: {
-                display: "flex",
-                "margin-bottom": "5px",
-                "align-items": "center"
-              }
-            },
+            { staticClass: "flex mb-2 items-center" },
             [
               _c("el-toggle-button", {
                 model: {
@@ -81908,7 +81911,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("div", { staticStyle: { "margin-left": "10px" } }, [
+              _c("div", { staticClass: "ml-2 text-lg font-thin" }, [
                 _vm._v("KBP")
               ])
             ],
@@ -81917,13 +81920,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            {
-              staticStyle: {
-                display: "flex",
-                "margin-bottom": "5px",
-                "align-items": "center"
-              }
-            },
+            { staticClass: "flex mb-2 items-center" },
             [
               _c("el-toggle-button", {
                 model: {
@@ -81935,7 +81932,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("div", { staticStyle: { "margin-left": "10px" } }, [
+              _c("div", { staticClass: "ml-2 text-lg font-thin" }, [
                 _vm._v("SL")
               ])
             ],
@@ -81944,13 +81941,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            {
-              staticStyle: {
-                display: "flex",
-                "margin-bottom": "15px",
-                "align-items": "center"
-              }
-            },
+            { staticClass: "flex mb-2 items-center" },
             [
               _c("el-toggle-button", {
                 model: {
@@ -81962,14 +81953,14 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("div", { staticStyle: { "margin-left": "10px" } }, [
+              _c("div", { staticClass: "ml-2 text-lg font-thin" }, [
                 _vm._v("BP")
               ])
             ],
             1
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
+          _c("div", { staticClass: "mt-2" }, [
             _c("input", {
               directives: [
                 {
@@ -81979,7 +81970,8 @@ var render = function() {
                   expression: "competition.time"
                 }
               ],
-              staticClass: "form-control",
+              staticClass:
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: {
                 name: "time",
                 placeholder: "Ungefärlig tid, ex. 8 – 15"
@@ -81996,7 +81988,7 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
+          _c("div", { staticClass: "mt-2" }, [
             _c("input", {
               directives: [
                 {
@@ -82006,7 +81998,8 @@ var render = function() {
                   expression: "competition.location"
                 }
               ],
-              staticClass: "form-control",
+              staticClass:
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: {
                 name: "location",
                 placeholder: "Plats, ex Friskis Majorna"
@@ -82023,7 +82016,7 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
+          _c("div", { staticClass: "mt-2" }, [
             _c("textarea", {
               directives: [
                 {
@@ -82033,12 +82026,9 @@ var render = function() {
                   expression: "competition.description"
                 }
               ],
-              staticClass: "form-control",
-              attrs: {
-                rows: "6",
-                name: "description",
-                placeholder: "Ev. ytterligare info"
-              },
+              staticClass:
+                "form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5",
+              attrs: { rows: "5", placeholder: "Ev. ytterligare info" },
               domProps: { value: _vm.competition.description },
               on: {
                 input: function($event) {
@@ -82053,13 +82043,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            {
-              staticStyle: {
-                display: "flex",
-                "margin-bottom": "5px",
-                "align-items": "center"
-              }
-            },
+            { staticClass: "flex mt-2 mb-2 items-center" },
             [
               _c("el-toggle-button", {
                 model: {
@@ -82071,7 +82055,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("div", { staticStyle: { "margin-left": "10px" } }, [
+              _c("div", { staticClass: "ml-2 text-lg font-thin" }, [
                 _vm._v("Visa antal anmälda för medlemmar")
               ])
             ],
@@ -82080,13 +82064,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            {
-              staticStyle: {
-                display: "flex",
-                "margin-bottom": "20px",
-                "align-items": "center"
-              }
-            },
+            { staticClass: "flex mb-2 items-center" },
             [
               _c("el-toggle-button", {
                 model: {
@@ -82098,62 +82076,77 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("div", { staticStyle: { "margin-left": "10px" } }, [
+              _c("div", { staticClass: "ml-2 text-lg font-thin" }, [
                 _vm._v("Visa anmälningslista för medlemmar (namn, vikt, gren)")
               ])
             ],
             1
           ),
           _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticStyle: {
-                display: "flex",
-                "margin-bottom": "20px",
-                "align-items": "center"
-              }
-            },
-            [
-              _c("div", { staticStyle: { "margin-right": "10px" } }, [
-                _vm._v("Visningsalternativ")
-              ]),
-              _vm._v(" "),
-              _c("el-dropdown", {
-                attrs: { wide: "", options: _vm.showStatusOptions },
-                model: {
-                  value: _vm.competition.show_status,
-                  callback: function($$v) {
-                    _vm.$set(_vm.competition, "show_status", $$v)
-                  },
-                  expression: "competition.show_status"
+          _c("div", { staticClass: "flex mb-2 items-center" }, [
+            _c("div", { staticClass: "mr-2 text-lg font-thin" }, [
+              _vm._v("Visningsalternativ")
+            ]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.competition.show_status,
+                    expression: "competition.show_status"
+                  }
+                ],
+                staticClass:
+                  "mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5",
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.competition,
+                      "show_status",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
                 }
-              })
-            ],
-            1
-          ),
+              },
+              [
+                _c("option", { attrs: { value: "default" } }, [
+                  _vm._v("Default (visas tills datum passerat)")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "show" } }, [_vm._v("Visa")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "hide" } }, [_vm._v("Dölj")])
+              ]
+            )
+          ]),
           _vm._v(" "),
           _c(
             "div",
-            { staticStyle: { display: "flex" } },
+            { staticClass: "flex", staticStyle: { display: "flex" } },
             [
               !_vm.editing
-                ? _c(
-                    "el-button",
-                    {
-                      attrs: { primary: "" },
-                      on: { click: _vm.createCompetition }
-                    },
-                    [_vm._v("Skapa tävling")]
-                  )
+                ? _c("ui-button", { on: { click: _vm.createCompetition } }, [
+                    _vm._v("Skapa tävling")
+                  ])
                 : _vm._e(),
               _vm._v(" "),
               _vm.editing
                 ? _c(
-                    "el-button",
+                    "ui-button",
                     {
-                      staticStyle: { "margin-right": "10px" },
-                      attrs: { secondary: "" },
+                      staticClass: "mr-2",
+                      attrs: { type: "secondary" },
                       on: { click: _vm.cancelUpdate }
                     },
                     [_vm._v("Ångra")]
@@ -82161,30 +82154,59 @@ var render = function() {
                 : _vm._e(),
               _vm._v(" "),
               _vm.editing
-                ? _c(
-                    "el-button",
-                    {
-                      attrs: { primary: "" },
-                      on: { click: _vm.updateCompetition }
-                    },
-                    [_vm._v("Uppdatera tävling")]
-                  )
+                ? _c("ui-button", { on: { click: _vm.updateCompetition } }, [
+                    _vm._v("Uppdatera tävling")
+                  ])
                 : _vm._e()
             ],
             1
           ),
           _vm._v(" "),
           _vm.newCompetitionError
-            ? _c("div", { staticStyle: { color: "red" } }, [
-                _vm._v(
-                  "\n        Kunde inte skapa tävling, kontrollera inmatning och anlutning.\n      "
+            ? _c("div", { staticClass: "mt-2" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "bg-yellow-50 border-l-4 border-yellow-400 p-4"
+                  },
+                  [
+                    _c("div", { staticClass: "flex" }, [
+                      _c("div", { staticClass: "flex-shrink-0" }, [
+                        _c(
+                          "svg",
+                          {
+                            staticClass: "h-5 w-5 text-yellow-400",
+                            attrs: {
+                              viewBox: "0 0 20 20",
+                              fill: "currentColor"
+                            }
+                          },
+                          [
+                            _c("path", {
+                              attrs: {
+                                "fill-rule": "evenodd",
+                                d:
+                                  "M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z",
+                                "clip-rule": "evenodd"
+                              }
+                            })
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(1)
+                    ])
+                  ]
                 )
               ])
             : _vm._e()
         ]
       ),
       _vm._v(" "),
-      _c("GkkLink", { attrs: { to: "/", text: "Tillbaka till startsidan" } }),
+      _c("GkkLink", {
+        staticClass: "mt-16",
+        attrs: { to: "/", text: "Tillbaka till startsidan" }
+      }),
       _vm._v(" "),
       _c(
         "modal",
@@ -82309,6 +82331,18 @@ var staticRenderFns = [
               "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
           },
           [_vm._v("\n                Åtgärder\n              ")]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ml-3" }, [
+      _c("p", { staticClass: "text-sm leading-5 text-yellow-700" }, [
+        _vm._v(
+          "\n              Kunde inte skapa tävling, kontrollera inmatning och anlutning.\n            "
         )
       ])
     ])
@@ -85411,8 +85445,9 @@ var render = function() {
           ? "bg-white text-gkk border-gkk hover:bg-gray-200"
           : "bg-gkk hover:bg-gkk-light text-white",
       on: {
-        click: function($event) {
-          return _vm.$emit("click")
+        click: function(e) {
+          e.preventDefault()
+          _vm.$emit("click")
         }
       }
     },
