@@ -1,12 +1,13 @@
 <template>
-  <div>
-    <h1>Ny nyhet</h1>
-    <el-input style="font-size: 20px; padding: 20px;" v-model="title" placeholder="Nyhetens titel"></el-input>
+  <div class="container mx-auto max-w-3xl">
+    <h1 class="text-center text-3xl font-hairline mb-6">Ny nyhet</h1>
+    <input placeholder="Nyhetens titel" class="appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5" v-model="title">
 
-    <h3 style="margin-top: 30px;">Nyhetens text</h3>
-    <trix-editor @trix-change="change" class="trix-content"></trix-editor>
+    <trix-editor @trix-change="change" class="trix-content" placeholder="Nyhetens text ..."></trix-editor>
 
-    <el-button style="margin-top: 10px;" @click="create">Skapa nyhet</el-button>
+    <ui-button class="mt-2" @click="create">
+      Skapa nyhet
+    </ui-button>
   </div>
 </template>
 
@@ -39,7 +40,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

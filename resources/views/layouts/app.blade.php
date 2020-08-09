@@ -13,11 +13,11 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/main.css') }}" rel="stylesheet">
 
     @yield('head')
 </head>
-<body>
+<body class="bg-gray-50">
 @yield('css')
 
 <div id="app">
@@ -27,7 +27,6 @@
 @yield('content')
 </main>
 
-<!-- <gkk-testbar></gkk-testbar> -->
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>

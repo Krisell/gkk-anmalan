@@ -1,31 +1,44 @@
 <template>
-  <div style="max-width: 600px; margin: auto;">
-    <h1 style="margin-bottom: 20px;">Funktionärsanmälan</h1>
-    <h2>{{ event.name }}</h2>
-    <h4>{{ dateString }} ({{ event.date }})</h4>
-    <h3 style="line-height: 1.4; font-size: 16px; white-space: pre-wrap;">{{ event.description }}</h3>
+  <div class="container mx-auto max-w-lg">
+    <h1 class="text-center text-3xl font-hairline mb-2">Funktionärsanmälan</h1>
 
-    <div v-if="passedLastRegistration" style="margin-top: 20px;">
+    <div class="bg-white shadow sm:rounded-lg text-center mb-4">
+      <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          {{ event.name }}
+        </h3>
+        <div class="mt-2 max-w-xl text-sm leading-5 text-gray-500">
+          <p>
+            {{ dateString }} ({{ event.date }})
+          </p>
+        </div>
+        <div class="mt-5">
+          <h3 class="text-md font-hairline mt-2 whitespace-pre-wrap">{{ event.description }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="passedLastRegistration" class="mt-2">
       <div v-if="!this.registration">
-        <h3 style="color: orange;">Sista anmälningsdatum har passerat.</h3>
+        <h3 class="text-orange-400 text-lg font-thin text-center">Sista anmälningsdatum har passerat.</h3>
       </div>
 
       <div v-if="this.registration && this.registration.status == 0">
-        <h3 style="color: orange;">Sista anmälningsdatum har passerat, och du har anmält att du inte vill/kan delta.</h3>
+        <h3 class="text-orange-400 text-lg font-thin text-center">Sista anmälningsdatum har passerat, och du har anmält att du inte vill/kan delta.</h3>
       </div>
 
       <div v-if="this.registration && this.registration.status == 1">
-        <h3 style="color: green;">Sista anmälningsdatum har passerat, och du är anmäld.</h3>
-        <div>{{ comment }}</div>
+        <h3 class="text-green-400 text-lg font-thin text-center">Sista anmälningsdatum har passerat, och du är anmäld.</h3>
+        <h3 class="text-gkk text-lg font-thin text-center">{{ comment }}</h3>
       </div>
     </div>
 
     <div v-else>
-      <form style="margin-top: 20px;">
-        <div class="form-group">
-          <textarea v-model="comment" class="form-control" name="description" placeholder="Ev. kommentar/ytterligare info, exempelvis om du måste gå tidigare" rows="5"></textarea>
+      <form class="mt-2">
+        <div class="mt-2">
+          <textarea v-model="comment" rows="5" placeholder="Ev. kommentar/ytterligare info." class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"></textarea>
         </div>
-        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div class="mt-2 flex flex-col justify-center items-center">
           <el-button v-if="registration && canHelp" style="margin-bottom: 10px;" @click="register(true)"><i class="fa fa-check-circle-o" style="margin-right: 10px;"></i>Jag kan hjälpa till</el-button>
           <el-button secondary v-if="!registration || !canHelp" style="margin-bottom: 10px;" @click="register(true)">Jag kan hjälpa till</el-button>
 
@@ -50,16 +63,21 @@
 
     <GkkLink to="/events" text="Tillbaka till alla event" />
 
-    <el-delimiter></el-delimiter>
-    <div v-if="event.publish_list_value && event.publish_list_value.length > 0">
-      <h3>Följande medlemmar har tackat ja</h3>
-      <table class="table" id="datatable" v-if="event.publish_list">
+    <div class="mt-16" v-if="event.publish_list_value && event.publish_list_value.length > 0">
+      <h3 class="text-lg font-thin text-center">Följande medlemmar har tackat ja</h3>
+      <table class="min-w-full" v-if="event.publish_list">
           <thead>
-            <tr><th scope="col">Namn</th></tr>
+            <tr>
+              <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                Namn
+              </th>
+            </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-white text-center">
             <tr v-for="registration in event.publish_list_value" :key="registration.id">
-              <td>{{ registration.user.first_name }} {{ registration.user.last_name }}</td>
+              <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
+                {{ registration.user.first_name }} {{ registration.user.last_name }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -125,8 +143,3 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
-  .type {
-    margin-bottom: 40px;
-  }
-</style>

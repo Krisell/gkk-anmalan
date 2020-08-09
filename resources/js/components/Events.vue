@@ -1,9 +1,9 @@
 <template>
-  <div style="max-width: 600px; margin: auto;">
-    <h1>Funktionärsanmälan</h1>
+  <div class="container mx-auto">
+    <h1 class="text-center text-3xl font-hairline mb-6">Funktionärsanmälan</h1>
 
-    <div class="type" v-if="events.length">
-      <div v-for="event in events" :key="event.id" style="display: flex; align-items: center; margin-bottom: 20px;">
+    <div v-if="events.length">
+      <div v-for="event in events" :key="event.id" class="flex align-center mb-6">
         <gkk-event-card
           @click="location(`/events/${event.id}`)"
           :event="event"
@@ -13,7 +13,7 @@
     </div>
 
     <div v-else>
-      <h3>Just nu finns inga events att anmäla sig till.</h3>
+      <h2 class="text-center text-xl font-thin m-6">Just nu finns inga tävlingar att anmäla sig till.</h2>
     </div>
 
     <GkkLink to="/" text="Tillbaka till startsidan" />
@@ -30,9 +30,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="less">
-  .type {
-    margin-bottom: 40px;
-  }
-</style>

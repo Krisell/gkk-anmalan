@@ -1,36 +1,66 @@
 <template>
-  <div>
-    <h2 style="margin: 20px;">{{ accounts.length }} medlemmar har registrerat ett konto</h2>
-    <table class="table">
-        <thead>
-          <tr>
-            <th class="gkk" scope="col">Namn</th>
-            <th class="gkk" scope="col">Epost</th>
-            <th class="gkk" scope="col">Registreringsdatum</th>
-            <th class="gkk" scope="col">Antal besök</th>
-            <th class="gkk" scope="col">Senaste besök</th>
-            <th class="gkk" scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="competition-row" v-for="account in accounts" :key="account.id">
-            <td>{{ account.first_name }} {{ account.last_name }}</td>
-            <td>{{ account.email }}</td>
-            <td>{{ account.created_at | dateString }}</td>
-            <td>{{ account.visits }}</td>
-            <td>{{ account.last_visited_at | dateString }}</td>
-            <td v-if="user.role === 'superadmin'">
-              <i @click="confirmDemotion(account)" v-if="account.role === 'admin'" style="cursor: pointer;"  class="fa fa-star" data-toggle="tooltip" data-placement="top" title="Administratör, klicka för att ta bort rollen"></i>
-              <i v-else-if="account.role === 'superadmin'" class="fa fa-star" data-toggle="tooltip" data-placement="top" title="Superadministratör"></i>
-              <i @click="confirmPromotion(account)" v-else class="fa fa-star-o" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Gör till administratör"></i>
-            </td>
-            <td v-else>
-              <i v-if="account.role === 'admin'" class="fa fa-star" data-toggle="tooltip" data-placement="top" title="Administratör"></i>
-              <i v-if="account.role === 'superadmin'" class="fa fa-star" data-toggle="tooltip" data-placement="top" title="Superadministratör"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="container mx-auto">
+    <h2 class="text-2xl font-hairline text-center m-4">{{ accounts.length }} medlemmar har registrerat ett konto</h2>
+
+    <div class="flex flex-col">
+      <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+          <table class="min-w-full">
+            <thead>
+              <tr>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Namn
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Registreringsdatum
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Senaste besök
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Antal besök
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <tr v-for="account in accounts" :key="account.id">
+                <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="flex items-center">
+                    <div class="ml-4">
+                      <div class="text-sm leading-5 font-medium text-gray-900">{{ account.first_name }} {{ account.last_name }}</div>
+                      <div class="text-sm leading-5 text-gray-500">{{ account.email }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ account.created_at | dateString }}</div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ account.last_visited_at | dateString }}</div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  {{ account.visits }}
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                  <div v-if="user.role === 'superadmin'">
+                    <i @click="confirmDemotion(account)" v-if="account.role === 'admin'" style="cursor: pointer;"  class="fa fa-star" v-tooltip="'Administratör, klicka för att ta bort rollen'"></i>
+                    <i v-else-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
+                    <i @click="confirmPromotion(account)" v-else class="fa fa-star-o" style="cursor: pointer;" v-tooltip="'Gör till administratör'"></i>
+                  </div>
+                  <div v-else>
+                    <i v-if="account.role === 'admin'" class="fa fa-star" v-tooltip="'Administratör'"></i>
+                    <i v-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <GkkLink to="/" text="Tillbaka till startsidan" />
 
     <modal name="promote" :adaptive="true" height="auto">
       <div style="padding: 30px; margin-top: 20px;">
@@ -64,9 +94,6 @@ export default {
       selectedAccount: null,
     }
   },
-  mounted () {
-    $(() => { $('[data-toggle="tooltip"]').tooltip() })
-  },
   filters: {
     dateString (date) {
       if (!date) {
@@ -94,7 +121,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

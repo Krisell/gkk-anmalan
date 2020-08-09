@@ -1,5 +1,5 @@
 <template>
-  <div class="action-button-card" @click="$emit('click')">
+  <div class="action-button-card max-w-xl mx-auto" @click="$emit('click')">
     <div class="description">{{ competition.name }} ({{ dateString }})</div>
     <div v-if="competition.last_registration_at" style="text-align: center;">Sista anmälningsdag: {{ competition.last_registration_at }}</div>
     <div class="description" style="font-size: 12px; margin-top: 0; white-space: pre-wrap;">{{ competition.description }}</div>
@@ -69,7 +69,7 @@ i.icon {
   font-size: 12px;
   cursor: pointer;
   flex: 1;
-  margin-right: 10px;
+  // margin-right: 10px;
   padding: 30px;
   color: #ff9e02;
   color: black;

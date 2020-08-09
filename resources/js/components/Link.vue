@@ -1,7 +1,11 @@
 <template>
-    <el-button style="margin: auto; margin-top: 20px;" link @click="location(to)">
+<div class="flex mt-4 w-full">
+  <ui-button @click="location(to)" class="mx-auto">
+    <div class="w-full text-center">
       {{ text }}
-    </el-button>
+    </div>
+  </ui-button>
+</div>
 </template>
 
 <script>
@@ -9,9 +13,3 @@ export default {
   props: ['to', 'text'],
 }
 </script>
-
-<style scoped>
-  button {
-    outline: none;
-  }
-</style>
