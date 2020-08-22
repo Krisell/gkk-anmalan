@@ -1,8 +1,11 @@
 <template>
-  <button @click="click"
+  <button
+    @click="click"
     class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo focus:border-indigo-600 active:bg-gkk transition duration-150 ease-in-out"
-    :class="type === 'secondary' ? 'bg-white text-gkk border-gkk hover:bg-gray-200' : 'bg-gkk hover:bg-gkk-light text-white'"
-    >
+    :class="
+      type === 'secondary' ? 'bg-white text-gkk border-gkk hover:bg-gray-200' : 'bg-gkk hover:bg-gkk-light text-white'
+    "
+  >
     <slot></slot>
   </button>
 </template>
@@ -20,13 +23,13 @@ export default {
     },
   },
   methods: {
-    click (e) {
+    click(e) {
       if (this.prevent) {
-        e.preventDefault();
+        e.preventDefault()
       }
 
-      this.$emit('click');
-    }
-  }
+      this.$emit('click')
+    },
+  },
 }
 </script>

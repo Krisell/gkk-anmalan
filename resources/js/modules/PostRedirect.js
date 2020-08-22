@@ -1,5 +1,5 @@
 const PostRedirect = {
-  send (options = {}) {
+  send(options = {}) {
     const form = document.createElement('form')
     form.method = 'post'
     form.action = options.url

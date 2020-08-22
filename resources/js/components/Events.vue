@@ -24,9 +24,9 @@
 export default {
   props: ['events', 'user-registrations'],
   methods: {
-    registrationFor (event) {
-      return this.userRegistrations.find(registration => Number(registration.event_id) === Number(event.id))
-    }
-  }
+    registrationFor(event) {
+      return this.userRegistrations.find((registration) => Number(registration.event_id) === Number(event.id))
+    },
+  },
 }
 </script>

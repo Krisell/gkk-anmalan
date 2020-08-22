@@ -4,7 +4,11 @@
 
     <div v-if="competitions.length">
       <div v-for="competition in competitions" :key="competition.id" class="flex align-center mb-6">
-        <gkk-competition-card @click="location(`/competitions/${competition.id}`)" :competition="competition" :registration="registrationFor(competition)"></gkk-competition-card>
+        <gkk-competition-card
+          @click="location(`/competitions/${competition.id}`)"
+          :competition="competition"
+          :registration="registrationFor(competition)"
+        ></gkk-competition-card>
       </div>
     </div>
 
@@ -20,10 +24,11 @@
 export default {
   props: ['competitions', 'user-registrations'],
   methods: {
-    registrationFor (competition) {
-      return this.userRegistrations.find(registration => Number(registration.competition_id) === Number(competition.id))
-    }
-  }
+    registrationFor(competition) {
+      return this.userRegistrations.find(
+        (registration) => Number(registration.competition_id) === Number(competition.id),
+      )
+    },
+  },
 }
 </script>
-

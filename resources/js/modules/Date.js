@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 const Date = {
-  string (date) {
+  string(date) {
     if (!date) {
       return 'Datum ännu ej bestämt'
     }
@@ -13,11 +13,11 @@ const Date = {
       4: 'Torsdag',
       5: 'Fredag',
       6: 'Lördag',
-      7: 'Söndag'
+      7: 'Söndag',
     }[moment(date).isoWeekday()]
 
     return `${day}, ${moment(date).date()} ${moment(date).locale('sv').format('MMMM')}`
-  }
+  },
 }
 
 export default Date

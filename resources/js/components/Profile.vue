@@ -3,37 +3,62 @@
     <h1 class="text-3xl font-hairline mb-2">Profil</h1>
     <div style="margin-top: 30px;"></div>
     <h2 class="font-thin">Namn</h2>
-    <input v-model="name.first" class="form-input block w-full sm:text-sm sm:leading-5">
-    <input v-model="name.last" class="mt-1 form-input block w-full sm:text-sm sm:leading-5">
-    <button @click="updateName" class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
+    <input v-model="name.first" class="form-input block w-full sm:text-sm sm:leading-5" />
+    <input v-model="name.last" class="mt-1 form-input block w-full sm:text-sm sm:leading-5" />
+    <button
+      @click="updateName"
+      class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
+    >
       <span>Uppdatera namn</span>
     </button>
 
     <div class="my-8 border-b border-gray-200 border-1"></div>
 
     <h2 class="font-thin">Epost</h2>
-    <input v-model="email" type="email" class="form-input block w-full sm:text-sm sm:leading-5">
-    <button @click="updateEmail" class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
+    <input v-model="email" type="email" class="form-input block w-full sm:text-sm sm:leading-5" />
+    <button
+      @click="updateEmail"
+      class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
+    >
       <span>Uppdatera epost</span>
     </button>
 
     <div class="my-8 border-b border-gray-200 border-1"></div>
 
     <div v-if="!isAdjusted.password">
-    <button @click="startEdit('password')" class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
-      <span>Redigera lösenord</span>
-    </button>
+      <button
+        @click="startEdit('password')"
+        class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
+      >
+        <span>Redigera lösenord</span>
+      </button>
     </div>
 
     <div v-else>
-      <input v-model="password.new" type="password" placeholder="Nytt lösenord" class="form-input block w-full sm:text-sm sm:leading-5">
-      <input v-model="password.new_confirmation" type="password" placeholder="Bekräfta lösenord" class="mt-1 form-input block w-full sm:text-sm sm:leading-5">
-      <div style="display: flex">
-        <button @click="reset" class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
+      <input
+        v-model="password.new"
+        type="password"
+        placeholder="Nytt lösenord"
+        class="form-input block w-full sm:text-sm sm:leading-5"
+      />
+      <input
+        v-model="password.new_confirmation"
+        type="password"
+        placeholder="Bekräfta lösenord"
+        class="mt-1 form-input block w-full sm:text-sm sm:leading-5"
+      />
+      <div style="display: flex;">
+        <button
+          @click="reset"
+          class="mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
+        >
           <span class="text-red-400">Ångra</span>
         </button>
 
-        <button @click="updatePassword" class="ml-2 mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out">
+        <button
+          @click="updatePassword"
+          class="ml-2 mt-2 relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
+        >
           <span>Byt lösenord</span>
         </button>
       </div>
@@ -46,27 +71,27 @@
 <script>
 export default {
   props: ['user'],
-  data () {
+  data() {
     return {
       isAdjusted: {
-          name: false,
-          email: false,
-          password: false
+        name: false,
+        email: false,
+        password: false,
       },
       error: {
         password: false,
-        data: false
+        data: false,
       },
       edit: '',
       name: {
-          first: this.user.first_name,
-          last: this.user.last_name
+        first: this.user.first_name,
+        last: this.user.last_name,
       },
       email: this.user.email,
       password: {
-          current: '',
-          new: '',
-          new_confirmation: ''
+        current: '',
+        new: '',
+        new_confirmation: '',
       },
       errors: {
         password: false,
@@ -74,15 +99,15 @@ export default {
     }
   },
   methods: {
-    startEdit (type) {
+    startEdit(type) {
       this.reset()
       this.isAdjusted[type] = true
     },
-    reset (type = '') {
+    reset(type = '') {
       this.password.current = ''
       this.edit = ''
 
-      for (var attr in this.isAdjusted){
+      for (var attr in this.isAdjusted) {
         this.isAdjusted[attr] = false
       }
 
@@ -97,21 +122,26 @@ export default {
         }
       }
     },
-    updateName () {
-      window.axios.post('/profile/name', {
-        first_name: this.name.first,
-        last_name: this.name.last,
-      }).then(this.reload)
+    updateName() {
+      window.axios
+        .post('/profile/name', {
+          first_name: this.name.first,
+          last_name: this.name.last,
+        })
+        .then(this.reload)
     },
-    updateEmail () {
+    updateEmail() {
       window.axios.post('/profile/email', { email: this.email }).then(this.reload)
     },
-    updatePassword () {
-      window.axios.post('/profile/password', {
-        password: this.password.new,
-        password_confirmation: this.password.new_confirmation,
-      }).then(this.reload).catch(() => this.errors.password = true)
+    updatePassword() {
+      window.axios
+        .post('/profile/password', {
+          password: this.password.new,
+          password_confirmation: this.password.new_confirmation,
+        })
+        .then(this.reload)
+        .catch(() => (this.errors.password = true))
     },
-  }
+  },
 }
 </script>
