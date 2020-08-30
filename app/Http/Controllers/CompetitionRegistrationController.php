@@ -34,4 +34,11 @@ class CompetitionRegistrationController extends Controller
             $data,
         );
     }
+
+    public function update(Competition $competition, CompetitionRegistration $registration)
+    {
+        abort_unless(auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin', 401);
+        
+        return $registration->update(request()->only(['status', 'comment']));
+    }
 }

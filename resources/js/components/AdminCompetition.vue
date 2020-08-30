@@ -8,6 +8,9 @@
             <thead>
               <tr>
                 <th
+                  class="w-2 px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                ></th>
+                <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Anmäld
@@ -41,6 +44,10 @@
             </thead>
             <tbody class="bg-white">
               <tr v-for="registration in competition.registrations" :key="registration.id">
+                <td class="text-center">
+                  <i @click="editRegistration(registration)" class="fa fa-pencil cursor-pointer"></i>
+                </td>
+
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -116,6 +123,46 @@
       </svg>
     </div>
     <GkkLink to="/admin/competitions" text="Tillbaka till alla tävlingar" />
+
+    <modal name="edit-registration" :adaptive="true" height="auto">
+      <div style="padding: 30px; margin-top: 20px;" v-if="registrationToEdit">
+        <h2 class="text-center text-xl font-thin">
+          Redigera anmälan
+        </h2>
+        <div class="flex items-center">
+          <div class="w-full text-center mt-2">
+            <div class="text-sm leading-5 font-medium text-gray-900">
+              {{ registrationToEdit.user.first_name }} {{ registrationToEdit.user.last_name }}
+            </div>
+            <div class="text-sm leading-5 text-gray-500">{{ registrationToEdit.created_at | dateString }}</div>
+          </div>
+        </div>
+        <div>
+          <label for="location" class="block text-sm leading-5 font-medium text-gray-700">Anmäld</label>
+          <select
+            v-model="registrationToEdit.status"
+            id="location"
+            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+          >
+            <option value="1">Ja</option>
+            <option value="0">Nej</option>
+          </select>
+        </div>
+        <div class="mt-2">
+          <textarea
+            v-model="registrationToEdit.comment"
+            rows="5"
+            placeholder="Ev. ytterligare info"
+            class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+          ></textarea>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
+        <el-button secondary @click="$modal.hide('edit-registration')">Stäng</el-button>
+        <el-button style="margin-left: 10px;" danger primary @click="confirmEditRegistration">Uppdatera</el-button>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -124,6 +171,11 @@ import zipcelx from 'zipcelx'
 
 export default {
   props: ['competition'],
+  data() {
+    return {
+      registrationToEdit: null,
+    }
+  },
   filters: {
     dateString(date) {
       return date.substr(0, 10)
@@ -136,6 +188,17 @@ export default {
     },
   },
   methods: {
+    editRegistration(registration) {
+      this.registrationToEdit = JSON.parse(JSON.stringify(registration))
+      this.$modal.show('edit-registration')
+    },
+    confirmEditRegistration() {
+      axios({
+        url: `/competitions/${this.competition.id}/registrations/${this.registrationToEdit.id}`,
+        method: 'post',
+        data: this.registrationToEdit,
+      }).then((_) => window.location.reload())
+    },
     excel() {
       zipcelx({
         filename: 'gkk',

@@ -45,6 +45,7 @@ Route::group(['prefix' => 'competitions', 'middleware' => 'auth'], function () {
     Route::get('/', 'CompetitionController@index');
     Route::get('{competition}', 'CompetitionController@show');
     Route::post('{competition}/registrations', 'CompetitionRegistrationController@store');
+    Route::post('{competition}/registrations/{registration}', 'CompetitionRegistrationController@update');
 });
 
 Route::group(['prefix' => 'profile', 'middleware' => 'auth'], function () {
