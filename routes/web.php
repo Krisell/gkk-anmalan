@@ -38,6 +38,7 @@ Route::group(['prefix' => 'events', 'middleware' => 'auth'], function () {
     Route::get('/', 'EventController@index');
     Route::get('{event}', 'EventController@show');
     Route::post('{event}/registrations', 'EventRegistrationController@store');
+    Route::post('{event}/registrations/{registration}', 'EventRegistrationController@update');
 });
 
 Route::group(['prefix' => 'competitions', 'middleware' => 'auth'], function () {
