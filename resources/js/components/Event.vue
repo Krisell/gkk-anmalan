@@ -8,7 +8,7 @@
           {{ event.name }}
         </h3>
         <div class="mt-2 max-w-xl text-sm leading-5 text-gray-500">
-          <p>{{ dateString }} ({{ event.date }})</p>
+          <p v-html="dateString"></p>
         </div>
         <div class="mt-5">
           <h3 class="text-md font-hairline mt-2 whitespace-pre-wrap">{{ event.description }}</h3>
@@ -125,7 +125,13 @@ export default {
   },
   computed: {
     dateString() {
-      return Date.string(this.event.date)
+      if (this.event.end_date) {
+        return `${Date.string(this.event.date)} – ${Date.string(this.event.end_date)}<br>(${this.event.date} – ${
+          this.event.end_date
+        })`
+      }
+
+      return `${Date.string(this.event.date)} (${this.event.date})`
     },
     passedLastRegistration() {
       if (!this.event.last_registration_at) {

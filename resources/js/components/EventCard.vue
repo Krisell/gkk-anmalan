@@ -35,6 +35,10 @@ export default {
   props: ['event', 'registration'],
   computed: {
     dateString() {
+      if (this.event.end_date) {
+        return `${Date.string(this.event.date)} – ${Date.string(this.event.end_date)}`
+      }
+
       return Date.string(this.event.date)
     },
   },

@@ -48,7 +48,7 @@
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div class="text-sm leading-5 font-medium text-gray-900">{{ event.name }}</div>
-                      <div class="text-sm leading-5 text-gray-500">{{ event.date }}</div>
+                      <div class="text-sm leading-5 text-gray-500">{{ event | dateString }}</div>
                     </div>
                   </div>
                 </td>
@@ -149,6 +149,14 @@
         <div class="text-lg font-thin mt-2">Datum</div>
         <input
           v-model="event.date"
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          type="date"
+          name="date"
+        />
+
+        <div class="text-lg font-thin mt-2">till (lämna tom för endagsevent)</div>
+        <input
+          v-model="event.end_date"
           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           type="date"
           name="date"
@@ -281,6 +289,15 @@ export default {
         { value: 'hide', label: 'Dölj' },
       ],
     }
+  },
+  filters: {
+    dateString(event) {
+      if (!event.end_date) {
+        return event.date || '&nbsp;'
+      }
+
+      return `${event.date} – ${event.end_date}`
+    },
   },
   methods: {
     confirmDelete(event) {

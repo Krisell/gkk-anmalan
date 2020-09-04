@@ -73,6 +73,7 @@ class EventController extends Controller
             'name' => 'required',
             'time' => '',
             'date' => '',
+            'end_date' => '',
             'location' => '',
             'description' => '',
             'publish_count' => '',
