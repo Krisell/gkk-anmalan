@@ -100,7 +100,7 @@
       </div>
     </div>
 
-    <div class="text-center cursor-pointer" @click="excel" v-tooltip="'Hämta Excel-fil'">
+    <div class="text-center cursor-pointer mt-4" @click="excel" v-tooltip="'Hämta Excel-fil'">
       <svg
         class="mx-auto"
         xmlns="http://www.w3.org/2000/svg"
@@ -137,6 +137,15 @@
         ></path>
       </svg>
     </div>
+
+    <div class="w-full text-center mt-4">
+      <ui-button @click="liftingcast" type="secondary" class="mx-auto">
+        <div class="w-full text-center">
+          Exportera lyftare till Liftingcast-fil
+        </div>
+      </ui-button>
+    </div>
+
     <GkkLink to="/admin/competitions" text="Tillbaka till alla tävlingar" />
 
     <modal name="edit-registration" :adaptive="true" height="auto">
@@ -182,6 +191,7 @@
 </template>
 
 <script>
+import File from '../modules/File.js'
 import zipcelx from 'zipcelx'
 
 export default {
@@ -229,6 +239,30 @@ export default {
         method: 'post',
         data: this.registrationToEdit,
       }).then((_) => window.location.reload())
+    },
+    liftingcast() {
+      let csv =
+        '"name","team","lot","platform","session","flight","birthDate","memberNumber","gender","rawOrEquipped","division","declaredAwardsWeightClass","bodyWeight","squatRackHeight","benchRackHeight","squat1","bench1","dead1","wasDrugTested","phoneNumber","streetAddress","city","state","zipCode","email","emergencyContactName","emergencyContactPhoneNumber","additionalItems"\n'
+
+      // "Martin","GKK",,"1","1","A","1987/08/19","","Male","Raw","Män","Open",,"","",,,,"N","","","",,"","","","",""
+      this.competition.registrations.forEach((reg) => {
+        if (Number(reg.status) === 0) {
+          return
+        }
+
+        const flight = reg.gender === 'Män' ? 'B' : 'A'
+        const gender = reg.gender === 'Män' ? 'Male' : 'Female'
+
+        let birthdate = ''
+        if (reg.licence_number) {
+          let [_, Y, M, D] = reg.licence_number.match(/(\d\d)(\d\d)(\d\d).*/)
+          birthdate = `19${Y}/${M}/${D}`
+        }
+
+        csv += `"${reg.user.first_name} ${reg.user.last_name}","GKK",,"1","1","${flight}","${birthdate}","","${gender}","Raw","${reg.gender}","Open",,"","",,,,"N","","","",,"","","","",""\n`
+      })
+
+      File.save('liftingcast-import.csv', csv, 'data:text/csv;charset=utf-8')
     },
     excel() {
       zipcelx({
