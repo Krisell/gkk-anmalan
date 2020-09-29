@@ -34,6 +34,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'superadmin']], func
     Route::post('/accounts/demote/{user}', 'AccountController@demote');
 });
 
+Route::group(['prefix' => 'documents', 'middleware' => 'auth'], function () {
+    Route::get('/', 'DocumentController@index');
+});
+
 Route::group(['prefix' => 'events', 'middleware' => 'auth'], function () {
     Route::get('/', 'EventController@index');
     Route::get('{event}', 'EventController@show');

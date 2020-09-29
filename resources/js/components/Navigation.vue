@@ -19,6 +19,12 @@
         icon="users"
         :unanswered="unanswered.events"
       ></gkk-action-card>
+      <gkk-action-card
+        class="m-4 max-w-xs w-64"
+        @click="location('/documents')"
+        description="Dokument"
+        icon="file-o"
+      ></gkk-action-card>
       <!-- <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="cooperation" description="Intresseanmälan<br>(Under utveckling)" icon="lightbulb-o"></gkk-action-card> -->
       <gkk-action-card
         class="m-4 max-w-xs w-64"
