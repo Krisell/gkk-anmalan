@@ -109,7 +109,7 @@
         width="60"
         height="60"
         viewBox="0 0 100 100"
-        style="fill: #000000;"
+        style="fill: #000000"
       >
         <path
           fill="#a0d2a1"
@@ -140,19 +140,15 @@
 
     <div class="w-full text-center mt-4">
       <ui-button @click="liftingcast" type="secondary" class="mx-auto">
-        <div class="w-full text-center">
-          Exportera lyftare till Liftingcast-fil
-        </div>
+        <div class="w-full text-center">Exportera lyftare till Liftingcast-fil</div>
       </ui-button>
     </div>
 
     <GkkLink to="/admin/competitions" text="Tillbaka till alla tävlingar" />
 
     <modal name="edit-registration" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px;" v-if="registrationToEdit">
-        <h2 class="text-center text-xl font-thin">
-          Redigera anmälan
-        </h2>
+      <div style="padding: 30px; margin-top: 20px" v-if="registrationToEdit">
+        <h2 class="text-center text-xl font-thin">Redigera anmälan</h2>
         <div class="flex items-center">
           <div class="w-full text-center mt-2">
             <div class="text-sm leading-5 font-medium text-gray-900">
@@ -182,9 +178,9 @@
         </div>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
         <el-button secondary @click="$modal.hide('edit-registration')">Stäng</el-button>
-        <el-button style="margin-left: 10px;" danger primary @click="confirmEditRegistration">Uppdatera</el-button>
+        <el-button style="margin-left: 10px" danger primary @click="confirmEditRegistration">Uppdatera</el-button>
       </div>
     </modal>
   </div>
@@ -192,7 +188,6 @@
 
 <script>
 import File from '../modules/File.js'
-import zipcelx from 'zipcelx'
 
 export default {
   props: ['competition'],
@@ -265,34 +260,36 @@ export default {
       File.save('liftingcast-import.csv', csv, 'data:text/csv;charset=utf-8')
     },
     excel() {
-      zipcelx({
-        filename: 'gkk',
-        sheet: {
-          data: [
-            [{ value: this.competition.name, type: 'string' }],
-            [], // Empty row
-            [
-              { value: 'Namn', type: 'string' },
-              { value: 'Datum', type: 'string' },
-              { value: 'Vill tävla', type: 'string' },
-              { value: 'Kön', type: 'string' },
-              { value: 'Gren', type: 'string' },
-              { value: 'Viktklass', type: 'string' },
-              { value: 'Kommentar', type: 'string' },
+      import(/* webpackChunkName: "zipcelx" */ 'zipcelx').then(({ default: zipcelx }) => {
+        zipcelx({
+          filename: 'gkk',
+          sheet: {
+            data: [
+              [{ value: this.competition.name, type: 'string' }],
+              [], // Empty row
+              [
+                { value: 'Namn', type: 'string' },
+                { value: 'Datum', type: 'string' },
+                { value: 'Vill tävla', type: 'string' },
+                { value: 'Kön', type: 'string' },
+                { value: 'Gren', type: 'string' },
+                { value: 'Viktklass', type: 'string' },
+                { value: 'Kommentar', type: 'string' },
+              ],
+              ...this.filteredRegistrations.map((registration) => {
+                return [
+                  { value: `${registration.user.first_name} ${registration.user.last_name}`, type: 'string' },
+                  { value: this.$options.filters.dateString(registration.created_at), type: 'string' },
+                  { value: registration.status == 1 ? 'Ja' : 'Nej', type: 'string' },
+                  { value: registration.gender, type: 'string' },
+                  { value: this.$options.filters.eventsString(registration.events), type: 'string' },
+                  { value: registration.weight_class, type: 'string' },
+                  { value: registration.comment, type: 'string' },
+                ]
+              }),
             ],
-            ...this.filteredRegistrations.map((registration) => {
-              return [
-                { value: `${registration.user.first_name} ${registration.user.last_name}`, type: 'string' },
-                { value: this.$options.filters.dateString(registration.created_at), type: 'string' },
-                { value: registration.status == 1 ? 'Ja' : 'Nej', type: 'string' },
-                { value: registration.gender, type: 'string' },
-                { value: this.$options.filters.eventsString(registration.events), type: 'string' },
-                { value: registration.weight_class, type: 'string' },
-                { value: registration.comment, type: 'string' },
-              ]
-            }),
-          ],
-        },
+          },
+        })
       })
     },
   },
