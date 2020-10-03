@@ -27,6 +27,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     Route::get('/news', 'NewsController@index');
     Route::post('/news', 'NewsController@store');
+
+    Route::group(['prefix' => 'documents'], function () {
+        Route::get('/', 'DocumentsAdministratorController@index');
+        Route::post('/', 'DocumentsAdministratorController@store');
+        Route::delete('/{document}', 'DocumentsAdministratorController@destroy');
+        Route::post('/{document}', 'DocumentsAdministratorController@update');
+    });
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'superadmin']], function () {
