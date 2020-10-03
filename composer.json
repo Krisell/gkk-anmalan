@@ -11,6 +11,7 @@
         "php": "^7.2",
         "cache/filesystem-adapter": "^1.0",
         "fideloper/proxy": "^4.0",
+        "firebase/php-jwt": "^5.2",
         "google/apiclient": "^2.0",
         "guzzlehttp/guzzle": "^6.5",
         "laravel/framework": "^7.0",

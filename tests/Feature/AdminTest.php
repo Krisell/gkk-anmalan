@@ -131,4 +131,20 @@ class AdminTest extends TestCase
        $this->post("/admin/accounts/demote/{$user->id}")->assertStatus(200);
        $this->assertNull($user->fresh()->role);
    }
+
+    /** @test */
+    function only_an_admin_can_load_the_documents_admin_page_with_the_firebase_jwt()
+    {
+        $john = factory(User::class)->create();
+
+        auth()->login($john);
+
+        $this->get('/admin/documents')->assertUnauthorized();
+
+        $admin = factory(User::class)->create(['role' => 'admin']);
+        
+        auth()->login($admin);
+
+        $this->get('/admin/documents')->assertViewHas('jwt');
+    }
 }

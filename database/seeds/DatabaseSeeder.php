@@ -42,5 +42,10 @@ class DatabaseSeeder extends Seeder
             'name' => 'NNR',
             'url' => 'https://www.livsmedelsverket.se/globalassets/publikationsdatabas/andra-sprak/nordic-nutrition-recommendations-2012.pdf?AspxAutoDetectCookieSupport=1',
         ]);
+
+        Document::create([
+            'name' => 'NNR 2',
+            'url' => 'https://www.livsmedelsverket.se/globalassets/publikationsdatabas/andra-sprak/nordic-nutrition-recommendations-2012.pdf?AspxAutoDetectCookieSupport=1',
+        ]);
     }
 }
