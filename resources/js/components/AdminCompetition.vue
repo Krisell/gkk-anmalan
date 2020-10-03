@@ -251,7 +251,11 @@ export default {
         let birthdate = ''
         if (reg.licence_number) {
           let [_, Y, M, D] = reg.licence_number.match(/(\d\d)(\d\d)(\d\d).*/)
+          if (Y < 30) {
+            birthdate = `20${Y}/${M}/${D}`
+          } else {
           birthdate = `19${Y}/${M}/${D}`
+          }
         }
 
         csv += `"${reg.user.first_name} ${reg.user.last_name}","GKK",,"1","1","${flight}","${birthdate}","","${gender}","Raw","${reg.gender}","Open",,"","",,,,"N","","","",,"","","","",""\n`
