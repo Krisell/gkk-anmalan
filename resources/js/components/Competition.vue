@@ -105,8 +105,7 @@
           <h4 class="ml-2 text-md font-thin">Viktklass (kg)</h4>
         </div>
         <h4 class="ml-2 text-sm font-thin">
-          Vid serietävling kan du välja "Vill ej uppge" som viktklass. Vid mästerskap krävs anmälan till viktklass. Se
-          infosymbolen ovan.
+          Vid mästerskap krävs anmälan till viktklass, men inte vid seritävling. Se infosymbolen ovan.
         </h4>
 
         <select
