@@ -36,6 +36,26 @@ class CompetitionRegistrationTest extends TestCase
     }
 
     /** @test */
+    public function weight_class_doesnt_have_to_be_specified_for_all_competitions()
+    {
+        $competition = factory(Competition::class)->create();
+        $user = factory(User::class)->create();
+        auth()->login($user);
+
+        $data = [
+            'licence_number' => 'ab',
+            'weight_class' => '¯\_(ツ)_/¯',
+            'gender' => 'Män',
+            'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+            'status' => 1,
+        ];
+
+        $this->post("/competitions/{$competition->id}/registrations", $data)->assertStatus(201);
+
+        $this->assertDatabaseHas('competition_registrations', $data);
+    }
+
+    /** @test */
     public function a_competition_registration_can_be_updated_given_the_required_data()
     {
         $competition = factory(Competition::class)->create();

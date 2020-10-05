@@ -90,7 +90,7 @@
         <div class="flex mb-2 mt-6">
           <svg
             v-tooltip="
-              'Mästerskap har i regel klassfast anmälan, medan serie-tävlingar inte har viktklasser (men kan ordna gupperna baserat på detta, så välj gärna en uppskattning).'
+              'Mästerskap har i regel klassfast anmälan, medan serie-tävlingar inte har viktklasser. Gruppindelningen görs ofta baserat på viktklass, så välj gärna en uppskattning, men det är också helt OK att välja ¯\\_(ツ)_/¯'
             "
             class="w-6 h-6"
             fill="none"
@@ -104,12 +104,17 @@
           </svg>
           <h4 class="ml-2 text-md font-thin">Viktklass (kg)</h4>
         </div>
+        <h4 class="ml-2 text-sm font-thin">
+          Vid serietävling kan du välja "Vill ej uppge" som viktklass. Vid mästerskap krävs anmälan till viktklass. Se
+          infosymbolen ovan.
+        </h4>
 
         <select
           v-model="weightClass['Män']"
           v-show="gender === 'Män'"
           class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
+          <option>¯\_(ツ)_/¯</option>
           <option>52</option>
           <option>59</option>
           <option>66</option>
@@ -126,6 +131,7 @@
           v-show="gender === 'Kvinnor'"
           class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
+          <option>¯\_(ツ)_/¯</option>
           <option>43</option>
           <option>47</option>
           <option>52</option>
@@ -167,36 +173,36 @@
           ></textarea>
         </div>
         <div class="mt-2 flex flex-col justify-center items-center">
-          <el-button v-if="registration && canHelp" style="margin-bottom: 10px;" @click="register(true)"
-            ><i class="fa fa-check-circle-o" style="margin-right: 10px;"></i>Ja, jag vill tävla</el-button
+          <el-button v-if="registration && canHelp" style="margin-bottom: 10px" @click="register(true)"
+            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Ja, jag vill tävla</el-button
           >
-          <el-button secondary v-if="!registration || !canHelp" style="margin-bottom: 10px;" @click="register(true)"
+          <el-button secondary v-if="!registration || !canHelp" style="margin-bottom: 10px" @click="register(true)"
             >Ja, jag vill tävla</el-button
           >
 
-          <el-button danger v-if="registration && !canHelp" style="margin-bottom: 30px;" @click="register(false)"
-            ><i class="fa fa-check-circle-o" style="margin-right: 10px;"></i>Jag vill inte tävla</el-button
+          <el-button danger v-if="registration && !canHelp" style="margin-bottom: 30px" @click="register(false)"
+            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag vill inte tävla</el-button
           >
           <el-button
             secondary
             danger
             v-if="!registration || canHelp"
-            style="margin-bottom: 30px;"
+            style="margin-bottom: 30px"
             @click="register(false)"
             >Jag vill inte tävla</el-button
           >
 
-          <el-button v-if="justSaved" secondary disabled style="margin-bottom: 10px;">Sparat!</el-button>
-          <el-button v-else secondary style="margin-bottom: 10px;" @click="save">Spara</el-button>
+          <el-button v-if="justSaved" secondary disabled style="margin-bottom: 10px">Sparat!</el-button>
+          <el-button v-else secondary style="margin-bottom: 10px" @click="save">Spara</el-button>
         </div>
         <div v-if="registrationStatus === 'error'">
-          <el-message danger style="margin-top: 20px;">
+          <el-message danger style="margin-top: 20px">
             Kunde inte skicka, kontrollera inmatning och anlutning.
           </el-message>
         </div>
         <div v-if="registrationStatus === 'completed'">
-          <el-message v-if="!canHelp" info style="margin-top: 20px;">Tack för informationen!</el-message>
-          <el-message v-else success style="margin-top: 20px;">Grymt, vi ses där!</el-message>
+          <el-message v-if="!canHelp" info style="margin-top: 20px">Tack för informationen!</el-message>
+          <el-message v-else success style="margin-top: 20px">Grymt, vi ses där!</el-message>
         </div>
       </form>
     </div>
