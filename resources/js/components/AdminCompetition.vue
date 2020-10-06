@@ -254,7 +254,7 @@ export default {
           if (Y < 30) {
             birthdate = `20${Y}/${M}/${D}`
           } else {
-          birthdate = `19${Y}/${M}/${D}`
+            birthdate = `19${Y}/${M}/${D}`
           }
         }
 
