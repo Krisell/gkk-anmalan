@@ -19,4 +19,6 @@ firebase.initializeApp({
   measurementId: 'G-B8J19RFZ1R',
 })
 
-firebase.analytics()
+if (typeof firebase.analytics === 'function') {
+  firebase.analytics()
+}
