@@ -39,6 +39,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'superadmin']], function () {
     Route::post('/accounts/promote/{user}', 'AccountController@promote');
     Route::post('/accounts/demote/{user}', 'AccountController@demote');
+
+    Route::group(['prefix' => 'dev'], function () {
+        Route::get('/phpinfo', 'DevController@phpinfo');
+        Route::get('/opcache', 'DevController@opcache');
+    });
 });
 
 Route::group(['prefix' => 'documents', 'middleware' => 'auth'], function () {
