@@ -17,7 +17,7 @@ class ClosedForRegistrationTest extends TestCase
     /** @test */
     public function a_competition_has_a_date_for_last_registration()
     {
-        $competition = factory(Competition::class)->create();
+        $competition = Competition::factory()->create();
 
         $this->assertNull($competition->last_registration_at);
 
@@ -29,7 +29,7 @@ class ClosedForRegistrationTest extends TestCase
     /** @test */
     public function an_event_has_a_date_for_last_registration()
     {
-        $event = factory(Event::class)->create();
+        $event = Event::factory()->create();
 
         $this->assertNull($event->last_registration_at);
 
@@ -41,8 +41,8 @@ class ClosedForRegistrationTest extends TestCase
     /** @test */
     public function a_competition_registration_can_be_created_and_update_before_the_last_date_but_not_after()
     {
-        $competition = factory(Competition::class)->create(['last_registration_at' => now()->addDays(2)]);
-        $user = factory(User::class)->create();
+        $competition = Competition::factory()->create(['last_registration_at' => now()->addDays(2)]);
+        $user = User::factory()->create();
         auth()->login($user);
 
         $this->post("/competitions/{$competition->id}/registrations", [
@@ -89,9 +89,9 @@ class ClosedForRegistrationTest extends TestCase
     /** @test */
     public function an_event_registration_can_be_created_and_update_before_the_last_date_but_not_after()
     {
-        $event = factory(Event::class)->create(['last_registration_at' => now()->addDays(2)]);
+        $event = Event::factory()->create(['last_registration_at' => now()->addDays(2)]);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         auth()->login($user);
 
         $this->post("/events/{$event->id}/registrations", [

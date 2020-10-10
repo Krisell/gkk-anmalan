@@ -17,19 +17,19 @@ class DevTest extends TestCase
         $this->json('get', '/admin/dev/phpinfo')->assertUnauthorized();
         $this->json('get', '/admin/dev/opcache')->assertUnauthorized();
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         auth()->login($user);
 
         $this->json('get', '/admin/dev/phpinfo')->assertUnauthorized();
         $this->json('get', '/admin/dev/opcache')->assertUnauthorized();
 
-        $adminUser = factory(User::class)->create(['role' => 'admin']);
+        $adminUser = User::factory()->create(['role' => 'admin']);
         auth()->login($adminUser);
 
         $this->json('get', '/admin/dev/phpinfo')->assertUnauthorized();
         $this->json('get', '/admin/dev/opcache')->assertUnauthorized();
 
-        $superadminUser = factory(User::class)->create(['role' => 'superadmin']);
+        $superadminUser = User::factory()->create(['role' => 'superadmin']);
         auth()->login($superadminUser);
 
         ob_start();

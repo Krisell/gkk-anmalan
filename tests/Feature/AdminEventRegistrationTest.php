@@ -16,10 +16,10 @@ class AdminEventRegistrationTest extends TestCase
     /** @test */
     public function an_admin_can_update_an_event_registration()
     {
-        $event = factory(Event::class)->create();
-        $user = factory(User::class)->create(['role' => 'admin']);
+        $event = Event::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
-        $registration = factory(EventRegistration::class)->create([
+        $registration = EventRegistration::factory()->create([
             'user_id' => $user->id,
             'event_id' => $event->id,
             'status' => 0,
@@ -42,10 +42,10 @@ class AdminEventRegistrationTest extends TestCase
     /** @test */
     public function a_non_admin_cant_update_a_registration()
     {
-        $event = factory(Event::class)->create();
-        $user = factory(User::class)->create();
+        $event = Event::factory()->create();
+        $user = User::factory()->create();
 
-        $registration = factory(EventRegistration::class)->create([
+        $registration = EventRegistration::factory()->create([
             'user_id' => $user->id,
             'event_id' => $event->id,
             'status' => 0,

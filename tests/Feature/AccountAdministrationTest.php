@@ -14,8 +14,8 @@ class AccountAdministrationTest extends TestCase
     /** @test */
     public function an_admin_may_se_a_list_of_all_users()
     {
-        $user = factory(User::class)->create();
-        $adminUser = factory(User::class)->create(['role' => 'admin']);
+        $user = User::factory()->create();
+        $adminUser = User::factory()->create(['role' => 'admin']);
         auth()->login($adminUser);
 
         $response = $this->get('/admin/accounts');
@@ -28,8 +28,8 @@ class AccountAdministrationTest extends TestCase
     /** @test */
     public function a_non_admin_may_not_se_accounts()
     {
-        $user = factory(User::class)->create();
-        $adminUser = factory(User::class)->create(['role' => 'admin']);
+        $user = User::factory()->create();
+        $adminUser = User::factory()->create(['role' => 'admin']);
 
         $this->get('/admin/accounts')->assertRedirect();
 

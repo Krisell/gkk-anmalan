@@ -14,7 +14,7 @@ class ProfileInformationTest extends TestCase
     /** @test */
     public function a_user_can_update_their_name()
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'first_name' => 'Before1',
             'last_name' => 'Before2',
         ]);
@@ -35,7 +35,7 @@ class ProfileInformationTest extends TestCase
     /** @test */
     public function a_user_can_update_their_email()
     {
-        $user = factory(User::class)->create(['email' => 'a@b.c']);
+        $user = User::factory()->create(['email' => 'a@b.c']);
 
         auth()->login($user);
 
@@ -47,7 +47,7 @@ class ProfileInformationTest extends TestCase
     /** @test */
     public function a_user_can_update_their_password()
     {
-        $user = factory(User::class)->create(['password' => bcrypt('old_password')]);
+        $user = User::factory()->create(['password' => bcrypt('old_password')]);
 
         $this->post('/login', [
             'email' => $user->email,

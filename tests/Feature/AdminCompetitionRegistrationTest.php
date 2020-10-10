@@ -16,10 +16,10 @@ class AdminCompetitionRegistrationTest extends TestCase
     /** @test */
     public function an_admin_can_update_an_Competition_registration()
     {
-        $competition = factory(Competition::class)->create();
-        $user = factory(User::class)->create(['role' => 'admin']);
+        $competition = Competition::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
-        $registration = factory(CompetitionRegistration::class)->create([
+        $registration = CompetitionRegistration::factory()->create([
             'user_id' => $user->id,
             'competition_id' => $competition->id,
             'status' => 0,
@@ -42,10 +42,10 @@ class AdminCompetitionRegistrationTest extends TestCase
     /** @test */
     public function a_non_admin_cant_update_a_registration()
     {
-        $competition = factory(Competition::class)->create();
-        $user = factory(User::class)->create();
+        $competition = Competition::factory()->create();
+        $user = User::factory()->create();
 
-        $registration = factory(CompetitionRegistration::class)->create([
+        $registration = CompetitionRegistration::factory()->create([
             'user_id' => $user->id,
             'competition_id' => $competition->id,
             'status' => 0,

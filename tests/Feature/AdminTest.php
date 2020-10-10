@@ -25,7 +25,7 @@ class AdminTest extends TestCase
     /** @test */
     function an_admin_can_create_an_event()
     {
-        $user = factory(User::class)->create(['role' => 'admin']);
+        $user = User::factory()->create(['role' => 'admin']);
         auth()->login($user);
 
         $this->post('/admin/events', $this->data())->assertStatus(201);
@@ -35,7 +35,7 @@ class AdminTest extends TestCase
     /** @test */
     function a_superadmin_can_create_an_event()
     {
-        $user = factory(User::class)->create(['role' => 'superadmin']);
+        $user = User::factory()->create(['role' => 'superadmin']);
         auth()->login($user);
 
         $this->post('/admin/events', $this->data())->assertStatus(201);
@@ -47,7 +47,7 @@ class AdminTest extends TestCase
     {
         $this->post('/admin/events', $this->data())->assertStatus(302);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         auth()->login($user);
 
         $this->post('/admin/events', $this->data())->assertStatus(401);
@@ -57,8 +57,8 @@ class AdminTest extends TestCase
     /** @test */
     function a_non_admin_cant_promote_users()
     {
-        $user = factory(User::class)->create();
-        $nonAdminUser = factory(User::class)->create(['role' => 'user']);
+        $user = User::factory()->create();
+        $nonAdminUser = User::factory()->create(['role' => 'user']);
         auth()->login($nonAdminUser);
 
         $this->assertNull($user->role);
@@ -70,8 +70,8 @@ class AdminTest extends TestCase
     /** @test */
     function a_normal_admin_cant_promote_other_users()
     {
-        $user = factory(User::class)->create();
-        $adminUser = factory(User::class)->create(['role' => 'admin']);
+        $user = User::factory()->create();
+        $adminUser = User::factory()->create(['role' => 'admin']);
         auth()->login($adminUser);
 
         $this->assertNull($user->role);
@@ -83,8 +83,8 @@ class AdminTest extends TestCase
     /** @test */
     function a_superadmin_can_promote_other_users()
     {
-        $user = factory(User::class)->create();
-        $adminUser = factory(User::class)->create(['role' => 'superadmin']);
+        $user = User::factory()->create();
+        $adminUser = User::factory()->create(['role' => 'superadmin']);
         auth()->login($adminUser);
 
         $this->assertNull($user->role);
@@ -96,8 +96,8 @@ class AdminTest extends TestCase
     /** @test */
     function a_non_admin_cant_demote_users()
     {
-        $user = factory(User::class)->create(['role' => 'admin']);
-        $nonAdminUser = factory(User::class)->create(['role' => 'user']);
+        $user = User::factory()->create(['role' => 'admin']);
+        $nonAdminUser = User::factory()->create(['role' => 'user']);
         auth()->login($nonAdminUser);
 
         $this->assertEquals('admin', $user->role);
@@ -109,8 +109,8 @@ class AdminTest extends TestCase
    /** @test */
    function a_normal_admin_cant_demote_other_users()
    {
-       $user = factory(User::class)->create(['role' => 'admin']);
-       $adminUser = factory(User::class)->create(['role' => 'admin']);
+       $user = User::factory()->create(['role' => 'admin']);
+       $adminUser = User::factory()->create(['role' => 'admin']);
        auth()->login($adminUser);
 
        $this->assertEquals('admin', $user->role);
@@ -122,8 +122,8 @@ class AdminTest extends TestCase
    /** @test */
    function a_superadmin_can_demote_other_users()
    {
-       $user = factory(User::class)->create(['role' => 'admin']);
-       $adminUser = factory(User::class)->create(['role' => 'superadmin']);
+       $user = User::factory()->create(['role' => 'admin']);
+       $adminUser = User::factory()->create(['role' => 'superadmin']);
        auth()->login($adminUser);
 
        $this->assertEquals('admin', $user->role);
@@ -135,13 +135,13 @@ class AdminTest extends TestCase
     /** @test */
     function only_an_admin_can_load_the_documents_admin_page_with_the_firebase_jwt()
     {
-        $john = factory(User::class)->create();
+        $john = User::factory()->create();
 
         auth()->login($john);
 
         $this->get('/admin/documents')->assertUnauthorized();
 
-        $admin = factory(User::class)->create(['role' => 'admin']);
+        $admin = User::factory()->create(['role' => 'admin']);
         
         auth()->login($admin);
 

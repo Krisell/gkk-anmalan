@@ -29,7 +29,7 @@ class EventTest extends TestCase
     /** @test */
     public function an_admin_can_create_an_event()
     {
-        auth()->login(factory(User::class)->create(['role' => 'admin']));
+        auth()->login(User::factory()->create(['role' => 'admin']));
 
         $this->post('/admin/events', $this->data())->assertCreated();
 
@@ -39,7 +39,7 @@ class EventTest extends TestCase
     /** @test */
     public function the_event_name_is_required()
     {
-        auth()->login(factory(User::class)->create(['role' => 'admin']));
+        auth()->login(User::factory()->create(['role' => 'admin']));
 
         $this->post('/admin/events', $this->data(['name' => null]))->assertSessionHasErrors('name');
 
@@ -51,7 +51,7 @@ class EventTest extends TestCase
     {
         $this->post('/admin/events', $this->data())->assertStatus(302);
 
-        auth()->login(factory(User::class)->create());
+        auth()->login(User::factory()->create());
 
         $this->post('/admin/events', $this->data())->assertStatus(401);
         $this->assertDatabaseMissing('events', $this->data());
@@ -60,8 +60,8 @@ class EventTest extends TestCase
     /** @test */
     public function an_admin_can_update_an_an_event()
     {
-        auth()->login(factory(User::class)->create(['role' => 'admin']));
-        $event = factory(Event::class)->create();
+        auth()->login(User::factory()->create(['role' => 'admin']));
+        $event = Event::factory()->create();
 
         $this->patch("/admin/events/{$event->id}", $this->data([
             'name' => 'Nytt namn',

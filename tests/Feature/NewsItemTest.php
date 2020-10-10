@@ -15,7 +15,7 @@ class NewsItemTest extends TestCase
     /** @test */
     function an_admin_can_create_a_news_item()
     {
-        $user = factory(User::class)->create(['role' => 'admin']);
+        $user = User::factory()->create(['role' => 'admin']);
 
         auth()->login($user);
 
@@ -33,7 +33,7 @@ class NewsItemTest extends TestCase
     /** @test */
     function a_non_admin_cant_create_a_news_item()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         auth()->login($user);
 
@@ -48,7 +48,7 @@ class NewsItemTest extends TestCase
     /** @test */
     function a_title_and_body_must_be_provided()
     {
-        $user = factory(User::class)->create(['role' => 'admin']);
+        $user = User::factory()->create(['role' => 'admin']);
 
         auth()->login($user);
 

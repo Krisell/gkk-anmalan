@@ -15,8 +15,8 @@ class DeleteTest extends TestCase
     /** @test */
     public function an_admin_may_delete_an_event()
     {
-        $event = factory(Event::class)->create();
-        $user = factory(User::class)->create(['role' => 'admin']);
+        $event = Event::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         auth()->login($user);
 
@@ -28,8 +28,8 @@ class DeleteTest extends TestCase
     /** @test */
     public function an_event_is_only_soft_deleted_by_default()
     {
-        $event = factory(Event::class)->create();
-        $user = factory(User::class)->create(['role' => 'admin']);
+        $event = Event::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         auth()->login($user);
 

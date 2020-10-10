@@ -15,12 +15,12 @@ class HiddenPastTest extends TestCase
     /** @test */
     public function a_past_competition_is_by_default_hidden()
     {
-        $cA = factory(Competition::class)->create(['date' => now()->subDays(10)]);
-        $cB = factory(Competition::class)->create(['date' => now()->subDays(2)]);
-        $cC = factory(Competition::class)->create(['date' => now()->addDays(3)]);
-        $cD = factory(Competition::class)->create(['date' => now()->addDays(10)]);
+        $cA = Competition::factory()->create(['date' => now()->subDays(10)]);
+        $cB = Competition::factory()->create(['date' => now()->subDays(2)]);
+        $cC = Competition::factory()->create(['date' => now()->addDays(3)]);
+        $cD = Competition::factory()->create(['date' => now()->addDays(10)]);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         auth()->login($user);
 

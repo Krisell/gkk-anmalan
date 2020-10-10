@@ -5,10 +5,11 @@ namespace App;
 use App\CompetitionRegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Competition extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $dates = ['deleted_at'];
     protected $guarded = [];

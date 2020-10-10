@@ -18,8 +18,8 @@ class CompetitionRegistrationTest extends TestCase
     /** @test */
     public function a_competition_registration_can_be_created_given_the_required_data()
     {
-        $competition = factory(Competition::class)->create();
-        $user = factory(User::class)->create();
+        $competition = Competition::factory()->create();
+        $user = User::factory()->create();
         auth()->login($user);
 
         $data = [
@@ -38,8 +38,8 @@ class CompetitionRegistrationTest extends TestCase
     /** @test */
     public function weight_class_doesnt_have_to_be_specified_for_all_competitions()
     {
-        $competition = factory(Competition::class)->create();
-        $user = factory(User::class)->create();
+        $competition = Competition::factory()->create();
+        $user = User::factory()->create();
         auth()->login($user);
 
         $data = [
@@ -58,11 +58,11 @@ class CompetitionRegistrationTest extends TestCase
     /** @test */
     public function a_competition_registration_can_be_updated_given_the_required_data()
     {
-        $competition = factory(Competition::class)->create();
-        $user = factory(User::class)->create();
+        $competition = Competition::factory()->create();
+        $user = User::factory()->create();
         auth()->login($user);
 
-        $registration = factory(CompetitionRegistration::class)->create([
+        $registration = CompetitionRegistration::factory()->create([
             'user_id' => $user->id,
             'competition_id' => $competition->id,
         ]);

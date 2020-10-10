@@ -17,8 +17,8 @@ class EventRegistrationTest extends TestCase
     /** @test */
     public function an_event_registration_can_be_created_given_the_required_data()
     {
-        $event = factory(Event::class)->create();
-        $user = factory(User::class)->create();
+        $event = Event::factory()->create();
+        $user = User::factory()->create();
         auth()->login($user);
 
         $this->post("/events/{$event->id}/registrations", ['status' => 1, 'comment' => 'abc'])->assertStatus(201);
@@ -29,11 +29,11 @@ class EventRegistrationTest extends TestCase
     /** @test */
     public function a_competition_registration_can_be_updated_given_the_required_data()
     {
-        $event = factory(Event::class)->create();
-        $user = factory(User::class)->create();
+        $event = Event::factory()->create();
+        $user = User::factory()->create();
         auth()->login($user);
 
-        $registration = factory(EventRegistration::class)->create([
+        $registration = EventRegistration::factory()->create([
             'user_id' => $user->id,
             'event_id' => $event->id,
         ]);
