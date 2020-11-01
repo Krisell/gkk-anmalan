@@ -23,6 +23,11 @@
             <thead>
               <tr>
                 <th
+                  class="text-center w-2 px-6 py-3 border-b border-gray-200 bg-gray-50 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Närvaro bekräftad
+                </th>
+                <th
                   class="w-2 px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 ></th>
                 <th
@@ -44,6 +49,13 @@
             </thead>
             <tbody class="bg-white">
               <tr v-for="registration in filteredRegistrations" :key="registration.id">
+                <td class="text-center">
+                  <toggle-button
+                    @change="save(registration)"
+                    v-model="registration.presence_confirmed"
+                    color="#314270"
+                  />
+                </td>
                 <td class="text-center">
                   <i @click="editRegistration(registration)" class="fa fa-pencil cursor-pointer"></i>
                 </td>
@@ -182,16 +194,19 @@ export default {
     },
   },
   methods: {
+    save(registration) {
+      return axios({
+        url: `/events/${this.event.id}/registrations/${registration.id}`,
+        method: 'post',
+        data: registration,
+      })
+    },
     editRegistration(registration) {
       this.registrationToEdit = JSON.parse(JSON.stringify(registration))
       this.$modal.show('edit-registration')
     },
     confirmEditRegistration() {
-      axios({
-        url: `/events/${this.event.id}/registrations/${this.registrationToEdit.id}`,
-        method: 'post',
-        data: this.registrationToEdit,
-      }).then((_) => window.location.reload())
+      this.save(this.registrationToEdit).then((_) => window.location.reload())
     },
     excel() {
       import(/* webpackChunkName: "zipcelx" */ 'zipcelx').then(({ default: zipcelx }) => {

@@ -10,7 +10,7 @@ class AccountController extends Controller
     public function index()
     {
         return view('admin.accounts', [
-            'accounts' => User::all(),
+            'accounts' => User::with(['eventRegistrations.event'])->get(),
             'user' => auth()->user(),
         ]);
     }

@@ -42,7 +42,7 @@
                 v-for="event in events"
                 :key="event.id"
                 @click="location(`/admin/events/${event.id}`)"
-                style="cursor: pointer;"
+                style="cursor: pointer"
               >
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
@@ -250,15 +250,13 @@
     <GkkLink class="mt-16" to="/" text="Tillbaka till startsidan" />
 
     <modal name="delete-event" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px;">
-        <h3 style="text-align: center;">
-          Är du säker på att du vill radera {{ selectedEvent && selectedEvent.name }}?
-        </h3>
+      <div style="padding: 30px; margin-top: 20px">
+        <h3 style="text-align: center">Är du säker på att du vill radera {{ selectedEvent && selectedEvent.name }}?</h3>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
         <el-button secondary @click="$modal.hide('delete-event')">Nej</el-button>
-        <el-button style="margin-left: 10px;" danger primary @click="deleteEvent">Radera</el-button>
+        <el-button style="margin-left: 10px" danger primary @click="deleteEvent">Radera</el-button>
       </div>
     </modal>
   </div>

@@ -19,6 +19,7 @@ class CreateEventRegistrationsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->integer('status');
             $table->text('comment')->nullable();
+            $table->boolean('presence_confirmed')->default(false);
             $table->timestamps();
 
             $table->unique(['user_id', 'event_id']);

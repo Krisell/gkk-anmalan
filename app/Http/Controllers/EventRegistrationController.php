@@ -29,6 +29,6 @@ class EventRegistrationController extends Controller
     {
         abort_unless(auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin', 401);
         
-        return $registration->update(request()->only(['status', 'comment']));
+        return $registration->update(request()->only(['status', 'comment', 'presence_confirmed']));
     }
 }

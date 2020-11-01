@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VModal from 'vue-js-modal'
 import VTooltip from 'v-tooltip'
+import ToggleButton from 'vue-js-toggle-button'
 
 require('./bootstrap')
 
@@ -8,6 +9,7 @@ window.Vue = Vue
 Vue.config.ignoredElements = ['trix-editor']
 Vue.use(VModal)
 Vue.use(VTooltip)
+Vue.use(ToggleButton)
 
 Vue.mixin({
   methods: {

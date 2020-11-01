@@ -16,6 +16,11 @@
                 <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Bekräftad närvaro som funktionär<br />(senaste 365 dagarna)
+                </th>
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Registreringsdatum
                 </th>
                 <th
@@ -44,6 +49,13 @@
                   </div>
                 </td>
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">
+                    {{ presentTotal(account.event_registrations) }}<br />({{
+                      presentLastYear(account.event_registrations)
+                    }})
+                  </div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">{{ account.created_at | dateString }}</div>
                 </td>
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
@@ -63,7 +75,7 @@
                     <i
                       @click="confirmDemotion(account)"
                       v-if="account.role === 'admin'"
-                      style="cursor: pointer;"
+                      style="cursor: pointer"
                       class="fa fa-star"
                       v-tooltip="'Administratör, klicka för att ta bort rollen'"
                     ></i>
@@ -76,7 +88,7 @@
                       @click="confirmPromotion(account)"
                       v-else
                       class="fa fa-star-o"
-                      style="cursor: pointer;"
+                      style="cursor: pointer"
                       v-tooltip="'Gör till administratör'"
                     ></i>
                   </div>
@@ -95,34 +107,36 @@
     <GkkLink to="/" text="Tillbaka till startsidan" />
 
     <modal name="promote" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px;">
-        <h3 style="text-align: center;">
+      <div style="padding: 30px; margin-top: 20px">
+        <h3 style="text-align: center">
           Är du säker på att du vill göra {{ selectedAccount && selectedAccount.email }} till administratör?
         </h3>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
         <el-button secondary @click="$modal.hide('promote')">Nej</el-button>
-        <el-button @click="promotion" danger primary style="margin-left: 20px;">Ja, gör till administratör</el-button>
+        <el-button @click="promotion" danger primary style="margin-left: 20px">Ja, gör till administratör</el-button>
       </div>
     </modal>
 
     <modal name="demote" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px;">
-        <h3 style="text-align: center;">
+      <div style="padding: 30px; margin-top: 20px">
+        <h3 style="text-align: center">
           Är du säker på att du vill ta bort administratörsrollen för {{ selectedAccount && selectedAccount.email }}?
         </h3>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
         <el-button secondary @click="$modal.hide('demote')">Nej</el-button>
-        <el-button @click="demotion" danger primary style="margin-left: 20px;">Ja, ta bort</el-button>
+        <el-button @click="demotion" danger primary style="margin-left: 20px">Ja, ta bort</el-button>
       </div>
     </modal>
   </div>
 </template>
 
 <script>
+import Date from '../modules/Date.js'
+
 export default {
   props: ['accounts', 'user'],
   data() {
@@ -140,6 +154,14 @@ export default {
     },
   },
   methods: {
+    presentTotal(registrations) {
+      return registrations.filter((registration) => registration.presence_confirmed).length
+    },
+    presentLastYear(registrations) {
+      return registrations.filter(
+        (registration) => registration.presence_confirmed && Date.withinAYear(registration.event.date),
+      ).length
+    },
     confirmDemotion(account) {
       this.selectedAccount = account
       this.$modal.show('demote')

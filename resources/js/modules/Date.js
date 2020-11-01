@@ -18,6 +18,9 @@ const Date = {
 
     return `${day}, ${moment(date).date()} ${moment(date).locale('sv').format('MMMM')}`
   },
+  withinAYear(date) {
+    return moment(new window.Date()).diff(moment(date), 'days') < 365
+  },
 }
 
 export default Date
