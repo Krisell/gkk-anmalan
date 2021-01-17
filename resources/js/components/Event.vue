@@ -46,36 +46,36 @@
           ></textarea>
         </div>
         <div class="mt-2 flex flex-col justify-center items-center">
-          <el-button v-if="registration && canHelp" style="margin-bottom: 10px;" @click="register(true)"
-            ><i class="fa fa-check-circle-o" style="margin-right: 10px;"></i>Jag kan hjälpa till</el-button
+          <el-button v-if="registration && canHelp" style="margin-bottom: 10px" @click="register(true)"
+            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan delta</el-button
           >
-          <el-button secondary v-if="!registration || !canHelp" style="margin-bottom: 10px;" @click="register(true)"
-            >Jag kan hjälpa till</el-button
+          <el-button secondary v-if="!registration || !canHelp" style="margin-bottom: 10px" @click="register(true)"
+            >Jag kan delta</el-button
           >
 
-          <el-button danger v-if="registration && !canHelp" style="margin-bottom: 30px;" @click="register(false)"
-            ><i class="fa fa-check-circle-o" style="margin-right: 10px;"></i>Jag kan inte hjälpa till</el-button
+          <el-button danger v-if="registration && !canHelp" style="margin-bottom: 30px" @click="register(false)"
+            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan inte hjälpa till</el-button
           >
           <el-button
             secondary
             danger
             v-if="!registration || canHelp"
-            style="margin-bottom: 30px;"
+            style="margin-bottom: 30px"
             @click="register(false)"
             >Jag kan inte hjälpa till</el-button
           >
 
-          <el-button v-if="justSaved" secondary disabled style="margin-bottom: 10px;">Sparat!</el-button>
-          <el-button v-else secondary style="margin-bottom: 10px;" @click="save">Spara</el-button>
+          <el-button v-if="justSaved" secondary disabled style="margin-bottom: 10px">Sparat!</el-button>
+          <el-button v-else secondary style="margin-bottom: 10px" @click="save">Spara</el-button>
         </div>
         <div v-if="registrationStatus === 'error'">
-          <el-message danger style="margin-top: 20px;">
+          <el-message danger style="margin-top: 20px">
             Kunde inte skicka, kontrollera inmatning och anlutning.
           </el-message>
         </div>
         <div v-if="registrationStatus === 'completed'">
-          <el-message v-if="!canHelp" info style="margin-top: 20px;">Synd, men tack för informationen!</el-message>
-          <el-message v-else success style="margin-top: 20px;">Grymt, vi ses där!</el-message>
+          <el-message v-if="!canHelp" info style="margin-top: 20px">Synd, men tack för informationen!</el-message>
+          <el-message v-else success style="margin-top: 20px">Grymt, vi ses där!</el-message>
         </div>
       </form>
     </div>
