@@ -23,7 +23,7 @@ class DocumentsAdministratorController extends Controller
             'url' => 'required',
         ]);
 
-        Document::create($data);
+        return Document::create($data);
     }
 
     public function destroy(Document $document)
