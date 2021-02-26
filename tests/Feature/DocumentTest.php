@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\User;
 use App\Document;
 use Tests\TestCase;
+use App\DocumentFolder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -47,9 +48,12 @@ class DocumentTest extends TestCase
     {
         Auth::login(User::factory()->create(['role' => 'admin']));
 
+        $folder = DocumentFolder::factory()->create();
+
         $this->post('/admin/documents', [
             'name' => 'MY DOCUMENT',
             'url' => 'https://my-url.com',
+            'document_folder_id' => $folder->id,
         ])->assertCreated();
 
         $this->assertCount(1, Document::all());

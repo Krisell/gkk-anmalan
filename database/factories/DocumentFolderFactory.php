@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Document;
 use App\DocumentFolder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class DocumentFactory extends Factory
+class DocumentFolderFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Document::class;
+    protected $model = DocumentFolder::class;
 
     /**
      * Define the model's default state.
@@ -24,8 +23,7 @@ class DocumentFactory extends Factory
     {
         return [
             'name' => 'ABC',
-            'url' => 'https://URL.com' ,
-            'document_folder_id' => DocumentFolder::factory(),
+            'order' => 0,
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DocumentFolderController;
+
 Auth::routes();
 
 Route::get('/', 'HomeController@index');
@@ -31,8 +33,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::group(['prefix' => 'documents'], function () {
         Route::get('/', 'DocumentsAdministratorController@index');
         Route::post('/', 'DocumentsAdministratorController@store');
-        Route::delete('/{document}', 'DocumentsAdministratorController@destroy');
         Route::post('/{document}', 'DocumentsAdministratorController@update');
+        Route::delete('/{document}', 'DocumentsAdministratorController@destroy');
+    });
+
+    Route::group(['prefix' => 'document-folders'], function () {
+        Route::post('/', [DocumentFolderController::class, 'store']);
+        Route::post('/{folder}', [DocumentFolderController::class, 'update']);
+        Route::delete('/{folder}', [DocumentFolderController::class, 'destroy']);
     });
 });
 

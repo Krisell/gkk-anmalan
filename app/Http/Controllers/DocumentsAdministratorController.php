@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Document;
 use App\Firebase;
+use App\DocumentFolder;
 use Illuminate\Http\Request;
 
 class DocumentsAdministratorController extends Controller
@@ -12,6 +13,7 @@ class DocumentsAdministratorController extends Controller
     {
         return view('admin.documents', [
             'documents' => Document::all(),
+            'folders' => DocumentFolder::all(),
             'jwt' => Firebase::makeAdminJwt(),
         ]);
     }
@@ -21,6 +23,7 @@ class DocumentsAdministratorController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'url' => 'required',
+            'document_folder_id' => 'required',
         ]);
 
         return Document::create($data);

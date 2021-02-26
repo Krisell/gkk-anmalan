@@ -3,7 +3,11 @@
     <h1 class="text-center text-3xl font-hairline mb-6">Dokument</h1>
 
     <div class="flex flex-col">
-      <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <div
+        v-for="folder in sortedFolders"
+        :key="folder.id"
+        class="py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+      >
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
@@ -11,7 +15,7 @@
                 <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Namn
+                  {{ folder.name }}
                 </th>
                 <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
@@ -22,7 +26,7 @@
               </tr>
             </thead>
             <tbody class="bg-white">
-              <tr class="event-row" v-for="document in documents" :key="document.id">
+              <tr class="event-row" v-for="document in documentsFor(folder)" :key="document.id">
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -76,11 +80,18 @@
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
 
-    <div class="flex justify-center mt-6">
-      <ui-button prevent @click="$modal.show('add-document')">Lägg till nytt dokument</ui-button>
+        <div class="flex justify-center mt-6">
+          <ui-button
+            prevent
+            @click="
+              chosenFolder = folder
+              $modal.show('add-document')
+            "
+            ><i class="fa fa-plus mr-2"></i>Nytt dokument i mappen {{ folder.name }}</ui-button
+          >
+        </div>
+      </div>
     </div>
 
     <GkkLink class="mt-16" to="/" text="Tillbaka till startsidan" />
@@ -148,7 +159,7 @@
 import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
 
 export default {
-  props: ['documents', 'jwt'],
+  props: ['documents', 'jwt', 'folders'],
   data() {
     return {
       uploadStatus: '',
@@ -157,9 +168,19 @@ export default {
         url: '',
       },
       selectedDocument: null,
+      chosenFolder: null,
     }
   },
+  computed: {
+    sortedFolders() {
+      this.folders.sort((a, b) => a.order - b.order)
+      return this.folders
+    },
+  },
   methods: {
+    documentsFor(folder) {
+      return this.documents.filter((document) => document.document_folder_id == folder.id)
+    },
     addDocument() {
       if (this.newDocument.name.length === 0 || this.newDocument.url.length === 0) {
         return
@@ -169,6 +190,7 @@ export default {
         .post(`/admin/documents`, {
           name: this.newDocument.name,
           url: this.newDocument.url,
+          document_folder_id: this.chosenFolder.id,
         })
         .then(() => window.location.reload())
     },
