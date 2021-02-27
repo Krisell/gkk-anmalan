@@ -29,9 +29,6 @@ export default {
     },
   },
   methods: {
-    open(url) {
-      window.open(url)
-    },
     documentsFor(folder) {
       return this.documents.filter((document) => document.document_folder_id == folder.id)
     },

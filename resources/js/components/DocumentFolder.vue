@@ -47,6 +47,11 @@ export default {
       expanded: false,
     }
   },
+  methods: {
+    open(url) {
+      window.open(url)
+    },
+  },
 }
 </script>
 
