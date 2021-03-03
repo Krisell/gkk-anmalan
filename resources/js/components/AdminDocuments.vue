@@ -152,6 +152,16 @@
             </tbody>
           </table>
         </div>
+        <div class="flex justify-center mt-6">
+          <ui-button
+            prevent
+            @click="
+              chosenFolder = folder
+              $modal.show('add-document')
+            "
+            ><i class="fa fa-plus mr-2"></i>Nytt dokument i mappen {{ folder.name }}</ui-button
+          >
+        </div>
       </div>
 
       <div class="text-center mt-4">
