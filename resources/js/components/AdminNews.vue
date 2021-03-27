@@ -6,6 +6,11 @@
       class="appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
       v-model="title"
     />
+    <input
+      placeholder="Datum som visas (lämna tomt om du vill använda dagens datum)"
+      class="appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+      v-model="published_at_date"
+    />
 
     <trix-editor @trix-change="change" class="bg-white trix-content" placeholder="Nyhetens text ..."></trix-editor>
 
@@ -19,6 +24,7 @@ export default {
     return {
       title: '',
       body: '',
+      published_at_date: '',
     }
   },
   methods: {
@@ -27,7 +33,6 @@ export default {
       this.body = html
     },
     create() {
-      console.log(this.title, this.body)
       window
         .axios({
           method: 'post',
@@ -35,6 +40,7 @@ export default {
           data: {
             title: this.title,
             body: this.body,
+            published_at_date: this.published_at_date,
           },
         })
         .then((response) => {

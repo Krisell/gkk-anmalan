@@ -22,11 +22,13 @@ class NewsItemTest extends TestCase
         $this->post('/admin/news', [
             'title' => 'News Item Title',
             'body' => '<h1>News Item Body</h1>',
+            'published_at_date' => '2021-03-03',
         ])->assertStatus(201);
 
         $this->assertDatabaseHas('news_items', [
             'title' => 'News Item Title',
             'body' => '<h1>News Item Body</h1>',
+            'published_at_date' => '2021-03-03',
         ]);
     }
 
@@ -40,13 +42,14 @@ class NewsItemTest extends TestCase
         $this->post('/admin/news', [
             'title' => 'News Item Title',
             'body' => '<h1>News Item Body</h1>',
+            'published_at_date' => '2021-03-03',
         ])->assertStatus(401);
 
         $this->assertCount(0, NewsItem::all());
     }
 
     /** @test */
-    function a_title_and_body_must_be_provided()
+    function a_title_and_body_must_be_provided_but_not_published_at_date()
     {
         $user = User::factory()->create(['role' => 'admin']);
 

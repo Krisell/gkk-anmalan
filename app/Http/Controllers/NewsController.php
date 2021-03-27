@@ -17,6 +17,7 @@ class NewsController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'body' => 'required',
+            'published_at_date' => '',
         ]);
 
         return NewsItem::create($data);

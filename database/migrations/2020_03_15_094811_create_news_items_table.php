@@ -18,6 +18,7 @@ class CreateNewsItemsTable extends Migration
             $table->string('title');
             $table->text('body');
             // $table->unsignedBigInteger('user_id');
+            $table->string('published_at_date')->nullable();
             $table->timestamps();
         });
     }
