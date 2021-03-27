@@ -7,11 +7,9 @@
       v-model="title"
     />
 
-    <trix-editor @trix-change="change" class="trix-content" placeholder="Nyhetens text ..."></trix-editor>
+    <trix-editor @trix-change="change" class="bg-white trix-content" placeholder="Nyhetens text ..."></trix-editor>
 
-    <ui-button class="mt-2" @click="create">
-      Skapa nyhet
-    </ui-button>
+    <ui-button class="mt-2" @click="create"> Skapa nyhet </ui-button>
   </div>
 </template>
 
