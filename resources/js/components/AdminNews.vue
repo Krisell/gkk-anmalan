@@ -12,7 +12,12 @@
       v-model="published_at_date"
     />
 
-    <trix-editor @trix-change="change" class="bg-white trix-content" placeholder="Nyhetens text ..."></trix-editor>
+    <trix-editor
+      @trix-change="change"
+      class="bg-white trix-content"
+      style="min-height: 300px"
+      placeholder="Nyhetens text ..."
+    ></trix-editor>
 
     <ui-button class="mt-2" @click="create"> Skapa nyhet </ui-button>
   </div>
