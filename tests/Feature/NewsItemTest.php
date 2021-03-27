@@ -64,4 +64,70 @@ class NewsItemTest extends TestCase
 
         $this->assertCount(0, NewsItem::all());
     }
+
+    /** @test */
+    function a_news_item_can_be_updated()
+    {
+        $news = NewsItem::create([
+            'title' => 'Before',
+            'body' => 'Before the edit'
+        ]);
+
+        $user = User::factory()->create(['role' => 'admin']);
+        auth()->login($user);
+
+        $this->json('post', "/admin/news/{$news->id}", [
+            'title' => 'After',
+            'body' => 'After the edit',
+        ])->assertStatus(200);
+
+        $this->assertEquals('After', $news->fresh()->title);
+        $this->assertEquals('After the edit', $news->fresh()->body);
+    }
+
+    /** @test */
+    function both_title_and_body_are_required_when_updating_a_news_item()
+    {
+        $news = NewsItem::create([
+            'title' => 'Before',
+            'body' => 'Before the edit'
+        ]);
+
+        $user = User::factory()->create(['role' => 'admin']);
+        auth()->login($user);
+
+        $this->json('post', "/admin/news/{$news->id}", [
+            'title' => 'After',
+        ])->assertStatus(422);
+
+        $this->json('post', "/admin/news/{$news->id}", [
+            'body' => 'After the edit',
+        ])->assertStatus(422);
+
+        $this->json('post', "/admin/news/{$news->id}", [
+            'body' => 'After the edit',
+            'title' => '',
+        ])->assertStatus(422);
+
+        $this->assertEquals('Before', $news->fresh()->title);
+        $this->assertEquals('Before the edit', $news->fresh()->body);
+    }
+
+    /** @test */
+    function a_news_item_can_be_deleted()
+    {
+        $news = NewsItem::create([
+            'title' => 'Before',
+            'body' => 'Before the edit'
+        ]);
+
+        $user = User::factory()->create(['role' => 'admin']);
+        auth()->login($user);
+
+        $this->json('delete', "/admin/news/{$news->id}")->assertStatus(200);
+
+        $this->assertDatabaseMissing('news_items', [
+            'title' => 'Before',
+        ]);
+    }
 }

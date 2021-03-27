@@ -21,4 +21,22 @@ class NewsController extends Controller
 
         return NewsItem::create($data);
     }
+
+    public function update(Request $request, NewsItem $news)
+    {
+        $data = $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+        ]);
+
+        $news->update([
+            'title' => $data['title'],
+            'body' => $data['body'],
+        ]);
+    }
+
+    public function destroy(NewsItem $news)
+    {
+        $news->delete();
+    }
 }
