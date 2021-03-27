@@ -206,9 +206,10 @@
 
     <modal name="add-document" :adaptive="true" height="auto">
       <div style="padding: 30px; margin-top: 20px">
+        <h1 class="text-2xl font-hairline mt-0 mb-6 text-center">Lägg till dokument/länk</h1>
         <div class="flex mb-6 items-center justify-center bg-grey-lighter">
+          <h1 class="p-10 text-center">Ladda upp en fil, eller ange valfri URL till en fil eller webbsida.</h1>
           <label
-            v-if="uploadStatus === ''"
             class="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer"
           >
             <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -216,20 +217,28 @@
                 d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z"
               />
             </svg>
-            <span v-if="newDocument.url.length > 0" class="mt-2 text-base leading-normal">Välj annan fil</span>
-            <span v-else class="mt-2 text-base leading-normal">Välj fil</span>
+            <div v-if="uploadStatus === 'pending'">Laddar upp ...</div>
+            <div v-else>
+              <span v-if="newDocument.url.length > 0" class="mt-2 text-base leading-normal">Välj annan fil</span>
+              <span v-else class="mt-2 text-base leading-normal">Ladda upp fil</span>
+            </div>
             <input @change="upload" ref="fileUpload" type="file" class="hidden" />
           </label>
-          <p v-else>Laddar upp ...</p>
         </div>
-        <h3 style="text-align: center">Ange dokumentets namn</h3>
         <div class="mt-1 relative rounded-md shadow-sm">
-          <input v-model="newDocument.name" class="form-input block w-full sm:text-sm sm:leading-5" />
+          <input
+            v-model="newDocument.name"
+            placeholder="Namn"
+            class="form-input block w-full sm:text-sm sm:leading-5"
+          />
+        </div>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input v-model="newDocument.url" placeholder="URL" class="form-input block w-full sm:text-sm sm:leading-5" />
         </div>
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('edit-document')">Stäng</el-button>
+        <el-button secondary @click="$modal.hide('add-document')">Stäng</el-button>
         <el-button style="margin-left: 10px" danger primary @click="addDocument">Lägg till dokument</el-button>
       </div>
     </modal>
@@ -378,11 +387,10 @@ export default {
         return
       }
 
-      this.newDocument.name = file.name
       const extension = file.name.split('.')[file.name.split('.').length - 1]
-
       let url = await FirebaseFileUpload.upload(this.jwt, file, extension)
       this.uploadStatus = ''
+      this.newDocument.name = file.name
       this.newDocument.url = url
     },
   },
