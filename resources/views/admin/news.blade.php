@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-<gkk-admin-news></gkk-admin-news>
+<gkk-admin-news :news='@json($news ?? null)'></gkk-admin-news>
 @endsection
 
 

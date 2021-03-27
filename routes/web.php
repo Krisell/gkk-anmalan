@@ -29,6 +29,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     Route::group(['prefix' => 'news'], function () {
         Route::get('/', 'NewsController@index');
+        Route::get('/{news}', 'NewsController@edit');
         Route::post('/', 'NewsController@store');
         Route::post('/{news}', 'NewsController@update');
         Route::delete('/{news}', 'NewsController@destroy');

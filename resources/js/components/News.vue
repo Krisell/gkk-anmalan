@@ -6,10 +6,13 @@
     </div>
 
     <div
-      class="shadow bg-white rounded-sm mb-4 border-gkk border-t-2 p-2 px-6"
+      class="relative shadow bg-white rounded-sm mb-4 border-gkk border-t-2 p-2 px-6"
       v-for="newsItem in news"
       :key="newsItem.id"
     >
+      <div class="absolute bottom-2 right-2" @click="location(`/admin/news/${newsItem.id}`)" v-if="isAdmin">
+        <el-button danger style="padding: 5px; font-size: 10px">Redigera nyhet</el-button>
+      </div>
       <h1 style="margin: 20px 0">
         {{ newsItem.title }} <span style="font-size: 12px">{{ publishDate(newsItem) }}</span>
       </h1>

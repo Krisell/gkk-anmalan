@@ -82,6 +82,7 @@ class NewsItemTest extends TestCase
         $this->json('post', "/admin/news/{$news->id}", [
             'title' => 'After',
             'body' => 'After the edit',
+            'published_at_date' => '',
         ])->assertStatus(200);
 
         $this->assertEquals('After', $news->fresh()->title);

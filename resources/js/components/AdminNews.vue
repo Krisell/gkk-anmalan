@@ -12,24 +12,38 @@
       v-model="published_at_date"
     />
 
+    <input v-if="news" id="news-content" :value="news.body" type="hidden" name="content" />
+    <input v-if="!news" id="news-content" type="hidden" name="content" />
     <trix-editor
       @trix-change="change"
       class="bg-white trix-content"
       style="min-height: 300px"
       placeholder="Nyhetens text ..."
+      input="news-content"
     ></trix-editor>
 
-    <ui-button class="mt-2" @click="create"> Skapa nyhet </ui-button>
+    <ui-button v-if="!news" class="mt-2" @click="create"> Skapa nyhet </ui-button>
+    <ui-button v-if="news" class="mt-2" @click="update"> Uppdatera nyhet </ui-button>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
+  props: ['news'],
   data() {
     return {
       title: '',
       body: '',
       published_at_date: '',
+    }
+  },
+  mounted() {
+    if (this.news) {
+      this.title = this.news.title
+      this.body = this.news.body
+      this.published_at_date = this.news.published_at_date
     }
   },
   methods: {
@@ -38,19 +52,30 @@ export default {
       this.body = html
     },
     create() {
-      window
-        .axios({
-          method: 'post',
-          url: '/admin/news',
-          data: {
-            title: this.title,
-            body: this.body,
-            published_at_date: this.published_at_date,
-          },
-        })
-        .then((response) => {
-          window.location = '/'
-        })
+      axios({
+        method: 'post',
+        url: '/admin/news',
+        data: {
+          title: this.title,
+          body: this.body,
+          published_at_date: this.published_at_date,
+        },
+      }).then((response) => {
+        window.location = '/'
+      })
+    },
+    update() {
+      axios({
+        method: 'post',
+        url: `/admin/news/${this.news.id}`,
+        data: {
+          title: this.title,
+          body: this.body,
+          published_at_date: this.published_at_date,
+        },
+      }).then((response) => {
+        window.location = '/'
+      })
     },
   },
 }

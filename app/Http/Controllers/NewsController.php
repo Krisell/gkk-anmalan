@@ -12,6 +12,13 @@ class NewsController extends Controller
         return view('admin.news');
     }
 
+    public function edit(NewsItem $news)
+    {
+        return view('admin.news', [
+            'news' => $news,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -28,11 +35,13 @@ class NewsController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'body' => 'required',
+            'published_at_date' => '',
         ]);
 
         $news->update([
             'title' => $data['title'],
             'body' => $data['body'],
+            'published_at_date' => $data['published_at_date'],
         ]);
     }
 
