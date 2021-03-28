@@ -33,6 +33,25 @@ class NewsItemTest extends TestCase
     }
 
     /** @test */
+    function the_published_at_date_defaults_to_todays_date()
+    {
+        $user = User::factory()->create(['role' => 'admin']);
+
+        auth()->login($user);
+
+        $this->post('/admin/news', [
+            'title' => 'News Item Title',
+            'body' => '<h1>News Item Body</h1>',
+        ])->assertStatus(201);
+
+        $this->assertDatabaseHas('news_items', [
+            'title' => 'News Item Title',
+            'body' => '<h1>News Item Body</h1>',
+            'published_at_date' => now()->format('Y-m-d'),
+        ]);
+    }
+
+    /** @test */
     function a_non_admin_cant_create_a_news_item()
     {
         $user = User::factory()->create();

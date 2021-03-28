@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $news = Auth()->id() ? NewsItem::latest()->get() : [];
+        $news = Auth()->id() ? NewsItem::orderBy('published_at_date', 'desc')->orderBy('created_at', 'desc')->get() : [];
 
         return view('welcome', [
             'user' => auth()->user(),

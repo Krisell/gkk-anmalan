@@ -31,6 +31,10 @@ class NewsController extends Controller
             'published_at_date' => '',
         ]);
 
+        if (empty($data['published_at_date'])) {
+            $data['published_at_date'] = now()->format('Y-m-d');
+        }
+
         return NewsItem::create($data);
     }
 
