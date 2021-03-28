@@ -1,16 +1,18 @@
 <template>
   <div style="text-align: center">
-    <div class="flex flex-col m-6 sm:flex-row items-center justify-center" v-if="user">
+    <div class="flex flex-col m-6 sm:flex-row items-center justify-center">
       <gkk-action-card
+        v-if="user"
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @admin="location('/admin/competitions')"
         @click="location('/competitions')"
         description="Tävlingsanmälan"
-        icon="trophy"
+        icon="list-ul"
         :unanswered="unanswered.competitions"
       ></gkk-action-card>
       <gkk-action-card
+        v-if="user"
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @admin="location('/admin/events')"
@@ -20,6 +22,7 @@
         :unanswered="unanswered.events"
       ></gkk-action-card>
       <gkk-action-card
+        v-if="user"
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @admin="location('/admin/documents')"
@@ -29,15 +32,22 @@
       ></gkk-action-card>
       <!-- <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="cooperation" description="Intresseanmälan<br>(Under utveckling)" icon="lightbulb-o"></gkk-action-card> -->
       <gkk-action-card
-        class="m-4 max-w-xs w-64"
         v-if="isAdmin"
+        class="m-4 max-w-xs w-64"
         @click="location('/admin/accounts')"
         description="Administrera konton"
         icon="user"
       ></gkk-action-card>
-    </div>
-    <div class="flex flex-col m-6 sm:flex-row items-center justify-center" v-if="!user">
       <gkk-action-card
+        v-if="!user"
+        class="m-4 max-w-xs w-64"
+        :admin="isAdmin"
+        @click="location('/register')"
+        description="Skapa konto"
+        icon="user"
+      ></gkk-action-card>
+      <gkk-action-card
+        v-if="!user"
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @click="location('/login')"
@@ -47,9 +57,10 @@
       <gkk-action-card
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
-        @click="location('/register')"
-        description="Skapa konto"
-        icon="user"
+        @admin="location('/admin/records')"
+        @click="location('/records')"
+        description="Klubbrekord"
+        icon="trophy"
       ></gkk-action-card>
     </div>
 

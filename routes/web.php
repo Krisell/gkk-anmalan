@@ -88,3 +88,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('google', 'AuthController@google');
     Route::post('microsoft', 'AuthController@microsoft');
 });
+
+Route::group(['prefix' => 'records'], function () {
+    Route::get('/', 'RecordsController@index');
+});
