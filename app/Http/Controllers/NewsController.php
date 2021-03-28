@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Firebase;
 use App\NewsItem;
 use Illuminate\Http\Request;
 
@@ -9,13 +10,16 @@ class NewsController extends Controller
 {
     public function index()
     {
-        return view('admin.news');
+        return view('admin.news', [
+            'jwt' => Firebase::makeAdminJwt(),
+        ]);
     }
 
     public function edit(NewsItem $news)
     {
         return view('admin.news', [
             'news' => $news,
+            'jwt' => Firebase::makeAdminJwt(),
         ]);
     }
 

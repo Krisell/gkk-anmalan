@@ -15,6 +15,7 @@
     <input v-if="news" id="news-content" :value="news.body" type="hidden" name="content" />
     <input v-if="!news" id="news-content" type="hidden" name="content" />
     <trix-editor
+      ref="editor"
       @trix-change="change"
       class="bg-white trix-content"
       style="min-height: 300px"
@@ -28,10 +29,11 @@
 </template>
 
 <script>
+import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
 import axios from 'axios'
 
 export default {
-  props: ['news'],
+  props: ['news', 'jwt'],
   data() {
     return {
       title: '',
@@ -45,6 +47,26 @@ export default {
       this.body = this.news.body
       this.published_at_date = this.news.published_at_date
     }
+
+    this.$refs.editor.addEventListener('trix-attachment-add', async (event) => {
+      const file = event.attachment.file
+
+      if (!file) {
+        return
+      }
+
+      const extension = file.name.split('.')[file.name.split('.').length - 1]
+
+      ;[10, 20, 30, 40, 50, 60, 70, 80, 90].forEach((progress) => {
+        window.setTimeout(() => {
+          event.attachment.setUploadProgress(progress)
+        }, progress * 10)
+      })
+
+      const url = await FirebaseFileUpload.upload(this.jwt, file, extension)
+
+      event.attachment.setAttributes({ url: url, href: url })
+    })
   },
   methods: {
     change(event) {
