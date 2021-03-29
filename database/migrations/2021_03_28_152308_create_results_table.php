@@ -18,6 +18,7 @@ class CreateResultsTable extends Migration
             $table->string('gender');
             $table->datetime('competition_date');
             $table->string('weight_class');
+            $table->string('event');
             $table->unsignedInteger('user_id')->nullable();
             $table->string('name')->nullable();
             $table->string('result');
