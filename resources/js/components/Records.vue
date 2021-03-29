@@ -44,7 +44,7 @@
                   <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                     <div class="flex items-center">
                       <div class="mx-auto">
-                        <div class="text-sm leading-5 font-medium text-gray-900">
+                        <div class="text-sm leading-5 text-gray-900">
                           {{ result.weight_class }}
                         </div>
                       </div>
@@ -53,7 +53,7 @@
                   <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                     <div class="flex items-center">
                       <div class="mx-auto">
-                        <div class="text-sm leading-5 font-medium text-gray-900">
+                        <div class="text-sm leading-5 text-gray-900">
                           {{ result.event }}
                         </div>
                       </div>
@@ -62,8 +62,8 @@
                   <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                     <div class="flex items-center">
                       <div class="mx-auto">
-                        <div class="text-sm leading-5 font-medium text-gray-900">
-                          {{ result.name || `${result.user.first_name} ${result.user.last_name}` }}
+                        <div class="text-sm leading-5 text-gray-900">
+                          {{ result.name || name(result.user) }}
                         </div>
                       </div>
                     </div>
@@ -71,7 +71,7 @@
                   <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                     <div class="flex items-center">
                       <div class="mx-auto">
-                        <div class="text-sm leading-5 font-medium text-gray-900">
+                        <div class="text-sm leading-5 text-gray-900">
                           {{ result.result }}
                         </div>
                       </div>
@@ -80,7 +80,11 @@
                   <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                     <div class="flex items-center">
                       <div class="mx-auto">
-                        <div class="text-sm leading-5 font-medium text-gray-900">
+                        <div
+                          v-tooltip.bottom="'Nytt senaste året'"
+                          :class="{ 'text-green-500': withinAYear(result.competition_date) }"
+                          class="text-sm leading-5 text-gray-900"
+                        >
                           {{ result.competition_date }}
                         </div>
                       </div>
@@ -99,9 +103,17 @@
 </template>
 
 <script>
+import Date from '../modules/Date.js'
+
 export default {
   props: ['results'],
   methods: {
+    withinAYear(date) {
+      return Date.withinAYear(date)
+    },
+    name(user) {
+      return user ? `${user.first_name} ${user.last_name}` : ''
+    },
     recordsFor(gender) {
       let genderResults = this.results.filter((result) =>
         gender === 'Kvinnor' ? result.gender === 'F' : result.gender === 'M',
@@ -109,7 +121,7 @@ export default {
 
       return genderResults.sort((a, b) => {
         if (a.weight_class !== b.weight_class) {
-          return a.weight_class.localeCompare(b.weight_class)
+          return a.weight_class.localeCompare(b.weight_class, undefined, { numeric: true, sensitivity: 'base' })
         }
 
         const eventOrder = ['Knäböj', 'Bänkpress', 'Marklyft', 'Totalt']
