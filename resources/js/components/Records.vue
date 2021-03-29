@@ -81,10 +81,13 @@
                     <div class="flex items-center">
                       <div class="mx-auto">
                         <div
+                          v-if="withinAYear(result.competition_date)"
                           v-tooltip.bottom="'Nytt senaste året'"
-                          :class="{ 'text-green-500': withinAYear(result.competition_date) }"
-                          class="text-sm leading-5 text-gray-900"
+                          class="text-sm leading-5 text-green-500"
                         >
+                          {{ result.competition_date }}
+                        </div>
+                        <div v-else class="text-sm leading-5 text-gray-900">
                           {{ result.competition_date }}
                         </div>
                       </div>
