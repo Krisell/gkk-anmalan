@@ -5,37 +5,26 @@
       <el-button danger style="padding: 5px; font-size: 10px">Skapa nyhet</el-button>
     </div>
 
-    <div
+    <NewsItem
       class="relative shadow bg-white rounded-sm mb-4 border-gkk border-t-2 p-2 px-6"
-      v-for="newsItem in news"
-      :key="newsItem.id"
-    >
-      <div class="absolute bottom-2 right-2" @click="location(`/admin/news/${newsItem.id}`)" v-if="isAdmin">
-        <el-button danger style="padding: 5px; font-size: 10px">Redigera nyhet</el-button>
-      </div>
-      <h1 style="margin: 20px 0">
-        {{ newsItem.title }} <span style="font-size: 12px">{{ publishDate(newsItem) }}</span>
-      </h1>
-      <div v-html="newsItem.body"></div>
-    </div>
+      v-for="(item, index) in news"
+      :key="item.id"
+      :item="item"
+      :user="user"
+      :default-expanded="index === 0"
+    ></NewsItem>
   </div>
 </template>
 
 <script>
+import NewsItem from './NewsItem.vue'
+
 export default {
+  components: { NewsItem },
   props: ['user', 'news'],
   computed: {
     isAdmin() {
       return this.user && ['admin', 'superadmin'].includes(this.user.role)
-    },
-  },
-  methods: {
-    publishDate(newsItem) {
-      if (newsItem.published_at_date) {
-        return newsItem.published_at_date
-      }
-
-      return newsItem.created_at.slice(0, 10)
     },
   },
 }
