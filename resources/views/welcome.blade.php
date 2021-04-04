@@ -11,7 +11,9 @@
             <gkk-navigation :user='@json($user)' :unanswered='@json($unanswered)'></gkk-navigation>
 
             @auth
-            <gkk-news :user='@json($user)' :news='@json($news)'></gkk-news>
+                @if ($user->granted_by != 0)
+                <gkk-news :user='@json($user)' :news='@json($news)'></gkk-news>
+                @endif
             @endauth
         </div>
     </div>
