@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('weight_class')->nullable();
             $table->string('role')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->unsignedInteger('granted_by')->default(0)->index();
             $table->string('password');
             $table->unsignedInteger('visits')->default(0);
             $table->timestamp('last_visited_at')->nullable();

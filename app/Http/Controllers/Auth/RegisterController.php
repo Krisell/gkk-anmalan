@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Mail\WelcomeMail;
+use App\Mail\GrantAccountMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -92,6 +93,7 @@ class RegisterController extends Controller
         ]);
 
         Mail::to($user)->send(new WelcomeMail($user));
+        Mail::to('martin.krisell@gmail.com')->send(new GrantAccountMail);
 
         return $user;
     }

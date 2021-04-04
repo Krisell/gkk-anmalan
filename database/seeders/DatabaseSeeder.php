@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@example.com',
             'password' => Hash::make('asdasdasd'),
             'role' => null,
+            'granted_by' => 1,
         ]);
 
         User::create([
@@ -31,6 +32,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => Hash::make('asdasdasd'),
             'role' => 'admin',
+            'granted_by' => 1,
         ]);
 
         User::create([
@@ -39,6 +41,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'superadmin@example.com',
             'password' => Hash::make('asdasdasd'),
             'role' => 'superadmin',
+            'granted_by' => 1,
         ]);
 
         User::create([
@@ -47,6 +50,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'martin.krisell@gmail.com',
             'password' => Hash::make('asdasd'),
             'role' => 'admin',
+            'granted_by' => 1,
         ]);
 
         User::create([
@@ -55,6 +59,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'martinkrisell@gmail.com',
             'password' => Hash::make('asdasd'),
             'role' => 'superadmin',
+            'granted_by' => 1,
         ]);
 
         User::create([
@@ -63,6 +68,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'martinnormal@gmail.com',
             'password' => Hash::make('asdasd'),
             'role' => null,
+            'granted_by' => 1,
         ]);
 
         $folder1 = DocumentFolder::create([

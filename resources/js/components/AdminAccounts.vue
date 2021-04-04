@@ -1,5 +1,54 @@
 <template>
   <div class="container mx-auto">
+    <div v-if="ungranted.length > 0" class="flex flex-col mb-8">
+      <h2 class="text-2xl font-hairline text-center m-4">Väntar på godkännande</h2>
+      <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+          <table class="min-w-full">
+            <thead>
+              <tr>
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Namn
+                </th>
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Registreringsdatum
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <tr v-for="account in ungranted" :key="account.id">
+                <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="flex items-center">
+                    <div class="ml-4">
+                      <div class="text-sm leading-5 font-medium text-gray-900">
+                        {{ account.first_name }} {{ account.last_name }}
+                      </div>
+                      <div class="text-sm leading-5 text-gray-500">{{ account.email }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ account.created_at | dateString }}</div>
+                </td>
+
+                <td
+                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
+                >
+                  <ui-button @click="grantAccount(account)">Godkänn konto</ui-button>
+                  <ui-button class="ml-2" type="secondary" @click="deleteAccount(account)">Radera konto</ui-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <h2 class="text-2xl font-hairline text-center m-4">{{ accounts.length }} medlemmar har registrerat ett konto</h2>
 
     <div class="flex flex-col">
@@ -138,10 +187,11 @@
 import Date from '../modules/Date.js'
 
 export default {
-  props: ['accounts', 'user'],
+  props: ['accounts', 'user', 'ungranted'],
   data() {
     return {
       selectedAccount: null,
+      grantStatus: '',
     }
   },
   filters: {
@@ -154,6 +204,26 @@ export default {
     },
   },
   methods: {
+    grantAccount(account) {
+      if (this.grantStatus !== '') {
+        return
+      }
+
+      this.grantStatus = 'pending'
+      axios.post(`/admin/accounts/${account.id}/grant`).then(() => {
+        window.location.reload()
+      })
+    },
+    deleteAccount(account) {
+      if (this.grantStatus !== '') {
+        return
+      }
+
+      this.grantStatus = 'pending'
+      axios.delete(`/admin/accounts/${account.id}/grant`).then(() => {
+        window.location.reload()
+      })
+    },
     presentTotal(registrations) {
       return registrations.filter((registration) => registration.presence_confirmed).length
     },

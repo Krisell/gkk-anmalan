@@ -1,6 +1,14 @@
 <template>
   <div style="text-align: center">
-    <div class="flex flex-col m-6 sm:flex-row items-center justify-center">
+    <div v-if="user && user.granted_by == 0">
+      <h3 class="text-center mt-6 font-thin text-xl">
+        Välkommen till GKK!<br />
+        Innan du kan börja använda systemet behöver ditt konto godkännas av en styrelsemedlem. En epostnotis har
+        skickats till styrelsen.<br />
+        Om du vill utföra en brådskande anmälan kan du ta kontakt med någon i styrelsen (ex. på Discord).
+      </h3>
+    </div>
+    <div v-else class="flex flex-col m-6 sm:flex-row items-center justify-center">
       <gkk-action-card
         v-if="user"
         class="m-4 max-w-xs w-64"
@@ -37,6 +45,7 @@
         @click="location('/admin/accounts')"
         description="Administrera konton"
         icon="user"
+        :unanswered="unanswered.ungranted"
       ></gkk-action-card>
       <gkk-action-card
         v-if="!user"

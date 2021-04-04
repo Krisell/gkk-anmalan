@@ -36,6 +36,9 @@
                     Skapa konto
                 </div>
             </ui-button>
+            <div class="text-center mt-4 text-xs text-gray-400">
+                Innan du kan börja använda ditt konto kommer det behöva godkännas av administratören. När du registrerar dig skickas automatiskt en epostnotis till administratören.
+            </div>
         </form>
     </div>
 </div>
