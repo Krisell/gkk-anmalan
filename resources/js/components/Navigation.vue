@@ -3,9 +3,7 @@
     <div v-if="user && user.granted_by == 0">
       <h3 class="text-center mt-6 font-thin text-xl">
         Välkommen till GKK!<br />
-        Innan du kan börja använda systemet behöver ditt konto godkännas av en styrelsemedlem. En epostnotis har
-        skickats till styrelsen.<br />
-        Om du vill utföra en brådskande anmälan kan du ta kontakt med någon i styrelsen (ex. på Discord).
+        Innan du kan börja använda systemet behöver ditt konto godkännas av administratören.
       </h3>
     </div>
     <div v-else class="flex flex-col m-6 sm:flex-row items-center justify-center">
