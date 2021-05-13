@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Document;
-use App\Firebase;
 use App\DocumentFolder;
+use App\Firebase;
 use Illuminate\Http\Request;
 
 class DocumentsAdministratorController extends Controller
@@ -12,7 +12,7 @@ class DocumentsAdministratorController extends Controller
     public function index()
     {
         return view('admin.documents', [
-            'documents' => Document::all(),
+            'documents' => Document::orderBy('name')->get(),
             'folders' => DocumentFolder::all(),
             'jwt' => Firebase::makeAdminJwt(),
         ]);

@@ -11,7 +11,7 @@ class DocumentController extends Controller
     public function index()
     {
         return view('documents', [
-            'documents' => Document::get(),
+            'documents' => Document::orderBy('name')->get(),
             'folders' => DocumentFolder::get(),
         ]);
     }
