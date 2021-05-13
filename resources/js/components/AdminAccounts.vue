@@ -435,7 +435,10 @@ export default {
             return 0
           }
 
-          return this.sortOrder * a[this.sortKey].localeCompare(b[this.sortKey])
+          return (
+            this.sortOrder *
+            String(a[this.sortKey]).localeCompare(String(b[this.sortKey]), undefined, { numeric: true })
+          )
         })
     },
     inactiveAccounts() {
