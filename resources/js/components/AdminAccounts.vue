@@ -80,6 +80,7 @@
             <thead>
               <tr>
                 <th
+                  @click="sortBy('first_name')"
                   class="
                     px-6
                     py-3
@@ -91,6 +92,7 @@
                     text-gray-500
                     uppercase
                     tracking-wider
+                    cursor-pointer
                   "
                 >
                   Namn
@@ -112,6 +114,7 @@
                   Bekräftad närvaro som funktionär<br />(senaste 365 dagarna)
                 </th>
                 <th
+                  @click="sortBy('created_at')"
                   class="
                     px-6
                     py-3
@@ -123,11 +126,13 @@
                     text-gray-500
                     uppercase
                     tracking-wider
+                    cursor-pointer
                   "
                 >
                   Registreringsdatum
                 </th>
                 <th
+                  @click="sortBy('last_visited_at')"
                   class="
                     px-6
                     py-3
@@ -139,11 +144,13 @@
                     text-gray-500
                     uppercase
                     tracking-wider
+                    cursor-pointer
                   "
                 >
                   Senaste besök
                 </th>
                 <th
+                  @click="sortBy('visits')"
                   class="
                     px-6
                     py-3
@@ -155,6 +162,7 @@
                     text-gray-500
                     uppercase
                     tracking-wider
+                    cursor-pointer
                   "
                 >
                   Antal besök
@@ -180,7 +188,7 @@
               </tr>
             </thead>
             <tbody class="bg-white">
-              <tr v-for="account in activeAccounts" :key="account.id">
+              <tr v-for="account in sortedActiveAccounts" :key="account.id">
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -405,6 +413,8 @@ export default {
     return {
       selectedAccount: null,
       grantStatus: '',
+      sortKey: 'created_at',
+      sortOrder: 1,
     }
   },
   filters: {
@@ -417,14 +427,29 @@ export default {
     },
   },
   computed: {
-    activeAccounts() {
-      return this.accounts.filter((account) => account.inactivated_at === null)
+    sortedActiveAccounts() {
+      return this.accounts
+        .filter((account) => account.inactivated_at === null)
+        .sort((a, b) => {
+          if (!a[this.sortKey] || !b[this.sortKey]) {
+            return 0
+          }
+
+          return this.sortOrder * a[this.sortKey].localeCompare(b[this.sortKey])
+        })
     },
     inactiveAccounts() {
       return this.accounts.filter((account) => account.inactivated_at !== null)
     },
   },
   methods: {
+    sortBy(key) {
+      if (this.sortKey === key) {
+        this.sortOrder *= -1
+      }
+
+      this.sortKey = key
+    },
     grantAccount(account) {
       if (this.grantStatus !== '') {
         return
