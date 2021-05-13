@@ -1,8 +1,13 @@
 <?php
 
+use App\Http\Controllers\SignAgreementsController;
+use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
+
 Auth::routes();
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->middleware(EnsureAgreementsAreSignedMiddleware::class);
+Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
+Route::post('/sign-agreements', [SignAgreementsController::class, 'store'])->middleware('auth');
 
 Route::group(['prefix' => 'records'], function () {
     Route::get('/', 'RecordsController@index');
@@ -17,7 +22,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'admin', 'middleware' => ['superadmin']], function () {
         Route::post('/accounts/promote/{user}', 'AccountController@promote');
         Route::post('/accounts/demote/{user}', 'AccountController@demote');
-    
+
         Route::group(['prefix' => 'dev'], function () {
             Route::get('/phpinfo', 'DevController@phpinfo');
             Route::get('/opcache', 'DevController@opcache');
@@ -26,24 +31,24 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => \App\Http\Middleware\GrantedUserMiddleware::class], function () {
         Route::group(['prefix' => 'documents'], function () {
-            Route::get('/', 'DocumentController@index');
+            Route::get('/', 'DocumentController@index')->middleware(EnsureAgreementsAreSignedMiddleware::class);
         });
-        
+
         Route::group(['prefix' => 'events'], function () {
-            Route::get('/', 'EventController@index');
+            Route::get('/', 'EventController@index')->middleware(EnsureAgreementsAreSignedMiddleware::class);
             Route::get('{event}', 'EventController@show');
             Route::post('{event}/registrations', 'EventRegistrationController@store');
             Route::post('{event}/registrations/{registration}', 'EventRegistrationController@update');
         });
-        
+
         Route::group(['prefix' => 'competitions'], function () {
-            Route::get('/', 'CompetitionController@index');
+            Route::get('/', 'CompetitionController@index')->middleware(EnsureAgreementsAreSignedMiddleware::class);
             Route::get('{competition}', 'CompetitionController@show');
             Route::post('{competition}/registrations', 'CompetitionRegistrationController@store');
             Route::post('{competition}/registrations/{registration}', 'CompetitionRegistrationController@update');
         });
     });
-    
+
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/', 'ProfileController@index');
         Route::post('/name', 'ProfileController@updateName');

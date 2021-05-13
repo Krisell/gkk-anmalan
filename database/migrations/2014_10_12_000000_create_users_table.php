@@ -27,6 +27,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->unsignedInteger('visits')->default(0);
             $table->timestamp('last_visited_at')->nullable();
+            $table->timestamp('membership_agreement_signed_at')->nullable();
+            $table->timestamp('anti_doping_agreement_signed_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
