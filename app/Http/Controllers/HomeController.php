@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Competition;
 use App\Event;
 use App\NewsItem;
-use App\Competition;
+use App\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -19,7 +19,7 @@ class HomeController extends Controller
             'competitions' => auth()->user() ? Competition::visible()->count() - auth()->user()->competitionRegistrations()->count() : 0,
         ];
 
-        if (auth()->user() && in_array(auth()->user()->role, ['admin', 'superadmin'])) {
+        if (auth()->user() && \in_array(auth()->user()->role, ['admin', 'superadmin'])) {
             $unanswered['ungranted'] = User::whereGrantedBy(0)->count();
         }
 

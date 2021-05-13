@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\User;
 use App\Event;
-use Carbon\Carbon;
-use Tests\TestCase;
 use App\EventRegistration;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class EventRegistrationTest extends TestCase
 {
@@ -37,7 +37,7 @@ class EventRegistrationTest extends TestCase
             'user_id' => $user->id,
             'event_id' => $event->id,
         ]);
-        $this->post("/events/{$event->id}/registrations", array_merge($registration->toArray(), [
+        $this->post("/events/{$event->id}/registrations", \array_merge($registration->toArray(), [
             'comment' => 'NEW COMMENT',
         ]))->assertStatus(200);
 

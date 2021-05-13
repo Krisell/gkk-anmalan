@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\CompetitionInformationMail;
+use App\Mail\CreateRegistrationMail;
 use App\SignUpLink;
 use Illuminate\Console\Command;
-use App\Mail\CreateRegistrationMail;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\CompetitionInformationMail;
 
 class SendRegistrationEmailsCommand extends Command
 {
@@ -41,9 +41,9 @@ class SendRegistrationEmailsCommand extends Command
      */
     public function handle()
     {
-        $receivers = json_decode(file_get_contents(base_path('recipients.json')), true);
+        $receivers = \json_decode(\file_get_contents(base_path('recipients.json')), true);
 
-        if (!$this->option('confirm')) {
+        if (! $this->option('confirm')) {
             foreach ($receivers as $receiver) {
                 $this->info("Will send email to {$receiver['email']}");
             }

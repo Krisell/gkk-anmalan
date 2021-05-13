@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-use App\User;
 use App\NewsItem;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class NewsItemTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    function an_admin_can_create_a_news_item()
+    public function an_admin_can_create_a_news_item()
     {
         $user = User::factory()->create(['role' => 'admin']);
 
@@ -33,7 +33,7 @@ class NewsItemTest extends TestCase
     }
 
     /** @test */
-    function the_published_at_date_defaults_to_todays_date()
+    public function the_published_at_date_defaults_to_todays_date()
     {
         $user = User::factory()->create(['role' => 'admin']);
 
@@ -52,7 +52,7 @@ class NewsItemTest extends TestCase
     }
 
     /** @test */
-    function a_non_admin_cant_create_a_news_item()
+    public function a_non_admin_cant_create_a_news_item()
     {
         $user = User::factory()->create();
 
@@ -68,7 +68,7 @@ class NewsItemTest extends TestCase
     }
 
     /** @test */
-    function a_title_and_body_must_be_provided_but_not_published_at_date()
+    public function a_title_and_body_must_be_provided_but_not_published_at_date()
     {
         $user = User::factory()->create(['role' => 'admin']);
 
@@ -88,11 +88,11 @@ class NewsItemTest extends TestCase
     }
 
     /** @test */
-    function a_news_item_can_be_updated()
+    public function a_news_item_can_be_updated()
     {
         $news = NewsItem::create([
             'title' => 'Before',
-            'body' => 'Before the edit'
+            'body' => 'Before the edit',
         ]);
 
         $user = User::factory()->create(['role' => 'admin']);
@@ -109,11 +109,11 @@ class NewsItemTest extends TestCase
     }
 
     /** @test */
-    function both_title_and_body_are_required_when_updating_a_news_item()
+    public function both_title_and_body_are_required_when_updating_a_news_item()
     {
         $news = NewsItem::create([
             'title' => 'Before',
-            'body' => 'Before the edit'
+            'body' => 'Before the edit',
         ]);
 
         $user = User::factory()->create(['role' => 'admin']);
@@ -137,11 +137,11 @@ class NewsItemTest extends TestCase
     }
 
     /** @test */
-    function a_news_item_can_be_deleted()
+    public function a_news_item_can_be_deleted()
     {
         $news = NewsItem::create([
             'title' => 'Before',
-            'body' => 'Before the edit'
+            'body' => 'Before the edit',
         ]);
 
         $user = User::factory()->create(['role' => 'admin']);

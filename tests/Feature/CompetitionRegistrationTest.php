@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\User;
-use App\Event;
-use Carbon\Carbon;
-use Tests\TestCase;
 use App\Competition;
 use App\CompetitionRegistration;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Event;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class CompetitionRegistrationTest extends TestCase
 {
@@ -26,7 +26,7 @@ class CompetitionRegistrationTest extends TestCase
             'licence_number' => 'ab',
             'weight_class' => '74',
             'gender' => 'Män',
-            'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+            'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
             'status' => 1,
         ];
 
@@ -46,7 +46,7 @@ class CompetitionRegistrationTest extends TestCase
             'licence_number' => 'ab',
             'weight_class' => '¯\_(ツ)_/¯',
             'gender' => 'Män',
-            'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+            'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
             'status' => 1,
         ];
 
@@ -66,7 +66,7 @@ class CompetitionRegistrationTest extends TestCase
             'user_id' => $user->id,
             'competition_id' => $competition->id,
         ]);
-        $this->post("/competitions/{$competition->id}/registrations", array_merge($registration->toArray(), [
+        $this->post("/competitions/{$competition->id}/registrations", \array_merge($registration->toArray(), [
             'licence_number' => 'abc',
         ]))->assertStatus(200);
 

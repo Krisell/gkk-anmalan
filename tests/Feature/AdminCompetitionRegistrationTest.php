@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\User;
 use App\Competition;
-use Tests\TestCase;
 use App\CompetitionRegistration;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class AdminCompetitionRegistrationTest extends TestCase
 {
@@ -23,7 +23,7 @@ class AdminCompetitionRegistrationTest extends TestCase
             'user_id' => $user->id,
             'competition_id' => $competition->id,
             'status' => 0,
-            'comment' => 'No comment'
+            'comment' => 'No comment',
         ]);
 
         $data = [
@@ -49,7 +49,7 @@ class AdminCompetitionRegistrationTest extends TestCase
             'user_id' => $user->id,
             'competition_id' => $competition->id,
             'status' => 0,
-            'comment' => 'No comment'
+            'comment' => 'No comment',
         ]);
 
         $data = [

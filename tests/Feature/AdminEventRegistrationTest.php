@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\User;
 use App\Event;
-use Tests\TestCase;
 use App\EventRegistration;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class AdminEventRegistrationTest extends TestCase
 {
@@ -23,7 +23,7 @@ class AdminEventRegistrationTest extends TestCase
             'user_id' => $user->id,
             'event_id' => $event->id,
             'status' => 0,
-            'comment' => 'No comment'
+            'comment' => 'No comment',
         ]);
 
         $data = [
@@ -49,7 +49,7 @@ class AdminEventRegistrationTest extends TestCase
             'user_id' => $user->id,
             'event_id' => $event->id,
             'status' => 0,
-            'comment' => 'No comment'
+            'comment' => 'No comment',
         ]);
 
         $data = [

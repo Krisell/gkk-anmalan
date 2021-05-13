@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\User;
-use App\Event;
-use Carbon\Carbon;
-use Tests\TestCase;
 use App\Competition;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Event;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class ClosedForRegistrationTest extends TestCase
 {
@@ -49,7 +49,7 @@ class ClosedForRegistrationTest extends TestCase
             'licence_number' => 'ab',
             'weight_class' => '74',
             'gender' => 'Män',
-            'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+            'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
             'status' => 1,
         ])->assertStatus(201);
 
@@ -57,7 +57,7 @@ class ClosedForRegistrationTest extends TestCase
             'licence_number' => 'cd',
             'weight_class' => '74',
             'gender' => 'Män',
-            'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+            'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
             'status' => 1,
         ])->assertStatus(200);
 
@@ -70,7 +70,7 @@ class ClosedForRegistrationTest extends TestCase
             'licence_number' => 'ef',
             'weight_class' => '74',
             'gender' => 'Män',
-            'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+            'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
             'status' => 1,
         ])->assertStatus(401);
 
@@ -78,7 +78,7 @@ class ClosedForRegistrationTest extends TestCase
             'licence_number' => 'gh',
             'weight_class' => '74',
             'gender' => 'Män',
-            'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+            'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
             'status' => 1,
         ])->assertStatus(401);
 

@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class ProfileInformationTest extends TestCase
 {
@@ -23,7 +23,7 @@ class ProfileInformationTest extends TestCase
 
         $this->post('/profile/name', [
             'first_name' => 'After1',
-            'last_name' => 'After2'
+            'last_name' => 'After2',
         ])->assertOk();
 
         $this->assertDatabaseHas('users', [

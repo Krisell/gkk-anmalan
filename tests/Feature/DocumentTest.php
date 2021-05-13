@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\User;
 use App\Document;
-use Tests\TestCase;
 use App\DocumentFolder;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Auth;
+use Tests\TestCase;
 
 class DocumentTest extends TestCase
 {
@@ -19,17 +19,17 @@ class DocumentTest extends TestCase
     {
         $this->get('/documents')->assertRedirect();
     }
-    
+
     /** @test */
     public function a_signed_in_user_can_see_documents()
     {
         Auth::login(User::factory()->create());
-        
+
         $this->get('/documents')->assertViewHas([
             'documents' => Document::all(),
         ]);
     }
-    
+
     /** @test */
     public function a_non_admin_cant_upload_a_document()
     {
@@ -42,7 +42,7 @@ class DocumentTest extends TestCase
 
         $this->assertCount(0, Document::all());
     }
-    
+
     /** @test */
     public function an_admin_can_upload_a_document()
     {

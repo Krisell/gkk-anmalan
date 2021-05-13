@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class DevTest extends TestCase
 {
@@ -32,9 +32,9 @@ class DevTest extends TestCase
         $superadminUser = User::factory()->create(['role' => 'superadmin']);
         auth()->login($superadminUser);
 
-        ob_start();
+        \ob_start();
         $this->json('get', '/admin/dev/phpinfo')->assertOk();
         $this->json('get', '/admin/dev/opcache')->assertOk();
-        ob_end_clean();
+        \ob_end_clean();
     }
 }

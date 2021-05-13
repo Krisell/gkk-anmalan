@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\User;
 use App\Event;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class EventTest extends TestCase
 {
@@ -14,7 +14,7 @@ class EventTest extends TestCase
 
     public function data($overrides = [])
     {
-        return array_merge([
+        return \array_merge([
             'name' => 'Eventnamn',
             'time' => '9–13',
             'date' => '2020-02-23',
@@ -47,7 +47,7 @@ class EventTest extends TestCase
     }
 
     /** @test */
-    function a_non_admin_cannot_create_an_event()
+    public function a_non_admin_cannot_create_an_event()
     {
         $this->post('/admin/events', $this->data())->assertStatus(302);
 

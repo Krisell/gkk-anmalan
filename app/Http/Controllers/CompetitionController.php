@@ -51,7 +51,7 @@ class CompetitionController extends Controller
     public function adminIndex()
     {
         return view('admin.competitions', [
-            'competitions' => Competition::with('registrations')->get()
+            'competitions' => Competition::with('registrations')->get(),
         ]);
     }
 

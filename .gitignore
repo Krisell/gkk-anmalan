@@ -16,3 +16,4 @@ app/Http/Controllers/cache
 reports/
 
 public/js/app.js.LICENSE.txt
+.php_cs.cache

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Cache\Adapter\Filesystem\FilesystemCachePool;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local;
 use Illuminate\Support\Facades\Http;
-use Cache\Adapter\Filesystem\FilesystemCachePool;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 
 class AuthController extends Controller
 {
@@ -44,6 +44,7 @@ class AuthController extends Controller
 
         if ($user) {
             auth()->login($user);
+
             return redirect(request('to', '/'));
         }
 

@@ -8,11 +8,11 @@ class DevController extends Controller
 {
     public function phpinfo()
     {
-        phpinfo();
+        \phpinfo();
     }
 
     public function opcache()
     {
-        return opcache_get_status(false);
+        return \opcache_get_status(false);
     }
 }

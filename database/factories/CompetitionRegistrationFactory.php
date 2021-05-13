@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\User;
 use App\Competition;
-use Illuminate\Support\Str;
 use App\CompetitionRegistration;
+use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class CompetitionRegistrationFactory extends Factory
 {
@@ -30,9 +30,8 @@ class CompetitionRegistrationFactory extends Factory
           'licence_number' => '010101ab',
           'gender' => 'Män',
           'weight_class' => '74',
-          'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+          'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
           'status' => 1,
         ];
     }
 }
-

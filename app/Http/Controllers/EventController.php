@@ -51,7 +51,7 @@ class EventController extends Controller
     public function adminIndex()
     {
         return view('admin.events', [
-            'events' => Event::with('registrations')->get()
+            'events' => Event::with('registrations')->get(),
         ]);
     }
 

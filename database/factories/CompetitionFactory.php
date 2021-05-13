@@ -24,8 +24,7 @@ class CompetitionFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+            'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
         ];
     }
 }
-

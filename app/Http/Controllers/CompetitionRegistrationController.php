@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Competition;
-use Illuminate\Http\Request;
 use App\CompetitionRegistration;
+use Illuminate\Http\Request;
 
 class CompetitionRegistrationController extends Controller
 {
@@ -38,7 +38,7 @@ class CompetitionRegistrationController extends Controller
     public function update(Competition $competition, CompetitionRegistration $registration)
     {
         abort_unless(auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin', 401);
-        
+
         return $registration->update(request()->only(['status', 'comment']));
     }
 }

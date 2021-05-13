@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\User;
 use App\Document;
 use App\DocumentFolder;
+use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -73,12 +73,12 @@ class DatabaseSeeder extends Seeder
 
         $folder1 = DocumentFolder::create([
             'name' => 'Information',
-            'order' => 1
+            'order' => 1,
         ]);
 
         $folder2 = DocumentFolder::create([
             'name' => 'Protokoll 2021',
-            'order' => 2
+            'order' => 2,
         ]);
 
         Document::create([

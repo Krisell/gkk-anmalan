@@ -24,7 +24,7 @@ class DocumentFactory extends Factory
     {
         return [
             'name' => 'ABC',
-            'url' => 'https://URL.com' ,
+            'url' => 'https://URL.com',
             'document_folder_id' => DocumentFolder::factory(),
         ];
     }

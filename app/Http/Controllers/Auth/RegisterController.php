@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use App\Mail\WelcomeMail;
-use App\Mail\GrantAccountMail;
 use App\Http\Controllers\Controller;
+use App\Mail\GrantAccountMail;
+use App\Mail\WelcomeMail;
+use App\Providers\RouteServiceProvider;
+use App\User;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -52,8 +52,8 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         if (request('data')) {
-            $json = base64_decode(request('data'));
-            $data = json_decode($json);
+            $json = \base64_decode(request('data'));
+            $data = \json_decode($json);
 
             return view('auth.register', ['data' => $data]);
         }

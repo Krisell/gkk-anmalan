@@ -3,15 +3,16 @@
 namespace Tests\Feature;
 
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class AdminTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function data ($overrides = []) {
+    private function data($overrides = [])
+    {
         return [
             'name' => 'Martin',
             'time' => '9–15',
@@ -23,7 +24,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    function an_admin_can_create_an_event()
+    public function an_admin_can_create_an_event()
     {
         $user = User::factory()->create(['role' => 'admin']);
         auth()->login($user);
@@ -33,7 +34,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    function a_superadmin_can_create_an_event()
+    public function a_superadmin_can_create_an_event()
     {
         $user = User::factory()->create(['role' => 'superadmin']);
         auth()->login($user);
@@ -43,7 +44,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    function a_non_admin_cannot_create_an_event()
+    public function a_non_admin_cannot_create_an_event()
     {
         $this->post('/admin/events', $this->data())->assertStatus(302);
 
@@ -55,7 +56,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    function a_non_admin_cant_promote_users()
+    public function a_non_admin_cant_promote_users()
     {
         $user = User::factory()->create();
         $nonAdminUser = User::factory()->create(['role' => 'user']);
@@ -68,7 +69,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    function a_normal_admin_cant_promote_other_users()
+    public function a_normal_admin_cant_promote_other_users()
     {
         $user = User::factory()->create();
         $adminUser = User::factory()->create(['role' => 'admin']);
@@ -81,7 +82,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    function a_superadmin_can_promote_other_users()
+    public function a_superadmin_can_promote_other_users()
     {
         $user = User::factory()->create();
         $adminUser = User::factory()->create(['role' => 'superadmin']);
@@ -94,7 +95,7 @@ class AdminTest extends TestCase
     }
 
     /** @test */
-    function a_non_admin_cant_demote_users()
+    public function a_non_admin_cant_demote_users()
     {
         $user = User::factory()->create(['role' => 'admin']);
         $nonAdminUser = User::factory()->create(['role' => 'user']);
@@ -106,34 +107,34 @@ class AdminTest extends TestCase
         $this->assertEquals('admin', $user->fresh()->role);
     }
 
-   /** @test */
-   function a_normal_admin_cant_demote_other_users()
-   {
-       $user = User::factory()->create(['role' => 'admin']);
-       $adminUser = User::factory()->create(['role' => 'admin']);
-       auth()->login($adminUser);
+    /** @test */
+    public function a_normal_admin_cant_demote_other_users()
+    {
+        $user = User::factory()->create(['role' => 'admin']);
+        $adminUser = User::factory()->create(['role' => 'admin']);
+        auth()->login($adminUser);
 
-       $this->assertEquals('admin', $user->role);
+        $this->assertEquals('admin', $user->role);
 
-       $this->post("/admin/accounts/demote/{$user->id}")->assertStatus(401);
-       $this->assertEquals('admin', $user->fresh()->role);
-   }
-
-   /** @test */
-   function a_superadmin_can_demote_other_users()
-   {
-       $user = User::factory()->create(['role' => 'admin']);
-       $adminUser = User::factory()->create(['role' => 'superadmin']);
-       auth()->login($adminUser);
-
-       $this->assertEquals('admin', $user->role);
-
-       $this->post("/admin/accounts/demote/{$user->id}")->assertStatus(200);
-       $this->assertNull($user->fresh()->role);
-   }
+        $this->post("/admin/accounts/demote/{$user->id}")->assertStatus(401);
+        $this->assertEquals('admin', $user->fresh()->role);
+    }
 
     /** @test */
-    function only_an_admin_can_load_the_documents_admin_page_with_the_firebase_jwt()
+    public function a_superadmin_can_demote_other_users()
+    {
+        $user = User::factory()->create(['role' => 'admin']);
+        $adminUser = User::factory()->create(['role' => 'superadmin']);
+        auth()->login($adminUser);
+
+        $this->assertEquals('admin', $user->role);
+
+        $this->post("/admin/accounts/demote/{$user->id}")->assertStatus(200);
+        $this->assertNull($user->fresh()->role);
+    }
+
+    /** @test */
+    public function only_an_admin_can_load_the_documents_admin_page_with_the_firebase_jwt()
     {
         $john = User::factory()->create();
 
@@ -142,7 +143,7 @@ class AdminTest extends TestCase
         $this->get('/admin/documents')->assertUnauthorized();
 
         $admin = User::factory()->create(['role' => 'admin']);
-        
+
         auth()->login($admin);
 
         $this->get('/admin/documents')->assertViewHas('jwt');

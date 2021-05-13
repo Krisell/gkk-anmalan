@@ -17,6 +17,6 @@ return [
     'sent' => 'Vi har skickat ett mail för att återställa ditt lösenord.',
     'throttled' => 'Vänligen vänta innan nya försök görs.',
     'token' => 'Ogiltig begäran.',
-    'user' => "Vi kan inte hitta något konto med denna epost.",
+    'user' => 'Vi kan inte hitta något konto med denna epost.',
 
 ];

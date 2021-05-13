@@ -2,15 +2,15 @@
 
 namespace App;
 
-use App\User;
 use App\Event;
-use Illuminate\Database\Eloquent\Model;
+use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class EventRegistration extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = [];
 
     protected $casts = [
