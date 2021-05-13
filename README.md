@@ -1,47 +1,50 @@
 # Göteborg Kraftsportklubb (GKK) Anmälningsweb
 
+Detta projekt hanterar "anmälningssidan" för Göteborg Kraftsportklubb. Projektet startades 2020 för att förenkla hanteringen vid anmälan till tävlingar (från medlem till styrelse) men har med tiden utökas till att idag omfatta följande funktioner:
+
+- Tävlingsanmälan
+- Funktionärsanmälan
+- Nyheter
+- Dokumenthantering (ex. protokoll eller länkar som publiceras för medlemmarna)
+- Klubbrekord (administration under utveckling)
+- Medlemshantering med avtal, bokföring av funkionärshjälp mm.
+
+Systemet uppdateras löpande med nya funktioner efter behov.
+
 ## Teknisk översikt
-Applikationen använder ramverken Vue.js och Laravel (php). Hostingen sker på One.com där ordinarie GKK-hemsida ligger. Datan sparas i den MySQL-databas som ingår i One-hostingen, som också ligger under daglig backup.
 
-Vissa grafiska delar använder https://github.com/Naartti/vue-el-element, tack @naartti!
+Applikationen är helt webbaserad och bygger på ramverken Vue.js och Laravel (PHP). Hostingen sker på One.com där ordinarie GKK-hemsida ligger. Datan sparas i den MySQL-databas som ingår i One-hostingen, som också ligger under daglig backup.
 
-## Uppdatera webben
-Efter att önskade ändringar är pushade hit, logga in på servern och kör kommanot 
-```
-deployanm
-``` 
-Detta gör en `git pull` från projektets mapp samt uppdaterar publika assets och kör optimeringskommandona `php artisan route:cache` och `php artisan config:cache`.
+## Uppdatera live-versionen
 
-Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt. Observera att index.php har justerats för att hitta rätt, så den ska *inte* uppdateras. För tillfället är det endast innehållet i js/ och css/, samt `mix-manifest.json`, som kopieras.
+Efter att önskade ändringar är utvecklade, mergade till master och pushade hit används följande steg för att publicera en ny version:
 
-## Köra lokalt
-Se till att php och composer finns installerat på din enhet (eller ex. i din docker-kontainer).
+- Logga in på servern
+- I mappen `anmalan`, kör kommandot `deployanm` som automatiserar `git pull`, uppdatering av publika assets samt Laravel-specifika optimeringskommandon.
+- Om PHP-beroenden har uppdaterats, kör också `php composer.phar update`
+
+Deploy är i nuläget inte helt atomär utan en kort period (några sekunder) av nertid kan upplevas (särskilt i samband med `composer update`). Detta är acceptabelt i nuläget men kan komma att förändras om användningen av systemet ökar.
+
+Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt (av `deployanm` ovan). Observera att Laravels `index.php` har justerats för att hitta rätt, så den ska _inte_ uppdateras. För tillfället är det endast innehållet i js/ och css/, samt `mix-manifest.json`, som kopieras.
+
+## Utveckla lokalt
+
+Se till att PHP och composer finns installerat på din enhet (eller ex. i din docker-kontainer).
 
 Följande kommandon kan sedan användas för att sätta upp en utvecklingsmiljö:
- * `git clone https://github.com/Krisell/gkk-anmalan.git` i den mapp du vill ha projektet i
- * `cp .env.example .env` för att skapa en lokal .env-fil (innehåller hemlig data såsom API-nycklar och app-nyckel)
- * `composer install` för att installera beroenden baserat på `composer.lock`
- * `php artisan key:generate` för att skapa en unik app-nyckel
- * `php artisan serve` för att starta en lokal server
+
+- `git clone https://github.com/Krisell/gkk-anmalan.git`
+- `cp .env.example .env` för att skapa en lokal .env-fil (lagrar hemlig data såsom API-nycklar och app-nyckel utanför ordinarie kodhantering)
+- `composer install` för att installera beroenden baserat på `composer.lock`
+- `php artisan key:generate` för att skapa en unik app-nyckel
+- `php artisan serve` för att starta en lokal server
 
 Om du vill göra ändringar i frontend krävs att `Node.js` är installerat, att du installerar beroenden med `npm install` samt att du bygger för utveckling (`npm run watch`) eller för produktion (`npm run production`).
 
-## Kort om namngivning i källkoden
-En `Competition` är ett tävlingstillfälle som GKK-medlemmar kan anmäla sig till.
-Administratören skapar tillfället och respektive medlem skapar en `CompetitionRegistration`.
-
-Ett `Event` är ett tillfälle där medlemmar kan anmäla sig till att hjälpa till som funktionär.
-Administratören skapar tillfället och respektive medlem skapar en `EventRegistration`.
-
-Ett `Cooperation` är ett tillfälle där andra föreningar kan anmäla intresse att delta (ex. skicka tävlande till våra serieomgångar).
-Administratören skapar tillfället och besökare skapar en `CooperationRegistration`. Detta bör till skillnad från de andra två fallen inte kräva inlogg.
-**Detta är inte implementerat ännu.**
-
 ## Konton
-Registreringen är i nuläget helt öppen, och innebär att medlemmarna sjävla kan registrera sig. Det sker ingen verifiering av angiven epostadress, men det kan vi koppla på om det blir aktuellt. I ett senare skede vill vi kanske stänga registreringen och istället låta administratörer enkelt maila ut en inbjudan till nya medlemmar.
 
-## Epost
-Just nu används Mailgun för att skicka epost (ex. vid registrering, ifall vi vill göra det). Mailgun är gratis upp till 10 000 epost per månad om jag förstår det rätt, vilket vi aldrig kommer uppnå. API-nycklar för mailgun behöver sättas i .env-filen för att aktiveras (se .env.example).
+Registreringen är i nuläget öppen, och innebär att medlemmar sjävla kan registrera sig. Före användning behöver medlemsavtal godkännas. Det sker i nuläget ingen verifiering av angiven epostadress, men det kan vi koppla på om det blir aktuellt, alternativt stänga anmälan och låta nya konton skapas av styrelsen.
 
 ## Bidrag
+
 Idéer och hjälp mottages tacksamt. Du kan antingen skapa en Issue/PR direkt här, eller kontakta mig via epost.
