@@ -31,8 +31,8 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'membership_agreement_signed_at' => now(),
             'anti_doping_agreement_signed_at' => now(),
+            'inactivated_at' => null,
             'granted_by' => 1,
-
         ];
     }
 

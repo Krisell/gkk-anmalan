@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AccountGrantedMail;
 use App\User;
 use Illuminate\Http\Request;
-use App\Mail\AccountGrantedMail;
 use Illuminate\Support\Facades\Mail;
 
 class AccountController extends Controller
@@ -40,5 +40,19 @@ class AccountController extends Controller
         if ($user->granted_by == 0) {
             $user->delete();
         }
+    }
+
+    public function inactivate(User $user)
+    {
+        $user->update([
+            'inactivated_at' => now(),
+        ]);
+    }
+
+    public function reactivate(User $user)
+    {
+        $user->update([
+            'inactivated_at' => null,
+        ]);
     }
 }

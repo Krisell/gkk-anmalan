@@ -9,6 +9,8 @@ Route::get('/', 'HomeController@index')->middleware(EnsureAgreementsAreSignedMid
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
 Route::post('/sign-agreements', [SignAgreementsController::class, 'store'])->middleware('auth');
 
+Route::view('/inactivated', 'inactivated')->name('inactivated');
+
 Route::group(['prefix' => 'records'], function () {
     Route::get('/', 'RecordsController@index');
 });
@@ -58,6 +60,9 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
+    Route::post('/accounts/inactivate/{user}', 'AccountController@inactivate');
+    Route::post('/accounts/reactivate/{user}', 'AccountController@reactivate');
+
     Route::group(['prefix' => 'events'], function () {
         Route::get('/{event}', 'EventController@admin');
         Route::get('/', 'EventController@adminIndex');
