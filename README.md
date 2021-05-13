@@ -1,6 +1,8 @@
-# Göteborg Kraftsportklubb (GKK) Anmälningsweb
+# GKK Anmälningssidor
 
-Detta projekt hanterar "anmälningssidan" för Göteborg Kraftsportklubb. Projektet startades 2020 för att förenkla hanteringen vid anmälan till tävlingar (från medlem till styrelse) men har med tiden utökas till att idag omfatta följande funktioner:
+<img src="https://user-images.githubusercontent.com/25909128/118098777-9b9b0a80-b3d4-11eb-8e96-8e4484b41c25.png" width="100">
+
+Detta projekt hanterar "anmälningssidan" för Göteborg Kraftsportklubb (GKK). Projektet startades 2020 för att förenkla hanteringen vid anmälan till tävlingar (från medlem till styrelse) men har med tiden utökas till att idag omfatta följande funktioner:
 
 - Tävlingsanmälan
 - Funktionärsanmälan
