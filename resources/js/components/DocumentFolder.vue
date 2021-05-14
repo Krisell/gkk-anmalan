@@ -73,7 +73,7 @@ export default {
     }
   },
   mounted() {
-    this.expanded = !this.topFolder
+    this.expanded = this.topFolder
   },
   methods: {
     open(url) {
