@@ -45,7 +45,11 @@ Om du vill göra ändringar i frontend krävs att `Node.js` är installerat, att
 
 ## Konton
 
-Registreringen är i nuläget öppen, och innebär att medlemmar sjävla kan registrera sig. Före användning behöver medlemsavtal godkännas. Det sker i nuläget ingen verifiering av angiven epostadress, men det kan vi koppla på om det blir aktuellt, alternativt stänga anmälan och låta nya konton skapas av styrelsen.
+Registreringen är öppen så medlemmar sjävla kan skapa ett konto, men före användning krävs dels att våra medlemsavtal och antidopingavtal godkänns, dels att någon administratör (styrelsemedlem) godkänner det nya kontot. Det senare sker genom att en epostnotis skickas till styrelsen, och medlemmen får ett epost när godkännandet är genomfört. Observera att det i nuläget inte sker någon verifiering av angiven epostadress men det kan vi koppla på om det blir aktuellt, alternativt stänga anmälan och låta nya konton skapas av styrelsen.
+
+## Inloggning via Google/Microsoft
+
+Efter skapat konto kan inloggning ske enkelt via Google/Microsoft-knapparna, så att lösenord inte behöver avges. Det krävs dock att ett konto skapas först, och att lösenord då sätts till något. En framtida förbättring är att tillåta även kontoskapande via dessa knappar.
 
 ## Bidrag
 
