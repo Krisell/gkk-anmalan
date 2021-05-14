@@ -22,6 +22,7 @@ class CreateResultsTable extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->string('name')->nullable();
             $table->string('result');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -104,4 +104,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('/{folder}', [\App\Http\Controllers\DocumentFolderController::class, 'update']);
         Route::delete('/{folder}', [\App\Http\Controllers\DocumentFolderController::class, 'destroy']);
     });
+
+    Route::group(['prefix' => 'results'], function () {
+        Route::get('/', [\App\Http\Controllers\ResultsController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\ResultsController::class, 'store']);
+        Route::delete('/{result}', [\App\Http\Controllers\ResultsController::class, 'destroy']);
+    });
 });

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\User;
 use App\Result;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +23,12 @@ class ResultFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'gender' => 'M',
+            'competition_date' => '2021-03-02',
+            'weight_class' => '74',
+            'event' => 'Knäböj',
+            'user_id' => User::factory(),
+            'result' => '150',
         ];
     }
 }

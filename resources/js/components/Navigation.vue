@@ -64,7 +64,7 @@
       <gkk-action-card
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
-        @admin="location('/admin/records')"
+        @admin="location('/admin/results')"
         @click="location('/records')"
         description="Klubbrekord"
         icon="trophy"
