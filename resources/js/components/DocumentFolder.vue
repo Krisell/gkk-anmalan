@@ -21,8 +21,8 @@
                   tracking-wider
                 "
               >
-                <i v-if="!expanded" class="fa fa-chevron-down -ml-4 mr-2"></i>
-                <i v-if="expanded" class="fa fa-chevron-up -ml-4 mr-2"></i>
+                <i v-if="!expanded" class="fa fa-chevron-right -ml-4 mr-2"></i>
+                <i v-if="expanded" class="fa fa-chevron-down -ml-4 mr-2"></i>
                 {{ folder.name }} ({{ documents.length }} dokument)
               </th>
               <th
