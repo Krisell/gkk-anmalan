@@ -67,7 +67,8 @@ export default {
       this.status = ''
       axios
         .post('/admin/news/email/test', {
-          item: this.item,
+          title: this.item.title,
+          body: this.item.body,
         })
         .then(() => {
           this.status = 'test-successful'

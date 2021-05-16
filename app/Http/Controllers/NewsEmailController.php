@@ -28,6 +28,11 @@ class NewsEmailController extends Controller
 
     public function test()
     {
-        Mail::to(auth()->user())->send(new NewsMail(request('item')));
+        $item = NewsItem::make([
+            'body' => request('body'),
+            'title' => request('title'),
+        ]);
+
+        Mail::to(auth()->user())->send(new NewsMail($item));
     }
 }

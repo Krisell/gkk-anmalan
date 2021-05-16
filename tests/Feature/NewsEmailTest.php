@@ -72,10 +72,9 @@ class NewsEmailTest extends TestCase
             'body' => 'DEF',
         ]);
 
-        $data = \json_encode($item);
-
         $this->post('/admin/news/email/test', [
-            'item' => $item,
+            'body' => $item->body,
+            'title' => $item->title,
         ])->assertRedirect();
 
         Mail::assertNotSent(NewsMail::class);
@@ -84,7 +83,8 @@ class NewsEmailTest extends TestCase
         auth()->login($user);
 
         $this->post('/admin/news/email/test', [
-            'item' => $item,
+            'body' => $item->body,
+            'title' => $item->title,
         ])->assertUnauthorized();
 
         Mail::assertNotSent(NewsMail::class);
@@ -93,7 +93,8 @@ class NewsEmailTest extends TestCase
         auth()->login($user);
 
         $this->post('/admin/news/email/test', [
-            'item' => $item,
+            'body' => $item->body,
+            'title' => $item->title,
         ])->assertOk();
 
         Mail::assertSent(NewsMail::class, fn ($mail) => $mail->hasTo($user->email));
