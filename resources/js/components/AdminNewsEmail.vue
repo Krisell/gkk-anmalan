@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import PostRedirect from '../modules/PostRedirect'
+
 export default {
   props: ['item'],
   data() {
@@ -73,7 +75,15 @@ export default {
     },
     showPreview() {
       this.status = ''
-      window.open(`/admin/news/email/preview?item=${encodeURIComponent(JSON.stringify(this.item))}`)
+
+      PostRedirect.send({
+        open: true,
+        url: '/admin/news/email/preview',
+        data: {
+          title: this.item.title,
+          body: this.item.body,
+        },
+      })
     },
   },
 }

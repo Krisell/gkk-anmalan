@@ -30,6 +30,6 @@ class NewsMail extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->item['title'])->markdown('emails.news');
+        return $this->subject($this->item->title)->markdown('emails.news');
     }
 }

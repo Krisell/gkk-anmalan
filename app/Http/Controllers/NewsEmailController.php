@@ -18,7 +18,10 @@ class NewsEmailController extends Controller
 
     public function preview()
     {
-        $item = \json_decode(request('item'), true);
+        $item = NewsItem::make([
+            'body' => request('body'),
+            'title' => request('title'),
+        ]);
 
         return new NewsMail($item);
     }

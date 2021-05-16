@@ -3,6 +3,11 @@ const PostRedirect = {
     const form = document.createElement('form')
     form.method = 'post'
     form.action = options.url
+
+    if (options.open) {
+      form.target = 'gkk-tab'
+    }
+
     form.style.display = 'none'
 
     Object.entries(options.data).forEach(([key, value]) => {
@@ -13,6 +18,11 @@ const PostRedirect = {
     })
 
     document.body.appendChild(form)
+
+    if (options.open) {
+      window.open('', 'gkk-tab')
+    }
+
     form.submit()
   },
 }

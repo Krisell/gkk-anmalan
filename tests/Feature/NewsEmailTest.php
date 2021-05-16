@@ -40,24 +40,26 @@ class NewsEmailTest extends TestCase
     /** @test */
     public function a_news_email_can_be_previewed_in_the_browser()
     {
-        $item = NewsItem::create([
-            'title' => 'ABC',
-            'body' => 'DEF',
-        ]);
-
-        $data = \json_encode($item);
-
-        $this->get("/admin/news/email/preview?item=$data")->assertRedirect();
+        $this->post('/admin/news/email/preview', [
+            'body' => 'ABC',
+            'title' => 'CDE',
+        ])->assertRedirect();
 
         $user = User::factory()->create();
         auth()->login($user);
 
-        $this->get("/admin/news/email/preview?item=$data")->assertUnauthorized();
+        $this->post('/admin/news/email/preview', [
+            'body' => 'ABC',
+            'title' => 'CDE',
+        ])->assertUnauthorized();
 
         $user = User::factory()->create(['role' => 'admin']);
         auth()->login($user);
 
-        $this->get("/admin/news/email/preview?item=$data")->assertOk();
+        $this->post('/admin/news/email/preview', [
+            'body' => 'ABC',
+            'title' => 'CDE',
+        ])->assertOk();
     }
 
     /** @test */

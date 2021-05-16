@@ -92,7 +92,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::delete('/{news}', [\App\Http\Controllers\NewsController::class, 'destroy']);
 
         Route::group(['prefix' => 'email'], function () {
-            Route::get('/preview', [\App\Http\Controllers\NewsEmailController::class, 'preview']);
+            Route::post('/preview', [\App\Http\Controllers\NewsEmailController::class, 'preview']);
             Route::post('/test', [\App\Http\Controllers\NewsEmailController::class, 'test']);
             Route::get('/{item}', [\App\Http\Controllers\NewsEmailController::class, 'show']);
         });
