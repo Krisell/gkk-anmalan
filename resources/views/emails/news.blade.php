@@ -5,6 +5,5 @@
 
 <br>
 <br>
-Hälsningar,<br>
 Göteborg Kraftsportklubb
 @endcomponent
