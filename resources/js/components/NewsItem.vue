@@ -3,6 +3,14 @@
     <div class="absolute bottom-2 right-2" @click="location(`/admin/news/${item.id}`)" v-if="isAdmin">
       <el-button danger style="padding: 5px; font-size: 10px">Redigera nyhet</el-button>
     </div>
+    <div
+      v-tooltip.left="'Gör epostutskick'"
+      class="absolute top-0 right-4 mt-2 cursor-pointer"
+      @click="location(`/admin/news/email/${item.id}`)"
+      v-if="isAdmin"
+    >
+      <i class="fa fa-envelope"></i>
+    </div>
     <h1 @click="expanded = !expanded" style="margin: 20px 0; cursor: pointer">
       {{ item.title }} <span style="font-size: 12px">{{ publishDate }}</span>
       <span v-if="!expanded" class="text-xs ml-4 text-gray-500">Klicka för att visa</span>
