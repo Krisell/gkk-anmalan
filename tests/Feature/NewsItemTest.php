@@ -137,7 +137,7 @@ class NewsItemTest extends TestCase
     }
 
     /** @test */
-    public function a_news_item_can_be_deleted()
+    public function a_news_item_can_be_deleted_by_the_admin()
     {
         $news = NewsItem::create([
             'title' => 'Before',
@@ -147,10 +147,16 @@ class NewsItemTest extends TestCase
         $user = User::factory()->create(['role' => 'admin']);
         auth()->login($user);
 
+        $this->assertDatabaseHas('news_items', [
+            'title' => 'Before',
+            'deleted_at' => null,
+        ]);
+
         $this->json('delete', "/admin/news/{$news->id}")->assertStatus(200);
 
         $this->assertDatabaseMissing('news_items', [
             'title' => 'Before',
+            'deleted_at' => null,
         ]);
     }
 }
