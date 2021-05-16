@@ -87,6 +87,7 @@ p.sub {
 
 img {
   max-width: 100%;
+  object-fit: cover;
 }
 
 /* Layout */
