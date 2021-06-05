@@ -1,10 +1,10 @@
 <template>
   <div class="container mx-auto max-w-3xl">
-    <h1 class="text-center text-3xl font-hairline m2-6">Klubbrekord</h1>
+    <h1 class="text-center text-3xl font-thin m2-6">Klubbrekord</h1>
 
     <div class="text-center">
       <div class="flex flex-col" v-for="gender in ['Kvinnor', 'Män']" :key="gender">
-        <h2 class="font-hairline text-2xl mb-4 mt-6">{{ gender }}</h2>
+        <h2 class="font-thin text-2xl mb-4 mt-6">{{ gender }}</h2>
         <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <div
             class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200"

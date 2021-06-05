@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-3xl mx-auto relative p-4">
-    <h1 class="text-3xl font-hairline mb-2" v-if="news.length">Nyheter</h1>
+    <h1 class="text-3xl font-thin mb-2" v-if="news.length">Nyheter</h1>
     <div class="absolute top-0 right-4 mt-2" @click="location('/admin/news')" v-if="isAdmin">
       <el-button danger style="padding: 5px; font-size: 10px">Skapa nyhet</el-button>
     </div>

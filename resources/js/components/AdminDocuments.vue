@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto max-w-3xl">
-    <h1 class="text-center text-3xl font-hairline mb-6">Dokument</h1>
+    <h1 class="text-center text-3xl font-thin mb-6">Dokument</h1>
 
     <div class="flex flex-col">
       <div
@@ -13,15 +13,48 @@
             <thead>
               <tr>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   {{ folder.name }}
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 ></th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   <div class="flex justify-end">
                     <svg
@@ -168,7 +201,26 @@
         <div class="text-lg font-thin mt-2">Ny mapp</div>
         <input
           v-model="newFolderName"
-          class="my-2 m-auto appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="
+            my-2
+            m-auto
+            appearance-none
+            rounded-none
+            relative
+            block
+            w-64
+            px-3
+            py-2
+            border border-gray-300
+            placeholder-gray-500
+            text-gray-900
+            focus:outline-none
+            focus:shadow-outline-blue
+            focus:border-blue-300
+            focus:z-10
+            sm:text-sm
+            sm:leading-5
+          "
           name="name"
         />
         <ui-button prevent @click="newFolder"><i class="fa fa-plus mr-2"></i>Skapa ny mapp</ui-button>
@@ -206,11 +258,24 @@
 
     <modal name="add-document" :adaptive="true" height="auto">
       <div style="padding: 30px; margin-top: 20px">
-        <h1 class="text-2xl font-hairline mt-0 mb-6 text-center">Lägg till dokument/länk</h1>
+        <h1 class="text-2xl font-thin mt-0 mb-6 text-center">Lägg till dokument/länk</h1>
         <div class="flex mb-6 items-center justify-center bg-grey-lighter">
           <h1 class="p-10 text-center">Ladda upp en fil, eller ange valfri URL till en fil eller webbsida.</h1>
           <label
-            class="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer"
+            class="
+              w-64
+              flex flex-col
+              items-center
+              px-4
+              py-6
+              bg-white
+              text-blue
+              rounded-lg
+              shadow-lg
+              tracking-wide
+              border border-blue
+              cursor-pointer
+            "
           >
             <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path

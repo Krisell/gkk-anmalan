@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto max-w-3xl">
-    <h1 class="text-center text-3xl font-hairline mb-6">Dokument</h1>
+    <h1 class="text-center text-3xl font-thin mb-6">Dokument</h1>
 
     <div class="flex flex-col">
       <DocumentFolder

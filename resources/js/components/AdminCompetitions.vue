@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-center text-3xl font-hairline mb-6">Admin</h1>
+    <h1 class="text-center text-3xl font-thin mb-6">Admin</h1>
     <h2 class="text-center text-xl font-thin mb-6">Tävlingsanmälan</h2>
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -9,32 +9,98 @@
             <thead>
               <tr>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Tävling
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-center text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Anmälan senast
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-center text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Tid
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-center text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Plats
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-center text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Antal anmälda
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-center text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Åtgärder
                 </th>
@@ -45,7 +111,7 @@
                 v-for="competition in competitions"
                 :key="competition.id"
                 @click="location(`/admin/competitions/${competition.id}`)"
-                style="cursor: pointer;"
+                style="cursor: pointer"
               >
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
@@ -143,7 +209,24 @@
         <div class="text-lg font-thin mt-2">Tävlingsnamn</div>
         <input
           v-model="competition.name"
-          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="
+            appearance-none
+            rounded-none
+            relative
+            block
+            w-full
+            px-3
+            py-2
+            border border-gray-300
+            placeholder-gray-500
+            text-gray-900
+            focus:outline-none
+            focus:shadow-outline-blue
+            focus:border-blue-300
+            focus:z-10
+            sm:text-sm
+            sm:leading-5
+          "
           name="name"
         />
       </div>
@@ -151,7 +234,24 @@
         <div class="text-lg font-thin mt-2">Datum</div>
         <input
           v-model="competition.date"
-          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="
+            appearance-none
+            rounded-none
+            relative
+            block
+            w-full
+            px-3
+            py-2
+            border border-gray-300
+            placeholder-gray-500
+            text-gray-900
+            focus:outline-none
+            focus:shadow-outline-blue
+            focus:border-blue-300
+            focus:z-10
+            sm:text-sm
+            sm:leading-5
+          "
           type="date"
           name="date"
         />
@@ -159,7 +259,24 @@
         <div class="text-lg font-thin mt-2">till (lämna tom för endagstävling)</div>
         <input
           v-model="competition.end_date"
-          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="
+            appearance-none
+            rounded-none
+            relative
+            block
+            w-full
+            px-3
+            py-2
+            border border-gray-300
+            placeholder-gray-500
+            text-gray-900
+            focus:outline-none
+            focus:shadow-outline-blue
+            focus:border-blue-300
+            focus:z-10
+            sm:text-sm
+            sm:leading-5
+          "
           type="date"
           name="date"
         />
@@ -169,7 +286,24 @@
         <div class="text-lg font-thin mt-2">Ev. sista anmälningsdag</div>
         <input
           v-model="competition.last_registration_at"
-          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="
+            appearance-none
+            rounded-none
+            relative
+            block
+            w-full
+            px-3
+            py-2
+            border border-gray-300
+            placeholder-gray-500
+            text-gray-900
+            focus:outline-none
+            focus:shadow-outline-blue
+            focus:border-blue-300
+            focus:z-10
+            sm:text-sm
+            sm:leading-5
+          "
           type="date"
           name="last_registration_at"
         />
@@ -198,7 +332,24 @@
       <div class="mt-2">
         <input
           v-model="competition.time"
-          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="
+            appearance-none
+            rounded-none
+            relative
+            block
+            w-full
+            px-3
+            py-2
+            border border-gray-300
+            placeholder-gray-500
+            text-gray-900
+            focus:outline-none
+            focus:shadow-outline-blue
+            focus:border-blue-300
+            focus:z-10
+            sm:text-sm
+            sm:leading-5
+          "
           name="time"
           placeholder="Ungefärlig tid, ex. 8 – 15"
         />
@@ -206,7 +357,24 @@
       <div class="mt-2">
         <input
           v-model="competition.location"
-          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="
+            appearance-none
+            rounded-none
+            relative
+            block
+            w-full
+            px-3
+            py-2
+            border border-gray-300
+            placeholder-gray-500
+            text-gray-900
+            focus:outline-none
+            focus:shadow-outline-blue
+            focus:border-blue-300
+            focus:z-10
+            sm:text-sm
+            sm:leading-5
+          "
           name="location"
           placeholder="Plats, ex Friskis Majorna"
         />
@@ -234,7 +402,26 @@
         <div class="mr-2 text-lg font-thin">Visningsalternativ</div>
         <select
           v-model="competition.show_status"
-          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+          class="
+            mt-1
+            block
+            form-select
+            w-full
+            py-2
+            px-3
+            border border-gray-300
+            bg-white
+            rounded-md
+            shadow-sm
+            focus:outline-none
+            focus:shadow-outline-blue
+            focus:border-blue-300
+            transition
+            duration-150
+            ease-in-out
+            sm:text-sm
+            sm:leading-5
+          "
         >
           <option value="default">Default (visas tills datum passerat)</option>
           <option value="show">Visa</option>
@@ -273,15 +460,15 @@
     <GkkLink class="mt-16" to="/" text="Tillbaka till startsidan" />
 
     <modal name="delete-competition" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px;">
-        <h3 style="text-align: center;">
+      <div style="padding: 30px; margin-top: 20px">
+        <h3 style="text-align: center">
           Är du säker på att du vill radera {{ selectedCompetition && selectedCompetition.name }}?
         </h3>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px;">
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
         <el-button secondary @click="$modal.hide('delete-competition')">Nej</el-button>
-        <el-button style="margin-left: 10px;" danger primary @click="deleteCompetition">Radera</el-button>
+        <el-button style="margin-left: 10px" danger primary @click="deleteCompetition">Radera</el-button>
       </div>
     </modal>
   </div>

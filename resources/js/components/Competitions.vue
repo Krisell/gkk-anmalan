@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-center text-3xl font-hairline mb-6">Tävlingsanmälan</h1>
+    <h1 class="text-center text-3xl font-thin mb-6">Tävlingsanmälan</h1>
 
     <div v-if="competitions.length">
       <div v-for="competition in competitions" :key="competition.id" class="flex align-center mb-6">

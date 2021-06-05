@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto">
     <div v-if="ungranted.length > 0" class="flex flex-col mb-8">
-      <h2 class="text-2xl font-hairline text-center m-4">Väntar på godkännande</h2>
+      <h2 class="text-2xl font-thin text-center m-4">Väntar på godkännande</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
@@ -71,7 +71,7 @@
       </div>
     </div>
 
-    <h2 class="text-2xl font-hairline text-center m-4">{{ accounts.length }} medlemmar har registrerat ett konto</h2>
+    <h2 class="text-2xl font-thin text-center m-4">{{ accounts.length }} medlemmar har registrerat ett konto</h2>
 
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -289,7 +289,7 @@
     </div>
 
     <div v-if="inactiveAccounts.length > 0" class="flex flex-col mb-8 mt-8">
-      <h2 class="text-2xl font-hairline text-center m-4">Inaktiverade konton</h2>
+      <h2 class="text-2xl font-thin text-center m-4">Inaktiverade konton</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">

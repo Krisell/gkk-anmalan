@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto max-w-3xl">
-    <h1 class="text-center text-3xl font-hairline mb-6">Gör epostutskick</h1>
+    <h1 class="text-center text-3xl font-thin mb-6">Gör epostutskick</h1>
 
     <h3 class="mb-4 text-xs font-thin">
       Du kan justera mailets innehåll nedan, men detta uppdaterar inte nyheten på webbsidan.<br />Vill du göra ändringar

@@ -7,7 +7,7 @@
   </div>
 
   <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="text-center text-2xl font-hairline my-4">Återställ lösenord</h2>
+    <h2 class="text-center text-2xl font-thin my-4">Återställ lösenord</h2>
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form method="POST" action="{{ route('password.update') }}">
                 @csrf

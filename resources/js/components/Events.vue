@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-center text-3xl font-hairline mb-6">Funktionärsanmälan</h1>
+    <h1 class="text-center text-3xl font-thin mb-6">Funktionärsanmälan</h1>
 
     <div v-if="events.length">
       <div v-for="event in events" :key="event.id" class="flex align-center mb-6">
