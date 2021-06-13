@@ -3,8 +3,16 @@
     <h1 class="text-3xl font-thin mb-2">Profil</h1>
     <div style="margin-top: 30px"></div>
     <h2 class="font-thin">Namn</h2>
-    <input v-model="name.first" class="form-input block w-full sm:text-sm sm:leading-5" />
-    <input v-model="name.last" class="mt-1 form-input block w-full sm:text-sm sm:leading-5" />
+    <input
+      type="text"
+      v-model="name.first"
+      class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+    />
+    <input
+      type="text"
+      v-model="name.last"
+      class="mt-1 form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+    />
     <button
       @click="updateName"
       class="
@@ -22,8 +30,7 @@
         text-gkk
         bg-white
         border-gkk
-        focus:outline-none
-        focus:shadow-outline-indigo
+        focus:outline-none focus:shadow-outline-indigo
         active:bg-gkk
         transition
         duration-150
@@ -36,7 +43,11 @@
     <div class="my-8 border-b border-gray-200 border-1"></div>
 
     <h2 class="font-thin">Epost</h2>
-    <input v-model="email" type="email" class="form-input block w-full sm:text-sm sm:leading-5" />
+    <input
+      v-model="email"
+      type="email"
+      class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+    />
     <button
       @click="updateEmail"
       class="
@@ -54,8 +65,7 @@
         text-gkk
         bg-white
         border-gkk
-        focus:outline-none
-        focus:shadow-outline-indigo
+        focus:outline-none focus:shadow-outline-indigo
         active:bg-gkk
         transition
         duration-150
@@ -85,8 +95,7 @@
           text-gkk
           bg-white
           border-gkk
-          focus:outline-none
-          focus:shadow-outline-indigo
+          focus:outline-none focus:shadow-outline-indigo
           active:bg-gkk
           transition
           duration-150
@@ -128,8 +137,7 @@
             text-gkk
             bg-white
             border-gkk
-            focus:outline-none
-            focus:shadow-outline-indigo
+            focus:outline-none focus:shadow-outline-indigo
             active:bg-gkk
             transition
             duration-150
@@ -157,8 +165,7 @@
             text-gkk
             bg-white
             border-gkk
-            focus:outline-none
-            focus:shadow-outline-indigo
+            focus:outline-none focus:shadow-outline-indigo
             active:bg-gkk
             transition
             duration-150

@@ -214,12 +214,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           name="name"
         />
@@ -246,7 +242,11 @@
       <div style="padding: 30px; margin-top: 20px" v-if="selectedDocument">
         <h3 style="text-align: center">Redigera dokumentets namn</h3>
         <div class="mt-1 relative rounded-md shadow-sm">
-          <input v-model="selectedDocument.name" class="form-input block w-full sm:text-sm sm:leading-5" />
+          <input
+            type="text"
+            v-model="selectedDocument.name"
+            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+          />
         </div>
       </div>
 
@@ -292,13 +292,19 @@
         </div>
         <div class="mt-1 relative rounded-md shadow-sm">
           <input
+            type="text"
             v-model="newDocument.name"
             placeholder="Namn"
-            class="form-input block w-full sm:text-sm sm:leading-5"
+            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
           />
         </div>
         <div class="mt-1 relative rounded-md shadow-sm">
-          <input v-model="newDocument.url" placeholder="URL" class="form-input block w-full sm:text-sm sm:leading-5" />
+          <input
+            type="text"
+            v-model="newDocument.url"
+            placeholder="URL"
+            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+          />
         </div>
       </div>
 
