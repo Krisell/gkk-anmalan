@@ -30,6 +30,10 @@
           </span>
         </div>
 
+        @error('email')
+          <div class="text-xs text-center mt-2 text-red-400">Kunde inte logga in med dessa användaruppgifter.</div>
+        @enderror
+
         <div class="mt-6 flex items-center justify-between">
           <div class="text-sm leading-5 mx-auto">
             <a href="/password/reset" class="font-medium text-gkk hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">

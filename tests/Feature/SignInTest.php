@@ -34,10 +34,13 @@ class SignInTest extends TestCase
         $this->assertNull(auth()->user());
 
         $this->get('/login');
-        $this->followingRedirects()->post('/login', [
+        $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,
             'password' => 'wrong-password',
-        ])->assertSee($user->email);
+        ]);
+        
+        $response->assertSee($user->email);
+        $response->assertSee('Kunde inte logga in med dessa användaruppgifter.');
 
         $this->assertNull(auth()->user());
     }
