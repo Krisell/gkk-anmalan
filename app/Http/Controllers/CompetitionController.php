@@ -48,11 +48,15 @@ class CompetitionController extends Controller
         $competition->update($this->validated($request));
     }
 
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
-        return view('admin.competitions', [
-            'competitions' => Competition::with('registrations')->get(),
-        ]);
+        $competitions = Competition::with('registrations');
+
+        if (! $request->has('all')) {
+            $competitions->where('date', '>', now()->subDays(7));
+        }
+
+        return view('admin.competitions', ['competitions' => $competitions->get(), 'showingOld' => $request->has('all')]);
     }
 
     public function admin(Competition $competition)

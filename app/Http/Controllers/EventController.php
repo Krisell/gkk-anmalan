@@ -48,11 +48,15 @@ class EventController extends Controller
         $event->update($this->validated($request));
     }
 
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
-        return view('admin.events', [
-            'events' => Event::with('registrations')->get(),
-        ]);
+        $events = Event::with('registrations');
+
+        if (! $request->has('all')) {
+            $events->where('date', '>', now()->subDays(7));
+        }
+
+        return view('admin.events', ['events' => $events->get(), 'showingOld' => $request->has('all')]);
     }
 
     public function admin(Event $event)

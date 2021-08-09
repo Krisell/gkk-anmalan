@@ -70,4 +70,22 @@ class EventTest extends TestCase
 
         $this->assertDatabaseHas('events', $this->data(['name' => 'Nytt namn', 'publish_count' => true]));
     }
+
+    /** @test */
+    public function an_admin_cannot_see_old_events_by_default()
+    {
+        auth()->login(User::factory()->create(['role' => 'admin']));
+        $event = Event::factory()->create(['name' => 'An old event', 'date' => now()->subDays(10)]);
+
+        $this->get('admin/events')->assertDontSee('An old event');
+    }
+
+    /** @test */
+    public function an_admin_cannot_see_old_events_via_a_query_parameter()
+    {
+        auth()->login(User::factory()->create(['role' => 'admin']));
+        $event = Event::factory()->create(['name' => 'An old event', 'date' => now()->subDays(10)]);
+
+        $this->get('admin/events?all=true')->assertSee('An old event');
+    }
 }

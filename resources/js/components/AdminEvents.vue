@@ -168,6 +168,9 @@
             </tbody>
           </table>
         </div>
+        <a v-if="!showingOld" href="?all" class="text-xs mt-2 cursor-pointer hover:underline text-right font-extralight block"
+          >Visa även gamla events</a
+        >
       </div>
     </div>
 
@@ -206,12 +209,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           name="name"
         />
@@ -232,12 +231,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           type="date"
           name="date"
@@ -257,12 +252,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           type="date"
           name="date"
@@ -284,12 +275,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           type="date"
         />
@@ -309,12 +296,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           name="time"
           placeholder="Ungefärlig tid, ex. 8 – 15"
@@ -334,12 +317,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           name="location"
           placeholder="Plats, ex Friskis Majorna"
@@ -379,14 +358,11 @@
             bg-white
             rounded-md
             shadow-sm
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
             transition
             duration-150
             ease-in-out
-            sm:text-sm
-            sm:leading-5
+            sm:text-sm sm:leading-5
           "
         >
           <option value="default">Default (visas tills datum passerat)</option>
@@ -440,7 +416,7 @@
 
 <script>
 export default {
-  props: ['events'],
+  props: ['events', 'showingOld'],
   data() {
     return {
       editing: false,
