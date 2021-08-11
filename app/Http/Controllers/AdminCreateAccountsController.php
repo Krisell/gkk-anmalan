@@ -13,7 +13,7 @@ class AdminCreateAccountsController extends Controller
     {
         $newAccounts = collect(request('accounts'))->filter(function ($account) {
             return !User::whereEmail($account['email'])->exists();
-        });
+        })->values();
 
         // foreach ($newAccounts as $account) {
         //     User::create([
