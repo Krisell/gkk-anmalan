@@ -26,7 +26,7 @@
         </div>
 
         @error('email')
-        <div class="rounded-md bg-red-50 p-4">
+        <div class="rounded-md bg-red-50 p-4 mt-2">
             <div class="flex">
                 <div class="flex-shrink-0">
                 <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
