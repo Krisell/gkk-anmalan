@@ -60,8 +60,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    Route::post('/accounts/inactivate/{user}', [\App\Http\Controllers\AccountController::class, 'inactivate']);
-    Route::post('/accounts/reactivate/{user}', [\App\Http\Controllers\AccountController::class, 'reactivate']);
+    Route::prefix('accounts')->group(function () {
+        Route::post('/inactivate/{user}', [\App\Http\Controllers\AccountController::class, 'inactivate']);
+        Route::post('/reactivate/{user}', [\App\Http\Controllers\AccountController::class, 'reactivate']);
+        Route::post('/', [\App\Http\Controllers\AdminCreateAccountsController::class, 'store']);
+    });
 
     Route::prefix('events')->group(function () {
         Route::get('/{event}', [\App\Http\Controllers\EventController::class, 'admin']);

@@ -288,6 +288,20 @@
       </div>
     </div>
 
+    <div class="flex flex-col mt-4 items-center justify-center">
+      <h2 class="text-xl font-thin text-center m-4">Lägg till nya konton</h2>
+      <div class="w-1/2 font-thin mb-4">
+        Nedan kan du klistra in konton från exempelvis Excel, eller skriva manuellt. Ange dessa i formatet "Förnamn
+        Efternamn Epost" där antingen tabb eller ; (semikolon) avgränsar fälten. Ange en person per rad.
+      </div>
+      <div class="w-1/2 font-thin mb-4">
+        Epostadresser som redan finns i systemet kommer ignoreras. Tillagda konton kommer automatiskt skicka ut ett
+        epost till användaren med en länk för att logga in och ange ett lösenord.
+      </div>
+      <textarea v-model="newAccountsString" class="mx-auto w-1/2 h-32"></textarea>
+      <ui-button @click="createAccounts" class="mt-2">Skapa konton</ui-button>
+    </div>
+
     <div v-if="inactiveAccounts.length > 0" class="flex flex-col mb-8 mt-8">
       <h2 class="text-2xl font-thin text-center m-4">Inaktiverade konton</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -415,6 +429,7 @@ export default {
       grantStatus: '',
       sortKey: 'created_at',
       sortOrder: 1,
+      newAccountsString: '',
     }
   },
   filters: {
@@ -504,6 +519,18 @@ export default {
     },
     reactivate(account) {
       axios.post(`/admin/accounts/reactivate/${account.id}`).then(() => this.reload())
+    },
+    async createAccounts() {
+      const lines = this.newAccountsString.split(/\n+/).filter((line) => line.length > 0)
+
+      const accounts = lines.map((line) => {
+        const [firstName, lastName, email] = line.split(/[\t;]+/)
+        return { firstName, lastName, email }
+      })
+
+      const response = await axios.post('/admin/accounts', { accounts })
+
+      console.log(response)
     },
   },
 }
