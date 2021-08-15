@@ -56,7 +56,10 @@ class EventController extends Controller
             $events->where('date', '>', now()->subDays(7));
         }
 
-        return view('admin.events', ['events' => $events->get(), 'showingOld' => $request->has('all')]);
+        return view('admin.events', [
+            'events' => $events->latest()->get(),
+            'showingOld' => $request->has('all'),
+        ]);
     }
 
     public function admin(Event $event)
