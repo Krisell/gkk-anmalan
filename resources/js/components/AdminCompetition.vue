@@ -304,7 +304,7 @@ export default {
   data() {
     return {
       registrationToEdit: null,
-      showFilter: 'all',
+      showFilter: '1',
       sortKey: '',
       sortOrder: 1,
     }
