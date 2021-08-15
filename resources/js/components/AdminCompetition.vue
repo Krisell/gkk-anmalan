@@ -51,6 +51,7 @@
                   "
                 ></th>
                 <th
+                  @click="sortBy('first_name')"
                   class="
                     px-6
                     py-3
@@ -67,6 +68,7 @@
                   Anmäld
                 </th>
                 <th
+                  @click="sortBy('status')"
                   class="
                     px-6
                     py-3
@@ -83,6 +85,7 @@
                   Vill tävla
                 </th>
                 <th
+                  @click="sortBy('gender')"
                   class="
                     px-6
                     py-3
@@ -99,6 +102,7 @@
                   Kön
                 </th>
                 <th
+                  @click="sortBy('events')"
                   class="
                     px-6
                     py-3
@@ -115,6 +119,7 @@
                   Gren
                 </th>
                 <th
+                  @click="sortBy('weight_class')"
                   class="
                     px-6
                     py-3
@@ -149,7 +154,7 @@
               </tr>
             </thead>
             <tbody class="bg-white">
-              <tr v-for="registration in filteredRegistrations" :key="registration.id">
+              <tr v-for="registration in sortedRegistrations" :key="registration.id">
                 <td class="text-center">
                   <i @click="editRegistration(registration)" class="fa fa-pencil cursor-pointer"></i>
                 </td>
@@ -301,9 +306,30 @@ export default {
     return {
       registrationToEdit: null,
       showFilter: 'all',
+      sortKey: 'first_name',
+      sortOrder: 1,
     }
   },
   computed: {
+    sortedRegistrations() {
+      const lifters = this.filteredRegistrations.map((registration) => {
+        return {
+          ...registration,
+          first_name: registration.user.first_name,
+          last_name: registration.user.last_name,
+        }
+      })
+
+      return lifters.sort((a, b) => {
+        if (!a[this.sortKey] || !b[this.sortKey]) {
+          return 0
+        }
+
+        return (
+          this.sortOrder * String(a[this.sortKey]).localeCompare(String(b[this.sortKey]), undefined, { numeric: true })
+        )
+      })
+    },
     filteredRegistrations() {
       if (this.showFilter === 'all') {
         return this.competition.registrations
@@ -330,6 +356,13 @@ export default {
     },
   },
   methods: {
+    sortBy(key) {
+      if (this.sortKey === key) {
+        this.sortOrder *= -1
+      }
+
+      this.sortKey = key
+    },
     editRegistration(registration) {
       this.registrationToEdit = JSON.parse(JSON.stringify(registration))
       this.$modal.show('edit-registration')
