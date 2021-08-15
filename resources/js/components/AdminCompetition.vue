@@ -7,7 +7,20 @@
           <label for="location" class="block text-sm leading-5 font-medium text-gray-700">Filtrering</label>
           <select
             v-model="showFilter"
-            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            class="
+              mt-1
+              form-select
+              block
+              w-full
+              pl-3
+              pr-10
+              py-2
+              text-base
+              leading-6
+              border-gray-300
+              focus:outline-none focus:shadow-outline-blue focus:border-blue-300
+              sm:text-sm sm:leading-5
+            "
           >
             <option value="all">Visa alla</option>
             <option value="1">Visa endast de som tackat ja ({{ countYes }} st)</option>
@@ -23,35 +36,113 @@
             <thead>
               <tr>
                 <th
-                  class="w-2 px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    w-2
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 ></th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Anmäld
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Vill tävla
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Kön
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Gren
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Viktklass
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  class="
+                    px-6
+                    py-3
+                    border-b border-gray-200
+                    bg-gray-50
+                    text-left text-xs
+                    leading-4
+                    font-medium
+                    text-gray-500
+                    uppercase
+                    tracking-wider
+                  "
                 >
                   Kommentar
                 </th>
@@ -87,7 +178,9 @@
                 </td>
 
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-sm leading-5 text-gray-500">{{ registration.weight_class }}</div>
+                  <div class="text-sm leading-5 text-gray-500">
+                    {{ registration.status == 1 ? registration.weight_class : '' }}
+                  </div>
                 </td>
 
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
@@ -162,7 +255,20 @@
           <select
             v-model="registrationToEdit.status"
             id="location"
-            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            class="
+              mt-1
+              form-select
+              block
+              w-full
+              pl-3
+              pr-10
+              py-2
+              text-base
+              leading-6
+              border-gray-300
+              focus:outline-none focus:shadow-outline-blue focus:border-blue-300
+              sm:text-sm sm:leading-5
+            "
           >
             <option value="1">Ja</option>
             <option value="0">Nej</option>
