@@ -68,7 +68,6 @@
                   Anmäld
                 </th>
                 <th
-                  @click="sortBy('status')"
                   class="
                     px-6
                     py-3
@@ -306,7 +305,7 @@ export default {
     return {
       registrationToEdit: null,
       showFilter: 'all',
-      sortKey: 'first_name',
+      sortKey: '',
       sortOrder: 1,
     }
   },
