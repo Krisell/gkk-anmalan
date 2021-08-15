@@ -69,12 +69,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           v-model="licenceNumber"
         />
@@ -139,18 +135,15 @@
             bg-white
             rounded-md
             shadow-sm
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
             transition
             duration-150
             ease-in-out
-            sm:text-sm
-            sm:leading-5
+            sm:text-sm sm:leading-5
           "
         >
           <option>¯\_(ツ)_/¯</option>
-          <option>52</option>
+          <option>53</option>
           <option>59</option>
           <option>66</option>
           <option>74</option>
@@ -175,14 +168,11 @@
             bg-white
             rounded-md
             shadow-sm
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
             transition
             duration-150
             ease-in-out
-            sm:text-sm
-            sm:leading-5
+            sm:text-sm sm:leading-5
           "
         >
           <option>¯\_(ツ)_/¯</option>
@@ -191,7 +181,8 @@
           <option>52</option>
           <option>57</option>
           <option>63</option>
-          <option>72</option>
+          <option>69</option>
+          <option>76</option>
           <option>84</option>
           <option>84+</option>
         </select>
