@@ -28,7 +28,7 @@ class NewsController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'body' => 'required',
-            'published_at_date' => '',
+            'published_at_date' => 'nullable',
         ]);
 
         if (empty($data['published_at_date'])) {
@@ -43,7 +43,7 @@ class NewsController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'body' => 'required',
-            'published_at_date' => '',
+            'published_at_date' => 'nullable',
         ]);
 
         $news->update([

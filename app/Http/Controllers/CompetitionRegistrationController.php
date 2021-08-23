@@ -11,8 +11,8 @@ class CompetitionRegistrationController extends Controller
     public function store(Competition $competition, Request $request)
     {
         $data = $request->validate([
-            'status' => '',
-            'comment' => '',
+            'status' => 'nullable',
+            'comment' => 'nullable',
             'licence_number' => 'required',
             'events' => 'json|required',
             'gender' => 'required',

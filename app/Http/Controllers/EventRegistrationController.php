@@ -12,7 +12,7 @@ class EventRegistrationController extends Controller
     {
         $data = $request->validate([
             'status' => 'required',
-            'comment' => '',
+            'comment' => 'nullable',
         ]);
 
         if ($event->last_registration_at) {

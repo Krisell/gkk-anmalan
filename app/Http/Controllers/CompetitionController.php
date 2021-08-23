@@ -78,15 +78,15 @@ class CompetitionController extends Controller
     {
         return $request->validate([
             'name' => 'required',
-            'time' => '',
-            'date' => '',
-            'end_date' => '',
-            'location' => '',
-            'description' => '',
+            'time' => 'nullable',
+            'date' => 'nullable',
+            'end_date' => 'nullable',
+            'location' => 'nullable',
+            'description' => 'nullable',
             'events' => 'json',
-            'publish_count' => '',
-            'publish_list' => '',
-            'last_registration_at' => '',
+            'publish_count' => 'nullable',
+            'publish_list' => 'nullable',
+            'last_registration_at' => 'nullable',
             'show_status' => 'required',
         ]);
     }
