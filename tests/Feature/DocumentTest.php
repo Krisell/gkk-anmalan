@@ -26,7 +26,7 @@ class DocumentTest extends TestCase
         Auth::login(User::factory()->create());
 
         $this->get('/documents')->assertViewHas([
-            'documents' => Document::all(),
+            'folders' => DocumentFolder::all(),
         ]);
     }
 

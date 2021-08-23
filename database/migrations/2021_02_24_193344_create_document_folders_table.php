@@ -17,6 +17,7 @@ class CreateDocumentFoldersTable extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedInteger('order');
+            $table->boolean('only_administrators')->default(false);
             $table->timestamps();
         });
     }

@@ -8,7 +8,7 @@
         :key="folder.id"
         :folder="folder"
         :top-folder="folderIndex === 0"
-        :documents="documentsFor(folder)"
+        :documents="folder.documents"
       ></DocumentFolder>
     </div>
 
@@ -21,16 +21,11 @@ import DocumentFolder from './DocumentFolder.vue'
 
 export default {
   components: { DocumentFolder },
-  props: ['documents', 'folders'],
+  props: ['folders'],
   computed: {
     sortedFolders() {
       this.folders.sort((a, b) => a.order - b.order)
       return this.folders
-    },
-  },
-  methods: {
-    documentsFor(folder) {
-      return this.documents.filter((document) => document.document_folder_id == folder.id)
     },
   },
 }

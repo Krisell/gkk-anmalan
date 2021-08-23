@@ -12,8 +12,7 @@ class DocumentsAdministratorController extends Controller
     public function index()
     {
         return view('admin.documents', [
-            'documents' => Document::orderBy('name')->get(),
-            'folders' => DocumentFolder::all(),
+            'folders' => DocumentFolder::with('documents')->get(),
             'jwt' => Firebase::makeAdminJwt(),
         ]);
     }

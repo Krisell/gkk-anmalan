@@ -112,7 +112,7 @@
 
                     <svg
                       v-tooltip.left="'Radera mapp'"
-                      v-if="documentsFor(folder).length === 0"
+                      v-if="folder.documents.length === 0"
                       class="w-6 ml-2 text-gkk-light hover:text-gkk cursor-pointer"
                       @click="deleteFolder(folder)"
                       fill="none"
@@ -131,7 +131,7 @@
               </tr>
             </thead>
             <tbody class="bg-white">
-              <tr v-for="document in documentsFor(folder)" :key="document.id">
+              <tr v-for="document in folder.documents" :key="document.id">
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -334,7 +334,7 @@
 import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
 
 export default {
-  props: ['documents', 'jwt', 'folders'],
+  props: ['jwt', 'folders'],
   data() {
     return {
       newFolderName: '',
@@ -403,9 +403,6 @@ export default {
     async deleteFolder(folder) {
       await window.axios.delete(`/admin/document-folders/${folder.id}`)
       window.location.reload()
-    },
-    documentsFor(folder) {
-      return this.documents.filter((document) => document.document_folder_id == folder.id)
     },
     addDocument() {
       if (this.newDocument.name.length === 0 || this.newDocument.url.length === 0) {

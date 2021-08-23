@@ -10,9 +10,14 @@ class DocumentController extends Controller
 {
     public function index()
     {
+        $query = DocumentFolder::query();
+
+        if (! collect(['admin', 'superadmin'])->contains(auth()->user()->role)) {
+            $query->whereOnlyAdministrators(0);
+        }
+
         return view('documents', [
-            'documents' => Document::orderBy('name')->get(),
-            'folders' => DocumentFolder::get(),
+            'folders' => $query->with('documents')->get(),
         ]);
     }
 }
