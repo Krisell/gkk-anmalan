@@ -29,4 +29,9 @@ class HomeController extends Controller
             'news' => $news,
         ]);
     }
+
+    public function exclamation()
+    {
+        return redirect('');
+    }
 }

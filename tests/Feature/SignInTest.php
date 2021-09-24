@@ -44,4 +44,10 @@ class SignInTest extends TestCase
 
         $this->assertNull(auth()->user());
     }
+
+    /** @test */
+    public function exclamation_point_still_points_to_landing_page()
+    {
+        $this->get('!')->assertRedirect('');
+    }
 }
