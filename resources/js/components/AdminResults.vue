@@ -161,7 +161,7 @@
           "
         >
           <option>Knäböj</option>
-          <option>Bänpress</option>
+          <option>Bänkpress</option>
           <option>Marklyft</option>
           <option>Total</option>
           <option>120+</option>
