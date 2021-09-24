@@ -7,9 +7,10 @@ Detta projekt hanterar "anmälningssidan" för Göteborg Kraftsportklubb (GKK). 
 - Tävlingsanmälan
 - Funktionärsanmälan
 - Nyheter
-- Dokumenthantering (ex. protokoll eller länkar som publiceras för medlemmarna)
-- Klubbrekord (administration under utveckling)
-- Medlemshantering med avtal, bokföring av funkionärshjälp mm.
+- Epost-utskick
+- Dokumenthantering (ex. protokoll eller länkar som publiceras för medlemmarna, eller interna dokument för styrelsen)
+- Klubbrekord
+- Medlemshantering med register, avtal, bokföring av funkionärshjälp mm
 
 Systemet uppdateras löpande med nya funktioner efter behov.
 
