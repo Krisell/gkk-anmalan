@@ -23,18 +23,19 @@
 </template>
 
 <script>
+import axios from 'axios'
+
+const MEMBERSHIP_AGREEMENT = 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK.pdf?alt=media&token=2a2ac4ed-2cec-4865-84ff-a28ac65d30fb'
+const ANTI_DOPING_AGREEMENT = 'https://www.gkk-styrkelyft.se/wp-content/uploads/2019/01/Antidopingavtal-mellan-medlemmen-och-klubben-20190110.pdf'
+
 export default {
   props: ['user'],
   methods: {
     showMemberShipAgreement() {
-      window.open(
-        'https://www.gkk-styrkelyft.se/wp-content/uploads/2019/12/Go%CC%88teborg-Kraftsportklubbs-medlemsavtal.pdf',
-      )
+      window.open(MEMBERSHIP_AGREEMENT)
     },
     showAntiDopingAgreement() {
-      window.open(
-        'https://www.gkk-styrkelyft.se/wp-content/uploads/2019/01/Antidopingavtal-mellan-medlemmen-och-klubben-20190110.pdf',
-      )
+      window.open(ANTI_DOPING_AGREEMENT)
     },
     signAgreements() {
       axios.post('/sign-agreements').then(() => {
