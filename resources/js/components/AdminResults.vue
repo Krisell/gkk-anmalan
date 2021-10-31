@@ -53,7 +53,7 @@
             sm:text-sm sm:leading-5
           "
         >
-          <option v-for="lifter in users" :key="lifter.key" :value="lifter.id">
+          <option v-for="lifter in sortedUsers" :key="lifter.key" :value="lifter.id">
             {{ lifter.first_name }} {{ lifter.last_name }}
           </option>
         </select>
@@ -420,6 +420,13 @@ export default {
       },
       createResultError: false,
     }
+  },
+  computed: {
+    sortedUsers() {
+      return this.users
+        .slice()
+        .sort((a, b) => `${a.first_name} ${a.last_name}`.localeCompare(`${b.first_name} ${b.last_name}`))
+    },
   },
   methods: {
     remove(result) {
