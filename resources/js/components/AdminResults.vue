@@ -120,7 +120,8 @@
           <option>52</option>
           <option>57</option>
           <option>63</option>
-          <option>72</option>
+          <option>69</option>
+          <option>76</option>
           <option>84</option>
           <option>84+</option>
         </select>
