@@ -46,14 +46,11 @@
             bg-white
             rounded-md
             shadow-sm
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
             transition
             duration-150
             ease-in-out
-            sm:text-sm
-            sm:leading-5
+            sm:text-sm sm:leading-5
           "
         >
           <option v-for="lifter in users" :key="lifter.key" :value="lifter.id">
@@ -79,14 +76,11 @@
             bg-white
             rounded-md
             shadow-sm
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
             transition
             duration-150
             ease-in-out
-            sm:text-sm
-            sm:leading-5
+            sm:text-sm sm:leading-5
           "
         >
           <option>52</option>
@@ -114,14 +108,11 @@
             bg-white
             rounded-md
             shadow-sm
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
             transition
             duration-150
             ease-in-out
-            sm:text-sm
-            sm:leading-5
+            sm:text-sm sm:leading-5
           "
         >
           <option>43</option>
@@ -150,21 +141,17 @@
             bg-white
             rounded-md
             shadow-sm
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
             transition
             duration-150
             ease-in-out
-            sm:text-sm
-            sm:leading-5
+            sm:text-sm sm:leading-5
           "
         >
           <option>Knäböj</option>
           <option>Bänkpress</option>
           <option>Marklyft</option>
           <option>Total</option>
-          <option>120+</option>
         </select>
       </div>
 
@@ -183,12 +170,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           type="date"
           name="date"
@@ -210,12 +193,8 @@
             border border-gray-300
             placeholder-gray-500
             text-gray-900
-            focus:outline-none
-            focus:shadow-outline-blue
-            focus:border-blue-300
-            focus:z-10
-            sm:text-sm
-            sm:leading-5
+            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
+            sm:text-sm sm:leading-5
           "
           type="number"
           name="date"
@@ -424,6 +403,7 @@
 
 <script>
 import Date from '../modules/Date.js'
+import axios from 'axios'
 
 export default {
   props: ['results', 'users'],
@@ -454,17 +434,18 @@ export default {
       return user ? `${user.first_name} ${user.last_name}` : ''
     },
     recordsFor(gender) {
-      let genderResults = this.results.filter((result) =>
+      const genderResults = this.results.filter((result) =>
         gender === 'Kvinnor' ? result.gender === 'F' : result.gender === 'M',
       )
 
       // Filter out the best result in each class, and then sort based on class and event
       return genderResults
         .filter(
-          (result) =>
-            !genderResults.find(
-              (r) => r.weight_class == result.weight_class && r.event == result.event && r.result > result.result,
-            ),
+          (res) =>
+            genderResults.filter(
+              (r) =>
+                r.weight_class === res.weight_class && r.event === res.event && Number(r.result) > Number(res.result),
+            ).length === 0,
         )
         .sort((a, b) => {
           if (a.weight_class !== b.weight_class) {

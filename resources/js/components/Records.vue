@@ -173,18 +173,27 @@ export default {
       return user ? `${user.first_name} ${user.last_name}` : ''
     },
     recordsFor(gender) {
-      let genderResults = this.results.filter((result) =>
+      const genderResults = this.results.filter((result) =>
         gender === 'Kvinnor' ? result.gender === 'F' : result.gender === 'M',
       )
 
-      return genderResults.sort((a, b) => {
-        if (a.weight_class !== b.weight_class) {
-          return a.weight_class.localeCompare(b.weight_class, undefined, { numeric: true, sensitivity: 'base' })
-        }
+      // Filter out the best result in each class, and then sort based on class and event
+      return genderResults
+        .filter(
+          (res) =>
+            genderResults.filter(
+              (r) =>
+                r.weight_class === res.weight_class && r.event === res.event && Number(r.result) > Number(res.result),
+            ).length === 0,
+        )
+        .sort((a, b) => {
+          if (a.weight_class !== b.weight_class) {
+            return a.weight_class.localeCompare(b.weight_class, undefined, { numeric: true, sensitivity: 'base' })
+          }
 
-        const eventOrder = ['Knäböj', 'Bänkpress', 'Marklyft', 'Totalt']
-        return eventOrder.indexOf(a.event) - eventOrder.indexOf(b.event)
-      })
+          const eventOrder = ['Knäböj', 'Bänkpress', 'Marklyft', 'Totalt']
+          return eventOrder.indexOf(a.event) - eventOrder.indexOf(b.event)
+        })
     },
   },
 }
