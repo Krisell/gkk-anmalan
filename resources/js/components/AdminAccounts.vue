@@ -71,7 +71,15 @@
       </div>
     </div>
 
-    <h2 class="text-2xl font-thin text-center m-4">{{ accounts.length }} medlemmar har registrerat ett konto</h2>
+    <h2 class="text-2xl font-thin text-center m-4">
+      {{ accounts.length }} medlemmar har registrerat ett konto
+      <i
+        style="margin-left: 20px; cursor: pointer"
+        v-tooltip="'Kopiera epostadresserna för alla ej inaktiverade konton'"
+        @click="copyEmails"
+        class="fa fa-clipboard"
+      ></i>
+    </h2>
 
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -461,6 +469,15 @@ export default {
     },
   },
   methods: {
+    copyEmails() {
+      navigator.clipboard.writeText(
+        this.accounts
+          .filter((account) => account.inactivated_at === null)
+          .map((account) => account.email)
+          .sort((a, b) => a.localeCompare(b))
+          .join('; '),
+      )
+    },
     sortBy(key) {
       if (this.sortKey === key) {
         this.sortOrder *= -1
