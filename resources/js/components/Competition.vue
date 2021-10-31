@@ -241,7 +241,10 @@
           <el-button v-else secondary style="margin-bottom: 10px" @click="save">Spara</el-button>
         </div>
         <div v-if="registrationStatus === 'error'">
-          <el-message danger style="margin-top: 20px">
+          <el-message v-if="registrationErrorReason === 'licence_number'" danger style="margin-top: 20px">
+            Du måste ange licensnummer, se info ovan.
+          </el-message>
+          <el-message v-else danger style="margin-top: 20px">
             Kunde inte skicka, kontrollera inmatning och anlutning.
           </el-message>
         </div>
@@ -339,6 +342,7 @@ export default {
     return {
       justSaved: false,
       registrationStatus: '',
+      registrationErrorReason: '',
       registration: this._registration,
       comment: this._registration ? this._registration.comment : '',
       canHelp: this._registration ? this._registration.status == 1 : null,
@@ -408,6 +412,7 @@ export default {
     },
     register(canHelp) {
       this.registrationStatus = ''
+      this.registrationErrorReason = ''
 
       window
         .axios({
@@ -431,6 +436,12 @@ export default {
           setTimeout(() => (this.justSaved = false), 2000)
         })
         .catch((err) => {
+          if (err.response && err.response.status === 422) {
+            if (err.response.data.errors && 'licence_number' in err.response.data.errors) {
+              this.registrationErrorReason = 'licence_number'
+            }
+          }
+
           this.registrationStatus = 'error'
         })
     },
