@@ -24,7 +24,7 @@ Efter att önskade ändringar är utvecklade, mergade till master och pushade hi
 
 - Logga in på servern
 - I mappen `anmalan`, kör kommandot `deployanm` som automatiserar `git pull`, uppdatering av publika assets samt Laravel-specifika optimeringskommandon.
-- Om PHP-beroenden har uppdaterats, kör också `php composer.phar update`
+- Om PHP-beroenden har uppdaterats, kör också `php composer.phar install`
 
 Deploy är i nuläget inte helt atomär utan en kort period (några sekunder) av nertid kan upplevas (särskilt i samband med `composer update`). Detta är acceptabelt i nuläget men kan komma att förändras om användningen av systemet ökar.
 
