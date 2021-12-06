@@ -26,7 +26,7 @@ Efter att önskade ändringar är utvecklade, mergade till master och pushade hi
 - I mappen `anmalan`, kör kommandot `deployanm` som automatiserar `git pull`, uppdatering av publika assets samt Laravel-specifika optimeringskommandon.
 - Om PHP-beroenden har uppdaterats, kör också `php composer.phar install`
 
-Deploy är i nuläget inte helt atomär utan en kort period (några sekunder) av nertid kan upplevas (särskilt i samband med `composer update`). Detta är acceptabelt i nuläget men kan komma att förändras om användningen av systemet ökar.
+Deploy är i nuläget inte helt atomär utan en kort period (några sekunder) av nertid kan upplevas (särskilt i samband med `composer install`). Detta är acceptabelt i nuläget men kan komma att förändras om användningen av systemet ökar.
 
 Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt (av `deployanm` ovan). Observera att Laravels `index.php` har justerats för att hitta rätt, så den ska _inte_ uppdateras. För tillfället är det endast innehållet i js/ och css/, samt `mix-manifest.json`, som kopieras.
 
