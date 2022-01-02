@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white shadow-md">
+  <nav class="bg-white shadow-md fixed top-0 w-full">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
@@ -7,26 +7,66 @@
             <a href="/" class="flex items-center">
               <img
                 class="h-12 w-auto"
+                style="position: absolute; left: 40px; top: 10px; width: 100px; height: 100px"
                 src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png"
                 alt="GKK logo"
               />
             </a>
+
+            <div class="hidden lg:flex">
+              <a
+                class="ml-6 uppercase hover:border-b-1 hover:border-black"
+                :class="site === 'landing' ? 'border-b-2 border-black' : ''"
+                href="/"
+                >Startsidan</a
+              >
+              <a
+                class="ml-6 uppercase hover:border-b-1 hover:border-black"
+                :class="site === 'powerlifting' ? 'border-b-2 border-black' : ''"
+                href="/powerlifting"
+                >Om styrkelyft</a
+              >
+              <a
+                class="ml-6 uppercase hover:border-b-1 hover:border-black"
+                :class="site === 'about' ? 'border-b-2 border-black' : ''"
+                href="/about"
+                >Om GKK</a
+              >
+              <a
+                class="ml-6 uppercase hover:border-b-1 hover:border-black"
+                :class="site === 'member' ? 'border-b-2 border-black' : ''"
+                href="/member"
+                >Medlemskap</a
+              >
+              <a
+                class="ml-6 uppercase hover:border-b-1 hover:border-black"
+                :class="site === 'compete' ? 'border-b-2 border-black' : ''"
+                href="/compete"
+                >Program &amp; dokument</a
+              >
+              <a
+                class="ml-6 uppercase hover:border-b-1 hover:border-black"
+                :class="site === 'records' ? 'border-b-2 border-black' : ''"
+                href="/records"
+                >Klubbrekord</a
+              >
+            </div>
           </div>
         </div>
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <span class="rounded-md shadow-sm">
-              <div v-if="!user">
-                <a href="/login">
-                  <ui-button>Logga in</ui-button>
+              <div>
+                <a class="uppercase" :class="site === 'inside' ? 'border-b-2 border-black' : ''" href="/insidan">
+                  Insidan
                 </a>
 
-                <a href="/register">
+                <!-- <a href="/register">
                   <ui-button>Skapa konto</ui-button>
-                </a>
+                </a> -->
               </div>
 
-              <div v-if="user">
+              <!-- <div v-if="user">
                 <a @click="logout">
                   <ui-button type="secondary">Logga ut</ui-button>
                 </a>
@@ -34,7 +74,7 @@
                 <a href="/profile">
                   <ui-button>Profil ({{ user.first_name }} {{ user.last_name }})</ui-button>
                 </a>
-              </div>
+              </div> -->
             </span>
           </div>
         </div>
@@ -47,7 +87,7 @@
 import axios from 'axios'
 
 export default {
-  props: ['user'],
+  props: ['user', 'site'],
   methods: {
     logout() {
       axios.post('/logout').then((_) => (window.location = '/'))

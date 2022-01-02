@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto max-w-3xl">
-    <h1 class="text-center text-3xl font-thin m2-6">Klubbrekord</h1>
+    <h1 class="text-center text-3xl font-thin mt-24">Klubbrekord</h1>
 
     <div class="text-center">
       <div class="flex flex-col" v-for="gender in ['Kvinnor', 'Män']" :key="gender">
@@ -155,8 +155,6 @@
         </div>
       </div>
     </div>
-
-    <GkkLink to="/" text="Tillbaka till startsidan" />
   </div>
 </template>
 

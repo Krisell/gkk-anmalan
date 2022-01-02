@@ -7,7 +7,13 @@ use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
 Auth::routes();
 
 Route::get('/!', [HomeController::class, 'exclamation']);
-Route::get('/', [HomeController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
+Route::get('/', [HomeController::class, 'index']);
+
+Route::get('/powerlifting', [HomeController::class, 'powerlifting']);
+Route::get('/about', [HomeController::class, 'about']);
+Route::get('/member', [HomeController::class, 'member']);
+
+Route::get('/insidan', [HomeController::class, 'inside'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
 Route::post('/sign-agreements', [SignAgreementsController::class, 'store'])->middleware('auth');
 Route::view('/inactivated', 'inactivated')->name('inactivated');

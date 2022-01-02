@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: center">
+  <div style="text-align: center" class="mt-24">
     <div v-if="user && user.granted_by == 0">
       <h3 class="text-center mt-6 font-thin text-xl">
         Välkommen till GKK!<br />
@@ -33,7 +33,7 @@
         :admin="isAdmin"
         @admin="location('/admin/documents')"
         @click="location('/documents')"
-        description="Dokument"
+        description="Medlemsdokument"
         icon="file-o"
       ></gkk-action-card>
       <!-- <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="cooperation" description="Intresseanmälan<br>(Under utveckling)" icon="lightbulb-o"></gkk-action-card> -->
@@ -50,7 +50,7 @@
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @click="location('/register')"
-        description="Skapa konto"
+        description="Skapa konto för medlemmar"
         icon="user"
       ></gkk-action-card>
       <gkk-action-card
@@ -58,17 +58,17 @@
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @click="location('/login')"
-        description="Logga in"
+        description="Logga in för medlemmar"
         icon="sign-in"
       ></gkk-action-card>
-      <gkk-action-card
+      <!-- <gkk-action-card
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @admin="location('/admin/results')"
         @click="location('/records')"
         description="Klubbrekord"
         icon="trophy"
-      ></gkk-action-card>
+      ></gkk-action-card> -->
     </div>
 
     <modal name="not-implemented" :adaptive="true" height="auto">
