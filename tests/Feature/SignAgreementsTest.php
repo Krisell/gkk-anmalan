@@ -21,14 +21,14 @@ class SignAgreementsTest extends TestCase
 
         auth()->login($user);
 
-        $this->get('/')->assertRedirect('/sign-agreements');
+        $this->get('/insidan')->assertRedirect('/sign-agreements');
         $this->get('/documents')->assertRedirect('/sign-agreements');
         $this->get('/events')->assertRedirect('/sign-agreements');
         $this->get('/competitions')->assertRedirect('/sign-agreements');
 
         $user->update(['membership_agreement_signed_at' => now()]);
 
-        $this->get('/')->assertRedirect('/sign-agreements');
+        $this->get('/insidan')->assertRedirect('/sign-agreements');
         $this->get('/documents')->assertRedirect('/sign-agreements');
         $this->get('/events')->assertRedirect('/sign-agreements');
         $this->get('/competitions')->assertRedirect('/sign-agreements');
