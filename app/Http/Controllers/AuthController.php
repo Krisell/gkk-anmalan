@@ -3,20 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Cache\Adapter\Filesystem\FilesystemCachePool;
+use Firebase\JWT\JWK;
+use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
+use Illuminate\Support\Facades\Http;
+use Cache\Adapter\Filesystem\FilesystemCachePool;
 
 class AuthController extends Controller
 {
     public function google()
     {
-        $client = app(\Google_Client::class);
-        $client->setCache(new FilesystemCachePool(new Filesystem(new Local(__DIR__.'/'))));
-        $payload = $client->verifyIdToken(request('idToken'));
+        $keys = Http::get('https://www.googleapis.com/oauth2/v3/certs')->json();
+        $payload = (array) JWT::decode(
+            request('idToken'), 
+            JWK::parseKeySet($keys), 
+            ['RS256'],
+        );
 
         abort_if($payload['aud'] !== '52915573324-bn4g8a0iuv4r9mbgmi23sd8464g0j0mv.apps.googleusercontent.com', 401);
 
