@@ -2,7 +2,7 @@ module.exports = {
   future: {
     removeDeprecatedGapUtilities: true,
   },
-  purge: ['./resources/**/*.html', './resources/**/*.vue', './resources/**/*.jsx', './resources/**/*.php'],
+  content: ['./resources/**/*.html', './resources/**/*.vue', './resources/**/*.jsx', './resources/**/*.php'],
   theme: {
     extend: {
       colors: {
@@ -12,6 +12,5 @@ module.exports = {
       },
     },
   },
-  variants: {},
   plugins: [require('@tailwindcss/forms')],
 }
