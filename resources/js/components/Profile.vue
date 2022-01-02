@@ -22,7 +22,7 @@
         items-center
         px-4
         py-2
-        border border-transparent
+        border
         text-sm
         leading-5
         font-medium
@@ -57,7 +57,7 @@
         items-center
         px-4
         py-2
-        border border-transparent
+        border
         text-sm
         leading-5
         font-medium
@@ -87,7 +87,7 @@
           items-center
           px-4
           py-2
-          border border-transparent
+          border
           text-sm
           leading-5
           font-medium
@@ -129,7 +129,7 @@
             items-center
             px-4
             py-2
-            border border-transparent
+            border
             text-sm
             leading-5
             font-medium
@@ -157,7 +157,7 @@
             items-center
             px-4
             py-2
-            border border-transparent
+            border
             text-sm
             leading-5
             font-medium
