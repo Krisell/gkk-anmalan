@@ -16,7 +16,7 @@ class DocumentController extends Controller
             $query->whereOnlyAdministrators(0);
         }
 
-        return view('documents', [
+        return view('member-documents', [
             'folders' => $query->with('documents')->get(),
         ]);
     }

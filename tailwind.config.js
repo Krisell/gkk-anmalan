@@ -1,8 +1,5 @@
 module.exports = {
-  future: {
-    removeDeprecatedGapUtilities: true,
-  },
-  content: ['./resources/**/*.html', './resources/**/*.vue', './resources/**/*.jsx', './resources/**/*.php'],
+  content: ['./resources/**/*.vue', './resources/views**/*.blade.php'],
   theme: {
     extend: {
       colors: {

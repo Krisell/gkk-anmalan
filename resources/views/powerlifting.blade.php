@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="background-image: url(https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1991-as-Smart-Object-1psSmall-1.jpg); 
+<div style="background-image: url(https://goteborg-kraftsportklubb.web.app/img/bjorn_och_klas-min.jpeg); 
 height: 500px;
 background-size: cover;
 background-position-y: center;" class="flex items-center">
@@ -12,7 +12,6 @@ background-position-y: center;" class="flex items-center">
           <div class="space-y-12">
             <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
                 <div class="flex items-center">
-                {{-- <img style="height: 80px;" class="mr-4" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png"> --}}
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Om Styrkelyft</h2>
                 </div>
                 <p class="text-xl text-gray-500">I styrkelyft tävlar man i grenarna knäböj, bänkpress och marklyft. Man kan också tävla i enbart bänkpress. Det finns tävlingar där utrustning (ex. knälindor och böjdräkt) är tillåtet, och det finns tävlingar i klassisk styrkelyft där ingen hjälpande utrustning utöver knävärmare och handledslindor är tillåtet. Som ny i sporten rekommenderar vi att man börjar fokuseras på den klassiska lyftningen, som också är störst idag.</p>
@@ -21,42 +20,42 @@ background-position-y: center;" class="flex items-center">
               <li>
                 <div class="space-y-4">
                   <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1991-as-Smart-Object-1psSmall-1.jpg" alt="">
+                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/bjorn_och_klas-min.jpeg" alt="">
                   </div>
                 </div>
               </li>
               <li>
                 <div class="space-y-4">
                   <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1879-as-Smart-Object-1psSmall_v2.jpg" alt="">
+                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/bjornlyftare-min.jpg" alt="">
                   </div>
                 </div>
               </li>
               <li>
                 <div class="space-y-4">
                   <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1882-as-Smart-Object-1psSmall-e1584523116204.jpg" alt="">
+                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/bankpress-min.jpg" alt="">
                   </div>
                 </div>
               </li>
               <li>
                 <div class="space-y-4">
                   <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1888-as-Smart-Object-1psSmall.jpg" alt="">
+                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/tavling-min.jpg" alt="">
                   </div>
                 </div>
               </li>
               <li>
                 <div class="space-y-4">
                   <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1951-as-Smart-Object-1psSmall.jpg" alt="">
+                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/mark-min.jpg" alt="">
                   </div>
                 </div>
               </li>
               <li>
                 <div class="space-y-4">
                   <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_2636-as-Smart-Object-1psSmall_v2.jpg" alt="">
+                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/clara-min.jpg" alt="">
                   </div>
                 </div>
               </li>

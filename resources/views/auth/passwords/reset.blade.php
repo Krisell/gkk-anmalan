@@ -3,7 +3,7 @@
 @section('content')
 <div class="flex flex-col justify-center sm:px-6 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <img class="mx-auto h-24 w-auto" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png" alt="GKK Logo">
+    <img class="mx-auto h-24 w-auto" src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png" alt="GKK Logo">
   </div>
 
   <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-md">

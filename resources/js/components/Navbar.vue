@@ -8,7 +8,7 @@
               <img
                 class="h-12 w-auto"
                 style="position: absolute; left: 40px; top: 10px; width: 100px; height: 100px"
-                src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png"
+                src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"
                 alt="GKK logo"
               />
             </a>
@@ -40,9 +40,9 @@
               >
               <a
                 class="ml-6 uppercase hover:border-b-1 hover:border-black"
-                :class="site === 'compete' ? 'border-b-2 border-black' : ''"
-                href="/compete"
-                >Program &amp; dokument</a
+                :class="site === 'documents' ? 'border-b-2 border-black' : ''"
+                href="/documents"
+                >Dokument &amp; program</a
               >
               <a
                 class="ml-6 uppercase hover:border-b-1 hover:border-black"

@@ -30,6 +30,11 @@ class HomeController extends Controller
         return view('member', ['site' => 'member']);
     }
 
+    public function documents()
+    {
+        return view('documents', ['site' => 'documents']);
+    }
+
     public function inside()
     {
         $news = auth()->id() ? NewsItem::orderBy('published_at_date', 'desc')->orderBy('created_at', 'desc')->get() : [];

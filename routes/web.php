@@ -12,6 +12,7 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/powerlifting', [HomeController::class, 'powerlifting']);
 Route::get('/about', [HomeController::class, 'about']);
 Route::get('/member', [HomeController::class, 'member']);
+Route::get('/documents', [HomeController::class, 'documents']);
 
 Route::get('/insidan', [HomeController::class, 'inside'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
@@ -39,7 +40,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware(\App\Http\Middleware\GrantedUserMiddleware::class)->group(function () {
-        Route::prefix('documents')->group(function () {
+        Route::prefix('member-documents')->group(function () {
             Route::get('/', [\App\Http\Controllers\DocumentController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
         });
 

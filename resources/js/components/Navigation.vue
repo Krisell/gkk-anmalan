@@ -32,7 +32,7 @@
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @admin="location('/admin/documents')"
-        @click="location('/documents')"
+        @click="location('/member-documents')"
         description="Medlemsdokument"
         icon="file-o"
       ></gkk-action-card>

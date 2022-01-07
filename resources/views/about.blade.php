@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="background-image: url(https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1951-as-Smart-Object-1psSmall.jpg); 
+<div style="background-image: url(https://goteborg-kraftsportklubb.web.app/img/mark-min.jpg); 
 height: 500px;
 background-size: cover;
 background-position-y: center;" class="flex items-center">
@@ -105,52 +105,6 @@ John Wedin
                   Dessutom svenska rekordhållare I lag. Tyvärr slutade alla lagmedlemmar samtidigt och tyngdlyftningen i GKK dog sakta ut. Nytt liv fick GKK när styrkelyften tog fart på 70-talet. Lite historik: 1956-58 så fanns det 2st små gym I Göteborg, Jordhyttegatan Sandarna ( Stig Hasselgren) 6-8 st.Andra Långgatan ( Harry Hertzberg ) 6-8st. I GKK fick några byggare träna på nåder 10st. I Göteborg fanns det max 30st muskelbyggare, hur många idag? Första riktiga gymmet öppnades 1959 på Nya Ullevi (Samo Kalon Henry Bergsström). Sven Slobo öppnade som nr två ungefär 1960. Lite statistik:1958-59 så knäböjde ingen göteborgare 220kg, i marklyft så gjorde ingen 240, ingen bänkpressade 160.”</p>
 
             </div>
-            <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1991-as-Smart-Object-1psSmall-1.jpg" alt="">
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1879-as-Smart-Object-1psSmall_v2.jpg" alt="">
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1882-as-Smart-Object-1psSmall-e1584523116204.jpg" alt="">
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1888-as-Smart-Object-1psSmall.jpg" alt="">
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_1951-as-Smart-Object-1psSmall.jpg" alt="">
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/MG_2636-as-Smart-Object-1psSmall_v2.jpg" alt="">
-                  </div>
-                </div>
-              </li>
-      
-              <!-- More people... -->
-            </ul>
           </div>
         </div>
       </div>
