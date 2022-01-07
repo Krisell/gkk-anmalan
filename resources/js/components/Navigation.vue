@@ -36,7 +36,6 @@
         description="Medlemsdokument"
         icon="file-o"
       ></gkk-action-card>
-      <!-- <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="cooperation" description="Intresseanmälan<br>(Under utveckling)" icon="lightbulb-o"></gkk-action-card> -->
       <gkk-action-card
         v-if="isAdmin"
         class="m-4 max-w-xs w-64"
@@ -61,29 +60,23 @@
         description="Logga in för medlemmar"
         icon="sign-in"
       ></gkk-action-card>
-      <!-- <gkk-action-card
-        class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
-        @admin="location('/admin/results')"
-        @click="location('/records')"
-        description="Klubbrekord"
-        icon="trophy"
-      ></gkk-action-card> -->
     </div>
 
-    <modal name="not-implemented" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">Denna funktion är under utveckling</h3>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button @click="$modal.hide('not-implemented')">Stäng</el-button>
-      </div>
-    </modal>
+    <div v-if="user">
+      <button
+        @click="logout"
+        type="button"
+        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
+      >
+        Logga ut
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   props: ['user', 'unanswered'],
   computed: {
@@ -92,8 +85,10 @@ export default {
     },
   },
   methods: {
-    cooperation() {
-      this.$modal.show('not-implemented')
+    logout() {
+      axios.post('/logout').then(() => {
+        window.location.reload()
+      })
     },
   },
 }

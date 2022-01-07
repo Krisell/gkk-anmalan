@@ -2,10 +2,6 @@
 
 @section('content')
 <div class="flex flex-col justify-center sm:px-6 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <img class="mx-auto h-24 w-auto" src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png" alt="GKK Logo">
-  </div>
-
   <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
     <h2 class="text-center text-2xl font-thin my-4">Skapa konto</h2>
     <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
