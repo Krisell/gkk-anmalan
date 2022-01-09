@@ -14,41 +14,93 @@ background-position-y: center;" class="flex items-center">
                 <div class="flex items-center">
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Om GKK</h2>
                 </div>
-                <p class="text-xl text-gray-500">Kort om föreningen idag. Nämna vår lokal.</p>
+                <p class="text-xl text-gray-500">Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar. Vi har vår egna klubb- och träningslokal hos <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. I föreningen finns allt från elitaktiva på högsta nivå till motionärer.</p>
+                
+                <p class="text-xl text-gray-500">Kort praktisk information som address, bankgiro mm?</p>
 
                 <div class="flex items-center">
-                <h3 class="text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2021</h3>
+                <h3 class="mt-8 text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2021</h3>
                 </div>
-                <p class="text-xl text-gray-500">
-
-Ordförande
-Tobias Nilsson
-
-Kassör
-Jenny Karlsson
-
-Sekreterare
-Martin Krisell
-
-Suppleant
-Maria Klintarp
-
-Ledamot
-Albin Björkman
-
-Ledamot
-Carl Öberg
-
-Ledamot
-Niclas Håkansson
-
-Ledamot
-John Wedin
-                </p>
+                <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/styrelsen_tobias.jpg" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Tobias Nilsson</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Ordförande</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://avatars.githubusercontent.com/u/25909128?v=4" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Martin Krisell</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Sekreterare</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/stryrelsen_carl-1.jpeg" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Carl Öberg</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dt class="sr-only">Title</dt>
+                        <dd class="text-gray-500 text-sm">Ledamot</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://scontent-arn2-1.xx.fbcdn.net/v/t31.18172-8/13268462_1196927513651456_8204667318684761322_o.jpg?_nc_cat=106&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=hTA1MHKGh_4AX9OAcGf&tn=UsCYSEN_HsLPmIxM&_nc_ht=scontent-arn2-1.xx&oh=00_AT9OK6zlPBx_4pwSkfL-Yps_PZQzBL81IF4Z0N8r-wf8JA&oe=6201628F" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Jenny Karlsson</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Kassör</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/styrelsen_albin.jpg" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Albin Björkman</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Ledamot</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.18169-9/20597459_10154761206141711_1107831019939934982_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=kL7Nm22BCs4AX_CytTZ&_nc_ht=scontent-arn2-1.xx&oh=00_AT9lOlQnbuZWHvEB08EyCNsSZEVRZ9QMD-8PM8CuklAt_w&oe=62020347" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Niklas Håkansson</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Ledamot</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/08/gkk_john_wedin.jpg" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">John Wedin</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Ledamot</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://media-exp1.licdn.com/dms/image/C4E03AQHqn4PBK3-enA/profile-displayphoto-shrink_200_200/0/1549910289228?e=1645056000&v=beta&t=7T3uud0MrM-8fqezx6qKDxPcYsxWY5UZr-eU982vqsE" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Maria Klintarp</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Suppleant</dd>
+                      </dl>
+                    </div>
+                  </li>
+                </ul>
 
                 <div class="flex items-center">
-                <h3 class="text-2xl font-extrabold tracking-tight sm:text-4xl">Historia</h3>
+                <h3 class="mt-8 text-2xl font-extrabold tracking-tight sm:text-4xl">Historia</h3>
                 </div>
+                <p class="text-xl text-gray-500">Denna text ligger på gamla hemsidan. Vill vi behålla den, uppdatera, korta ner eller ta bort? Texten är inte stylad här än.</p>
                 <p class="text-xl text-gray-500">Göteborgs Kraftsportklubb startade 1933 med tyngdlyftning på programmet d.v.s stöt, press och ryck. I slutet av 70-talet startade numera framlidne Åke Bohlin upp en styrkelyftssektion d.v.s Knäböjning, Bänkpress och Marklyft. Man höll till i Tuve och där fostrades under Åkes hårda drillning många fina lyftare. Stefan Nentis var den största stjärnan under 70 och 80-talen med många ädla medaljer på VM, EM, SM. Även numera framlidne Zlatko Radojkovic var med i yppersta eliten. Under den här perioden har det passerat många lyftare som har hållit god SM-klass. I slutet av 80-talet anslöt sig bl.a Dennis Andersson, Bertil Sundvall och de har under 90-talet hållit god SM-klass.Vi får inte glömma den starke dragkamparen Erik Johansson som även han hade en del internationella uppdrag med viss framgång.
 
                   I början av 90-talet anslöt sig så Sveriges bäste lyftare genom tiderna( i skrivande stund )Kenneth Mattsson till klubben. Kenneth har tidigare tävlat för andra göteborgsklubbar och även gjort avstickare utanför stadsgränsen. Började redan under tidigt 70-tal slipa formen för framtida uppdrag. Började nå lite god SM-status i mitten på 70-talet och började lukta lite internationell krutrök under senare halvan av 70-talet.Även om Kenneth inte tillhörde klubben under 80-talet så lade han säkert lite av grunden till sina framgångar tillsammans med bl a Stefan Nentis där man peppade varandra och tränade hårt. Detta ledde till 2 guldmedaljer i Styrkelyft 82-83.Stefan fick guld 82. Även andra ädla medaljer har erövrats.

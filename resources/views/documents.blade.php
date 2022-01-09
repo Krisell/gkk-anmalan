@@ -14,7 +14,7 @@ background-position-y: center;" class="flex items-center">
                 <div class="flex items-center">
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Dokument & Träningsprogram</h2>
                 </div>
-                <p class="text-xl text-gray-500">Berätta om avgifter, rättigheter och skyldigheter, och hur man rent praktiskt gör.</p>
+                <p class="text-xl text-gray-500">Motsvarande det som idag ligger på "Dokument" på hemsidan.</p>
             </div>
             <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
               <li>
