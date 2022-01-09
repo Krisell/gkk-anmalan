@@ -14,7 +14,10 @@ Route::get('/about', [HomeController::class, 'about']);
 Route::get('/member', [HomeController::class, 'member']);
 Route::get('/documents', [HomeController::class, 'documents']);
 
-Route::get('/insidan', [HomeController::class, 'inside'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
+Route::prefix('insidan')->middleware(EnsureAgreementsAreSignedMiddleware::class)->group(function () {
+    Route::get('/', [HomeController::class, 'inside']);
+});
+
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
 Route::post('/sign-agreements', [SignAgreementsController::class, 'store'])->middleware('auth');
 Route::view('/inactivated', 'inactivated')->name('inactivated');

@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.inside')
 
-@section('content')
+@section('inside')
 <gkk-admin-documents 
     :folders='@json($folders)'
     :jwt='@json($jwt)'

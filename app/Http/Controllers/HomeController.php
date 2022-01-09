@@ -52,7 +52,6 @@ class HomeController extends Controller
             'user' => auth()->user(),
             'unanswered' => $unanswered,
             'news' => $news,
-            'site' => 'inside'
         ]);
     }
 

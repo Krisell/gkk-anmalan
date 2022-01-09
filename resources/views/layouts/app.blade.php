@@ -23,7 +23,7 @@
 <div id="app" class="mt-16">
 <gkk-navbar :user='@json(auth()->user())' :site='@json($site ?? '')'></gkk-navbar>
 
-<main>
+<main class="mt-16">
 @yield('content')
 </main>
 

@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.inside')
 
-@section('content')
+@section('inside')
 <div class="container mx-auto">
     <div>
       <img class="mx-auto" style="height: 150px;" src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png">

@@ -2464,136 +2464,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['accounts', 'user', 'ungranted'],
@@ -3581,166 +3451,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['competitions', 'showingOld'],
   data: function data() {
@@ -3878,67 +3588,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -5017,152 +4666,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['events', 'showingOld'],
   data: function data() {
@@ -5308,42 +4811,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5424,8 +4891,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           body: this.body,
           published_at_date: this.published_at_date
         }
-      }).then(function (response) {
-        window.location = '/';
+      }).then(function () {
+        window.location = '/insidan';
       });
     },
     update: function update() {
@@ -5437,13 +4904,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           body: this.body,
           published_at_date: this.published_at_date
         }
-      }).then(function (response) {
-        window.location = '/';
+      }).then(function () {
+        window.location = '/insidan';
       });
     },
     deleteNews: function deleteNews() {
       axios__WEBPACK_IMPORTED_MODULE_2___default()["delete"]("/admin/news/".concat(this.news.id)).then(function () {
-        window.location = '/';
+        window.location = '/insidan';
       });
     }
   }
@@ -5567,162 +5034,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_Date_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modules/Date.js */ "./resources/js/modules/Date.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -6960,17 +6271,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -7404,14 +6704,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['user', 'site'],
@@ -7439,16 +6731,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -7645,107 +6927,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -72073,7 +71254,7 @@ var render = function () {
                         "th",
                         {
                           staticClass:
-                            "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                  cursor-pointer\n                ",
+                            "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer",
                           on: {
                             click: function ($event) {
                               return _vm.sortBy("first_name")
@@ -72089,7 +71270,7 @@ var render = function () {
                         "th",
                         {
                           staticClass:
-                            "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                  cursor-pointer\n                ",
+                            "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer",
                           on: {
                             click: function ($event) {
                               return _vm.sortBy("created_at")
@@ -72107,7 +71288,7 @@ var render = function () {
                         "th",
                         {
                           staticClass:
-                            "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                  cursor-pointer\n                ",
+                            "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer",
                           on: {
                             click: function ($event) {
                               return _vm.sortBy("last_visited_at")
@@ -72125,7 +71306,7 @@ var render = function () {
                         "th",
                         {
                           staticClass:
-                            "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                  cursor-pointer\n                ",
+                            "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer",
                           on: {
                             click: function ($event) {
                               return _vm.sortBy("visits")
@@ -72143,7 +71324,7 @@ var render = function () {
                         "th",
                         {
                           staticClass:
-                            "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+                            "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
                         },
                         [
                           _vm._v(
@@ -72301,7 +71482,7 @@ var render = function () {
                           "td",
                           {
                             staticClass:
-                              "\n                  px-6\n                  py-2\n                  whitespace-no-wrap\n                  border-b border-gray-200\n                  text-sm\n                  leading-5\n                  text-gray-500 text-center\n                ",
+                              "px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center",
                           },
                           [
                             _vm._v(
@@ -72316,7 +71497,7 @@ var render = function () {
                           "td",
                           {
                             staticClass:
-                              "\n                  px-6\n                  py-2\n                  whitespace-no-wrap\n                  border-b border-gray-200\n                  text-sm\n                  leading-5\n                  text-gray-500 text-center\n                ",
+                              "px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center",
                           },
                           [
                             account.membership_agreement_signed_at &&
@@ -72637,7 +71818,9 @@ var render = function () {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _c("GkkLink", { attrs: { to: "/", text: "Tillbaka till startsidan" } }),
+      _c("GkkLink", {
+        attrs: { to: "/insidan", text: "Tillbaka till insidans navigering" },
+      }),
       _vm._v(" "),
       _c(
         "modal",
@@ -72828,7 +72011,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Namn\n              ")]
         ),
@@ -72837,7 +72020,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Registreringsdatum\n              ")]
         ),
@@ -72856,7 +72039,7 @@ var staticRenderFns = [
       "th",
       {
         staticClass:
-          "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+          "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
       },
       [
         _vm._v("\n                Bekräftad närvaro som funktionär"),
@@ -72875,7 +72058,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Namn\n              ")]
         ),
@@ -72884,7 +72067,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Registreringsdatum\n              ")]
         ),
@@ -73588,7 +72771,7 @@ var render = function () {
         _vm._v("Admin"),
       ]),
       _vm._v(" "),
-      _c("h2", { staticClass: "text-center text-xl font-thin mb-6" }, [
+      _c("h2", { staticClass: "text-center text-xl font-thin mb-6 mt-8" }, [
         _vm._v("Tävlingsanmälan"),
       ]),
       _vm._v(" "),
@@ -73960,7 +73143,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { name: "name" },
               domProps: { value: _vm.competition.name },
               on: {
@@ -73989,7 +73172,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { type: "date", name: "date" },
               domProps: { value: _vm.competition.date },
               on: {
@@ -74016,7 +73199,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { type: "date", name: "date" },
               domProps: { value: _vm.competition.end_date },
               on: {
@@ -74045,7 +73228,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { type: "date", name: "last_registration_at" },
               domProps: { value: _vm.competition.last_registration_at },
               on: {
@@ -74158,7 +73341,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: {
                 name: "time",
                 placeholder: "Ungefärlig tid, ex. 8 – 15",
@@ -74186,7 +73369,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: {
                 name: "location",
                 placeholder: "Plats, ex Friskis Majorna",
@@ -74287,7 +73470,7 @@ var render = function () {
                   },
                 ],
                 staticClass:
-                  "\n          mt-1\n          block\n          form-select\n          w-full\n          py-2\n          px-3\n          border border-gray-300\n          bg-white\n          rounded-md\n          shadow-sm\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300\n          transition\n          duration-150\n          ease-in-out\n          sm:text-sm sm:leading-5\n        ",
+                  "mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5",
                 on: {
                   change: function ($event) {
                     var $$selectedVal = Array.prototype.filter
@@ -74402,7 +73585,7 @@ var render = function () {
       _vm._v(" "),
       _c("GkkLink", {
         staticClass: "mt-16",
-        attrs: { to: "/", text: "Tillbaka till startsidan" },
+        attrs: { to: "/insidan", text: "Tillbaka till insidans navigering" },
       }),
       _vm._v(" "),
       _c(
@@ -74480,7 +73663,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Tävling\n              ")]
         ),
@@ -74489,7 +73672,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Anmälan senast\n              ")]
         ),
@@ -74498,7 +73681,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Tid\n              ")]
         ),
@@ -74507,7 +73690,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Plats\n              ")]
         ),
@@ -74516,7 +73699,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Antal anmälda\n              ")]
         ),
@@ -74525,7 +73708,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-center text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Åtgärder\n              ")]
         ),
@@ -74602,7 +73785,7 @@ var render = function () {
                             "th",
                             {
                               staticClass:
-                                "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+                                "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
                             },
                             [
                               _vm._v(
@@ -74615,14 +73798,14 @@ var render = function () {
                           _vm._v(" "),
                           _c("th", {
                             staticClass:
-                              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+                              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
                           }),
                           _vm._v(" "),
                           _c(
                             "th",
                             {
                               staticClass:
-                                "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+                                "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
                             },
                             [
                               _c("div", { staticClass: "flex justify-end" }, [
@@ -74997,7 +74180,7 @@ var render = function () {
                   },
                 ],
                 staticClass:
-                  "\n          my-2\n          m-auto\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-64\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                  "my-2 m-auto appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
                 attrs: { name: "name" },
                 domProps: { value: _vm.newFolderName },
                 on: {
@@ -75027,7 +74210,7 @@ var render = function () {
       _vm._v(" "),
       _c("GkkLink", {
         staticClass: "mt-16",
-        attrs: { to: "/", text: "Tillbaka till startsidan" },
+        attrs: { to: "/insidan", text: "Tillbaka till insidans navigering" },
       }),
       _vm._v(" "),
       _c(
@@ -75206,7 +74389,7 @@ var render = function () {
                     "label",
                     {
                       staticClass:
-                        "\n            w-64\n            flex flex-col\n            items-center\n            px-4\n            py-6\n            bg-white\n            text-blue\n            rounded-lg\n            shadow-lg\n            tracking-wide\n            border border-blue\n            cursor-pointer\n          ",
+                        "w-64 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer",
                     },
                     [
                       _c(
@@ -76399,7 +75582,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { name: "name" },
               domProps: { value: _vm.event.name },
               on: {
@@ -76428,7 +75611,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { type: "date", name: "date" },
               domProps: { value: _vm.event.date },
               on: {
@@ -76455,7 +75638,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { type: "date", name: "date" },
               domProps: { value: _vm.event.end_date },
               on: {
@@ -76484,7 +75667,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: { type: "date" },
               domProps: { value: _vm.event.last_registration_at },
               on: {
@@ -76513,7 +75696,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: {
                 name: "time",
                 placeholder: "Ungefärlig tid, ex. 8 – 15",
@@ -76541,7 +75724,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-full\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+                "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
               attrs: {
                 name: "location",
                 placeholder: "Plats, ex Friskis Majorna",
@@ -76642,7 +75825,7 @@ var render = function () {
                   },
                 ],
                 staticClass:
-                  "\n          mt-1\n          block\n          form-select\n          w-full\n          py-2\n          px-3\n          border border-gray-300\n          bg-white\n          rounded-md\n          shadow-sm\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300\n          transition\n          duration-150\n          ease-in-out\n          sm:text-sm sm:leading-5\n        ",
+                  "mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5",
                 on: {
                   change: function ($event) {
                     var $$selectedVal = Array.prototype.filter
@@ -76751,7 +75934,7 @@ var render = function () {
       _vm._v(" "),
       _c("GkkLink", {
         staticClass: "mt-16",
-        attrs: { to: "/", text: "Tillbaka till startsidan" },
+        attrs: { to: "/insidan", text: "Tillbaka till insidans navigering" },
       }),
       _vm._v(" "),
       _c(
@@ -76825,7 +76008,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Event\n              ")]
         ),
@@ -76834,7 +76017,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Sista anmälningsdag\n              ")]
         ),
@@ -76843,7 +76026,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Tid och plats\n              ")]
         ),
@@ -76852,7 +76035,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Antal tackat ja\n              ")]
         ),
@@ -76861,7 +76044,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                  px-6\n                  py-3\n                  border-b border-gray-200\n                  bg-gray-50\n                  text-left text-xs\n                  leading-4\n                  font-medium\n                  text-gray-500\n                  uppercase\n                  tracking-wider\n                ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                Åtgärder\n              ")]
         ),
@@ -76921,7 +76104,7 @@ var render = function () {
           },
         ],
         staticClass:
-          "\n      appearance-none\n      rounded-none\n      relative\n      block\n      w-full\n      px-3\n      py-2\n      mb-4\n      border border-gray-300\n      placeholder-gray-500\n      text-gray-900\n      focus:outline-none\n      focus:shadow-outline-blue\n      focus:border-blue-300\n      focus:z-10\n      sm:text-sm\n      sm:leading-5\n    ",
+          "appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
         attrs: { placeholder: "Nyhetens titel" },
         domProps: { value: _vm.title },
         on: {
@@ -76944,7 +76127,7 @@ var render = function () {
           },
         ],
         staticClass:
-          "\n      appearance-none\n      rounded-none\n      relative\n      block\n      w-full\n      px-3\n      py-2\n      mb-4\n      border border-gray-300\n      placeholder-gray-500\n      text-gray-900\n      focus:outline-none\n      focus:shadow-outline-blue\n      focus:border-blue-300\n      focus:z-10\n      sm:text-sm\n      sm:leading-5\n    ",
+          "appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
         attrs: {
           placeholder:
             "Datum som visas (lämna tomt om du vill använda dagens datum)",
@@ -77232,7 +76415,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          mt-1\n          block\n          form-select\n          w-64\n          py-2\n          px-3\n          border border-gray-300\n          bg-white\n          rounded-md\n          shadow-sm\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300\n          transition\n          duration-150\n          ease-in-out\n          sm:text-sm sm:leading-5\n        ",
+                "mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5",
               on: {
                 change: function ($event) {
                   var $$selectedVal = Array.prototype.filter
@@ -77294,7 +76477,7 @@ var render = function () {
                     },
                   ],
                   staticClass:
-                    "\n          mt-1\n          block\n          form-select\n          w-64\n          py-2\n          px-3\n          border border-gray-300\n          bg-white\n          rounded-md\n          shadow-sm\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300\n          transition\n          duration-150\n          ease-in-out\n          sm:text-sm sm:leading-5\n        ",
+                    "mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5",
                   on: {
                     change: function ($event) {
                       var $$selectedVal = Array.prototype.filter
@@ -77350,7 +76533,7 @@ var render = function () {
                     },
                   ],
                   staticClass:
-                    "\n          mt-1\n          block\n          form-select\n          w-64\n          py-2\n          px-3\n          border border-gray-300\n          bg-white\n          rounded-md\n          shadow-sm\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300\n          transition\n          duration-150\n          ease-in-out\n          sm:text-sm sm:leading-5\n        ",
+                    "mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5",
                   on: {
                     change: function ($event) {
                       var $$selectedVal = Array.prototype.filter
@@ -77409,7 +76592,7 @@ var render = function () {
                 },
               ],
               staticClass:
-                "\n          mt-1\n          block\n          form-select\n          w-64\n          py-2\n          px-3\n          border border-gray-300\n          bg-white\n          rounded-md\n          shadow-sm\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300\n          transition\n          duration-150\n          ease-in-out\n          sm:text-sm sm:leading-5\n        ",
+                "mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5",
               on: {
                 change: function ($event) {
                   var $$selectedVal = Array.prototype.filter
@@ -77455,7 +76638,7 @@ var render = function () {
               },
             ],
             staticClass:
-              "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-64\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+              "appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
             attrs: { type: "date", name: "date" },
             domProps: { value: _vm.result.competition_date },
             on: {
@@ -77484,7 +76667,7 @@ var render = function () {
               },
             ],
             staticClass:
-              "\n          appearance-none\n          rounded-none\n          relative\n          block\n          w-64\n          px-3\n          py-2\n          border border-gray-300\n          placeholder-gray-500\n          text-gray-900\n          focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10\n          sm:text-sm sm:leading-5\n        ",
+              "appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5",
             attrs: { type: "number", name: "date" },
             domProps: { value: _vm.result.result },
             on: {
@@ -77801,7 +76984,9 @@ var render = function () {
         0
       ),
       _vm._v(" "),
-      _c("GkkLink", { attrs: { to: "/", text: "Tillbaka till startsidan" } }),
+      _c("GkkLink", {
+        attrs: { to: "/insidan", text: "Tillbaka till insidans navigering" },
+      }),
     ],
     1
   )
@@ -77853,7 +77038,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                    px-6\n                    py-3\n                    border-b border-gray-200\n                    bg-gray-50\n                    text-center text-xs\n                    leading-4\n                    font-medium\n                    text-gray-500\n                    uppercase\n                    tracking-wider\n                  ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                  Klass\n                ")]
         ),
@@ -77862,7 +77047,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                    px-6\n                    py-3\n                    border-b border-gray-200\n                    bg-gray-50\n                    text-center text-xs\n                    leading-4\n                    font-medium\n                    text-gray-500\n                    uppercase\n                    tracking-wider\n                  ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                  Gren (KSL)\n                ")]
         ),
@@ -77871,7 +77056,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                    px-6\n                    py-3\n                    border-b border-gray-200\n                    bg-gray-50\n                    text-center text-xs\n                    leading-4\n                    font-medium\n                    text-gray-500\n                    uppercase\n                    tracking-wider\n                  ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                  Namn\n                ")]
         ),
@@ -77880,7 +77065,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                    px-6\n                    py-3\n                    border-b border-gray-200\n                    bg-gray-50\n                    text-center text-xs\n                    leading-4\n                    font-medium\n                    text-gray-500\n                    uppercase\n                    tracking-wider\n                  ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                  Vikt (kg)\n                ")]
         ),
@@ -77889,14 +77074,14 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n                    px-6\n                    py-3\n                    border-b border-gray-200\n                    bg-gray-50\n                    text-center text-xs\n                    leading-4\n                    font-medium\n                    text-gray-500\n                    uppercase\n                    tracking-wider\n                  ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n                  Datum\n                ")]
         ),
         _vm._v(" "),
         _c("th", {
           staticClass:
-            "\n                    px-6\n                    py-3\n                    border-b border-gray-200\n                    bg-gray-50\n                    text-center text-xs\n                    leading-4\n                    font-medium\n                    text-gray-500\n                    uppercase\n                    tracking-wider\n                  ",
+            "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
         }),
       ]),
     ])
@@ -79002,7 +78187,7 @@ var render = function () {
     "div",
     { staticClass: "container mx-auto" },
     [
-      _c("h1", { staticClass: "text-center text-3xl font-thin mb-6" }, [
+      _c("h1", { staticClass: "text-center text-3xl font-thin mb-6 mt-8" }, [
         _vm._v("Tävlingsanmälan"),
       ]),
       _vm._v(" "),
@@ -79037,7 +78222,9 @@ var render = function () {
             ]),
           ]),
       _vm._v(" "),
-      _c("GkkLink", { attrs: { to: "/", text: "Tillbaka till startsidan" } }),
+      _c("GkkLink", {
+        attrs: { to: "/insidan", text: "Tillbaka till insidans navigering" },
+      }),
     ],
     1
   )
@@ -79228,7 +78415,7 @@ var render = function () {
     "div",
     { staticClass: "container mx-auto max-w-3xl" },
     [
-      _c("h1", { staticClass: "text-center text-3xl font-thin mb-6" }, [
+      _c("h1", { staticClass: "text-center text-3xl font-thin mb-6 mt-8" }, [
         _vm._v("Dokument"),
       ]),
       _vm._v(" "),
@@ -79248,7 +78435,9 @@ var render = function () {
         1
       ),
       _vm._v(" "),
-      _c("GkkLink", { attrs: { to: "/", text: "Tillbaka till startsidan" } }),
+      _c("GkkLink", {
+        attrs: { to: "/insidan", text: "Tillbaka till insidans navigering" },
+      }),
     ],
     1
   )
@@ -79280,7 +78469,7 @@ var render = function () {
     "div",
     { staticClass: "container mx-auto max-w-lg" },
     [
-      _c("h1", { staticClass: "text-center text-3xl font-thin mb-2" }, [
+      _c("h1", { staticClass: "text-center text-3xl font-thin mb-2 mt-8" }, [
         _vm._v("Funktionärsanmälan"),
       ]),
       _vm._v(" "),
@@ -79619,7 +78808,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "\n              px-6\n              py-3\n              border-b border-gray-200\n              bg-gray-50\n              text-center text-xs\n              leading-4\n              font-medium\n              text-gray-500\n              uppercase\n              tracking-wider\n            ",
+              "px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider",
           },
           [_vm._v("\n            Namn\n          ")]
         ),
@@ -79765,7 +78954,7 @@ var render = function () {
     "div",
     { staticClass: "container mx-auto" },
     [
-      _c("h1", { staticClass: "text-center text-3xl font-thin mb-6" }, [
+      _c("h1", { staticClass: "text-center text-3xl font-thin mb-6 mt-8" }, [
         _vm._v("Funktionärsanmälan"),
       ]),
       _vm._v(" "),
@@ -79800,7 +78989,9 @@ var render = function () {
             ]),
           ]),
       _vm._v(" "),
-      _c("GkkLink", { attrs: { to: "/", text: "Tillbaka till startsidan" } }),
+      _c("GkkLink", {
+        attrs: { to: "/insidan", text: "Tillbaka till insidans navigering" },
+      }),
     ],
     1
   )
@@ -79875,7 +79066,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "mt-10" }, [
+  return _c("div", [
     _c(
       "div",
       {
@@ -80131,15 +79322,31 @@ var render = function () {
                   "a",
                   {
                     staticClass: "uppercase",
-                    class:
-                      _vm.site === "inside" ? "border-b-2 border-black" : "",
+                    class: _vm.site === "" ? "border-b-2 border-black" : "",
                     attrs: { href: "/insidan" },
                   },
-                  [_vm._v("\n                Insidan\n              ")]
+                  [_vm._v(" Insidan ")]
                 ),
               ]),
             ]),
           ]),
+          _vm._v(" "),
+          _vm.user
+            ? _c("div", { staticClass: "flex-shrink-0 ml-4" }, [
+                _c("span", { staticClass: "rounded-md shadow-sm" }, [
+                  _c("div", { on: { click: _vm.logout } }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "uppercase text-xs",
+                        attrs: { href: "#" },
+                      },
+                      [_vm._v(" Logga ut ")]
+                    ),
+                  ]),
+                ]),
+              ])
+            : _vm._e(),
         ]),
       ]),
     ]),
@@ -80190,145 +79397,126 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "mt-24", staticStyle: { "text-align": "center" } },
-    [
-      _vm.user && _vm.user.granted_by == 0
-        ? _c("div", [_vm._m(0)])
-        : _c(
-            "div",
-            {
-              staticClass:
-                "flex flex-col m-6 sm:flex-row items-center justify-center",
-            },
-            [
-              _vm.user
-                ? _c("gkk-action-card", {
-                    staticClass: "m-4 max-w-xs w-64",
-                    attrs: {
-                      admin: _vm.isAdmin,
-                      description: "Tävlingsanmälan",
-                      icon: "list-ul",
-                      unanswered: _vm.unanswered.competitions,
+  return _c("div", { staticStyle: { "text-align": "center" } }, [
+    _vm.user && _vm.user.granted_by == 0
+      ? _c("div", [_vm._m(0)])
+      : _c(
+          "div",
+          {
+            staticClass:
+              "flex flex-col m-6 sm:flex-row items-center justify-center",
+          },
+          [
+            _vm.user
+              ? _c("gkk-action-card", {
+                  staticClass: "m-4 max-w-xs w-64",
+                  attrs: {
+                    admin: _vm.isAdmin,
+                    description: "Tävlingsanmälan",
+                    icon: "list-ul",
+                    unanswered: _vm.unanswered.competitions,
+                  },
+                  on: {
+                    admin: function ($event) {
+                      return _vm.location("/admin/competitions")
                     },
-                    on: {
-                      admin: function ($event) {
-                        return _vm.location("/admin/competitions")
-                      },
-                      click: function ($event) {
-                        return _vm.location("/competitions")
-                      },
+                    click: function ($event) {
+                      return _vm.location("/competitions")
                     },
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.user
-                ? _c("gkk-action-card", {
-                    staticClass: "m-4 max-w-xs w-64",
-                    attrs: {
-                      admin: _vm.isAdmin,
-                      description: "Funktionärsanmälan",
-                      icon: "users",
-                      unanswered: _vm.unanswered.events,
+                  },
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.user
+              ? _c("gkk-action-card", {
+                  staticClass: "m-4 max-w-xs w-64",
+                  attrs: {
+                    admin: _vm.isAdmin,
+                    description: "Funktionärsanmälan",
+                    icon: "users",
+                    unanswered: _vm.unanswered.events,
+                  },
+                  on: {
+                    admin: function ($event) {
+                      return _vm.location("/admin/events")
                     },
-                    on: {
-                      admin: function ($event) {
-                        return _vm.location("/admin/events")
-                      },
-                      click: function ($event) {
-                        return _vm.location("/events")
-                      },
+                    click: function ($event) {
+                      return _vm.location("/events")
                     },
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.user
-                ? _c("gkk-action-card", {
-                    staticClass: "m-4 max-w-xs w-64",
-                    attrs: {
-                      admin: _vm.isAdmin,
-                      description: "Medlemsdokument",
-                      icon: "file-o",
+                  },
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.user
+              ? _c("gkk-action-card", {
+                  staticClass: "m-4 max-w-xs w-64",
+                  attrs: {
+                    admin: _vm.isAdmin,
+                    description: "Medlemsdokument",
+                    icon: "file-o",
+                  },
+                  on: {
+                    admin: function ($event) {
+                      return _vm.location("/admin/documents")
                     },
-                    on: {
-                      admin: function ($event) {
-                        return _vm.location("/admin/documents")
-                      },
-                      click: function ($event) {
-                        return _vm.location("/member-documents")
-                      },
+                    click: function ($event) {
+                      return _vm.location("/member-documents")
                     },
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.isAdmin
-                ? _c("gkk-action-card", {
-                    staticClass: "m-4 max-w-xs w-64",
-                    attrs: {
-                      description: "Administrera konton",
-                      icon: "user",
-                      unanswered: _vm.unanswered.ungranted,
+                  },
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.isAdmin
+              ? _c("gkk-action-card", {
+                  staticClass: "m-4 max-w-xs w-64",
+                  attrs: {
+                    description: "Administrera konton",
+                    icon: "user",
+                    unanswered: _vm.unanswered.ungranted,
+                  },
+                  on: {
+                    click: function ($event) {
+                      return _vm.location("/admin/accounts")
                     },
-                    on: {
-                      click: function ($event) {
-                        return _vm.location("/admin/accounts")
-                      },
+                  },
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.user
+              ? _c("gkk-action-card", {
+                  staticClass: "m-4 max-w-xs w-64",
+                  attrs: {
+                    admin: _vm.isAdmin,
+                    description: "Skapa konto som medlem",
+                    icon: "user",
+                  },
+                  on: {
+                    click: function ($event) {
+                      return _vm.location("/register")
                     },
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              !_vm.user
-                ? _c("gkk-action-card", {
-                    staticClass: "m-4 max-w-xs w-64",
-                    attrs: {
-                      admin: _vm.isAdmin,
-                      description: "Skapa konto för medlemmar",
-                      icon: "user",
+                  },
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.user
+              ? _c("gkk-action-card", {
+                  staticClass: "m-4 max-w-xs w-64",
+                  attrs: {
+                    admin: _vm.isAdmin,
+                    description: "Logga in som medlem",
+                    icon: "sign-in",
+                  },
+                  on: {
+                    click: function ($event) {
+                      return _vm.location("/login")
                     },
-                    on: {
-                      click: function ($event) {
-                        return _vm.location("/register")
-                      },
-                    },
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              !_vm.user
-                ? _c("gkk-action-card", {
-                    staticClass: "m-4 max-w-xs w-64",
-                    attrs: {
-                      admin: _vm.isAdmin,
-                      description: "Logga in för medlemmar",
-                      icon: "sign-in",
-                    },
-                    on: {
-                      click: function ($event) {
-                        return _vm.location("/login")
-                      },
-                    },
-                  })
-                : _vm._e(),
-            ],
-            1
-          ),
-      _vm._v(" "),
-      _vm.user
-        ? _c("div", [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600",
-                attrs: { type: "button" },
-                on: { click: _vm.logout },
-              },
-              [_vm._v("\n      Logga ut\n    ")]
-            ),
-          ])
-        : _vm._e(),
-    ]
-  )
+                  },
+                })
+              : _vm._e(),
+          ],
+          1
+        ),
+  ])
 }
 var staticRenderFns = [
   function () {
@@ -80602,7 +79790,7 @@ var render = function () {
         "button",
         {
           staticClass:
-            "\n      mt-2\n      relative\n      inline-flex\n      items-center\n      px-4\n      py-2\n      border\n      text-sm\n      leading-5\n      font-medium\n      rounded-md\n      text-gkk\n      bg-white\n      border-gkk\n      focus:outline-none focus:shadow-outline-indigo\n      active:bg-gkk\n      transition\n      duration-150\n      ease-in-out\n    ",
+            "mt-2 relative inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out",
           on: { click: _vm.updateName },
         },
         [_c("span", [_vm._v("Uppdatera namn")])]
@@ -80639,7 +79827,7 @@ var render = function () {
         "button",
         {
           staticClass:
-            "\n      mt-2\n      relative\n      inline-flex\n      items-center\n      px-4\n      py-2\n      border\n      text-sm\n      leading-5\n      font-medium\n      rounded-md\n      text-gkk\n      bg-white\n      border-gkk\n      focus:outline-none focus:shadow-outline-indigo\n      active:bg-gkk\n      transition\n      duration-150\n      ease-in-out\n    ",
+            "mt-2 relative inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out",
           on: { click: _vm.updateEmail },
         },
         [_c("span", [_vm._v("Uppdatera epost")])]
@@ -80653,7 +79841,7 @@ var render = function () {
               "button",
               {
                 staticClass:
-                  "\n        mt-2\n        relative\n        inline-flex\n        items-center\n        px-4\n        py-2\n        border\n        text-sm\n        leading-5\n        font-medium\n        rounded-md\n        text-gkk\n        bg-white\n        border-gkk\n        focus:outline-none focus:shadow-outline-indigo\n        active:bg-gkk\n        transition\n        duration-150\n        ease-in-out\n      ",
+                  "mt-2 relative inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out",
                 on: {
                   click: function ($event) {
                     return _vm.startEdit("password")
@@ -80718,7 +79906,7 @@ var render = function () {
                 "button",
                 {
                   staticClass:
-                    "\n          mt-2\n          relative\n          inline-flex\n          items-center\n          px-4\n          py-2\n          border\n          text-sm\n          leading-5\n          font-medium\n          rounded-md\n          text-gkk\n          bg-white\n          border-gkk\n          focus:outline-none focus:shadow-outline-indigo\n          active:bg-gkk\n          transition\n          duration-150\n          ease-in-out\n        ",
+                    "mt-2 relative inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out",
                   on: { click: _vm.reset },
                 },
                 [_c("span", { staticClass: "text-red-400" }, [_vm._v("Ångra")])]
@@ -80728,7 +79916,7 @@ var render = function () {
                 "button",
                 {
                   staticClass:
-                    "\n          ml-2\n          mt-2\n          relative\n          inline-flex\n          items-center\n          px-4\n          py-2\n          border\n          text-sm\n          leading-5\n          font-medium\n          rounded-md\n          text-gkk\n          bg-white\n          border-gkk\n          focus:outline-none focus:shadow-outline-indigo\n          active:bg-gkk\n          transition\n          duration-150\n          ease-in-out\n        ",
+                    "ml-2 mt-2 relative inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out",
                   on: { click: _vm.updatePassword },
                 },
                 [_c("span", [_vm._v("Byt lösenord")])]
@@ -80736,7 +79924,9 @@ var render = function () {
             ]),
           ]),
       _vm._v(" "),
-      _c("GkkLink", { attrs: { to: "/", text: "Tillbaka till startsidan" } }),
+      _c("GkkLink", {
+        attrs: { to: "/insidan", text: "Tillbaka till insidans navigering" },
+      }),
     ],
     1
   )

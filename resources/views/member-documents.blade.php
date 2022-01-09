@@ -1,5 +1,5 @@
-@extends('layouts.app')
+@extends('layouts.inside')
 
-@section('content')
+@section('inside')
 <gkk-documents :folders='@json($folders)'></gkk-documents>
 @endsection

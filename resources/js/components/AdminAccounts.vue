@@ -8,34 +8,12 @@
             <thead>
               <tr>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-left text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Namn
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Registreringsdatum
                 </th>
@@ -89,105 +67,35 @@
               <tr>
                 <th
                   @click="sortBy('first_name')"
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-left text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                    cursor-pointer
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                 >
                   Namn
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Bekräftad närvaro som funktionär<br />(senaste 365 dagarna)
                 </th>
                 <th
                   @click="sortBy('created_at')"
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                    cursor-pointer
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                 >
                   Registreringsdatum
                 </th>
                 <th
                   @click="sortBy('last_visited_at')"
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                    cursor-pointer
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                 >
                   Senaste besök
                 </th>
                 <th
                   @click="sortBy('visits')"
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                    cursor-pointer
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                 >
                   Antal besök
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Godkänt avtalen
                 </th>
@@ -223,28 +131,12 @@
                   </div>
                 </td>
                 <td
-                  class="
-                    px-6
-                    py-2
-                    whitespace-no-wrap
-                    border-b border-gray-200
-                    text-sm
-                    leading-5
-                    text-gray-500 text-center
-                  "
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
                 >
                   {{ account.visits }}
                 </td>
                 <td
-                  class="
-                    px-6
-                    py-2
-                    whitespace-no-wrap
-                    border-b border-gray-200
-                    text-sm
-                    leading-5
-                    text-gray-500 text-center
-                  "
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
                 >
                   <i
                     class="fa fa-check-circle text-gkk text-lg"
@@ -318,34 +210,12 @@
             <thead>
               <tr>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-left text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Namn
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Registreringsdatum
                 </th>
@@ -380,7 +250,7 @@
       </div>
     </div>
 
-    <GkkLink to="/" text="Tillbaka till startsidan" />
+    <GkkLink to="/insidan" text="Tillbaka till insidans navigering" />
 
     <modal name="promote" :adaptive="true" height="auto">
       <div style="padding: 30px; margin-top: 20px">

@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex flex-col justify-center sm:px-6 p-8">
-  <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-md p-4">
+<div class="flex flex-col justify-center sm:px-6">
+  <div class="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
+    <h2 class="text-center text-2xl font-thin my-4">Logga in som medlem</h2>
     <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
       <form action="/login" method="POST">
         @csrf

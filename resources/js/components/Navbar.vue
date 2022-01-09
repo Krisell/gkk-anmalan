@@ -57,24 +57,16 @@
           <div class="flex-shrink-0">
             <span class="rounded-md shadow-sm">
               <div>
-                <a class="uppercase" :class="site === 'inside' ? 'border-b-2 border-black' : ''" href="/insidan">
-                  Insidan
-                </a>
-
-                <!-- <a href="/register">
-                  <ui-button>Skapa konto</ui-button>
-                </a> -->
+                <a class="uppercase" :class="site === '' ? 'border-b-2 border-black' : ''" href="/insidan"> Insidan </a>
               </div>
+            </span>
+          </div>
 
-              <!-- <div v-if="user">
-                <a @click="logout">
-                  <ui-button type="secondary">Logga ut</ui-button>
-                </a>
-
-                <a href="/profile">
-                  <ui-button>Profil ({{ user.first_name }} {{ user.last_name }})</ui-button>
-                </a>
-              </div> -->
+          <div v-if="user" class="flex-shrink-0 ml-4">
+            <span class="rounded-md shadow-sm">
+              <div @click="logout">
+                <a class="uppercase text-xs" href="#"> Logga ut </a>
+              </div>
             </span>
           </div>
         </div>

@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: center" class="mt-24">
+  <div style="text-align: center">
     <div v-if="user && user.granted_by == 0">
       <h3 class="text-center mt-6 font-thin text-xl">
         Välkommen till GKK!<br />
@@ -49,7 +49,7 @@
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @click="location('/register')"
-        description="Skapa konto för medlemmar"
+        description="Skapa konto som medlem"
         icon="user"
       ></gkk-action-card>
       <gkk-action-card
@@ -57,19 +57,9 @@
         class="m-4 max-w-xs w-64"
         :admin="isAdmin"
         @click="location('/login')"
-        description="Logga in för medlemmar"
+        description="Logga in som medlem"
         icon="sign-in"
       ></gkk-action-card>
-    </div>
-
-    <div v-if="user">
-      <button
-        @click="logout"
-        type="button"
-        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
-      >
-        Logga ut
-      </button>
     </div>
   </div>
 </template>

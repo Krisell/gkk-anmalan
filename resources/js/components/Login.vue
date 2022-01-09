@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-10">
-    <div @click="google" class="loginBtn google font-sans text-sm font-medium" style="text-align: center;">
+  <div>
+    <div @click="google" class="loginBtn google font-sans text-sm font-medium" style="text-align: center">
       <div class="icon">
         <svg
           version="1.1"
@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <div style="margin-top: 10px;" @click="microsoft" class="loginBtn microsoft font-sans text-sm font-medium">
+    <div style="margin-top: 10px" @click="microsoft" class="loginBtn microsoft font-sans text-sm font-medium">
       <div class="icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
           <title>MS-SymbolLockup</title>

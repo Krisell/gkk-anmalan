@@ -1,5 +1,5 @@
-@extends('layouts.app')
+@extends('layouts.inside')
 
-@section('content')
+@section('inside')
 <gkk-profile :user='@json($user)'></gkk-profile>
 @endsection
