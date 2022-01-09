@@ -16,7 +16,7 @@ background-position-y: center;" class="flex items-center">
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Välkommen till Göteborg Kraftsportklubb</h2>
                 </div>
                 <p class="text-xl text-gray-500">
-                  Göteborg Kraftsportklubb (GKK) är en idrottsförening som bildades 1933. Vi ägnar oss åt idrotten Styrkelyft och tränar och tävlar därmed i knäböj, bänkpress och marklyft. Vi tränar tillsammans, hjälper varandra och tror på att styrka kommer från gemenskap.
+                  Göteborg Kraftsportklubb (GKK) är en idrottsförening som bildades 1933. Vi ägnar oss åt idrotten Styrkelyft och tränar och tävlar därmed i knäböj, bänkpress och marklyft. I föreningen finns allt från elitaktiva på högsta nivå till motionärer. Vi tränar tillsammans, hjälper varandra och tror på att styrka kommer från gemenskap.
                 </p>
                 <p class="text-xl text-gray-500">
                   Sedan 2019 har vi vår egna klubblokal hos Friskis & Svettis Majorna i Göteborg. För att träna hos oss behöver du därmed också vara medlem och ha träningskort hos Friskis & Svettis. Träning kan ske även under obemannade tider genom att registrera en kod i kassan. Priser för träning hos friskis <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">hittar du här</a>. Mer information om du är intresserad av att gå med i GKK hittar du under <a class="underline" href="https://gkk.test/member">Medlemsskap</a>.
