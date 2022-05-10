@@ -12,12 +12,12 @@ const LiftingCast = {
         return
       }
 
-      const flight = lifter.gender === 'Män' ? 'B' : 'A'
+      const events = Parser.json(lifter.events)
+
+      const flight = events.kbp ? 'A' : 'B'
       const gender = lifter.gender === 'Män' ? 'Male' : 'Female'
 
       const birthdate = LiftingCast.getBirthdate(lifter.licence_number)
-
-      const events = Parser.json(lifter.events)
 
       let division = events.kbp ? 'BP' : 'SL'
       division += lifter.gender === 'Män' ? ' Herr' : ' Dam'
