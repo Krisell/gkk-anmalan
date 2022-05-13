@@ -82,7 +82,7 @@
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div class="text-sm leading-5 text-gray-500">{{ registration.status == 1 ? 'Ja' : 'Nej' }}</div>
-                      <div class="text-sm leading-5 text-gray-500">{{ registration.created_at | dateString }}</div>
+                      <div class="text-xs leading-5 text-gray-500">{{ registration.created_at | dateString }}</div>
                     </div>
                   </div>
                 </td>
