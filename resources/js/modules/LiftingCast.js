@@ -1,4 +1,5 @@
 import File from './File.js'
+import Parser from '@krisell/parser'
 
 const LiftingCast = {
   download(lifters) {
@@ -11,12 +12,17 @@ const LiftingCast = {
         return
       }
 
-      const flight = lifter.gender === 'Män' ? 'B' : 'A'
+      const events = Parser.json(lifter.events)
+
+      const flight = events.kbp ? 'A' : 'B'
       const gender = lifter.gender === 'Män' ? 'Male' : 'Female'
 
-      let birthdate = LiftingCast.getBirthdate(lifter.licence_number)
+      const birthdate = LiftingCast.getBirthdate(lifter.licence_number)
 
-      csv += `"${lifter.user.first_name} ${lifter.user.last_name}","GKK",,"1","1","${flight}","${birthdate}","","${gender}","Raw","${lifter.gender}","Open",,"","",,,,"N","","","",,"","","","",""\n`
+      let division = events.kbp ? 'BP' : 'SL'
+      division += lifter.gender === 'Män' ? ' Herr' : ' Dam'
+
+      csv += `"${lifter.user.first_name} ${lifter.user.last_name}","GKK",,"1","1","${flight}","${birthdate}","","${gender}","Raw","${division}","Open",,"","",,,,"N","","","",,"","","","",""\n`
     })
 
     File.save('liftingcast-import.csv', csv, 'data:text/csv;charset=utf-8')
