@@ -5,12 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Firebase\JWT\JWK;
 use Firebase\JWT\JWT;
-use GuzzleHttp\Client;
-use Illuminate\Http\Request;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local;
 use Illuminate\Support\Facades\Http;
-use Cache\Adapter\Filesystem\FilesystemCachePool;
 
 class AuthController extends Controller
 {
