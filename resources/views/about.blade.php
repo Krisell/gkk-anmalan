@@ -14,20 +14,30 @@ background-position-y: center;" class="flex items-center">
                 <div class="flex items-center">
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Om GKK</h2>
                 </div>
-                <p class="text-xl text-gray-500">Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar. Vi har vår egna klubb- och träningslokal hos <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. I föreningen finns allt från elitaktiva på högsta nivå till motionärer.</p>
+                <p class="text-xl leading-normal text-gray-500">Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar. Vi har vår egna klubb- och träningslokal hos <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. I föreningen finns allt från elitaktiva på högsta nivå till motionärer.</p>
                 
-                <p class="text-xl text-gray-500">Kort praktisk information som address, bankgiro mm?</p>
+                <p class="text-xl leading-normal text-gray-500">Kort praktisk information som address, bankgiro mm? Bankgiro 846-0891.<br>info@gkk-styrkelyft.se Org.nummer: 802456-7672</p>
 
                 <div class="flex items-center">
-                <h3 class="mt-8 text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2021</h3>
+                <h3 class="mt-8 text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2022</h3>
                 </div>
                 <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/styrelsen_tobias.jpg" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Tobias Nilsson</h3>
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/stryrelsen_carl-1.jpeg" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Carl Öberg</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dt class="sr-only">Title</dt>
                         <dd class="text-gray-500 text-sm">Ordförande</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fjenny.png?alt=media&token=8c1c612e-75ca-4eac-849e-e5ef0b060f67" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Jenny Karlsson</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Kassör</dd>
                       </dl>
                     </div>
                   </li>
@@ -42,20 +52,10 @@ background-position-y: center;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/stryrelsen_carl-1.jpeg" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Carl Öberg</h3>
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/styrelsen_tobias.jpg" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Tobias Nilsson</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
-                        <dt class="sr-only">Title</dt>
                         <dd class="text-gray-500 text-sm">Ledamot</dd>
-                      </dl>
-                    </div>
-                  </li>
-                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
-                    <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://scontent-arn2-1.xx.fbcdn.net/v/t31.18172-8/13268462_1196927513651456_8204667318684761322_o.jpg?_nc_cat=106&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=hTA1MHKGh_4AX9OAcGf&tn=UsCYSEN_HsLPmIxM&_nc_ht=scontent-arn2-1.xx&oh=00_AT9OK6zlPBx_4pwSkfL-Yps_PZQzBL81IF4Z0N8r-wf8JA&oe=6201628F" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Jenny Karlsson</h3>
-                      <dl class="mt-1 flex-grow flex flex-col justify-between">
-                        <dd class="text-gray-500 text-sm">Kassör</dd>
                       </dl>
                     </div>
                   </li>
@@ -70,7 +70,7 @@ background-position-y: center;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.18169-9/20597459_10154761206141711_1107831019939934982_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=kL7Nm22BCs4AX_CytTZ&_nc_ht=scontent-arn2-1.xx&oh=00_AT9lOlQnbuZWHvEB08EyCNsSZEVRZ9QMD-8PM8CuklAt_w&oe=62020347" alt="">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FNiclas.png?alt=media&token=a4bad7c6-17b7-491f-8cdd-c0e6c8002f9e" alt="">
                       <h3 class="mt-6 text-gray-900 text-sm font-medium">Niklas Håkansson</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Ledamot</dd>
@@ -79,8 +79,8 @@ background-position-y: center;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/08/gkk_john_wedin.jpg" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">John Wedin</h3>
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FMaria.png?alt=media&token=73491faa-2ba4-46f9-b37f-a2ad69ca0038" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Maria Klintarp</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Ledamot</dd>
                       </dl>
@@ -88,8 +88,17 @@ background-position-y: center;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://media-exp1.licdn.com/dms/image/C4E03AQHqn4PBK3-enA/profile-displayphoto-shrink_200_200/0/1549910289228?e=1645056000&v=beta&t=7T3uud0MrM-8fqezx6qKDxPcYsxWY5UZr-eU982vqsE" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Maria Klintarp</h3>
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FIda.png?alt=media&token=371aa963-19a4-494a-9146-3fe63a0562ed" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Ida Anemyr</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Suppleant</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FBo%CC%88ttcher.png?alt=media&token=88f3ba4d-82f0-462d-851d-b6c210078bc9" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Simon Böttcher</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Suppleant</dd>
                       </dl>

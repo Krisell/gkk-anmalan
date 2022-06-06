@@ -12,14 +12,16 @@ background-position-y: center;" class="flex items-center">
           <div class="space-y-12">
             <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
                 <div class="flex items-center">
-                {{-- <img style="height: 80px;" class="mr-4" src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"> --}}
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Välkommen till Göteborg Kraftsportklubb</h2>
                 </div>
-                <p class="text-xl text-gray-500">
-                  Göteborg Kraftsportklubb (GKK) är en idrottsförening som bildades 1933. Vi ägnar oss åt idrotten Styrkelyft och tränar och tävlar därmed i knäböj, bänkpress och marklyft. I föreningen finns allt från elitaktiva på högsta nivå till motionärer. Vi tränar tillsammans, hjälper varandra och tror på att styrka kommer från gemenskap.
+                <p class="text-xl leading-normal text-gray-500">
+                  Göteborg Kraftsportklubb (GKK) är en idrottsförening som bildades 1933. Vi ägnar oss åt idrotten Styrkelyft och tränar och tävlar därmed i knäböj, bänkpress och marklyft. Sedan 2022 har vi också ett antal medlemmar som tränar tyngdlyftning med ambitionen att tävla. I föreningen finns allt från elitaktiva på högsta nivå till motionärer. Vi tränar tillsammans, hjälper varandra och tror på att styrka kommer från gemenskap.
                 </p>
-                <p class="text-xl text-gray-500">
-                  Sedan 2019 har vi vår egna klubb- och träningslokal hos <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. För att träna hos oss behöver du därmed också vara medlem och ha träningskort hos Friskis & Svettis. Träning kan ske även under obemannade tider genom att registrera en kod i kassan. Mer information om du är intresserad av att bli medlem i GKK hittar du under <a class="underline" href="/member">Medlemskap</a>.
+                <p class="text-xl leading-normal text-gray-500">
+                  Sedan december 2018 har vi vår egna klubb- och träningslokal hos <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. För att träna hos oss behöver du därmed också vara medlem och ha träningskort hos Friskis & Svettis. Träning kan ske även under obemannade tider genom att registrera en kod i kassan. Mer information om du är intresserad av att bli medlem i GKK hittar du under <a class="underline" href="/member">Medlemskap</a>.
+                </p>
+                <p class="text-xl leading-normal text-gray-500">
+                  GKK finns även på <a class="underline" href="https://www.instagram.com/goteborgkk/" target="_blank">Instagram</a> där du kan hitta foton och löpande information från föreningen.
                 </p>
             </div>
             <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
