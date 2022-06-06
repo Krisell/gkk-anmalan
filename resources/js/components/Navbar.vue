@@ -15,7 +15,7 @@
           <a href="/powerlifting">Styrkelyft</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a href="/gkk">Om GKK</a>
+          <a href="/about">Om GKK</a>
         </li>
         <li class="mt-4 hover:text-gkk">
           <a href="/member">Medlemskap</a>
