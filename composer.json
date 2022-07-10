@@ -31,7 +31,7 @@
     "preferred-install": "dist",
     "sort-packages": true,
     "platform": {
-      "php": "8.0.2"
+      "php": "8.0.16"
     }
   },
   "extra": {
