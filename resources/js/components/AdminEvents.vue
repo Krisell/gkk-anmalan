@@ -10,82 +10,27 @@
             <thead>
               <tr>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-left text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Event
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-left text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Sista anmälningsdag
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-left text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Tid och plats
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-left text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Antal tackat ja
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-left text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Åtgärder
                 </th>
@@ -103,7 +48,7 @@
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div class="text-sm leading-5 font-medium text-gray-900">{{ event.name }}</div>
-                      <div class="text-sm leading-5 text-gray-500">{{ event | dateString }}</div>
+                      <div class="text-sm leading-5 text-gray-500">{{ dateString(event) }}</div>
                     </div>
                   </div>
                 </td>
@@ -168,7 +113,10 @@
             </tbody>
           </table>
         </div>
-        <a v-if="!showingOld" href="?all" class="text-xs mt-2 cursor-pointer hover:underline text-right font-extralight block"
+        <a
+          v-if="!showingOld"
+          href="?all"
+          class="text-xs mt-2 cursor-pointer hover:underline text-right font-extralight block"
           >Visa även gamla events</a
         >
       </div>
@@ -198,20 +146,7 @@
         <div class="text-lg font-thin mt-2">Namn på event</div>
         <input
           v-model="event.name"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           name="name"
         />
       </div>
@@ -220,20 +155,7 @@
         <div class="text-lg font-thin mt-2">Datum</div>
         <input
           v-model="event.date"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           type="date"
           name="date"
         />
@@ -241,20 +163,7 @@
         <div class="text-lg font-thin mt-2">till (lämna tom för endagsevent)</div>
         <input
           v-model="event.end_date"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           type="date"
           name="date"
         />
@@ -264,20 +173,7 @@
         <div class="text-lg font-thin mt-2">Ev. sista anmälningsdag</div>
         <input
           v-model="event.last_registration_at"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           type="date"
         />
       </div>
@@ -285,20 +181,7 @@
       <div class="mt-2">
         <input
           v-model="event.time"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           name="time"
           placeholder="Ungefärlig tid, ex. 8 – 15"
         />
@@ -306,20 +189,7 @@
       <div class="mt-2">
         <input
           v-model="event.location"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           name="location"
           placeholder="Plats, ex Friskis Majorna"
         />
@@ -347,23 +217,7 @@
         <div class="mr-2 text-lg font-thin">Visningsalternativ</div>
         <select
           v-model="event.show_status"
-          class="
-            mt-1
-            block
-            form-select
-            w-full
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option value="default">Default (visas tills datum passerat)</option>
           <option value="show">Visa</option>
@@ -440,7 +294,7 @@ export default {
       ],
     }
   },
-  filters: {
+  methods: {
     dateString(event) {
       if (!event.end_date) {
         return event.date || '&nbsp;'
@@ -448,8 +302,6 @@ export default {
 
       return `${event.date} – ${event.end_date}`
     },
-  },
-  methods: {
     confirmDelete(event) {
       this.selectedEvent = event
       console.log(event)
@@ -478,6 +330,7 @@ export default {
         .then(this.reload)
         .catch((err) => {
           this.newEventError = true
+          console.log(err)
         })
     },
     cancelUpdate() {
@@ -495,6 +348,7 @@ export default {
         .then(this.reload)
         .catch((err) => {
           this.newEventError = true
+          console.log(err)
         })
     },
   },

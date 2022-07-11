@@ -9,98 +9,32 @@
             <thead>
               <tr>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-left text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Tävling
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Anmälan senast
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Tid
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Plats
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Antal anmälda
                 </th>
                 <th
-                  class="
-                    px-6
-                    py-3
-                    border-b border-gray-200
-                    bg-gray-50
-                    text-center text-xs
-                    leading-4
-                    font-medium
-                    text-gray-500
-                    uppercase
-                    tracking-wider
-                  "
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   Åtgärder
                 </th>
@@ -117,7 +51,7 @@
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div class="text-sm leading-5 font-medium text-gray-900">{{ competition.name }}</div>
-                      <div class="text-sm leading-5 text-gray-500">{{ competition | dateString }}</div>
+                      <div class="text-sm leading-5 text-gray-500">{{ dateString(competition) }}</div>
                     </div>
                   </div>
                 </td>
@@ -215,20 +149,7 @@
         <div class="text-lg font-thin mt-2">Tävlingsnamn</div>
         <input
           v-model="competition.name"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           name="name"
         />
       </div>
@@ -236,20 +157,7 @@
         <div class="text-lg font-thin mt-2">Datum</div>
         <input
           v-model="competition.date"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           type="date"
           name="date"
         />
@@ -257,20 +165,7 @@
         <div class="text-lg font-thin mt-2">till (lämna tom för endagstävling)</div>
         <input
           v-model="competition.end_date"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           type="date"
           name="date"
         />
@@ -280,20 +175,7 @@
         <div class="text-lg font-thin mt-2">Ev. sista anmälningsdag</div>
         <input
           v-model="competition.last_registration_at"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           type="date"
           name="last_registration_at"
         />
@@ -322,20 +204,7 @@
       <div class="mt-2">
         <input
           v-model="competition.time"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           name="time"
           placeholder="Ungefärlig tid, ex. 8 – 15"
         />
@@ -343,20 +212,7 @@
       <div class="mt-2">
         <input
           v-model="competition.location"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           name="location"
           placeholder="Plats, ex Friskis Majorna"
         />
@@ -384,23 +240,7 @@
         <div class="mr-2 text-lg font-thin">Visningsalternativ</div>
         <select
           v-model="competition.show_status"
-          class="
-            mt-1
-            block
-            form-select
-            w-full
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option value="default">Default (visas tills datum passerat)</option>
           <option value="show">Visa</option>
@@ -486,7 +326,7 @@ export default {
       ],
     }
   },
-  filters: {
+  methods: {
     dateString(competition) {
       if (!competition.end_date) {
         return competition.date || '&nbsp;'
@@ -494,8 +334,6 @@ export default {
 
       return `${competition.date} – ${competition.end_date}`
     },
-  },
-  methods: {
     confirmDelete(competition) {
       this.selectedCompetition = competition
       this.$modal.show('delete-competition')
@@ -531,6 +369,7 @@ export default {
         .then(this.reload)
         .catch((err) => {
           this.newCompetitionError = true
+          console.log(err)
         })
     },
     cancelUpdate() {
@@ -551,6 +390,7 @@ export default {
         .then(this.reload)
         .catch((err) => {
           this.newCompetitionError = true
+          console.log(err)
         })
     },
   },

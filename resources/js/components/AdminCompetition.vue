@@ -82,7 +82,7 @@
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div class="text-sm leading-5 text-gray-500">{{ registration.status == 1 ? 'Ja' : 'Nej' }}</div>
-                      <div class="text-xs leading-5 text-gray-500">{{ registration.created_at | dateString }}</div>
+                      <div class="text-xs leading-5 text-gray-500">{{ dateString(registration.created_at) }}</div>
                     </div>
                   </div>
                 </td>
@@ -92,7 +92,7 @@
                 </td>
 
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-sm leading-5 text-gray-500">{{ registration.events | eventsString }}</div>
+                  <div class="text-sm leading-5 text-gray-500">{{ eventsString(registration.events) }}</div>
                 </td>
 
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
@@ -165,7 +165,7 @@
             <div class="text-sm leading-5 font-medium text-gray-900">
               {{ registrationToEdit.user.first_name }} {{ registrationToEdit.user.last_name }}
             </div>
-            <div class="text-sm leading-5 text-gray-500">{{ registrationToEdit.created_at | dateString }}</div>
+            <div class="text-sm leading-5 text-gray-500">{{ dateString(registrationToEdit.created_at) }}</div>
           </div>
         </div>
         <div>
@@ -244,7 +244,7 @@ export default {
       return this.competition.registrations.filter((registration) => registration.status == 0).length
     },
   },
-  filters: {
+  methods: {
     dateString(date) {
       return date.substr(0, 10)
     },
@@ -254,8 +254,6 @@ export default {
         .map(([event]) => event.toUpperCase())
         .join(', ')
     },
-  },
-  methods: {
     sortBy(key) {
       if (this.sortKey === key) {
         this.sortOrder *= -1
@@ -297,10 +295,10 @@ export default {
               ...this.filteredRegistrations.map((registration) => {
                 return [
                   { value: `${registration.user.first_name} ${registration.user.last_name}`, type: 'string' },
-                  { value: this.$options.filters.dateString(registration.created_at), type: 'string' },
+                  { value: this.dateString(registration.created_at), type: 'string' },
                   { value: registration.status == 1 ? 'Ja' : 'Nej', type: 'string' },
                   { value: registration.gender, type: 'string' },
-                  { value: this.$options.filters.eventsString(registration.events), type: 'string' },
+                  { value: this.eventsString(registration.events), type: 'string' },
                   { value: registration.weight_class, type: 'string' },
                   { value: registration.comment, type: 'string' },
                 ]

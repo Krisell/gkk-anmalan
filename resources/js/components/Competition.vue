@@ -58,20 +58,7 @@
         </div>
 
         <input
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           v-model="licenceNumber"
         />
 
@@ -124,23 +111,7 @@
         <select
           v-model="weightClass['Män']"
           v-show="gender === 'Män'"
-          class="
-            mt-1
-            block
-            form-select
-            w-full
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option>¯\_(ツ)_/¯</option>
           <option>53</option>
@@ -157,23 +128,7 @@
         <select
           v-model="weightClass['Kvinnor']"
           v-show="gender === 'Kvinnor'"
-          class="
-            mt-1
-            block
-            form-select
-            w-full
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option>¯\_(ツ)_/¯</option>
           <option>43</option>
@@ -263,50 +218,17 @@
         <thead>
           <tr>
             <th
-              class="
-                px-6
-                py-3
-                border-b border-gray-200
-                bg-gray-50
-                text-center text-xs
-                leading-4
-                font-medium
-                text-gray-500
-                uppercase
-                tracking-wider
-              "
+              class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
             >
               Namn
             </th>
             <th
-              class="
-                px-6
-                py-3
-                border-b border-gray-200
-                bg-gray-50
-                text-center text-xs
-                leading-4
-                font-medium
-                text-gray-500
-                uppercase
-                tracking-wider
-              "
+              class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
             >
               Viktklass
             </th>
             <th
-              class="
-                px-6
-                py-3
-                border-b border-gray-200
-                bg-gray-50
-                text-center text-xs
-                leading-4
-                font-medium
-                text-gray-500
-                uppercase
-                tracking-wider
-              "
+              class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
             >
               Gren
             </th>
@@ -321,7 +243,7 @@
               {{ registration.weight_class }}
             </td>
             <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-              {{ registration.events | eventsString }}
+              {{ eventsToString(registration.events) }}
             </td>
           </tr>
         </tbody>
@@ -369,14 +291,7 @@ export default {
       this.weightClass[this.gender] = this.user.weight_class
     }
   },
-  filters: {
-    eventsString(events) {
-      return Object.entries(JSON.parse(events))
-        .filter(([event, status]) => status)
-        .map(([event]) => event.toUpperCase())
-        .join(', ')
-    },
-  },
+
   computed: {
     dateString() {
       if (this.competition.end_date) {
@@ -404,6 +319,12 @@ export default {
     },
   },
   methods: {
+    eventsToString(events) {
+      return Object.entries(JSON.parse(events))
+        .filter(([event, status]) => status)
+        .map(([event]) => event.toUpperCase())
+        .join(', ')
+    },
     hasEvent(event) {
       return JSON.parse(this.competition.events)[event]
     },
