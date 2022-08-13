@@ -1,8 +1,34 @@
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.esm.js'
 import VModal from 'vue-js-modal'
 import VTooltip from 'v-tooltip'
+import axios from 'axios'
 
-window.axios = require('axios')
+import Link from './components/Link.vue'
+import News from './components/News.vue'
+import Event from './components/Event.vue'
+import Navbar from './components/NavBar.vue'
+import Events from './components/Events.vue'
+import Profile from './components/Profile.vue'
+import Records from './components/Records.vue'
+import AdminNews from './components/AdminNews.vue'
+import Documents from './components/Documents.vue'
+import EventCard from './components/EventCard.vue'
+import Navigation from './components/Navigation.vue'
+import ActionCard from './components/ActionCard.vue'
+import Agreements from './components/Agreements.vue'
+import AdminEvent from './components/AdminEvent.vue'
+import AdminEvents from './components/AdminEvents.vue'
+import Competition from './components/Competition.vue'
+import AdminResults from './components/AdminResults.vue'
+import Competitions from './components/Competitions.vue'
+import AdminAccounts from './components/AdminAccounts.vue'
+import AdminDocuments from './components/AdminDocuments.vue'
+import CompetitionCard from './components/CompetitionCard.vue'
+import AdminCompetition from './components/AdminCompetition.vue'
+import AdminCompetitions from './components/AdminCompetitions.vue'
+
+window.axios = axios
+
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 window.firebase.initializeApp({
@@ -39,18 +65,29 @@ Vue.mixin({
   },
 })
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-const files = require.context('./components', false, /\.vue$/i)
-files.keys().forEach((key) => {
-  Vue.component('Gkk' + key.split('/').pop().split('.')[0], files(key).default)
-})
+Vue.component('GkkLink', Link)
+Vue.component('GkkNews', News)
+Vue.component('GkkEvent', Event)
+Vue.component('GkkNavbar', Navbar)
+Vue.component('GkkEvents', Events)
+Vue.component('GkkProfile', Profile)
+Vue.component('GkkRecords', Records)
+Vue.component('GkkAdminNews', AdminNews)
+Vue.component('GkkDocuments', Documents)
+Vue.component('GkkEventCard', EventCard)
+Vue.component('GkkNavigation', Navigation)
+Vue.component('GkkActionCard', ActionCard)
+Vue.component('GkkAdminEvent', AdminEvent)
+Vue.component('GkkAgreements', Agreements)
+Vue.component('GkkAdminEvents', AdminEvents)
+Vue.component('GkkCompetition', Competition)
+Vue.component('GkkAdminResults', AdminResults)
+Vue.component('GkkCompetitions', Competitions)
+Vue.component('GkkAdminAccounts', AdminAccounts)
+Vue.component('GkkAdminDocuments', AdminDocuments)
+Vue.component('GkkCompetitionCard', CompetitionCard)
+Vue.component('GkkAdminCompetition', AdminCompetition)
+Vue.component('GkkAdminCompetitions', AdminCompetitions)
 
 // eslint-disable-next-line no-new
 new Vue({

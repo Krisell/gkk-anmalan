@@ -13,7 +13,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="{{ mix('css/main.css') }}" rel="stylesheet">
+    @vite(['resources/css/main.css', 'resources/js/app.js'])
 
     @yield('head')
 </head>
@@ -33,6 +33,5 @@
 <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-analytics.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-storage.js"></script>
-<script src="{{ mix('js/app.js') }}" defer></script>
 </body>
 </html>

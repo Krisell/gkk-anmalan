@@ -17,13 +17,13 @@
           <div class="flex-shrink-0">
             <span class="rounded-md shadow-sm">
               <div v-if="!user">
-                <Button @click="location('/login')">Logga in</Button>
+                <Button class="mr-1" @click="location('/login')">Logga in</Button>
                 <Button @click="location('/register')">Skapa konto</Button>
               </div>
 
               <div v-if="user">
                 <a @click="logout">
-                  <Button type="secondary">Logga ut</Button>
+                  <Button class="mr-1" type="secondary">Logga ut</Button>
                 </a>
 
                 <Button @click="location('/profile')">Profil ({{ user.first_name }} {{ user.last_name }})</Button>

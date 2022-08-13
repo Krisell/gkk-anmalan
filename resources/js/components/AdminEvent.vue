@@ -50,11 +50,7 @@
             <tbody class="bg-white">
               <tr v-for="registration in filteredRegistrations" :key="registration.id">
                 <td class="text-center">
-                  <toggle-button
-                    @change="save(registration)"
-                    v-model="registration.presence_confirmed"
-                    color="#314270"
-                  />
+                  <ToggleButton @input="save(registration)" v-model="registration.presence_confirmed" color="#314270" />
                 </td>
                 <td class="text-center">
                   <i @click="editRegistration(registration)" class="fa fa-pencil cursor-pointer"></i>
@@ -165,7 +161,10 @@
 </template>
 
 <script>
+import ToggleButton from './ui/ToggleButton.vue'
+
 export default {
+  components: { ToggleButton },
   props: ['event'],
   data() {
     return {
