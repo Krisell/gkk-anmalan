@@ -22,7 +22,7 @@
 
     <p v-if="status === 'test-successful'">Testmail skickat!</p>
 
-    <Button v-if="item" class="mt-2" @click="showPreview"> Se färdigt mail i webbläsaren </Button>
+    <Button v-if="item" class="mt-2 mr-2" @click="showPreview"> Se färdigt mail i webbläsaren </Button>
     <Button v-if="item" class="mt-2" @click="testSend"> Gör provutskick till endast dig själv </Button>
     <Button v-if="item" type="secondary" class="mt-2">
       Denna knapp ska göra utskick till samtliga medlemmar, men det är inte implementerat ännu
