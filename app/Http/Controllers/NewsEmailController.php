@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Mail\NewsMail;
 use App\NewsItem;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class NewsEmailController extends Controller

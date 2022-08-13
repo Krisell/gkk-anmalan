@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\EventRegistration;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class EventRegistrationFactory extends Factory
 {
@@ -23,7 +22,7 @@ class EventRegistrationFactory extends Factory
     public function definition()
     {
         return [
-          'status' => 1,
+            'status' => 1,
         ];
     }
 }

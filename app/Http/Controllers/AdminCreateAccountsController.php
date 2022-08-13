@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AccountCreatedByAdminWelcome;
 use App\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\AccountCreatedByAdminWelcome;
+use Illuminate\Support\Str;
 
 class AdminCreateAccountsController extends Controller
 {
     public function store()
     {
         $newAccounts = collect(request('accounts'))->filter(function ($account) {
-            return !User::whereEmail($account['email'])->exists();
+            return ! User::whereEmail($account['email'])->exists();
         })->values();
 
         foreach ($newAccounts as $account) {

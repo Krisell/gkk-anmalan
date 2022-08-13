@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -17,7 +16,7 @@ class UserSeeder extends Seeder
     {
         User::create([
             'first_name' => 'Vanlig',
-            'last_name' =>  'Dödlig',
+            'last_name' => 'Dödlig',
             'email' => 'user@example.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => null,
@@ -26,7 +25,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'first_name' => 'GKK',
-            'last_name' =>  'Admin',
+            'last_name' => 'Admin',
             'email' => 'admin@example.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => 'admin',
@@ -35,7 +34,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'first_name' => 'GKK',
-            'last_name' =>  'Superadmin',
+            'last_name' => 'Superadmin',
             'email' => 'superadmin@example.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => 'superadmin',
@@ -44,7 +43,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'first_name' => 'Martin',
-            'last_name' =>  'Krisell',
+            'last_name' => 'Krisell',
             'email' => 'martin.krisell@gmail.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => 'admin',
@@ -53,7 +52,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'first_name' => 'Martin',
-            'last_name' =>  'Super',
+            'last_name' => 'Super',
             'email' => 'martinkrisell@gmail.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => 'superadmin',
@@ -62,7 +61,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'first_name' => 'Martin',
-            'last_name' =>  'Normal',
+            'last_name' => 'Normal',
             'email' => 'martinnormal@gmail.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => null,

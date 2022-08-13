@@ -13,8 +13,8 @@ class AuthController extends Controller
     {
         $keys = Http::get('https://www.googleapis.com/oauth2/v3/certs')->json();
         $payload = (array) JWT::decode(
-            request('idToken'), 
-            JWK::parseKeySet($keys), 
+            request('idToken'),
+            JWK::parseKeySet($keys),
             ['RS256'],
         );
 

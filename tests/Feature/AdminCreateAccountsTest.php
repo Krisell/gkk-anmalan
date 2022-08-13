@@ -3,9 +3,8 @@
 namespace Tests\Feature;
 
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class AdminCreateAccountsTest extends TestCase
 {
@@ -29,5 +28,4 @@ class AdminCreateAccountsTest extends TestCase
 
         // $this->assertCount(3, User::all());
     }
-    
 }

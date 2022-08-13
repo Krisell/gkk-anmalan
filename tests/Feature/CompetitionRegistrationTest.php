@@ -4,11 +4,8 @@ namespace Tests\Feature;
 
 use App\Competition;
 use App\CompetitionRegistration;
-use App\Event;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CompetitionRegistrationTest extends TestCase

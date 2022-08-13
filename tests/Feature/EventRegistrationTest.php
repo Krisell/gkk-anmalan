@@ -5,9 +5,7 @@ namespace Tests\Feature;
 use App\Event;
 use App\EventRegistration;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class EventRegistrationTest extends TestCase

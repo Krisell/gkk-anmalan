@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\NewsItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class NewsItemFactory extends Factory
 {

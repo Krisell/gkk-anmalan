@@ -2,11 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\User;
 use App\Result;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class AdminResultsTest extends TestCase
 {

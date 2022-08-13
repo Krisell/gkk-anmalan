@@ -6,7 +6,6 @@ use App\Competition;
 use App\CompetitionRegistration;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AdminCompetitionRegistrationTest extends TestCase

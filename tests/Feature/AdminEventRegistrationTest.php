@@ -6,7 +6,6 @@ use App\Event;
 use App\EventRegistration;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AdminEventRegistrationTest extends TestCase
