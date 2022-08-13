@@ -7,37 +7,14 @@
             <tr>
               <th
                 @click="expanded = !expanded"
-                class="
-                  cursor-pointer
-                  px-6
-                  py-3
-                  border-b border-gray-200
-                  bg-gray-50
-                  text-left text-xs
-                  leading-4
-                  font-medium
-                  text-gray-500
-                  uppercase
-                  tracking-wider
-                "
+                class="cursor-pointer px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
               >
                 <i v-if="!expanded" class="fa fa-chevron-right -ml-4 mr-2"></i>
                 <i v-if="expanded" class="fa fa-chevron-down -ml-4 mr-2"></i>
                 {{ folder.name }} ({{ documents.length }} dokument)
               </th>
               <th
-                class="
-                  px-6
-                  py-3
-                  border-b border-gray-200
-                  bg-gray-50
-                  text-left text-xs
-                  leading-4
-                  font-medium
-                  text-gray-500
-                  uppercase
-                  tracking-wider
-                "
+                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
               ></th>
             </tr>
           </thead>
@@ -54,7 +31,7 @@
               </td>
 
               <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 flex justify-end">
-                <ui-button prevent @click="open(document.url)">Visa</ui-button>
+                <Button @click="open(document.url)">Visa</Button>
               </td>
             </tr>
           </tbody>
@@ -65,7 +42,10 @@
 </template>
 
 <script>
+import Button from './ui/Button.vue'
+
 export default {
+  components: { Button },
   props: ['folder', 'documents', 'top-folder'],
   data() {
     return {

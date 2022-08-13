@@ -3,48 +3,12 @@
     <h1 class="text-center text-3xl font-thin mb-6">Ny nyhet</h1>
     <input
       placeholder="Nyhetens titel"
-      class="
-        appearance-none
-        rounded-none
-        relative
-        block
-        w-full
-        px-3
-        py-2
-        mb-4
-        border border-gray-300
-        placeholder-gray-500
-        text-gray-900
-        focus:outline-none
-        focus:shadow-outline-blue
-        focus:border-blue-300
-        focus:z-10
-        sm:text-sm
-        sm:leading-5
-      "
+      class="appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
       v-model="title"
     />
     <input
       placeholder="Datum som visas (lämna tomt om du vill använda dagens datum)"
-      class="
-        appearance-none
-        rounded-none
-        relative
-        block
-        w-full
-        px-3
-        py-2
-        mb-4
-        border border-gray-300
-        placeholder-gray-500
-        text-gray-900
-        focus:outline-none
-        focus:shadow-outline-blue
-        focus:border-blue-300
-        focus:z-10
-        sm:text-sm
-        sm:leading-5
-      "
+      class="appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
       v-model="published_at_date"
     />
 
@@ -59,17 +23,19 @@
       input="news-content"
     ></trix-editor>
 
-    <ui-button v-if="!news" class="mt-2" @click="create"> Skapa nyhet </ui-button>
-    <ui-button v-if="news" class="mt-2" @click="update"> Uppdatera nyhet </ui-button>
-    <ui-button v-if="news" type="secondary" class="mt-2" @click="deleteNews"> Radera nyhet </ui-button>
+    <Button v-if="!news" class="mt-2" @click="create"> Skapa nyhet </Button>
+    <Button v-if="news" class="mt-2" @click="update"> Uppdatera nyhet </Button>
+    <Button v-if="news" type="secondary" class="mt-2" @click="deleteNews"> Radera nyhet </Button>
   </div>
 </template>
 
 <script>
 import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
+import Button from './ui/Button.vue'
 import axios from 'axios'
 
 export default {
+  components: { Button },
   props: ['news', 'jwt'],
   data() {
     return {

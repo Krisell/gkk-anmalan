@@ -150,9 +150,9 @@
     </div>
 
     <div class="w-full text-center mt-4">
-      <ui-button @click="liftingcast" type="secondary" class="mx-auto">
+      <Button @click="liftingcast" type="secondary" class="mx-auto">
         <div class="w-full text-center">Exportera lyftare till Liftingcast-fil</div>
-      </ui-button>
+      </Button>
     </div>
 
     <GkkLink to="/admin/competitions" text="Tillbaka till alla tävlingar" />
@@ -190,17 +190,19 @@
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('edit-registration')">Stäng</el-button>
-        <el-button style="margin-left: 10px" danger primary @click="confirmEditRegistration">Uppdatera</el-button>
+        <Button @click="$modal.hide('edit-registration')" type="secondary" class="mx-4">Stäng</Button>
+        <Button @click="confirmEditRegistration" type="danger">Uppdatera</Button>
       </div>
     </modal>
   </div>
 </template>
 
 <script>
+import Button from './ui/Button.vue'
 import LiftingCast from '../modules/LiftingCast.js'
 
 export default {
+  components: { Button },
   props: ['competition'],
   data() {
     return {

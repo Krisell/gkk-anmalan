@@ -46,36 +46,29 @@
           ></textarea>
         </div>
         <div class="mt-2 flex flex-col justify-center items-center">
-          <el-button v-if="registration && canHelp" style="margin-bottom: 10px" @click="register(true)"
-            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan delta</el-button
+          <Button v-if="registration && canHelp" style="margin-bottom: 10px" @click="register(true)"
+            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan delta</Button
           >
-          <el-button secondary v-if="!registration || !canHelp" style="margin-bottom: 10px" @click="register(true)"
-            >Jag kan delta</el-button
-          >
-
-          <el-button danger v-if="registration && !canHelp" style="margin-bottom: 30px" @click="register(false)"
-            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan inte hjälpa till</el-button
-          >
-          <el-button
-            secondary
-            danger
-            v-if="!registration || canHelp"
-            style="margin-bottom: 30px"
-            @click="register(false)"
-            >Jag kan inte hjälpa till</el-button
+          <Button type="secondary" v-if="!registration || !canHelp" style="margin-bottom: 10px" @click="register(true)"
+            >Jag kan delta</Button
           >
 
-          <el-button v-if="justSaved" secondary disabled style="margin-bottom: 10px">Sparat!</el-button>
-          <el-button v-else secondary style="margin-bottom: 10px" @click="save">Spara</el-button>
+          <Button type="danger" v-if="registration && !canHelp" style="margin-bottom: 30px" @click="register(false)"
+            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan inte hjälpa till</Button
+          >
+          <Button type="secondary" v-if="!registration || canHelp" style="margin-bottom: 30px" @click="register(false)"
+            >Jag kan inte hjälpa till</Button
+          >
+
+          <Button v-if="justSaved" type="secondary" disabled style="margin-bottom: 10px">Sparat!</Button>
+          <Button v-else type="secondary" style="margin-bottom: 10px" @click="save">Spara</Button>
         </div>
         <div v-if="registrationStatus === 'error'">
-          <el-message danger style="margin-top: 20px">
-            Kunde inte skicka, kontrollera inmatning och anlutning.
-          </el-message>
+          <Message danger style="margin-top: 20px"> Kunde inte skicka, kontrollera inmatning och anlutning. </Message>
         </div>
         <div v-if="registrationStatus === 'completed'">
-          <el-message v-if="!canHelp" info style="margin-top: 20px">Synd, men tack för informationen!</el-message>
-          <el-message v-else success style="margin-top: 20px">Grymt, vi ses där!</el-message>
+          <Message v-if="!canHelp" info style="margin-top: 20px">Synd, men tack för informationen!</Message>
+          <Message v-else success style="margin-top: 20px">Grymt, vi ses där!</Message>
         </div>
       </form>
     </div>
@@ -88,18 +81,7 @@
         <thead>
           <tr>
             <th
-              class="
-                px-6
-                py-3
-                border-b border-gray-200
-                bg-gray-50
-                text-center text-xs
-                leading-4
-                font-medium
-                text-gray-500
-                uppercase
-                tracking-wider
-              "
+              class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
             >
               Namn
             </th>
@@ -120,10 +102,12 @@
 </template>
 
 <script>
-import _ from 'vue-el-element'
 import Date from '../modules/Date.js'
+import Message from './Message.vue'
+import Button from './ui/Button.vue'
 
 export default {
+  components: { Message, Button },
   props: ['event', 'user', '_registration'],
   data() {
     return {

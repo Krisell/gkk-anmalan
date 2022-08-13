@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="absolute bottom-2 right-2" @click="location(`/admin/news/${item.id}`)" v-if="isAdmin">
-      <el-button danger style="padding: 5px; font-size: 10px">Redigera nyhet</el-button>
+      <Button type="danger" style="padding: 5px; font-size: 10px">Redigera nyhet</Button>
     </div>
     <div
       v-tooltip.left="'Gör epostutskick'"
@@ -20,7 +20,10 @@
 </template>
 
 <script>
+import Button from './ui/Button.vue'
+
 export default {
+  components: { Button },
   props: ['item', 'user', 'default-expanded'],
   data() {
     return {

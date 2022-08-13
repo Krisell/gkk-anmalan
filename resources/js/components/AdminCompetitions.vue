@@ -126,7 +126,7 @@
     </div>
 
     <div class="w-full flex justify-center items-center">
-      <ui-button class="mt-2 mx-auto" v-if="!editing" @click="showNewCompetition = !showNewCompetition">
+      <Button class="mt-2 mx-auto" v-if="!editing" @click="showNewCompetition = !showNewCompetition">
         <div class="flex items-center justify-center">
           <svg
             class="w-6 -ml-2 mr-2"
@@ -141,7 +141,7 @@
           </svg>
           <div>Ny tävling</div>
         </div>
-      </ui-button>
+      </Button>
     </div>
 
     <form class="mt-4 mb-6 max-w-xl mx-auto" v-show="showNewCompetition">
@@ -182,22 +182,22 @@
       </div>
 
       <div class="flex mt-4 mb-2 items-center">
-        <el-toggle-button v-model="events.ksl" />
+        <ToggleButton v-model="events.ksl" />
         <div class="ml-2 text-lg font-thin">KSL</div>
       </div>
 
       <div class="flex mb-2 items-center">
-        <el-toggle-button v-model="events.kbp" />
+        <ToggleButton v-model="events.kbp" />
         <div class="ml-2 text-lg font-thin">KBP</div>
       </div>
 
       <div class="flex mb-2 items-center">
-        <el-toggle-button v-model="events.sl" />
+        <ToggleButton v-model="events.sl" />
         <div class="ml-2 text-lg font-thin">SL</div>
       </div>
 
       <div class="flex mb-2 items-center">
-        <el-toggle-button v-model="events.bp" />
+        <ToggleButton v-model="events.bp" />
         <div class="ml-2 text-lg font-thin">BP</div>
       </div>
 
@@ -227,12 +227,12 @@
       </div>
 
       <div class="flex mt-2 mb-2 items-center">
-        <el-toggle-button v-model="competition.publish_count" />
+        <ToggleButton v-model="competition.publish_count" />
         <div class="ml-2 text-lg font-thin">Visa antal anmälda för medlemmar</div>
       </div>
 
       <div class="flex mb-2 items-center">
-        <el-toggle-button v-model="competition.publish_list" />
+        <ToggleButton v-model="competition.publish_list" />
         <div class="ml-2 text-lg font-thin">Visa anmälningslista för medlemmar (namn, vikt, gren)</div>
       </div>
 
@@ -249,9 +249,9 @@
       </div>
 
       <div class="flex">
-        <ui-button prevent v-if="!editing" @click="createCompetition">Skapa tävling</ui-button>
-        <ui-button prevent type="secondary" class="mr-2" v-if="editing" @click="cancelUpdate">Ångra</ui-button>
-        <ui-button prevent v-if="editing" @click="updateCompetition">Uppdatera tävling</ui-button>
+        <Button v-if="!editing" @click="createCompetition">Skapa tävling</Button>
+        <Button type="secondary" class="mr-2" v-if="editing" @click="cancelUpdate">Ångra</Button>
+        <Button v-if="editing" @click="updateCompetition">Uppdatera tävling</Button>
       </div>
 
       <div v-if="newCompetitionError" class="mt-2">
@@ -294,7 +294,11 @@
 </template>
 
 <script>
+import ToggleButton from './ui/ToggleButton.vue'
+import Button from './ui/Button.vue'
+
 export default {
+  components: { ToggleButton, Button },
   props: ['competitions', 'showingOld'],
   data() {
     return {

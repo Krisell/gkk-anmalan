@@ -35,23 +35,7 @@
         <h4 class="ml-2 text-md font-thin">Lyftare</h4>
         <select
           v-model="result.user_id"
-          class="
-            mt-1
-            block
-            form-select
-            w-64
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option v-for="lifter in sortedUsers" :key="lifter.key" :value="lifter.id">
             {{ lifter.first_name }} {{ lifter.last_name }}
@@ -65,23 +49,7 @@
         <select
           v-model="result.weight_class"
           v-if="result.gender === 'M'"
-          class="
-            mt-1
-            block
-            form-select
-            w-64
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option>52</option>
           <option>59</option>
@@ -97,23 +65,7 @@
         <select
           v-model="result.weight_class"
           v-if="result.gender === 'F'"
-          class="
-            mt-1
-            block
-            form-select
-            w-64
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option>43</option>
           <option>47</option>
@@ -131,23 +83,7 @@
         <h4 class="ml-2 text-md font-thin">Gren</h4>
         <select
           v-model="result.event"
-          class="
-            mt-1
-            block
-            form-select
-            w-64
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option>Knäböj</option>
           <option>Bänkpress</option>
@@ -160,20 +96,7 @@
         <h4 class="ml-2 text-md font-thin">Datum</h4>
         <input
           v-model="result.competition_date"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-64
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           type="date"
           name="date"
         />
@@ -183,26 +106,13 @@
         <h4 class="ml-2 text-md font-thin">Resultat (kg)</h4>
         <input
           v-model="result.result"
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-64
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           type="number"
           name="date"
         />
       </div>
       <div class="flex mt-4">
-        <ui-button prevent @click="createResult">Skapa resultat</ui-button>
+        <Button @click="createResult">Skapa resultat</Button>
       </div>
 
       <div v-if="createResultError" class="mt-2">
@@ -238,98 +148,32 @@
               <thead>
                 <tr>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Klass
                   </th>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Gren (KSL)
                   </th>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Namn
                   </th>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Vikt (kg)
                   </th>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Datum
                   </th>
                   <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   ></th>
                 </tr>
               </thead>
@@ -403,10 +247,12 @@
 </template>
 
 <script>
+import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
 import axios from 'axios'
 
 export default {
+  components: { Button },
   props: ['results', 'users'],
   data() {
     return {

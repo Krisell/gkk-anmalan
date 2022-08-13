@@ -17,23 +17,16 @@
           <div class="flex-shrink-0">
             <span class="rounded-md shadow-sm">
               <div v-if="!user">
-                <a href="/login">
-                  <ui-button>Logga in</ui-button>
-                </a>
-
-                <a href="/register">
-                  <ui-button>Skapa konto</ui-button>
-                </a>
+                <Button @click="location('/login')">Logga in</Button>
+                <Button @click="location('/register')">Skapa konto</Button>
               </div>
 
               <div v-if="user">
                 <a @click="logout">
-                  <ui-button type="secondary">Logga ut</ui-button>
+                  <Button type="secondary">Logga ut</Button>
                 </a>
 
-                <a href="/profile">
-                  <ui-button>Profil ({{ user.first_name }} {{ user.last_name }})</ui-button>
-                </a>
+                <Button @click="location('/profile')">Profil ({{ user.first_name }} {{ user.last_name }})</Button>
               </div>
             </span>
           </div>
@@ -44,9 +37,11 @@
 </template>
 
 <script>
+import Button from './ui/Button.vue'
 import axios from 'axios'
 
 export default {
+  components: { Button },
   props: ['user'],
   methods: {
     logout() {

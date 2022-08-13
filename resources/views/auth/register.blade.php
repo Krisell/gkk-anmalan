@@ -31,11 +31,11 @@
                 </div>
             </div>
 
-            <ui-button class="mt-4 w-full">
+            <x-button class="mt-4 w-full">
                 <div class="text-center w-full">
                     Skapa konto
                 </div>
-            </ui-button>
+            </x-button>
             <div class="text-center mt-4 text-xs text-gray-400">
                 Innan du kan börja använda ditt konto kommer det behöva godkännas av administratören. När du registrerar dig skickas automatiskt en epostnotis till administratören.
             </div>

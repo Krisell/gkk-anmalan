@@ -123,7 +123,7 @@
     </div>
 
     <div class="w-full flex justify-center items-center">
-      <ui-button class="mt-2 mx-auto" v-if="!editing" @click="showNewEvent = !showNewEvent">
+      <Button class="mt-2 mx-auto" v-if="!editing" @click="showNewEvent = !showNewEvent">
         <div class="flex items-center justify-center">
           <svg
             class="w-6 -ml-2 mr-2"
@@ -138,7 +138,7 @@
           </svg>
           <div>Nytt event för funktionärsanmälningar</div>
         </div>
-      </ui-button>
+      </Button>
     </div>
 
     <form class="mt-4 mb-6 max-w-xl mx-auto" v-show="showNewEvent">
@@ -204,12 +204,12 @@
       </div>
 
       <div class="flex mt-2 mb-2 items-center">
-        <el-toggle-button v-model="event.publish_count" />
+        <ToggleButton v-model="event.publish_count" />
         <div class="ml-2 text-lg font-thin">Visa antal anmälda för medlemmar</div>
       </div>
 
       <div class="flex mb-2 items-center">
-        <el-toggle-button v-model="event.publish_list" />
+        <ToggleButton v-model="event.publish_list" />
         <div class="ml-2 text-lg font-thin">Visa anmälningslista för medlemmar (endast namn)</div>
       </div>
 
@@ -226,9 +226,9 @@
       </div>
 
       <div class="flex">
-        <ui-button prevent v-if="!editing" @click="createEvent">Skapa event</ui-button>
-        <ui-button prevent type="secondary" class="mr-2" v-if="editing" @click="cancelUpdate">Ångra</ui-button>
-        <ui-button prevent v-if="editing" @click="updateEvent">Uppdatera event</ui-button>
+        <Button v-if="!editing" @click="createEvent">Skapa event</Button>
+        <Button type="secondary" class="mr-2" v-if="editing" @click="cancelUpdate">Ångra</Button>
+        <Button v-if="editing" @click="updateEvent">Uppdatera event</Button>
       </div>
 
       <div v-if="newEventError" class="mt-2">
@@ -269,7 +269,11 @@
 </template>
 
 <script>
+import Button from './ui/Button.vue'
+import ToggleButton from './ui/ToggleButton.vue'
+
 export default {
+  components: { Button, ToggleButton },
   props: ['events', 'showingOld'],
   data() {
     return {

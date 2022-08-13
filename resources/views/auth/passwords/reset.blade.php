@@ -26,9 +26,9 @@
                     </div>
                 </div>
 
-                <ui-button class="mt-6">
+                <x-button class="mt-6">
                     Återställ lösenord
-                </ui-button>
+                </x-button>
             </form>
         </div>
     </div>

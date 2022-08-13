@@ -1,37 +1,39 @@
 <template>
   <div class="action-button-card max-w-xl mx-auto" @click="$emit('click')">
     <div class="description">{{ competition.name }} ({{ dateString }})</div>
-    <div v-if="competition.last_registration_at" style="text-align: center;">
+    <div v-if="competition.last_registration_at" style="text-align: center">
       Sista anmälningsdag: {{ competition.last_registration_at }}
     </div>
-    <div class="description" style="font-size: 12px; margin-top: 0; white-space: pre-wrap;">
+    <div class="description" style="font-size: 12px; margin-top: 0; white-space: pre-wrap">
       {{ competition.description }}
     </div>
-    <div style="margin-top: 30px;">
-      <el-message warning v-if="registration && registration.status == 0">
+    <div style="margin-top: 30px">
+      <Message warning v-if="registration && registration.status == 0">
         <div>Du har tackat nej till denna tävling.</div>
         <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
-      </el-message>
-      <el-message success v-else-if="registration && registration.status == 1">
+      </Message>
+      <Message success v-else-if="registration && registration.status == 1">
         <div>Du har anmält intresse att tävla!</div>
         <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
-      </el-message>
-      <el-message info v-else>
+      </Message>
+      <Message info v-else>
         <div>Du har inte meddelat om du vill tävla ännu.</div>
         <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
-      </el-message>
+      </Message>
 
-      <el-message style="margin-top: 10px;" v-if="competition.publish_count_value > 0">
+      <Message style="margin-top: 10px" v-if="competition.publish_count_value > 0">
         Hittills har {{ competition.publish_count_value }} GKK-medlemmar tackat ja till denna tävling.
-      </el-message>
+      </Message>
     </div>
   </div>
 </template>
 
 <script>
 import Date from '../modules/Date.js'
+import Message from './Message.vue'
 
 export default {
+  components: { Message },
   props: ['competition', 'registration'],
   computed: {
     dateString() {
