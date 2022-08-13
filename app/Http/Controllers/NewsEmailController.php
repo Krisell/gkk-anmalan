@@ -17,7 +17,7 @@ class NewsEmailController extends Controller
 
     public function preview()
     {
-        $item = NewsItem::make([
+        $item = new NewsItem([
             'body' => request('body'),
             'title' => request('title'),
         ]);
@@ -27,7 +27,7 @@ class NewsEmailController extends Controller
 
     public function test()
     {
-        $item = NewsItem::make([
+        $item = new NewsItem([
             'body' => request('body'),
             'title' => request('title'),
         ]);

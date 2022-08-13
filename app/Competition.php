@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Competition extends Model
@@ -21,7 +22,7 @@ class Competition extends Model
         'date' => 'datetime:Y-m-d',
     ];
 
-    public function registrations()
+    public function registrations(): HasMany
     {
         return $this->hasMany(CompetitionRegistration::class);
     }

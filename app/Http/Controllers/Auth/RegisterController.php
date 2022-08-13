@@ -44,11 +44,6 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    /**
-     * Show the application registration form.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function showRegistrationForm()
     {
         if (request('data')) {
@@ -92,7 +87,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        Mail::to($user)->send(new WelcomeMail($user));
+        Mail::to($user)->send(new WelcomeMail());
         Mail::to('martin.krisell@gmail.com')->send(new GrantAccountMail);
 
         return $user;

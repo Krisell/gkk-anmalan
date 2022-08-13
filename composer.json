@@ -24,6 +24,7 @@
     "laravel/pint": "^1.1",
     "mockery/mockery": "^1.0",
     "nunomaduro/collision": "^6.1",
+    "nunomaduro/larastan": "^2.0",
     "phpunit/phpunit": "^9.0",
     "spatie/laravel-ignition": "^1.0.0"
   },
@@ -60,6 +61,9 @@
     ],
     "test": [
       "php artisan test --parallel --stop-on-failure"
+    ],
+    "static": [
+      "phpstan analyse -c phpstan.neon"
     ],
     "post-autoload-dump": [
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
