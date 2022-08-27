@@ -6,7 +6,6 @@ use App\Competition;
 use App\Event;
 use App\NewsItem;
 use App\User;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {

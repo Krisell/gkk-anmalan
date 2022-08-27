@@ -112,7 +112,7 @@
         />
       </div>
       <div class="flex mt-4">
-        <ui-button prevent @click="createResult">Skapa resultat</ui-button>
+        <Button @click="createResult">Skapa resultat</Button>
       </div>
 
       <div v-if="createResultError" class="mt-2">
@@ -247,10 +247,12 @@
 </template>
 
 <script>
+import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
 import axios from 'axios'
 
 export default {
+  components: { Button },
   props: ['results', 'users'],
   data() {
     return {

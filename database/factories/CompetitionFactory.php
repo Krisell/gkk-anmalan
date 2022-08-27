@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Competition;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class CompetitionFactory extends Factory
 {

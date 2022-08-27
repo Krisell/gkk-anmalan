@@ -110,7 +110,7 @@
                 </td>
 
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 flex justify-end">
-                  <ui-button prevent @click="show(document)">Visa</ui-button>
+                  <Button @click="show(document)">Visa</Button>
                 </td>
 
                 <td class="px-6 whitespace-no-wrap border-b border-gray-200" style="width: 80px">
@@ -153,13 +153,12 @@
           </table>
         </div>
         <div class="flex justify-center mt-6">
-          <ui-button
-            prevent
+          <Button
             @click="
               chosenFolder = folder
               $modal.show('add-document')
             "
-            ><i class="fa fa-plus mr-2"></i>Nytt dokument i mappen {{ folder.name }}</ui-button
+            ><i class="fa fa-plus mr-2"></i>Nytt dokument i mappen {{ folder.name }}</Button
           >
         </div>
       </div>
@@ -171,7 +170,7 @@
           class="my-2 m-auto appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           name="name"
         />
-        <ui-button prevent @click="newFolder"><i class="fa fa-plus mr-2"></i>Skapa ny mapp</ui-button>
+        <Button @click="newFolder"><i class="fa fa-plus mr-2"></i>Skapa ny mapp</Button>
       </div>
     </div>
 
@@ -185,8 +184,8 @@
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('delete-document')">Nej</el-button>
-        <el-button style="margin-left: 10px" danger primary @click="deleteDocument">Radera</el-button>
+        <Button type="secondary" @click="$modal.hide('delete-document')">Nej</Button>
+        <Button style="margin-left: 10px" type="danger" @click="deleteDocument">Radera</Button>
       </div>
     </modal>
 
@@ -203,8 +202,8 @@
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('edit-document')">Stäng</el-button>
-        <el-button style="margin-left: 10px" danger primary @click="editDocument">Uppdatera namn</el-button>
+        <Button type="secondary" @click="$modal.hide('edit-document')">Stäng</Button>
+        <Button style="margin-left: 10px" type="danger" @click="editDocument">Uppdatera namn</Button>
       </div>
     </modal>
 
@@ -248,8 +247,8 @@
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('add-document')">Stäng</el-button>
-        <el-button style="margin-left: 10px" danger primary @click="addDocument">Lägg till dokument</el-button>
+        <Button type="secondary" @click="$modal.hide('add-document')">Stäng</Button>
+        <Button style="margin-left: 10px" type="danger" @click="addDocument">Lägg till dokument</Button>
       </div>
     </modal>
 
@@ -262,8 +261,8 @@
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('edit-folder')">Stäng</el-button>
-        <el-button style="margin-left: 10px" danger primary @click="editFolderConfirm">Uppdatera namn</el-button>
+        <Button type="secondary" @click="$modal.hide('edit-folder')">Stäng</Button>
+        <Button style="margin-left: 10px" type="danger" @click="editFolderConfirm">Uppdatera namn</Button>
       </div>
     </modal>
   </div>
@@ -271,8 +270,10 @@
 
 <script>
 import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
+import Button from './ui/Button.vue'
 
 export default {
+  components: { Button },
   props: ['jwt', 'folders'],
   data() {
     return {

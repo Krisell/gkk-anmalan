@@ -50,11 +50,7 @@
             <tbody class="bg-white">
               <tr v-for="registration in filteredRegistrations" :key="registration.id">
                 <td class="text-center">
-                  <toggle-button
-                    @change="save(registration)"
-                    v-model="registration.presence_confirmed"
-                    color="#314270"
-                  />
+                  <ToggleButton @input="save(registration)" v-model="registration.presence_confirmed" color="#314270" />
                 </td>
                 <td class="text-center">
                   <i @click="editRegistration(registration)" class="fa fa-pencil cursor-pointer"></i>
@@ -66,7 +62,7 @@
                       <div class="text-sm leading-5 font-medium text-gray-900">
                         {{ registration.user.first_name }} {{ registration.user.last_name }}
                       </div>
-                      <div class="text-sm leading-5 text-gray-500">{{ registration.created_at | dateString }}</div>
+                      <div class="text-sm leading-5 text-gray-500">{{ dateString(registration.created_at) }}</div>
                     </div>
                   </div>
                 </td>
@@ -132,7 +128,7 @@
             <div class="text-sm leading-5 font-medium text-gray-900">
               {{ registrationToEdit.user.first_name }} {{ registrationToEdit.user.last_name }}
             </div>
-            <div class="text-sm leading-5 text-gray-500">{{ registrationToEdit.created_at | dateString }}</div>
+            <div class="text-sm leading-5 text-gray-500">{{ dateString(registrationToEdit.created_at) }}</div>
           </div>
         </div>
         <div>
@@ -165,7 +161,10 @@
 </template>
 
 <script>
+import ToggleButton from './ui/ToggleButton.vue'
+
 export default {
+  components: { ToggleButton },
   props: ['event'],
   data() {
     return {
@@ -188,12 +187,10 @@ export default {
       return this.event.registrations.filter((registration) => registration.status == 0).length
     },
   },
-  filters: {
+  methods: {
     dateString(date) {
       return date.substr(0, 10)
     },
-  },
-  methods: {
     save(registration) {
       return axios({
         url: `/events/${this.event.id}/registrations/${registration.id}`,
@@ -225,7 +222,7 @@ export default {
               ...this.filteredRegistrations.map((registration) => {
                 return [
                   { value: `${registration.user.first_name} ${registration.user.last_name}`, type: 'string' },
-                  { value: this.$options.filters.dateString(registration.created_at), type: 'string' },
+                  { value: this.dateString(registration.created_at), type: 'string' },
                   { value: registration.status == 1 ? 'Ja' : 'Nej', type: 'string' },
                   { value: registration.comment, type: 'string' },
                 ]

@@ -23,17 +23,19 @@
       input="news-content"
     ></trix-editor>
 
-    <ui-button v-if="!news" class="mt-2" @click="create"> Skapa nyhet </ui-button>
-    <ui-button v-if="news" class="mt-2" @click="update"> Uppdatera nyhet </ui-button>
-    <ui-button v-if="news" type="secondary" class="mt-2" @click="deleteNews"> Radera nyhet </ui-button>
+    <Button v-if="!news" class="mt-2" @click="create"> Skapa nyhet </Button>
+    <Button v-if="news" class="mt-2" @click="update"> Uppdatera nyhet </Button>
+    <Button v-if="news" type="secondary" class="mt-2" @click="deleteNews"> Radera nyhet </Button>
   </div>
 </template>
 
 <script>
 import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
+import Button from './ui/Button.vue'
 import axios from 'axios'
 
 export default {
+  components: { Button },
   props: ['news', 'jwt'],
   data() {
     return {

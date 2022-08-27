@@ -19,11 +19,11 @@
 
         <div class="mt-6">
           <span class="block w-full rounded-md shadow-sm">
-            <ui-button submit class="w-full">
+            <x-button :prevent="false" class="w-full">
               <div class="w-full text-center">
                 Logga in
               </div>
-            </ui-button>
+            </x-button>
           </span>
         </div>
 

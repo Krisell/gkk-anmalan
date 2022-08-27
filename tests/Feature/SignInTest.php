@@ -3,14 +3,13 @@
 namespace Tests\Feature;
 
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class SignInTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /** @test */
     public function sign_in_can_be_completed_with_the_correct_details()
     {
@@ -38,7 +37,7 @@ class SignInTest extends TestCase
             'email' => $user->email,
             'password' => 'wrong-password',
         ]);
-        
+
         $response->assertSee($user->email);
         $response->assertSee('Kunde inte logga in med dessa användaruppgifter.');
 

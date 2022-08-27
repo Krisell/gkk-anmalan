@@ -7,6 +7,7 @@
       </h3>
     </div>
     <div v-else class="flex flex-col m-6 sm:flex-row items-center justify-center">
+      <div class="absolute top-[70px] right-3 text-gray-500 text-xs">Inloggad: {{ user.email }}</div>
       <gkk-action-card
         v-if="user"
         class="m-4 max-w-xs w-64"

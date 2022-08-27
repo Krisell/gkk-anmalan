@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\User;
 use App\Result;
+use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ResultFactory extends Factory

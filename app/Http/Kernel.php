@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\SuperadminMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -68,13 +67,6 @@ class Kernel extends HttpKernel
         'superadmin' => \App\Http\Middleware\SuperadminMiddleware::class,
     ];
 
-    /**
-     * The priority-sorted list of middleware.
-     *
-     * This forces non-global middleware to always be in the given order.
-     *
-     * @var array
-     */
     protected $middlewarePriority = [
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,

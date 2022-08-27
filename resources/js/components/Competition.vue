@@ -58,20 +58,7 @@
         </div>
 
         <input
-          class="
-            appearance-none
-            rounded-none
-            relative
-            block
-            w-full
-            px-3
-            py-2
-            border border-gray-300
-            placeholder-gray-500
-            text-gray-900
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10
-            sm:text-sm sm:leading-5
-          "
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           v-model="licenceNumber"
         />
 
@@ -124,23 +111,7 @@
         <select
           v-model="weightClass['Män']"
           v-show="gender === 'Män'"
-          class="
-            mt-1
-            block
-            form-select
-            w-full
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option>¯\_(ツ)_/¯</option>
           <option>53</option>
@@ -157,23 +128,7 @@
         <select
           v-model="weightClass['Kvinnor']"
           v-show="gender === 'Kvinnor'"
-          class="
-            mt-1
-            block
-            form-select
-            w-full
-            py-2
-            px-3
-            border border-gray-300
-            bg-white
-            rounded-md
-            shadow-sm
-            focus:outline-none focus:shadow-outline-blue focus:border-blue-300
-            transition
-            duration-150
-            ease-in-out
-            sm:text-sm sm:leading-5
-          "
+          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option>¯\_(ツ)_/¯</option>
           <option>43</option>
@@ -189,22 +144,22 @@
 
         <div class="mt-4">
           <div v-if="hasEvent('ksl')" class="flex mb-2 items-center">
-            <el-toggle-button v-model="events.ksl" />
+            <ToggleButton v-model="events.ksl" />
             <div class="ml-2 font-thin">Klassisk Styrkelyft</div>
           </div>
 
           <div v-if="hasEvent('kbp')" class="flex mb-2 items-center">
-            <el-toggle-button v-model="events.kbp" />
+            <ToggleButton v-model="events.kbp" />
             <div class="ml-2 font-thin">Klassisk Bänkpress</div>
           </div>
 
           <div v-if="hasEvent('sl')" class="flex mb-2 items-center">
-            <el-toggle-button v-model="events.sl" />
+            <ToggleButton v-model="events.sl" />
             <div class="ml-2 font-thin">Styrkelyft (utrustat)</div>
           </div>
 
           <div v-if="hasEvent('bp')" class="flex mb-2 items-center">
-            <el-toggle-button v-model="events.bp" />
+            <ToggleButton v-model="events.bp" />
             <div class="ml-2 font-thin">Bänkpress (utrustat)</div>
           </div>
         </div>
@@ -218,39 +173,34 @@
           ></textarea>
         </div>
         <div class="mt-2 flex flex-col justify-center items-center">
-          <el-button v-if="registration && canHelp" style="margin-bottom: 10px" @click="register(true)"
-            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Ja, jag vill tävla</el-button
+          <Button v-if="registration && canHelp" style="margin-bottom: 10px" @click="register(true)"
+            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Ja, jag vill tävla</Button
           >
-          <el-button secondary v-if="!registration || !canHelp" style="margin-bottom: 10px" @click="register(true)"
-            >Ja, jag vill tävla</el-button
-          >
-
-          <el-button danger v-if="registration && !canHelp" style="margin-bottom: 30px" @click="register(false)"
-            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag vill inte tävla</el-button
-          >
-          <el-button
-            secondary
-            danger
-            v-if="!registration || canHelp"
-            style="margin-bottom: 30px"
-            @click="register(false)"
-            >Jag vill inte tävla</el-button
+          <Button type="secondary" v-if="!registration || !canHelp" style="margin-bottom: 10px" @click="register(true)"
+            >Ja, jag vill tävla</Button
           >
 
-          <el-button v-if="justSaved" secondary disabled style="margin-bottom: 10px">Sparat!</el-button>
-          <el-button v-else secondary style="margin-bottom: 10px" @click="save">Spara</el-button>
+          <Button type="danger" v-if="registration && !canHelp" style="margin-bottom: 30px" @click="register(false)"
+            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag vill inte tävla</Button
+          >
+          <Button type="secondary" v-if="!registration || canHelp" style="margin-bottom: 30px" @click="register(false)"
+            >Jag vill inte tävla</Button
+          >
+
+          <Button v-if="justSaved" secondary disabled style="margin-bottom: 10px">Sparat!</Button>
+          <Button v-else secondary style="margin-bottom: 10px" @click="save">Spara</Button>
         </div>
         <div v-if="registrationStatus === 'error'">
-          <el-message v-if="registrationErrorReason === 'licence_number'" danger style="margin-top: 20px">
+          <Message v-if="registrationErrorReason === 'licence_number'" danger style="margin-top: 20px">
             Du måste ange licensnummer, se info ovan.
-          </el-message>
-          <el-message v-else danger style="margin-top: 20px">
+          </Message>
+          <Message v-else danger style="margin-top: 20px">
             Kunde inte skicka, kontrollera inmatning och anlutning.
-          </el-message>
+          </Message>
         </div>
         <div v-if="registrationStatus === 'completed'">
-          <el-message v-if="!canHelp" info style="margin-top: 20px">Tack för informationen!</el-message>
-          <el-message v-else success style="margin-top: 20px">Grymt, vi ses där!</el-message>
+          <Message v-if="!canHelp" info style="margin-top: 20px">Tack för informationen!</Message>
+          <Message v-else success style="margin-top: 20px">Grymt, vi ses där!</Message>
         </div>
       </form>
     </div>
@@ -263,50 +213,17 @@
         <thead>
           <tr>
             <th
-              class="
-                px-6
-                py-3
-                border-b border-gray-200
-                bg-gray-50
-                text-center text-xs
-                leading-4
-                font-medium
-                text-gray-500
-                uppercase
-                tracking-wider
-              "
+              class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
             >
               Namn
             </th>
             <th
-              class="
-                px-6
-                py-3
-                border-b border-gray-200
-                bg-gray-50
-                text-center text-xs
-                leading-4
-                font-medium
-                text-gray-500
-                uppercase
-                tracking-wider
-              "
+              class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
             >
               Viktklass
             </th>
             <th
-              class="
-                px-6
-                py-3
-                border-b border-gray-200
-                bg-gray-50
-                text-center text-xs
-                leading-4
-                font-medium
-                text-gray-500
-                uppercase
-                tracking-wider
-              "
+              class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
             >
               Gren
             </th>
@@ -321,7 +238,7 @@
               {{ registration.weight_class }}
             </td>
             <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-              {{ registration.events | eventsString }}
+              {{ eventsToString(registration.events) }}
             </td>
           </tr>
         </tbody>
@@ -333,10 +250,13 @@
 </template>
 
 <script>
-import _ from 'vue-el-element'
+import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
+import Message from './Message.vue'
+import ToggleButton from './ui/ToggleButton.vue'
 
 export default {
+  components: { Message, Button, ToggleButton },
   props: ['competition', 'user', '_registration'],
   data() {
     return {
@@ -369,14 +289,7 @@ export default {
       this.weightClass[this.gender] = this.user.weight_class
     }
   },
-  filters: {
-    eventsString(events) {
-      return Object.entries(JSON.parse(events))
-        .filter(([event, status]) => status)
-        .map(([event]) => event.toUpperCase())
-        .join(', ')
-    },
-  },
+
   computed: {
     dateString() {
       if (this.competition.end_date) {
@@ -404,6 +317,12 @@ export default {
     },
   },
   methods: {
+    eventsToString(events) {
+      return Object.entries(JSON.parse(events))
+        .filter(([event, status]) => status)
+        .map(([event]) => event.toUpperCase())
+        .join(', ')
+    },
     hasEvent(event) {
       return JSON.parse(this.competition.events)[event]
     },

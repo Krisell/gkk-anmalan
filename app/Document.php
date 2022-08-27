@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\DocumentFolder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Mail\NewsMail;
 use App\NewsItem;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class NewsEmailController extends Controller
@@ -18,7 +17,7 @@ class NewsEmailController extends Controller
 
     public function preview()
     {
-        $item = NewsItem::make([
+        $item = new NewsItem([
             'body' => request('body'),
             'title' => request('title'),
         ]);
@@ -28,7 +27,7 @@ class NewsEmailController extends Controller
 
     public function test()
     {
-        $item = NewsItem::make([
+        $item = new NewsItem([
             'body' => request('body'),
             'title' => request('title'),
         ]);

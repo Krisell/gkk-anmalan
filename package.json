@@ -1,32 +1,25 @@
 {
   "private": true,
   "scripts": {
-    "dev": "npm run development",
-    "development": "mix",
-    "mix watch": "npm run watch-poll",
-    "watch": "mix watch",
-    "hot": "mix watch --hot",
-    "prod": "npm run production",
-    "production": "mix --production",
+    "dev": "vite",
+    "build": "vite build",
+    "production": "npm run build",
     "test": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@tailwindcss/forms": "^0.5.2",
+    "@vitejs/plugin-vue2": "^1.1.2",
     "autoprefixer": "^10.4.1",
     "axios": "^0.27.2",
-    "babel-jest": "^28.1.1",
-    "cross-env": "^7.0.3",
-    "jest": "^28.1.1",
-    "jquery": "^3.6.0",
-    "laravel-mix": "^6.0.27",
-    "lodash": "^4.17.21",
-    "popper.js": "^1.16.1",
+    "babel-jest": "^27.0.6",
+    "jest": "^27.0.6",
+    "laravel-vite-plugin": "^0.5.3",
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.8",
+    "vite": "^3.0.7",
     "vue": "^2.6.14",
-    "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14"
   },
   "dependencies": {
@@ -37,15 +30,11 @@
     "eslint": "^8.18.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-standard": "^5.0.0",
-    "eslint-plugin-vue": "^9.1.1",
-    "less": "^4.1.1",
-    "less-loader": "^11.0.0",
+    "eslint-plugin-vue": "^7.16.0",
     "moment": "^2.29.1",
     "prettier": "^2.3.2",
     "v-tooltip": "^2.1.3",
-    "vue-el-element": "^1.12.8",
     "vue-js-modal": "^1.3.35",
-    "vue-js-toggle-button": "^1.3.3",
     "zipcelx": "^1.6.2"
   }
 }

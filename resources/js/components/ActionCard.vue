@@ -9,14 +9,17 @@
       <slot v-else></slot>
     </div>
     <div class="description" v-html="description"></div>
-    <div style="position: absolute; left: -8px; bottom: -8px;" @click.stop="$emit('admin')" v-if="admin">
-      <el-button danger style="padding: 5px; font-size: 10px;">Admin</el-button>
+    <div style="position: absolute; left: -8px; bottom: -8px" @click.stop="$emit('admin')" v-if="admin">
+      <Button type="danger">Admin</Button>
     </div>
   </div>
 </template>
 
 <script>
+import Button from './ui/Button.vue'
+
 export default {
+  components: { Button },
   props: ['description', 'icon', 'danger', 'admin', 'unanswered'],
 }
 </script>

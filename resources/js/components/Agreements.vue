@@ -10,13 +10,13 @@
       </p>
     </div>
     <div class="mt-8">
-      <ui-button type="secondary" @click="showMemberShipAgreement">Visa medlemsavtal</ui-button>
+      <Button type="secondary" @click="showMemberShipAgreement">Visa medlemsavtal</Button>
     </div>
     <div class="mt-2">
-      <ui-button type="secondary" @click="showAntiDopingAgreement">Visa antidopingavtal</ui-button>
+      <Button type="secondary" @click="showAntiDopingAgreement">Visa antidopingavtal</Button>
     </div>
     <div class="mt-8">
-      <ui-button @click="signAgreements">Godkänn avtalen</ui-button>
+      <Button @click="signAgreements">Godkänn avtalen</Button>
       <p class="text-xs mt-2">Läs avtalen innan du godkänner!</p>
     </div>
   </div>
@@ -24,11 +24,15 @@
 
 <script>
 import axios from 'axios'
+import Button from './ui/Button.vue'
 
-const MEMBERSHIP_AGREEMENT = 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK.pdf?alt=media&token=2a2ac4ed-2cec-4865-84ff-a28ac65d30fb'
-const ANTI_DOPING_AGREEMENT = 'https://www.gkk-styrkelyft.se/wp-content/uploads/2019/01/Antidopingavtal-mellan-medlemmen-och-klubben-20190110.pdf'
+const MEMBERSHIP_AGREEMENT =
+  'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK.pdf?alt=media&token=2a2ac4ed-2cec-4865-84ff-a28ac65d30fb'
+const ANTI_DOPING_AGREEMENT =
+  'https://www.gkk-styrkelyft.se/wp-content/uploads/2019/01/Antidopingavtal-mellan-medlemmen-och-klubben-20190110.pdf'
 
 export default {
+  components: { Button },
   props: ['user'],
   methods: {
     showMemberShipAgreement() {

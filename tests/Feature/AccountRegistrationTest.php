@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Mail\GrantAccountMail;
 use App\Mail\WelcomeMail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 

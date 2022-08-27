@@ -8,25 +8,7 @@
     </h3>
     <input
       placeholder="Nyhetens titel"
-      class="
-        appearance-none
-        rounded-none
-        relative
-        block
-        w-full
-        px-3
-        py-2
-        mb-4
-        border border-gray-300
-        placeholder-gray-500
-        text-gray-900
-        focus:outline-none
-        focus:shadow-outline-blue
-        focus:border-blue-300
-        focus:z-10
-        sm:text-sm
-        sm:leading-5
-      "
+      class="appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
       v-model="item.title"
     />
     <input v-if="item" id="news-content" :value="item.body" type="hidden" name="content" />
@@ -40,18 +22,20 @@
 
     <p v-if="status === 'test-successful'">Testmail skickat!</p>
 
-    <ui-button v-if="item" class="mt-2" @click="showPreview"> Se färdigt mail i webbläsaren </ui-button>
-    <ui-button v-if="item" class="mt-2" @click="testSend"> Gör provutskick till endast dig själv </ui-button>
-    <ui-button v-if="item" type="secondary" class="mt-2">
+    <Button v-if="item" class="mt-2 mr-2" @click="showPreview"> Se färdigt mail i webbläsaren </Button>
+    <Button v-if="item" class="mt-2" @click="testSend"> Gör provutskick till endast dig själv </Button>
+    <Button v-if="item" type="secondary" class="mt-2">
       Denna knapp ska göra utskick till samtliga medlemmar, men det är inte implementerat ännu
-    </ui-button>
+    </Button>
   </div>
 </template>
 
 <script>
 import PostRedirect from '../modules/PostRedirect'
+import Button from './ui/Button.vue'
 
 export default {
+  components: { Button },
   props: ['item'],
   data() {
     return {

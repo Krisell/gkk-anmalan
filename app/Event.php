@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event extends Model
@@ -11,14 +12,16 @@ class Event extends Model
     use SoftDeletes, HasFactory;
 
     protected $dates = ['deleted_at'];
+
     protected $guarded = [];
+
     protected $casts = [
         'publish_count' => 'boolean',
         'publish_list' => 'boolean',
         'last_registration_at' => 'datetime:Y-m-d',
     ];
 
-    public function registrations()
+    public function registrations(): HasMany
     {
         return $this->hasMany(EventRegistration::class);
     }

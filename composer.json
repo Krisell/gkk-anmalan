@@ -13,23 +13,27 @@
     "guzzlehttp/guzzle": "^7.0.1",
     "laravel/framework": "^9.0",
     "laravel/tinker": "^2.0",
-    "laravel/ui": "^3.0"
+    "laravel/ui": "^3.0",
+    "symfony/http-client": "^6.0",
+    "symfony/mailgun-mailer": "^6.0"
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.2",
     "brianium/paratest": "^6.2",
-    "spatie/laravel-ignition": "^1.0.0",
     "fakerphp/faker": "^1.9.1",
+    "laravel/pint": "^1.1",
     "mockery/mockery": "^1.0",
     "nunomaduro/collision": "^6.1",
-    "phpunit/phpunit": "^9.0"
+    "nunomaduro/larastan": "^2.0",
+    "phpunit/phpunit": "^9.0",
+    "spatie/laravel-ignition": "^1.0.0"
   },
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true,
     "platform": {
-      "php": "8.0.2"
+      "php": "8.0.16"
     }
   },
   "extra": {
@@ -52,6 +56,15 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "scripts": {
+    "lint": [
+      "vendor/bin/pint"
+    ],
+    "test": [
+      "php artisan test --parallel --stop-on-failure"
+    ],
+    "static": [
+      "phpstan analyse -c phpstan.neon"
+    ],
     "post-autoload-dump": [
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
       "@php artisan package:discover --ansi"

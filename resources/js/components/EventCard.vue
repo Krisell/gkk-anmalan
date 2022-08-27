@@ -1,37 +1,39 @@
 <template>
   <div class="action-button-card max-w-xl mx-auto" @click="$emit('click')">
     <div class="description">{{ event.name }} ({{ dateString }})</div>
-    <div v-if="event.last_registration_at" style="text-align: center;">
+    <div v-if="event.last_registration_at" style="text-align: center">
       Sista anmälningsdag: {{ event.last_registration_at }}
     </div>
-    <div class="description" style="font-size: 12px; margin-top: 0; white-space: pre-wrap;">
+    <div class="description" style="font-size: 12px; margin-top: 0; white-space: pre-wrap">
       {{ event.description }}
     </div>
-    <div style="margin-top: 30px;">
-      <el-message warning v-if="registration && registration.status == 0">
+    <div style="margin-top: 30px">
+      <Message warning v-if="registration && registration.status == 0">
         <div>Du har anmält att du inte kan komma.</div>
         <div v-if="afterLastRegistration(event)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
-      </el-message>
-      <el-message success v-else-if="registration && registration.status == 1">
+      </Message>
+      <Message success v-else-if="registration && registration.status == 1">
         <div>Du är anmäld som funktionär, tack!</div>
         <div v-if="afterLastRegistration(event)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
-      </el-message>
-      <el-message info v-else>
+      </Message>
+      <Message info v-else>
         <div>Du har inte meddelat om du kan delta ännu.</div>
         <div v-if="afterLastRegistration(event)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
-      </el-message>
+      </Message>
 
-      <el-message style="margin-top: 10px;" v-if="event.publish_count_value > 0">
+      <Message style="margin-top: 10px" v-if="event.publish_count_value > 0">
         Hittills har {{ event.publish_count_value }} GKK-medlemmar tackat ja till detta event.
-      </el-message>
+      </Message>
     </div>
   </div>
 </template>
 
 <script>
 import Date from '../modules/Date.js'
+import Message from './Message.vue'
 
 export default {
+  components: { Message },
   props: ['event', 'registration'],
   computed: {
     dateString() {

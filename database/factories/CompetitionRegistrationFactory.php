@@ -6,7 +6,6 @@ use App\Competition;
 use App\CompetitionRegistration;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class CompetitionRegistrationFactory extends Factory
 {
@@ -25,13 +24,13 @@ class CompetitionRegistrationFactory extends Factory
     public function definition()
     {
         return [
-          'competition_id' => Competition::factory(),
-          'user_id' => User::factory(),
-          'licence_number' => '010101ab',
-          'gender' => 'Män',
-          'weight_class' => '74',
-          'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
-          'status' => 1,
+            'competition_id' => Competition::factory(),
+            'user_id' => User::factory(),
+            'licence_number' => '010101ab',
+            'gender' => 'Män',
+            'weight_class' => '74',
+            'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+            'status' => 1,
         ];
     }
 }

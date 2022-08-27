@@ -33,14 +33,14 @@
                   </div>
                 </td>
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-sm leading-5 text-gray-500 text-center">{{ account.created_at | dateString }}</div>
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ dateString(account.created_at) }}</div>
                 </td>
 
                 <td
                   class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
                 >
-                  <ui-button @click="grantAccount(account)">Godkänn konto</ui-button>
-                  <ui-button class="ml-2" type="secondary" @click="deleteAccount(account)">Radera konto</ui-button>
+                  <Button @click="grantAccount(account)">Godkänn konto</Button>
+                  <Button class="ml-2" type="secondary" @click="deleteAccount(account)">Radera konto</Button>
                 </td>
               </tr>
             </tbody>
@@ -123,11 +123,11 @@
                   </div>
                 </td>
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-sm leading-5 text-gray-500 text-center">{{ account.created_at | dateString }}</div>
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ dateString(account.created_at) }}</div>
                 </td>
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">
-                    {{ account.last_visited_at | dateString }}
+                    {{ dateString(account.last_visited_at) }}
                   </div>
                 </td>
                 <td
@@ -199,7 +199,7 @@
         epost till användaren med en länk för att logga in och ange ett lösenord.
       </div>
       <textarea v-model="newAccountsString" class="mx-auto w-1/2 h-32"></textarea>
-      <ui-button @click="createAccounts" class="mt-2">Skapa konton</ui-button>
+      <Button @click="createAccounts" class="mt-2">Skapa konton</Button>
     </div>
 
     <div v-if="inactiveAccounts.length > 0" class="flex flex-col mb-8 mt-8">
@@ -235,13 +235,13 @@
                   </div>
                 </td>
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-sm leading-5 text-gray-500 text-center">{{ account.created_at | dateString }}</div>
+                  <div class="text-sm leading-5 text-gray-500 text-center">{{ dateString(account.created_at) }}</div>
                 </td>
 
                 <td
                   class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
                 >
-                  <ui-button @click="reactivate(account)">Återaktivera konto</ui-button>
+                  <Button @click="reactivate(account)">Återaktivera konto</Button>
                 </td>
               </tr>
             </tbody>
@@ -260,8 +260,8 @@
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('promote')">Nej</el-button>
-        <el-button @click="promotion" danger primary style="margin-left: 20px">Ja, gör till administratör</el-button>
+        <Button @click="$modal.hide('promote')" type="secondary" class="mx-4">Nej</Button>
+        <Button @click="promotion" type="danger">Ja, gör till administratör</Button>
       </div>
     </modal>
 
@@ -273,8 +273,8 @@
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('demote')">Nej</el-button>
-        <el-button @click="demotion" danger primary style="margin-left: 20px">Ja, ta bort</el-button>
+        <Button @click="$modal.hide('demote')" type="secondary" class="mx-4">Nej</Button>
+        <Button @click="demotion" type="danger">Ja, ta bort</Button>
       </div>
     </modal>
 
@@ -289,17 +289,19 @@
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('inactivate')">Nej</el-button>
-        <el-button @click="inactivate" danger primary style="margin-left: 20px">Ja, inaktivera</el-button>
+        <Button @click="$modal.hide('inactivate')" type="secondary" class="mx-4">Nej</Button>
+        <Button @click="inactivate" type="danger">Ja, inaktivera</Button>
       </div>
     </modal>
   </div>
 </template>
 
 <script>
+import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
 
 export default {
+  components: { Button },
   props: ['accounts', 'user', 'ungranted'],
   data() {
     return {
@@ -309,15 +311,6 @@ export default {
       sortOrder: 1,
       newAccountsString: '',
     }
-  },
-  filters: {
-    dateString(date) {
-      if (!date) {
-        return ''
-      }
-
-      return date.substr(0, 10)
-    },
   },
   computed: {
     sortedActiveAccounts() {
@@ -339,6 +332,13 @@ export default {
     },
   },
   methods: {
+    dateString(date) {
+      if (!date) {
+        return ''
+      }
+
+      return date.substr(0, 10)
+    },
     copyEmails() {
       navigator.clipboard.writeText(
         this.accounts

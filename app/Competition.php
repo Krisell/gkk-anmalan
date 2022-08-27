@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\CompetitionRegistration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Competition extends Model
@@ -12,7 +12,9 @@ class Competition extends Model
     use SoftDeletes, HasFactory;
 
     protected $dates = ['deleted_at'];
+
     protected $guarded = [];
+
     protected $casts = [
         'publish_count' => 'boolean',
         'publish_list' => 'boolean',
@@ -20,7 +22,7 @@ class Competition extends Model
         'date' => 'datetime:Y-m-d',
     ];
 
-    public function registrations()
+    public function registrations(): HasMany
     {
         return $this->hasMany(CompetitionRegistration::class);
     }

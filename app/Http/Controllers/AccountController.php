@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Mail\AccountGrantedMail;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class AccountController extends Controller
