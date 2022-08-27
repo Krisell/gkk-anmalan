@@ -9,22 +9,22 @@
           <div class="cursor-pointer text-teachiq-red">Stäng</div>
         </li>
         <li class="mt-8 hover:text-gkk">
-          <a href="/">Start</a>
+          <a :class="site === 'landing' ? 'border-b-2 border-black' : ''" href="/">Start</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a href="/powerlifting">Styrkelyft</a>
+          <a :class="site === 'powerlifting' ? 'border-b-2 border-black' : ''" href="/powerlifting">Styrkelyft</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a href="/about">Om GKK</a>
+          <a :class="site === 'about' ? 'border-b-2 border-black' : ''" href="/about">Om GKK</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a href="/member">Medlemskap</a>
+          <a :class="site === 'member' ? 'border-b-2 border-black' : ''" href="/member">Medlemskap</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a href="/documents">Dokument &amp; program</a>
+          <a :class="site === 'documents' ? 'border-b-2 border-black' : ''" href="/documents">Dokument &amp; program</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a href="/records">Klubbrekord</a>
+          <a :class="site === 'records' ? 'border-b-2 border-black' : ''" href="/records">Klubbrekord</a>
         </li>
       </ul>
     </nav>
@@ -109,25 +109,6 @@
               </span>
             </div>
           </div>
-
-          <!-- <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <span class="rounded-md shadow-sm">
-                <div v-if="!user">
-                  <Button class="mr-1" @click="location('/login')">Logga in</Button>
-                  <Button @click="location('/register')">Skapa konto</Button>
-                </div>
-
-                <div v-if="user">
-                  <a @click="logout">
-                    <Button class="mr-1" type="secondary">Logga ut</Button>
-                  </a>
-
-                  <Button @click="location('/profile')">Profil ({{ user.first_name }} {{ user.last_name }})</Button>
-                </div>
-              </span>
-            </div>
-          </div> -->
         </div>
       </div>
     </nav>
@@ -135,11 +116,9 @@
 </template>
 
 <script>
-import Button from './ui/Button.vue'
 import axios from 'axios'
 
 export default {
-  components: { Button },
   props: ['user', 'site'],
   data() {
     return {
