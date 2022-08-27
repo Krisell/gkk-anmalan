@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     logout() {
-      axios.post('/logout').then((_) => (window.location = '/'))
+      axios.post('/logout').then((_) => (window.location = '/insidan'))
     },
   },
 }

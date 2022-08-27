@@ -24,7 +24,7 @@ class AccountRegistrationTest extends TestCase
             'email' => 'martin.krisell@gmail.com',
             'password' => 'asdasdasd',
             'password_confirmation' => 'asdasdasd',
-        ])->assertRedirect('/');
+        ])->assertRedirect('/insidan');
 
         $this->assertDatabaseHas('users', [
             'email' => 'martin.krisell@gmail.com',
@@ -45,7 +45,7 @@ class AccountRegistrationTest extends TestCase
             'email' => 'kurt.svensson@gmail.com',
             'password' => 'asdasdasd',
             'password_confirmation' => 'asdasdasd',
-        ])->assertRedirect('/');
+        ])->assertRedirect('/insidan');
 
         Mail::assertSent(GrantAccountMail::class, function ($mail) {
             return $mail->hasTo('martin.krisell@gmail.com'); // administrator

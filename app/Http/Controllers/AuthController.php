@@ -30,7 +30,7 @@ class AuthController extends Controller
         $data = Http::withHeaders(['Authorization' => "Bearer $token"])->get('https://graph.microsoft.com/v1.0/me/')->json();
 
         if (! $data) {
-            return redirect('/');
+            return redirect('/insidan');
         }
 
         $email = $data['mail'] ?? $data['userPrincipalName'] ?? null;
@@ -45,7 +45,7 @@ class AuthController extends Controller
         if ($user) {
             auth()->login($user);
 
-            return redirect(request('to', '/'));
+            return redirect(request('to', '/insidan'));
         }
 
         return redirect("/register?email={$email}");
