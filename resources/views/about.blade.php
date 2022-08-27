@@ -10,16 +10,20 @@ background-position-y: center;" class="flex items-center">
     <div>
         <div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8">
           <div class="space-y-12">
-            <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+            <div class="md:max-w-xl lg:max-w-3xl xl:max-w-none">
                 <div class="flex items-center">
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Om GKK</h2>
                 </div>
                 <p class="text-xl leading-normal text-gray-500">Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar. Vi har vår egna klubb- och träningslokal hos <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. I föreningen finns allt från motionärer till elitaktiva på högsta nivå och alla är lika välkomna.</p>
                 
-                <p class="text-xl leading-normal text-gray-500">Kort praktisk information som address, bankgiro mm? Bankgiro 846-0891.<br>info@gkk-styrkelyft.se Org.nummer: 802456-7672</p>
+                <p class="mt-4 text-xl leading-normal text-gray-500"><b>Adress:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Kontakt:</b> info@gkk-styrkelyft.se</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Bankgiro:</b> 846-0891</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Organisationsnummer:</b> 802456-7672</p>
 
-                <div class="flex items-center">
-                <h3 class="mt-8 text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2022</h3>
+                <p class="text-xl leading-normal text-gray-500 mt-4 mb-4">Varmt välkommen att hälsa på och träna ett pass!</p>
+                  
+                <h3 class="mt-8 -mb-6 text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2022</h3>
                 </div>
                 <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
@@ -70,8 +74,8 @@ background-position-y: center;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FNiclas.png?alt=media&token=a4bad7c6-17b7-491f-8cdd-c0e6c8002f9e" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Niklas Håkansson</h3>
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FBo%CC%88ttcher.png?alt=media&token=88f3ba4d-82f0-462d-851d-b6c210078bc9" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Simon Böttcher</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Ledamot</dd>
                       </dl>
@@ -97,8 +101,8 @@ background-position-y: center;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FBo%CC%88ttcher.png?alt=media&token=88f3ba4d-82f0-462d-851d-b6c210078bc9" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Simon Böttcher</h3>
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FNiclas.png?alt=media&token=a4bad7c6-17b7-491f-8cdd-c0e6c8002f9e" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Niklas Håkansson</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Suppleant</dd>
                       </dl>
@@ -109,7 +113,7 @@ background-position-y: center;" class="flex items-center">
                 <div class="flex items-center">
                 <h3 class="mt-8 text-2xl font-extrabold tracking-tight sm:text-4xl">Historia</h3>
                 </div>
-                <p class="text-xl text-gray-500">Denna text ligger på gamla hemsidan. Vill vi behålla den, uppdatera, korta ner eller ta bort? Texten är inte stylad här än.</p>
+                <p class="text-xl text-gray-500">TODO: På gamla hemsidan ligger följande text. Vill vi behålla den, uppdatera, korta ner eller ta bort? Texten är inte stylad här än.</p>
                 <p class="text-xl text-gray-500">Göteborgs Kraftsportklubb startade 1933 med tyngdlyftning på programmet d.v.s stöt, press och ryck. I slutet av 70-talet startade numera framlidne Åke Bohlin upp en styrkelyftssektion d.v.s Knäböjning, Bänkpress och Marklyft. Man höll till i Tuve och där fostrades under Åkes hårda drillning många fina lyftare. Stefan Nentis var den största stjärnan under 70 och 80-talen med många ädla medaljer på VM, EM, SM. Även numera framlidne Zlatko Radojkovic var med i yppersta eliten. Under den här perioden har det passerat många lyftare som har hållit god SM-klass. I slutet av 80-talet anslöt sig bl.a Dennis Andersson, Bertil Sundvall och de har under 90-talet hållit god SM-klass.Vi får inte glömma den starke dragkamparen Erik Johansson som även han hade en del internationella uppdrag med viss framgång.
 
                   I början av 90-talet anslöt sig så Sveriges bäste lyftare genom tiderna( i skrivande stund )Kenneth Mattsson till klubben. Kenneth har tidigare tävlat för andra göteborgsklubbar och även gjort avstickare utanför stadsgränsen. Började redan under tidigt 70-tal slipa formen för framtida uppdrag. Började nå lite god SM-status i mitten på 70-talet och började lukta lite internationell krutrök under senare halvan av 70-talet.Även om Kenneth inte tillhörde klubben under 80-talet så lade han säkert lite av grunden till sina framgångar tillsammans med bl a Stefan Nentis där man peppade varandra och tränade hårt. Detta ledde till 2 guldmedaljer i Styrkelyft 82-83.Stefan fick guld 82. Även andra ädla medaljer har erövrats.

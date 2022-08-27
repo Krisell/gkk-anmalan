@@ -14,10 +14,10 @@ background-position-y: center;" class="flex items-center">
                 <div class="flex items-center">
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Om Styrkelyft</h2>
                 </div>
-                <p class="text-xl leading-normal text-gray-500">I styrkelyft tävlar man i grenarna knäböj, bänkpress och marklyft. Man kan också tävla i enbart bänkpress. Det finns tävlingar där särskild utrustning, exempelvis knälindor och böjdräkt, är tillåtet, och det finns tävlingar i så kallad "klassisk styrkelyft" där ingen hjälpande utrustning utöver knävärmare och handledslindor är tillåtet. Den klassiska grenen har flest utövare och är en lämplig utgångpunkt för en nybörjare.</p>
-                <p class="text-xl leading-normal text-gray-400">Här kan det vara lämpligt att visa bilder/filmer på de tre lyften.</p>
-                <p class="text-xl leading-normal text-gray-400">Vill man kanske nämna något om idrottens historia?</p>
-                <p class="text-xl leading-normal text-gray-400">Den nuvarande hemsidans information om hur en tävling går till kanske kan placeras här, alternativt som ett separat dokument?</p>
+                <p class="text-xl leading-normal text-gray-500">I styrkelyft tävlar man i grenarna knäböj, bänkpress och marklyft. Man kan också tävla i enbart bänkpress. Det finns tävlingar där särskild utrustning, exempelvis knälindor och böjdräkt, är tillåtet, och det finns tävlingar i så kallad "klassisk styrkelyft" där ingen hjälpande utrustning utöver knävärmare och handledslindor är tillåtet. Den klassiska disciplinen har idag flest utövare och är en lämplig utgångpunkt för en nybörjare.</p>
+                <p class="text-xl leading-normal text-gray-400">TODO: Här kan det vara lämpligt att visa bilder/filmer på de tre lyften.</p>
+                <p class="text-xl leading-normal text-gray-400">TODO: Vill man kanske nämna något om idrottens historia?</p>
+                <p class="text-xl leading-normal text-gray-400">TODO: Den nuvarande hemsidans information om hur en tävling går till kanske kan placeras här, alternativt som ett separat dokument?</p>
             </div>
             <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
               <li>
