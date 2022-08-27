@@ -14,7 +14,7 @@ background-position-y: center;" class="flex items-center">
                 <div class="flex items-center">
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Om GKK</h2>
                 </div>
-                <p class="text-xl leading-normal text-gray-500">Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar. Vi har vår egna klubb- och träningslokal hos <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. I föreningen finns allt från elitaktiva på högsta nivå till motionärer.</p>
+                <p class="text-xl leading-normal text-gray-500">Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar. Vi har vår egna klubb- och träningslokal hos <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. I föreningen finns allt från motionärer till elitaktiva på högsta nivå och alla är lika välkomna.</p>
                 
                 <p class="text-xl leading-normal text-gray-500">Kort praktisk information som address, bankgiro mm? Bankgiro 846-0891.<br>info@gkk-styrkelyft.se Org.nummer: 802456-7672</p>
 
