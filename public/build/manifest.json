@@ -1,17 +1,17 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.0771b49c.js",
+    "file": "assets/app.81cc6c00.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "dynamicImports": [
       "node_modules/zipcelx/lib/module.js"
     ],
     "css": [
-      "assets/app.363953de.css"
+      "assets/app.19c42a7d.css"
     ]
   },
   "node_modules/zipcelx/lib/module.js": {
-    "file": "assets/module.bc0c9e8d.js",
+    "file": "assets/module.7bfbe9f8.js",
     "src": "node_modules/zipcelx/lib/module.js",
     "isDynamicEntry": true,
     "imports": [
@@ -19,7 +19,7 @@
     ]
   },
   "resources/js/app.css": {
-    "file": "assets/app.363953de.css",
+    "file": "assets/app.19c42a7d.css",
     "src": "resources/js/app.css"
   },
   "resources/css/main.css": {

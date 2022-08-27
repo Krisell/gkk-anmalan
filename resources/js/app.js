@@ -5,6 +5,7 @@ import axios from 'axios'
 
 import Link from './components/Link.vue'
 import News from './components/News.vue'
+import Login from './components/Login.vue'
 import Event from './components/Event.vue'
 import Navbar from './components/NavBar.vue'
 import Events from './components/Events.vue'
@@ -68,6 +69,7 @@ Vue.mixin({
 
 Vue.component('GkkLink', Link)
 Vue.component('GkkNews', News)
+Vue.component('GkkLogin', Login)
 Vue.component('GkkEvent', Event)
 Vue.component('GkkNavbar', Navbar)
 Vue.component('GkkEvents', Events)
