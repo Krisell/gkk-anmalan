@@ -9,7 +9,7 @@ class CompetitionController extends Controller
 {
     public function index()
     {
-        $competitions = Competition::visible()->get();
+        $competitions = Competition::visible()->orderBy('date')->get();
 
         foreach ($competitions as $competition) {
             if ($competition->publish_count) {
