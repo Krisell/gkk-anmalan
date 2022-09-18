@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Competition;
 use App\Event;
 use Illuminate\Http\Request;
 
@@ -64,8 +65,20 @@ class EventController extends Controller
 
     public function admin(Event $event)
     {
+        // Figure out competing users same day, to mark in admin UI
+        // This only works for one or two day competitions currently.
+        $competitions = collect([
+            ...Competition::where('date', $event->date)->get(),
+            ...Competition::where('end_date', $event->date)->get(),
+        ]);
+
+        $competingUsers = $competitions
+            ->map(fn ($competition) => $competition->registrations()->pluck('user_id'))
+            ->flatten()->unique();
+
         return view('admin.event', [
             'event' => $event->load('registrations.user'),
+            'competingUsers' => $competingUsers,
         ]);
     }
 

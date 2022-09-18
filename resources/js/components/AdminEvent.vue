@@ -52,7 +52,13 @@
                 <td class="text-center">
                   <ToggleButton @input="save(registration)" v-model="registration.presence_confirmed" color="#314270" />
                 </td>
+
                 <td class="text-center">
+                  <i 
+                    v-tooltip="'Personen är anmäld till tävling samma dag!'" 
+                    v-if="registration.status == 1 && competingUsers.includes(registration.user_id)" 
+                    class="fa fa-exclamation-triangle mr-2 text-orange-400"
+                  ></i>
                   <i @click="editRegistration(registration)" class="fa fa-pencil cursor-pointer"></i>
                 </td>
 
@@ -165,7 +171,7 @@ import ToggleButton from './ui/ToggleButton.vue'
 
 export default {
   components: { ToggleButton },
-  props: ['event'],
+  props: ['event', 'competingUsers'],
   data() {
     return {
       registrationToEdit: null,

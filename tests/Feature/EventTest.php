@@ -16,7 +16,7 @@ class EventTest extends TestCase
         return \array_merge([
             'name' => 'Eventnamn',
             'time' => '9–13',
-            'date' => '2020-02-23',
+            'date' => '2020-02-23 00:00:00',
             'location' => 'Hos mig',
             'description' => 'Det blir kul!',
             'publish_count' => false,

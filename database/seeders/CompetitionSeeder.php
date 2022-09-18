@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Competition;
+use App\CompetitionRegistration;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class CompetitionSeeder extends Seeder
@@ -14,6 +16,17 @@ class CompetitionSeeder extends Seeder
      */
     public function run()
     {
-        Competition::factory(3)->create();
+        $competition = Competition::factory()->create([
+            'date' => now()->addDays(10),
+        ]);
+
+        CompetitionRegistration::factory()
+            ->for(User::whereEmail('sameday@example.com')->first())
+            ->for($competition)
+            ->create();
+
+        Competition::factory(3)->create([
+            'date' => now()->addDays(30),
+        ]);
     }
 }

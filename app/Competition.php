@@ -20,6 +20,7 @@ class Competition extends Model
         'publish_list' => 'boolean',
         'last_registration_at' => 'datetime:Y-m-d',
         'date' => 'datetime:Y-m-d',
+        'end_date' => 'datetime:Y-m-d',
     ];
 
     public function registrations(): HasMany

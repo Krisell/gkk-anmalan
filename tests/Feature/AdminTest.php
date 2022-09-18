@@ -15,7 +15,7 @@ class AdminTest extends TestCase
         return [
             'name' => 'Martin',
             'time' => '9–15',
-            'date' => '2020-02-03',
+            'date' => '2020-02-03 00:00:00',
             'location' => 'Friskis majorna',
             'description' => 'Alla behövs!',
             'show_status' => 'default',

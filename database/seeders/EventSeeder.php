@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Event;
+use App\EventRegistration;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class EventSeeder extends Seeder
@@ -14,8 +16,17 @@ class EventSeeder extends Seeder
      */
     public function run()
     {
-        Event::factory(3)->create([
+        $event = Event::factory()->create([
             'date' => now()->addDays(10),
+        ]);
+
+        EventRegistration::factory()
+            ->for(User::whereEmail('sameday@example.com')->first())
+            ->for($event)
+            ->create();
+
+        Event::factory(2)->create([
+            'date' => now()->addDays(30),
         ]);
     }
 }
