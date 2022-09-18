@@ -73,7 +73,7 @@ class EventController extends Controller
         ]);
 
         $competingUsers = $competitions
-            ->map(fn ($competition) => $competition->registrations()->pluck('user_id'))
+            ->map(fn ($competition) => $competition->registrations()->whereStatus(1)->pluck('user_id'))
             ->flatten()->unique();
 
         return view('admin.event', [

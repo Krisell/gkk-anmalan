@@ -45,6 +45,7 @@ class AdminEventRegistrationTest extends TestCase
 
         $competitonC = Competition::factory()->create(['date' => $event->date, 'end_date' => $event->date->copy()->addDay()]);
         $userC = CompetitionRegistration::factory()->for($competitonC)->create()->user_id;
+        $notCompeting = CompetitionRegistration::factory()->for($competitonC)->create(['status' => 0])->user_id;
 
         // $this->withoutExceptionHandling();
         auth()->login($user);
