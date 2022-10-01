@@ -95,8 +95,10 @@ class EventController extends Controller
         $event->delete();
     }
 
-    public function add(Event $event)
+    public function add(Event $event, Request $request)
     {
+        $request->validate(['user_id' => 'required|exists:users,id']);
+
         $event->registrations()->updateOrCreate([
             'user_id' => request('user_id'),
         ], [
