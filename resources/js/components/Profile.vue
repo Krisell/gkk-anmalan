@@ -3,11 +3,13 @@
     <h1 class="text-3xl font-thin mb-2">Profil</h1>
     <div style="margin-top: 30px"></div>
 
-    <div class="mt-8">
+    <div class="mt-8 flex items-center">
       <Button type="secondary" @click="showMemberShipAgreement">Visa medlemsavtal</Button>
+      <div class="ml-6 text-sm italic">Signerat {{ renderDate(user.membership_agreement_signed_at) }}</div>
     </div>
-    <div class="mt-2">
+    <div class="mt-2 flex items-center">
       <Button type="secondary" @click="showAntiDopingAgreement">Visa antidopingavtal</Button>
+      <div class="ml-6 text-sm italic">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
     </div>
 
     <h2 class="font-thin mt-6">Namn</h2>
@@ -229,6 +231,9 @@ export default {
     },
     showAntiDopingAgreement() {
       window.open(Documents.ANTI_DOPING_AGREEMENT)
+    },
+    renderDate(date) {
+      return new Date(date).toLocaleDateString('sv-SE')
     },
     startEdit(type) {
       this.reset()
