@@ -101,7 +101,7 @@ class EventController extends Controller
             'user_id' => request('user_id'),
         ], [
             'status' => 1,
-            'comment' => 'Added by admin',
+            'comment' => 'Tillagd av admin',
             'presence_confirmed' => 1,
         ]);
     }
