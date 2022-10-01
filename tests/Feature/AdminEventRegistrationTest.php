@@ -18,13 +18,18 @@ class AdminEventRegistrationTest extends TestCase
     public function the_admin_can_see_the_event_registration_list()
     {
         $event = Event::factory()->create();
-        $user = User::factory()->create(['role' => 'admin']);
+        $userA = User::factory()->create(['role' => 'admin']);
+        $userB = User::factory()->create();
 
-        EventRegistration::factory()->for($user)->for($event)->create();
+        $remaining = User::factory(3)->create();
 
-        auth()->login($user);
+        EventRegistration::factory()->for($userA)->for($event)->create();
+        EventRegistration::factory()->for($userB)->for($event)->create();
+
+        auth()->login($userA);
         $this->get("/admin/events/$event->id")->assertViewHas([
             'event' => $event->load('registrations.user'),
+            'remainingUsers' => User::orderBy('first_name', 'asc')->whereIn('id', $remaining->pluck('id'))->get(),
         ]);
     }
 
@@ -110,5 +115,25 @@ class AdminEventRegistrationTest extends TestCase
         $this->post("/events/{$event->id}/registrations/{$registration->id}", $data)->assertStatus(401);
 
         $this->assertDatabaseMissing('event_registrations', $data);
+    }
+
+    /** @test */
+    public function an_admin_can_add_an_additional_user_to_an_event()
+    {
+        $event = Event::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin']);
+        $user = User::factory()->create();
+
+        $this->assertDatabaseMissing('event_registrations', ['user_id' => $user->id, 'event_id' => $event->id]);
+
+        auth()->login($admin);
+        $this->post("/admin/events/{$event->id}/registrations/", ['user_id' => $user->id])->assertStatus(200);
+
+        $this->assertDatabaseHas('event_registrations', [
+            'user_id' => $user->id, 
+            'event_id' => $event->id,
+            'status' => 1,
+            'presence_confirmed' => 1,
+        ]);
     }
 }

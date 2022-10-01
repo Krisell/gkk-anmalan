@@ -87,9 +87,29 @@
       </div>
     </div>
 
-    <div class="text-center cursor-pointer" @click="excel" v-tooltip="'Hämta Excel-fil'">
+    <div class="mb-2 mt-6 flex items-end">
+      <div>
+        <select
+          v-model="userToAdd"
+          class="mt-1 block form-select w-72 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+        >
+          <option value=''>Lägg till ytterligare medlem manuellt</option>
+          <option v-for="lifter in remainingUsers" :key="lifter.key" :value="lifter.id">
+            {{ lifter.first_name }} {{ lifter.last_name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="flex mt-4 ml-4">
+        <Button @click="addUser">Lägg till (och markera som närvarande)</Button>
+      </div>
+    </div>
+
+    <div class="text-center">
       <svg
-        class="mx-auto"
+        v-tooltip="'Hämta Excel-fil'"
+        @click="excel"
+        class="mx-auto cursor-pointer"
         xmlns="http://www.w3.org/2000/svg"
         x="0px"
         y="0px"
@@ -168,14 +188,16 @@
 
 <script>
 import ToggleButton from './ui/ToggleButton.vue'
+import Button from './ui/Button.vue'
 
 export default {
-  components: { ToggleButton },
-  props: ['event', 'competingUsers'],
+  components: { ToggleButton, Button },
+  props: ['event', 'competingUsers', 'remainingUsers'],
   data() {
     return {
       registrationToEdit: null,
       showFilter: 'all',
+      userToAdd: '',
     }
   },
   computed: {
@@ -203,6 +225,11 @@ export default {
         method: 'post',
         data: registration,
       })
+    },
+    async addUser() {
+      await axios.post(`/admin/events/${this.event.id}/registrations`, { user_id: this.userToAdd })
+
+      window.location.reload()
     },
     editRegistration(registration) {
       this.registrationToEdit = JSON.parse(JSON.stringify(registration))

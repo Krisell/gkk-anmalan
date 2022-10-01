@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Competition;
 use App\Event;
 use Illuminate\Http\Request;
+use App\User;
+use App\EventRegistration;
 
 class EventController extends Controller
 {
@@ -76,15 +78,32 @@ class EventController extends Controller
             ->map(fn ($competition) => $competition->registrations()->whereStatus(1)->pluck('user_id'))
             ->flatten()->unique();
 
+        $remainingUsers = User::query()
+            ->whereNotIn('id', $event->registrations->pluck('user_id'))
+            ->orderBy('first_name', 'asc')
+            ->get();
+
         return view('admin.event', [
             'event' => $event->load('registrations.user'),
             'competingUsers' => $competingUsers,
+            'remainingUsers' => $remainingUsers,
         ]);
     }
 
     public function destroy(Event $event)
     {
         $event->delete();
+    }
+
+    public function add(Event $event)
+    {
+        $event->registrations()->updateOrCreate([
+            'user_id' => request('user_id'),
+        ], [
+            'status' => 1,
+            'comment' => 'Added by admin',
+            'presence_confirmed' => 1,
+        ]);
     }
 
     private function validated(Request $request)
