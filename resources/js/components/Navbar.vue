@@ -7,7 +7,7 @@
             <a href="/" class="flex items-center">
               <img
                 class="h-12 w-auto"
-                src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%c3%a5f%c3%a4rg-p%c3%a5-m%c3%b6rk-bakgrund-transparent.png"
+                src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FTva%CC%8Afa%CC%88rg-pa%CC%8A-mo%CC%88rk-bakgrund-transparent.png?alt=media&token=1d6648d5-8046-46e2-a3f0-81b6a7065dc2"
                 alt="GKK logo"
               />
             </a>

@@ -2,7 +2,15 @@
   <div class="max-w-2xl mx-auto">
     <h1 class="text-3xl font-thin mb-2">Profil</h1>
     <div style="margin-top: 30px"></div>
-    <h2 class="font-thin">Namn</h2>
+
+    <div class="mt-8">
+      <Button type="secondary" @click="showMemberShipAgreement">Visa medlemsavtal</Button>
+    </div>
+    <div class="mt-2">
+      <Button type="secondary" @click="showAntiDopingAgreement">Visa antidopingavtal</Button>
+    </div>
+
+    <h2 class="font-thin mt-6">Namn</h2>
     <input
       type="text"
       v-model="name.first"
@@ -182,7 +190,11 @@
 </template>
 
 <script>
+import Documents from '../modules/Documents.js'
+import Button from './ui/Button.vue'
+
 export default {
+  components: { Button },
   props: ['user'],
   data() {
     return {
@@ -212,6 +224,12 @@ export default {
     }
   },
   methods: {
+    showMemberShipAgreement() {
+      window.open(Documents.MEMBERSHIP_AGREEMENT)
+    },
+    showAntiDopingAgreement() {
+      window.open(Documents.ANTI_DOPING_AGREEMENT)
+    },
     startEdit(type) {
       this.reset()
       this.isAdjusted[type] = true
