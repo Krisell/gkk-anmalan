@@ -10,7 +10,7 @@ Auth::routes();
 Route::get('/!', [HomeController::class, 'exclamation']);
 Route::get('/', [HomeController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
-Route::post('/sign-agreements', [SignAgreementsController::class, 'store'])->middleware('auth');
+Route::post('/sign-agreements/{agreement}', [SignAgreementsController::class, 'store'])->middleware('auth');
 Route::view('/inactivated', 'inactivated')->name('inactivated');
 
 Route::prefix('records')->group(function () {

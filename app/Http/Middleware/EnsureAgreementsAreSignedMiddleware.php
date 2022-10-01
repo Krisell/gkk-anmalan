@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\User;
 use Closure;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EnsureAgreementsAreSignedMiddleware
 {
@@ -29,6 +30,36 @@ class EnsureAgreementsAreSignedMiddleware
      */
     private function bothAgreementsAreSigned(User $user)
     {
-        return ! empty($user->membership_agreement_signed_at) && ! empty($user->anti_doping_agreement_signed_at);
+        $membership = $user->membership_agreement_signed_at;
+        if (!$membership) {
+            return false;
+        }
+
+        $membership = Carbon::parse($membership);
+        if ($membership->lt(now()->subYear())) {
+            return false;
+        }
+
+        $lastUpdatedMembershipAgreement = config('agreements.membership.last_updated_at');
+        if ($lastUpdatedMembershipAgreement && $membership->lt($lastUpdatedMembershipAgreement)) {
+            return false;
+        }
+
+        $antiDoping = $user->anti_doping_agreement_signed_at;
+        if (!$antiDoping) {
+            return false;
+        }
+
+        $antiDoping = Carbon::parse($antiDoping);
+        if ($antiDoping->lt(now()->subYear())) {
+            return false;
+        }
+
+        $lastUpdatedAntiDopingAgreement = config('agreements.anti_doping.last_updated_at');
+        if ($lastUpdatedAntiDopingAgreement && $antiDoping->lt($lastUpdatedAntiDopingAgreement)) {
+            return false;
+        }
+
+        return true;
     }
 }
