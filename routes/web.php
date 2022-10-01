@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SignAgreementsController;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
-use App\Http\Controllers\EventController;
 
 Auth::routes();
 

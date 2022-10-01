@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Competition;
 use App\Event;
-use Illuminate\Http\Request;
 use App\User;
-use App\EventRegistration;
+use Illuminate\Http\Request;
 
 class EventController extends Controller
 {

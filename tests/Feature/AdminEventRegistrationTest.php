@@ -130,7 +130,7 @@ class AdminEventRegistrationTest extends TestCase
         $this->post("/admin/events/{$event->id}/registrations/", ['user_id' => $user->id])->assertStatus(200);
 
         $this->assertDatabaseHas('event_registrations', [
-            'user_id' => $user->id, 
+            'user_id' => $user->id,
             'event_id' => $event->id,
             'status' => 1,
             'presence_confirmed' => 1,
