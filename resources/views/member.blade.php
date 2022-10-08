@@ -28,7 +28,7 @@ background-position-y: center;" class="flex items-center">
                     Efter detta kommer faktura för medlemskap skickas ut och när den är betald är du upptagen i föreningen.
                   </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
-                    Du kommer också bjudas in till vårt medlemssystem där du bland annat behöver godkänna vårt antidopingavtal och <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK.pdf?alt=media&token=2a2ac4ed-2cec-4865-84ff-a28ac65d30fb">medlemsavtal</a>.
+                    Du kommer också bjudas in till vårt medlemssystem där du bland annat behöver godkänna vårt <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FAntidopingavtal.pdf?alt=media&token=f43b48b7-62e8-405e-8b3e-f75ac2c465c6">antidopingavtal</a> och <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK%202022-09-20.pages.pdf?alt=media&token=52b3f7dd-e27c-49f2-a63d-0bdf2a0a0188">medlemsavtal</a>.
                   </p>
               </div>
 
@@ -65,7 +65,7 @@ background-position-y: center;" class="flex items-center">
                     Till förbundet betalas en tävlingslicens in varje år och denna betalar du till GKK i samband med första tävlingsanmälan (se ovan).
                   </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
-                    Anmälningsavgifter till tävlingar står ibland föreningen för, om ekonomi finns. Ibland ges också bidrag för ex. resa och boende om tävlingen sker på annan ort.
+                    Anmälningsavgifter till tävlingar står ibland föreningen för, om ekonomi finns. Ibland ges också visst bidrag för ex. resa och boende om tävlingen sker på annan ort.
                   </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
 
