@@ -7,7 +7,7 @@
       </h3>
     </div>
     <div v-else class="flex flex-col m-6 sm:flex-row items-center justify-center">
-      <div v-if="user" class="absolute top-[70px] right-3 text-gray-500 text-xs">Inloggad som {{ user.email }}</div>
+      <div v-if="user" class="absolute top-[75px] right-3 text-gray-500 text-xs">Inloggad som {{ user.email }}</div>
       <gkk-action-card
         v-if="user"
         class="m-4 max-w-xs w-64"
@@ -15,7 +15,7 @@
         @admin="location('/admin/competitions')"
         @click="location('/competitions')"
         description="Tävlingsanmälan"
-        icon="list-ul"
+        icon="th-list"
       ></gkk-action-card>
       <gkk-action-card
         v-if="user"
@@ -37,11 +37,18 @@
         icon="file-o"
       ></gkk-action-card>
       <gkk-action-card
+        v-if="user"
+        class="m-4 max-w-xs w-64"
+        @click="location('/profile')"
+        description="Profil"
+        icon="user-circle"
+      ></gkk-action-card>
+      <gkk-action-card
         v-if="isAdmin"
         class="m-4 max-w-xs w-64"
         @click="location('/admin/accounts')"
         description="Administrera konton"
-        icon="user"
+        icon="list-alt"
         :unanswered="unanswered.ungranted"
       ></gkk-action-card>
       <gkk-action-card
@@ -50,7 +57,7 @@
         :admin="isAdmin"
         @click="location('/register')"
         description="Skapa konto som medlem"
-        icon="user"
+        icon="user-circle"
       ></gkk-action-card>
       <gkk-action-card
         v-if="!user"
