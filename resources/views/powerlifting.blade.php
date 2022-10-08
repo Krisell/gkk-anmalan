@@ -35,7 +35,7 @@ background-position-y: center;" class="flex items-center">
                 Samtliga dessa har mästerskap på distriktsnivå, nationell nivå och internationellt. Det finns även i regel mästerskap för ungdomar, juniorer och veteraner i respektive disciplin.
               </p>
               <p class="text-xl leading-normal text-gray-500">
-                Man kan tävla antingen i en så kallad <b>serietävling</b> eller i ett <b>mästerskap</b>. I mästerskap tävlar man om placeringar och medaljer. I serietävlingar samlar man poäng till föreningens lag, eller tävlar för att se hur mycket man klarar. Till vissa mästerskap (ex. SM) måste man kvala in, och det kan man göra genom att klara uppsatta kvalgränser vid en serietävling.
+                Man kan tävla antingen i en så kallad <b>serietävling</b> eller i ett <b>mästerskap</b>. I mästerskap tävlar man om placeringar och medaljer. I serietävlingar samlar man poäng till föreningens lag, eller tävlar för att se hur mycket man klarar. Till vissa mästerskap (ex. SM) måste man kvala in, och det kan man göra genom att klara uppsatta kvalgränser vid valfri tävling.
               </p>
               <p class="text-xl leading-normal text-gray-500">
                 Göteborg Kraftsportklubb arrangerar ofta serietävlingar på hemmaplan på Friskis och Svettis i Majorna, då hela föreningen är engagerad och medlemmarna antingen är med och tävlar eller ställer upp som funktionär. Om föreningens lag presterar bra under året kan de gå till final i lag-SM där SM-medaljer står på spel.
