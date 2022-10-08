@@ -16,7 +16,6 @@
         @click="location('/competitions')"
         description="Tävlingsanmälan"
         icon="list-ul"
-        :unanswered="unanswered.competitions"
       ></gkk-action-card>
       <gkk-action-card
         v-if="user"

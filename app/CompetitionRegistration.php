@@ -16,4 +16,9 @@ class CompetitionRegistration extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function competition(): BelongsTo
+    {
+        return $this->belongsTo(Competition::class);
+    }
 }

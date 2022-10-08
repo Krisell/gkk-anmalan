@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Competition;
 use App\Event;
+use App\User;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -64,14 +66,45 @@ class EventController extends Controller
 
     public function admin(Event $event)
     {
+        // Figure out competing users same day, to mark in admin UI
+        // This only works for one or two day competitions currently.
+        $competitions = collect([
+            ...Competition::where('date', $event->date)->get(),
+            ...Competition::where('end_date', $event->date)->get(),
+        ]);
+
+        $competingUsers = $competitions
+            ->map(fn ($competition) => $competition->registrations()->whereStatus(1)->pluck('user_id'))
+            ->flatten()->unique();
+
+        $remainingUsers = User::query()
+            ->whereNotIn('id', $event->registrations->pluck('user_id'))
+            ->orderBy('first_name', 'asc')
+            ->get();
+
         return view('admin.event', [
             'event' => $event->load('registrations.user'),
+            'competingUsers' => $competingUsers,
+            'remainingUsers' => $remainingUsers,
         ]);
     }
 
     public function destroy(Event $event)
     {
         $event->delete();
+    }
+
+    public function add(Event $event, Request $request)
+    {
+        $request->validate(['user_id' => 'required|exists:users,id']);
+
+        $event->registrations()->updateOrCreate([
+            'user_id' => request('user_id'),
+        ], [
+            'status' => 1,
+            'comment' => 'Tillagd av admin',
+            'presence_confirmed' => 1,
+        ]);
     }
 
     private function validated(Request $request)

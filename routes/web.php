@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SignAgreementsController;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
@@ -19,7 +20,7 @@ Route::prefix('insidan')->middleware(EnsureAgreementsAreSignedMiddleware::class)
 });
 
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
-Route::post('/sign-agreements', [SignAgreementsController::class, 'store'])->middleware('auth');
+Route::post('/sign-agreements/{agreement}', [SignAgreementsController::class, 'store'])->middleware('auth');
 Route::view('/inactivated', 'inactivated')->name('inactivated');
 
 Route::prefix('records')->group(function () {
@@ -77,12 +78,14 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/', [\App\Http\Controllers\AdminCreateAccountsController::class, 'store']);
     });
 
-    Route::prefix('events')->group(function () {
-        Route::get('/{event}', [\App\Http\Controllers\EventController::class, 'admin']);
-        Route::get('/', [\App\Http\Controllers\EventController::class, 'adminIndex']);
-        Route::post('/', [\App\Http\Controllers\EventController::class, 'store']);
-        Route::patch('/{event}', [\App\Http\Controllers\EventController::class, 'update']);
-        Route::delete('/{event}', [\App\Http\Controllers\EventController::class, 'destroy']);
+    Route::prefix('events')->controller(EventController::class)->group(function () {
+        Route::get('/{event}', 'admin');
+        Route::get('/', 'adminIndex');
+        Route::post('/', 'store');
+        Route::patch('/{event}', 'update');
+        Route::delete('/{event}', 'destroy');
+
+        Route::post('/{event}/registrations/', 'add');
     });
 
     Route::prefix('competitions')->group(function () {

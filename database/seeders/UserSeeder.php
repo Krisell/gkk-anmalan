@@ -67,5 +67,7 @@ class UserSeeder extends Seeder
             'role' => null,
             'granted_by' => 1,
         ]);
+
+        User::factory()->create(['email' => 'sameday@example.com']);
     }
 }

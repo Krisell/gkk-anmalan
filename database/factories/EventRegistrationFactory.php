@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\EventRegistration;
+use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EventRegistrationFactory extends Factory
@@ -23,6 +24,7 @@ class EventRegistrationFactory extends Factory
     {
         return [
             'status' => 1,
+            'user_id' => User::factory(),
         ];
     }
 }

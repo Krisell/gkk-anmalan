@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Competition;
 use App\Event;
 use App\NewsItem;
 use App\User;
@@ -40,7 +39,7 @@ class HomeController extends Controller
 
         $unanswered = [
             'events' => auth()->user() ? Event::visible()->count() - auth()->user()->eventRegistrations()->count() : 0,
-            'competitions' => auth()->user() ? Competition::visible()->count() - auth()->user()->competitionRegistrations()->count() : 0,
+            'competitions' => 0, // Intentionally skip, as not all competitions are relevant for all users
         ];
 
         if (auth()->user() && \in_array(auth()->user()->role, ['admin', 'superadmin'])) {

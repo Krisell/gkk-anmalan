@@ -8,7 +8,11 @@
 
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <gkk-agreements :user='@json($user)'></gkk-agreements>
+            <gkk-agreements 
+                :user='@json($user)' 
+                :membership-agreement-status='@json($membershipAgreementStatus)'
+                :anti-doping-agreement-status='@json($antiDopingAgreementStatus)'
+            ></gkk-agreements>
         </div>
     </div>
 </div>
