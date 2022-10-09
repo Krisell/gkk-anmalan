@@ -241,8 +241,6 @@
         </div>
       </div>
     </div>
-
-    <GkkLink to="/insidan" text="Tillbaka till insidans navigering" />
   </div>
 </template>
 

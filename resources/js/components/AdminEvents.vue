@@ -253,8 +253,6 @@
       </div>
     </form>
 
-    <GkkLink class="mt-16" to="/insidan" text="Tillbaka till insidans navigering" />
-
     <modal name="delete-event" :adaptive="true" height="auto">
       <div style="padding: 30px; margin-top: 20px">
         <h3 style="text-align: center">Är du säker på att du vill radera {{ selectedEvent && selectedEvent.name }}?</h3>

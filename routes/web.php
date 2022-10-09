@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('profile')->group(function () {
+    Route::prefix('profile')->middleware(EnsureAgreementsAreSignedMiddleware::class)->group(function () {
         Route::get('/', [\App\Http\Controllers\ProfileController::class, 'index']);
         Route::post('/name', [\App\Http\Controllers\ProfileController::class, 'updateName']);
         Route::post('/email', [\App\Http\Controllers\ProfileController::class, 'updateEmail']);

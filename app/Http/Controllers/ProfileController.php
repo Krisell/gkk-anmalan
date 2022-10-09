@@ -10,6 +10,7 @@ class ProfileController extends Controller
     {
         return view('profile', [
             'user' => auth()->user(),
+            'view' => 'profile',
         ]);
     }
 

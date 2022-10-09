@@ -16,6 +16,7 @@ class DocumentController extends Controller
 
         return view('member-documents', [
             'folders' => $query->with('documents')->get(),
+            'view' => 'member-documents',
         ]);
     }
 }

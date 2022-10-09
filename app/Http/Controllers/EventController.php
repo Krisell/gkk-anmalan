@@ -22,6 +22,7 @@ class EventController extends Controller
         return view('events', [
             'events' => $events,
             'userRegistrations' => auth()->user()->eventRegistrations,
+            'view' => 'event',
         ]);
     }
 
@@ -37,6 +38,7 @@ class EventController extends Controller
             'event' => $event,
             'user' => auth()->user(),
             'registration' => auth()->user()->eventRegistrations()->whereEventId($event->id)->first(),
+            'view' => 'event',
         ]);
     }
 

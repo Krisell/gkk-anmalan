@@ -15,8 +15,6 @@
     <div v-else>
       <h2 class="text-center text-xl font-thin m-6">Just nu finns inga tävlingar att anmäla sig till.</h2>
     </div>
-
-    <GkkLink to="/insidan" text="Tillbaka till insidans navigering" />
   </div>
 </template>
 

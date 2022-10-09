@@ -250,8 +250,6 @@
       </div>
     </div>
 
-    <GkkLink to="/insidan" text="Tillbaka till insidans navigering" />
-
     <modal name="promote" :adaptive="true" height="auto">
       <div style="padding: 30px; margin-top: 20px">
         <h3 style="text-align: center">

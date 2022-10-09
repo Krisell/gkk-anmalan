@@ -112,6 +112,27 @@
         </div>
       </div>
     </nav>
+
+    <div v-if="user && site === ''" class="fixed top-[70px]">
+      <div>
+        <div class="md:hidden">
+          <label for="tabs" class="sr-only">Select a tab</label>
+          <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-gkk focus:ring-gkk">
+            <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{ tab.name }}</option>
+          </select>
+        </div>
+        <div class="hidden md:block">
+          <div>
+            <nav class="-mb-px flex space-x-8 ml-2 lg:ml-32" aria-label="Tabs">
+              <a v-for="tab in tabs" :key="tab.name" :href="tab.href" :class="[tab.current ? 'border-gkk text-gkk' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm']" :aria-current="tab.current ? 'page' : undefined">
+                <i class="mr-2 fa" :class="`fa-${tab.icon}`"></i>
+                <span>{{ tab.name }}</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -119,9 +140,16 @@
 import axios from 'axios'
 
 export default {
-  props: ['user', 'site'],
+  props: ['user', 'site', 'view'],
   data() {
     return {
+      tabs: [
+        { name: 'Insidan start', href: '/insidan', icon: 'unlock-alt', current: this.view === 'inside' },
+        { name: 'Tävlingsanmälan', href: '/competitions', icon: 'th-list', current: this.view === 'competition' },
+        { name: 'Funktionärsanmälan', href: '/events', icon: 'users', current: this.view === 'event' },
+        { name: 'Medlemsdokument', href: '/member-documents', icon: 'file-o', current: this.view === 'member-documents' },
+        { name: `Profil (${ this.user.email })`, href: '/profile', icon: 'user-circle', current: this.view === 'profile' },
+      ],
       navIsOpen: false,
     }
   },
