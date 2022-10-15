@@ -26,6 +26,9 @@
         <li class="mt-4 hover:text-gkk">
           <a :class="site === 'records' ? 'border-b-2 border-black' : ''" href="/records">Klubbrekord</a>
         </li>
+        <li class="mt-4 hover:text-gkk">
+          <a :class="site === '' ? 'border-b-2 border-black' : ''" href="/insidan">Insidan</a>
+        </li>
       </ul>
     </nav>
     <nav class="bg-white shadow-md fixed top-0 w-full z-50">
@@ -115,19 +118,23 @@
 
     <div v-if="user && site === ''" class="fixed top-[70px]">
       <div>
-        <div class="md:hidden">
-          <label for="tabs" class="sr-only">Select a tab</label>
-          <select id="tabs" name="tabs" class="block w-full rounded-md border-gray-300 focus:border-gkk focus:ring-gkk">
-            <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">{{ tab.name }}</option>
-          </select>
+        <div 
+          @click="showSubMenu = true" 
+          class="md:hidden bg-gkk cursor-pointer text-white relative inline-flex items-center px-4 py-2 border leading-5 font-medium focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out -mt-4 -ml-2 rounded-br-lg">
+          Visa meny&nbsp;&nbsp;➦
         </div>
-        <div class="hidden md:block">
+        <div class="-ml-64 md:ml-0 transition-all md:block" :class="{ 'ml-0': showSubMenu }">
           <div>
-            <nav class="-mb-px flex space-x-8 ml-2 lg:ml-32" aria-label="Tabs">
-              <a v-for="tab in tabs" :key="tab.name" :href="tab.href" :class="[tab.current ? 'border-gkk text-gkk' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'group inline-flex items-center py-2 px-1 border-b-2 font-medium text-sm']" :aria-current="tab.current ? 'page' : undefined">
+            <i v-if="showSubMenu" class="md:hidden fa fa-times-circle-o cursor-pointer z-10 text-3xl absolute left-2 top-0 text-white" @click="showSubMenu = false"></i>
+            <nav class="-mb-px flex flex-col fixed h-screen top-[64px] bg-gkk pt-12 w-[210px]" aria-label="Tabs">
+              <a v-for="tab in tabs" :key="tab.name" :href="tab.href" v-if="(!tab.admin) || isAdmin"
+                class="ml-4 mb-3 mt-2 group inline-flex items-center py-2 px-1 font-medium text-sm text-white" 
+                >
                 <i class="mr-2 fa" :class="`fa-${tab.icon}`"></i>
-                <span>{{ tab.name }}</span>
+                <span :class="[tab.current ? 'underline' : '']">{{ tab.name }}</span>
               </a>
+
+              <div v-if="user" class="fixed bottom-2 left-2 text-white text-xs">Inloggad som<br/> {{ user.email }}</div>
             </nav>
           </div>
         </div>
@@ -144,14 +151,22 @@ export default {
   data() {
     return {
       tabs: [
-        { name: 'Insidan start', href: '/insidan', icon: 'unlock-alt', current: this.view === 'inside' },
+        { name: 'Insidan start', href: '/insidan', icon: 'newspaper-o', current: this.view === 'inside' },
         { name: 'Tävlingsanmälan', href: '/competitions', icon: 'th-list', current: this.view === 'competition' },
         { name: 'Funktionärsanmälan', href: '/events', icon: 'users', current: this.view === 'event' },
         { name: 'Medlemsdokument', href: '/member-documents', icon: 'file-o', current: this.view === 'member-documents' },
-        { name: `Profil (${ this.user.email })`, href: '/profile', icon: 'user-circle', current: this.view === 'profile' },
+        { name: 'Profil', href: '/profile', icon: 'user-circle', current: this.view === 'profile' },
+        { name: 'Administrera rekord', href: '/admin/results', icon: 'trophy', current: this.view === 'records', admin: true },
+        { name: 'Administrera konton', href: '/admin/accounts', icon: 'list-alt', current: this.view === 'accounts', admin: true },
       ],
       navIsOpen: false,
+      showSubMenu: false,
     }
+  },
+  computed: {
+    isAdmin() {
+      return this.user && ['admin', 'superadmin'].includes(this.user.role)
+    },
   },
   methods: {
     logout() {

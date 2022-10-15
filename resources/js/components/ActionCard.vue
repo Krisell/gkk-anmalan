@@ -9,9 +9,6 @@
       <slot v-else></slot>
     </div>
     <div class="description" v-html="description"></div>
-    <div style="position: absolute; left: -8px; bottom: -8px" @click.stop="$emit('admin')" v-if="admin">
-      <Button type="danger">Admin</Button>
-    </div>
   </div>
 </template>
 
@@ -20,7 +17,7 @@ import Button from './ui/Button.vue'
 
 export default {
   components: { Button },
-  props: ['description', 'icon', 'danger', 'admin', 'unanswered'],
+  props: ['description', 'icon', 'danger', 'unanswered'],
 }
 </script>
 
@@ -37,7 +34,6 @@ i.icon {
 }
 
 .action-button-card {
-  position: relative;
   height: 170px;
   background: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);

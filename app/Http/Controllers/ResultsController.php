@@ -13,6 +13,7 @@ class ResultsController extends Controller
         return view('admin.results', [
             'results' => Result::with('user:id,first_name,last_name')->get(),
             'users' => User::get(['id', 'first_name', 'last_name']),
+            'view' => 'records',
         ]);
     }
 

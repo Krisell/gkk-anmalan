@@ -1,7 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-center text-3xl font-thin mb-6">Admin</h1>
-    <h2 class="text-center text-xl font-thin mb-6">Funktionärsanmälningar</h2>
+    <h1 class="text-center text-3xl font-thin mb-6">Admin - Funktionärsanmälningar</h1>
 
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">

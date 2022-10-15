@@ -14,6 +14,7 @@ class AccountController extends Controller
             'ungranted' => User::whereGrantedBy(0)->get(),
             'accounts' => User::with(['eventRegistrations.event'])->get(),
             'user' => auth()->user(),
+            'view' => 'accounts',
         ]);
     }
 

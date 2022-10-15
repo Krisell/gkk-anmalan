@@ -10,8 +10,6 @@
       <gkk-action-card
         v-if="user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
-        @admin="location('/admin/competitions')"
         @click="location('/competitions')"
         description="Tävlingsanmälan"
         icon="th-list"
@@ -19,8 +17,6 @@
       <gkk-action-card
         v-if="user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
-        @admin="location('/admin/events')"
         @click="location('/events')"
         description="Funktionärsanmälan"
         icon="users"
@@ -29,10 +25,8 @@
       <gkk-action-card
         v-if="user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
-        @admin="location('/admin/documents')"
         @click="location('/member-documents')"
-        description="Medlemsdokument"
+        description="Dokument"
         icon="file-o"
       ></gkk-action-card>
       <gkk-action-card
@@ -53,7 +47,6 @@
       <gkk-action-card
         v-if="!user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
         @click="location('/register')"
         description="Skapa konto som medlem"
         icon="user-circle"
@@ -61,7 +54,6 @@
       <gkk-action-card
         v-if="!user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
         @click="location('/login')"
         description="Logga in som medlem"
         icon="sign-in"

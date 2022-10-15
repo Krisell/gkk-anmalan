@@ -23,6 +23,7 @@ class EventController extends Controller
             'events' => $events,
             'userRegistrations' => auth()->user()->eventRegistrations,
             'view' => 'event',
+            'user' => auth()->user(),
         ]);
     }
 
@@ -63,6 +64,7 @@ class EventController extends Controller
         return view('admin.events', [
             'events' => $events->latest()->get(),
             'showingOld' => $request->has('all'),
+            'view' => 'event',
         ]);
     }
 

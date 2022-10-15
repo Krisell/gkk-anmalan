@@ -21,7 +21,7 @@
 @yield('css')
 
 <div id="app" class="mt-16">
-<gkk-navbar :user='@json(auth()->user())' :site='@json($site ?? '')' :view='@json($view ?? '')'></gkk-navbar>
+<gkk-header :user='@json(auth()->user())' :site='@json($site ?? '')' :view='@json($view ?? '')'></gkk-header>
 
 <main class="mt-16">
 @yield('content')
