@@ -154,7 +154,7 @@ export default {
         { name: 'Insidan start', href: '/insidan', icon: 'newspaper-o', current: this.view === 'inside' },
         { name: 'Tävlingsanmälan', href: '/competitions', icon: 'th-list', current: this.view === 'competition' },
         { name: 'Funktionärsanmälan', href: '/events', icon: 'users', current: this.view === 'event' },
-        { name: 'Medlemsdokument', href: '/member-documents', icon: 'file-o', current: this.view === 'member-documents' },
+        { name: 'Dokument', href: '/member-documents', icon: 'file-o', current: this.view === 'member-documents' },
         { name: 'Profil', href: '/profile', icon: 'user-circle', current: this.view === 'profile' },
         { name: 'Administrera rekord', href: '/admin/results', icon: 'trophy', current: this.view === 'records', admin: true },
         { name: 'Administrera konton', href: '/admin/accounts', icon: 'list-alt', current: this.view === 'accounts', admin: true },

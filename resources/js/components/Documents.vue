@@ -23,14 +23,12 @@ export default {
   components: { DocumentFolder, AdministrateButton },
   props: ['folders', 'user'],
   computed: {
-    isAdmin() {
-      return this.user && ['admin', 'superadmin'].includes(this.user.role)
-    },
-  },
-  computed: {
     sortedFolders() {
       this.folders.sort((a, b) => a.order - b.order)
       return this.folders
+    },
+    isAdmin() {
+      return this.user && ['admin', 'superadmin'].includes(this.user.role)
     },
   },
 }
