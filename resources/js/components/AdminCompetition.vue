@@ -1,6 +1,14 @@
 <template>
   <div class="container mx-auto">
-    <h2 class="text-center text-xl font-thin mb-6">Anmälningar till {{ competition.name }}</h2>
+    <h2 class="text-center text-xl font-thin mb-6">
+      Anmälningar till {{ competition.name }}
+      <i
+        style="margin-left: 20px; cursor: pointer"
+        v-tooltip="'Kopiera epostadresserna för alla anmälda'"
+        @click="copyEmails"
+        class="fa fa-clipboard"
+      ></i>
+    </h2>
     <div class="bg-white shadow sm:rounded-lg mb-6">
       <div class="px-4 py-5 sm:p-6">
         <div>
@@ -309,6 +317,14 @@ export default {
           },
         })
       })
+    },
+    copyEmails() {
+      navigator.clipboard.writeText(
+        this.filteredRegistrations
+          .map((registration) => registration.user.email)
+          .sort((a, b) => a.localeCompare(b))
+          .join('; '),
+      )
     },
   },
 }
