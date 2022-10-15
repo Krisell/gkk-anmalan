@@ -4,7 +4,7 @@
 <div style="background-image: url(https://goteborg-kraftsportklubb.web.app/img/bella-min.jpg); 
 height: 500px;
 background-size: cover;
-background-position-y: center;" class="flex items-center">
+background-position-y: center; max-height: 50vh;" class="flex items-center">
 </div>
 <div class="container mx-auto">
     <div>
