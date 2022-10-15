@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="background-image: url(https://goteborg-kraftsportklubb.web.app/img/bella-min.jpg); 
+<div style="background-image: url(https://goteborg-kraftsportklubb.web.app/img/kamratskap.jpeg); 
 height: 500px;
 background-size: cover;
-background-position-y: center; max-height: 50vh;" class="flex items-center">
+background-position-y: 30%; background-position-x: 50%; max-height: 50vh;" class="flex items-center">
 </div>
 <div class="container mx-auto">
     <div>
