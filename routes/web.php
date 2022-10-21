@@ -10,8 +10,8 @@ Auth::routes();
 Route::get('/!', [HomeController::class, 'exclamation']);
 Route::get('/', [HomeController::class, 'index']);
 
-Route::view('/dm', 'dm2022');
-Route::view('/dm2022', 'dm2022');
+Route::get('/dm', [HomeController::class, 'dm']);
+Route::get('/dm2022', [HomeController::class, 'dm']);
 
 Route::get('/powerlifting', [HomeController::class, 'powerlifting']);
 Route::get('/about', [HomeController::class, 'about']);
