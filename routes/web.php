@@ -10,6 +10,9 @@ Auth::routes();
 Route::get('/!', [HomeController::class, 'exclamation']);
 Route::get('/', [HomeController::class, 'index']);
 
+Route::view('/dm', 'dm2022');
+Route::view('/dm2022', 'dm2022');
+
 Route::get('/powerlifting', [HomeController::class, 'powerlifting']);
 Route::get('/about', [HomeController::class, 'about']);
 Route::get('/member', [HomeController::class, 'member']);
