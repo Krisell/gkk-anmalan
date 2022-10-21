@@ -174,8 +174,6 @@
       </div>
     </div>
 
-    <GkkLink class="mt-16" to="/" text="Tillbaka till startsidan" />
-
     <modal name="delete-document" :adaptive="true" height="auto">
       <div style="padding: 30px; margin-top: 20px">
         <h3 style="text-align: center">

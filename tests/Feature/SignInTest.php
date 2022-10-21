@@ -20,7 +20,7 @@ class SignInTest extends TestCase
         $this->post('/login', [
             'email' => $user->email,
             'password' => 'password', // default in factory
-        ])->assertRedirect('/');
+        ])->assertRedirect('/insidan');
 
         $this->assertNotNull(auth()->user());
     }

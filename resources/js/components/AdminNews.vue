@@ -85,8 +85,8 @@ export default {
           body: this.body,
           published_at_date: this.published_at_date,
         },
-      }).then((response) => {
-        window.location = '/'
+      }).then(() => {
+        window.location = '/insidan'
       })
     },
     update() {
@@ -98,13 +98,13 @@ export default {
           body: this.body,
           published_at_date: this.published_at_date,
         },
-      }).then((response) => {
-        window.location = '/'
+      }).then(() => {
+        window.location = '/insidan'
       })
     },
     deleteNews() {
       axios.delete(`/admin/news/${this.news.id}`).then(() => {
-        window.location = '/'
+        window.location = '/insidan'
       })
     },
   },

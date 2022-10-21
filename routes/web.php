@@ -8,7 +8,20 @@ use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
 Auth::routes();
 
 Route::get('/!', [HomeController::class, 'exclamation']);
-Route::get('/', [HomeController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
+Route::get('/', [HomeController::class, 'index']);
+
+Route::view('/dm', 'dm2022');
+Route::view('/dm2022', 'dm2022');
+
+Route::get('/powerlifting', [HomeController::class, 'powerlifting']);
+Route::get('/about', [HomeController::class, 'about']);
+Route::get('/member', [HomeController::class, 'member']);
+Route::get('/documents', [HomeController::class, 'documents']);
+
+Route::prefix('insidan')->middleware(EnsureAgreementsAreSignedMiddleware::class)->group(function () {
+    Route::get('/', [HomeController::class, 'inside']);
+});
+
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
 Route::post('/sign-agreements/{agreement}', [SignAgreementsController::class, 'store'])->middleware('auth');
 Route::view('/inactivated', 'inactivated')->name('inactivated');
@@ -34,7 +47,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware(\App\Http\Middleware\GrantedUserMiddleware::class)->group(function () {
-        Route::prefix('documents')->group(function () {
+        Route::prefix('member-documents')->group(function () {
             Route::get('/', [\App\Http\Controllers\DocumentController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
         });
 
@@ -53,7 +66,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('profile')->group(function () {
+    Route::prefix('profile')->middleware(EnsureAgreementsAreSignedMiddleware::class)->group(function () {
         Route::get('/', [\App\Http\Controllers\ProfileController::class, 'index']);
         Route::post('/name', [\App\Http\Controllers\ProfileController::class, 'updateName']);
         Route::post('/email', [\App\Http\Controllers\ProfileController::class, 'updateEmail']);

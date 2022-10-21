@@ -1,6 +1,7 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-center text-3xl font-thin mb-6">Funktionärsanmälan</h1>
+    <h1 class="text-center text-3xl font-thin mb-6 mt-8">Funktionärsanmälan</h1>
+    <AdministrateButton v-if="isAdmin" path="/admin/events" />
 
     <div v-if="events.length">
       <div v-for="event in orderedEvents" :key="event.id" class="flex align-center mb-6">
@@ -15,14 +16,15 @@
     <div v-else>
       <h2 class="text-center text-xl font-thin m-6">Just nu finns inga tävlingar att anmäla sig till.</h2>
     </div>
-
-    <GkkLink to="/" text="Tillbaka till startsidan" />
   </div>
 </template>
 
 <script>
+import AdministrateButton from './AdministrateButton.vue'
+
 export default {
-  props: ['events', 'user-registrations'],
+  components: { AdministrateButton },
+  props: ['events', 'user-registrations', 'user'],
   computed: {
     orderedEvents() {
       return this.events.slice().sort((a, b) => {
@@ -36,6 +38,9 @@ export default {
 
         return 0
       })
+    },
+    isAdmin() {
+      return this.user && ['admin', 'superadmin'].includes(this.user.role)
     },
   },
   methods: {

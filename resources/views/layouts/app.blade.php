@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="https://anmalan.gkk-styrkelyft.se/appIconGKK.png">
     <link rel="icon" type="image/png" href="https://anmalan.gkk-styrkelyft.se/favicon.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Göteborg Kraftsportklubb</title>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -17,13 +17,13 @@
 
     @yield('head')
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 h-full min-h-full">
 @yield('css')
 
-<div id="app">
-<gkk-navbar :user='@json(auth()->user())'></gkk-navbar>
+<div id="app" class="mt-16">
+<gkk-header :user='@json(auth()->user())' :site='@json($site ?? '')' :view='@json($view ?? '')'></gkk-header>
 
-<main class="py-4">
+<main class="mt-16">
 @yield('content')
 </main>
 

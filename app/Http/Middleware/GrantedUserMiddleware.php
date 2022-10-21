@@ -17,7 +17,7 @@ class GrantedUserMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (auth()->user()->granted_by == 0) {
-            return redirect('/');
+            return redirect('/insidan');
         }
 
         return $next($request);

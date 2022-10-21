@@ -1,6 +1,7 @@
 <template>
   <div class="max-w-2xl mx-auto">
     <h1 class="text-3xl font-thin mb-2">Profil</h1>
+    <div>Inloggad som {{ user.email }}</div>
     <div style="margin-top: 30px"></div>
 
     <div class="mt-8 flex items-center">
@@ -25,27 +26,7 @@
     />
     <button
       @click="updateName"
-      class="
-        mt-2
-        relative
-        inline-flex
-        items-center
-        px-4
-        py-2
-        border
-        text-sm
-        leading-5
-        font-medium
-        rounded-md
-        text-gkk
-        bg-white
-        border-gkk
-        focus:outline-none focus:shadow-outline-indigo
-        active:bg-gkk
-        transition
-        duration-150
-        ease-in-out
-      "
+      class="mt-2 inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
     >
       <span>Uppdatera namn</span>
     </button>
@@ -60,27 +41,7 @@
     />
     <button
       @click="updateEmail"
-      class="
-        mt-2
-        relative
-        inline-flex
-        items-center
-        px-4
-        py-2
-        border
-        text-sm
-        leading-5
-        font-medium
-        rounded-md
-        text-gkk
-        bg-white
-        border-gkk
-        focus:outline-none focus:shadow-outline-indigo
-        active:bg-gkk
-        transition
-        duration-150
-        ease-in-out
-      "
+      class="mt-2 inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
     >
       <span>Uppdatera epost</span>
     </button>
@@ -90,27 +51,7 @@
     <div v-if="!isAdjusted.password">
       <button
         @click="startEdit('password')"
-        class="
-          mt-2
-          relative
-          inline-flex
-          items-center
-          px-4
-          py-2
-          border
-          text-sm
-          leading-5
-          font-medium
-          rounded-md
-          text-gkk
-          bg-white
-          border-gkk
-          focus:outline-none focus:shadow-outline-indigo
-          active:bg-gkk
-          transition
-          duration-150
-          ease-in-out
-        "
+        class="mt-2 inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
       >
         <span>Redigera lösenord</span>
       </button>
@@ -132,62 +73,19 @@
       <div style="display: flex">
         <button
           @click="reset"
-          class="
-            mt-2
-            relative
-            inline-flex
-            items-center
-            px-4
-            py-2
-            border
-            text-sm
-            leading-5
-            font-medium
-            rounded-md
-            text-gkk
-            bg-white
-            border-gkk
-            focus:outline-none focus:shadow-outline-indigo
-            active:bg-gkk
-            transition
-            duration-150
-            ease-in-out
-          "
+          class="mt-2 inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
         >
           <span class="text-red-400">Ångra</span>
         </button>
 
         <button
           @click="updatePassword"
-          class="
-            ml-2
-            mt-2
-            relative
-            inline-flex
-            items-center
-            px-4
-            py-2
-            border
-            text-sm
-            leading-5
-            font-medium
-            rounded-md
-            text-gkk
-            bg-white
-            border-gkk
-            focus:outline-none focus:shadow-outline-indigo
-            active:bg-gkk
-            transition
-            duration-150
-            ease-in-out
-          "
+          class="ml-2 mt-2 inline-flex items-center px-4 py-2 border text-sm leading-5 font-medium rounded-md text-gkk bg-white border-gkk focus:outline-none focus:shadow-outline-indigo active:bg-gkk transition duration-150 ease-in-out"
         >
           <span>Byt lösenord</span>
         </button>
       </div>
     </div>
-
-    <GkkLink to="/" text="Tillbaka till startsidan" />
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto max-w-lg">
-    <h1 class="text-center text-3xl font-thin mb-2">Funktionärsanmälan</h1>
+    <h1 class="text-center text-3xl font-thin mb-2 mt-8">Funktionärsanmälan</h1>
 
     <div class="bg-white shadow sm:rounded-lg text-center mb-4">
       <div class="px-4 py-5 sm:p-6">

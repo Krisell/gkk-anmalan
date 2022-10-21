@@ -1,5 +1,5 @@
-@extends('layouts.app')
+@extends('layouts.inside')
 
-@section('content')
+@section('inside')
 <gkk-admin-competition :competition='@json($competition)'></gkk-admin-competition>
 @endsection

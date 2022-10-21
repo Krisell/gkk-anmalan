@@ -7,7 +7,7 @@ import Link from './components/Link.vue'
 import News from './components/News.vue'
 import Login from './components/Login.vue'
 import Event from './components/Event.vue'
-import Navbar from './components/NavBar.vue'
+import Header from './components/Header.vue'
 import Events from './components/Events.vue'
 import Profile from './components/Profile.vue'
 import Records from './components/Records.vue'
@@ -71,7 +71,7 @@ Vue.component('GkkLink', Link)
 Vue.component('GkkNews', News)
 Vue.component('GkkLogin', Login)
 Vue.component('GkkEvent', Event)
-Vue.component('GkkNavbar', Navbar)
+Vue.component('GkkHeader', Header)
 Vue.component('GkkEvents', Events)
 Vue.component('GkkProfile', Profile)
 Vue.component('GkkRecords', Records)

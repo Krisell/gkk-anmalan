@@ -3,9 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\User;
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class EnsureAgreementsAreSignedMiddleware
 {
@@ -31,7 +31,7 @@ class EnsureAgreementsAreSignedMiddleware
     private function bothAgreementsAreSigned(User $user)
     {
         $membership = $user->membership_agreement_signed_at;
-        if (!$membership) {
+        if (! $membership) {
             return false;
         }
 
@@ -46,7 +46,7 @@ class EnsureAgreementsAreSignedMiddleware
         }
 
         $antiDoping = $user->anti_doping_agreement_signed_at;
-        if (!$antiDoping) {
+        if (! $antiDoping) {
             return false;
         }
 

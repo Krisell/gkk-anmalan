@@ -20,6 +20,8 @@ class CompetitionController extends Controller
         return view('competitions', [
             'competitions' => $competitions,
             'userRegistrations' => auth()->user()->competitionRegistrations,
+            'view' => 'competition',
+            'user' => auth()->user(),
         ]);
     }
 
@@ -35,6 +37,7 @@ class CompetitionController extends Controller
             'competition' => $competition,
             'user' => auth()->user(),
             'registration' => auth()->user()->competitionRegistrations()->whereCompetitionId($competition->id)->first(),
+            'view' => 'competition',
         ]);
     }
 
@@ -59,6 +62,7 @@ class CompetitionController extends Controller
         return view('admin.competitions', [
             'competitions' => $competitions->latest()->get(),
             'showingOld' => $request->has('all'),
+            'view' => 'competition',
         ]);
     }
 

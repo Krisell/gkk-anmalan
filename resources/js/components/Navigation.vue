@@ -10,17 +10,13 @@
       <gkk-action-card
         v-if="user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
-        @admin="location('/admin/competitions')"
         @click="location('/competitions')"
         description="Tävlingsanmälan"
-        icon="list-ul"
+        icon="th-list"
       ></gkk-action-card>
       <gkk-action-card
         v-if="user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
-        @admin="location('/admin/events')"
         @click="location('/events')"
         description="Funktionärsanmälan"
         icon="users"
@@ -29,60 +25,46 @@
       <gkk-action-card
         v-if="user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
-        @admin="location('/admin/documents')"
-        @click="location('/documents')"
+        @click="location('/member-documents')"
         description="Dokument"
         icon="file-o"
       ></gkk-action-card>
-      <!-- <gkk-action-card :admin="isAdmin" @admin="$modal.show('not-implemented')" @click="cooperation" description="Intresseanmälan<br>(Under utveckling)" icon="lightbulb-o"></gkk-action-card> -->
+      <gkk-action-card
+        v-if="user"
+        class="m-4 max-w-xs w-64"
+        @click="location('/profile')"
+        description="Profil"
+        icon="user-circle"
+      ></gkk-action-card>
       <gkk-action-card
         v-if="isAdmin"
         class="m-4 max-w-xs w-64"
         @click="location('/admin/accounts')"
         description="Administrera konton"
-        icon="user"
+        icon="list-alt"
         :unanswered="unanswered.ungranted"
       ></gkk-action-card>
       <gkk-action-card
         v-if="!user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
         @click="location('/register')"
-        description="Skapa konto"
-        icon="user"
+        description="Skapa konto som medlem"
+        icon="user-circle"
       ></gkk-action-card>
       <gkk-action-card
         v-if="!user"
         class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
         @click="location('/login')"
-        description="Logga in"
+        description="Logga in som medlem"
         icon="sign-in"
       ></gkk-action-card>
-      <gkk-action-card
-        class="m-4 max-w-xs w-64"
-        :admin="isAdmin"
-        @admin="location('/admin/results')"
-        @click="location('/records')"
-        description="Klubbrekord"
-        icon="trophy"
-      ></gkk-action-card>
     </div>
-
-    <modal name="not-implemented" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">Denna funktion är under utveckling</h3>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button @click="$modal.hide('not-implemented')">Stäng</el-button>
-      </div>
-    </modal>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   props: ['user', 'unanswered'],
   computed: {
@@ -91,8 +73,10 @@ export default {
     },
   },
   methods: {
-    cooperation() {
-      this.$modal.show('not-implemented')
+    logout() {
+      axios.post('/logout').then(() => {
+        window.location.reload()
+      })
     },
   },
 }

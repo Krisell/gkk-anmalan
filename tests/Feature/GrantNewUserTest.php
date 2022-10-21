@@ -17,15 +17,15 @@ class GrantNewUserTest extends TestCase
     {
         auth()->login(User::factory()->ungranted()->create());
 
-        $this->get('/competitions')->assertRedirect('/');
-        $this->get('/events')->assertRedirect('/');
-        $this->get('/documents')->assertRedirect('/');
+        $this->get('/competitions')->assertRedirect('/insidan');
+        $this->get('/events')->assertRedirect('/insidan');
+        $this->get('/member-documents')->assertRedirect('/insidan');
 
         auth()->user()->update(['granted_by' => 1]);
 
         $this->get('/competitions')->assertOk();
         $this->get('/events')->assertOk();
-        $this->get('/documents')->assertOk();
+        $this->get('/member-documents')->assertOk();
     }
 
     /** @test */

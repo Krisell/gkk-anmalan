@@ -14,6 +14,7 @@ class DocumentsAdministratorController extends Controller
         return view('admin.documents', [
             'folders' => DocumentFolder::with('documents')->get(),
             'jwt' => Firebase::makeAdminJwt(),
+            'view' => 'member-documents',
         ]);
     }
 

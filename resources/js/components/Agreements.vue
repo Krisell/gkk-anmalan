@@ -52,7 +52,7 @@ export default {
     },
     signAgreement(kind) {
       axios.post(`/sign-agreements/${kind}`).then(() => {
-        window.location = '/'
+        window.location = '/insidan'
       })
     },
   },

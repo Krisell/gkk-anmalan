@@ -250,8 +250,6 @@
       </div>
     </div>
 
-    <GkkLink to="/" text="Tillbaka till startsidan" />
-
     <modal name="promote" :adaptive="true" height="auto">
       <div style="padding: 30px; margin-top: 20px">
         <h3 style="text-align: center">

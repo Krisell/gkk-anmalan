@@ -10,6 +10,7 @@ class RecordsController extends Controller
     {
         return view('records', [
             'results' => Result::with('user:id,first_name,last_name')->get(),
+            'site' => 'records',
         ]);
     }
 }

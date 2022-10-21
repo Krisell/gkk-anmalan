@@ -16,7 +16,7 @@ class DocumentTest extends TestCase
     /** @test */
     public function test_a_not_signed_in_user_cant_access_documents()
     {
-        $this->get('/documents')->assertRedirect();
+        $this->get('/member-documents')->assertRedirect();
     }
 
     /** @test */
@@ -24,7 +24,7 @@ class DocumentTest extends TestCase
     {
         Auth::login(User::factory()->create());
 
-        $this->get('/documents')->assertViewHas([
+        $this->get('/member-documents')->assertViewHas([
             'folders' => DocumentFolder::all(),
         ]);
     }

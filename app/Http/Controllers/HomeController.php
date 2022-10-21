@@ -10,6 +10,35 @@ class HomeController extends Controller
 {
     public function index()
     {
+        return view('landing', ['site' => 'landing']);
+    }
+
+    public function powerlifting()
+    {
+        return view('powerlifting', ['site' => 'powerlifting']);
+    }
+
+    public function about()
+    {
+        return view('about', ['site' => 'about']);
+    }
+
+    public function member()
+    {
+        return view('member', ['site' => 'member']);
+    }
+
+    public function documents()
+    {
+        return view('documents', ['site' => 'documents']);
+    }
+
+    public function inside()
+    {
+        if (config('gkk.no-database-yet')) {
+            return redirect(config('gkk.redirect'));
+        }
+
         $news = auth()->id() ? NewsItem::orderBy('published_at_date', 'desc')->orderBy('created_at', 'desc')->get() : [];
 
         $unanswered = [
@@ -21,10 +50,11 @@ class HomeController extends Controller
             $unanswered['ungranted'] = User::whereGrantedBy(0)->count();
         }
 
-        return view('welcome', [
+        return view('inside', [
             'user' => auth()->user(),
             'unanswered' => $unanswered,
             'news' => $news,
+            'view' => 'inside',
         ]);
     }
 

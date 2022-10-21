@@ -1,8 +1,8 @@
 @extends('layouts.inside')
 
 @section('inside')
-<gkk-admin-documents 
+<gkk-documents 
     :folders='@json($folders)'
-    :jwt='@json($jwt)'
-></gkk-admin-documents>
+    :user='@json($user)'>
+</gkk-documents>
 @endsection

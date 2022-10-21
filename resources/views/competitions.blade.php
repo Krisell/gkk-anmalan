@@ -1,5 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.inside')
 
-@section('content')
-<gkk-competitions :competitions='@json($competitions)' :user-registrations='@json($userRegistrations)'></gkk-competitions>
+@section('inside')
+<gkk-competitions 
+    :competitions='@json($competitions)' 
+    :user-registrations='@json($userRegistrations)'
+    :user='@json($user)'
+></gkk-competitions>
 @endsection

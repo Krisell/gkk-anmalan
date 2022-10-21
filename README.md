@@ -2,7 +2,7 @@
 
 <img src="https://user-images.githubusercontent.com/25909128/118098777-9b9b0a80-b3d4-11eb-8e96-8e4484b41c25.png" width="100">
 
-Detta projekt hanterar "anmälningssidan" för Göteborg Kraftsportklubb (GKK). Projektet startades 2020 för att förenkla hanteringen vid anmälan till tävlingar (från medlem till styrelse) men har med tiden utökas till att idag omfatta följande funktioner:
+Detta projekt hanterar både hemida och den interna "anmälningssidan" för Göteborg Kraftsportklubb (GKK). Projektet startades 2020 för att förenkla hanteringen vid anmälan till tävlingar (från medlem till styrelse) men har med tiden utökas till att idag omfatta både publik hemsida och medlemssidor med följande funktioner:
 
 - Tävlingsanmälan
 - Funktionärsanmälan
@@ -16,19 +16,19 @@ Systemet uppdateras löpande med nya funktioner efter behov.
 
 ## Teknisk översikt
 
-Applikationen är helt webbaserad och bygger på ramverken Vue.js och Laravel (PHP). Hostingen sker på One.com där ordinarie GKK-hemsida ligger. Datan sparas i den MySQL-databas som ingår i One-hostingen, som också ligger under daglig backup.
+Applikationen är helt webbaserad och bygger på ramverken Vue.js och Laravel (PHP). Data sparas i en klassisk MySQL-databas som också ligger under daglig backup.
 
 ## Uppdatera live-versionen
 
-Efter att önskade ändringar är utvecklade, mergade till master och pushade hit används följande steg för att publicera en ny version:
+Efter att önskade ändringar är utvecklade, mergade till rätt branch och pushade hit används följande steg för att publicera en ny version:
 
 - Logga in på servern
-- I mappen `anmalan`, kör kommandot `deployanm` som automatiserar `git pull`, uppdatering av publika assets samt Laravel-specifika optimeringskommandon.
-- Om PHP-beroenden har uppdaterats, kör också `php composer.phar install`
+- I mappen för aktuell branch, kör kommandot `bin/update.sh` som automatiserar `git pull`, uppdatering av publika assets samt Laravel-specifika optimeringskommandon.
+- Om PHP-beroenden har uppdaterats, kör också `php composer.phar install --no-dev`
 
 Deploy är i nuläget inte helt atomär utan en kort period (några sekunder) av nertid kan upplevas (särskilt i samband med `composer install`). Detta är acceptabelt i nuläget men kan komma att förändras om användningen av systemet ökar.
 
-Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt (av `deployanm` ovan). Observera att Laravels `index.php` har justerats för att hitta rätt, så den ska _inte_ uppdateras. För tillfället är det endast innehållet i js/ och css/, samt `mix-manifest.json`, som kopieras.
+Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt enligt ovan. Observera att Laravels `index.php` har justerats för att hitta rätt, så den ska _inte_ uppdateras. För tillfället är det endast innehållet i js/ och css/, samt frontend-manifest (för cache-busting), som kopieras.
 
 ## Utveckla lokalt
 

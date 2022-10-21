@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class SignAgreementsController extends Controller
 {
@@ -23,8 +23,8 @@ class SignAgreementsController extends Controller
             return auth()->user()->update([
                 'membership_agreement_signed_at' => now(),
             ]);
-        } 
-        
+        }
+
         if ($agreement === 'anti-doping') {
             return auth()->user()->update([
                 'anti_doping_agreement_signed_at' => now(),
@@ -35,10 +35,10 @@ class SignAgreementsController extends Controller
     private function membershipAgreementStatus(User $user)
     {
         $membership = $user->membership_agreement_signed_at;
-        if (!$membership) {
+        if (! $membership) {
             return 'unsigned';
         }
-        
+
         $membership = Carbon::parse($membership);
 
         $lastUpdatedMembershipAgreement = config('agreements.membership.last_updated_at');
@@ -46,7 +46,7 @@ class SignAgreementsController extends Controller
             return 'expired';
         }
 
-        if($membership->lt(now()->subYear())) {
+        if ($membership->lt(now()->subYear())) {
             return 'old';
         }
 
@@ -56,7 +56,7 @@ class SignAgreementsController extends Controller
     private function antiDopingAgreementStatus(User $user)
     {
         $antiDoping = $user->anti_doping_agreement_signed_at;
-        if (!$antiDoping) {
+        if (! $antiDoping) {
             return 'unsigned';
         }
 
@@ -67,7 +67,7 @@ class SignAgreementsController extends Controller
             return 'expired';
         }
 
-        if($antiDoping->lt(now()->subYear())) {
+        if ($antiDoping->lt(now()->subYear())) {
             return 'old';
         }
 

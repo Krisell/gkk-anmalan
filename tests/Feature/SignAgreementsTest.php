@@ -21,22 +21,22 @@ class SignAgreementsTest extends TestCase
 
         auth()->login($user);
 
-        $this->get('/')->assertRedirect('/sign-agreements');
-        $this->get('/documents')->assertRedirect('/sign-agreements');
+        $this->get('/insidan')->assertRedirect('/sign-agreements');
+        $this->get('/member-documents')->assertRedirect('/sign-agreements');
         $this->get('/events')->assertRedirect('/sign-agreements');
         $this->get('/competitions')->assertRedirect('/sign-agreements');
 
         $user->update(['membership_agreement_signed_at' => now()]);
 
-        $this->get('/')->assertRedirect('/sign-agreements');
-        $this->get('/documents')->assertRedirect('/sign-agreements');
+        $this->get('/insidan')->assertRedirect('/sign-agreements');
+        $this->get('/member-documents')->assertRedirect('/sign-agreements');
         $this->get('/events')->assertRedirect('/sign-agreements');
         $this->get('/competitions')->assertRedirect('/sign-agreements');
 
         $user->update(['anti_doping_agreement_signed_at' => now()]);
 
-        $this->get('/')->assertOk();
-        $this->get('/documents')->assertOk();
+        $this->get('/insidan')->assertOk();
+        $this->get('/member-documents')->assertOk();
         $this->get('/events')->assertOk();
         $this->get('/competitions')->assertOk();
     }
@@ -51,22 +51,22 @@ class SignAgreementsTest extends TestCase
 
         auth()->login($user);
 
-        $this->get('/')->assertRedirect('/sign-agreements');
-        $this->get('/documents')->assertRedirect('/sign-agreements');
+        $this->get('/insidan')->assertRedirect('/sign-agreements');
+        $this->get('/member-documents')->assertRedirect('/sign-agreements');
         $this->get('/events')->assertRedirect('/sign-agreements');
         $this->get('/competitions')->assertRedirect('/sign-agreements');
 
         $user->update(['membership_agreement_signed_at' => now()]);
 
-        $this->get('/')->assertRedirect('/sign-agreements');
-        $this->get('/documents')->assertRedirect('/sign-agreements');
+        $this->get('/insidan')->assertRedirect('/sign-agreements');
+        $this->get('/member-documents')->assertRedirect('/sign-agreements');
         $this->get('/events')->assertRedirect('/sign-agreements');
         $this->get('/competitions')->assertRedirect('/sign-agreements');
 
         $user->update(['anti_doping_agreement_signed_at' => now()]);
 
-        $this->get('/')->assertOk();
-        $this->get('/documents')->assertOk();
+        $this->get('/insidan')->assertOk();
+        $this->get('/member-documents')->assertOk();
         $this->get('/events')->assertOk();
         $this->get('/competitions')->assertOk();
     }
@@ -81,7 +81,7 @@ class SignAgreementsTest extends TestCase
 
         auth()->login($user);
 
-        $this->get('/')->assertOk();
+        $this->get('/insidan')->assertOk();
 
         // The membership agreement was updated 2022-09-29.
         $user->update([
@@ -89,15 +89,15 @@ class SignAgreementsTest extends TestCase
             'anti_doping_agreement_signed_at' => Carbon::parse('2022-09-28'),
         ]);
 
-        $this->get('/')->assertRedirect('/sign-agreements');
-        $this->get('/documents')->assertRedirect('/sign-agreements');
+        $this->get('/insidan')->assertRedirect('/sign-agreements');
+        $this->get('/member-documents')->assertRedirect('/sign-agreements');
         $this->get('/events')->assertRedirect('/sign-agreements');
         $this->get('/competitions')->assertRedirect('/sign-agreements');
 
         $user->update(['membership_agreement_signed_at' => now()]);
 
-        $this->get('/')->assertOk();
-        $this->get('/documents')->assertOk();
+        $this->get('/insidan')->assertOk();
+        $this->get('/member-documents')->assertOk();
         $this->get('/events')->assertOk();
         $this->get('/competitions')->assertOk();
     }

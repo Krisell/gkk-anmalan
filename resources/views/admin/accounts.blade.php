@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.inside')
 
-@section('content')
+@section('inside')
 <gkk-admin-accounts 
     :user='@json($user)' 
     :ungranted='@json($ungranted)' 
