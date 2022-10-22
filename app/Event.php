@@ -26,6 +26,16 @@ class Event extends Model
         return $this->hasMany(EventRegistration::class);
     }
 
+    public function getPublishCountValueAttribute()
+    {
+        return $this->registrations()->whereStatus(1)->count();
+    }
+
+    public function getPublishListValueAttribute()
+    {
+        return $this->registrations()->whereStatus(1)->with('user:id,first_name,last_name')->get();
+    }
+
     public function scopeVisible($query)
     {
         return $query->where('show_status', 'show')->orWhere(function ($query) {

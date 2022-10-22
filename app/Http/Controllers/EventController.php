@@ -15,7 +15,7 @@ class EventController extends Controller
 
         foreach ($events as $event) {
             if ($event->publish_count) {
-                $event->publish_count_value = $event->registrations()->whereStatus(1)->count();
+                $event->append('publish_count_value');
             }
         }
 
@@ -30,9 +30,7 @@ class EventController extends Controller
     public function show(Event $event)
     {
         if ($event->publish_list) {
-            $event->publish_list_value = $event->registrations()->whereStatus(1)->with(['user' => function ($query) {
-                $query->select('id', 'first_name', 'last_name');
-            }])->get();
+            $event->append('publish_list_value');
         }
 
         return view('event', [

@@ -13,7 +13,7 @@ class CompetitionController extends Controller
 
         foreach ($competitions as $competition) {
             if ($competition->publish_count) {
-                $competition->publish_count_value = $competition->registrations()->whereStatus(1)->count();
+                $competition->append('publish_count_value');
             }
         }
 
@@ -28,9 +28,7 @@ class CompetitionController extends Controller
     public function show(Competition $competition)
     {
         if ($competition->publish_list) {
-            $competition->publish_list_value = $competition->registrations()->whereStatus(1)->with(['user' => function ($query) {
-                $query->select('id', 'first_name', 'last_name');
-            }])->get();
+            $competition->append('publish_list_value');
         }
 
         return view('competition', [
