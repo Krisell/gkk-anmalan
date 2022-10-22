@@ -40,10 +40,6 @@ class HomeController extends Controller
 
     public function inside()
     {
-        if (config('gkk.no-database-yet')) {
-            return redirect(config('gkk.redirect'));
-        }
-
         $news = auth()->id() ? NewsItem::orderBy('published_at_date', 'desc')->orderBy('created_at', 'desc')->get() : [];
 
         $unanswered = [
