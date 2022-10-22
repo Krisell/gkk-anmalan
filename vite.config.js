@@ -20,7 +20,7 @@ export default defineConfig({
       },
     }),
   ],
-  server: detectServerConfig('anmalan.test'),
+  server: detectServerConfig('gkk.test'),
 })
 
 // We'll have to figure out a better way to run the client dev server, since not everyone uses Valet
