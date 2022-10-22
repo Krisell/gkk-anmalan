@@ -44,7 +44,7 @@ background-position-y: 30%; background-position-x: 50%; max-height: 50vh;" class
                 <div class="mt-8">
                   <h2 class="text-xl font-extrabold tracking-tight -mb-2">Provträning</h2>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
-                    Innan du behöver bestämma dig om medlemskap är du välkommen att provträna hos oss vid ett par tillfällen för att titta på lokalen och träffa medlemmar. Om du känner någon i GKK kan du följa med den personen på ett pass. Annars kan du kontakta oss på info@gkk-styrkelyft.se och skriva att du vill provträna och när. Vi försöker då se till att någon finns på plats som kan ta emot dig och berätta lite om oss och hjälpa dig med lyften. Vill du chansa kan du dyka upp en vardag från kl 16 i vår lokal, då det nästan alltid finns medlemmar på plats.
+                    Innan du behöver bestämma dig om medlemskap är du välkommen att provträna hos oss några gånger för att titta på lokalen och träffa medlemmar. Om du känner någon i GKK kan du följa med den personen på ett pass. Annars kan du kontakta oss på info@gkk-styrkelyft.se och skriva att du vill provträna och när. Vi försöker då se till att någon finns på plats som kan ta emot dig och berätta lite om oss och hjälpa dig med lyften. Vill du chansa kan du dyka upp en vardag från kl 16 i vår lokal, då det nästan alltid finns medlemmar på plats.
                   </p>
                 </div>
 
