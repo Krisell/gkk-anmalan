@@ -34,6 +34,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     <a class="underline" target="_blank" href="https://www.styrkelyft.se/dokument/dokument-blanketter">Dokument för tävling mm på förbundets hemsida</a>
                   </div>
                 </div>
+
+                <div>
+                  <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mt-12">Samarbete med SportRehab</h2>
+                  <div class="mt-4">
+                    <i class="fa fa-file-pdf-o"></i>
+                    <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FpUSeLCEIjkrZnfyjNXw7DEIrrlsBTH.pdf?alt=media&token=97fb01f5-6a40-4c7d-9d2e-8605b1893163">Samarbete med SportRehab</a>
+                  </div>
+                </div>
                 
                 <div>
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mt-12">Träningsprogram</h2>
