@@ -53,7 +53,7 @@
                 <i @click="navIsOpen = !navIsOpen" class="ml-2 fa fa-bars text-2xl cursor-pointer"></i>
                 <!-- <div class="ml-8 lg:ml-8 uppercase border-b-2 border-black">Start</div> -->
               </div>
-              <div class="hidden lg:flex absolute left-0 lg:left-24">
+              <div data-cy="navbar" class="hidden lg:flex absolute left-0 lg:left-24">
                 <a
                   class="ml-16 lg:ml-8 uppercase hover:border-b-1 hover:border-black"
                   :class="site === 'landing' ? 'border-b-2 border-black' : ''"
@@ -96,7 +96,7 @@
           <div class="flex items-center">
             <div class="flex-shrink-0">
               <span class="rounded-md shadow-sm">
-                <div>
+                <div data-cy="inside">
                   <a class="uppercase" :class="site === '' ? 'border-b-2 border-black' : ''" href="/insidan">
                     Insidan
                   </a>

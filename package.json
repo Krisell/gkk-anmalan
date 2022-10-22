@@ -2,6 +2,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "cypress-run": "npm run build && ./cypress/run.sh",
+    "cypress": "cypress run --browser chrome --headless",
     "build": "vite build",
     "production": "npm run build",
     "test": "jest"
@@ -14,6 +16,7 @@
     "autoprefixer": "^10.4.1",
     "axios": "^0.27.2",
     "babel-jest": "^27.0.6",
+    "cypress": "^10.10.0",
     "jest": "^27.0.6",
     "laravel-vite-plugin": "^0.5.3",
     "postcss": "^8.4.5",
