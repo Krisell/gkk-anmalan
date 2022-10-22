@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <link rel="apple-touch-startup-image" href="https://anmalan.gkk-styrkelyft.se/favicon.png">
-    <link rel="apple-touch-icon" href="https://anmalan.gkk-styrkelyft.se/appIconGKK.png">
-    <link rel="icon" type="image/png" href="https://anmalan.gkk-styrkelyft.se/favicon.png">
+    <link rel="apple-touch-startup-image" href="https://goteborg-kraftsportklubb.web.app/img/favicon.png">
+    <link rel="apple-touch-icon" href="https://goteborg-kraftsportklubb.web.app/img/appIconGKK.png">
+    <link rel="icon" type="image/png" href="https://goteborg-kraftsportklubb.web.app/img/favicon.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Göteborg Kraftsportklubb</title>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

@@ -28,7 +28,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/stryrelsen_carl-1.jpeg" alt="">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://goteborg-kraftsportklubb.web.app/img/stryrelsen_carl-1.jpeg" alt="">
                       <h3 class="mt-6 text-gray-900 text-sm font-medium">Carl Öberg</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dt class="sr-only">Title</dt>
@@ -56,7 +56,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/styrelsen_tobias.jpg" alt="">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://goteborg-kraftsportklubb.web.app/img/styrelsen_tobias.jpg" alt="">
                       <h3 class="mt-6 text-gray-900 text-sm font-medium">Tobias Nilsson</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Ledamot</dd>
@@ -65,7 +65,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2020/04/styrelsen_albin.jpg" alt="">
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://goteborg-kraftsportklubb.web.app/img/styrelsen_albin.jpg" alt="">
                       <h3 class="mt-6 text-gray-900 text-sm font-medium">Albin Björkman</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Ledamot</dd>

@@ -27,7 +27,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   </div>
                   <div class="mt-4">
                     <i class="fa fa-file-pdf-o"></i>
-                    <a class="underline" target="_blank" href="https://www.gkk-styrkelyft.se/wp-content/uploads/2020/03/gkk-integritetspolicy.pdf">Föreningens integritetspolicy (PDF)</a>
+                    <a class="underline" target="_blank" href="https://goteborg-kraftsportklubb.web.app/img/gkk-integritetspolicy.pdf">Föreningens integritetspolicy (PDF)</a>
                   </div>
                   <div class="mt-4">
                     <i class="fa fa-link"></i>
@@ -47,7 +47,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mt-12">Träningsprogram</h2>
                   <div class="flex mt-4">
                     <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FBeard-Press%202021-02-14.xlsx?alt=media&token=30924370-12aa-4ddf-8bf1-2fd45cc70717">
-                      <img width="200px" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2021/02/beardpress-logo-excel.png">
+                      <img width="200px" src="https://goteborg-kraftsportklubb.web.app/img/beardpress-logo-excel.png">
                     </a>
                     <div class="p-4">
                       <b>Beard Press</b><br>
@@ -57,7 +57,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   </div>
                   <div class="flex mt-4">
                     <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FBa%CC%88nkprogram%20CalleO%CC%88berg.xlsx?alt=media&token=731f217f-fe83-4950-88b6-402515862445">
-                      <img width="220px" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2021/07/hemside-bild.png">
+                      <img width="220px" src="https://goteborg-kraftsportklubb.web.app/img/hemside-bild.png">
                     </a>
                     <div class="p-4">
                       <b>Carl Öbergs bänkpressprogram</b><br>
@@ -68,28 +68,28 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <div>
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mt-12">Grafik</h2>
                   <div class="flex items-center mt-2">
-                    <img width="100px" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%C3%A5f%C3%A4rg-p%C3%A5-ljus-bakgrund.png">
+                    <img width="100px" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FTva%CC%8Afa%CC%88rg-pa%CC%8A-ljus-bakgrund.png?alt=media&token=be907bc2-2491-45e6-ae62-a5a78b080d41">
                     <div class="ml-2">Tvåfärg mot ljus bakgrund</div>
                   </div>
                   <div class="flex items-center mt-2">
-                    <img width="100px" src="https://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%C3%A5f%C3%A4rg-p%C3%A5-m%C3%B6rk-bakgrund-300x300.png">
+                    <img width="100px" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FTva%CC%8Afa%CC%88rg-pa%CC%8A-mo%CC%88rk-bakgrund-300x300.png?alt=media&token=f1942878-84fa-4519-a051-08bbec625fa7">
                     <div class="ml-2">Tvåfärg mot mörk bakgrund (för tryck och utskrift)</div>
                   </div>
                   <div class="flex items-center mt-2">
-                    <img width="100px" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%C3%A5f%C3%A4rg-p%C3%A5-m%C3%B6rk-bakgrund-transparent.png">
+                    <img width="100px" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FTva%CC%8Afa%CC%88rg-pa%CC%8A-mo%CC%88rk-bakgrund-transparent.png?alt=media&token=def700f9-01c7-4786-a246-28475a5e32f1">
                     <div class="ml-2">Tvåfärg mot mörk bakgrund (transparent)</div>
                   </div>
                   <div class="flex items-center mt-2">
-                    <img width="100px" src="http://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Monokrom-p%C3%A5-m%C3%B6rk-bakgrund.png">
+                    <img width="100px" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FMonokrom-pa%CC%8A-mo%CC%88rk-bakgrund.png?alt=media&token=aa0b2c8a-4059-42ed-a36e-7436f7b24a39">
                     <div class="ml-2">Monokrom mot mörk bakgrund</div>
                   </div>
                   <div class="mt-4"> 
                     <i class="fa fa-file-pdf-o"></i>
-                    <a class="underline" target="_blank" href="http://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Monokrom-p%C3%A5-m%C3%B6rk-bakgrund.pdf">Monokrom mot mörk bakgrund för tryck/utskrift (PDF)</a>
+                    <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FMonokrom-pa%CC%8A-mo%CC%88rk-bakgrund.pdf?alt=media&token=f49672e6-dc0b-4dcc-a973-bc7a2e47ffd4">Monokrom mot mörk bakgrund för tryck/utskrift (PDF)</a>
                   </div>
                   <div class="mt-4">
                     <i class="fa fa-file-pdf-o"></i>
-                    <a class="underline" target="_blank" href="http://www.gkk-styrkelyft.se/wp-content/uploads/2014/08/Tv%C3%A5f%C3%A4rg-p%C3%A5-m%C3%B6rk-bakgrund.pdf">Tvåfärg på mörk bakgrund för tryck/utskrift (PDF)</a>
+                    <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FTva%CC%8Afa%CC%88rg-pa%CC%8A-mo%CC%88rk-bakgrund.pdf?alt=media&token=e2779fa9-486f-491f-81ed-14d1b1d0d15b">Tvåfärg på mörk bakgrund för tryck/utskrift (PDF)</a>
                   </div>
                 </div>
             </div>
@@ -136,8 +136,6 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   </div>
                 </div>
               </li>
-      
-              <!-- More people... -->
             </ul>
           </div>
         </div>
