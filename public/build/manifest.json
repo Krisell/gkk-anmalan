@@ -1,6 +1,6 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.3df265a2.js",
+    "file": "assets/app.2ac20c44.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "dynamicImports": [
@@ -11,7 +11,7 @@
     ]
   },
   "node_modules/zipcelx/lib/module.js": {
-    "file": "assets/module.d05a6863.js",
+    "file": "assets/module.14eeee00.js",
     "src": "node_modules/zipcelx/lib/module.js",
     "isDynamicEntry": true,
     "imports": [
@@ -23,7 +23,7 @@
     "src": "resources/js/app.css"
   },
   "resources/css/main.css": {
-    "file": "assets/main.b8c79e3b.css",
+    "file": "assets/main.003af8d4.css",
     "src": "resources/css/main.css",
     "isEntry": true
   }
