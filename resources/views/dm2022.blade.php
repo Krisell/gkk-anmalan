@@ -16,13 +16,13 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
               </div>
               <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">12-13 november 2022 - Göteborg Kraftsportklubb - Friskis och Svettis i Majorna</h2>
                 <p class="text-xl leading-normal text-gray-500">
-                  Distriktsmästerskapen i Klassisk Styrkelyft och Utrustad Bänkpress går av stapeln 12-13 november hos GKK, på Friskis och Svettis i Majorna. 126 lyftare gör upp om medaljerna!
+                  Distriktsmästerskapen i Klassisk Styrkelyft och Utrustad Bänkpress går av stapeln 12-13 november hos GKK, på Friskis och Svettis i Majorna. 143 lyftare gör upp om medaljerna!
                 </p>
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> 116 st i KSL, 10 st i BP.</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar:</b> X</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Entreavgift:</b> Om man vill!</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Javisst!</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> 132 st i KSL och 11 st i BP.</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar: </b> 20</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Entreavgift:</b> Valfri</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Ja, länk läggs upp här på tävlingsdagen.</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck.</p>
                 <p class="text-xl leading-normal text-gray-500">
                   Tider och startlistor publiceras här så snart de är klara.
