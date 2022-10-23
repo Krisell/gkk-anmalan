@@ -315,7 +315,7 @@ export default {
       return this.accounts
         .filter((account) => account.inactivated_at === null)
         .sort((a, b) => {
-          if (!a[this.sortKey] || !b[this.sortKey]) {
+          if (!a[this.sortKey] && !b[this.sortKey]) {
             return 0
           }
 
