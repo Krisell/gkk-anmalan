@@ -314,16 +314,9 @@ export default {
     sortedActiveAccounts() {
       return this.accounts
         .filter((account) => account.inactivated_at === null)
-        .sort((a, b) => {
-          if (!a[this.sortKey] && !b[this.sortKey]) {
-            return 0
-          }
-
-          return (
-            this.sortOrder *
+        .sort((a, b) => this.sortOrder *
             String(a[this.sortKey]).localeCompare(String(b[this.sortKey]), undefined, { numeric: true })
-          )
-        })
+        )
     },
     inactiveAccounts() {
       return this.accounts.filter((account) => account.inactivated_at !== null)
