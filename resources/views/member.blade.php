@@ -59,7 +59,7 @@ background-position-y: 30%; background-position-x: 50%; max-height: 50vh;" class
                 <div class="mt-8">
                   <h2 class="text-xl font-extrabold tracking-tight -mb-2">Tävlingssugen?</h2>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
-                    Före din första tävling behöver du vara med och hjälpa till när GKK arrangerar, både för att lära dig mer om hur en tävling går till och för att lära känna föreningen bättre. På våra interna medlemssidor sker anmälan till sådana funktionärsuppdrag.
+                    Före din första tävling behöver du vara med och hjälpa till när GKK arrangerar, både för att lära dig mer om hur en tävling går till och för att lära känna föreningen bättre. På våra interna medlemssidor sker anmälan till sådana funktionärsuppdrag. Som tävlingsaktiv förväntas du hjälpa till på våra arrangemang vid minst ett tillfälle per år.
                   </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
                     Till förbundet betalas en tävlingslicens in varje år och denna betalar du till GKK i samband med första tävlingsanmälan (se ovan).
