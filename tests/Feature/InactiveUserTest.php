@@ -22,7 +22,7 @@ class InactiveUserTest extends TestCase
         $this->get('/')->assertRedirect('/inactivated');
         $this->get('/events')->assertRedirect('/inactivated');
         $this->get('/competitions')->assertRedirect('/inactivated');
-        $this->get('/documents')->assertRedirect('/inactivated');
+        $this->get('/dokument')->assertRedirect('/inactivated');
     }
 
     /** @test */

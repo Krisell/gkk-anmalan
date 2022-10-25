@@ -12,19 +12,19 @@
           <a :class="site === 'landing' ? 'border-b-2 border-black' : ''" href="/">Start</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'powerlifting' ? 'border-b-2 border-black' : ''" href="/powerlifting">Styrkelyft</a>
+          <a :class="site === 'powerlifting' ? 'border-b-2 border-black' : ''" href="/styrkelyft">Styrkelyft</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'about' ? 'border-b-2 border-black' : ''" href="/about">Om GKK</a>
+          <a :class="site === 'about' ? 'border-b-2 border-black' : ''" href="/gkk">Om GKK</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'member' ? 'border-b-2 border-black' : ''" href="/member">Medlemskap</a>
+          <a :class="site === 'member' ? 'border-b-2 border-black' : ''" href="/medlem">Medlemskap</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'documents' ? 'border-b-2 border-black' : ''" href="/documents">Dokument &amp; program</a>
+          <a :class="site === 'documents' ? 'border-b-2 border-black' : ''" href="/dokument">Dokument &amp; program</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'records' ? 'border-b-2 border-black' : ''" href="/records">Klubbrekord</a>
+          <a :class="site === 'records' ? 'border-b-2 border-black' : ''" href="/klubbrekord">Klubbrekord</a>
         </li>
         <li class="mt-4 hover:text-gkk">
           <a :class="site === '' ? 'border-b-2 border-black' : ''" href="/insidan">Insidan</a>
@@ -63,31 +63,31 @@
                 <a
                   class="ml-2 lg:ml-6 uppercase hover:border-b-1 hover:border-black"
                   :class="site === 'powerlifting' ? 'border-b-2 border-black' : ''"
-                  href="/powerlifting"
+                  href="/styrkelyft"
                   >Styrkelyft</a
                 >
                 <a
                   class="ml-2 lg:ml-6 uppercase hover:border-b-1 hover:border-black"
                   :class="site === 'about' ? 'border-b-2 border-black' : ''"
-                  href="/about"
+                  href="/gkk"
                   >Om GKK</a
                 >
                 <a
                   class="ml-6 uppercase hover:border-b-1 hover:border-black"
                   :class="site === 'member' ? 'border-b-2 border-black' : ''"
-                  href="/member"
+                  href="/medlem"
                   >Medlemskap</a
                 >
                 <a
                   class="ml-6 uppercase hover:border-b-1 hover:border-black"
                   :class="site === 'documents' ? 'border-b-2 border-black' : ''"
-                  href="/documents"
+                  href="/dokument"
                   >Dokument &amp; program</a
                 >
                 <a
                   class="ml-6 uppercase hover:border-b-1 hover:border-black"
                   :class="site === 'records' ? 'border-b-2 border-black' : ''"
-                  href="/records"
+                  href="/klubbrekord"
                   >Klubbrekord</a
                 >
               </div>

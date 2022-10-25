@@ -12,6 +12,6 @@ class RecordsTest extends TestCase
     /** @test */
     public function records_page_can_be_viewed()
     {
-        $this->get('/records')->assertViewHas('results');
+        $this->get('/klubbrekord')->assertViewHas('results');
     }
 }

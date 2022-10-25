@@ -13,10 +13,10 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/dm', [HomeController::class, 'dm']);
 Route::get('/dm2022', [HomeController::class, 'dm']);
 
-Route::get('/powerlifting', [HomeController::class, 'powerlifting']);
-Route::get('/about', [HomeController::class, 'about']);
-Route::get('/member', [HomeController::class, 'member']);
-Route::get('/documents', [HomeController::class, 'documents']);
+Route::get('/styrkelyft', [HomeController::class, 'powerlifting']);
+Route::get('/gkk', [HomeController::class, 'about']);
+Route::get('/medlem', [HomeController::class, 'member']);
+Route::get('/dokument', [HomeController::class, 'documents']);
 
 Route::prefix('insidan')->middleware(EnsureAgreementsAreSignedMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'inside']);
@@ -26,7 +26,7 @@ Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->midd
 Route::post('/sign-agreements/{agreement}', [SignAgreementsController::class, 'store'])->middleware('auth');
 Route::view('/inactivated', 'inactivated')->name('inactivated');
 
-Route::prefix('records')->group(function () {
+Route::prefix('klubbrekord')->group(function () {
     Route::get('/', [\App\Http\Controllers\RecordsController::class, 'index']);
 });
 
