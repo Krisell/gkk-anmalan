@@ -18,15 +18,25 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500">
                   Distriktsmästerskapen i Klassisk Styrkelyft och Utrustad Bänkpress går av stapeln 12-13 november hos GKK, på Friskis och Svettis i Majorna. 143 lyftare gör upp om medaljerna!
                 </p>
+                <a 
+                  target="_blank"
+                  class="inline-flex items-center px-4 py-2 border border-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                  href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor%20rev.%202022-10-26.pdf?alt=media&token=7d515331-44be-449d-98c6-9b2813aa9845">
+                  <i class="fa fa-file-pdf-o mr-2"></i>Startlistor och tävlingstider (rev. 2022-10-26)
+                </a>
+                <p class="mt-4 text-xl leading-normal text-gray-500"><b>Observera ändrade starttider från inbjudan på grund av stort deltagarantal.</b></p>
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> 132 st i KSL och 11 st i BP.</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> Totalt 143 st, fördelat på 132 st i KSL och 11 st i BP.</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar: </b> 20</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Entreavgift:</b> Valfri</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Ja, länk läggs upp här på tävlingsdagen.</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck.</p>
-                <p class="text-xl leading-normal text-gray-500">
-                  Tider och startlistor publiceras här så snart de är klara.
-                </p>
+                <a 
+                  target="_blank"
+                  class="inline-flex items-center px-4 py-2 border border-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                  href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor%20rev.%202022-10-26.pdf?alt=media&token=7d515331-44be-449d-98c6-9b2813aa9845">
+                  <i class="fa fa-file-pdf-o mr-2"></i>Startlistor och tävlingstider (rev. 2022-10-26)
+                </a>
                 <p class="text-xl leading-normal text-gray-500">
                   Resultatlistor publiceras här efter avslutad tävling.
                 </p>
