@@ -16,6 +16,7 @@ Route::get('/dm2022', [HomeController::class, 'dm']);
 Route::get('/styrkelyft', [HomeController::class, 'powerlifting']);
 Route::get('/gkk', [HomeController::class, 'about']);
 Route::get('/medlem', [HomeController::class, 'member']);
+Route::redirect('/member', '/medlem');
 Route::get('/dokument', [HomeController::class, 'documents']);
 
 Route::prefix('insidan')->middleware(EnsureAgreementsAreSignedMiddleware::class)->group(function () {
