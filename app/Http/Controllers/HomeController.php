@@ -15,7 +15,7 @@ class HomeController extends Controller
 
     public function dm()
     {
-        return view('dm2022', ['site' => 'landing']);
+        return view('dm2022', ['site' => 'dm']);
     }
 
     public function powerlifting()
