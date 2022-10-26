@@ -44,6 +44,14 @@ Följande kommandon kan sedan användas för att sätta upp en utvecklingsmiljö
 
 Om du vill göra ändringar i frontend krävs att `Node.js` är installerat, att du installerar beroenden med `npm install` samt att du bygger för utveckling (`npm run watch`) eller för produktion (`npm run production`).
 
+Automatiska tester och granskning av kodstil kan köras genom `bin/alltest.sh`, som kör följande kommandon
+```bash
+composer lint
+composer static
+composer test
+npm run cypress-run
+```
+
 ## Konton
 
 Registreringen är öppen så medlemmar sjävla kan skapa ett konto, men före användning krävs dels att våra medlemsavtal och antidopingavtal godkänns, dels att någon administratör (styrelsemedlem) godkänner det nya kontot. Det senare sker genom att en epostnotis skickas till styrelsen, och medlemmen får ett epost när godkännandet är genomfört. Observera att det i nuläget inte sker någon verifiering av angiven epostadress men det kan vi koppla på om det blir aktuellt, alternativt stänga anmälan och låta nya konton skapas av styrelsen.
