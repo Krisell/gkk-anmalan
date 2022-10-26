@@ -20,7 +20,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 </p>
                 <a 
                   target="_blank"
-                  class="inline-flex items-center px-4 py-2 border border-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                  class="inline-flex items-center px-4 py-2 border border-gkk hover:bg-gkk hover:text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                   href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor%20rev.%202022-10-26.pdf?alt=media&token=7d515331-44be-449d-98c6-9b2813aa9845">
                   <i class="fa fa-file-pdf-o mr-2"></i>Startlistor och tävlingstider (rev. 2022-10-26)
                 </a>
@@ -33,7 +33,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck.</p>
                 <a 
                   target="_blank"
-                  class="inline-flex items-center px-4 py-2 border border-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                  class="inline-flex items-center px-4 py-2 border border-gkk hover:bg-gkk hover:text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                   href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor%20rev.%202022-10-26.pdf?alt=media&token=7d515331-44be-449d-98c6-9b2813aa9845">
                   <i class="fa fa-file-pdf-o mr-2"></i>Startlistor och tävlingstider (rev. 2022-10-26)
                 </a>
