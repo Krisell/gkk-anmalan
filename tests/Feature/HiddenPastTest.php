@@ -1,30 +1,14 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Competition;
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class HiddenPastTest extends TestCase
-{
-    use RefreshDatabase;
+test('a past competition is by default hidden', function () {
+    Competition::factory()->create(['date' => now()->subDays(10)]);
+    Competition::factory()->create(['date' => now()->subDays(2)]);
+    Competition::factory()->create(['date' => now()->addDays(3)]);
+    Competition::factory()->create(['date' => now()->addDays(10)]);
 
-    /** @test */
-    public function a_past_competition_is_by_default_hidden()
-    {
-        $cA = Competition::factory()->create(['date' => now()->subDays(10)]);
-        $cB = Competition::factory()->create(['date' => now()->subDays(2)]);
-        $cC = Competition::factory()->create(['date' => now()->addDays(3)]);
-        $cD = Competition::factory()->create(['date' => now()->addDays(10)]);
+    login();
 
-        $user = User::factory()->create();
-
-        auth()->login($user);
-
-        $viewData = $this->get('competitions')->getOriginalContent()->getData()['competitions'];
-
-        $this->assertCount(2, $viewData);
-    }
-}
+    $this->assertCount(2, $this->get('competitions')->getOriginalContent()->getData()['competitions']);
+});

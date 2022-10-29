@@ -1,52 +1,37 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class SignInTest extends TestCase
-{
-    use RefreshDatabase;
+test('sign in can be completed with the correct details', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function sign_in_can_be_completed_with_the_correct_details()
-    {
-        $user = User::factory()->create();
+    $this->assertNull(auth()->user());
 
-        $this->assertNull(auth()->user());
+    $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password', // default in factory
+    ])->assertRedirect('/insidan');
 
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password', // default in factory
-        ])->assertRedirect('/insidan');
+    $this->assertNotNull(auth()->user());
+});
 
-        $this->assertNotNull(auth()->user());
-    }
+test('sign in cannot be completed with the incorrect details', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function sign_in_cannot_be_completed_with_the_incorrect_details()
-    {
-        $user = User::factory()->create();
+    $this->assertNull(auth()->user());
 
-        $this->assertNull(auth()->user());
+    $this->get('/login');
+    $response = $this->followingRedirects()->post('/login', [
+        'email' => $user->email,
+        'password' => 'wrong-password',
+    ]);
 
-        $this->get('/login');
-        $response = $this->followingRedirects()->post('/login', [
-            'email' => $user->email,
-            'password' => 'wrong-password',
-        ]);
+    $response->assertSee($user->email);
+    $response->assertSee('Kunde inte logga in med dessa användaruppgifter.');
 
-        $response->assertSee($user->email);
-        $response->assertSee('Kunde inte logga in med dessa användaruppgifter.');
+    $this->assertNull(auth()->user());
+});
 
-        $this->assertNull(auth()->user());
-    }
-
-    /** @test */
-    public function exclamation_point_still_points_to_landing_page()
-    {
-        $this->get('!')->assertRedirect('');
-    }
-}
+test('exclamation point still points to landing page', function () {
+    $this->get('!')->assertRedirect('');
+});

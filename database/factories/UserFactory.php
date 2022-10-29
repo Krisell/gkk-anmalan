@@ -38,19 +38,29 @@ class UserFactory extends Factory
 
     public function ungranted()
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'granted_by' => 0,
-            ];
-        });
+        return $this->state(fn () => [
+            'granted_by' => '0',
+        ]);
     }
 
     public function admin()
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'role' => 'admin',
-            ];
-        });
+        return $this->state(fn () => [
+            'role' => 'admin',
+        ]);
+    }
+
+    public function superadmin()
+    {
+        return $this->state(fn () => [
+            'role' => 'superadmin',
+        ]);
+    }
+
+    public function inactivated()
+    {
+        return $this->state(fn () => [
+            'inactivated_at' => now(),
+        ]);
     }
 }

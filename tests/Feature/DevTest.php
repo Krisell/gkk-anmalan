@@ -1,39 +1,23 @@
 <?php
 
-namespace Tests\Feature;
+test('the superadmin may load dev routes', function () {
+    $this->json('get', '/admin/dev/phpinfo')->assertUnauthorized();
+    $this->json('get', '/admin/dev/opcache')->assertUnauthorized();
 
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+    login();
 
-class DevTest extends TestCase
-{
-    use RefreshDatabase;
+    $this->json('get', '/admin/dev/phpinfo')->assertUnauthorized();
+    $this->json('get', '/admin/dev/opcache')->assertUnauthorized();
 
-    /** @test */
-    public function the_superadmin_may_load_dev_routes()
-    {
-        $this->json('get', '/admin/dev/phpinfo')->assertUnauthorized();
-        $this->json('get', '/admin/dev/opcache')->assertUnauthorized();
+    loginAdmin();
 
-        $user = User::factory()->create();
-        auth()->login($user);
+    $this->json('get', '/admin/dev/phpinfo')->assertUnauthorized();
+    $this->json('get', '/admin/dev/opcache')->assertUnauthorized();
 
-        $this->json('get', '/admin/dev/phpinfo')->assertUnauthorized();
-        $this->json('get', '/admin/dev/opcache')->assertUnauthorized();
+    loginSuperadmin();
 
-        $adminUser = User::factory()->create(['role' => 'admin']);
-        auth()->login($adminUser);
-
-        $this->json('get', '/admin/dev/phpinfo')->assertUnauthorized();
-        $this->json('get', '/admin/dev/opcache')->assertUnauthorized();
-
-        $superadminUser = User::factory()->create(['role' => 'superadmin']);
-        auth()->login($superadminUser);
-
-        \ob_start();
-        $this->json('get', '/admin/dev/phpinfo')->assertOk();
-        $this->json('get', '/admin/dev/opcache')->assertOk();
-        \ob_end_clean();
-    }
-}
+    \ob_start();
+    $this->json('get', '/admin/dev/phpinfo')->assertOk();
+    $this->json('get', '/admin/dev/opcache')->assertOk();
+    \ob_end_clean();
+});

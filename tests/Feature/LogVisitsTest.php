@@ -1,73 +1,57 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class LogVisitsTest extends TestCase
-{
-    use RefreshDatabase;
+test('a visit is counted', function () {
+    $user = User::factory()->create()->fresh();
 
-    /** @test */
-    public function a_visit_is_counted()
-    {
-        $user = User::factory()->create()->fresh();
+    $this->assertEquals(0, $user->visits);
+    $this->assertNull($user->last_visited_at);
 
-        $this->assertEquals(0, $user->visits);
-        $this->assertNull($user->last_visited_at);
+    login($user);
+    $this->get('/');
 
-        auth()->login($user);
-        $this->get('/');
+    $this->assertEquals(1, $user->visits);
+    $this->assertNotNull($user->last_visited_at);
+});
 
-        $this->assertEquals(1, $user->visits);
-        $this->assertNotNull($user->last_visited_at);
-    }
+test('a non logged in user can still visit a page', function () {
+    $this->get('/')->assertOk();
+});
 
-    /** @test */
-    public function a_non_logged_in_user_can_still_visit_a_page()
-    {
-        $this->get('/')->assertOk();
-    }
+test('a visit is counted at most once every 30 minutes', function () {
+    $user = login();
 
-    /** @test */
-    public function a_visit_is_counted_at_most_once_every_30_minutes()
-    {
-        $this->withoutExceptionHandling();
-        auth()->login($user = User::factory()->create());
+    $this->get('/');
 
-        $this->get('/');
+    $this->assertEquals(1, $user->visits);
+    $this->assertNotNull($user->last_visited_at);
+    $lastTime = $user->last_visited_at;
 
-        $this->assertEquals(1, $user->visits);
-        $this->assertNotNull($user->last_visited_at);
-        $lastTime = $user->last_visited_at;
+    Carbon::setTestNow(now()->addMinutes(20));
 
-        Carbon::setTestNow(now()->addMinutes(20));
+    $this->get('/');
 
-        $this->get('/');
+    $this->assertEquals(1, $user->visits);
+    $this->assertEquals($lastTime, $user->last_visited_at);
 
-        $this->assertEquals(1, $user->visits);
-        $this->assertEquals($lastTime, $user->last_visited_at);
+    Carbon::setTestNow(now()->addMinutes(20));
 
-        Carbon::setTestNow(now()->addMinutes(20));
+    $this->get('/');
 
-        $this->get('/');
+    $this->assertEquals(2, $user->visits);
+    $this->assertNotEquals($lastTime, $user->last_visited_at);
 
-        $this->assertEquals(2, $user->visits);
-        $this->assertNotEquals($lastTime, $user->last_visited_at);
+    Carbon::setTestNow(now()->addMinutes(40));
 
-        Carbon::setTestNow(now()->addMinutes(40));
+    $this->get('/');
 
-        $this->get('/');
+    $this->assertEquals(3, $user->visits);
 
-        $this->assertEquals(3, $user->visits);
+    Carbon::setTestNow(now()->addMinutes(20));
 
-        Carbon::setTestNow(now()->addMinutes(20));
+    $this->get('/');
 
-        $this->get('/');
-
-        $this->assertEquals(3, $user->visits);
-    }
-}
+    $this->assertEquals(3, $user->visits);
+});

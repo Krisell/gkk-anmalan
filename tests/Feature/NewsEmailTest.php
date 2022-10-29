@@ -1,101 +1,79 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Mail\NewsMail;
 use App\NewsItem;
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
 
-class NewsEmailTest extends TestCase
-{
-    use RefreshDatabase;
+test('the news email page can be accessed by administrators only', function () {
+    $item = NewsItem::create([
+        'title' => 'ABC',
+        'body' => 'DEF',
+    ]);
 
-    /** @test */
-    public function the_news_email_page_can_be_accessed_by_administrators_only()
-    {
-        $item = NewsItem::create([
-            'title' => 'ABC',
-            'body' => 'DEF',
-        ]);
+    $this->get("/admin/news/email/{$item->id}")->assertRedirect();
 
-        $this->get("/admin/news/email/{$item->id}")->assertRedirect();
+    login();
 
-        $user = User::factory()->create();
-        auth()->login($user);
+    $this->get("/admin/news/email/{$item->id}")->assertUnauthorized();
 
-        $this->get("/admin/news/email/{$item->id}")->assertUnauthorized();
+    loginAdmin();
 
-        $user = User::factory()->create(['role' => 'admin']);
-        auth()->login($user);
+    $this->get("/admin/news/email/{$item->id}")->assertViewHas([
+        'item' => $item,
+    ]);
+});
 
-        $this->get("/admin/news/email/{$item->id}")->assertViewHas([
-            'item' => $item,
-        ]);
-    }
+test('a news email can be previewed in the browser', function () {
+    $this->post('/admin/news/email/preview', [
+        'body' => 'ABC',
+        'title' => 'CDE',
+    ])->assertRedirect();
 
-    /** @test */
-    public function a_news_email_can_be_previewed_in_the_browser()
-    {
-        $this->post('/admin/news/email/preview', [
-            'body' => 'ABC',
-            'title' => 'CDE',
-        ])->assertRedirect();
+    login();
 
-        $user = User::factory()->create();
-        auth()->login($user);
+    $this->post('/admin/news/email/preview', [
+        'body' => 'ABC',
+        'title' => 'CDE',
+    ])->assertUnauthorized();
 
-        $this->post('/admin/news/email/preview', [
-            'body' => 'ABC',
-            'title' => 'CDE',
-        ])->assertUnauthorized();
+    loginAdmin();
 
-        $user = User::factory()->create(['role' => 'admin']);
-        auth()->login($user);
+    $this->post('/admin/news/email/preview', [
+        'body' => 'ABC',
+        'title' => 'CDE',
+    ])->assertOk();
+});
 
-        $this->post('/admin/news/email/preview', [
-            'body' => 'ABC',
-            'title' => 'CDE',
-        ])->assertOk();
-    }
+test('a news email can be sent as a test to the signed in user', function () {
+    Mail::fake();
 
-    /** @test */
-    public function a_news_email_can_be_sent_as_a_test_to_the_signed_in_user()
-    {
-        Mail::fake();
+    $item = NewsItem::create([
+        'title' => 'ABC',
+        'body' => 'DEF',
+    ]);
 
-        $item = NewsItem::create([
-            'title' => 'ABC',
-            'body' => 'DEF',
-        ]);
+    $this->post('/admin/news/email/test', [
+        'body' => $item->body,
+        'title' => $item->title,
+    ])->assertRedirect();
 
-        $this->post('/admin/news/email/test', [
-            'body' => $item->body,
-            'title' => $item->title,
-        ])->assertRedirect();
+    Mail::assertNotSent(NewsMail::class);
 
-        Mail::assertNotSent(NewsMail::class);
+    login();
 
-        $user = User::factory()->create();
-        auth()->login($user);
+    $this->post('/admin/news/email/test', [
+        'body' => $item->body,
+        'title' => $item->title,
+    ])->assertUnauthorized();
 
-        $this->post('/admin/news/email/test', [
-            'body' => $item->body,
-            'title' => $item->title,
-        ])->assertUnauthorized();
+    Mail::assertNotSent(NewsMail::class);
 
-        Mail::assertNotSent(NewsMail::class);
+    $user = loginAdmin();
 
-        $user = User::factory()->create(['role' => 'admin']);
-        auth()->login($user);
+    $this->post('/admin/news/email/test', [
+        'body' => $item->body,
+        'title' => $item->title,
+    ])->assertOk();
 
-        $this->post('/admin/news/email/test', [
-            'body' => $item->body,
-            'title' => $item->title,
-        ])->assertOk();
-
-        Mail::assertSent(NewsMail::class, fn ($mail) => $mail->hasTo($user->email));
-    }
-}
+    Mail::assertSent(NewsMail::class, fn ($mail) => $mail->hasTo($user->email));
+});

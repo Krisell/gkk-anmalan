@@ -1,83 +1,64 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Mail\AccountGrantedMail;
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
 
-class GrantNewUserTest extends TestCase
-{
-    use RefreshDatabase;
+test('a not granted user can not view any page except for nagivation', function () {
+    login(User::factory()->ungranted()->create());
 
-    /** @test */
-    public function a_not_granted_user_can_not_view_any_page_except_for_nagivation()
-    {
-        auth()->login(User::factory()->ungranted()->create());
+    $this->get('/competitions')->assertRedirect('/insidan');
+    $this->get('/events')->assertRedirect('/insidan');
+    $this->get('/member-documents')->assertRedirect('/insidan');
 
-        $this->get('/competitions')->assertRedirect('/insidan');
-        $this->get('/events')->assertRedirect('/insidan');
-        $this->get('/member-documents')->assertRedirect('/insidan');
+    auth()->user()->update(['granted_by' => 1]);
 
-        auth()->user()->update(['granted_by' => 1]);
+    $this->get('/competitions')->assertOk();
+    $this->get('/events')->assertOk();
+    $this->get('/member-documents')->assertOk();
+});
 
-        $this->get('/competitions')->assertOk();
-        $this->get('/events')->assertOk();
-        $this->get('/member-documents')->assertOk();
-    }
+test('an admin can grant a new account which triggers an email', function () {
+    $user = User::factory()->ungranted()->create();
 
-    /** @test */
-    public function an_admin_can_grant_a_new_account_which_triggers_an_email()
-    {
-        $user = User::factory()->ungranted()->create();
+    loginAdmin();
 
-        auth()->login(User::factory()->create(['role' => 'admin']));
+    Mail::fake();
+    $this->post("/admin/accounts/{$user->id}/grant")->assertOk();
 
-        Mail::fake();
-        $this->post("/admin/accounts/{$user->id}/grant")->assertOk();
+    $this->assertEquals(auth()->id(), $user->fresh()->granted_by);
+    Mail::assertSent(AccountGrantedMail::class, function ($mail) use ($user) {
+        return $mail->hasTo($user->email);
+    });
+});
 
-        $this->assertEquals(auth()->id(), $user->fresh()->granted_by);
-        Mail::assertSent(AccountGrantedMail::class, function ($mail) use ($user) {
-            return $mail->hasTo($user->email);
-        });
-    }
+test('an admin can delete an ungranted account', function () {
+    $user = User::factory()->ungranted()->create();
 
-    /** @test */
-    public function an_admin_can_delete_an_ungranted_account()
-    {
-        $user = User::factory()->ungranted()->create();
+    loginAdmin();
 
-        auth()->login(User::factory()->create(['role' => 'admin']));
+    $this->delete("/admin/accounts/{$user->id}/grant")->assertOk();
 
-        $this->delete("/admin/accounts/{$user->id}/grant")->assertOk();
+    $this->assertNull($user->fresh());
+});
 
-        $this->assertNull($user->fresh());
-    }
+test('an admin cannot delete a granted account', function () {
+    $user = User::factory()->create();
 
-    /** @test */
-    public function an_admin_cannot_delete_a_granted_account()
-    {
-        $user = User::factory()->create();
+    loginAdmin();
 
-        auth()->login(User::factory()->create(['role' => 'admin']));
+    $this->delete("/admin/accounts/{$user->id}/grant")->assertOk();
 
-        $this->delete("/admin/accounts/{$user->id}/grant")->assertOk();
+    $this->assertNotNull($user->fresh());
+});
 
-        $this->assertNotNull($user->fresh());
-    }
+test('a non admin cant grant a new account or delete a user', function () {
+    $user = User::factory()->ungranted()->create();
 
-    /** @test */
-    public function a_non_admin_cant_grant_a_new_account_or_delete_a_user()
-    {
-        $user = User::factory()->ungranted()->create();
+    login();
 
-        auth()->login(User::factory()->create());
+    $this->post("/admin/accounts/{$user->id}/grant")->assertUnauthorized();
+    $this->delete("/admin/accounts/{$user->id}/grant")->assertUnauthorized();
 
-        $this->post("/admin/accounts/{$user->id}/grant")->assertUnauthorized();
-        $this->delete("/admin/accounts/{$user->id}/grant")->assertUnauthorized();
-
-        $this->assertEquals(0, $user->fresh()->granted_by);
-    }
-}
+    $this->assertEquals(0, $user->fresh()->granted_by);
+});

@@ -1,54 +1,42 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Mail\GrantAccountMail;
 use App\Mail\WelcomeMail;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
 
-class AccountRegistrationTest extends TestCase
-{
-    use RefreshDatabase;
+test('an email is sent to the registered user', function () {
+    $this->post('register')->assertSessionHasErrors();
 
-    /** @test */
-    public function an_email_is_sent_to_the_registered_user()
-    {
-        $this->post('register')->assertSessionHasErrors();
+    Mail::fake();
+    $this->post('register', [
+        'first_name' => 'Martin',
+        'last_name' => 'Krisell',
+        'email' => 'martin.krisell@gmail.com',
+        'password' => 'asdasdasd',
+        'password_confirmation' => 'asdasdasd',
+    ])->assertRedirect('/insidan');
 
-        Mail::fake();
-        $this->post('register', [
-            'first_name' => 'Martin',
-            'last_name' => 'Krisell',
-            'email' => 'martin.krisell@gmail.com',
-            'password' => 'asdasdasd',
-            'password_confirmation' => 'asdasdasd',
-        ])->assertRedirect('/insidan');
+    $this->assertDatabaseHas('users', [
+        'email' => 'martin.krisell@gmail.com',
+    ]);
 
-        $this->assertDatabaseHas('users', [
-            'email' => 'martin.krisell@gmail.com',
-        ]);
+    Mail::assertSent(WelcomeMail::class, function ($mail) {
+        return $mail->hasTo('martin.krisell@gmail.com');
+    });
+});
 
-        Mail::assertSent(WelcomeMail::class, function ($mail) {
-            return $mail->hasTo('martin.krisell@gmail.com');
-        });
-    }
+test('an email is sent to administrators abount account granting', function () {
+    Mail::fake();
 
-    /** @test */
-    public function an_email_is_sent_to_administrators_abount_account_granting()
-    {
-        Mail::fake();
-        $this->post('register', [
-            'first_name' => 'Martin',
-            'last_name' => 'Krisell',
-            'email' => 'kurt.svensson@gmail.com',
-            'password' => 'asdasdasd',
-            'password_confirmation' => 'asdasdasd',
-        ])->assertRedirect('/insidan');
+    $this->post('register', [
+        'first_name' => 'Martin',
+        'last_name' => 'Krisell',
+        'email' => 'kurt.svensson@gmail.com',
+        'password' => 'asdasdasd',
+        'password_confirmation' => 'asdasdasd',
+    ])->assertRedirect('/insidan');
 
-        Mail::assertSent(GrantAccountMail::class, function ($mail) {
-            return $mail->hasTo('martin.krisell@gmail.com'); // administrator
-        });
-    }
-}
+    Mail::assertSent(GrantAccountMail::class, function ($mail) {
+        return $mail->hasTo('martin.krisell@gmail.com'); // administrator
+    });
+});
