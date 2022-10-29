@@ -68,7 +68,7 @@
       "vendor/bin/pint"
     ],
     "test": [
-      "pest"
+      "pest --stop-on-failure"
     ],
     "static": [
       "phpstan analyse -c phpstan.neon"
