@@ -20,6 +20,8 @@ return [
 
     'driver' => env('SESSION_DRIVER', 'cookie'),
 
+    'serialization' => 'json',
+
     'migrate' => [
         'serialization' => true, // Enables transparent serialization method migration
     ],
