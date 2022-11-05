@@ -24,6 +24,12 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor%20rev.%202022-11-02.pdf?alt=media&token=968ba854-656c-45fc-874b-7251d2843ee5">
                   <i class="fa fa-file-pdf-o mr-2"></i>Startlistor och tävlingstider (rev. 2022-11-02)
                 </a>
+                <a 
+                target="_blank"
+                class="text-sm inline-flex items-center px-4 py-2 border border-gkk hover:bg-gkk hover:text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                href="https://docs.google.com/spreadsheets/d/1vh6cDBPvBHb_vJANE2pZQQFMTHqSddNIBoN9PihHZbI/edit#gid=0">
+                <i class="fa fa-link mr-2"></i>Sammanställning av tidigare resultat
+              </a>
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Observera ändrade starttider från inbjudan på grund av stort deltagarantal.</b></p>
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> Totalt 143 st, fördelat på 132 st i KSL och 11 st i BP.</p>
