@@ -11,6 +11,7 @@
     "php": "^8.0",
     "firebase/php-jwt": "^5.2",
     "guzzlehttp/guzzle": "^7.0.1",
+    "krisell/laravel-session-migrator": "^1.0",
     "laravel/framework": "^9.0",
     "laravel/tinker": "^2.0",
     "laravel/ui": "^3.0",

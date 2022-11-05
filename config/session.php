@@ -20,6 +20,10 @@ return [
 
     'driver' => env('SESSION_DRIVER', 'cookie'),
 
+    'migrate' => [
+        'serialization' => true, // Enables transparent serialization method migration
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Session Lifetime
