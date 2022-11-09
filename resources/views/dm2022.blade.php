@@ -39,7 +39,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     <i class="fa fa-file-pdf-o mr-2"></i>Lottnummer och invägningsordning
                   </a>
                 </div>
-                <p class="mt-4 text-xl leading-normal text-gray-500"><b>Observera ändrade starttider från inbjudan på grund av stort deltagarantal.</b></p>
+                <p class="mt-4 text-xl leading-normal text-gray-500"><b>OBS: På grund av rådande energikris kommer tillgång till bastu inte finnas under tävlingen.</b></p>
+                <p class="mt-4 text-xl leading-normal text-gray-500"><b>Tävlingen sker med Eleiko-ställning av nyare modell.</b></p>
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> Totalt 143 st, fördelat på 132 st i KSL och 11 st i BP.</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar: </b> 20</p>
