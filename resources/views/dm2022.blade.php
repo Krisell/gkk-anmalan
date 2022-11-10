@@ -16,7 +16,11 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
               </div>
               <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">12-13 november 2022 - Göteborg Kraftsportklubb - Friskis och Svettis i Majorna</h2>
                 <p class="text-xl leading-normal text-gray-500">
-                  Distriktsmästerskapen i Klassisk Styrkelyft och Utrustad Bänkpress går av stapeln 12-13 november hos GKK, på Friskis och Svettis i Majorna. 143 lyftare gör upp om medaljerna!
+                  Distriktsmästerskapen i Klassisk Styrkelyft och Utrustad Bänkpress går av stapeln 12-13 november hos GKK, på Friskis och Svettis i Majorna.
+                </p>
+                <p class="text-xl leading-normal text-gray-500">
+                  143 lyftare gör upp om medaljerna! I klasser med 3 eller fler deltagare finns också sponsrade priser genom 
+                  <img style="display: inline; width: 140px; margin-top: -5px;" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Ftyngrelogga.png?alt=media&token=29616c97-a25c-4555-a404-b548684d763d">.
                 </p>
                 <a 
                   target="_blank"
