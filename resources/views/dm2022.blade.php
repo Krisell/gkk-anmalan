@@ -49,7 +49,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> Totalt 143 st, fördelat på 132 st i KSL och 11 st i BP.</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar: </b> 20</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Entreavgift:</b> Valfri</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Ja, länk läggs upp här på tävlingsdagen.</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> <a class="underline" target="_blank" href="https://www.youtube.com/watch?v=CQeyhXTxDIo">https://www.youtube.com/watch?v=CQeyhXTxDIo</a></p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck.</p>
                 <a 
                   target="_blank"
