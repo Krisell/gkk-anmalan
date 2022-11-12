@@ -22,6 +22,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   143 lyftare gör upp om medaljerna! I klasser med 3 eller fler deltagare finns också sponsrade priser genom 
                   <img style="display: inline; width: 140px; margin-top: -5px;" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Ftyngrelogga.png?alt=media&token=29616c97-a25c-4555-a404-b548684d763d">.
                 </p>
+                <div>
+                  <a 
+                  target="_blank"
+                  class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                  href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FResultatlistorLo%CC%88rdag.pdf?alt=media&token=cdb1a434-585d-4132-9192-300ccadc3e76">
+                  <i class="fa fa-file-pdf-o mr-2"></i>Resultatlistor lördag
+                </a>
+              </div>
                 <a 
                   target="_blank"
                   class="inline-flex items-center px-4 py-2 border border-gkk hover:bg-gkk hover:text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
@@ -54,6 +62,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <div>
                   <img class="rounded-lg w-96 shadow-xl border" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fqr-bild.png?alt=media&token=14ad24b5-170c-4a6b-a259-92ae56fdc09e">
                 </div>
+                <div>
+                  <a 
+                  target="_blank"
+                  class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                  href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FResultatlistorLo%CC%88rdag.pdf?alt=media&token=cdb1a434-585d-4132-9192-300ccadc3e76">
+                  <i class="fa fa-file-pdf-o mr-2"></i>Resultatlistor lördag
+                </a>
+              </div>
                 <a 
                   target="_blank"
                   class="inline-flex items-center px-4 py-2 border border-gkk hover:bg-gkk hover:text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
