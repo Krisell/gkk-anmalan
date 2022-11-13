@@ -26,8 +26,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <a 
                   target="_blank"
                   class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                  href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FResultatlistorLo%CC%88rdag.pdf?alt=media&token=cdb1a434-585d-4132-9192-300ccadc3e76">
-                  <i class="fa fa-file-pdf-o mr-2"></i>Resultatlistor lördag
+                  href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FResultatDM.pdf?alt=media&token=ee58f9ac-05b9-4452-9c69-33a20a69529f">
+                  <i class="fa fa-file-pdf-o mr-2"></i>Resultatlistor lördag och söndag
                 </a>
               </div>
                 <a 
@@ -66,8 +66,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <a 
                   target="_blank"
                   class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                  href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FResultatlistorLo%CC%88rdag.pdf?alt=media&token=cdb1a434-585d-4132-9192-300ccadc3e76">
-                  <i class="fa fa-file-pdf-o mr-2"></i>Resultatlistor lördag
+                  href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FResultatDM.pdf?alt=media&token=ee58f9ac-05b9-4452-9c69-33a20a69529f">
+                  <i class="fa fa-file-pdf-o mr-2"></i>Resultatlistor lördag och söndag
                 </a>
               </div>
                 <a 
