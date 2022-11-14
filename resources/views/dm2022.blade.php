@@ -18,10 +18,6 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500">
                   Distriktsmästerskapen i Klassisk Styrkelyft och Utrustad Bänkpress går av stapeln 12-13 november hos GKK, på Friskis och Svettis i Majorna.
                 </p>
-                <p class="text-xl leading-normal text-gray-500">
-                  143 lyftare gör upp om medaljerna! I klasser med 3 eller fler deltagare finns också sponsrade priser genom 
-                  <img style="display: inline; width: 140px; margin-top: -5px;" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Ftyngrelogga.png?alt=media&token=29616c97-a25c-4555-a404-b548684d763d">.
-                </p>
                 <div>
                   <a 
                   target="_blank"
@@ -30,6 +26,25 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <i class="fa fa-file-pdf-o mr-2"></i>Resultatlistor lördag och söndag
                 </a>
               </div>
+
+              <p class="text-xl leading-normal text-gray-500">
+                140 lyftare gjorde upp om medaljerna! I klasser med 3 eller fler deltagare fick lyftarna på prispallen sponsrade priser genom 
+                <img style="display: inline; width: 140px; margin-top: -5px;" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Ftyngrelogga.png?alt=media&token=29616c97-a25c-4555-a404-b548684d763d">.
+              </p>
+
+              <p class="text-xl leading-normal text-gray-500">
+                <b>Wahlanders</b> sponsrade även med fyra presentkort på 500 kr som gick till bästa herr och dam i ungdoms- och juniorklassnrna. 
+              </p>
+              <img width="150px" src="https://www.wahlanders.se/bilder/wahlanders-logo.jpg">
+              <p class="text-xl leading-normal text-gray-500">
+                Följande lyftare fick detta pris:<br>
+                <b>Bästa Dam Ungdom:</b> Amanda Löfkvist, Vedums AIS (69.41 IPF)<br>
+                <b>Bästa Dam Junior:</b> Cornelia Hinnersson, Göteborg KK (75.96 IPF)<br>
+                <b>Bästa Herr Ungdom:</b> Nicolas Almén, Göteborg SK (85.12 IPF)<br>
+                <b>Bästa Herr Junior:</b> Oscar Meyer, Halmstad TSK (98.68 IPF)
+              </p>
+
+              <div class="mt-8"></div>
                 <a 
                   target="_blank"
                   class="inline-flex items-center px-4 py-2 border border-gkk hover:bg-gkk hover:text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
