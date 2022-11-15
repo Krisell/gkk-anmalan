@@ -99,6 +99,16 @@
                 >
                   Godkänt avtalen
                 </th>
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Bet. 2022
+                </th>
+                <!-- <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Bet. 2023
+                </th> -->
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
               </tr>
@@ -142,6 +152,11 @@
                     class="fa fa-check-circle text-gkk text-lg"
                     v-if="account.membership_agreement_signed_at && account.anti_doping_agreement_signed_at"
                   ></i>
+                </td>
+                <td
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
+                >
+                  <ToggleButton @input="updateMembershipPayment(account, 2022)" :value="hasPaid(account, 2022)" color="#314270" />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
@@ -295,11 +310,12 @@
 </template>
 
 <script>
+import ToggleButton from './ui/ToggleButton.vue'
 import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
 
 export default {
-  components: { Button },
+  components: { Button, ToggleButton },
   props: ['accounts', 'user', 'ungranted'],
   data() {
     return {
@@ -409,6 +425,21 @@ export default {
       const response = await axios.post('/admin/accounts', { accounts })
 
       console.log(response)
+    },
+    hasPaid(user, year) {
+      return user.payments.some(payment => payment.type === 'MEMBERSHIP' && payment.year === year)
+    },
+    async updateMembershipPayment(user, year) {
+      if (this.hasPaid(user, year)) {
+        const payment = user.payments.find(payment => payment.type === 'MEMBERSHIP' && payment.year === year)
+        await axios.delete(`/admin/accounts/payment/${payment.id}`)
+        this.reload()
+        return
+      }
+
+      await axios.post(`/admin/accounts/payment/${user.id}`, { type: 'MEMBERSHIP', year })
+
+      this.reload()
     },
   },
 }

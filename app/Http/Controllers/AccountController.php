@@ -12,7 +12,7 @@ class AccountController extends Controller
     {
         return view('admin.accounts', [
             'ungranted' => User::whereGrantedBy(0)->get(),
-            'accounts' => User::with(['eventRegistrations.event'])->get(),
+            'accounts' => User::with(['eventRegistrations.event', 'payments'])->get(),
             'user' => auth()->user(),
             'view' => 'accounts',
         ]);

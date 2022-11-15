@@ -80,6 +80,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/inactivate/{user}', [\App\Http\Controllers\AccountController::class, 'inactivate']);
         Route::post('/reactivate/{user}', [\App\Http\Controllers\AccountController::class, 'reactivate']);
         Route::post('/', [\App\Http\Controllers\AdminCreateAccountsController::class, 'store']);
+
+        Route::post('/payment/{user}', [\App\Http\Controllers\PaymentController::class, 'store']);
+        Route::delete('/payment/{payment}', [\App\Http\Controllers\PaymentController::class, 'destroy']);
     });
 
     Route::prefix('events')->controller(EventController::class)->group(function () {
