@@ -27,10 +27,15 @@ test('an admin can mark user as paid', function () {
 
     loginAdmin();
 
-    $this->post("/admin/accounts/payment/{$user->id}", [
+    $payment = $this->post("/admin/accounts/payment/{$user->id}", [
         'type' => 'MEMBERSHIP',
         'year' => 2022,
     ])->assertCreated();
+
+    $this->assertDatabaseHas('audit_logs', [
+        'user_id' => auth()->id(),
+        'action' => "created payment {$payment['id']}",
+    ]);
 
     $this->assertDatabaseHas('payments', [
         'user_id' => $user->id,
@@ -51,6 +56,11 @@ test('an admin can remove a payment', function () {
 
     $this->delete("/admin/accounts/payment/{$paymentA->id}")->assertOk();
 
+    $this->assertDatabaseHas('audit_logs', [
+        'user_id' => auth()->id(),
+        'action' => "deleted payment {$paymentA->id}",
+    ]);
+
     $this->assertDatabaseMissing('payments', [
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
@@ -64,6 +74,11 @@ test('an admin can remove a payment', function () {
     ]);
 
     $this->delete("/admin/accounts/payment/{$paymentB->id}")->assertOk();
+
+    $this->assertDatabaseHas('audit_logs', [
+        'user_id' => auth()->id(),
+        'action' => "deleted payment {$paymentB->id}",
+    ]);
 
     $this->assertEmpty(Payment::all());
 });
