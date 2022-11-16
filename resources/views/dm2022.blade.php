@@ -68,9 +68,6 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> <a class="underline" target="_blank" href="https://www.youtube.com/watch?v=CQeyhXTxDIo">https://www.youtube.com/watch?v=CQeyhXTxDIo</a></p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck.</p>
                 <div>
-                  <img class="rounded-lg w-96 shadow-xl border" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fqr-bild.png?alt=media&token=14ad24b5-170c-4a6b-a259-92ae56fdc09e">
-                </div>
-                <div>
                   <a 
                   target="_blank"
                   class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
