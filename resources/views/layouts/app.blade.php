@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <meta property="og:locale" content="sv" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Göteborg Kraftsportklubb" />
+    <meta property="og:description" content="Styrkelyft i Göteborg" />
+    <meta property="og:site_name" content="Göteborg Kraftsportklubb" />
+    <meta property="og:image" content="https://goteborg-kraftsportklubb.web.app/img/bjorn_och_klas-min.jpeg" />
+    <meta property="og:image:secure_url" content="https://goteborg-kraftsportklubb.web.app/img/bjorn_och_klas-min.jpeg" />
+    <meta property="og:image:width" content="1500" />
+    <meta property="og:image:height" content="827" />
+    <meta property="og:image:alt" content="Lyftare går in på flaket" />
+    <meta property="og:image:type" content="image/jpeg" />
+
     <link rel="apple-touch-startup-image" href="https://goteborg-kraftsportklubb.web.app/img/favicon.png">
     <link rel="apple-touch-icon" href="https://goteborg-kraftsportklubb.web.app/img/appIconGKK.png">
     <link rel="icon" type="image/png" href="https://goteborg-kraftsportklubb.web.app/img/favicon.png">
