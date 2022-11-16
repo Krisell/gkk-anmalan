@@ -25,6 +25,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FResultatDM.pdf?alt=media&token=ee58f9ac-05b9-4452-9c69-33a20a69529f">
                   <i class="fa fa-file-pdf-o mr-2"></i>Resultatlistor lördag och söndag
                 </a>
+                </div>
+                <div>
+                <a 
+                target="_blank"
+                class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                href="https://photos.app.goo.gl/rjtSMYaa369YWB2NA">
+                <i class="fa fa-camera-retro mr-2"></i>Se och dela med dig av bilder från tävlingen
+              </a>
               </div>
 
               <p class="text-xl leading-normal text-gray-500">
@@ -51,21 +59,6 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor%20rev.%202022-11-08.pdf?alt=media&token=4fde4a7d-c70d-4dcf-96ff-ae13c4448842">
                   <i class="fa fa-file-pdf-o mr-2"></i>Startlistor och tävlingstider (rev. 2022-11-08)
                 </a>
-                <a 
-                  target="_blank"
-                  class="text-sm inline-flex items-center px-4 py-2 border border-gkk hover:bg-gkk hover:text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                  href="https://docs.google.com/spreadsheets/d/1vh6cDBPvBHb_vJANE2pZQQFMTHqSddNIBoN9PihHZbI/edit#gid=0">
-                  <i class="fa fa-link mr-2"></i>Sammanställning av tidigare resultat
-                </a>
-                
-                <div>
-                  <a 
-                    target="_blank"
-                    class="inline-flex items-center px-4 py-2 border border-gkk hover:bg-gkk hover:text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FInva%CC%88gningsordning%20-%20lottnummer.pdf?alt=media&token=ee10b053-0941-40c5-99e2-71e1da30c340">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Lottnummer och invägningsordning
-                  </a>
-                </div>
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>OBS: På grund av rådande energikris kommer tillgång till bastu inte finnas under tävlingen.</b></p>
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Tävlingen sker med Eleiko-ställning av nyare modell.</b></p>
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
@@ -91,14 +84,6 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor%20rev.%202022-11-08.pdf?alt=media&token=4fde4a7d-c70d-4dcf-96ff-ae13c4448842">
                   <i class="fa fa-file-pdf-o mr-2"></i>Startlistor och tävlingstider (rev. 2022-11-08)
                 </a>
-                <div>
-                  <a 
-                    target="_blank"
-                    class="inline-flex items-center px-4 py-2 border border-gkk hover:bg-gkk hover:text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FInva%CC%88gningsordning%20-%20lottnummer.pdf?alt=media&token=ee10b053-0941-40c5-99e2-71e1da30c340">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Lottnummer och invägningsordning
-                  </a>
-                </div>
                 <p class="text-xl leading-normal text-gray-500">
                   Resultatlistor publiceras här efter avslutad tävling.
                 </p>
