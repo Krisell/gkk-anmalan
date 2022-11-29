@@ -52,7 +52,12 @@ background-position-y: 40%; background-position-x: 100%; max-height: 50vh;" clas
                   <h3 class="ml-4 text-black text-xl font-bold">Kvar att lyfta: {{ str_replace('kr', 'kg', $donatedAmount) }}</h3>
                 </div>
 
-              <h3 class="text-black text-xl font-bold mt-6">Vi lyfter 1 kg för varje donerad krona!</h3>
+                <div>
+                  <h3 class="text-black text-xl font-bold mt-6">Vi lyfter 1 kg för varje donerad krona!</h3>
+                </div>
+                <div>
+                  <h3 class="text-black text-xl font-bold mt-6">Kom och prova på styrkelyft!</h3>
+                </div>
                 </div>
                 <div>
               </div>
