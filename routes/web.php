@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MusikhjalpenController;
 use App\Http\Controllers\SignAgreementsController;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
 
@@ -10,7 +11,10 @@ Auth::routes();
 Route::get('/!', [HomeController::class, 'exclamation']);
 Route::get('/', [HomeController::class, 'index']);
 
+Route::get('/musikhjalpen', [MusikhjalpenController::class, 'index']);
+
 Route::get('/dm', [HomeController::class, 'dm']);
+Route::redirect('/musik', '/musikhjalpen');
 Route::get('/dm2022', [HomeController::class, 'dm']);
 
 Route::get('/styrkelyft', [HomeController::class, 'powerlifting']);
