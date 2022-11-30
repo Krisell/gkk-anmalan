@@ -14,11 +14,15 @@ background-position-y: 40%; background-position-x: 100%; max-height: 50vh;" clas
                 <div class="flex items-center">
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Musikhjälpen</h2>
               </div>
-              <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">
-
-              </h2>
               <div>
-                  <h3 class="text-2xl font-extrabold tracking-tight sm:text-2xl">Göteborg Kraftsportklubb lyfter 1 kg per donerad krona.</h3>
+                <h3 class="text-2xl font-extrabold tracking-tight sm:text-2xl">Göteborg Kraftsportklubb lyfter 1 kg per donerad krona.</h3>
+              </div>
+              <div
+                target="_blank"
+                class="mt-2 inline-flex items-center px-4 py-2 border text-white leading-5 font-medium  focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                href="https://bossan.musikhjalpen.se/goeteborg-kraftsportklubb-lyfter-1-kg-per-donerad-krona">
+                <img width="60px" src="https://goteborg-kraftsportklubb.web.app/mh-logo.png?v=2">
+                <h3 class="ml-4 text-black text-xl font-bold">Donerat: {{ $donatedAmount }}</h3>
               </div>
               <div>
                 <h2 class="text-xl font-extrabold tracking-tight sm:text-xl"><i class="fa fa-map-marker mr-2 text-4xl"></i><i class="fa fa-clock-o mr-2 text-4xl"></i>Onsdagen den 14 december finner du oss på Musikhjälpens eventyta, mellan klockan 17 och 21. 16:30 gästar vi även i buren. Varmt välkomna att heja, eller testa på grenarna och hjälpa oss samla kilon!</h2>
@@ -35,25 +39,16 @@ background-position-y: 40%; background-position-x: 100%; max-height: 50vh;" clas
                 </div>
 
                 <div>
-                  <div
-                  target="_blank"
-                  class="mt-2 inline-flex items-center px-4 py-2 border text-white leading-5 font-medium  focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                  href="https://bossan.musikhjalpen.se/goeteborg-kraftsportklubb-lyfter-1-kg-per-donerad-krona">
-                  <img width="60px" src="https://goteborg-kraftsportklubb.web.app/mh-logo.png?v=2">
-                  <h3 class="ml-4 text-black text-xl font-bold">Donerat: {{ $donatedAmount }}</h3>
-                </div>
                 <div
-                  target="_blank"
                   class="mt-2 inline-flex items-center px-4 py-2 border text-white leading-5 font-medium  focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                  href="https://bossan.musikhjalpen.se/goeteborg-kraftsportklubb-lyfter-1-kg-per-donerad-krona">
+                >
                   <img width="60px" src="https://goteborg-kraftsportklubb.web.app/mh-logo.png?v=2">
                   <h3 class="ml-4 text-black text-xl font-bold">Antal lyfta kilon: 0 kg</h3>
                 </div>
 
                 <div
-                  target="_blank"
                   class="mt-2 inline-flex items-center px-4 py-2 border text-white leading-5 font-medium  focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                  href="https://bossan.musikhjalpen.se/goeteborg-kraftsportklubb-lyfter-1-kg-per-donerad-krona">
+                >
                   <img width="60px" src="https://goteborg-kraftsportklubb.web.app/mh-logo.png?v=2">
                   <h3 class="ml-4 text-black text-xl font-bold">Kvar att lyfta: {{ str_replace('kr', 'kg', $donatedAmount) }}</h3>
                 </div>
