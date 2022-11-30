@@ -17,7 +17,13 @@ background-position-y: 40%; background-position-x: 100%; max-height: 50vh;" clas
               <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">
 
               </h2>
+              <div>
                   <h3 class="text-2xl font-extrabold tracking-tight sm:text-2xl">Göteborg Kraftsportklubb lyfter 1 kg per donerad krona.</h3>
+              </div>
+              <div>
+                <h2 class="text-xl font-extrabold tracking-tight sm:text-xl"><i class="fa fa-map-marker mr-2 text-4xl"></i><i class="fa fa-clock-o mr-2 text-4xl"></i>Onsdagen den 14 december finner du oss på Musikhjälpens eventyta, mellan klockan 17 och 21. 16:30 gästar vi även i buren. Varmt välkomna att heja, eller testa på grenarna och hjälpa oss samla kilon!</h2>
+                
+              </div>
                 <div>
                   <a 
                   target="_blank"
