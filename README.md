@@ -49,7 +49,7 @@ Automatiska tester och granskning av kodstil kan köras genom `bin/alltest.sh`, 
 composer lint
 composer static
 composer test
-npm run cypress-run
+npm run test:e2e
 ```
 
 ## Konton

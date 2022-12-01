@@ -21,7 +21,7 @@ APP_ENV=testing php artisan route:cache
 
 echo "Starting test server on port $PORT..."
 
-DB_DATABASE=$(cd `dirname $0` && pwd)/../database/cypress.sqlite \
+DB_DATABASE=$(cd `dirname $0` && pwd)/../database/e2e.sqlite \
 SESSION_SECURE_COOKIE=false \
 MAIL_MAILER=array \
 BCRYPT_ROUNDS=4 \
@@ -35,10 +35,10 @@ SERVER_PID=$!
 echo -e "${GREEN}Test server started at http://localhost:${PORT}${NOCOLOR}"
 
 echo 'Migrating test database'
-TELESCOPE_ENABLED=false DB_DATABASE=$(cd `dirname $0` && pwd)/../database/cypress.sqlite php artisan migrate > /dev/null
+TELESCOPE_ENABLED=false DB_DATABASE=$(cd `dirname $0` && pwd)/../database/e2e.sqlite php artisan migrate > /dev/null
 echo -e "${GREEN}Test database migrated${NOCOLOR}"
 
-npm run cypress
+npx playwright test
 
 php artisan route:clear
 

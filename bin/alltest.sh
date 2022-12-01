@@ -5,5 +5,5 @@ set -e
 composer lint
 composer static
 composer test
-npm run cypress-run
+npm run test:e2e
 
