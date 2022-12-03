@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "test:e2e": "npm run build && ./e2e/run.sh",
+    "test:e2e": "npm run build && npx playwright test",
     "build": "vite build",
     "production": "npm run build",
     "test": "jest"
