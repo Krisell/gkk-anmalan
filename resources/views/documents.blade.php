@@ -11,8 +11,28 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
         <div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8">
           <div class="space-y-12">
             <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+              <div>
+                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Länkar</h2>
+                <div class="mt-4">
+                  <i class="fa fa-link"></i>
+                  <a class="underline" target="_blank" href="https://team.intersport.se/goteborg-kraftsportklubb">Webbshop klubbkläder (se till att logga in för att få rätt pris).</a>
+                </div>
+                <div class="mt-4">
+                  <i class="fa fa-link"></i>
+                  <a class="underline" target="_blank" href="https://styrkelyft.se">Svenska Styrkelyftsförbundet (SSF)</a>
+                </div>
+                <div class="mt-4">
+                  <i class="fa fa-link"></i>
+                  <a class="underline" target="_blank" href="https://www.styrkelyft.se/dokument/dokument-blanketter">Dokument för tävling mm på förbundets hemsida</a>
+                </div>
+                <div class="mt-4">
+                  <i class="fa fa-link"></i>
+                  <a class="underline" target="_blank" href="https://online.styrkelyft.se/">Databasen för resultatregistrering</a>
+                </div>
+              </div>
+
                 <div>
-                  <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Dokument</h2>
+                  <h2 class="mt-12 text-3xl font-extrabold tracking-tight sm:text-4xl">Dokument</h2>
                   <div class="mt-4">
                     <i class="fa fa-file-pdf-o"></i>
                     <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FAntidopingavtal.pdf?alt=media&token=f43b48b7-62e8-405e-8b3e-f75ac2c465c6">Antidopingavtal mellan medlem och förening (PDF)</a>
@@ -28,10 +48,6 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <div class="mt-4">
                     <i class="fa fa-file-pdf-o"></i>
                     <a class="underline" target="_blank" href="https://goteborg-kraftsportklubb.web.app/img/gkk-integritetspolicy.pdf">Föreningens integritetspolicy (PDF)</a>
-                  </div>
-                  <div class="mt-4">
-                    <i class="fa fa-link"></i>
-                    <a class="underline" target="_blank" href="https://www.styrkelyft.se/dokument/dokument-blanketter">Dokument för tävling mm på förbundets hemsida</a>
                   </div>
                 </div>
 

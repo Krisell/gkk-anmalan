@@ -21,7 +21,7 @@
           <a :class="site === 'member' ? 'border-b-2 border-black' : ''" href="/medlem">Medlemskap</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'documents' ? 'border-b-2 border-black' : ''" href="/dokument">Dokument &amp; program</a>
+          <a :class="site === 'documents' ? 'border-b-2 border-black' : ''" href="/dokument">Länkar</a>
         </li>
         <li class="mt-4 hover:text-gkk">
           <a :class="site === 'records' ? 'border-b-2 border-black' : ''" href="/klubbrekord">Klubbrekord</a>
@@ -85,7 +85,7 @@
                   class="ml-6 uppercase hover:border-b-1 hover:border-black"
                   :class="site === 'documents' ? 'border-b-2 border-black' : ''"
                   href="/dokument"
-                  >Dokument &amp; program</a
+                  >Länkar</a
                 >
                 <a
                   class="ml-6 uppercase hover:border-b-1 hover:border-black"
