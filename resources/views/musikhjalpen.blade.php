@@ -40,7 +40,7 @@ background-position-y: 40%; background-position-x: 100%; max-height: 50vh;" clas
                   class="mt-2 inline-flex items-center px-4 py-2 border text-white leading-5 font-medium  focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                 >
                   <img width="60px" src="https://goteborg-kraftsportklubb.web.app/mh-logo.png?v=2">
-                  <h3 class="ml-4 text-black text-xl font-bold">Kvar att lyfta: <gkk-lifted-weight :remaining="true" :lifted-weight-start='@json($liftedWeight)' :donated-start='@json($donatedAmount)'></gkk-lifted-weight> (TEST-DATA)</h3>
+                  <h3 class="ml-4 text-black text-xl font-bold">Kvar att lyfta: <gkk-lifted-weight :remaining="true" :lifted-weight-start='@json($liftedWeight)' :donated-start='@json($donatedAmount)'></gkk-lifted-weight></h3>
                 </div> --}}
 
                 {{-- <div>
