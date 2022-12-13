@@ -14,6 +14,7 @@ import Records from './components/Records.vue'
 import AdminNews from './components/AdminNews.vue'
 import Documents from './components/Documents.vue'
 import EventCard from './components/EventCard.vue'
+import MusicAdmin from './components/MusicAdmin.vue'
 import Navigation from './components/Navigation.vue'
 import ActionCard from './components/ActionCard.vue'
 import Agreements from './components/Agreements.vue'
@@ -21,6 +22,7 @@ import AdminEvent from './components/AdminEvent.vue'
 import AdminEvents from './components/AdminEvents.vue'
 import Competition from './components/Competition.vue'
 import AdminResults from './components/AdminResults.vue'
+import LiftedWeight from './components/LiftedWeight.vue'
 import Competitions from './components/Competitions.vue'
 import AdminAccounts from './components/AdminAccounts.vue'
 import AdminNewsEmail from './components/AdminNewsEmail.vue'
@@ -82,9 +84,11 @@ Vue.component('GkkNavigation', Navigation)
 Vue.component('GkkActionCard', ActionCard)
 Vue.component('GkkAdminEvent', AdminEvent)
 Vue.component('GkkAgreements', Agreements)
+Vue.component('GkkMusicAdmin', MusicAdmin)
 Vue.component('GkkAdminEvents', AdminEvents)
 Vue.component('GkkCompetition', Competition)
 Vue.component('GkkAdminResults', AdminResults)
+Vue.component('GkkLiftedWeight', LiftedWeight)
 Vue.component('GkkCompetitions', Competitions)
 Vue.component('GkkAdminAccounts', AdminAccounts)
 Vue.component('GkkAdminDocuments', AdminDocuments)

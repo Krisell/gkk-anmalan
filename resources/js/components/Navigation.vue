@@ -59,6 +59,8 @@
         icon="sign-in"
       ></gkk-action-card>
     </div>
+
+    <a class="text-xl underline" v-if="isAdmin" href="/admin/music">Musikhjälpen admin</a>
   </div>
 </template>
 

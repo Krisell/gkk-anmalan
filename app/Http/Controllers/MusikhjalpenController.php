@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\MusicHelpSet;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use NumberFormatter;
@@ -19,10 +20,15 @@ class MusikhjalpenController extends Controller
         $formatter = new NumberFormatter('sv_SE', NumberFormatter::CURRENCY);
         $formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 
+        $liftedWeight = MusicHelpSet::all()->map(function ($set) {
+            return $set->weight_lifted * $set->repetitions;
+        })->sum();
+
         return view('musikhjalpen', [
             'site' => 'musikhjalpen',
             'donatedAmount' => $formatter->formatCurrency($donatedAmount, 'SEK'),
             'donatedAmountRaw' => $donatedAmount,
+            'liftedWeight' => $liftedWeight,
         ]);
     }
 }
