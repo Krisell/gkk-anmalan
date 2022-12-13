@@ -1,9 +1,9 @@
 <template>
-  <div class="flex">
+  <div class="flex flex-col sm:flex-row">
       <div
         :class="{ updatedLeft: updatedDonatedAmount }"
         target="_blank"
-        class="animated rounded mr-2 mt-2 inline-flex items-center px-4 py-2 border text-white leading-5 font-medium  focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+        class="animated rounded mr-2 inline-flex items-center px-4 py-2 border text-white leading-5 font-medium  focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
         href="https://bossan.musikhjalpen.se/goeteborg-kraftsportklubb-lyfter-1-kg-per-donerad-krona">
         <img width="60px" src="https://goteborg-kraftsportklubb.web.app/mh-logo.png?v=2">
         <h3 class="ml-4 text-black text-xl font-bold">Donerat: {{ donatedAmount }} kr</h3>
@@ -48,7 +48,7 @@
       </div>
       <div
       :class="{ updatedRight: updatedLiftedWeight }"
-      class="animated rounded mt-2 inline-flex items-center px-4 py-2 border text-white leading-5 font-medium  focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+      class="animated rounded inline-flex items-center px-4 py-2 border text-white leading-5 font-medium  focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
     >
       <img width="60px" src="https://goteborg-kraftsportklubb.web.app/mh-logo.png?v=2">
       <h3 class="ml-4 text-black text-xl font-bold">Antal lyfta kilon: {{ liftedWeight }} kg</h3>
