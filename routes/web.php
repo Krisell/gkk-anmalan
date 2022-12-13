@@ -12,8 +12,6 @@ Route::get('/!', [HomeController::class, 'exclamation']);
 Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/musikhjalpen', [MusikhjalpenController::class, 'index']);
-Route::post('/musikhjalpen/lift', [App\Http\Controllers\MusicHelpSetController::class, 'store']);
-Route::delete('/musikhjalpen/lift/{musicHelpSet}', [App\Http\Controllers\MusicHelpSetController::class, 'destroy']);
 
 Route::get('/dm', [HomeController::class, 'dm']);
 Route::redirect('/musik', '/musikhjalpen');
@@ -80,6 +78,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword']);
     });
 });
+
+Route::get('/api/music', [\App\Http\Controllers\MusicApiController::class, 'index']);
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('music', [\App\Http\Controllers\MusicAdminController::class, 'index']);
