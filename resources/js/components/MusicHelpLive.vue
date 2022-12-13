@@ -9,7 +9,7 @@
         <h3 class="ml-4 text-black text-xl font-bold">Donerat: {{ donatedAmount }} kr</h3>
       </div>
       <div class="mr-2 relative">
-        <img src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png" style="width: 95px;position: absolute;top: 12px;left: 12px;"/>
+        <img src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png" style="width: 96px;position: absolute;top: 12px;left: 12px;"/>
         <svg
           :class="{ updated: updatedDonatedAmount || updatedLiftedWeight }"
           class="animated"
