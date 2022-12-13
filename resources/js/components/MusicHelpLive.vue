@@ -18,8 +18,8 @@
           style="position: absolute; z-index: 9"
         >
           <circle
-            stroke="#253868"
-            stroke-dasharray="360 360"
+            :stroke="strokeColor"
+            stroke-dasharray="360"
             :style="`stroke-dashoffset: ${remainingOfCircle}`"
             stroke-width="7"
             fill="transparent"
@@ -36,7 +36,7 @@
         >
           <circle
             stroke="#ddd"
-            stroke-dasharray="360 360"
+            stroke-dasharray="360"
             :style="`stroke-dashoffset: 0`"
             stroke-width="3"
             fill="transparent"
@@ -88,8 +88,15 @@ export default {
       return Number(this.donated.replace(/\s*/g, '')) - Number(this.liftedWeight)
     },
     remainingOfCircle() {
-      return (1 - (Number(this.liftedWeight) / Number((this.donatedAmount || '0').replace(/\s*/g, '')))) * 360
+      return (1 - (Number(this.liftedWeight) / Number((this.donatedAmount || '0').replace(/\s*/g, '')))) * 327 + 33
     },
+    strokeColor() {
+      if (this.remainingOfCircle > 33) {
+        return '#253868'
+      }
+
+      return 'green'
+    }
   },
   methods: {
     async update() {
@@ -100,12 +107,14 @@ export default {
         const newDonatedAmount = response.data.donatedAmount.replace('kr', '')
 
         if (newLiftedWeight !== this.liftedWeight) {
+          if (newLiftedWeight > this.liftedWeight) {
+            const audio = new Audio('https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fapplause-2.mp3?alt=media&token=02b36d78-78a8-4615-bb9b-d83e567fa6e8')
+            audio.play()
+          }
+
           this.liftedWeight = newLiftedWeight
           this.updatedLiftedWeight = true
           setTimeout(() => this.updatedLiftedWeight = false, 800)
-
-          const audio = new Audio('https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fapplause-2.mp3?alt=media&token=02b36d78-78a8-4615-bb9b-d83e567fa6e8')
-          audio.play()
         }
 
         if (newDonatedAmount !== this.donatedAmount) {
