@@ -9,5 +9,5 @@ if [ ! -z "$ALREADY_RUNNING_SERVERS" ]
 then
     echo "Killing server"
     kill "$ALREADY_RUNNING_SERVERS"
-    echo TEST
+    echo ' '
 fi
