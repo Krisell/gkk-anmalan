@@ -15,7 +15,20 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
               <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Om Styrkelyft</h2>
               </div>
               <p class="text-xl leading-normal text-gray-500">I styrkelyft tävlar man i grenarna knäböj, bänkpress och marklyft. Man kan också tävla i enbart bänkpress. Det finns tävlingar där särskild utrustning, exempelvis knälindor och dräkt, är tillåtet, och det finns tävlingar i så kallad "klassisk styrkelyft" där ingen hjälpande utrustning utöver knävärmare och handledslindor är tillåtet. Den klassiska disciplinen har idag flest utövare och är också en lämplig utgångpunkt för en nybörjare.</p>
-              <p class="text-xl leading-normal text-gray-400">Här är tanken att visa bilder på de tre lyften.</p>
+              <div class="flex justify-center max-w-full mt-8 overflow-x-hidden space-x-4 xl:justify-between">
+                <div class="mr-2 flex-1 text-center">
+                  <h3 class="text-md leading-normal text-black mb-2 font-bold">Knäböj</h3>
+                  <img class="shadow-md rounded-lg" src="https://goteborg-kraftsportklubb.web.app/grenar/squat-resized.png">
+                </div>
+                <div class="mr-2 flex-1 text-center">
+                  <h3 class="text-md leading-normal text-black mb-2 font-bold">Bänkpress</h3>
+                  <img class="shadow-md rounded-lg" src="https://goteborg-kraftsportklubb.web.app/grenar/benchpress.jpg">
+                </div>
+                <div class="mr-2 flex-1 text-center">
+                  <h3 class="text-md leading-normal text-black mb-2 font-bold">Marklyft</h3>
+                  <img class="shadow-md rounded-lg" src="https://goteborg-kraftsportklubb.web.app/grenar/deadlift.3.png">
+                </div>
+              </div>
             </div>
             <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
               <div class="flex items-center">
