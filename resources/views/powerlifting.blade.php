@@ -54,7 +54,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 Göteborg Kraftsportklubb arrangerar ofta serietävlingar på hemmaplan på Friskis och Svettis i Majorna, då hela föreningen är engagerad och medlemmarna antingen är med och tävlar eller ställer upp som funktionär. Om föreningens lag presterar bra under året kan de gå till final i lag-SM där SM-medaljer står på spel.
               </p>
               <p class="text-xl leading-normal text-gray-500">
-                Vid mästerskap anmäler man sig till en viktklass och man måste väga in 2 timmar före tävlingsstart för att få delta. Vid serietävlingar finns inga viktklasser utan där beräknas lagpoängen baserat på vikt på stången och dagens kroppsvikt.
+                Vid mästerskap anmäler man sig till en viktklass och man måste klara invägningen 2 timmar före tävlingsstart för att få delta. Vid serietävlingar finns inga viktklasser utan där beräknas lagpoängen baserat på vikt på stången och dagens kroppsvikt vid invägningen.
               </p>
             </div>
             <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
