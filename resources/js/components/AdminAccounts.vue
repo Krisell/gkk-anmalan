@@ -102,6 +102,11 @@
                 <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Bet. 2023
+                </th>
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Bet. 2022
                 </th>
                 <!-- <th
@@ -152,6 +157,11 @@
                     class="fa fa-check-circle text-gkk text-lg"
                     v-if="account.membership_agreement_signed_at && account.anti_doping_agreement_signed_at"
                   ></i>
+                </td>
+                <td
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
+                >
+                  <ToggleButton @input="updateMembershipPayment(account, 2023)" :value="hasPaid(account, 2023)" color="#314270" />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
