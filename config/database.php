@@ -43,6 +43,13 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+        'sqlite-e2e' => [
+            'driver' => 'sqlite',
+            'database' => database_path('e2e.sqlite'),
+            'prefix' => env('DB_PREFIX', ''),
+            'foreign_key_constraints' => true,
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
