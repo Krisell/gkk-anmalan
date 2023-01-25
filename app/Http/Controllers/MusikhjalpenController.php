@@ -12,9 +12,10 @@ class MusikhjalpenController extends Controller
     public function index()
     {
         $donatedAmount = Cache::remember('musikhjalpen-donated-amount', 10, function () {
-            $response = Http::get('https://bossan.musikhjalpen.se/server/fundraisers/5pHB9pLTRDStX1bRplY95q?fields[]=amount&fields=prev_amount');
+            return 15300;
+            // $response = Http::get('https://bossan.musikhjalpen.se/server/fundraisers/5pHB9pLTRDStX1bRplY95q?fields[]=amount&fields=prev_amount');
 
-            return $response->json()['amount'] ?? '';
+            // return $response->json()['amount'] ?? '';
         });
 
         $formatter = new NumberFormatter('sv_SE', NumberFormatter::CURRENCY);
