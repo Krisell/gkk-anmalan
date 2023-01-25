@@ -26,12 +26,22 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <i class="fa fa-file-pdf-o mr-2"></i>Resultatlistor lördag och söndag
                 </a>
                 </div>
+
+                <div>
+                  <a 
+                  target="_blank"
+                  class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
+                  href="https://photos.app.goo.gl/JmFz9fVx6PVji7uLA">
+                  <i class="fa fa-camera-retro mr-2"></i>Se bilder från tävlingen tagna av våra fotografer
+                </a>
+                </div>
+
                 <div>
                 <a 
                 target="_blank"
-                class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
                 href="https://photos.app.goo.gl/rjtSMYaa369YWB2NA">
-                <i class="fa fa-camera-retro mr-2"></i>Se och dela med dig av bilder från tävlingen
+                <i class="fa fa-camera-retro mr-2"></i>Se andras bilder från tävlingen och dela med dig av dina egna
               </a>
               </div>
 
