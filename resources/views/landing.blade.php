@@ -39,6 +39,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsplan 2023
                   </a>
                 </div>
+                <div>
+                  <a 
+                    target="_blank"
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FZ63bWLNajemKOpMlkgJg4YzupkG4se.pdf?alt=media&token=2b14db44-bdb9-4957-ae52-f99b73b5e671">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Revisionsberättelse 2022
+                  </a>
+                </div>
 
                 <p class="text-xl leading-normal text-gray-500">
                   Göteborg Kraftsportklubb (GKK) är en idrottsförening som bildades 1933. Vi ägnar oss åt idrotten Styrkelyft och tränar och tävlar därmed i knäböj, bänkpress och marklyft. Sedan 2022 har vi också ett antal medlemmar som tränar tyngdlyftning med ambitionen att tävla. I föreningen finns allt från motionärer till elitaktiva på högsta nivå. Vi tränar tillsammans, hjälper varandra och tror på att styrka kommer från gemenskap.
