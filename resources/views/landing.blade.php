@@ -43,6 +43,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FoEhjrzG0047RbdGemlL3KQPQFetwPK.pdf?alt=media&token=e430728a-3198-49a9-a419-87930503e888">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Budget 2023 samt Resultaträkning 2022
+                  </a>
+                </div>
+                <div>
+                  <a 
+                    target="_blank"
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FZ63bWLNajemKOpMlkgJg4YzupkG4se.pdf?alt=media&token=2b14db44-bdb9-4957-ae52-f99b73b5e671">
                     <i class="fa fa-file-pdf-o mr-2"></i>Revisionsberättelse 2022
                   </a>
