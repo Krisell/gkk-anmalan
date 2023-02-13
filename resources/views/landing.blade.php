@@ -27,8 +27,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FhPHW4i2RwwFcCsjV3lyC8ov7fneeLE.pdf?alt=media&token=96ee94fc-2f51-433c-8aaa-7dfae6154598">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2022. Läs gärna och kom med feedback på ev. fel, tillägg och förbättringar.
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2Fj3GrXdTlcOB97aGhZqUjLUobjPvTxZ.pdf?alt=media&token=ac09827e-17b0-490c-aafe-97fce3a8b029">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2022, uppdaterad 2023-02-13.
                   </a>
                 </div>
                 <div>
