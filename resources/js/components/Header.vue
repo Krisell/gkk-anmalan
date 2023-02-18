@@ -95,9 +95,9 @@
                 >
                 <a
                   class="ml-6 uppercase hover:border-b-1 text-[#009a79] border border-[#009a79] p-[2px] -m-[2px] px-1"
-                  :class="site === 'musikhjalpen' ? 'border-b-2 border-black' : ''"
-                  href="/musikhjalpen"
-                  >Musikhjälpen</a
+                  :class="site === 'prova-pa' ? 'border-b-2 border-black' : ''"
+                  href="/prova-pa"
+                  >Prova-på-tävling</a
                 >
               </div>
             </div>

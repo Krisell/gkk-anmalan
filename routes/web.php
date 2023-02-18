@@ -23,6 +23,8 @@ Route::get('/medlem', [HomeController::class, 'member']);
 Route::redirect('/member', '/medlem');
 Route::get('/dokument', [HomeController::class, 'documents']);
 
+Route::get('/prova-pa', [HomeController::class, 'provaPa']);
+
 Route::prefix('insidan')->middleware(EnsureAgreementsAreSignedMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'inside']);
 });
