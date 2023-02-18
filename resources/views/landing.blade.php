@@ -22,7 +22,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     </p>
                     <p class="text-xl leading-bold text-gkk">
                       Den 12 mars 2023 håller GKK en prova-på-tävling där alla som inte ännu tävlar i styrkelyft
-                      får möjligheten att testa hur det är! Mer information om tävlingen hittar du här.
+                      får möjligheten att testa hur det är! Mer information om tävlingen <span class="underline">hittar du här</span>.
                     </p>
                   </div>
                 </a>
