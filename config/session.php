@@ -22,10 +22,6 @@ return [
 
     'serialization' => 'json',
 
-    'migrate' => [
-        'serialization' => true, // Enables transparent serialization method migration
-    ],
-
     /*
     |--------------------------------------------------------------------------
     | Session Lifetime

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52e4e29ce9126eefeda04022af3d4c5b",
+    "content-hash": "09e5e6cf192ae80912d8fb0a6c688c5f",
     "packages": [
         {
             "name": "brick/math",
@@ -1086,68 +1086,6 @@
                 }
             ],
             "time": "2021-10-07T12:57:01+00:00"
-        },
-        {
-            "name": "krisell/laravel-session-migrator",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Krisell/laravel-session-migrator.git",
-                "reference": "45eb953e032f3c96f94dc137b2eaa6a3ce0565a6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Krisell/laravel-session-migrator/zipball/45eb953e032f3c96f94dc137b2eaa6a3ce0565a6",
-                "reference": "45eb953e032f3c96f94dc137b2eaa6a3ce0565a6",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "^9.0",
-                "php": "^8.0.2"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.8",
-                "orchestra/testbench": "^7.2",
-                "phpunit/phpunit": "^9.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Krisell\\LaravelSessionMigrator\\LaravelSessionMigratorServiceProvider"
-                    ],
-                    "aliases": {
-                        "LaravelSessionMigrator": "Krisell\\LaravelSessionMigrator\\LaravelSessionMigratorFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Krisell\\LaravelSessionMigrator\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Martin Krisell",
-                    "email": "martin.krisell@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Migrate Laravel session serialization method and driver without dropping any sessions.",
-            "homepage": "https://github.com/krisell/laravel-session-migrator",
-            "keywords": [
-                "krisell",
-                "laravel-session-migrator"
-            ],
-            "support": {
-                "issues": "https://github.com/Krisell/laravel-session-migrator/issues",
-                "source": "https://github.com/Krisell/laravel-session-migrator/tree/v1.0.0"
-            },
-            "time": "2022-03-22T21:30:06+00:00"
         },
         {
             "name": "laravel/framework",
