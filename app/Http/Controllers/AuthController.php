@@ -15,7 +15,6 @@ class AuthController extends Controller
         $payload = (array) JWT::decode(
             request('idToken'),
             JWK::parseKeySet($keys),
-            ['RS256'],
         );
 
         abort_if($payload['aud'] !== '52915573324-bn4g8a0iuv4r9mbgmi23sd8464g0j0mv.apps.googleusercontent.com', 401);
