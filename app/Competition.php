@@ -11,13 +11,12 @@ class Competition extends Model
 {
     use SoftDeletes, HasFactory;
 
-    protected $dates = ['deleted_at'];
-
     protected $guarded = [];
 
     protected $casts = [
         'publish_count' => 'boolean',
         'publish_list' => 'boolean',
+        'deleted_at' => 'datetime',
         'last_registration_at' => 'datetime:Y-m-d',
         'date' => 'datetime:Y-m-d',
         'end_date' => 'datetime:Y-m-d',
