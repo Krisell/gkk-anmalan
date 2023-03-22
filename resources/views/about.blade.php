@@ -23,7 +23,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
 
                 <p class="text-xl leading-normal text-gray-500 mt-4 mb-4">Varmt välkommen att hälsa på och träna ett pass med oss!</p>
                   
-                <h3 class="mt-8 -mb-6 text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2022</h3>
+                <h3 class="mt-8 -mb-6 text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2023</h3>
                 </div>
                 <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
@@ -74,17 +74,10 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FBo%CC%88ttcher.png?alt=media&token=88f3ba4d-82f0-462d-851d-b6c210078bc9" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Simon Böttcher</h3>
-                      <dl class="mt-1 flex-grow flex flex-col justify-between">
-                        <dd class="text-gray-500 text-sm">Ledamot</dd>
-                      </dl>
-                    </div>
-                  </li>
-                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
-                    <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FMaria.png?alt=media&token=73491faa-2ba4-46f9-b37f-a2ad69ca0038" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Maria Klintarp</h3>
+                      <div class="w-32 h-32 flex-shrink-0 mx-auto rounded-full overflow-hidden">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FElena.png?alt=media&token=dbda0f15-5af2-400f-b91d-8939ce49d746" alt="">
+                      </div>
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Elena Sanz Carmona</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Ledamot</dd>
                       </dl>
@@ -95,14 +88,27 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                       <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FIda.png?alt=media&token=371aa963-19a4-494a-9146-3fe63a0562ed" alt="">
                       <h3 class="mt-6 text-gray-900 text-sm font-medium">Ida Anemyr</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
+                        <dd class="text-gray-500 text-sm">Ledamot</dd>
+                      </dl>
+                    </div>
+                  </li>
+                  <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+                    <div class="flex-1 flex flex-col p-8">
+                      <div class="w-32 h-32 flex-shrink-0 mx-auto rounded-full overflow-hidden">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FPhilip.png?alt=media&token=5018ed03-a106-4999-95da-d5db596e4e8a" alt="">
+                      </div>
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Philip Larsson</h3>
+                      <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Suppleant</dd>
                       </dl>
                     </div>
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FNiclas.png?alt=media&token=a4bad7c6-17b7-491f-8cdd-c0e6c8002f9e" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Niklas Håkansson</h3>
+                      <div class="w-32 h-32 flex-shrink-0 mx-auto rounded-full overflow-hidden">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FIdaV.png?alt=media&token=a779389c-ccbc-4d4a-aece-14a8a9312431" alt="">
+                      </div>
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Ida Vingesand</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Suppleant</dd>
                       </dl>
