@@ -32,10 +32,6 @@
         </svg>
       </div>
       <div class="login-text">Logga in med Google</div>
-
-      <div v-if="googleIsLoggingIn">
-        <i class="fa fa-spin fa-spinner googleSpinner"></i>
-      </div>
     </div>
 
     <div style="margin-top: 10px" @click="microsoft" class="loginBtn microsoft font-sans text-sm font-medium">
@@ -58,39 +54,20 @@ import PostRedirect from '../modules/PostRedirect.js'
 
 export default {
   props: ['to'],
-  data() {
-    return {
-      googleIsLoggingIn: false,
-    }
-  },
-  created() {
-    if (window.location.hash === '#redirecting-google') {
-      this.googleIsLoggingIn = true
-    }
-
-    firebase
-      .auth()
-      .getRedirectResult()
-      .then((result) => {
-        if (result.credential) {
-          PostRedirect.send({
+  methods: {
+    google() {
+      firebase.auth().languageCode = 'sv'
+      const provider = new firebase.auth.GoogleAuthProvider()
+      provider.addScope('email')
+      firebase.auth().signInWithPopup(provider).then(result => {
+        PostRedirect.send({
             url: '/auth/google',
             data: {
               idToken: result.credential.idToken,
               to: this.to,
             },
           })
-        }
       })
-  },
-  methods: {
-    google() {
-      this.googleIsLoggingIn = true
-      firebase.auth().languageCode = 'sv'
-      const provider = new firebase.auth.GoogleAuthProvider()
-      provider.addScope('email')
-      window.location.hash = 'redirecting-google'
-      firebase.auth().signInWithRedirect(provider)
     },
     microsoft() {
       firebase
