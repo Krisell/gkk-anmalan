@@ -42,7 +42,7 @@ Följande kommandon kan sedan användas för att sätta upp en utvecklingsmiljö
 - `php artisan key:generate` för att skapa en unik app-nyckel
 - `php artisan serve` för att starta en lokal server
 
-Om du vill göra ändringar i frontend krävs att `Node.js` är installerat, att du installerar beroenden med `npm install` samt att du bygger för utveckling (`npm run watch`) eller för produktion (`npm run production`).
+Om du vill göra ändringar i frontend krävs att `Node.js` är installerat, att du installerar beroenden med `npm install` samt att du bygger för utveckling (`npm run dev`) eller för produktion (`npm run build`).
 
 Automatiska tester och granskning av kodstil kan köras genom `bin/alltest.sh`, som kör följande kommandon
 ```bash
