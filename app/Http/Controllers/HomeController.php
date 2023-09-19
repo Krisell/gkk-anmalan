@@ -28,9 +28,9 @@ class HomeController extends Controller
         return view('about', ['site' => 'about']);
     }
 
-    public function provaPa()
+    public function lagSM()
     {
-        return view('prova-pa', ['site' => 'prova-pa']);
+        return view('lag-sm', ['site' => 'lag-sm']);
     }
 
     public function member()
