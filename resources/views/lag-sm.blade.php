@@ -16,9 +16,13 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
               </div>
               
               <p class="text-xl leading-normal text-gray-500">
-                
-Den 16-17 december 2023 kommer kampen om sveriges starkaste lag avgöras genom Lag-SM i Styrkelyft.
-
+              Den 16-17 december 2023 kommer Lag-SM i Styrkelyft avgöras hos Göteborg Kraftsportklubb i Göteborg.
+              </p>
+              <p class="text-xl leading-normal text-gray-500">
+                Mer information som tider, tävlande föreningar mm kommer läggas upp längre fram.
+              </p>
+              <p class="text-xl leading-normal text-gray-500">
+                Varmt välkoma att komma och titta!
               </p>
 
               {{-- <p class="text-xl leading-normal text-gray-500">
