@@ -28,11 +28,6 @@ class HomeController extends Controller
         return view('about', ['site' => 'about']);
     }
 
-    public function lagSM()
-    {
-        return view('lag-sm', ['site' => 'lag-sm']);
-    }
-
     public function member()
     {
         return view('member', ['site' => 'member']);

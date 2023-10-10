@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LagSMController;
 use App\Http\Controllers\MusikhjalpenController;
 use App\Http\Controllers\SignAgreementsController;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
@@ -23,8 +24,10 @@ Route::get('/medlem', [HomeController::class, 'member']);
 Route::redirect('/member', '/medlem');
 Route::get('/dokument', [HomeController::class, 'documents']);
 
-Route::get('/lag-sm', [HomeController::class, 'lagSM']);
-Route::get('/lagsm', [HomeController::class, 'lagSM']);
+Route::controller(LagSMController::class)->group(function () {
+    Route::get('/lag-sm', 'index');
+    Route::get('/lagsm', 'index');
+});
 
 Route::prefix('insidan')->middleware(EnsureAgreementsAreSignedMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'inside']);

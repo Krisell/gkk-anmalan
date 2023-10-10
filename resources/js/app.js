@@ -30,6 +30,7 @@ import AdminDocuments from './components/AdminDocuments.vue'
 import CompetitionCard from './components/CompetitionCard.vue'
 import AdminCompetition from './components/AdminCompetition.vue'
 import AdminCompetitions from './components/AdminCompetitions.vue'
+import LagSM from './components/LagSM.vue'
 
 window.axios = axios
 
@@ -96,6 +97,7 @@ Vue.component('GkkAdminNewsEmail', AdminNewsEmail)
 Vue.component('GkkCompetitionCard', CompetitionCard)
 Vue.component('GkkAdminCompetition', AdminCompetition)
 Vue.component('GkkAdminCompetitions', AdminCompetitions)
+Vue.component('LagSM', LagSM)
 
 // eslint-disable-next-line no-new
 new Vue({
