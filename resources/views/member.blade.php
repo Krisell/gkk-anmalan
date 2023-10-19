@@ -28,7 +28,7 @@ background-position-y: 30%; background-position-x: 50%; max-height: 50vh;" class
                     Efter detta kommer faktura för medlemskap skickas ut och när den är betald är du upptagen i föreningen.
                   </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
-                    Du kommer också bjudas in till vårt medlemssystem där du bland annat behöver godkänna vårt <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FAntidopingavtal.pdf?alt=media&token=f43b48b7-62e8-405e-8b3e-f75ac2c465c6">antidopingavtal</a> och <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK%202022-09-20.pages.pdf?alt=media&token=52b3f7dd-e27c-49f2-a63d-0bdf2a0a0188">medlemsavtal</a>.
+                    Du kommer också bjudas in till vår medlemswebb där du bland annat behöver godkänna vårt <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FAntidopingavtal.pdf?alt=media&token=f43b48b7-62e8-405e-8b3e-f75ac2c465c6">antidopingavtal</a> och <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK%202022-09-20.pages.pdf?alt=media&token=52b3f7dd-e27c-49f2-a63d-0bdf2a0a0188">medlemsavtal</a>.
                   </p>
               </div>
 
