@@ -25,12 +25,21 @@
         <p class="text-xl leading-normal text-gray-500 mt-2">
             Vilka som får göra upp avgörs efter Serie 4 där sista inrapporteringsdag är 3 december.
         </p>
+        <p>
+            <select
+                v-model="showRound"
+                class="mt-4 form-select block pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            >
+                <option value="latest">Visa aktuell ställning under pågående omgång</option>
+                <option value="three">Visa ställningen efter 3 avslutade omgångar</option>
+            </select>
+        </p>
         <div class="mt-4 mb-32 flex items-between lg:items-center justify-start flex-col lg:flex-row">
             <div class="flex flex-1">
                 <div class="flex-1">
                     <h3 class="mt-4 font-bold">KSL Herrar</h3>
                     <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in KSLHerr.slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
+                        <li v-for="(team, index) in sortedKSLHerr().slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
                         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team.replace(/För./, '') }}</p>
@@ -43,7 +52,7 @@
                 <div class="flex-1">
                     <h3 class="mt-4 font-bold">KSL Damer</h3>
                     <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in KSLDam.slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
+                        <li v-for="(team, index) in sortedKSLDam().slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
                         <img class="w-12 h-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
@@ -58,7 +67,7 @@
                 <div class="flex-1">
                     <h3 class="mt-4 font-bold">KBP Herrar</h3>
                     <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in KBPHerr.slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
+                        <li v-for="(team, index) in sortedKBPHerr().slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
                         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
@@ -71,7 +80,7 @@
                 <div class="flex-1">
                     <h3 class="mt-4 font-bold">KBP Damer</h3>
                     <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in KBPDam.slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
+                        <li v-for="(team, index) in sortedKBPDam().slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
                         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
@@ -88,7 +97,12 @@
 </template>
 
 <script>
+import ToggleButton from './ui/ToggleButton.vue'
+
 export default {
+    components: {
+        ToggleButton
+    },
     data() {
         return {
             series: [],
@@ -96,11 +110,13 @@ export default {
             KSLDam: [],
             KBPHerr: [],
             KBPDam: [],
+            showRound: 'latest',
         }
     },
     async mounted() {
         // const response = await fetch('http://127.0.0.1:5001/goteborg-kraftsportklubb/europe-north1/readEliteSeries')
         const response = await fetch('https://readeliteseries-td5gx4uymq-lz.a.run.app')
+
         this.series = await response.json()
 
         this.KSLHerr = [...this.series.find(serie => serie.name === 'KSL Herr').top10]
@@ -125,6 +141,42 @@ export default {
             }
 
             return teamImages[team] || 'https://www.styrkelyft.se/pictures/nav_thumbs/ssf-logga_web_transparent_200px.png?v20210217122912'
+        },
+        sortedKSLHerr() {
+            const data = [...this.KSLHerr]
+
+            if (this.showRound === 'latest') {
+                return data.sort((a, b) => b.points - a.points)
+            }
+
+            return data.sort((a, b) => b.afterThreeRounds - a.afterThreeRounds)
+        },
+        sortedKSLDam() {
+            const data = [...this.KSLDam]
+
+            if (this.showRound === 'latest') {
+                return data.sort((a, b) => b.points - a.points)
+            }
+
+            return data.sort((a, b) => b.afterThreeRounds - a.afterThreeRounds)
+        },
+        sortedKBPHerr() {
+            const data = [...this.KBPHerr]
+
+            if (this.showRound === 'latest') {
+                return data.sort((a, b) => b.points - a.points)
+            }
+
+            return data.sort((a, b) => b.afterThreeRounds - a.afterThreeRounds)
+        },
+        sortedKBPDam() {
+            const data = [...this.KBPDam]
+
+            if (this.showRound === 'latest') {
+                return data.sort((a, b) => b.points - a.points)
+            }
+
+            return data.sort((a, b) => b.afterThreeRounds - a.afterThreeRounds)
         }
     }
 }
