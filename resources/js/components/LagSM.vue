@@ -43,7 +43,7 @@
                         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team.replace(/För./, '') }}</p>
-                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ team.points }} poäng</p>
+                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
                         </div>
                         </li>
                     </ul>
@@ -56,7 +56,7 @@
                         <img class="w-12 h-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
-                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ team.points }} poäng</p>
+                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
                         </div>
                         </li>
                     </ul>
@@ -71,7 +71,7 @@
                         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
-                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ team.points }} poäng</p>
+                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
                         </div>
                         </li>
                     </ul>
