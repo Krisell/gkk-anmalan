@@ -39,7 +39,7 @@
                 <div class="flex-1">
                     <h3 class="mt-4 font-bold">KSL Herrar</h3>
                     <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in sortedKSLHerr().slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
+                        <li v-for="(team, index) in sortedKSLHerr().slice(0, TEAMS_TO_KEEP)" :key="team.team" class="flex gap-x-4 py-3">
                         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team.replace(/För./, '') }}</p>
@@ -52,7 +52,7 @@
                 <div class="flex-1">
                     <h3 class="mt-4 font-bold">KSL Damer</h3>
                     <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in sortedKSLDam().slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
+                        <li v-for="(team, index) in sortedKSLDam().slice(0, TEAMS_TO_KEEP)" :key="team.team" class="flex gap-x-4 py-3">
                         <img class="w-12 h-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
@@ -67,7 +67,7 @@
                 <div class="flex-1">
                     <h3 class="mt-4 font-bold">KBP Herrar</h3>
                     <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in sortedKBPHerr().slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
+                        <li v-for="(team, index) in sortedKBPHerr().slice(0, TEAMS_TO_KEEP)" :key="team.team" class="flex gap-x-4 py-3">
                         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
@@ -80,7 +80,7 @@
                 <div class="flex-1">
                     <h3 class="mt-4 font-bold">KBP Damer</h3>
                     <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in sortedKBPDam().slice(0, 5)" :key="team.team" class="flex gap-x-4 py-3">
+                        <li v-for="(team, index) in sortedKBPDam().slice(0, TEAMS_TO_KEEP)" :key="team.team" class="flex gap-x-4 py-3">
                         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
@@ -98,6 +98,8 @@
 
 <script>
 import ToggleButton from './ui/ToggleButton.vue'
+
+const TEAMS_TO_KEEP = 5
 
 export default {
     components: {
