@@ -99,14 +99,13 @@
 <script>
 import ToggleButton from './ui/ToggleButton.vue'
 
-const TEAMS_TO_KEEP = 5
-
 export default {
     components: {
         ToggleButton
     },
     data() {
         return {
+            TEAMS_TO_KEEP: 5,
             series: [],
             KSLHerr: [],
             KSLDam: [],
