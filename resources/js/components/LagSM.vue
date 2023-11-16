@@ -20,7 +20,7 @@
         </div>
 
         <div class="flex items-center mt-6">
-            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Lag i final just nu</h2>
+            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Lag i final just nu (top 5)</h2>
         </div>
         <p class="text-xl leading-normal text-gray-500 mt-2">
             Vilka som får göra upp avgörs efter Serie 4 där sista inrapporteringsdag är 28 november.
@@ -46,6 +46,16 @@
                             <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
                         </div>
                         </li>
+                        <li>
+                            <div class="border border-t-0 border-l-0 border-r-0 border-b-1 border-gkk opacity-50 h-4"></div>
+                        </li>
+                        <li v-for="(team, index) in sortedKSLHerr().slice(TEAMS_TO_KEEP, TEAMS_TO_KEEP + 3)" :key="team.team" class="flex gap-x-4 py-3 opacity-20">
+                        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 + TEAMS_TO_KEEP }}. {{ team.team.replace(/För./, '') }}</p>
+                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
+                        </div>
+                        </li>
                     </ul>
                 </div>
 
@@ -56,6 +66,16 @@
                         <img class="w-12 h-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
+                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
+                        </div>
+                        </li>
+                        <li>
+                            <div class="border border-t-0 border-l-0 border-r-0 border-b-1 border-gkk opacity-50 h-4"></div>
+                        </li>
+                        <li v-for="(team, index) in sortedKSLDam().slice(TEAMS_TO_KEEP, TEAMS_TO_KEEP + 3)" :key="team.team" class="flex gap-x-4 py-3 opacity-20">
+                        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 + TEAMS_TO_KEEP }}. {{ team.team.replace(/För./, '') }}</p>
                             <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
                         </div>
                         </li>
@@ -74,6 +94,16 @@
                             <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
                         </div>
                         </li>
+                        <li>
+                            <div class="border border-t-0 border-l-0 border-r-0 border-b-1 border-gkk opacity-50 h-4"></div>
+                        </li>
+                        <li v-for="(team, index) in sortedKBPHerr().slice(TEAMS_TO_KEEP, TEAMS_TO_KEEP + 3)" :key="team.team" class="flex gap-x-4 py-3 opacity-20">
+                        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 + TEAMS_TO_KEEP }}. {{ team.team.replace(/För./, '') }}</p>
+                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
+                        </div>
+                        </li>
                     </ul>
                 </div>
 
@@ -84,6 +114,16 @@
                         <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
                         <div class="min-w-0">
                             <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
+                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
+                        </div>
+                        </li>
+                        <li>
+                            <div class="border border-t-0 border-l-0 border-r-0 border-b-1 border-gkk opacity-50 h-4"></div>
+                        </li>
+                        <li v-for="(team, index) in sortedKBPDam().slice(TEAMS_TO_KEEP, TEAMS_TO_KEEP + 3)" :key="team.team" class="flex gap-x-4 py-3 opacity-20">
+                        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 + TEAMS_TO_KEEP }}. {{ team.team.replace(/För./, '') }}</p>
                             <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
                         </div>
                         </li>
