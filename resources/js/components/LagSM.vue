@@ -23,7 +23,7 @@
             <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Lag i final just nu</h2>
         </div>
         <p class="text-xl leading-normal text-gray-500 mt-2">
-            Vilka som får göra upp avgörs efter Serie 4 där sista inrapporteringsdag är 3 december.
+            Vilka som får göra upp avgörs efter Serie 4 där sista inrapporteringsdag är 28 november.
         </p>
         <p>
             <select
