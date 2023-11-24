@@ -22,6 +22,26 @@
         </div>
 
         <div class="flex items-center mt-6">
+            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Tävlingsinformation</h2>
+        </div>
+        <p class="text-xl leading-normal text-gray-500 mt-2">
+            <div class="mt-4 ml-2 mb-2"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</div>
+            <img 
+                class="rounded-2xl shadow-xl cursor-pointer inline-block ml-2 w-[500px]"
+                @click="showImage('https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fkarta%20(1).png?alt=media&token=5668792a-f351-4175-b1ab-87e0b59215f0')" 
+                src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fkarta%20(1).png?alt=media&token=5668792a-f351-4175-b1ab-87e0b59215f0"
+            >
+        </p>
+        <p class="text-xl leading-normal text-gray-500 mt-2">
+            <div class="mt-6 ml-2 mb-2"><b>Ställning:</b> Eleiko med hård dyna</div>
+            <img 
+                class="rounded-2xl shadow-xl cursor-pointer inline-block ml-2 w-[500px]"
+                @click="showImage('https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fstallning.png?alt=media&token=bed8ed7c-e478-426f-80b8-e3e9caa44b9d')" 
+                src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fstallning.png?alt=media&token=bed8ed7c-e478-426f-80b8-e3e9caa44b9d"
+            >
+        </p>
+
+        <div class="flex items-center mt-6">
             <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Lag i final just nu (top 5)</h2>
         </div>
         <p class="text-xl leading-normal text-gray-500 mt-2">
@@ -220,6 +240,9 @@ export default {
             }
 
             return data.sort((a, b) => b.afterThreeRounds - a.afterThreeRounds)
+        },
+        showImage(url) {
+            window.open(url, '_blank')
         }
     }
 }
