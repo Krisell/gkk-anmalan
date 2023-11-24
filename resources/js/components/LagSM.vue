@@ -8,7 +8,7 @@
               </div>
               
               <p class="text-xl leading-normal text-gray-500">
-              Den 16-17 december 2023 avögrs Lag-SM i Styrkelyft hos Göteborg Kraftsportklubb.
+              Den 16-17 december 2023 avgörs Lag-SM i Styrkelyft hos Göteborg Kraftsportklubb.
               </p>
               <p class="text-xl leading-normal text-gray-500">
                 <b>Klassisk styrkelyft:</b> Lördag 16 december (herrar först, därefter damer)
