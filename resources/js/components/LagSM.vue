@@ -10,127 +10,35 @@
 
               
               <p class="text-xl leading-normal text-gray-500">
-              Den 16-17 december 2023 avgörs Lag-SM i Styrkelyft hos Göteborg Kraftsportklubb.
+              Den 16-17 december 2023 avgjordes Lag-SM i Styrkelyft hos Göteborg Kraftsportklubb.
               </p>
 
               <div class="flex items-center mt-6">
-            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Tävlingsinformation</h2>
+            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Bilder</h2>
             </div>
-
-              <p class="text-xl leading-normal text-gray-500">
-                <b>Lördag 16 december</b><br>
-                Klassisk Styrkelyft herr: Invägning 08.00-09.30 - Tävlingsstart 10.00<br>
-                Klassisk Styrkelyft dam: Invägning 12.00-13.30 - Tävlingsstart 14.00<br>
-            </p>
-            <p class="text-xl leading-normal text-gray-500">
-                <b>Söndag 17 december</b><br>
-                Klassisk Bänkpress herr: Invägning 09.00-10.30 - Tävlingsstart 11.00<br>
-                Klassisk Bänkpress dam: Invägning 10.30-12.00 - Tävlingsstart 12.30<br>
-            </p>
-            <p class="text-xl leading-normal text-gray-500">
-                Både i KSL och KBP sker uppdelning i två grupper med 10 lyftare i varje. Lagen avgör själva hur de delar upp sina lyftare.
-                </p>
-              <p class="text-xl leading-normal text-gray-500">
-                <b>Gratis entré för publik. Varmt välkoma att komma och titta!</b>
-              </p>
+            <a href="https://photos.app.goo.gl/K7ay7FxayxB9RzEr8" target="_blank">
+            <img width="500" class="my-4 rounded-2xl shadow-lg hover:scale-105 transition-all" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fframelagsm.png?alt=media&token=2d9d6ad8-70da-4ca5-9f36-c8d7f8045df7">
+                  <div class="mt-3 text-xl text-blue-400 underline">Bilder från tävlingen hittar ni här</div>
+        </a>
             </div>
         </div>
 
         <div class="flex items-center mt-6">
-            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Plats</h2>
+            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl"></h2>
         </div>
-        <p class="text-xl leading-normal text-gray-500 mt-2 mb-2">
-            Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg
-        </p>
-            <img 
-                class="rounded-2xl shadow-xl cursor-pointer inline-block ml-2 w-[500px]"
-                @click="showImage('https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fkarta%20(1).png?alt=media&token=5668792a-f351-4175-b1ab-87e0b59215f0')" 
-                src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fkarta%20(1).png?alt=media&token=5668792a-f351-4175-b1ab-87e0b59215f0"
-            >
-        <div class="flex items-center mt-6">
-            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Tävlingsutrustning</h2>
-        </div>
-        <p class="text-xl leading-normal text-gray-500 mt-2 mb-2">
-        Ställning tävling: Eleiko med hård dyna<br>
-        Ställning uppvärmning: Eleiko med mjuk dyna samt ER<br>
-            </p>
-            <img 
-                class="rounded-2xl shadow-xl cursor-pointer inline-block ml-2 w-[500px]"
-                @click="showImage('https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fstallning.png?alt=media&token=bed8ed7c-e478-426f-80b8-e3e9caa44b9d')" 
-                src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fstallning.png?alt=media&token=bed8ed7c-e478-426f-80b8-e3e9caa44b9d"
-            >
+              
+        <a href="https://www.instagram.com/p/C1EmdfLofzH/" target="_blank">
+            <img width="500" class="my-4 rounded-2xl shadow hover:scale-105 transition-all" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Flagsminsta.png?alt=media&token=14a4548c-25f9-400f-aca6-20e184c34c2a">
+        </a>
 
         <div class="flex items-center mt-6">
-            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Tävlande lag</h2>
+            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Resultat</h2>
         </div>
-        <p class="text-xl leading-normal text-gray-500 mt-2">
-            Se <a class="underline text-blue-400" target="_blank" href="https://www.styrkelyft.se/verksamhet/tavling/aktuella-sm">Styrkelyft.se Aktuella SM</a> för aktuell lista på anmälda lag.
-        </p>
-        <div class="flex items-center mt-6">
-            <h2 class="text-xl font-extrabold tracking-tight sm:text-2xl">Slutställning i Elitserien</h2>
-        </div>
-        <p class="text-xl leading-normal text-gray-500 mt-2 mb-2">
-                Top 5 i respektive Elitserie går till final. Observera att Linköpings AK avstår deltagande i Dam KBP, och Göteborg tar plats i den finalen i kraft av 6:e plats i Elitserien.
-            </p>
-        <div class="mt-4 mb-32 flex items-between lg:items-center justify-start flex-col lg:flex-row">
-            <div class="flex flex-1">
-                <div class="flex-1">
-                    <h3 class="mt-4 font-bold">KSL Herrar</h3>
-                    <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in sortedKSLHerr().slice(0, TEAMS_TO_KEEP)" :key="team.team" class="flex gap-x-4 py-3">
-                        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
-                        <div class="min-w-0">
-                            <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team.replace(/För./, '') }}</p>
-                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
-                        </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="flex-1">
-                    <h3 class="mt-4 font-bold">KSL Damer</h3>
-                    <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in sortedKSLDam().slice(0, TEAMS_TO_KEEP)" :key="team.team" class="flex gap-x-4 py-3">
-                        <img class="w-12 h-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
-                        <div class="min-w-0">
-                            <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
-                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
-                        </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="flex flex-1">
-                <div class="flex-1">
-                    <h3 class="mt-4 font-bold">KBP Herrar</h3>
-                    <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in sortedKBPHerr().slice(0, TEAMS_TO_KEEP)" :key="team.team" class="flex gap-x-4 py-3">
-                        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
-                        <div class="min-w-0">
-                            <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
-                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
-                        </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="flex-1">
-                    <h3 class="mt-4 font-bold">KBP Damer</h3>
-                    <ul role="list" class="divide-y divide-gray-100">
-                        <li v-for="(team, index) in sortedKBPDam().slice(0, TEAMS_TO_KEEP)" :key="team.team" class="flex gap-x-4 py-3">
-                        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="teamImage(team.team)" alt="" />
-                        <div class="min-w-0">
-                            <p class="text-sm font-semibold leading-6 text-gray-900">{{ index + 1 }}. {{ team.team }}</p>
-                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{ showRound === 'latest' ? team.points : team.afterThreeRounds }} poäng</p>
-                        </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-      </div>
+        <p class="text-xl leading-normal text-gray-500 mb-32">För resultat, se <a target="_blank" 
+            class="text-blue-400 underline"
+            href="https://www.styrkelyft.se/verksamhet/tavling/aktuella-sm">förbundets SM-sida</a></p>
         
+      </div>
     </div>
 </template>
 
