@@ -3,11 +3,14 @@ import { test, login, update } from './helpers.ts'
 
 test('A user can register', async ({ page }) => {
     await page.goto('/insidan')
-
     await page.getByText('Skapa konto som medlem').click()
-    await page.getByPlaceholder('Förnamn').fill('Test User')
+
+    const email = Math.random().toString(36).substring(7) + '@example.com'
+
+    await page.waitForTimeout(1000)
+    await page.getByPlaceholder('Förnamn').fill('A User')
     await page.getByPlaceholder('Efternamn').fill('Test Usersson')
-    await page.getByPlaceholder('Epost').fill('test@example.com')
+    await page.getByPlaceholder('Epost').fill(email)
     await page.locator('input[name="password"]').fill('password')
     await page.getByPlaceholder('Bekräfta lösenord').fill('password')
     await page.getByRole('button', { name: 'Skapa konto' }).click();
