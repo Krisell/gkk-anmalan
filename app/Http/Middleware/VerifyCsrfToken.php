@@ -21,5 +21,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/auth/*',
         '/admin/news/email/preview',
+        '*__e2e__*',
     ];
 }

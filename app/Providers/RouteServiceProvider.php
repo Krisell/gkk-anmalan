@@ -46,7 +46,9 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        //
+        if (app()->environment() === 'testing') {
+            Route::middleware('web')->group(base_path('/routes/e2e.php'));
+        }
     }
 
     /**

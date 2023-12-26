@@ -1,13 +1,12 @@
-// @ts-check
-const { devices } = require('@playwright/test');
+import { devices } from '@playwright/test';
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  * @type {import('@playwright/test').PlaywrightTestConfig}
  */
 const config = {
-  testDir: './e2e',
-  globalSetup: require.resolve('./e2e/setup.js'),
+  testDir: './tests/e2e',
+  globalSetup: require.resolve('./tests/e2e/setup.js'),
   timeout: 30 * 1000,
   expect: {
     timeout: 5000

@@ -1,5 +1,18 @@
 <template>
   <div style="text-align: center">
+    <modal name="confirmation" :adaptive="true" height="auto">
+      <div style="padding: 30px; margin-top: 20px">
+        <h3 style="text-align: center">
+          Är du säker på att du godkänner avtalet? Det är din skyldighet som medlem att känna till avtalets innehåll.
+        </h3>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
+        <Button @click="$modal.hide('confirmation')" type="secondary" class="mx-4">Nej</Button>
+        <Button @click="confirmSignAgreement" type="success">Ja, godkänn avtalet</Button>
+      </div>
+    </modal>
+
     <div>
       <h3 class="text-center mt-6 font-thin text-xl">
         Välkommen till GKK!<br />
@@ -13,8 +26,8 @@
       </div>
       <div class="mt-2">
         <div class="text-sm italic" v-if="membershipAgreementStatus === 'signed'">Signerat {{ renderDate(user.membership_agreement_signed_at) }}</div>
-        <div class="text-md" v-if="membershipAgreementStatus === 'expired'">Avtalet har uppdaterats sedan du godkänt. Läs och godkänn igen.</div>
-        <div class="text-md" v-if="membershipAgreementStatus === 'old'">Du godkände avtalet för över ett år sedan. Läs och godkänn igen.</div>
+        <div class="text-md text-red-500" v-if="membershipAgreementStatus === 'expired'">Avtalet har uppdaterats sedan du godkänt. Läs och godkänn igen.</div>
+        <div class="text-md text-red-500" v-if="membershipAgreementStatus === 'old'">Du godkände avtalet för över ett år sedan. Läs och godkänn igen.</div>
       </div>
       <div class="mt-8 flex items-center justify-center">
         <Button @click="showAntiDopingAgreement">Visa antidopingavtal</Button>
@@ -22,8 +35,8 @@
       </div>
       <div class="mt-2">
         <div class="text-sm italic" v-if="antiDopingAgreementStatus === 'signed'">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
-        <div class="text-md" v-if="antiDopingAgreementStatus === 'expired'">Avtalet har uppdaterats sedan du godkänt. Läs och godkänn igen.</div>
-        <div class="text-md" v-if="antiDopingAgreementStatus === 'old'">Du godkände avtalet för över ett år sedan. Läs och godkänn igen.</div>
+        <div class="text-md text-red-500" v-if="antiDopingAgreementStatus === 'expired'">Avtalet har uppdaterats sedan du godkänt. Läs och godkänn igen.</div>
+        <div class="text-md text-red-500" v-if="antiDopingAgreementStatus === 'old'">Du godkände avtalet för över ett år sedan. Läs och godkänn igen.</div>
       </div>
     </div>
     <h3 class="text-center mt-8 text-md">
@@ -51,10 +64,20 @@ export default {
       window.open(Documents.ANTI_DOPING_AGREEMENT)
     },
     signAgreement(kind) {
-      axios.post(`/sign-agreements/${kind}`).then(() => {
-        window.location = '/insidan'
-      })
+      this.signingAgreementKind = kind
+
+      this.$modal.show('confirmation')
     },
+    async confirmSignAgreement() {
+      if (this.signingAgreementKind === '') {
+        return
+      }
+
+      await axios.post(`/sign-agreements/${this.signingAgreementKind}`)
+      this.signingAgreementKind = ''
+      
+      window.location = '/insidan'
+    }
   },
 }
 </script>
