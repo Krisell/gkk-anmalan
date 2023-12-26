@@ -15,7 +15,7 @@
                 <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Registreringsdatum
+                  Datum reg.
                 </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
               </tr>
@@ -73,18 +73,19 @@
                 </th>
                 <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                  v-tooltip="'Bekräftad närvaro som funktionär. Inom parentes senaste 365 dagarna'"
                 >
-                  Bekräftad närvaro som funktionär<br />(senaste 365 dagarna)
+                  Bekr. funk.<br />(senaste 365 dagarna)
                 </th>
                 <th
                   @click="sortBy('created_at')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                 >
-                  Registreringsdatum
+                  Regdatum
                 </th>
                 <th
                   @click="sortBy('last_visited_at')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                 >
                   Senaste besök
                 </th>
@@ -102,18 +103,18 @@
                 <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Bet. 2023
+                  Medl.avg. 2024
                 </th>
                 <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Bet. 2022
+                  Medl.avg. 2023
                 </th>
-                <!-- <th
+                <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Bet. 2023
-                </th> -->
+                  Medl.avg. 2022
+                </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
               </tr>
@@ -157,6 +158,11 @@
                     class="fa fa-check-circle text-gkk text-lg"
                     v-if="account.membership_agreement_signed_at && account.anti_doping_agreement_signed_at"
                   ></i>
+                </td>
+                <td
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
+                >
+                  <ToggleButton @input="updateMembershipPayment(account, 2024)" :value="hasPaid(account, 2024)" color="#314270" />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
