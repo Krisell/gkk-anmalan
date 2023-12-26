@@ -342,6 +342,19 @@ export default {
       newAccountsString: '',
     }
   },
+  mounted() {
+    const url = new URL(window.location.href)
+    const sort = url.searchParams.get('sort')
+    const order = url.searchParams.get('order')
+
+    if (sort) {
+      this.sortKey = sort
+    }
+
+    if (order) {
+      this.sortOrder = parseInt(order)
+    }
+  },
   computed: {
     sortedActiveAccounts() {
       return this.accounts
@@ -377,6 +390,12 @@ export default {
       }
 
       this.sortKey = key
+
+      // Update query string to reflect sort order
+      const url = new URL(window.location.href)
+      url.searchParams.set('sort', this.sortKey)
+      url.searchParams.set('order', this.sortOrder)
+      window.history.replaceState({}, '', url)
     },
     grantAccount(account) {
       if (this.grantStatus !== '') {
