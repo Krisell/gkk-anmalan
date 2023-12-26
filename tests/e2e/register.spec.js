@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import { test, login, update } from './helpers.ts'
+import { test, login, update, php } from './helpers.ts'
 
 test('A user can register', async ({ page }) => {
     await page.goto('/insidan')
@@ -21,8 +21,28 @@ test('A user can register', async ({ page }) => {
 test('A new user can accept agreements', async ({ page }) => {
     const user = await login(page)
     await update(page, 'User', { id: user.id }, { 
-        membership_agreement_signed_at: '2020-01-01',
-        anti_doping_agreement_signed_at: '2020-01-01',
+        membership_agreement_signed_at: null,
+        anti_doping_agreement_signed_at: null,
+    })
+
+    await page.goto('/insidan')
+
+    await page.getByRole('button', { name: 'Godkänn medlemsavtalet' }).click();
+    await page.getByRole('button', { name: 'Ja, godkänn avtalet' }).click();
+
+    await expect(page.getByText('signerat')).toBeVisible()
+
+    await page.getByRole('button', { name: 'Godkänn antidopingavtalet' }).click();
+    await page.getByRole('button', { name: 'Ja, godkänn avtalet' }).click();
+
+    await expect(page.getByText('signerat')).toBeHidden()
+})
+
+test('An existing user need to accept agreements signed more than one year ago', async ({ page }) => {
+    const user = await login(page)
+    await update(page, 'User', { id: user.id }, { 
+        membership_agreement_signed_at: '2020-03-05',
+        anti_doping_agreement_signed_at: '2020-03-05',
     })
 
     await page.goto('/insidan')
