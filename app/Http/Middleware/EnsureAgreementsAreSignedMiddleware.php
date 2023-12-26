@@ -34,12 +34,12 @@ class EnsureAgreementsAreSignedMiddleware
         }
 
         $membership = Carbon::parse($membership);
-        if ($membership->lt(now()->subYear())) {
+        if ($membership->lessThan(now()->subYear())) {
             return false;
         }
 
         $lastUpdatedMembershipAgreement = config('agreements.membership.last_updated_at');
-        if ($lastUpdatedMembershipAgreement && $membership->lt($lastUpdatedMembershipAgreement)) {
+        if ($lastUpdatedMembershipAgreement && $membership->lessThan($lastUpdatedMembershipAgreement)) {
             return false;
         }
 
@@ -49,12 +49,12 @@ class EnsureAgreementsAreSignedMiddleware
         }
 
         $antiDoping = Carbon::parse($antiDoping);
-        if ($antiDoping->lt(now()->subYear())) {
+        if ($antiDoping->lessThan(now()->subYear())) {
             return false;
         }
 
         $lastUpdatedAntiDopingAgreement = config('agreements.anti_doping.last_updated_at');
-        if ($lastUpdatedAntiDopingAgreement && $antiDoping->lt($lastUpdatedAntiDopingAgreement)) {
+        if ($lastUpdatedAntiDopingAgreement && $antiDoping->lessThan($lastUpdatedAntiDopingAgreement)) {
             return false;
         }
 
