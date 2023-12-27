@@ -42,7 +42,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function login(User $user = null)
+function login(?User $user = null)
 {
     $user = $user ?: User::factory()->create();
 
