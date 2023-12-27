@@ -1,5 +1,6 @@
 <?php
 
+use App\ActivityLog;
 use App\Competition;
 use App\CompetitionRegistration;
 use App\Event;
@@ -73,7 +74,7 @@ test('an admin can update an event registration', function () {
     $this->assertDatabaseHas('event_registrations', $data);
 });
 
-test('a_non_admin_cant_update_a_registration', function () {
+test('a non admin cant update a registration', function () {
     $event = Event::factory()->create();
     $user = User::factory()->create();
 
@@ -114,5 +115,14 @@ test('an admin can add an additional user to an event', function () {
         'event_id' => $event->id,
         'status' => 1,
         'presence_confirmed' => 1,
+    ]);
+
+    $this->assertDatabaseHas(ActivityLog::class, [
+        'performed_by' => auth()->id(),
+        'user_id' => $user->id,
+        'action' => 'event-registration',
+        'data' => json_encode([
+            'event_id' => $event->id,
+        ]),
     ]);
 });

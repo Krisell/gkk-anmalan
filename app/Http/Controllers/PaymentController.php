@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivityLog;
 use App\AuditLog;
 use App\Payment;
 use App\User;
@@ -22,6 +23,14 @@ class PaymentController extends Controller
             'action' => "created payment {$payment->id}",
         ]);
 
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'payment-creation',
+            'data' => json_encode([
+                'payment_id' => $payment->id,
+            ]),
+        ]);
+
         return $payment;
     }
 
@@ -30,6 +39,14 @@ class PaymentController extends Controller
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => "deleted payment {$payment->id}",
+        ]);
+
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'payment-deletion',
+            'data' => json_encode([
+                'payment_id' => $payment->id,
+            ]),
         ]);
 
         $payment->delete();

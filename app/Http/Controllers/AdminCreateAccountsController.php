@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivityLog;
 use App\Mail\AccountCreatedByAdminWelcome;
 use App\User;
 use Illuminate\Support\Facades\Hash;
@@ -27,6 +28,14 @@ class AdminCreateAccountsController extends Controller
 
             Mail::to($user)->send(new AccountCreatedByAdminWelcome);
         }
+
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'account-batch-creation',
+            'data' => json_encode([
+                'accounts' => $newAccounts,
+            ]),
+        ]);
 
         return $newAccounts;
     }

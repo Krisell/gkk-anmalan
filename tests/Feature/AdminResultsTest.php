@@ -1,5 +1,6 @@
 <?php
 
+use App\ActivityLog;
 use App\Result;
 
 test('an administrator can add a result', function () {
@@ -17,6 +18,12 @@ test('an administrator can add a result', function () {
     $this->post('/admin/results', $data)->assertCreated();
 
     $this->assertDatabaseHas('results', $data);
+
+    $this->assertDatabaseHas(ActivityLog::class, [
+        'performed_by' => auth()->id(),
+        'action' => 'result-creation',
+        'data' => json_encode($data),
+    ]);
 });
 
 test('an administrator can delete a result', function () {
@@ -27,4 +34,12 @@ test('an administrator can delete a result', function () {
     $this->delete("/admin/results/{$result->id}")->assertOk();
 
     $this->assertEmpty(Result::all());
+
+    $this->assertDatabaseHas(ActivityLog::class, [
+        'performed_by' => auth()->id(),
+        'action' => 'result-deletion',
+        'data' => json_encode([
+            'result_id' => $result->id,
+        ]),
+    ]);
 });

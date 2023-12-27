@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivityLog;
 use App\Mail\AccountGrantedMail;
 use App\User;
 use Illuminate\Support\Facades\Mail;
@@ -21,11 +22,23 @@ class AccountController extends Controller
     public function promote(User $user)
     {
         $user->update(['role' => 'admin']);
+
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'account-promotion',
+            'user_id' => $user->id,
+        ]);
     }
 
     public function demote(User $user)
     {
         $user->update(['role' => null]);
+
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'account-demotion',
+            'user_id' => $user->id,
+        ]);
     }
 
     public function grant(User $user)

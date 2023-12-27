@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivityLog;
 use App\Competition;
 use App\Event;
 use App\User;
@@ -106,6 +107,15 @@ class EventController extends Controller
             'status' => 1,
             'comment' => 'Tillagd av admin',
             'presence_confirmed' => 1,
+        ]);
+
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'event-registration',
+            'user_id' => request('user_id'),
+            'data' => json_encode([
+                'event_id' => $event->id,
+            ]),
         ]);
     }
 

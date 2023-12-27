@@ -1,5 +1,6 @@
 <?php
 
+use App\ActivityLog;
 use App\User;
 
 function data()
@@ -66,6 +67,12 @@ test('a superadmin can promote other users', function () {
 
     $this->post("/admin/accounts/promote/{$user->id}")->assertStatus(200);
     $this->assertEquals('admin', $user->fresh()->role);
+
+    $this->assertDatabaseHas(ActivityLog::class, [
+        'performed_by' => auth()->id(),
+        'action' => 'account-promotion',
+        'user_id' => $user->id,
+    ]);
 });
 
 test('a non admin cant demote users', function () {
@@ -97,6 +104,12 @@ test('a superadmin can demote other users', function () {
 
     $this->post("/admin/accounts/demote/{$user->id}")->assertStatus(200);
     $this->assertNull($user->fresh()->role);
+
+    $this->assertDatabaseHas(ActivityLog::class, [
+        'performed_by' => auth()->id(),
+        'action' => 'account-demotion',
+        'user_id' => $user->id,
+    ]);
 });
 
 test('only an admin can load the documents admin page with the firebase jwt', function () {

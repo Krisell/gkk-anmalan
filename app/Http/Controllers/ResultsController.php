@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ActivityLog;
 use App\Result;
 use App\User;
 use Illuminate\Http\Request;
@@ -28,11 +29,25 @@ class ResultsController extends Controller
             'result' => 'required',
         ]);
 
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'result-creation',
+            'data' => json_encode($data),
+        ]);
+
         return Result::create($data);
     }
 
     public function destroy(Result $result)
     {
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'result-deletion',
+            'data' => json_encode([
+                'result_id' => $result->id,
+            ]),
+        ]);
+
         $result->delete();
     }
 }

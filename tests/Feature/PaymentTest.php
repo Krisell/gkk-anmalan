@@ -1,5 +1,6 @@
 <?php
 
+use App\ActivityLog;
 use App\Payment;
 use App\User;
 
@@ -35,6 +36,14 @@ test('an admin can mark user as paid', function () {
     $this->assertDatabaseHas('audit_logs', [
         'user_id' => auth()->id(),
         'action' => "created payment {$payment['id']}",
+    ]);
+
+    $this->assertDatabaseHas(ActivityLog::class, [
+        'performed_by' => auth()->id(),
+        'action' => 'payment-creation',
+        'data' => json_encode([
+            'payment_id' => $payment['id'],
+        ]),
     ]);
 
     $this->assertDatabaseHas('payments', [
@@ -78,6 +87,14 @@ test('an admin can remove a payment', function () {
     $this->assertDatabaseHas('audit_logs', [
         'user_id' => auth()->id(),
         'action' => "deleted payment {$paymentB->id}",
+    ]);
+
+    $this->assertDatabaseHas(ActivityLog::class, [
+        'performed_by' => auth()->id(),
+        'action' => 'payment-deletion',
+        'data' => json_encode([
+            'payment_id' => $paymentB->id,
+        ]),
     ]);
 
     $this->assertEmpty(Payment::all());
