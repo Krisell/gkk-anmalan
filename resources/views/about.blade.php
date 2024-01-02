@@ -18,8 +18,10 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Adress:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kontakt:</b> info@gkk-styrkelyft.se</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Bankgiro:</b> 846-0891</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Organisationsnummer:</b> 802456-7672</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Bankgiro:</b> 846-0891</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Swish:</b> 123-581 34 56</p>
+                <img width="200px" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fqr.png?alt=media&token=1692752d-65b1-4723-b36e-2f9065ade3d5">
 
                 <p class="text-xl leading-normal text-gray-500 mt-4 mb-4">Varmt välkommen att hälsa på och träna ett pass med oss!</p>
                   
