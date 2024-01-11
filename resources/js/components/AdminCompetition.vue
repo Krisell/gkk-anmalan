@@ -110,7 +110,7 @@
                 </td>
 
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="text-sm leading-5 text-gray-500 max-w-16">{{ registration.comment }}</div>
+                  <div class="text-sm leading-5 text-gray-500">{{ registration.comment }}</div>
                 </td>
               </tr>
             </tbody>
