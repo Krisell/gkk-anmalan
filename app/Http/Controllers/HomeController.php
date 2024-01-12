@@ -28,6 +28,11 @@ class HomeController extends Controller
         return view('about', ['site' => 'about']);
     }
 
+    public function provaPa()
+    {
+        return view('prova-pa', ['site' => 'prova-pa']);
+    }
+
     public function member()
     {
         return view('member', ['site' => 'member']);

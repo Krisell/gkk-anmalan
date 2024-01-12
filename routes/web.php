@@ -23,6 +23,7 @@ Route::get('/gkk', [HomeController::class, 'about']);
 Route::get('/medlem', [HomeController::class, 'member']);
 Route::redirect('/member', '/medlem');
 Route::get('/dokument', [HomeController::class, 'documents']);
+Route::get('/prova-pa', [HomeController::class, 'provaPa']);
 
 Route::controller(LagSMController::class)->group(function () {
     Route::get('/lag-sm', 'index');
