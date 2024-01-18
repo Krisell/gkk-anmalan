@@ -15,6 +15,47 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Välkommen till Göteborg Kraftsportklubb</h2>
                 </div>
 
+                <div>
+                  <a 
+                    target="_blank"
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FHzu1KcuyMUmOkGTnxQWqBOjrmrS0CA.pdf?alt=media&token=e7393521-554f-4591-aab6-b78a735d87e2">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Kallelse och föredragningslista årsmöte 2024-02-10 kl 10.00
+                  </a>
+                </div>
+                {{-- <div>
+                  <a 
+                    target="_blank"
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2Fj3GrXdTlcOB97aGhZqUjLUobjPvTxZ.pdf?alt=media&token=ac09827e-17b0-490c-aafe-97fce3a8b029">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2022, uppdaterad 2023-02-13.
+                  </a>
+                </div>
+                <div>
+                  <a 
+                    target="_blank"
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FZ1g0KkbTb7ePYq7h0QSr02zReZGeKN.pdf?alt=media&token=7fea9ac6-652d-4c62-9076-39a423d1bc0d">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsplan 2023
+                  </a>
+                </div>
+                <div>
+                  <a 
+                    target="_blank"
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FoEhjrzG0047RbdGemlL3KQPQFetwPK.pdf?alt=media&token=e430728a-3198-49a9-a419-87930503e888">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Budget 2023 samt Resultaträkning 2022
+                  </a>
+                </div>
+                <div>
+                  <a 
+                    target="_blank"
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FZ63bWLNajemKOpMlkgJg4YzupkG4se.pdf?alt=media&token=2b14db44-bdb9-4957-ae52-f99b73b5e671">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Revisionsberättelse 2022
+                  </a>
+                </div> --}}
+
 
                 <a href="/prova-pa" class="mt-6 block">
                   <div class="rounded p-2 border-gkk border-2">
