@@ -23,15 +23,15 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     <i class="fa fa-file-pdf-o mr-2"></i>Kallelse och föredragningslista årsmöte 2024-02-10 kl 10.00
                   </a>
                 </div>
-                {{-- <div>
+                <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2Fj3GrXdTlcOB97aGhZqUjLUobjPvTxZ.pdf?alt=media&token=ac09827e-17b0-490c-aafe-97fce3a8b029">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2022, uppdaterad 2023-02-13.
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FVerksamhetsbera%CC%88ttelse%202024.pdf?alt=media&token=1a474c76-10af-4f91-bfb7-642a40a7603c">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2023, uppdaterad 2024-02-08. Fel eller saknad information i denna meddelas styrelsen.
                   </a>
                 </div>
-                <div>--}}
+                <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
