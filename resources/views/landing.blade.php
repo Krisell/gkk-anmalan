@@ -43,7 +43,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FEkonomiskt%20resultat%202023.pdf?alt=media&token=aa533007-0481-46d4-9383-4210cceb956b">
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FEkonomiskt%20resultat%202023.pdf?alt=media&token=990c709a-2ad8-41cb-997f-5898c306db36">
                     <i class="fa fa-file-pdf-o mr-2"></i>Ekonomiskt resultat 2023
                   </a>
                 </div>
