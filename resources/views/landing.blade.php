@@ -51,6 +51,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FValberedningens%20fo%CC%88rslag%202024.pdf?alt=media&token=d6ba9bf8-9826-4344-888e-c290cd265bbd">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Valberedningens förslag för 2024
+                  </a>
+                </div>
+                <div>
+                  <a 
+                    target="_blank"
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FRevisionsberattelse_2023_Goteborg_Kraftsportklubb%20(1).pdf?alt=media&token=c5d4d798-82e6-4d86-995c-4cef2cf38bfc">
                     <i class="fa fa-file-pdf-o mr-2"></i>Revisionsberättelse 2023
                   </a>
