@@ -35,18 +35,18 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FVerksamhetsplan%202024.pdf?alt=media&token=1e84ead0-fbb6-48be-918f-4f23fcf55f0d">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsplan 2024
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FVerksamhetsplan%20och%20budget%202024.pdf?alt=media&token=d15bbc76-f0dd-4d2a-a678-11b60fe2c79d">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsplan och budget 2024
                   </a>
                 </div>
-                {{--<div>
+                <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FoEhjrzG0047RbdGemlL3KQPQFetwPK.pdf?alt=media&token=e430728a-3198-49a9-a419-87930503e888">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Budget 2023 samt Resultaträkning 2022
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FEkonomiskt%20resultat%202023.pdf?alt=media&token=aa533007-0481-46d4-9383-4210cceb956b">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Ekonomiskt resultat 2023
                   </a>
-                </div>--}}
+                </div>
                 <div>
                   <a 
                     target="_blank"
