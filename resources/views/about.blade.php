@@ -50,7 +50,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
                       <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://avatars.githubusercontent.com/u/25909128?v=4" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Martin Krisell</h3>
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Martin Sandström Krisell</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Sekreterare</dd>
                       </dl>
