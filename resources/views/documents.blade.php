@@ -11,12 +11,16 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
         <div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8">
           <div class="space-y-12">
             <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
-              <div>
-                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Länkar</h2>
-                <div class="mt-4">
-                  <i class="fa fa-link"></i>
-                  <a class="underline" target="_blank" href="https://team.intersport.se/goteborg-kraftsportklubb">Webbshop klubbkläder (se till att logga in för att få rätt pris).</a>
+              <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+                <div>
+                  <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Klubbkläder via Intersport</h2>
+                  <div class="mt-4">
+                    <i class="fa fa-link"></i>
+                    <a class="underline" target="_blank" href="https://team.intersport.se/goteborg-kraftsportklubb">Webbshop (se till att logga in för att få rätt pris).</a>
+                  </div>
                 </div>
+              <div>
+                <h2 class="mt-12 text-3xl font-extrabold tracking-tight sm:text-4xl">Länkar</h2>
                 <div class="mt-4">
                   <i class="fa fa-link"></i>
                   <a class="underline" target="_blank" href="https://styrkelyft.se">Svenska Styrkelyftsförbundet (SSF)</a>
