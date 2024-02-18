@@ -11,6 +11,10 @@ class AccountController extends Controller
 {
     public function index()
     {
+        if (request()->wantsJson()) {
+            return User::with(['eventRegistrations.event', 'payments'])->get();
+        }
+
         return view('admin.accounts', [
             'ungranted' => User::whereGrantedBy(0)->get(),
             'accounts' => User::with(['eventRegistrations.event', 'payments'])->get(),

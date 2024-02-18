@@ -332,7 +332,20 @@ import Date from '../modules/Date.js'
 
 export default {
   components: { Button, ToggleButton },
-  props: ['accounts', 'user', 'ungranted'],
+  props: {
+    initialAccounts: {
+      type: Array,
+      required: true,
+    },
+    user: {
+      type: Object,
+      required: true,
+    },
+    ungranted: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
       selectedAccount: null,
@@ -340,9 +353,10 @@ export default {
       sortKey: 'created_at',
       sortOrder: 1,
       newAccountsString: '',
+      accounts: this.initialAccounts,
     }
   },
-  mounted() {
+  async mounted() {
     const url = new URL(window.location.href)
     const sort = url.searchParams.get('sort')
     const order = url.searchParams.get('order')
@@ -368,6 +382,10 @@ export default {
     },
   },
   methods: {
+    async loadAccounts() {
+      const response = await axios.get('/admin/accounts')
+      this.accounts = response.data
+    },  
     dateString(date) {
       if (!date) {
         return ''
@@ -468,13 +486,14 @@ export default {
       if (this.hasPaid(user, year)) {
         const payment = user.payments.find(payment => payment.type === 'MEMBERSHIP' && payment.year === year)
         await axios.delete(`/admin/accounts/payment/${payment.id}`)
-        this.reload()
+
+        this.loadAccounts()
         return
       }
 
       await axios.post(`/admin/accounts/payment/${user.id}`, { type: 'MEMBERSHIP', year })
 
-      this.reload()
+      this.loadAccounts()
     },
   },
 }
