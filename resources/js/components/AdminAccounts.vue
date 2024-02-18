@@ -483,15 +483,21 @@ export default {
       return user.payments.some(payment => payment.type === 'MEMBERSHIP' && payment.year === year)
     },
     async updateMembershipPayment(user, year) {
+      const name = user.first_name + ' ' + user.last_name
+      
       if (this.hasPaid(user, year)) {
         const payment = user.payments.find(payment => payment.type === 'MEMBERSHIP' && payment.year === year)
         await axios.delete(`/admin/accounts/payment/${payment.id}`)
+
+        this.$toast.warning(`Medlemsavgiften för ${name} har markerats som obetald`);
 
         this.loadAccounts()
         return
       }
 
       await axios.post(`/admin/accounts/payment/${user.id}`, { type: 'MEMBERSHIP', year })
+
+      this.$toast.info(`Medlemsavgiften för ${name} har markerats som betald`);
 
       this.loadAccounts()
     },

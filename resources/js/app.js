@@ -1,4 +1,6 @@
 import Vue from 'vue/dist/vue.esm.js'
+import ToastPlugin from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-bootstrap.css'
 import VModal from 'vue-js-modal'
 import VTooltip from 'v-tooltip'
 import axios from 'axios'
@@ -55,6 +57,7 @@ window.Vue = Vue
 Vue.config.ignoredElements = ['trix-editor']
 Vue.use(VModal)
 Vue.use(VTooltip)
+Vue.use(ToastPlugin)
 
 Vue.mixin({
   methods: {
