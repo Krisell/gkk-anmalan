@@ -27,8 +27,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FVerksamhetsbera%CC%88ttelse%202024.pdf?alt=media&token=1a474c76-10af-4f91-bfb7-642a40a7603c">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2023, uppdaterad 2024-02-08. Fel eller saknad information i denna meddelas styrelsen.
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FLbWn2RCC8LrT0wVJTWOK2ZbwfyIY7r.pdf?alt=media&token=2f57c4a8-c3d3-42fc-b4bb-76a7e367abad">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2023, uppdaterad 2024-02-23.
                   </a>
                 </div>
                 <div>
