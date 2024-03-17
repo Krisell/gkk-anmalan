@@ -95,9 +95,9 @@
                 >
                 <a
                   class="ml-6 uppercase hover:border-b-1 text-[#009a79] border border-[#009a79] p-[2px] -m-[2px] px-1"
-                  :class="site === 'lag-sm' ? 'border-b-2 border-[#009a79]' : ''"
-                  href="/lag-sm"
-                  >Lag-SM 2023</a
+                  :class="site === 'gm' ? 'border-b-2 border-[#009a79]' : ''"
+                  href="/gm"
+                  >GM 2024</a
                 >
               </div>
             </div>

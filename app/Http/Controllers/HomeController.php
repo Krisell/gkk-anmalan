@@ -18,6 +18,11 @@ class HomeController extends Controller
         return view('dm2022', ['site' => 'dm']);
     }
 
+    public function gm()
+    {
+        return view('gm2024', ['site' => 'gm']);
+    }
+
     public function powerlifting()
     {
         return view('powerlifting', ['site' => 'powerlifting']);

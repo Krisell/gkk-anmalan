@@ -17,6 +17,7 @@ Route::get('/musikhjalpen', [MusikhjalpenController::class, 'index']);
 Route::get('/dm', [HomeController::class, 'dm']);
 Route::redirect('/musik', '/musikhjalpen');
 Route::get('/dm2022', [HomeController::class, 'dm']);
+Route::get('/gm', [HomeController::class, 'gm']);
 
 Route::get('/styrkelyft', [HomeController::class, 'powerlifting']);
 Route::get('/gkk', [HomeController::class, 'about']);
