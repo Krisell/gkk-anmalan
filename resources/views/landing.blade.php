@@ -15,7 +15,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Välkommen till Göteborg Kraftsportklubb</h2>
                 </div>
 
-                <div>
+                {{-- <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
@@ -62,7 +62,18 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FRevisionsberattelse_2023_Goteborg_Kraftsportklubb%20(1).pdf?alt=media&token=c5d4d798-82e6-4d86-995c-4cef2cf38bfc">
                     <i class="fa fa-file-pdf-o mr-2"></i>Revisionsberättelse 2023
                   </a>
-                </div>
+                </div> --}}
+
+                <a href="/gm" class="mt-6 block">
+                  <div class="rounded p-2 border-gkk border-2">
+                    <p class="text-3xl leading-bold text-gkk">
+                      Götalandsmästerskapen 11-12 maj 2024
+                    </p>
+                    <p class="text-xl leading-bold text-gkk">
+                      GKK arrangerar Götalandsmästerskapen i Klassisk Styrkelyft och Klassisk Bänkpress!<br>Klicka här för att läsa med på vår GM-sida.
+                    </p>
+                  </div>
+                </a>
 
 
                 {{-- <a href="/prova-pa" class="mt-6 block">
