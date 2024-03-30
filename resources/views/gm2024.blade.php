@@ -22,7 +22,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
               <div class="mt-8"></div>
                 <a 
                   class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                  href="https://online.styrkelyft.se/web/Docs/3781/2970.pdf"
+                  href="https://online.styrkelyft.se/web/Docs/3781/2972.pdf"
                   target="_blank">
                   <i class="fa fa-file-pdf-o mr-2"></i>Inbjudan Götalandsmästerskapen 2024
                 </a>
