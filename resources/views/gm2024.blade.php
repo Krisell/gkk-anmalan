@@ -18,6 +18,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500">
                   Götalandsmästerskapen i Klassisk Styrkelyft och Klassisk Bänkpress går av stapeln 11-12 maj hos GKK, på Friskis och Svettis i Majorna.
                 </p>
+                {{-- <img class="w-64 shadow-xl rounded-xl" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Flogo%20centered.png?alt=media&token=f0ea09ac-77b6-4e8a-b532-68cd7b3953e1"> --}}
 
               <div class="mt-8"></div>
                 <a 
@@ -28,8 +29,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 </a>
                 {{-- <p class="mt-4 text-xl leading-normal text-gray-500"><b>Tävlingen sker med Eleiko-ställning av nyare modell.</b></p> --}}
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> TBD</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar: </b> TBD</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> Publiceras efter anmälningstidens utgång, 13 april.</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar: </b> Publiceras efter anmälningstidens utgång, 13 april.</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Entreavgift:</b> Valfri</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Kommer sändas via YouTube</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck. 10 minuter promenad bort finns Coop och en mängd restauranger.</p>
