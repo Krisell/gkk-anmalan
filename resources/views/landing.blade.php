@@ -72,6 +72,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     <p class="text-xl leading-bold text-gkk">
                       GKK arrangerar Götalandsmästerskapen i Klassisk Styrkelyft och Klassisk Bänkpress!<br>Klicka här för att läsa med på vår GM-sida.
                     </p>
+                    <p class="mt-4 text-lg leading-bold text-gkk">Missa inte att beställa GM-tröjan!</p>
+                    <img class="w-32 rounded-lg shadow-lg" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Ftshirt-gm.png?alt=media&token=853518e3-d745-49a5-9518-f7fa0cbdacb4">
                   </div>
                 </a>
 
