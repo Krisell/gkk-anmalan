@@ -36,8 +36,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 </a>
                 {{-- <p class="mt-4 text-xl leading-normal text-gray-500"><b>Tävlingen sker med Eleiko-ställning av nyare modell.</b></p> --}}
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> Publiceras efter anmälningstidens utgång, 13 april.</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar: </b> Publiceras efter anmälningstidens utgång, 13 april.</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> 180 (!)</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar: </b> 33</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Entreavgift:</b> Valfri</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Kommer sändas via YouTube</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck. 10 minuter promenad bort finns Coop och en mängd restauranger.</p>
