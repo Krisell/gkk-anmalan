@@ -40,9 +40,6 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500"><b>Entreavgift:</b> Valfri</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Kommer sändas via YouTube</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck. 10 minuter promenad bort finns Coop och en mängd restauranger.</p>
-                <p class="text-xl leading-normal text-gray-500">
-                  Tävlingstider och startlistor publiceras här efter att anmälningstiden har gått ut.
-                </p>
 
                 <div>
                 <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fkarta%20(1).png?alt=media&token=5668792a-f351-4175-b1ab-87e0b59215f0">
