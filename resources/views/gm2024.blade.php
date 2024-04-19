@@ -28,11 +28,10 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <i class="fa fa-file-pdf-o mr-2"></i>Inbjudan Götalandsmästerskapen 2024
                 </a>
                 <div></div>
-                <a target="_blank" href="https://forms.gle/afzBmwUaVhGn6iE37">
+                <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor_GM_2024_2024-04-17.pdf?alt=media&token=da105918-d4d2-4b2d-ad54-2622681f6be7">
                   <p 
                   class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
-                    >Klicka här för att beställa GM-tröjan</p>
-                  <img class="w-32 mt-1 rounded-lg shadow-lg" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Ftshirt-gm.png?alt=media&token=853518e3-d745-49a5-9518-f7fa0cbdacb4">
+                    >Startlistor och tävlinstider (uppd. 2024-04-17)</p>
                 </a>
                 {{-- <p class="mt-4 text-xl leading-normal text-gray-500"><b>Tävlingen sker med Eleiko-ställning av nyare modell.</b></p> --}}
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
