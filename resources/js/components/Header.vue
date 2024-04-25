@@ -27,7 +27,7 @@
           <a :class="site === 'records' ? 'border-b-2 border-black' : ''" href="/klubbrekord">Klubbrekord</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'lag-sm' ? 'border-b-2 border-black' : ''" href="/lag-sm">Lag SM 2023</a>
+          <a :class="site === 'gm' ? 'border-b-2 border-black' : ''" href="/gm">GM 2024</a>
         </li>
         <li class="mt-4 hover:text-gkk">
           <a :class="site === '' ? 'border-b-2 border-black' : ''" href="/insidan">Insidan</a>
