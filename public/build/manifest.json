@@ -1,6 +1,6 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.bb425150.js",
+    "file": "assets/app.cbae4f5b.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "dynamicImports": [
@@ -11,7 +11,7 @@
     ]
   },
   "node_modules/zipcelx/lib/module.js": {
-    "file": "assets/module.4209c942.js",
+    "file": "assets/module.ffaa7a4d.js",
     "src": "node_modules/zipcelx/lib/module.js",
     "isDynamicEntry": true,
     "imports": [
