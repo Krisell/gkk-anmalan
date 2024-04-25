@@ -33,6 +33,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
                     >Startlistor och tävlinstider (uppd. 2024-04-22)</p>
                 </a>
+                <div></div>
+                <a target="_blank" href="https://www.facebook.com/events/6992337070876164">
+                  <p 
+                  class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    ><svg class="w-8 mr-2 h-8" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 30 30">
+                      <path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"></path>
+                  </svg>Klicka för att se Facebookevent för tävlingen</p>
+                </a>
                 {{-- <p class="mt-4 text-xl leading-normal text-gray-500"><b>Tävlingen sker med Eleiko-ställning av nyare modell.</b></p> --}}
                 <p class="mt-4 text-xl leading-normal text-gray-500"><b>Plats:</b> Göteborg Kraftsportklubb, Karl Johansgatan 152, 414 51 Göteborg</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> 182 (!)</p>
