@@ -31,7 +31,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FAnma%CC%88lda%20GM%202024%202024-04-22.pdf?alt=media&token=6d8bcf6c-dcec-417b-92af-627042c2eb44">
                   <p 
                   class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
-                    >Startlistor och tävlinstider (uppd. 2024-04-22)</p>
+                    >Startlistor och tävlingstider (uppd. 2024-04-22)</p>
                 </a>
                 <div></div>
                 <a target="_blank" href="https://www.facebook.com/events/6992337070876164">
