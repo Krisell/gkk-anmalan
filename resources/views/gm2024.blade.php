@@ -48,13 +48,23 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500"><b>Entreavgift:</b> Valfri</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Kommer sändas via YouTube</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck. 10 minuter promenad bort finns Coop och en mängd restauranger.</p>
-
+                <p class="text-xl leading-normal text-gray-500"><b>Tävlingsställning:</b> Planerad tävlingsställning är Eleikos tidigare mjuka modell, se bild.</p>
                 <div>
-                <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fkarta%20(1).png?alt=media&token=5668792a-f351-4175-b1ab-87e0b59215f0">
-                <img 
-                class="rounded-2xl shadow-xl cursor-pointer inline-block ml-2 w-[500px]"
-                  src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fkarta%20(1).png?alt=media&token=5668792a-f351-4175-b1ab-87e0b59215f0"
-                ></a>
+                  <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fbank.png?alt=media&token=390adbd2-b620-4bfc-aae3-e502f6056b40">
+                  <img 
+                    class="rounded-2xl shadow-xl cursor-pointer inline-block ml-2 w-[500px]" 
+                    src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fbank.png?alt=media&token=390adbd2-b620-4bfc-aae3-e502f6056b40"
+                  >
+                  </a>
+                </div>
+
+                <p class="text-xl leading-normal text-gray-500"><b>Parkering:</b> Ett begränsat antal parkeringar finns i direkt anslutning till tävlingshallen. Fler parkeringar finns i närområdet - se karta.</p>
+                <div>
+                  <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fkarta%20(1).png?alt=media&token=5668792a-f351-4175-b1ab-87e0b59215f0">
+                  <img 
+                  class="rounded-2xl shadow-xl cursor-pointer inline-block ml-2 w-[500px]"
+                    src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fkarta%20(1).png?alt=media&token=5668792a-f351-4175-b1ab-87e0b59215f0"
+                  ></a>
                 </div>
             </div>
             <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
