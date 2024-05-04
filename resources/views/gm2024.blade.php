@@ -34,6 +34,13 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     ><i class="fa fa-file-pdf-o mr-2"></i>Startlistor och tävlingstider (uppd. 2024-04-22)</p>
                 </a>
                 <div></div>
+                <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FLottnummer_och_invagningsordning%20(4).pdf?alt=media&token=c40fde28-4d96-4c0d-9af8-b5a9f886f744">
+                  <p 
+                  class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
+                    ><i class="fa fa-file-pdf-o mr-2"></i>Lottnummer och invägningsordning (uppd. 2024-04-22)</p>
+                </a>
+                <div></div>
+
                 <a target="_blank" href="https://www.facebook.com/events/6992337070876164">
                   <p 
                   class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
