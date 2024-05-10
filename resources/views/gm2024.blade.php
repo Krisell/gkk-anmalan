@@ -14,9 +14,9 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <div class="flex items-center">
                 <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Götalandsmästerskapen 2024 i KSL och KBP</h2>
               </div>
-              <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">11-12 maj 2024 - Göteborg Kraftsportklubb - Friskis och Svettis i Majorna</h2>
+              <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">10-12 maj 2024 - Göteborg Kraftsportklubb - Friskis och Svettis i Majorna</h2>
                 <p class="text-xl leading-normal text-gray-500">
-                  Götalandsmästerskapen i Klassisk Styrkelyft och Klassisk Bänkpress går av stapeln 11-12 maj hos GKK, på Friskis och Svettis i Majorna.
+                  Götalandsmästerskapen i Klassisk Styrkelyft och Klassisk Bänkpress går av stapeln 10-12 maj hos GKK, på Friskis och Svettis i Majorna.
                 </p>
                 {{-- <img class="w-64 shadow-xl rounded-xl" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Flogo%20centered.png?alt=media&token=f0ea09ac-77b6-4e8a-b532-68cd7b3953e1"> --}}
 

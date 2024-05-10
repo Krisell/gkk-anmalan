@@ -67,7 +67,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <a href="/gm" class="mt-6 block">
                   <div class="rounded p-2 border-gkk border-2">
                     <p class="text-3xl leading-bold text-gkk">
-                      Götalandsmästerskapen 11-12 maj 2024
+                      Götalandsmästerskapen 10-12 maj 2024
                     </p>
                     <p class="text-xl leading-bold text-gkk">
                       GKK arrangerar Götalandsmästerskapen i Klassisk Styrkelyft och Klassisk Bänkpress!<br>Klicka här för att läsa med på vår GM-sida.
