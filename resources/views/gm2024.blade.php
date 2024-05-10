@@ -20,6 +20,26 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 </p>
                 {{-- <img class="w-64 shadow-xl rounded-xl" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Flogo%20centered.png?alt=media&token=f0ea09ac-77b6-4e8a-b532-68cd7b3953e1"> --}}
 
+                <a 
+                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                href="https://www.youtube.com/watch?v=LFfvR_4Gj3w"
+                target="_blank">
+                <i class="fa fa-youtube-play mr-2"></i>Stream Fredag - Start 19.00
+              </a>
+              <a 
+                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                href="https://www.youtube.com/watch?v=DIu5wDRkF_I"
+                target="_blank">
+                <i class="fa fa-youtube-play mr-2"></i>Stream Lördag - Start 08.30
+              </a>
+              <a 
+                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                href="https://www.youtube.com/watch?v=_EQ4qmLdgVM"
+                target="_blank">
+                <i class="fa fa-youtube-play mr-2"></i>Stream Söndag - Start 08.30
+              </a>
+              <div></div>
+
                 <div class="rounded p-2 border-gkk border-2">
                   <p class="text-3xl leading-bold text-gkk">
                     Information om Bastu
