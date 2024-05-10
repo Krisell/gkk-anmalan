@@ -92,7 +92,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500"><b>Antal deltagare:</b> 182 (!)</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Antal deltagande föreningar: </b> 34</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Entreavgift:</b> Valfri</p>
-                <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Kommer sändas via YouTube</p>
+                <p class="text-xl leading-normal text-gray-500"><b>Livestream:</b> Sänds via YouTube. Scrolla längst upp för länkar.</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Kiosk:</b> På friskis finns att köpa enklare förtäring såsom mackor, korv och dryck. 10 minuter promenad bort finns Coop och en mängd restauranger.</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Tävlingsställning:</b> Planerad tävlingsställning är Eleikos tidigare mjuka modell, se bild.</p>
                 <div>
