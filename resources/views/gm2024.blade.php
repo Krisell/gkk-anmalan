@@ -22,6 +22,15 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
 
                 <div class="rounded p-2 border-gkk border-2">
                   <p class="text-3xl leading-bold text-gkk">
+                    Information om Bastu
+                  </p>
+                  <p class="text-xl leading-bold text-gkk">
+                    Tyvärr kommer bastu inte finnas tillgänglig <b>efter klockan 14 på lördag</b>. Övriga invägningar under helgen, inkl. söndag, har tillgång till bastu. Den går att starta klockan 06 både lördag och söndag inför de tidigaste invägningarna.
+                  </p>
+                </div>
+
+                <div class="rounded p-2 border-gkk border-2">
+                  <p class="text-3xl leading-bold text-gkk">
                     Foto / media
                   </p>
                   <p class="text-xl leading-bold text-gkk">
