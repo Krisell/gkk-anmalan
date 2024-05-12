@@ -22,6 +22,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
 
                 <a 
                 class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FGM2024Resultat.pdf?alt=media&token=36d75118-d229-4e9a-a0df-07aca2460f48"
+                target="_blank">
+                <i class="fa fa-file-pdf-o mr-2"></i>Resultat Götalandsmästerskapen 2024
+              </a>
+              <div></div>
+
+                <a 
+                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                 href="https://drive.google.com/drive/u/1/folders/1j93alpHQXl39rY0pC6iVb92QOLNNarlg"
                 target="_blank">
                 <i class="fa fa-youtube-play mr-2"></i>Stream fredag & lördag
@@ -61,6 +69,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <i class="fa fa-file-pdf-o mr-2"></i>Inbjudan Götalandsmästerskapen 2024
                 </a>
                 <div></div>
+
+
                 <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FAnma%CC%88lda%20GM%202024%202024-04-22.pdf?alt=media&token=6d8bcf6c-dcec-417b-92af-627042c2eb44">
                   <p 
                   class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
