@@ -32,7 +32,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                 href="https://drive.google.com/drive/u/1/folders/1j93alpHQXl39rY0pC6iVb92QOLNNarlg"
                 target="_blank">
-                <i class="fa fa-youtube-play mr-2"></i>Stream fredag & lördag
+                <i class="fa fa-youtube-play mr-2"></i>Stream från alla dagar
               </a>
               <a 
                 class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
