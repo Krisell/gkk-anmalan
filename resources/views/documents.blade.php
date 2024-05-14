@@ -81,6 +81,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     </a>
                     <div class="p-4">
                       <b>Carl Öbergs bänkpressprogram</b><br>
+                      Hög volym och hög intensitet. <br>
+                      Riktar sig till dig med år av dedikerad bänkpressträning.<br>
                       <span class="text-gray-500 mt-2">Excelfil</span>
                     </div>
                   </div>
