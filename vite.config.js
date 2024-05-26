@@ -21,6 +21,11 @@ export default defineConfig({
     }),
   ],
   server: detectServerConfig('gkk.test'),
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    include: ['resources/js/test/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+  },
 })
 
 // We'll have to figure out a better way to run the client dev server, since not everyone uses Valet
