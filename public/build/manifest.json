@@ -1,30 +1,29 @@
 {
-  "resources/js/app.js": {
-    "file": "assets/app.f8342b23.js",
-    "src": "resources/js/app.js",
-    "isEntry": true,
-    "dynamicImports": [
-      "node_modules/zipcelx/lib/module.js"
-    ],
-    "css": [
-      "assets/app.3901a7bd.css"
-    ]
-  },
   "node_modules/zipcelx/lib/module.js": {
-    "file": "assets/module.b4da433e.js",
+    "file": "assets/module-DRGOl6y4.js",
+    "name": "module",
     "src": "node_modules/zipcelx/lib/module.js",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "resources/js/app.css": {
-    "file": "assets/app.3901a7bd.css",
-    "src": "resources/js/app.css"
-  },
   "resources/css/main.css": {
-    "file": "assets/main.e88953e0.css",
+    "file": "assets/main-Uu6B_KLQ.css",
     "src": "resources/css/main.css",
     "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-COQC4FEF.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "node_modules/zipcelx/lib/module.js",
+      "node_modules/zipcelx/lib/module.js"
+    ],
+    "css": [
+      "assets/app-CnvIDEA9.css"
+    ]
   }
 }
