@@ -42,7 +42,7 @@
         <div class="flex mb-2">
           <svg
             v-tooltip="
-              'Licensnumret består i regel av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap'
+              'Om det är din första tävling anger du förväntat licensnummer som består av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap. Vi registrerar licensen före första tävlingsstart, och skulle det visa sig att ditt licensnummer är upptaget så skapas ett nytt och det uppdateras här automatiskt.'
             "
             class="w-6 h-6"
             fill="none"
