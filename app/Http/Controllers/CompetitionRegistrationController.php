@@ -13,7 +13,7 @@ class CompetitionRegistrationController extends Controller
         $data = $request->validate([
             'status' => 'nullable',
             'comment' => 'nullable',
-            'licence_number' => 'required_if:status,1',
+            'licence_number' => 'required_if:status,true',
             'events' => 'json|required',
             'gender' => 'required',
             'weight_class' => 'required',

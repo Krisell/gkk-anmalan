@@ -11,14 +11,14 @@ test('an admin can update an Competition registration', function () {
     $registration = CompetitionRegistration::factory()->create([
         'user_id' => $user->id,
         'competition_id' => $competition->id,
-        'status' => 0,
+        'status' => false,
         'comment' => 'No comment',
     ]);
 
     $data = [
         'competition_id' => $competition->id,
         'user_id' => $user->id,
-        'status' => 1,
+        'status' => true,
         'status' => 'Another comment',
     ];
 
@@ -35,14 +35,14 @@ test('a non admin cant update a registration', function () {
     $registration = CompetitionRegistration::factory()->create([
         'user_id' => $user->id,
         'competition_id' => $competition->id,
-        'status' => 0,
+        'status' => false,
         'comment' => 'No comment',
     ]);
 
     $data = [
         'competition_id' => $competition->id,
         'user_id' => $user->id,
-        'status' => 1,
+        'status' => true,
         'status' => 'Another comment',
     ];
 

@@ -12,7 +12,7 @@ test('a competition registration can be created given the required data', functi
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
-        'status' => 1,
+        'status' => true,
     ];
 
     $this->post("/competitions/{$competition->id}/registrations", $data)->assertStatus(201);
@@ -29,7 +29,7 @@ test('weight class doesnt have to be specified for all competitions', function (
         'weight_class' => '¯\_(ツ)_/¯',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
-        'status' => 1,
+        'status' => true,
     ];
 
     $this->post("/competitions/{$competition->id}/registrations", $data)->assertStatus(201);
@@ -60,7 +60,7 @@ test('licence number is required to accept a competition', function () {
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
-        'status' => 1,
+        'status' => true,
     ];
 
     $this->postJson("/competitions/{$competition->id}/registrations", $data)

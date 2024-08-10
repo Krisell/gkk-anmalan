@@ -104,7 +104,7 @@ class EventController extends Controller
         $event->registrations()->updateOrCreate([
             'user_id' => request('user_id'),
         ], [
-            'status' => 1,
+            'status' => true,
             'comment' => 'Tillagd av admin',
             'presence_confirmed' => 1,
         ]);

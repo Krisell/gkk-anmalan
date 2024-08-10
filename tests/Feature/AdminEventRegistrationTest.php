@@ -57,14 +57,14 @@ test('an admin can update an event registration', function () {
     $registration = EventRegistration::factory()->create([
         'user_id' => $user->id,
         'event_id' => $event->id,
-        'status' => 0,
+        'status' => false,
         'comment' => 'No comment',
     ]);
 
     $data = [
         'event_id' => $event->id,
         'user_id' => $user->id,
-        'status' => 1,
+        'status' => true,
         'status' => 'Another comment',
     ];
 
@@ -81,14 +81,14 @@ test('a non admin cant update a registration', function () {
     $registration = EventRegistration::factory()->create([
         'user_id' => $user->id,
         'event_id' => $event->id,
-        'status' => 0,
+        'status' => false,
         'comment' => 'No comment',
     ]);
 
     $data = [
         'event_id' => $event->id,
         'user_id' => $user->id,
-        'status' => 1,
+        'status' => true,
         'status' => 'Another comment',
     ];
 
@@ -113,7 +113,7 @@ test('an admin can add an additional user to an event', function () {
     $this->assertDatabaseHas('event_registrations', [
         'user_id' => $user->id,
         'event_id' => $event->id,
-        'status' => 1,
+        'status' => true,
         'presence_confirmed' => 1,
     ]);
 

@@ -7,9 +7,9 @@ test('an event registration can be created given the required data', function ()
     $event = Event::factory()->create();
     login();
 
-    $this->post("/events/{$event->id}/registrations", ['status' => 1, 'comment' => 'abc'])->assertStatus(201);
+    $this->post("/events/{$event->id}/registrations", ['status' => true, 'comment' => 'abc'])->assertStatus(201);
 
-    $this->assertDatabaseHas('event_registrations', ['status' => 1, 'comment' => 'abc']);
+    $this->assertDatabaseHas('event_registrations', ['status' => true, 'comment' => 'abc']);
 });
 
 test('a competition registration can be updated given the required data', function () {

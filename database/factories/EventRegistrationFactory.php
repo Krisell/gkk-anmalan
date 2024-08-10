@@ -23,7 +23,7 @@ class EventRegistrationFactory extends Factory
     public function definition()
     {
         return [
-            'status' => 1,
+            'status' => true,
             'user_id' => User::factory(),
         ];
     }

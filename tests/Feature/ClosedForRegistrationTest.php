@@ -33,7 +33,7 @@ test('a competition registration can be created and update before the last date 
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
-        'status' => 1,
+        'status' => true,
     ])->assertStatus(201);
 
     $this->post("/competitions/{$competition->id}/registrations", [
@@ -41,7 +41,7 @@ test('a competition registration can be created and update before the last date 
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
-        'status' => 1,
+        'status' => true,
     ])->assertStatus(200);
 
     $this->assertDatabaseHas('competition_registrations', ['licence_number' => 'cd']);
@@ -54,7 +54,7 @@ test('a competition registration can be created and update before the last date 
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
-        'status' => 1,
+        'status' => true,
     ])->assertStatus(401);
 
     $this->post("/competitions/{$competition->id}/registrations", [
@@ -62,7 +62,7 @@ test('a competition registration can be created and update before the last date 
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
-        'status' => 1,
+        'status' => true,
     ])->assertStatus(401);
 
     $this->assertDatabaseMissing('competition_registrations', ['licence_number' => 'ef']);
@@ -75,12 +75,12 @@ test('an event registration can be created and update before the last date but n
     login();
 
     $this->post("/events/{$event->id}/registrations", [
-        'status' => 1,
+        'status' => true,
         'comment' => 'ab',
     ])->assertStatus(201);
 
     $this->post("/events/{$event->id}/registrations", [
-        'status' => 1,
+        'status' => true,
         'comment' => 'cd',
     ])->assertStatus(200);
 
@@ -90,12 +90,12 @@ test('an event registration can be created and update before the last date but n
     Carbon::setTestNow(now()->addDays(3));
 
     $this->post("/events/{$event->id}/registrations", [
-        'status' => 1,
+        'status' => true,
         'comment' => 'ef',
     ])->assertStatus(401);
 
     $this->post("/events/{$event->id}/registrations", [
-        'status' => 1,
+        'status' => true,
         'comment' => 'gh',
     ])->assertStatus(401);
 

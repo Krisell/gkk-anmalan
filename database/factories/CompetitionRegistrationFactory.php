@@ -30,7 +30,7 @@ class CompetitionRegistrationFactory extends Factory
             'gender' => 'Män',
             'weight_class' => '74',
             'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
-            'status' => 1,
+            'status' => true,
         ];
     }
 }
