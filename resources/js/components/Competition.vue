@@ -41,9 +41,7 @@
       <form class="mt-2">
         <div class="flex mb-2">
           <svg
-            v-tooltip="
-              'Om det är din första tävling anger du förväntat licensnummer som består av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap. Vi registrerar licensen före första tävlingsstart, och skulle det visa sig att ditt licensnummer är upptaget så skapas ett nytt och det uppdateras här automatiskt.'
-            "
+            v-tooltip="licenseNumberInfo"
             class="w-6 h-6"
             fill="none"
             stroke-linecap="round"
@@ -192,7 +190,7 @@
         </div>
         <div v-if="registrationStatus === 'error'">
           <Message v-if="registrationErrorReason === 'licence_number'" danger style="margin-top: 20px">
-            Du måste ange licensnummer, se info ovan.
+            Du måste ange licensnummer. {{ licenseNumberInfo }}
           </Message>
           <Message v-else danger style="margin-top: 20px">
             Kunde inte skicka, kontrollera inmatning och anlutning.
@@ -260,6 +258,7 @@ export default {
   props: ['competition', 'user', '_registration'],
   data() {
     return {
+      licenseNumberInfo: 'Om det är din första tävling anger du förväntat licensnummer som består av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap. Vi registrerar licensen före första tävlingsstart, och skulle det visa sig att ditt licensnummer är upptaget så skapas ett nytt och det uppdateras här automatiskt.',
       justSaved: false,
       registrationStatus: '',
       registrationErrorReason: '',
