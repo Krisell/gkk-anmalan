@@ -1,5 +1,5 @@
 <template>
-  <div class="action-button-card" :class="{ danger }" @click="$emit('click')">
+  <div class="action-button-card relative" :class="{ danger }" @click="$emit('click')">
     <div v-if="unanswered > 0" class="unanswered">
       {{ unanswered }}
       <div class="unanswered inside"></div>
