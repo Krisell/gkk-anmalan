@@ -17,7 +17,7 @@ class CreateCompetitionRegistrationsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('competition_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('licence_number');
+            $table->string('licence_number')->nullable();
             $table->string('gender');
             $table->string('weight_class');
             $table->text('events');

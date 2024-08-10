@@ -51,3 +51,36 @@ test('a competition registration can be updated given the required data', functi
 
     $this->assertEquals('abc', $registration->fresh()->licence_number);
 });
+
+test('licence number is required to accept a competition', function () {
+    $competition = Competition::factory()->create();
+    login();
+
+    $data = [
+        'weight_class' => '74',
+        'gender' => 'Män',
+        'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+        'status' => 1,
+    ];
+
+    $this->postJson("/competitions/{$competition->id}/registrations", $data)
+        ->assertJsonValidationErrors('licence_number');
+
+    $this->assertDatabaseMissing(CompetitionRegistration::class, $data);
+});
+
+test('licence number is not required to decline a competition', function () {
+    $competition = Competition::factory()->create();
+    login();
+
+    $data = [
+        'weight_class' => '74',
+        'gender' => 'Män',
+        'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+        'status' => false,
+    ];
+
+    $this->postJson("/competitions/{$competition->id}/registrations", $data)->assertStatus(201);
+
+    $this->assertDatabaseHas(CompetitionRegistration::class, $data);
+});
