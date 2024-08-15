@@ -119,9 +119,10 @@
       </div>
     </div>
 
-    <div class="text-center cursor-pointer mt-4" @click="excel" v-tooltip="'Hämta Excel-fil'">
+    <div class="text-center mt-4" v-tooltip="'Hämta Excel-fil'">
       <svg
-        class="mx-auto"
+        @click="excel"
+        class="mx-auto cursor-pointer"
         xmlns="http://www.w3.org/2000/svg"
         x="0px"
         y="0px"
@@ -159,7 +160,13 @@
 
     <div class="w-full text-center mt-4">
       <Button @click="liftingcast" type="secondary" class="mx-auto">
-        <div class="w-full text-center">Exportera lyftare till Liftingcast-fil</div>
+        <div class="w-full text-center">Exportera lyftare till Liftingcast</div>
+      </Button>
+    </div>
+
+    <div class="w-full text-center mt-4">
+      <Button @click="powerliftingLive" type="secondary" class="mx-auto">
+        <div class="w-full text-center">Exportera lyftare till Powerlifting Live</div>
       </Button>
     </div>
 
@@ -208,6 +215,7 @@
 <script>
 import Button from './ui/Button.vue'
 import LiftingCast from '../modules/LiftingCast.js'
+import PowerliftingLive from '../modules/PowerliftingLive.js'
 
 export default {
   components: { Button },
@@ -284,6 +292,9 @@ export default {
     },
     liftingcast() {
       LiftingCast.download(this.competition.registrations)
+    },
+    powerliftingLive() {
+      PowerliftingLive.download(this.competition.registrations)
     },
     excel() {
       import(/* webpackChunkName: "zipcelx" */ 'zipcelx').then(({ default: zipcelx }) => {
