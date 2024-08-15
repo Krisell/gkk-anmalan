@@ -12,8 +12,10 @@ const PowerliftingLive = {
       }
 
       let weightClass = String(lifter.weight_class).includes('+') ? lifter.weight_class : `-${lifter.weight_class}`
-      if (weightClass === '-¯\\_(ツ)_/¯') {
-        weightClass = ''
+
+      // Lifters that haven't declared a weight class are temporarily placed in the highest weight class
+      if (weightClass.includes('ツ')) {
+        weightClass = (lifter.gender === 'Män') ? '120+' : '84+'
       }
 
       csv += `${lifter.licence_number};Senior;${weightClass};${lifter.user.first_name};${lifter.user.last_name};Göteborg KK;;1\n`;
