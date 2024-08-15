@@ -11,9 +11,12 @@ const PowerliftingLive = {
         return
       }
 
-      const weightClass = String(lifter.weight_class).includes('+') ? lifter.weight_class : `-${lifter.weight_class}`
+      let weightClass = String(lifter.weight_class).includes('+') ? lifter.weight_class : `-${lifter.weight_class}`
+      if (weightClass === '¯\_(ツ)_/¯') {
+        weightClass = ''
+      }
 
-      csv += `${lifter.licence_number};Senior;${weightClass};${lifter.user.first_name};${lifter.user.last_name};Göteborg KK;;Grupp 1\n`;
+      csv += `${lifter.licence_number};Senior;${weightClass};${lifter.user.first_name};${lifter.user.last_name};Göteborg KK;;1\n`;
     })
 
     File.save('powerlifting-live-import.csv', csv, 'data:text/csv;charset=utf-8')
