@@ -12,7 +12,7 @@ const PowerliftingLive = {
       }
 
       let weightClass = String(lifter.weight_class).includes('+') ? lifter.weight_class : `-${lifter.weight_class}`
-      if (weightClass === '¯\_(ツ)_/¯') {
+      if (weightClass === '-¯\_(ツ)_/¯') {
         weightClass = ''
       }
 
