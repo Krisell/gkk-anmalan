@@ -258,13 +258,17 @@ export default {
                 { value: 'Namn', type: 'string' },
                 { value: 'Datum', type: 'string' },
                 { value: 'Kan hjälpa till', type: 'string' },
+                { value: 'Tävlar', type: 'string' },
                 { value: 'Kommentar', type: 'string' },
               ],
               ...this.filteredRegistrations.map((registration) => {
+                const competes = registration.status == 1 && this.competingUsers.includes(registration.user_id)
+
                 return [
                   { value: `${registration.user.first_name} ${registration.user.last_name}`, type: 'string' },
                   { value: this.dateString(registration.created_at), type: 'string' },
                   { value: registration.status == 1 ? 'Ja' : 'Nej', type: 'string' },
+                  { value: competes ? 'Ja' : 'Nej', type: 'string' },
                   { value: registration.comment, type: 'string' },
                 ]
               }),
