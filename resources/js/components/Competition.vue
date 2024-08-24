@@ -185,6 +185,9 @@
             dig som funktionär till {{ simultaneousEvent.name }}</a> här. Naturligtvis kommer du inte 
             bli satt på fysisk krävande uppgifter före eget tävlande.
           </Message>
+          <Message v-else-if="wantsToCompete" info class="mt-2 mb-4">
+            Grymt, vi ses där!
+          </Message>
 
           <Button type="danger" v-if="registration && !wantsToCompete" class="mb-4" @click="register(false)"
             ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag vill inte tävla</Button
