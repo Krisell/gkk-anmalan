@@ -179,14 +179,18 @@
           >
 
           <Message v-if="simultaneousEvent && wantsToCompete" info class="mt-2 mb-4">
-            Grymt, vi ses där! Om du tävlar på hemmaplan förväntas du också anmäla dig 
-            som funktionär  och hjälpa till exempelvis med framplock eller efter eget tävlande. 
-            Du kan <a class="underline text-blue-400" :href="`/events/${simultaneousEvent.id}`">anmäla 
-            dig som funktionär till {{ simultaneousEvent.name }}</a> här. Naturligtvis kommer du inte 
-            bli satt på fysisk krävande uppgifter före eget tävlande.
+            <p>
+              Grymt, vi ses där! Om du tävlar på hemmaplan förväntas du också anmäla dig 
+              som funktionär  och hjälpa till exempelvis med framplock eller efter eget tävlande. 
+              Du kan <a target="_blank" class="underline text-blue-400" :href="`/events/${simultaneousEvent.id}`">anmäla 
+              dig som funktionär till {{ simultaneousEvent.name }}</a> här. Naturligtvis kommer du inte 
+              bli satt på fysisk krävande uppgifter före eget tävlande.
+            </p>
+            <p class="mt-3">Kom ihåg att <a target="_blank" class="underline text-blue-400" href="/profile">gällande medlemsavtal</a> ställer krav på tävlingsaktiva medlemmar.</p>
           </Message>
           <Message v-else-if="wantsToCompete" info class="mt-2 mb-4">
-            Grymt, vi ses där!
+            <p>Grymt, vi ses där!</p>
+            <p class="mt-3">Kom ihåg att <a target="_blank" class="underline text-blue-400" href="/profile">gällande medlemsavtal</a> ställer krav på tävlingsaktiva medlemmar.</p>
           </Message>
 
           <Button type="danger" v-if="registration && !wantsToCompete" class="mb-4" @click="register(false)"
