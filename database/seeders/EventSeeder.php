@@ -17,6 +17,7 @@ class EventSeeder extends Seeder
     public function run()
     {
         $event = Event::factory()->create([
+            'name' => 'DM KSL',
             'date' => now()->addDays(10),
         ]);
 

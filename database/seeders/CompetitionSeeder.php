@@ -17,6 +17,7 @@ class CompetitionSeeder extends Seeder
     public function run()
     {
         $competition = Competition::factory()->create([
+            'name' => 'DM KSL',
             'date' => now()->addDays(10),
         ]);
 
@@ -26,6 +27,7 @@ class CompetitionSeeder extends Seeder
             ->create();
 
         Competition::factory(3)->create([
+            'name' => 'Some other competition',
             'date' => now()->addDays(30),
         ]);
     }

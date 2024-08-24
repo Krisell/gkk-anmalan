@@ -34,7 +34,7 @@ test('a competition registration can be created and update before the last date 
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
         'status' => true,
-    ])->assertStatus(201);
+    ])->assertStatus(200);
 
     $this->post("/competitions/{$competition->id}/registrations", [
         'licence_number' => 'cd',

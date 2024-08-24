@@ -178,12 +178,23 @@
             >Ja, jag vill tävla</Button
           >
 
-          <Button type="danger" v-if="registration && !wantsToCompete" style="margin-bottom: 30px" @click="register(false)"
+          <Message v-if="simultaneousEvent && wantsToCompete" info class="mt-2 mb-4">
+            Grymt, vi ses där! Om du tävlar på hemmaplan förväntas du också anmäla dig 
+            som funktionär  och hjälpa till exempelvis med framplock eller efter eget tävlande. 
+            Du kan <a class="underline text-blue-400" :href="`/events/${simultaneousEvent.id}`">anmäla 
+            dig som funktionär till {{ simultaneousEvent.name }}</a> här. Naturligtvis kommer du inte 
+            bli satt på fysisk krävande uppgifter före eget tävlande.
+          </Message>
+
+          <Button type="danger" v-if="registration && !wantsToCompete" class="mb-4" @click="register(false)"
             ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag vill inte tävla</Button
           >
-          <Button type="secondary" v-if="!registration || wantsToCompete" style="margin-bottom: 30px" @click="register(false)"
+          <Button type="secondary" v-if="!registration || wantsToCompete" class="mb-4" @click="register(false)"
             >Jag vill inte tävla</Button
           >
+          <div v-if="registrationStatus === 'completed'">
+            <Message v-if="!wantsToCompete" info class="mb-4">Informationen är mottagen.</Message>
+          </div>
 
           <Button v-if="justSaved" secondary disabled style="margin-bottom: 10px">Sparat!</Button>
           <Button v-else secondary style="margin-bottom: 10px" @click="save">Spara</Button>
@@ -195,10 +206,6 @@
           <Message v-else danger style="margin-top: 20px">
             Kunde inte skicka, kontrollera inmatning och anlutning.
           </Message>
-        </div>
-        <div v-if="registrationStatus === 'completed'">
-          <Message v-if="!wantsToCompete" info style="margin-top: 20px">Tack för informationen!</Message>
-          <Message v-else success style="margin-top: 20px">Grymt, vi ses där!</Message>
         </div>
       </form>
     </div>
@@ -263,6 +270,7 @@ export default {
       registrationStatus: '',
       registrationErrorReason: '',
       registration: this._registration,
+      simultaneousEvent: null,
       comment: this._registration ? this._registration.comment : '',
       wantsToCompete: this._registration ? this._registration.status == 1 : null,
       licenceNumber: this.user.licence_number || '',
@@ -347,7 +355,8 @@ export default {
         })
         .then((response) => {
           this.wantsToCompete = wantsToCompete
-          this.registration = response.data
+          this.registration = response.data.registration
+          this.simultaneousEvent = response.data.simultaneousEvent
           this.registrationStatus = 'completed'
 
           this.justSaved = true

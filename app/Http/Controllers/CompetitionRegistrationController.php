@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Competition;
 use App\CompetitionRegistration;
+use App\Event;
 use Illuminate\Http\Request;
 
 class CompetitionRegistrationController extends Controller
@@ -29,10 +30,17 @@ class CompetitionRegistrationController extends Controller
             abort_if(now()->toDateString() > $competition->last_registration_at->toDateString(), 401);
         }
 
-        return CompetitionRegistration::updateOrCreate(
+        $registration = CompetitionRegistration::updateOrCreate(
             ['competition_id' => $competition->id, 'user_id' => auth()->id()],
             $data,
         );
+
+        $simultaneousEvent = Event::where('date', $competition->date)->first();
+
+        return [
+            'registration' => $registration,
+            'simultaneousEvent' => $simultaneousEvent,
+        ];
     }
 
     public function update(Competition $competition, CompetitionRegistration $registration)

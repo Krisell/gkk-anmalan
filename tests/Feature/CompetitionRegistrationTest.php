@@ -15,7 +15,7 @@ test('a competition registration can be created given the required data', functi
         'status' => true,
     ];
 
-    $this->post("/competitions/{$competition->id}/registrations", $data)->assertStatus(201);
+    $this->post("/competitions/{$competition->id}/registrations", $data)->assertStatus(200);
 
     $this->assertDatabaseHas('competition_registrations', $data);
 });
@@ -32,7 +32,7 @@ test('weight class doesnt have to be specified for all competitions', function (
         'status' => true,
     ];
 
-    $this->post("/competitions/{$competition->id}/registrations", $data)->assertStatus(201);
+    $this->post("/competitions/{$competition->id}/registrations", $data)->assertStatus(200);
 
     $this->assertDatabaseHas('competition_registrations', $data);
 });
@@ -80,7 +80,7 @@ test('licence number is not required to decline a competition', function () {
         'status' => false,
     ];
 
-    $this->postJson("/competitions/{$competition->id}/registrations", $data)->assertStatus(201);
+    $this->postJson("/competitions/{$competition->id}/registrations", $data)->assertStatus(200);
 
     $this->assertDatabaseHas(CompetitionRegistration::class, $data);
 });
