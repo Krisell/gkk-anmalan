@@ -171,17 +171,17 @@
           ></textarea>
         </div>
         <div class="mt-2 flex flex-col justify-center items-center">
-          <Button v-if="registration && canHelp" style="margin-bottom: 10px" @click="register(true)"
+          <Button v-if="registration && wantsToCompete" style="margin-bottom: 10px" @click="register(true)"
             ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Ja, jag vill tävla</Button
           >
-          <Button type="secondary" v-if="!registration || !canHelp" style="margin-bottom: 10px" @click="register(true)"
+          <Button type="secondary" v-if="!registration || !wantsToCompete" style="margin-bottom: 10px" @click="register(true)"
             >Ja, jag vill tävla</Button
           >
 
-          <Button type="danger" v-if="registration && !canHelp" style="margin-bottom: 30px" @click="register(false)"
+          <Button type="danger" v-if="registration && !wantsToCompete" style="margin-bottom: 30px" @click="register(false)"
             ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag vill inte tävla</Button
           >
-          <Button type="secondary" v-if="!registration || canHelp" style="margin-bottom: 30px" @click="register(false)"
+          <Button type="secondary" v-if="!registration || wantsToCompete" style="margin-bottom: 30px" @click="register(false)"
             >Jag vill inte tävla</Button
           >
 
@@ -197,7 +197,7 @@
           </Message>
         </div>
         <div v-if="registrationStatus === 'completed'">
-          <Message v-if="!canHelp" info style="margin-top: 20px">Tack för informationen!</Message>
+          <Message v-if="!wantsToCompete" info style="margin-top: 20px">Tack för informationen!</Message>
           <Message v-else success style="margin-top: 20px">Grymt, vi ses där!</Message>
         </div>
       </form>
@@ -264,7 +264,7 @@ export default {
       registrationErrorReason: '',
       registration: this._registration,
       comment: this._registration ? this._registration.comment : '',
-      canHelp: this._registration ? this._registration.status == 1 : null,
+      wantsToCompete: this._registration ? this._registration.status == 1 : null,
       licenceNumber: this.user.licence_number || '',
       weightClass: {
         Män: '93',
@@ -326,9 +326,9 @@ export default {
       return JSON.parse(this.competition.events)[event]
     },
     save() {
-      this.register(this.canHelp)
+      this.register(this.wantsToCompete)
     },
-    register(canHelp) {
+    register(wantsToCompete) {
       this.registrationStatus = ''
       this.registrationErrorReason = ''
 
@@ -337,7 +337,7 @@ export default {
           method: 'post',
           url: `/competitions/${this.competition.id}/registrations`,
           data: {
-            status: canHelp,
+            status: wantsToCompete,
             comment: this.comment,
             licence_number: this.licenceNumber,
             events: JSON.stringify(this.events),
@@ -346,7 +346,7 @@ export default {
           },
         })
         .then((response) => {
-          this.canHelp = canHelp
+          this.wantsToCompete = wantsToCompete
           this.registration = response.data
           this.registrationStatus = 'completed'
 
