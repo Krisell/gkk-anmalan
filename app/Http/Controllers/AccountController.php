@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ActivityLog;
 use App\Mail\AccountGrantedMail;
+use App\Mail\NotifyAboutNewRegistrationMail;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 
@@ -50,6 +51,17 @@ class AccountController extends Controller
         $user->update(['granted_by' => auth()->id()]);
 
         Mail::to($user->email)->send(new AccountGrantedMail);
+
+        if (config('gkk.new-member-receivers')) {
+            $receivers = collect(explode(',', config('gkk.new-member-receivers')))->map(fn ($email) => trim($email));
+
+            foreach ($receivers as $receiver) {
+                Mail::to($receiver)->send(new NotifyAboutNewRegistrationMail(
+                    $user->email,
+                    "$user->first_name $user->last_name")
+                );
+            }
+        }
     }
 
     public function destroyUngranted(User $user)

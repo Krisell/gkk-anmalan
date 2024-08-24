@@ -1,6 +1,7 @@
 <?php
 
 use App\Mail\AccountGrantedMail;
+use App\Mail\NotifyAboutNewRegistrationMail;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 
@@ -18,7 +19,7 @@ test('a not granted user can not view any page except for nagivation', function 
     $this->get('/member-documents')->assertOk();
 });
 
-test('an admin can grant a new account which triggers an email', function () {
+test('an admin can grant a new account which triggers an email to the user', function () {
     $user = User::factory()->ungranted()->create();
 
     loginAdmin();
@@ -29,6 +30,36 @@ test('an admin can grant a new account which triggers an email', function () {
     $this->assertEquals(auth()->id(), $user->fresh()->granted_by);
     Mail::assertSent(AccountGrantedMail::class, function ($mail) use ($user) {
         return $mail->hasTo($user->email);
+    });
+});
+
+test('no additional notifications are sent by default', function () {
+    $user = User::factory()->ungranted()->create();
+
+    loginAdmin();
+
+    Mail::fake();
+    $this->post("/admin/accounts/{$user->id}/grant")->assertOk();
+
+    Mail::assertNotSent(NotifyAboutNewRegistrationMail::class);
+});
+
+test('additional notifications can be sent if configured', function () {
+    $user = User::factory()->ungranted()->create();
+
+    loginAdmin();
+
+    config(['gkk.new-member-receivers' => 'user1@example.com, user2@example.com ']);
+
+    Mail::fake();
+    $this->post("/admin/accounts/{$user->id}/grant")->assertOk();
+
+    Mail::assertSent(NotifyAboutNewRegistrationMail::class, function ($mail) {
+        return $mail->hasTo('user1@example.com');
+    });
+
+    Mail::assertSent(NotifyAboutNewRegistrationMail::class, function ($mail) {
+        return $mail->hasTo('user2@example.com');
     });
 });
 
