@@ -88,13 +88,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/api/music', [\App\Http\Controllers\MusicApiController::class, 'index']);
-
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('music', [\App\Http\Controllers\MusicAdminController::class, 'index']);
-    Route::post('music', [\App\Http\Controllers\MusicAdminController::class, 'store']);
-    Route::delete('music/{musicHelpSet}', [\App\Http\Controllers\MusicAdminController::class, 'destroy']);
-
     Route::prefix('accounts')->group(function () {
         Route::post('/inactivate/{user}', [\App\Http\Controllers\AccountController::class, 'inactivate']);
         Route::post('/reactivate/{user}', [\App\Http\Controllers\AccountController::class, 'reactivate']);
