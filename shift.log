@@ -1,0 +1,131 @@
+
+*** Shift SKU: LS
+*** Shift Version: 0d06584c6dbaeee92b132a4d50e5dfb6d7ed2c82 (2024-07-24)
+
+*** Completed: Shift\Tasks\Laravel\Eleven\SlimmingComment
+>>> Event: formatting with Pint using laravel against defaults
+*** Completed: Shift\Tasks\Laravel\FormatCode
+*** Completed: Shift\Tasks\Laravel\Eight\FluentRouteMethods
+>>> Event: could not map controllers: 3
+*** Completed: Shift\Tasks\Laravel\Fixer\ClassBasedRoutes
+>>> Event: matched core file: app/Console/Kernel.php with version: 8.6.7
+>>> Event: matched core file: app/Exceptions/Handler.php with version: 7.30.1
+>>> Event: matched core file: app/Http/Middleware/Authenticate.php with version: 9.5.2
+>>> Event: matched core file: app/Http/Middleware/EncryptCookies.php with version: 10.3.3
+>>> Event: matched core file: app/Http/Middleware/RedirectIfAuthenticated.php with version: 7.30.1
+>>> Event: matched core file: app/Http/Middleware/TrimStrings.php with version: 8.5.11
+>>> Event: matched core file: app/Providers/BroadcastServiceProvider.php with version: 9.5.2
+>>> Event: matched core file: app/Providers/EventServiceProvider.php with version: 7.30.1
+>>> Event: custom core files:  Data: ["app\/Http\/Kernel.php","app\/Http\/Middleware\/TrustProxies.php","app\/Providers\/AuthServiceProvider.php","app\/Providers\/RouteServiceProvider.php"]
+*** Completed: Shift\Tasks\Laravel\Eleven\SlimSkeleton
+>>> Event: project did not contain lang folder
+*** Completed: Shift\Tasks\Laravel\Fixer\SlimLangFiles
+>>> Event: matched core file: artisan with version: 8.5.16
+>>> Event: matched core file: public/index.php with version: 7.30.1
+*** Completed: Shift\Tasks\Laravel\Slimmer\CoreFiles
+>>> Event: matched core file: config/view.php with version: 11.0.6
+string(5) "debug"
+string(8) "timezone"
+string(6) "locale"
+string(15) "fallback_locale"
+string(12) "faker_locale"
+string(14) "defaults.guard"
+string(18) "defaults.passwords"
+string(21) "providers.users.model"
+string(21) "passwords.users.table"
+string(16) "password_timeout"
+string(7) "default"
+string(33) "connections.pusher.options.useTLS"
+string(7) "default"
+string(21) "stores.database.table"
+string(26) "stores.database.connection"
+string(23) "stores.redis.connection"
+string(6) "prefix"
+string(7) "default"
+string(22) "connections.sqlite.url"
+string(21) "connections.mysql.url"
+string(26) "connections.mysql.database"
+string(26) "connections.mysql.username"
+string(25) "connections.mysql.charset"
+string(27) "connections.mysql.collation"
+string(21) "connections.pgsql.url"
+string(26) "connections.pgsql.database"
+string(26) "connections.pgsql.username"
+string(25) "connections.pgsql.charset"
+string(22) "connections.sqlsrv.url"
+string(27) "connections.sqlsrv.database"
+string(27) "connections.sqlsrv.username"
+string(26) "connections.sqlsrv.charset"
+string(22) "redis.default.password"
+string(20) "redis.cache.password"
+string(7) "default"
+string(6) "driver"
+string(13) "bcrypt.rounds"
+string(12) "argon.memory"
+string(13) "argon.threads"
+string(10) "argon.time"
+string(23) "channels.stack.channels"
+string(21) "channels.single.level"
+string(20) "channels.daily.level"
+string(19) "channels.daily.days"
+string(23) "channels.slack.username"
+string(20) "channels.slack.emoji"
+string(20) "channels.slack.level"
+string(25) "channels.papertrail.level"
+string(27) "channels.papertrail.handler"
+string(21) "channels.syslog.level"
+string(23) "channels.errorlog.level"
+string(12) "from.address"
+string(9) "from.name"
+string(14) "markdown.theme"
+string(7) "default"
+string(26) "connections.database.table"
+string(26) "connections.database.queue"
+string(32) "connections.database.retry_after"
+string(27) "connections.beanstalkd.host"
+string(28) "connections.beanstalkd.queue"
+string(34) "connections.beanstalkd.retry_after"
+string(21) "connections.sqs.queue"
+string(28) "connections.redis.connection"
+string(29) "connections.redis.retry_after"
+string(13) "failed.driver"
+string(15) "failed.database"
+string(6) "driver"
+string(15) "expire_on_close"
+string(7) "encrypt"
+string(10) "connection"
+string(5) "table"
+string(5) "store"
+string(4) "path"
+string(6) "domain"
+string(6) "secure"
+string(9) "http_only"
+string(9) "same_site"
+>>> Event: found custom envs Data: ["ARGON_MEMORY","ARGON_THREADS","ARGON_TIME","BCRYPT_ROUNDS","CACHE_STORE","DB_CONNECTION","MAIL_FROM_ADDRESS","MAIL_FROM_NAME","MAIL_MAILER","QUEUE_CONNECTION","QUEUE_FAILED_DRIVER","SESSION_DRIVER","SQS_QUEUE"]
+>>> Event: found renamed envs Data: ["FILESYSTEM_DRIVER"]
+*** Completed: Shift\Tasks\Laravel\Eleven\Config
+*** Completed: Shift\Tasks\Laravel\Eleven\EnvVariables
+>>> Event: matched core file: bootstrap/app.php with version: 10.3.3
+*** Completed: Shift\Tasks\Laravel\Eleven\Bootstrap
+*** Completed: Shift\Tasks\Laravel\Eleven\HttpKernel
+>>> Event: found consolidateable providers:  Data: ["app\/Providers\/AuthServiceProvider.php"]
+
+In ConfigurationResolver.php line 261:
+                                                                            
+  Configuration file `.php_cs` is outdated, rename to `.php-cs-fixer.php`.  
+                                                                            
+
+fix [--path-mode PATH-MODE] [--allow-risky ALLOW-RISKY] [--config CONFIG] [--dry-run] [--rules RULES] [--using-cache USING-CACHE] [--cache-file CACHE-FILE] [--diff] [--format FORMAT] [--stop-on-violation] [--show-progress SHOW-PROGRESS] [--] [<path>...]
+
+*** Completed: Shift\Tasks\Laravel\Eleven\ConsolidateProviders
+*** Completed: Shift\Tasks\Laravel\Eleven\RegisterProviders
+*** Completed: Shift\Tasks\Laravel\Eleven\ExceptionHandler
+>>> Event: matched core file: routes/console.php with version: 6.20.1
+>>> Event: matched core file: routes/channels.php with version: 6.20.1
+>>> Event: custom routes:  Data: ["routes\/api.php"]
+*** Completed: Shift\Tasks\Laravel\Eleven\Routes
+*** Completed: Shift\Tasks\Laravel\Eleven\ConsoleKernel
+*** Completed: Shift\Tasks\Laravel\Slimmer\Miscellaneous
+*** Completed: Shift\Tasks\Laravel\FixNamespace
+>>> Event: formatting with Pint using laravel against defaults
+*** Completed: Shift\Tasks\Laravel\Cleanup
