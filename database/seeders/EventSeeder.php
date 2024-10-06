@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Event;
-use App\EventRegistration;
-use App\User;
+use App\Models\Event;
+use App\Models\EventRegistration;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class EventSeeder extends Seeder

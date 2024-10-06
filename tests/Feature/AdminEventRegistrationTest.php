@@ -1,11 +1,11 @@
 <?php
 
-use App\ActivityLog;
-use App\Competition;
-use App\CompetitionRegistration;
-use App\Event;
-use App\EventRegistration;
-use App\User;
+use App\Models\ActivityLog;
+use App\Models\Competition;
+use App\Models\CompetitionRegistration;
+use App\Models\Event;
+use App\Models\EventRegistration;
+use App\Models\User;
 
 test('the admin can see the event registration list', function () {
     $event = Event::factory()->create();

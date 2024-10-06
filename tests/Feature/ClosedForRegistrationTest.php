@@ -1,7 +1,7 @@
 <?php
 
-use App\Competition;
-use App\Event;
+use App\Models\Competition;
+use App\Models\Event;
 use Carbon\Carbon;
 
 test('a competition has a date for last registration', function () {

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Document;
-use App\DocumentFolder;
 use App\Firebase;
+use App\Models\Document;
+use App\Models\DocumentFolder;
 use Illuminate\Http\Request;
 
 class DocumentsAdministratorController extends Controller

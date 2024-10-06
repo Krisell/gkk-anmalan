@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -78,8 +78,8 @@ class EndToEndTestingController extends Controller
             return request('model');
         }
 
-        if (\class_exists('App\\'.\ucfirst(request('model')))) {
-            return 'App\\'.\ucfirst(request('model'));
+        if (\class_exists('App\\Models\\'.\ucfirst(request('model')))) {
+            return 'App\\Models\\'.\ucfirst(request('model'));
         }
 
         throw new ModelNotFoundException(request('model'));

@@ -1,6 +1,6 @@
 <?php
 
-use App\User;
+use App\Models\User;
 
 test('a user can update their name', function () {
     $user = User::factory()->create([

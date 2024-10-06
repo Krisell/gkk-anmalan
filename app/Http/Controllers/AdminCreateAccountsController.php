@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\ActivityLog;
 use App\Mail\AccountCreatedByAdminWelcome;
-use App\User;
+use App\Models\ActivityLog;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;

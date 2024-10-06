@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Competition;
+use App\Models\Competition;
 use Illuminate\Http\Request;
 
 class CompetitionController extends Controller

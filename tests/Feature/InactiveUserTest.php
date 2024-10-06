@@ -1,6 +1,6 @@
 <?php
 
-use App\User;
+use App\Models\User;
 
 test('an_inactive_user_is_redirected_to_an_information_page', function () {
     login(User::factory()->inactivated()->create());

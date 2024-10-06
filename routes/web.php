@@ -3,16 +3,17 @@
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LagSMController;
-use App\Http\Controllers\MusikhjalpenController;
 use App\Http\Controllers\SignAgreementsController;
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
+use App\Http\Middleware\SuperadminMiddleware;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
 Route::get('/!', [HomeController::class, 'exclamation']);
 Route::get('/', [HomeController::class, 'index']);
-
-Route::get('/musikhjalpen', [MusikhjalpenController::class, 'index']);
 
 Route::get('/dm', [HomeController::class, 'dm']);
 Route::redirect('/musik', '/musikhjalpen');
@@ -50,7 +51,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('admin')->middleware('superadmin')->group(function () {
+    Route::prefix('admin')->middleware(SuperadminMiddleware::class)->group(function () {
         Route::post('/accounts/promote/{user}', [\App\Http\Controllers\AccountController::class, 'promote']);
         Route::post('/accounts/demote/{user}', [\App\Http\Controllers\AccountController::class, 'demote']);
 
@@ -88,7 +89,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::prefix('accounts')->group(function () {
         Route::post('/inactivate/{user}', [\App\Http\Controllers\AccountController::class, 'inactivate']);
         Route::post('/reactivate/{user}', [\App\Http\Controllers\AccountController::class, 'reactivate']);

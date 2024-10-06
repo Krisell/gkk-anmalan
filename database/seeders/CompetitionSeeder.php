@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Competition;
-use App\CompetitionRegistration;
-use App\User;
+use App\Models\Competition;
+use App\Models\CompetitionRegistration;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class CompetitionSeeder extends Seeder

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Document;
-use App\User;
+use App\Models\Document;
+use App\Models\User;
 use Tests\TestCase;
 
 class EndToEndTestingControllerTest extends TestCase
@@ -124,7 +124,7 @@ class EndToEndTestingControllerTest extends TestCase
         Document::factory()->create();
 
         $this->post('__e2e__/first', [
-            'model' => 'App\Document',
+            'model' => 'App\Models\Document',
             'attributes' => [
                 'name' => 'Some document',
             ],

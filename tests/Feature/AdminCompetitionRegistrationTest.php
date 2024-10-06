@@ -1,8 +1,8 @@
 <?php
 
-use App\Competition;
-use App\CompetitionRegistration;
-use App\User;
+use App\Models\Competition;
+use App\Models\CompetitionRegistration;
+use App\Models\User;
 
 test('an admin can update an Competition registration', function () {
     $competition = Competition::factory()->create();

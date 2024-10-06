@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Competition;
-use App\CompetitionRegistration;
-use App\User;
+use App\Models\Competition;
+use App\Models\CompetitionRegistration;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CompetitionRegistrationFactory extends Factory

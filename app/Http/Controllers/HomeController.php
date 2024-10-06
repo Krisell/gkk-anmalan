@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Event;
-use App\NewsItem;
-use App\User;
+use App\Models\Event;
+use App\Models\NewsItem;
+use App\Models\User;
 
 class HomeController extends Controller
 {

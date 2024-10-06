@@ -1,6 +1,6 @@
 <?php
 
-use App\Competition;
+use App\Models\Competition;
 
 test('a past competition is by default hidden', function () {
     Competition::factory()->create(['date' => now()->subDays(10)]);

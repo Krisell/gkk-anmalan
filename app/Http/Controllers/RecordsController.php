@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Result;
+use App\Models\Result;
 
 class RecordsController extends Controller
 {

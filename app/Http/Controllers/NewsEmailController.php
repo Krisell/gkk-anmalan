@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\NewsMail;
-use App\NewsItem;
+use App\Models\NewsItem;
 use Illuminate\Support\Facades\Mail;
 
 class NewsEmailController extends Controller

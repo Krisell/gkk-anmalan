@@ -1,8 +1,8 @@
 <?php
 
-use App\ActivityLog;
-use App\Payment;
-use App\User;
+use App\Models\ActivityLog;
+use App\Models\Payment;
+use App\Models\User;
 
 test('a user has many payments', function () {
     $user = User::factory()->create();

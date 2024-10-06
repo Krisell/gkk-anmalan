@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\ActivityLog;
-use App\AuditLog;
-use App\Payment;
-use App\User;
+use App\Models\ActivityLog;
+use App\Models\AuditLog;
+use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller

@@ -2,7 +2,7 @@
 
 use App\Mail\AccountGrantedMail;
 use App\Mail\NotifyAboutNewRegistrationMail;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 test('a not granted user can not view any page except for nagivation', function () {

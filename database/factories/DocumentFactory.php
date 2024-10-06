@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Document;
-use App\DocumentFolder;
+use App\Models\Document;
+use App\Models\DocumentFolder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DocumentFactory extends Factory
