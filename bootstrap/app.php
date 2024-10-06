@@ -32,14 +32,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\EnsureUserIsNotInactivatedMiddleware::class,
         ]);
 
-        $middleware->throttleApi('60,1');
-
-        $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
-            'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            'superadmin' => \App\Http\Middleware\SuperadminMiddleware::class,
-        ]);
-
         $middleware->priority([
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
