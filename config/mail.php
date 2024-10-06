@@ -2,6 +2,12 @@
 
 return [
 
+    'mailers' => [
+        'mailgun' => [
+            'transport' => 'mailgun',
+        ],
+    ],
+
     'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
 
     'port' => env('MAIL_PORT', 587),
@@ -15,9 +21,5 @@ return [
     'sendmail' => '/usr/sbin/sendmail -bs',
 
     'log_channel' => env('MAIL_LOG_CHANNEL'),
-
-    'mailgun' => [
-        'transport' => 'mailgun',
-    ],
 
 ];
