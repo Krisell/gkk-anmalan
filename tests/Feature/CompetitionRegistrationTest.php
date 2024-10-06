@@ -1,7 +1,7 @@
 <?php
 
-use App\Competition;
-use App\CompetitionRegistration;
+use App\Models\Competition;
+use App\Models\CompetitionRegistration;
 
 test('a competition registration can be created given the required data', function () {
     $competition = Competition::factory()->create();

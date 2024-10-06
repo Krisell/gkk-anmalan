@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DocumentFolder;
+use App\Models\DocumentFolder;
 
 class DocumentController extends Controller
 {

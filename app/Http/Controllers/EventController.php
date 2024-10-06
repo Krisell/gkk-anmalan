@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\ActivityLog;
-use App\Competition;
-use App\Event;
-use App\User;
+use App\Models\ActivityLog;
+use App\Models\Competition;
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EventController extends Controller

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Competition;
-use App\CompetitionRegistration;
-use App\Event;
+use App\Models\Competition;
+use App\Models\CompetitionRegistration;
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class CompetitionRegistrationController extends Controller

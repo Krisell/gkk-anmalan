@@ -1,6 +1,6 @@
 <?php
 
-use App\Competition;
+use App\Models\Competition;
 
 it('can show all competitions for signed in users', function () {
     $this->get('/competitions')->assertRedirect('/login');

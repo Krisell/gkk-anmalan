@@ -1,6 +1,6 @@
 <?php
 
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 
 test('a_user_without_one_unsigned_agreement_are_redirected_to_the_signing_page', function () {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DocumentFolder;
+use App\Models\DocumentFolder;
 use Illuminate\Http\Request;
 
 class DocumentFolderController extends Controller

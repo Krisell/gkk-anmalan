@@ -1,6 +1,6 @@
 <?php
 
-use App\User;
+use App\Models\User;
 
 test('sign in can be completed with the correct details', function () {
     $user = User::factory()->create();

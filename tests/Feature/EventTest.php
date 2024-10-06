@@ -1,6 +1,6 @@
 <?php
 
-use App\Event;
+use App\Models\Event;
 
 function eventData($overrides = [])
 {

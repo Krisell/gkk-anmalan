@@ -1,6 +1,6 @@
 <?php
 
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 
 test('a visit is counted', function () {

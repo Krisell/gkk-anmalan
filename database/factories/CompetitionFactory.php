@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Competition;
+use App\Models\Competition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CompetitionFactory extends Factory

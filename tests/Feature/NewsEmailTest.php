@@ -1,7 +1,7 @@
 <?php
 
 use App\Mail\NewsMail;
-use App\NewsItem;
+use App\Models\NewsItem;
 use Illuminate\Support\Facades\Mail;
 
 test('the news email page can be accessed by administrators only', function () {

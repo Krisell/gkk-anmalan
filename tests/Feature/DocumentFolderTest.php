@@ -1,6 +1,6 @@
 <?php
 
-use App\DocumentFolder;
+use App\Models\DocumentFolder;
 
 test('a non admin cant create a folder', function () {
     login();

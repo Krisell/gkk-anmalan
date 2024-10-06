@@ -1,7 +1,7 @@
 <?php
 
-use App\ActivityLog;
-use App\Result;
+use App\Models\ActivityLog;
+use App\Models\Result;
 
 test('an administrator can add a result', function () {
     loginAdmin();

@@ -1,6 +1,6 @@
 <?php
 
-use App\Event;
+use App\Models\Event;
 
 test('an admin may delete an event', function () {
     $event = Event::factory()->create();

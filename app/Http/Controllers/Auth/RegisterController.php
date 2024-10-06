@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\GrantAccountMail;
 use App\Mail\WelcomeMail;
+use App\Models\User;
 use App\Providers\AppServiceProvider;
-use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -74,7 +74,7 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @return \App\User
+     * @return \App\Models\User
      */
     protected function create(array $data)
     {

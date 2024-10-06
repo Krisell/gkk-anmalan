@@ -1,7 +1,7 @@
 <?php
 
-use App\Event;
-use App\EventRegistration;
+use App\Models\Event;
+use App\Models\EventRegistration;
 
 test('an event registration can be created given the required data', function () {
     $event = Event::factory()->create();

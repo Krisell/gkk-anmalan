@@ -1,7 +1,7 @@
 <?php
 
-use App\Payment;
-use App\User;
+use App\Models\Payment;
+use App\Models\User;
 
 test('an admin may se a list of all users', function () {
     $user = User::factory()->create();

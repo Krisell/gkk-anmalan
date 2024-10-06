@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\ActivityLog;
-use App\Result;
-use App\User;
+use App\Models\ActivityLog;
+use App\Models\Result;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ResultsController extends Controller

@@ -1,7 +1,7 @@
 <?php
 
-use App\ActivityLog;
-use App\User;
+use App\Models\ActivityLog;
+use App\Models\User;
 
 function data()
 {

@@ -1,6 +1,6 @@
 <?php
 
-use App\NewsItem;
+use App\Models\NewsItem;
 
 test('an admin can create a news item', function () {
     loginAdmin();

@@ -1,7 +1,7 @@
 <?php
 
-use App\Document;
-use App\DocumentFolder;
+use App\Models\Document;
+use App\Models\DocumentFolder;
 
 test('test a not signed in user cant access documents', function () {
     $this->get('/member-documents')->assertRedirect();

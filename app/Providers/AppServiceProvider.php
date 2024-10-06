@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/insidan';
 
     /**
      * Register any application services.

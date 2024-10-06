@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\ActivityLog;
 use App\Mail\AccountGrantedMail;
 use App\Mail\NotifyAboutNewRegistrationMail;
-use App\User;
+use App\Models\ActivityLog;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 class AccountController extends Controller

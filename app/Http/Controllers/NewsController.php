@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Firebase;
-use App\NewsItem;
+use App\Models\NewsItem;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller

@@ -3,16 +3,15 @@
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LagSMController;
-use App\Http\Controllers\MusikhjalpenController;
 use App\Http\Controllers\SignAgreementsController;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
 Route::get('/!', [HomeController::class, 'exclamation']);
 Route::get('/', [HomeController::class, 'index']);
-
-Route::get('/musikhjalpen', [MusikhjalpenController::class, 'index']);
 
 Route::get('/dm', [HomeController::class, 'dm']);
 Route::redirect('/musik', '/musikhjalpen');
