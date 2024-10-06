@@ -2,6 +2,7 @@
 # Välkommen till GKKs anmälningssidor
 
 Nu har ditt konto godkänts av administratören. Välkommen in! 
+
 https://anmalan.gkk-styrkelyft.se
 
 Hälsningar,<br>
