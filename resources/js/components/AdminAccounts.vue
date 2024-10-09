@@ -72,7 +72,8 @@
                   Namn
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                @click="sortBy('event_registrations')"
+                  class="cursor-pointer px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   v-tooltip="'Bekräftad närvaro som funktionär. Inom parentes senaste 365 dagarna'"
                 >
                   Bekr. funk.<br />(senaste 365 dagarna)
@@ -373,8 +374,14 @@ export default {
     sortedActiveAccounts() {
       return this.accounts
         .filter((account) => account.inactivated_at === null)
-        .sort((a, b) => this.sortOrder *
+        .sort((a, b) => {
+          if (this.sortKey === 'event_registrations') {
+            return this.sortOrder * (this.presentLastYear(b.event_registrations) - this.presentLastYear(a.event_registrations))
+          }
+
+          return this.sortOrder *
             String(a[this.sortKey]).localeCompare(String(b[this.sortKey]), undefined, { numeric: true })
+        }
         )
     },
     inactiveAccounts() {
