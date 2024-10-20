@@ -8,13 +8,11 @@
             <thead>
               <tr>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Namn
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Datum reg.
                 </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
@@ -37,8 +35,7 @@
                 </td>
 
                 <td
-                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
-                >
+                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                   <Button @click="grantAccount(account)">Godkänn konto</Button>
                   <Button class="ml-2" type="secondary" @click="deleteAccount(account)">Radera konto</Button>
                 </td>
@@ -51,12 +48,9 @@
 
     <h2 class="text-2xl font-thin text-center m-4">
       {{ accounts.length }} medlemmar har registrerat ett konto
-      <i
-        style="margin-left: 20px; cursor: pointer"
-        v-tooltip="'Kopiera epostadresserna för alla ej inaktiverade konton'"
-        @click="copyEmails"
-        class="fa fa-clipboard"
-      ></i>
+      <i style="margin-left: 20px; cursor: pointer"
+        v-tooltip="'Kopiera epostadresserna för alla ej inaktiverade konton'" @click="copyEmails"
+        class="fa fa-clipboard"></i>
     </h2>
 
     <div class="flex flex-col">
@@ -65,10 +59,8 @@
           <table class="min-w-full">
             <thead>
               <tr>
-                <th
-                  @click="sortBy('first_name')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                >
+                <th @click="sortBy('first_name')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Namn
                 </th>
                 <th
@@ -78,43 +70,37 @@
                 >
                   Bekr. funk.<br />(senaste 365 dagarna)
                 </th>
-                <th
-                  @click="sortBy('created_at')"
-                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                >
+                <th @click="sortBy('created_at')"
+                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Regdatum
                 </th>
-                <th
-                  @click="sortBy('last_visited_at')"
-                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                >
+                <th @click="sortBy('last_visited_at')"
+                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Senaste besök
                 </th>
-                <th
-                  @click="sortBy('visits')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                >
+                <th @click="sortBy('visits')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Antal besök
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Godkänt avtalen
                 </th>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Medl.avg. 2024
+                <th v-if="getCurrentYear() > 2024"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Licens.avg. {{ getCurrentYear() }}
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Medl.avg. 2023
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Medl.avg. {{ getCurrentYear() }}
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Medl.avg. 2022
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Medl.avg. {{ getCurrentYear() - 1 }}
+                </th>
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Medl.avg. {{ getCurrentYear() - 2 }}
                 </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
@@ -148,56 +134,44 @@
                   </div>
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
-                >
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   {{ account.visits }}
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
-                >
-                  <i
-                    class="fa fa-check-circle text-gkk text-lg"
-                    v-if="account.membership_agreement_signed_at && account.anti_doping_agreement_signed_at"
-                  ></i>
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <i class="fa fa-check-circle text-gkk text-lg"
+                    v-if="account.membership_agreement_signed_at && account.anti_doping_agreement_signed_at"></i>
+                </td>
+                <td v-if="getCurrentYear() > 2024"
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <ToggleButton @input="updateMembershipPayment(account, getCurrentYear(), 'SSFLICENSE')"
+                    :value="hasPaid(account, getCurrentYear(), 'SSFLICENSE')" color="#314270" />
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
-                >
-                  <ToggleButton @input="updateMembershipPayment(account, 2024)" :value="hasPaid(account, 2024)" color="#314270" />
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <ToggleButton @input="updateMembershipPayment(account, getCurrentYear(), 'MEMBERSHIP')"
+                    :value="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" color="#314270" />
+
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
-                >
-                  <ToggleButton @input="updateMembershipPayment(account, 2023)" :value="hasPaid(account, 2023)" color="#314270" />
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <ToggleButton @input="updateMembershipPayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
+                    :value="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" color="#314270" />
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
-                >
-                  <ToggleButton @input="updateMembershipPayment(account, 2022)" :value="hasPaid(account, 2022)" color="#314270" />
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <ToggleButton @input="updateMembershipPayment(account, getCurrentYear() - 2, 'MEMBERSHIP')"
+                    :value="hasPaid(account, getCurrentYear() - 2, 'MEMBERSHIP')" color="#314270" />
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
-                >
+                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                   <div v-if="user.role === 'superadmin'">
-                    <i
-                      @click="confirmDemotion(account)"
-                      v-if="account.role === 'admin'"
-                      style="cursor: pointer"
-                      class="fa fa-star"
-                      v-tooltip="'Administratör, klicka för att ta bort rollen'"
-                    ></i>
-                    <i
-                      v-else-if="account.role === 'superadmin'"
-                      class="fa fa-star"
-                      v-tooltip="'Superadministratör'"
-                    ></i>
-                    <i
-                      @click="confirmPromotion(account)"
-                      v-else
-                      class="fa fa-star-o"
-                      style="cursor: pointer"
-                      v-tooltip="'Gör till administratör'"
-                    ></i>
+                    <i @click="confirmDemotion(account)" v-if="account.role === 'admin'" style="cursor: pointer"
+                      class="fa fa-star" v-tooltip="'Administratör, klicka för att ta bort rollen'"></i>
+                    <i v-else-if="account.role === 'superadmin'" class="fa fa-star"
+                      v-tooltip="'Superadministratör'"></i>
+                    <i @click="confirmPromotion(account)" v-else class="fa fa-star-o" style="cursor: pointer"
+                      v-tooltip="'Gör till administratör'"></i>
                   </div>
                   <div v-else>
                     <i v-if="account.role === 'admin'" class="fa fa-star" v-tooltip="'Administratör'"></i>
@@ -205,13 +179,9 @@
                   </div>
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
-                >
-                  <i
-                    @click="confirmInactivation(account)"
-                    class="fa fa-ban cursor-pointer"
-                    v-tooltip="'Inaktivera konto – personen kommer inte kunna logga in förrän kontot återaktiveras.'"
-                  ></i>
+                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                  <i @click="confirmInactivation(account)" class="fa fa-ban cursor-pointer"
+                    v-tooltip="'Inaktivera konto – personen kommer inte kunna logga in förrän kontot återaktiveras.'"></i>
                 </td>
               </tr>
             </tbody>
@@ -242,13 +212,11 @@
             <thead>
               <tr>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Namn
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Registreringsdatum
                 </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
@@ -271,8 +239,7 @@
                 </td>
 
                 <td
-                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
-                >
+                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                   <Button @click="reactivate(account)">Återaktivera konto</Button>
                 </td>
               </tr>
@@ -354,7 +321,7 @@ export default {
       sortKey: 'created_at',
       sortOrder: 1,
       newAccountsString: '',
-      accounts: this.initialAccounts,
+      accounts: this.initialAccounts
     }
   },
   async mounted() {
@@ -392,7 +359,7 @@ export default {
     async loadAccounts() {
       const response = await axios.get('/admin/accounts')
       this.accounts = response.data
-    },  
+    },
     dateString(date) {
       if (!date) {
         return ''
@@ -442,6 +409,11 @@ export default {
         window.location.reload()
       })
     },
+    getCurrentYear() {
+      var currentDate = new window.Date();
+      console.log(currentDate);
+      return currentDate.getFullYear();
+    },
     presentTotal(registrations) {
       return registrations.filter((registration) => registration.presence_confirmed).length
     },
@@ -486,25 +458,25 @@ export default {
 
       console.log(response)
     },
-    hasPaid(user, year) {
-      return user.payments.some(payment => payment.type === 'MEMBERSHIP' && payment.year === year)
+    hasPaid(user, year, paymentType) {
+      return user.payments.some(payment => payment.type === paymentType && payment.year === year)
     },
-    async updateMembershipPayment(user, year) {
+    async updateMembershipPayment(user, year, paymentType) {
       const name = user.first_name + ' ' + user.last_name
-      
-      if (this.hasPaid(user, year)) {
-        const payment = user.payments.find(payment => payment.type === 'MEMBERSHIP' && payment.year === year)
+      const paymentTypeMessage = paymentType == 'MEMBERSHIP' ? 'Medlemsavgiften' : 'Licens'
+      if (this.hasPaid(user, year, paymentType)) {
+        const payment = user.payments.find(payment => payment.type === paymentType && payment.year === year)
         await axios.delete(`/admin/accounts/payment/${payment.id}`)
 
-        this.$toast.warning(`Medlemsavgiften för ${name} har markerats som obetald`);
+        this.$toast.warning(`${paymentTypeMessage} för ${name} har markerats som obetald`);
 
         this.loadAccounts()
         return
       }
 
-      await axios.post(`/admin/accounts/payment/${user.id}`, { type: 'MEMBERSHIP', year })
+      await axios.post(`/admin/accounts/payment/${user.id}`, { type: paymentType, year })
 
-      this.$toast.info(`Medlemsavgiften för ${name} har markerats som betald`);
+      this.$toast.info(`${paymentTypeMessage} för ${name} har markerats som betald`);
 
       this.loadAccounts()
     },
