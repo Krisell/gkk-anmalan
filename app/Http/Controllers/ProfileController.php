@@ -8,7 +8,7 @@ class ProfileController extends Controller
 {
     public function index(Request $request)
     {
-        $payments = $request->user()->payments()->where('year', '>=', date('Y') - 1)->get();
+        $payments = $request->user()->payments()->where('year', '>=', 2025)->get();
 
         return view('profile', [
             'user' => $request->user(),
