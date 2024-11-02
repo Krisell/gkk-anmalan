@@ -56,6 +56,19 @@
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+          <template>
+            <div>
+              <div class="relative my-4 rounded-md shadow-sm w-64 mx-auto">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                  <i class="fa fa-search text-gray-400"></i>
+                </div>
+                <input 
+                  v-model="search" 
+                  class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" placeholder="Sök medlem" 
+                />
+              </div>
+            </div>
+          </template>
           <table class="min-w-full">
             <thead>
               <tr>
@@ -102,7 +115,7 @@
               </tr>
             </thead>
             <tbody class="bg-white">
-              <tr v-for="account in sortedActiveAccounts" :key="account.id">
+              <tr v-for="account in filteredSortedActiveAccounts" :key="account.id">
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -341,7 +354,8 @@ export default {
       sortKey: 'visits',
       sortOrder: -1,
       newAccountsString: '',
-      accounts: this.initialAccounts
+      accounts: this.initialAccounts,
+      search: '',
     }
   },
   async mounted() {
@@ -358,6 +372,20 @@ export default {
     }
   },
   computed: {
+    filteredSortedActiveAccounts() {
+      if (this.search === '') {
+        return this.sortedActiveAccounts
+      }
+
+      // Fuzzy search on full name and email string
+      return this.sortedActiveAccounts.filter((account) => {
+        const search = this.search.toLowerCase()
+        const fullName = `${account.first_name} ${account.last_name}`.toLowerCase()
+        const email = account.email.toLowerCase()
+
+        return fullName.includes(search) || email.includes(search)
+      })
+    },
     sortedActiveAccounts() {
       return this.accounts
         .filter((account) => account.inactivated_at === null)
