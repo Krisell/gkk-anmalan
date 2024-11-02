@@ -14,14 +14,12 @@ class CompetitionRegistrationController extends Controller
         $data = $request->validate([
             'status' => 'nullable',
             'comment' => 'nullable',
-            'licence_number' => 'required_if:status,true',
             'events' => 'json|required',
             'gender' => 'required',
             'weight_class' => 'required',
         ]);
 
         auth()->user()->update([
-            'licence_number' => $data['licence_number'] ?? null,
             'gender' => $data['gender'],
             'weight_class' => $data['weight_class'],
         ]);

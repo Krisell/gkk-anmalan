@@ -31,7 +31,6 @@
         <h3 class="text-green-400 text-lg font-thin text-center">
           Sista anmälningsdatum har passerat, och du är anmäld.
         </h3>
-        <h3 class="text-gkk text-lg font-thin text-center">Licensnummer: {{ licenceNumber }}</h3>
         <h3 class="text-gkk text-lg font-thin text-center">{{ gender }}, {{ weightClass[gender] }} kg</h3>
         <h3 class="text-gkk text-lg font-thin text-center">{{ eventsString }}</h3>
         <h3 class="text-gkk text-lg font-thin text-center">{{ comment }}</h3>
@@ -39,27 +38,6 @@
     </div>
     <div v-else>
       <form class="mt-2">
-        <div class="flex mb-2">
-          <svg
-            v-tooltip="licenseNumberInfo"
-            class="w-6 h-6"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <h4 class="ml-2 text-md font-thin">Licensnummer</h4>
-        </div>
-
-        <input
-          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-          v-model="licenceNumber"
-        />
-
         <div class="mt-4">
           <div class="flex items-center">
             <input
@@ -69,7 +47,7 @@
               class="form-radio h-6 w-6 text-gkk transition duration-150 ease-in-out"
             />
             <label class="ml-3">
-              <span class="block text-sm leading-5 font-medium text-gray-700">Kvinnor</span>
+              <span class="block text-sm leading-5 font-medium text-gray-700">Damer</span>
             </label>
           </div>
           <div class="mt-4 flex items-center">
@@ -80,7 +58,7 @@
               class="form-radio h-6 w-6 text-gkk transition duration-150 ease-in-out"
             />
             <label class="ml-3">
-              <span class="block text-sm leading-5 font-medium text-gray-700">Män</span>
+              <span class="block text-sm leading-5 font-medium text-gray-700">Herrar</span>
             </label>
           </div>
         </div>
@@ -207,10 +185,7 @@
           <Button v-else secondary style="margin-bottom: 10px" @click="save">Spara</Button>
         </div>
         <div v-if="registrationStatus === 'error'">
-          <Message v-if="registrationErrorReason === 'licence_number'" danger style="margin-top: 20px">
-            Du måste ange licensnummer. {{ licenseNumberInfo }}
-          </Message>
-          <Message v-else danger style="margin-top: 20px">
+          <Message danger style="margin-top: 20px">
             Kunde inte skicka, kontrollera inmatning och anlutning.
           </Message>
         </div>
@@ -272,7 +247,6 @@ export default {
   props: ['competition', 'user', '_registration'],
   data() {
     return {
-      licenseNumberInfo: 'Om det är din första tävling anger du förväntat licensnummer som består av din födelsedata (6 siffror), samt dina initialer. Ex. har Anna Persson som är född 1987-08-19 licensnummer 870819ap. Vi registrerar licensen före första tävlingsstart, och skulle det visa sig att ditt licensnummer är upptaget så skapas ett nytt och det uppdateras här automatiskt.',
       justSaved: false,
       registrationStatus: '',
       registrationErrorReason: '',
@@ -280,7 +254,6 @@ export default {
       simultaneousEvent: null,
       comment: this._registration ? this._registration.comment : '',
       wantsToCompete: this._registration ? this._registration.status == 1 : null,
-      licenceNumber: this.user.licence_number || '',
       weightClass: {
         Män: '93',
         Kvinnor: '63',
@@ -354,7 +327,6 @@ export default {
           data: {
             status: wantsToCompete,
             comment: this.comment,
-            licence_number: this.licenceNumber,
             events: JSON.stringify(this.events),
             gender: this.gender,
             weight_class: this.weightClass[this.gender],
@@ -370,12 +342,6 @@ export default {
           setTimeout(() => (this.justSaved = false), 2000)
         })
         .catch((err) => {
-          if (err.response && err.response.status === 422) {
-            if (err.response.data.errors && 'licence_number' in err.response.data.errors) {
-              this.registrationErrorReason = 'licence_number'
-            }
-          }
-
           this.registrationStatus = 'error'
         })
     },

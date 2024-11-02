@@ -29,7 +29,6 @@ test('a competition registration can be created and update before the last date 
     login();
 
     $this->post("/competitions/{$competition->id}/registrations", [
-        'licence_number' => 'ab',
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
@@ -37,20 +36,15 @@ test('a competition registration can be created and update before the last date 
     ])->assertStatus(200);
 
     $this->post("/competitions/{$competition->id}/registrations", [
-        'licence_number' => 'cd',
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
         'status' => true,
     ])->assertStatus(200);
-
-    $this->assertDatabaseHas('competition_registrations', ['licence_number' => 'cd']);
-    $this->assertDatabaseMissing('competition_registrations', ['licence_number' => 'ab']);
 
     Carbon::setTestNow(now()->addDays(3));
 
     $this->post("/competitions/{$competition->id}/registrations", [
-        'licence_number' => 'ef',
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
@@ -58,15 +52,11 @@ test('a competition registration can be created and update before the last date 
     ])->assertStatus(401);
 
     $this->post("/competitions/{$competition->id}/registrations", [
-        'licence_number' => 'gh',
         'weight_class' => '74',
         'gender' => 'Män',
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
         'status' => true,
     ])->assertStatus(401);
-
-    $this->assertDatabaseMissing('competition_registrations', ['licence_number' => 'ef']);
-    $this->assertDatabaseMissing('competition_registrations', ['licence_number' => 'gh']);
 });
 
 test('an event registration can be created and update before the last date but not after', function () {
