@@ -318,8 +318,8 @@ export default {
     return {
       selectedAccount: null,
       grantStatus: '',
-      sortKey: 'created_at',
-      sortOrder: 1,
+      sortKey: 'visits',
+      sortOrder: -1,
       newAccountsString: '',
       accounts: this.initialAccounts
     }
