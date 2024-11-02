@@ -86,15 +86,18 @@
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Avtal
                 </th>
-                <th v-if="getCurrentYear() > 2024"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  Licens.avg. {{ getCurrentYear() }}
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Licens.avg. 2025
                 </th>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Medl.avg. {{ getCurrentYear() + 1 }}
+                </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Medl.avg. {{ getCurrentYear() }}
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Medl.avg. {{ getCurrentYear() - 1 }}
+                </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
               </tr>
             </thead>
@@ -139,39 +142,61 @@
                   <i class="fa fa-check-circle text-gkk text-lg"
                     v-if="account.membership_agreement_signed_at && account.anti_doping_agreement_signed_at"></i>
                 </td>
-                <td v-if="getCurrentYear() > 2024"
+                <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <ToggleButton @input="updateMembershipPayment(account, getCurrentYear(), 'SSFLICENSE')"
-                    :value="hasPaid(account, getCurrentYear(), 'SSFLICENSE')" color="#314270" />
+                  <ToggleButton 
+                    v-if="showPaymentToggle(account, 2025, 'SSFLICENSE')" 
+                    @input="updatePayment(account, 2025, 'SSFLICENSE')"
+                    :value="hasPaid(account, 2025, 'SSFLICENSE')" 
+                    color="#314270" 
+                  />
+                </td>
+                <td
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <ToggleButton 
+                    v-if="showPaymentToggle(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
+                    @input="updatePayment(account, getCurrentYear() + 1, 'MEMBERSHIP')"
+                    :value="hasPaid(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
+                    color="#314270"
+                  />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <ToggleButton 
                     v-if="showPaymentToggle(account, getCurrentYear(), 'MEMBERSHIP')" 
-                    @input="updateMembershipPayment(account, getCurrentYear(), 'MEMBERSHIP')"
+                    @input="updatePayment(account, getCurrentYear(), 'MEMBERSHIP')"
                     :value="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" 
                     color="#314270"
                   />
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                  <div v-if="user.role === 'superadmin'">
-                    <i @click="confirmDemotion(account)" v-if="account.role === 'admin'" style="cursor: pointer"
-                      class="fa fa-star" v-tooltip="'Administratör, klicka för att ta bort rollen'"></i>
-                    <i v-else-if="account.role === 'superadmin'" class="fa fa-star"
-                      v-tooltip="'Superadministratör'"></i>
-                    <i @click="confirmPromotion(account)" v-else class="fa fa-star-o" style="cursor: pointer"
-                      v-tooltip="'Gör till administratör'"></i>
-                  </div>
-                  <div v-else>
-                    <i v-if="account.role === 'admin'" class="fa fa-star" v-tooltip="'Administratör'"></i>
-                    <i v-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
-                  </div>
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <ToggleButton 
+                    v-if="showPaymentToggle(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
+                    @input="updatePayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
+                    :value="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
+                    color="#314270"
+                  />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                  <i @click="confirmInactivation(account)" class="fa fa-ban cursor-pointer"
-                    v-tooltip="'Inaktivera konto – personen kommer inte kunna logga in förrän kontot återaktiveras.'"></i>
+                  <div class="flex items-center gap-2">
+                    <div v-if="user.role === 'superadmin'">
+                      <i @click="confirmDemotion(account)" v-if="account.role === 'admin'" style="cursor: pointer"
+                        class="fa fa-star" v-tooltip="'Administratör, klicka för att ta bort rollen'"></i>
+                      <i v-else-if="account.role === 'superadmin'" class="fa fa-star"
+                        v-tooltip="'Superadministratör'"></i>
+                      <i @click="confirmPromotion(account)" v-else class="fa fa-star-o" style="cursor: pointer"
+                        v-tooltip="'Gör till administratör'"></i>
+                    </div>
+                    <div v-else>
+                      <i v-if="account.role === 'admin'" class="fa fa-star" v-tooltip="'Administratör'"></i>
+                      <i v-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
+                    </div>
+                    <i @click="confirmInactivation(account)" class="fa fa-ban cursor-pointer"
+                      v-tooltip="'Inaktivera konto – personen kommer inte kunna logga in förrän kontot återaktiveras.'">
+                    </i>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -411,9 +436,7 @@ export default {
       })
     },
     getCurrentYear() {
-      var currentDate = new window.Date();
-      console.log(currentDate);
-      return currentDate.getFullYear();
+      return new window.Date().getFullYear()
     },
     presentTotal(registrations) {
       return registrations.filter((registration) => registration.presence_confirmed).length
@@ -465,7 +488,7 @@ export default {
     showPaymentToggle(user, year, paymentType) {
       return user.payments.some(payment => payment.type === paymentType && payment.year === year)
     },
-    async updateMembershipPayment(user, year, paymentType) {
+    async updatePayment(user, year, paymentType) {
       const paymentTypeMessage = paymentType == 'MEMBERSHIP' ? 'Medlemsavgiften' : 'Licens'
       const payment = user.payments.find(payment => payment.type === paymentType && payment.year === year)
       const name = `${user.first_name} ${user.last_name}`
