@@ -94,14 +94,6 @@
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Medl.avg. {{ getCurrentYear() }}
                 </th>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  Medl.avg. {{ getCurrentYear() - 1 }}
-                </th>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  Medl.avg. {{ getCurrentYear() - 2 }}
-                </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
               </tr>
@@ -157,16 +149,6 @@
                   <ToggleButton @input="updateMembershipPayment(account, getCurrentYear(), 'MEMBERSHIP')"
                     :value="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" color="#314270" />
 
-                </td>
-                <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <ToggleButton @input="updateMembershipPayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
-                    :value="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" color="#314270" />
-                </td>
-                <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <ToggleButton @input="updateMembershipPayment(account, getCurrentYear() - 2, 'MEMBERSHIP')"
-                    :value="hasPaid(account, getCurrentYear() - 2, 'MEMBERSHIP')" color="#314270" />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
