@@ -112,7 +112,10 @@
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div class="text-sm leading-5 font-medium text-gray-900">
-                        {{ account.first_name }} {{ account.last_name }}
+                        {{ account.first_name }} {{ account.last_name }} 
+                        <span v-if="account.licence_number" class="text-xs font-light ml-2">
+                          {{ account.licence_number }}
+                        </span>
                       </div>
                       <div class="text-sm leading-5 text-gray-500">{{ account.email }}</div>
                     </div>
