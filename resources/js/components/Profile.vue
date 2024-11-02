@@ -14,8 +14,15 @@
       <div class="ml-6 text-sm italic">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
     </div>
 
-    <h2 class="mt-8 mb-1 text-2xl">Avgifter</h2>
-    Under utveckling.
+    <h2 class="mt-8 mb-1 text-2xl">Avgifter (under utveckling)</h2>
+    <ul>
+      <li v-for="payment in payments" :key="payment.id">
+        <div v-if="payment.state === 'PAID'" class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="32px" height="32px"><path fill="#c8e6c9" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"/><path fill="#4caf50" d="M34.586,14.586l-13.57,13.586l-5.602-5.586l-2.828,2.828l8.434,8.414l16.395-16.414L34.586,14.586z"/></svg>
+          <span class="ml-2 mr-4 text-green-800">BETALD</span><span>{{ paymentTypeText(payment.type) }}, {{payment.year }} ({{ payment.sek_amount }} SEK)</span>
+        </div>
+      </li>
+    </ul> 
 
     <h2 class="mt-8 mb-1 text-2xl">Kontouppgifter</h2>
     <h3 class="font-light mt-2 mb-2">Födelseår</h3>
@@ -99,7 +106,7 @@ import Button from './ui/Button.vue'
 
 export default {
   components: { Button },
-  props: ['user'],
+  props: ['user', 'payments'],
   data() {
     return {
       isAdjusted: {
@@ -128,6 +135,12 @@ export default {
     }
   },
   methods: {
+    paymentTypeText(paymentType) {
+      return {
+        MEMBERSHIP: 'Medlemsavgift',
+        SSFLICENSE: 'Tävlingslicens mot förbundet',
+      }[paymentType] || 'Okänd avgift'
+    },
     showMemberShipAgreement() {
       window.open(Documents.MEMBERSHIP_AGREEMENT)
     },

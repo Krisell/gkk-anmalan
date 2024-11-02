@@ -6,11 +6,14 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $payments = $request->user()->payments()->where('year', '>=', date('Y') - 1)->get();
+
         return view('profile', [
-            'user' => auth()->user(),
+            'user' => $request->user(),
             'view' => 'profile',
+            'payments' => $payments,
         ]);
     }
 
