@@ -46,6 +46,10 @@ class GeneratePaymentUpFront extends Command
                 continue;
             }
 
+            if ($user->inactivated_at) {
+                continue;
+            }
+
             $count++;
 
             $user->payments()->create([
