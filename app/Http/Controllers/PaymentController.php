@@ -5,50 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\ActivityLog;
 use App\Models\AuditLog;
 use App\Models\Payment;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function store(Request $request, User $user)
+    public function update(Request $request, Payment $payment)
     {
-        $payment = Payment::updateOrCreate([
-            'user_id' => $user->id,
-            'type' => $request->input('type'),
-            'year' => $request->input('year'),
-        ]);
+        $payment->update(['state' => request('state')]);
 
         AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => "created payment {$payment->id}",
+            'user_id' => $request->user()->id,
+            'action' => "updated payment {$payment->id}",
         ]);
 
         ActivityLog::create([
-            'performed_by' => auth()->id(),
-            'action' => 'payment-creation',
+            'performed_by' => $request->user()->id,
+            'action' => 'payment-update',
             'data' => json_encode([
                 'payment_id' => $payment->id,
+                'state' => request('state'),
             ]),
         ]);
 
         return $payment;
-    }
-
-    public function destroy(Payment $payment)
-    {
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => "deleted payment {$payment->id}",
-        ]);
-
-        ActivityLog::create([
-            'performed_by' => auth()->id(),
-            'action' => 'payment-deletion',
-            'data' => json_encode([
-                'payment_id' => $payment->id,
-            ]),
-        ]);
-
-        $payment->delete();
     }
 }

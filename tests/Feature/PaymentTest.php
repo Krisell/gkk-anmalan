@@ -21,28 +21,33 @@ test('an admin can mark user as paid', function () {
 
     $user = User::factory()->create();
 
-    $this->post("/admin/accounts/payment/{$user->id}", [
+    $payment = Payment::factory()->for($user)->create([
         'type' => 'MEMBERSHIP',
         'year' => 2022,
+        'sek_amount' => 100,
+    ]);
+
+    $this->patch("/admin/accounts/payment/{$payment->id}", [
+        'state' => 'PAID',
     ])->assertUnauthorized();
 
     loginAdmin();
 
-    $payment = $this->post("/admin/accounts/payment/{$user->id}", [
-        'type' => 'MEMBERSHIP',
-        'year' => 2022,
-    ])->assertCreated();
+    $this->patch("/admin/accounts/payment/{$payment->id}", [
+        'state' => 'PAID',
+    ])->assertOk();
 
     $this->assertDatabaseHas('audit_logs', [
         'user_id' => auth()->id(),
-        'action' => "created payment {$payment['id']}",
+        'action' => "updated payment {$payment['id']}",
     ]);
 
     $this->assertDatabaseHas(ActivityLog::class, [
         'performed_by' => auth()->id(),
-        'action' => 'payment-creation',
+        'action' => 'payment-update',
         'data' => json_encode([
             'payment_id' => $payment['id'],
+            'state' => 'PAID',
         ]),
     ]);
 
@@ -50,52 +55,62 @@ test('an admin can mark user as paid', function () {
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
         'year' => 2022,
+        'sek_amount' => 100,
+        'state' => 'PAID',
     ]);
 });
 
-test('an admin can remove a payment', function () {
+test('an admin can mark a payment as not paid', function () {
     login();
 
     $user = User::factory()->create();
 
-    $paymentA = Payment::factory()->for($user)->create(['year' => 2022]);
-    $paymentB = Payment::factory()->for($user)->create(['year' => 2021]);
+    $paymentA = Payment::factory()->for($user)->create(['year' => 2022, 'state' => 'PAID']);
+    $paymentB = Payment::factory()->for($user)->create(['year' => 2021, 'state' => 'PAID']);
 
     loginAdmin();
 
-    $this->delete("/admin/accounts/payment/{$paymentA->id}")->assertOk();
+    $this->patch("/admin/accounts/payment/{$paymentA->id}")->assertOk();
 
     $this->assertDatabaseHas('audit_logs', [
         'user_id' => auth()->id(),
-        'action' => "deleted payment {$paymentA->id}",
+        'action' => "updated payment {$paymentA->id}",
     ]);
 
-    $this->assertDatabaseMissing('payments', [
+    $this->assertDatabaseHas('payments', [
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
         'year' => 2022,
+        'state' => null,
     ]);
 
     $this->assertDatabaseHas('payments', [
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
         'year' => 2021,
+        'state' => 'PAID',
     ]);
 
-    $this->delete("/admin/accounts/payment/{$paymentB->id}")->assertOk();
+    $this->patch("/admin/accounts/payment/{$paymentB->id}")->assertOk();
 
     $this->assertDatabaseHas('audit_logs', [
         'user_id' => auth()->id(),
-        'action' => "deleted payment {$paymentB->id}",
+        'action' => "updated payment {$paymentB->id}",
     ]);
 
     $this->assertDatabaseHas(ActivityLog::class, [
         'performed_by' => auth()->id(),
-        'action' => 'payment-deletion',
+        'action' => 'payment-update',
         'data' => json_encode([
             'payment_id' => $paymentB->id,
+            'state' => null,
         ]),
     ]);
 
-    $this->assertEmpty(Payment::all());
+    $this->assertDatabaseHas('payments', [
+        'user_id' => $user->id,
+        'type' => 'MEMBERSHIP',
+        'year' => 2021,
+        'state' => null,
+    ]);
 });
