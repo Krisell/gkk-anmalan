@@ -61,6 +61,7 @@ class UserFactory extends Factory
     {
         return $this->state(fn () => [
             'inactivated_at' => now(),
+            'birth_year' => rand(1950, 2020),
         ]);
     }
 }

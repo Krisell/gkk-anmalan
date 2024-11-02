@@ -16,7 +16,8 @@ class UserSeeder extends Seeder
     {
         User::create([
             'first_name' => 'Vanlig',
-            'last_name' => 'Dödlig',
+            'last_name' => 'Användare',
+            'birth_year' => 1990,
             'email' => 'user@example.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => null,
@@ -26,6 +27,7 @@ class UserSeeder extends Seeder
         User::create([
             'first_name' => 'GKK',
             'last_name' => 'Admin',
+            'birth_year' => 1987,
             'email' => 'admin@example.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => 'admin',
@@ -35,6 +37,7 @@ class UserSeeder extends Seeder
         User::create([
             'first_name' => 'GKK',
             'last_name' => 'Superadmin',
+            'birth_year' => 1970,
             'email' => 'superadmin@example.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => 'superadmin',
@@ -42,29 +45,12 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'first_name' => 'Martin',
-            'last_name' => 'Krisell',
-            'email' => 'martin.krisell@gmail.com',
+            'first_name' => 'Annan',
+            'last_name' => 'Admin',
+            'birth_year' => 1987,
+            'email' => 'annan.admin@example.com',
             'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
             'role' => 'admin',
-            'granted_by' => 1,
-        ]);
-
-        User::create([
-            'first_name' => 'Martin',
-            'last_name' => 'Super',
-            'email' => 'martinkrisell@gmail.com',
-            'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
-            'role' => 'superadmin',
-            'granted_by' => 1,
-        ]);
-
-        User::create([
-            'first_name' => 'Martin',
-            'last_name' => 'Normal',
-            'email' => 'martinnormal@gmail.com',
-            'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
-            'role' => null,
             'granted_by' => 1,
         ]);
 

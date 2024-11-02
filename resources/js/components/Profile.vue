@@ -4,7 +4,8 @@
     <div>Inloggad som {{ user.email }}</div>
     <div style="margin-top: 30px"></div>
 
-    <div class="mt-8 flex items-center">
+    <h2 class="mt-8 mb-1 text-2xl">Avtal</h2>
+    <div class="mt-2 flex items-center">
       <Button type="secondary" @click="showMemberShipAgreement">Visa medlemsavtal</Button>
       <div class="ml-6 text-sm italic">Signerat {{ renderDate(user.membership_agreement_signed_at) }}</div>
     </div>
@@ -13,7 +14,13 @@
       <div class="ml-6 text-sm italic">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
     </div>
 
-    <h2 class="font-thin mt-6">Namn</h2>
+    <h2 class="mt-8 mb-1 text-2xl">Avgifter</h2>
+    Under utveckling.
+
+    <h2 class="mt-8 mb-1 text-2xl">Kontouppgifter</h2>
+    <h3 class="font-light mt-2 mb-2">Födelseår</h3>
+    {{ user.birth_year }}
+    <h3 class="font-light mt-6 mb-2">Namn</h3>
     <input
       type="text"
       v-model="name.first"
@@ -31,9 +38,7 @@
       <span>Uppdatera namn</span>
     </button>
 
-    <div class="my-8 border-b border-gray-200 border-1"></div>
-
-    <h2 class="font-thin">Epost</h2>
+    <h3 class="font-light mt-6 mb-2">Epost</h3>
     <input
       v-model="email"
       type="email"
@@ -46,8 +51,7 @@
       <span>Uppdatera epost</span>
     </button>
 
-    <div class="my-8 border-b border-gray-200 border-1"></div>
-
+    <h3 class="font-light mt-6 mb-2">Lösenord</h3>
     <div v-if="!isAdjusted.password">
       <button
         @click="startEdit('password')"
@@ -62,13 +66,13 @@
         v-model="password.new"
         type="password"
         placeholder="Nytt lösenord"
-        class="form-input block w-full sm:text-sm sm:leading-5"
+        class="mt-1 form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
       />
       <input
         v-model="password.new_confirmation"
         type="password"
         placeholder="Bekräfta lösenord"
-        class="mt-1 form-input block w-full sm:text-sm sm:leading-5"
+        class="mt-1 form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
       />
       <div style="display: flex">
         <button
