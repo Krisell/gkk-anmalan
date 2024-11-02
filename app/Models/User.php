@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'edited_at' => 'datetime',
+        'birth_year' => 'integer',
     ];
 
     public function eventRegistrations(): HasMany
