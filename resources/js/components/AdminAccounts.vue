@@ -49,8 +49,8 @@
     <h2 class="text-2xl font-thin text-center m-4">
       {{ accounts.length }} medlemmar har registrerat ett konto
       <i style="margin-left: 20px; cursor: pointer"
-        v-tooltip="'Kopiera epostadresserna för alla ej inaktiverade konton'" @click="copyEmails"
-        class="fa fa-clipboard"></i>
+        v-tooltip="'Klicka för att kopiera epostadresserna för alla ej inaktiverade konton'" @click="copyEmails"
+        class="fa fa-envelope"></i>
     </h2>
 
     <div class="flex flex-col">
@@ -113,11 +113,13 @@
                     <div class="ml-4">
                       <div class="text-sm leading-5 font-medium text-gray-900">
                         {{ account.first_name }} {{ account.last_name }} 
-                        <span v-if="account.licence_number" class="text-xs font-light ml-2">
-                          {{ account.licence_number }}
-                        </span>
+                        <i
+                        v-tooltip="`${account.email}<br>Klicka för att kopiera.`" @click="copyEmail(account.email)"
+                        class="fa fa-envelope-o ml-2 cursor-pointer"></i>
                       </div>
-                      <div class="text-sm leading-5 text-gray-500">{{ account.email }}</div>
+                      <span v-if="account.licence_number" class="text-xs font-light">
+                        {{ account.licence_number }}
+                      </span>
                     </div>
                   </div>
                 </td>
@@ -231,9 +233,14 @@
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div class="text-sm leading-5 font-medium text-gray-900">
-                        {{ account.first_name }} {{ account.last_name }}
+                        {{ account.first_name }} {{ account.last_name }} 
+                        <i
+                        v-tooltip="`${account.email}<br>Klicka för att kopiera.`" @click="copyEmail(account.email)"
+                        class="fa fa-envelope-o ml-2 cursor-pointer"></i>
                       </div>
-                      <div class="text-sm leading-5 text-gray-500">{{ account.email }}</div>
+                      <span v-if="account.licence_number" class="text-xs font-light">
+                        {{ account.licence_number }}
+                      </span>
                     </div>
                   </div>
                 </td>
@@ -370,6 +377,10 @@ export default {
 
       return date.substr(0, 10)
     },
+    copyEmail(email) {
+      navigator.clipboard.writeText(email)
+      this.$toast.success(`Epostadress kopierad: ${email}`)
+    },
     copyEmails() {
       navigator.clipboard.writeText(
         this.accounts
@@ -377,6 +388,8 @@ export default {
           .map((account) => account.email)
           .sort((a, b) => a.localeCompare(b))
           .join('; '),
+
+        this.$toast.success('Epostadresser kopierade')
       )
     },
     sortBy(key) {
