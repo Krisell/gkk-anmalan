@@ -47,7 +47,7 @@
     </div>
 
     <h2 class="text-2xl font-thin text-center m-4">
-      {{ accounts.length }} medlemmar har registrerat ett konto
+      Lista med {{ sortedActiveAccounts.length }} aktiva konton
       <i style="margin-left: 20px; cursor: pointer"
         v-tooltip="'Klicka för att kopiera epostadresserna för alla ej inaktiverade konton'" @click="copyEmails"
         class="fa fa-envelope"></i>
@@ -210,7 +210,7 @@
     </div>
 
     <div v-if="inactiveAccounts.length > 0" class="flex flex-col mb-8 mt-8">
-      <h2 class="text-2xl font-thin text-center m-4">Inaktiverade konton</h2>
+      <h2 class="text-2xl font-thin text-center m-4">{{ inactiveAccounts.length }} inaktiverade konton</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
