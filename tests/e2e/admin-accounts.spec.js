@@ -25,10 +25,13 @@ test('The admin can mark and unmark payments', async ({ page }) => {
     })
 
     await page.goto('/admin/accounts')
-    await page.locator('label div').click();
-    await expect(page.getByText(`Medlemsavgiften för ${otherUser.first_name} ${otherUser.last_name} har markerats som betald`)).toBeVisible()
+
+    const name = `${otherUser.first_name} ${otherUser.last_name}`
+    
+    await page.getByRole('row', { name }).locator('label div').click();
+    await expect(page.getByText(`Medlemsavgiften för ${name} har markerats som betald`)).toBeVisible()
 
     await page.reload()
-    await page.locator('label div').click();
-    await expect(page.getByText(`Medlemsavgiften för ${otherUser.first_name} ${otherUser.last_name} har markerats som obetald`)).toBeVisible()
+    await page.getByRole('row', { name }).locator('label div').click();
+    await expect(page.getByText(`Medlemsavgiften för ${name} har markerats som obetald`)).toBeVisible()
 })

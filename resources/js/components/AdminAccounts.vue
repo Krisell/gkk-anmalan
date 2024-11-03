@@ -58,7 +58,11 @@
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
           <template>
             <div>
-              <div class="relative my-4 rounded-md shadow-sm w-64 mx-auto">
+              <div class="relative my-4 w-64 ml-4 lg:mx-auto flex gap-2 text-sm font-thin">
+                <ToggleButton v-model="treasurerMode"  />
+                Kassörsläge
+              </div>
+              <div class="relative my-4 rounded-md shadow-sm w-64 ml-4 lg:mx-auto">
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                   <i class="fa fa-search text-gray-400"></i>
                 </div>
@@ -85,20 +89,24 @@
                 </th>
                 <th
                 @click="sortBy('event_registrations')"
+                  v-show="!treasurerMode"
                   class="cursor-pointer px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   v-tooltip="'Bekräftad närvaro som funktionär. Inom parentes senaste 365 dagarna'"
                 >
                   Bekr. funk.<br />(senaste 365 dagarna)
                 </th>
                 <th @click="sortBy('created_at')"
+                  v-show="!treasurerMode"
                   class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Regdatum
                 </th>
                 <th @click="sortBy('last_visited_at')"
+                  v-show="!treasurerMode"
                   class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Senaste besök
                 </th>
                 <th @click="sortBy('visits')"
+                  v-show="!treasurerMode"
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Antal besök
                 </th>
@@ -118,7 +126,7 @@
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Medl.avg. {{ getCurrentYear() - 1 }}
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                <th v-show="!treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
               </tr>
             </thead>
             <tbody class="bg-white">
@@ -138,22 +146,23 @@
                     </div>
                   </div>
                 </td>
-                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                <td v-show="!treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">
                     {{ presentTotal(account.event_registrations) }}<br />({{
                       presentLastYear(account.event_registrations)
                     }})
                   </div>
                 </td>
-                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                <td v-show="!treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">{{ dateString(account.created_at) }}</div>
                 </td>
-                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                <td v-show="!treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">
                     {{ dateString(account.last_visited_at) }}
                   </div>
                 </td>
                 <td
+                  v-show="!treasurerMode"
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   {{ account.visits }}
                 </td>
@@ -199,6 +208,7 @@
                   />
                 </td>
                 <td
+                  v-show="!treasurerMode"
                   class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                   <div class="flex items-center gap-2">
                     <div v-if="user.role === 'superadmin'">
@@ -363,6 +373,7 @@ export default {
       newAccountsString: '',
       accounts: this.initialAccounts,
       search: '',
+      treasurerMode: false,
     }
   },
   async mounted() {
