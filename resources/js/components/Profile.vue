@@ -29,10 +29,10 @@
               <div>{{payment.year }}</div>
             </div>
             <div v-if="payment.state !== 'PAID'">
-                <img @click="open(swishUrl(payment))" class="cursor-pointer w-48 mt-3 p-1 border-4 border-black rounded-lg" :src="`${qrCodes[payment.id]}`" />
+                <img @click="loadURL(swishUrl(payment))" class="cursor-pointer w-48 mt-3 p-1 border-4 border-black rounded-lg" :src="`${qrCodes[payment.id]}`" />
                 <p class="text-sm italic">Skanna för att betala med Swish</p>
                 <div class="md:hidden">
-                  <Button type="secondary" class="my-2" @click="open(swishUrl(payment))">Klicka här för att öppna Swish på denna enhet</Button>
+                  <Button type="secondary" class="my-2" @click="loadURL(swishUrl(payment))">Klicka här för att öppna Swish på denna enhet</Button>
                 </div>
                 <div class="mt-2">
                   <Button 
@@ -198,8 +198,8 @@ export default {
       this.paymentInProcess = payment
       this.$modal.show('paymentPendingModal')
     },
-    open(url) {
-      window.open(url)
+    loadURL(url) {
+      window.location = url
     },
     swishUrl(payment) {
       const msg = encodeURIComponent(`${payment.type} ${payment.year}, ${this.user.first_name} ${this.user.last_name}`)
