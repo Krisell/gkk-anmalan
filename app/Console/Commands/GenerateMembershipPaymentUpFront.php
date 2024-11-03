@@ -7,32 +7,20 @@ use Illuminate\Console\Command;
 
 use function Laravel\Prompts\select;
 
-class GeneratePaymentUpFront extends Command
+class GenerateMembershipPaymentUpFront extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'generate-payment-up-front';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
+    protected $signature = 'generate-membership-payment-up-front';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $type = select(
-            label: 'What type?',
-            options: ['MEMBERSHIP'],
-        );
-
         $year = select(
             label: 'What year?',
             options: [(string) (now()->year - 1), (string) (now()->year), (string) (now()->year + 1)],
@@ -42,7 +30,7 @@ class GeneratePaymentUpFront extends Command
 
         $count = 0;
         foreach ($users as $user) {
-            if ($user->payments()->where('type', $type)->where('year', $year)->exists()) {
+            if ($user->payments()->where('type', 'MEMBERSHIP')->where('year', $year)->exists()) {
                 continue;
             }
 
@@ -52,14 +40,16 @@ class GeneratePaymentUpFront extends Command
 
             $count++;
 
+            $discountedByAge = ((int) $year - $user->birth_year) <= 23 || ((int) $year - $user->birth_year) >= 65;
+
             $user->payments()->create([
-                'type' => $type,
+                'type' => 'MEMBERSHIP',
                 'year' => $year,
-                // The following calucaltion is only correct for MEMBERSHIP fees.
-                'sek_amount' => (int) $year - $user->birth_year <= 23 ? 700 : 1500,
+                'sek_amount' => $discountedByAge ? 700 : 1500,
+                'modifier' => $discountedByAge ? 'AGE_DISCOUNT' : null,
             ]);
         }
 
-        $this->info("{$count} payments created successfully.");
+        $this->info("{$count} membership payments created successfully.");
     }
 }

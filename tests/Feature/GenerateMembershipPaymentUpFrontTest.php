@@ -8,10 +8,9 @@ test('Membership payments can be created up front', function () {
         'birth_year' => 1970,
     ]);
 
-    $this->artisan('generate-payment-up-front')
-        ->expectsQuestion('What type?', 'MEMBERSHIP')
+    $this->artisan('generate-membership-payment-up-front')
         ->expectsQuestion('What year?', '2024')
-        ->expectsOutput('3 payments created successfully.')
+        ->expectsOutput('3 membership payments created successfully.')
         ->assertExitCode(0);
 
     $this->assertDatabaseHas(Payment::class, [
@@ -41,10 +40,9 @@ test('Users with existing payments are skipped', function () {
         'state' => null,
     ]);
 
-    $this->artisan('generate-payment-up-front')
-        ->expectsQuestion('What type?', 'MEMBERSHIP')
+    $this->artisan('generate-membership-payment-up-front')
         ->expectsQuestion('What year?', '2024')
-        ->expectsOutput('1 payments created successfully.')
+        ->expectsOutput('1 membership payments created successfully.')
         ->assertExitCode(0);
 
     $this->assertDatabaseCount(Payment::class, 3);
@@ -54,10 +52,9 @@ test('Inactivated members are skipped', function () {
     $activeUser = User::factory()->create();
     $inactiveUser = User::factory()->inactivated()->create();
 
-    $this->artisan('generate-payment-up-front')
-        ->expectsQuestion('What type?', 'MEMBERSHIP')
+    $this->artisan('generate-membership-payment-up-front')
         ->expectsQuestion('What year?', '2024')
-        ->expectsOutput('1 payments created successfully.')
+        ->expectsOutput('1 membership payments created successfully.')
         ->assertExitCode(0);
 
     $this->assertDatabaseHas(Payment::class, ['user_id' => $activeUser->id]);
