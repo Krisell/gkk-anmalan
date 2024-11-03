@@ -25,7 +25,7 @@ test('Payments can be handled on the profile page', async ({ page }) => {
 
     await page.locator('li').filter({ hasText: 'OBETALD123 SEK' }).getByRole('button').click()
     await page.getByRole('button', { name: 'Ja, betalningen är genomförd' }).click()
-    await expect(page.getByText('INVÄNTAR VERIFIERING123 SEK')).toBeVisible()
+    await expect(page.getByText('VERIFIERAS123 SEK')).toBeVisible()
 
     await update(page, 'Payment', { id: payment.id }, { state: 'PAID' })
 

@@ -15,21 +15,24 @@
         <div class="ml-6 text-sm italic">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
       </div>
 
-      <h2 class="mt-8 mb-1 text-2xl">Avgifter (under utveckling)</h2>
+      <h2 class="mt-8 mb-1 text-2xl">Avgifter</h2>
       <ul>
         <li v-for="payment in payments" :key="payment.id" class="mt-2">
           <div class="border-4 rounded p-4">
             <div v-if="!payment.state" class="bg-red-400 border-red-400 border rounded p-2 text-white rounded-r-none text-sm inline-block text-center px-6">
               OBETALD<br>{{ payment.sek_amount }} SEK
             </div>
-            <div v-else-if="payment.state === 'PENDING'" class="bg-orange-400 border-orange-400 p-2 text-white border rounded rounded-r-none text-sm inline-block text-center px-6">INVÄNTAR VERIFIERING<br>{{ payment.sek_amount }} SEK</div>
+            <div v-else-if="payment.state === 'PENDING'" class="bg-orange-400 border-orange-400 p-2 text-white border rounded rounded-r-none text-sm inline-block text-center px-6">VERIFIERAS<br>{{ payment.sek_amount }} SEK</div>
             <div v-else-if="payment.state === 'PAID'" class="bg-green-400 border-green-400 p-2 text-white border rounded rounded-r-none text-sm inline-block text-center px-6">BETALD<br>{{ payment.sek_amount }} SEK</div>
             <div class="p-2 border rounded border-gkk border-l-0 rounded-l-none text-sm inline-block text-center px-6">
               <div>{{ paymentTypeText(payment.type) }}</div>
               <div>{{payment.year }}</div>
             </div>
+            <div v-if="payment.state === 'PENDING'" class="text-sm">
+              Betalningen är giltig omedelbart och kommer verifieras i systemet av föreningens kassör senast inom några veckor.
+            </div>
             <div v-if="payment.state !== 'PAID'">
-                <img @click="loadURL(swishUrl(payment))" class="cursor-pointer w-48 mt-3 p-1 border-4 border-black rounded-lg" :src="`${qrCodes[payment.id]}`" />
+                <img class="cursor-pointer w-48 mt-3 p-1 border-4 border-black rounded-lg" :src="`${qrCodes[payment.id]}`" />
                 <p class="text-sm italic">Skanna för att betala med Swish</p>
                 <div class="md:hidden">
                   <Button type="secondary" class="my-2" @click="loadURL(swishUrl(payment))">Klicka här för att öppna Swish på denna enhet</Button>
@@ -130,7 +133,7 @@
         <h3 class="text-center text-xl mb-4">
           Har du genomfört betalningen?
         </h3>
-        <p class="text-center">Detta verifieras av vår kassör inom några veckor. Tills dess kommer det stå <i>"Inväntar verifiering"</i> här. När betalningen är verifierad kommer detta ändras till <i>"Betald"</i>.</p>
+        <p class="text-center">Detta verifieras av vår kassör inom några veckor. Tills dess kommer det stå <i>"Verifieras"</i> här. När betalningen är verifierad kommer detta ändras till <i>"Betald"</i>.</p>
       </div>
 
       <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
