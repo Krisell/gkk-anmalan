@@ -540,10 +540,10 @@ export default {
       const name = `${user.first_name} ${user.last_name}`
 
       if (this.hasPaid(user, year, paymentType)) {
-        await axios.patch(`/admin/accounts/payment/${payment.id}`, { state: null })
+        await axios.patch(`/payments/${payment.id}`, { state: null })
         this.$toast.warning(`${paymentTypeMessage} för ${name} har markerats som obetald`)
       } else {
-        await axios.patch(`/admin/accounts/payment/${payment.id}`, { state: 'PAID' })
+        await axios.patch(`/payments/${payment.id}`, { state: 'PAID' })
         this.$toast.info(`${paymentTypeMessage} för ${name} har markerats som betald`)
       }
 

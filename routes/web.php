@@ -87,6 +87,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/email', [\App\Http\Controllers\ProfileController::class, 'updateEmail']);
         Route::post('/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword']);
     });
+
+    Route::patch('/payments/{payment}', [\App\Http\Controllers\PaymentController::class, 'update']);
 });
 
 Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(function () {
@@ -94,7 +96,6 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::post('/inactivate/{user}', [\App\Http\Controllers\AccountController::class, 'inactivate']);
         Route::post('/reactivate/{user}', [\App\Http\Controllers\AccountController::class, 'reactivate']);
         Route::post('/', [\App\Http\Controllers\AdminCreateAccountsController::class, 'store']);
-        Route::patch('/payment/{payment}', [\App\Http\Controllers\PaymentController::class, 'update']);
     });
 
     Route::prefix('events')->controller(EventController::class)->group(function () {

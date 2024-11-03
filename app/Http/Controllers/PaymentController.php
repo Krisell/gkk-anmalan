@@ -11,6 +11,8 @@ class PaymentController extends Controller
 {
     public function update(Request $request, Payment $payment)
     {
+        $this->authorize('update', $payment);
+
         $payment->update(['state' => request('state')]);
 
         AuditLog::create([

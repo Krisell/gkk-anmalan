@@ -27,13 +27,13 @@ test('an admin can mark user as paid', function () {
         'sek_amount' => 100,
     ]);
 
-    $this->patch("/admin/accounts/payment/{$payment->id}", [
+    $this->patch("/payments/{$payment->id}", [
         'state' => 'PAID',
-    ])->assertUnauthorized();
+    ])->assertStatus(403);
 
     loginAdmin();
 
-    $this->patch("/admin/accounts/payment/{$payment->id}", [
+    $this->patch("/payments/{$payment->id}", [
         'state' => 'PAID',
     ])->assertOk();
 
@@ -70,7 +70,7 @@ test('an admin can mark a payment as not paid', function () {
 
     loginAdmin();
 
-    $this->patch("/admin/accounts/payment/{$paymentA->id}")->assertOk();
+    $this->patch("/payments/{$paymentA->id}")->assertOk();
 
     $this->assertDatabaseHas('audit_logs', [
         'user_id' => auth()->id(),
@@ -91,7 +91,7 @@ test('an admin can mark a payment as not paid', function () {
         'state' => 'PAID',
     ]);
 
-    $this->patch("/admin/accounts/payment/{$paymentB->id}")->assertOk();
+    $this->patch("/payments/{$paymentB->id}")->assertOk();
 
     $this->assertDatabaseHas('audit_logs', [
         'user_id' => auth()->id(),
