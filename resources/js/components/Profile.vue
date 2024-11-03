@@ -23,7 +23,11 @@
         </div>
         <div v-else class="border-4 rounded p-4">
           <span class="ml-2 mr-4 text-red-800">OBETALD</span><span>{{ paymentTypeText(payment.type) }}, {{payment.year }} <span v-if="payment.sek_amount">({{ payment.sek_amount }} SEK)</span></span>
-          <img class="w-64 mt-4" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fqr.png?alt=media&token=1692752d-65b1-4723-b36e-2f9065ade3d5">
+          <a :href="swishUrl(payment)" target="_blank">
+            <img class="w-64 mt-4" :src="`${qrCodes[payment.id]}`" />
+          </a>
+          Om du visar sidan på telefon kan du klicka på QR-koden för att öppna den i Swish.
+          Vill du betala på annat sätt?
         </div>
       </li>
     </ul> 
@@ -107,6 +111,7 @@
 <script>
 import Documents from '../modules/Documents.js'
 import Button from './ui/Button.vue'
+import QRCode from 'qrcode'
 
 export default {
   components: { Button },
@@ -136,9 +141,26 @@ export default {
       errors: {
         password: false,
       },
+      qrCodes: {},
     }
   },
+  created() {
+      this.payments.forEach(async (payment) => {
+        this.qrCodes = {
+          ...this.qrCodes,
+          [payment.id]: await this.paymentQRCode(payment),
+        }
+      })
+  },
   methods: {
+    swishUrl(payment) {
+      const msg = encodeURIComponent(`${payment.type} ${payment.year}, ${this.user.first_name} ${this.user.last_name}`)
+      
+      return `https://app.swish.nu/1/p/sw/?sw=1235813456&amt=${payment.sek_amount}&msg=${msg}`
+    },
+    paymentQRCode(payment) {
+      return QRCode.toDataURL(this.swishUrl(payment))
+    },
     paymentTypeText(paymentType) {
       return {
         MEMBERSHIP: 'Medlemsavgift',
