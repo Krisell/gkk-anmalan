@@ -11,6 +11,7 @@ test('an email is sent to the registered user', function () {
     $this->post('register', [
         'first_name' => 'Martin',
         'last_name' => 'Krisell',
+        'birth_year' => 1987,
         'email' => 'martin.krisell@gmail.com',
         'password' => 'asdasdasd',
         'password_confirmation' => 'asdasdasd',
@@ -31,6 +32,7 @@ test('an email is sent to administrators abount account granting', function () {
     $this->post('register', [
         'first_name' => 'Martin',
         'last_name' => 'Krisell',
+        'birth_year' => 1987,
         'email' => 'kurt.svensson@gmail.com',
         'password' => 'asdasdasd',
         'password_confirmation' => 'asdasdasd',
