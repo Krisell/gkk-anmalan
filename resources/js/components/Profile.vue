@@ -19,16 +19,22 @@
       <ul>
         <li v-for="payment in payments" :key="payment.id" class="mt-2">
           <div class="border-4 rounded p-4">
-            <div v-if="!payment.state" class="bg-red-400 border-red-400 border rounded p-2 text-white rounded-r-none text-sm inline-block text-center px-6">
-              OBETALD<br>{{ payment.sek_amount }} SEK
+            <div class="flex">
+              <div class="p-2 border rounded border-gkk border-r-0 rounded-r-none text-sm inline-block text-center px-6">
+                <div>{{ paymentTypeText(payment.type) }} {{payment.year }}</div>
+                <div>{{ payment.sek_amount }} SEK</div>
+              </div>
+              <div v-if="!payment.state" class="bg-red-400 border-red-400 border rounded p-2 text-white rounded-l-none text-sm text-center px-6 flex items-center">
+                OBETALD
+              </div>
+              <div v-else-if="payment.state === 'PENDING'" class="bg-orange-400 border-orange-400 p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center">
+                VERIFIERAS
+              </div>
+              <div v-else-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center">
+                BETALD
+              </div>
             </div>
-            <div v-else-if="payment.state === 'PENDING'" class="bg-orange-400 border-orange-400 p-2 text-white border rounded rounded-r-none text-sm inline-block text-center px-6">VERIFIERAS<br>{{ payment.sek_amount }} SEK</div>
-            <div v-else-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-r-none text-sm inline-block text-center px-6">BETALD<br>{{ payment.sek_amount }} SEK</div>
-            <div class="p-2 border rounded border-gkk border-l-0 rounded-l-none text-sm inline-block text-center px-6">
-              <div>{{ paymentTypeText(payment.type) }}</div>
-              <div>{{payment.year }}</div>
-            </div>
-            <div v-if="payment.state === 'PENDING'" class="text-sm">
+            <div v-if="payment.state === 'PENDING'" class="text-sm mt-2">
               Betalningen är giltig omedelbart och kommer verifieras i systemet av föreningens kassör senast inom några veckor.
             </div>
             <div v-if="payment.state !== 'PAID'">

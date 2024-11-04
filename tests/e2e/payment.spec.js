@@ -20,15 +20,15 @@ test('Payments can be handled on the profile page', async ({ page }) => {
 
     await page.goto('/profile')
 
-    await expect(page.getByText('OBETALD123 SEK')).toBeVisible()
-    await expect(page.getByText('OBETALD456 SEK')).toBeVisible()
+    await expect(await page.getByText('Medlemsavgift 2025123 SEK OBETALD')).toBeVisible()
+    await expect(await page.getByText('Tävlingslicens 2026456 SEK OBETALD')).toBeVisible()
 
-    await page.locator('li').filter({ hasText: 'OBETALD123 SEK' }).getByRole('button').click()
+    await page.locator('li').filter({ hasText: 'Medlemsavgift 2025123 SEK' }).getByRole('button').click();
     await page.getByRole('button', { name: 'Ja, betalningen är genomförd' }).click()
-    await expect(page.getByText('VERIFIERAS123 SEK')).toBeVisible()
+    await expect(await page.getByText('Medlemsavgift 2025123 SEK VERIFIERAS')).toBeVisible()
 
     await update(page, 'Payment', { id: payment.id }, { state: 'PAID' })
 
     await page.reload()
-    await expect(page.getByText('BETALD456 SEK')).toBeVisible()
+    await expect(await page.getByText('Tävlingslicens 2026456 SEK BETALD')).toBeVisible()
 })
