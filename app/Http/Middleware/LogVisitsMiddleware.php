@@ -14,9 +14,13 @@ class LogVisitsMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user() && (! auth()->user()->last_visited_at || now()->subMinutes(30)->gt(auth()->user()->last_visited_at))) {
-            auth()->user()->update([
-                'visits' => auth()->user()->visits + 1,
+        if ($request->user()?->wasLoggedInByAdmin) {
+            return $next($request);
+        }
+
+        if ($request->user() && (! $request->user()->last_visited_at || now()->subMinutes(30)->gt($request->user()->last_visited_at))) {
+            $request->user()->update([
+                'visits' => $request->user()->visits + 1,
                 'last_visited_at' => now(),
             ]);
         }

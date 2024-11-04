@@ -149,13 +149,35 @@
         </div>
       </div>
     </div>
+
+    <modal name="impersonate" :adaptive="true" height="auto">
+      <div style="padding: 30px; margin-top: 20px" class="flex flex-col gap-2 items-center">
+        <h3 style="text-align: center">
+          Ange epost eller användarid
+        </h3>
+        <input 
+          @keypress.enter="impersonate"
+          class="mx-auto" 
+          id="impersonatedUser" 
+          v-model="impersonatedUser"
+        >
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
+        <Button @click="$modal.hide('impersonate')" type="secondary" class="mx-4">Tillbaka</Button>
+        <Button @click="impersonate" type="danger">Aktivera</Button>
+      </div>
+    </modal>
   </div>
 </template>
 
 <script>
+import TypeTrigger from '@krisell/type-trigger'
+import Button from './ui/Button.vue'
 import axios from 'axios'
 
 export default {
+  components: { Button },
   props: ['user', 'site', 'view'],
   data() {
     return {
@@ -170,6 +192,7 @@ export default {
       ],
       navIsOpen: false,
       showSubMenu: false,
+      impersonatedUser: '',
     }
   },
   computed: {
@@ -181,6 +204,34 @@ export default {
     logout() {
       axios.post('/logout').then((_) => (window.location = '/insidan'))
     },
+    async impersonate() {
+      await axios.post(`/admin/impersonate/${this.impersonatedUser}`)
+      
+      window.location = '/profile'
+    },
+  },
+  mounted() {
+    TypeTrigger.register('imp', () => {
+      if (this.site !== '') {
+        return
+      }
+
+      if (! this.user || this.user.role !== 'superadmin') {
+        return
+      }
+
+      this.$modal.show('impersonate')
+      setTimeout(() => document.querySelector('#impersonatedUser').focus(), 100)
+    })
+
+    TypeTrigger.register('unimpme', async () => {
+      if (this.site !== '') {
+        return
+      }
+
+      await axios.delete('/impersonate')
+      window.location = '/profile'
+    })
   },
 }
 </script>

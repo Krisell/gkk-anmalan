@@ -51,9 +51,12 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::delete('/impersonate', [\App\Http\Controllers\ImpersonationController::class, 'delete']);
+
     Route::prefix('admin')->middleware(SuperadminMiddleware::class)->group(function () {
         Route::post('/accounts/promote/{user}', [\App\Http\Controllers\AccountController::class, 'promote']);
         Route::post('/accounts/demote/{user}', [\App\Http\Controllers\AccountController::class, 'demote']);
+        Route::post('/impersonate/{userOrId}', [\App\Http\Controllers\ImpersonationController::class, 'store']);
 
         Route::prefix('dev')->group(function () {
             Route::get('/phpinfo', [\App\Http\Controllers\DevController::class, 'phpinfo']);
