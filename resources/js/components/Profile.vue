@@ -23,7 +23,7 @@
               OBETALD<br>{{ payment.sek_amount }} SEK
             </div>
             <div v-else-if="payment.state === 'PENDING'" class="bg-orange-400 border-orange-400 p-2 text-white border rounded rounded-r-none text-sm inline-block text-center px-6">VERIFIERAS<br>{{ payment.sek_amount }} SEK</div>
-            <div v-else-if="payment.state === 'PAID'" class="bg-green-400 border-green-400 p-2 text-white border rounded rounded-r-none text-sm inline-block text-center px-6">BETALD<br>{{ payment.sek_amount }} SEK</div>
+            <div v-else-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-r-none text-sm inline-block text-center px-6">BETALD<br>{{ payment.sek_amount }} SEK</div>
             <div class="p-2 border rounded border-gkk border-l-0 rounded-l-none text-sm inline-block text-center px-6">
               <div>{{ paymentTypeText(payment.type) }}</div>
               <div>{{payment.year }}</div>
