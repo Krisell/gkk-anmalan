@@ -25,4 +25,7 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['resources/js/test/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
+  build: {
+    chunkSizeWarningLimit: 1024,
+  }
 })
