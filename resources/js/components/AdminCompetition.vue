@@ -81,7 +81,6 @@
                       <div class="text-sm leading-5 font-medium text-gray-900">
                         {{ registration.user.first_name }} {{ registration.user.last_name }}
                       </div>
-                      <div class="text-sm leading-5 text-gray-500">{{ registration.licence_number }}</div>
                     </div>
                   </div>
                 </td>
