@@ -16,13 +16,13 @@ background-position-y: 30%; background-position-x: 50%; max-height: 50vh;" class
                 </div>
                 <p class="text-xl leading-normal text-gray-500 mt-4">
                   Som medlem i GKK får man möjlighet att träna i vår fina lokal, att delta i våra gemensamma aktiviteter och att representera föreningen vid tävling om man vill.
-                  Men behöver också ställa upp vid några tillfällen varje år då vi själva arrangerar tävlingar, och som ny får man naturligtvis mycket hjälp.
+                  Man behöver också ställa upp vid några tillfällen varje år då vi själva arrangerar tävlingar, och som ny får man naturligtvis mycket hjälp.
                 </p>
 
                 <div class="mt-8">
                 <h2 class="text-xl font-extrabold tracking-tight -mb-2">Vill du bli medlem?</h2>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
-                    Börja med att läsa den information som finns här på vår hemsida, och kom till oss och provträna (se info nedan). När du har bestämt dig återkommer du till info@gkk-styrkelyft.se och berättar att du vill bli medlem och skickar med adress, namn, personnummer, telefon och mailadress. Om du är student så skickar du även med bevis på det (ex. bild från Mecenat-appen eller registreringsbevis).
+                    Börja med att läsa den information som finns här på vår hemsida, och kom till oss och provträna (se info nedan). När du har bestämt dig återkommer du till info@gkk-styrkelyft.se och berättar att du vill bli medlem samt skickar med adress, namn, personnummer, telefon och mailadress. Om du är student så skickar du även med bevis på det (ex. bild från Mecenat-appen eller registreringsbevis).
                   </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
                     Efter detta kommer faktura för medlemskap skickas ut och när den är betald är du upptagen i föreningen.
@@ -65,7 +65,7 @@ background-position-y: 30%; background-position-x: 50%; max-height: 50vh;" class
                     Till förbundet betalas en tävlingslicens in varje år och denna betalar du till GKK i samband med första tävlingsanmälan (se ovan).
                   </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
-                    Anmälningsavgifter till tävlingar står ibland föreningen för, om ekonomi finns. Ibland ges också visst bidrag för ex. resa och boende om tävlingen sker på annan ort.
+                    Anmälningsavgifter till större tävlingar står ibland föreningen för, om ekonomi finns. Ibland ges också visst bidrag för ex. resa och boende om tävlingen sker på annan ort.
                   </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
 
