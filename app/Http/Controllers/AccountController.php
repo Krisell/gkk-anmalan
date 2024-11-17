@@ -58,8 +58,9 @@ class AccountController extends Controller
             foreach ($receivers as $receiver) {
                 Mail::to($receiver)->send(new NotifyAboutNewRegistrationMail(
                     $user->email,
-                    "$user->first_name $user->last_name")
-                );
+                    "$user->first_name $user->last_name",
+                    $user->birth_year
+                ));
             }
         }
     }

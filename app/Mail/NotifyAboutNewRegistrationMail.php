@@ -13,7 +13,7 @@ class NotifyAboutNewRegistrationMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public $email, public $name) {}
+    public function __construct(public $email, public $name, public $birthYear) {}
 
     public function build()
     {
