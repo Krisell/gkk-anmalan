@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   content: ['./resources/**/*.vue', './resources/views/**/*.blade.php'],
   theme: {
     extend: {
@@ -9,5 +9,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+  plugins: [import('@tailwindcss/forms'), import('@tailwindcss/typography')],
 }

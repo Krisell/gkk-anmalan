@@ -1,5 +1,4 @@
 import File from './File.js'
-import Parser from '@krisell/parser'
 
 const PowerliftingLive = {
   download(lifters) {

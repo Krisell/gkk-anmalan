@@ -1,4 +1,4 @@
-import LiftingCast from '../modules/LiftingCast.js'
+import LiftingCast from '../../resources/js/modules/LiftingCast.js'
 
 it('Returns the empty string on missing licence number', () => {
   expect(LiftingCast.getBirthdate()).toEqual('')

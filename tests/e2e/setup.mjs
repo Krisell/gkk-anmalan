@@ -1,4 +1,4 @@
-const childProcess = require('child_process')
+import childProcess from 'child_process'
 
 const PORT = 65456
 
@@ -7,7 +7,7 @@ function exec(cmd, env = {}) {
     childProcess.execSync(cmd, { stdio: 'inherit', env: { ...env, ...process.env } })
 }
 
-async function globalSetup(config) {
+export default async function globalSetup(config) {
     exec('php artisan route:cache', { APP_ENV: 'testing' })
     exec('touch database/e2e.sqlite')
     exec('php artisan migrate:fresh --database=sqlite-e2e')
@@ -34,5 +34,3 @@ then
 fi`)
     }
 }
-
-export default globalSetup

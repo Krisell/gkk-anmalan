@@ -1,12 +1,9 @@
 import { devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 
-/**
- * @see https://playwright.dev/docs/test-configuration
- * @type {import('@playwright/test').PlaywrightTestConfig}
- */
-const config = {
+export default defineConfig({
   testDir: './tests/e2e',
-  globalSetup: require.resolve('./tests/e2e/setup.js'),
+  globalSetup: require.resolve('./tests/e2e/setup.mjs'),
   timeout: 30 * 1000,
   expect: {
     timeout: 5000
@@ -30,6 +27,4 @@ const config = {
     },
   ],
   outputDir: 'test-results/',
-};
-
-module.exports = config;
+});
