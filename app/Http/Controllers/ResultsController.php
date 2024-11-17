@@ -32,7 +32,7 @@ class ResultsController extends Controller
         ActivityLog::create([
             'performed_by' => auth()->id(),
             'action' => 'result-creation',
-            'data' => json_encode($data),
+            'data' => \json_encode($data),
         ]);
 
         return Result::create($data);
@@ -43,7 +43,7 @@ class ResultsController extends Controller
         ActivityLog::create([
             'performed_by' => auth()->id(),
             'action' => 'result-deletion',
-            'data' => json_encode([
+            'data' => \json_encode([
                 'result_id' => $result->id,
             ]),
         ]);

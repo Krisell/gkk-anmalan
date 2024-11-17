@@ -32,7 +32,7 @@ class AdminCreateAccountsController extends Controller
         ActivityLog::create([
             'performed_by' => auth()->id(),
             'action' => 'account-batch-creation',
-            'data' => json_encode([
+            'data' => \json_encode([
                 'accounts' => $newAccounts,
             ]),
         ]);

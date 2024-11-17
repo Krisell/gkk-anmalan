@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'connections' => [
         'sqlite-e2e' => [
             'driver' => 'sqlite',
@@ -25,7 +24,7 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
+            'options' => \extension_loaded('pdo_mysql') ? \array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
@@ -50,5 +49,4 @@ return [
         'table' => 'migrations',
         'update_date_on_publish' => false, // disable to preserve original behavior for existing applications
     ],
-
 ];

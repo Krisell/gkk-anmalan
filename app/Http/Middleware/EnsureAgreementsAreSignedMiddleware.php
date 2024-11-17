@@ -29,31 +29,37 @@ class EnsureAgreementsAreSignedMiddleware
     private function bothAgreementsAreSigned(User $user)
     {
         $membership = $user->membership_agreement_signed_at;
+
         if (! $membership) {
             return false;
         }
 
         $membership = Carbon::parse($membership);
+
         if ($membership->lessThan(now()->subYear())) {
             return false;
         }
 
         $lastUpdatedMembershipAgreement = config('agreements.membership.last_updated_at');
+
         if ($lastUpdatedMembershipAgreement && $membership->lessThan($lastUpdatedMembershipAgreement)) {
             return false;
         }
 
         $antiDoping = $user->anti_doping_agreement_signed_at;
+
         if (! $antiDoping) {
             return false;
         }
 
         $antiDoping = Carbon::parse($antiDoping);
+
         if ($antiDoping->lessThan(now()->subYear())) {
             return false;
         }
 
         $lastUpdatedAntiDopingAgreement = config('agreements.anti_doping.last_updated_at');
+
         if ($lastUpdatedAntiDopingAgreement && $antiDoping->lessThan($lastUpdatedAntiDopingAgreement)) {
             return false;
         }

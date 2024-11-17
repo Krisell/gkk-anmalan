@@ -23,3 +23,5 @@ public/js/app.js.LICENSE.txt
 /test-results/
 /playwright-report/
 /playwright/.cache/
+.pint.cache
+

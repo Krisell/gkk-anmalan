@@ -53,13 +53,13 @@ class AccountController extends Controller
         Mail::to($user->email)->send(new AccountGrantedMail);
 
         if (config('gkk.new-member-receivers')) {
-            $receivers = collect(explode(',', config('gkk.new-member-receivers')))->map(fn ($email) => trim($email));
+            $receivers = collect(\explode(',', config('gkk.new-member-receivers')))->map(fn ($email) => \trim($email));
 
             foreach ($receivers as $receiver) {
                 Mail::to($receiver)->send(new NotifyAboutNewRegistrationMail(
                     $user->email,
                     "$user->first_name $user->last_name",
-                    $user->birth_year
+                    $user->birth_year,
                 ));
             }
         }

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
 
-return Application::configure(basePath: dirname(__DIR__))
+return Application::configure(basePath: \dirname(__DIR__))
     ->withProviders()
     ->withRouting(
         using: function () {
@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             if (app()->environment() === 'testing') {
                 Route::middleware('web')->group(base_path('/routes/e2e.php'));
             }
-        }
+        },
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectGuestsTo(fn () => route('login'));

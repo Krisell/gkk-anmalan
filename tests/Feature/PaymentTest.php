@@ -45,7 +45,7 @@ test('an admin can mark user as paid', function () {
     $this->assertDatabaseHas(ActivityLog::class, [
         'performed_by' => auth()->id(),
         'action' => 'payment-update',
-        'data' => json_encode([
+        'data' => \json_encode([
             'payment_id' => $payment['id'],
             'state' => 'PAID',
         ]),
@@ -101,7 +101,7 @@ test('an admin can mark a payment as not paid', function () {
     $this->assertDatabaseHas(ActivityLog::class, [
         'performed_by' => auth()->id(),
         'action' => 'payment-update',
-        'data' => json_encode([
+        'data' => \json_encode([
             'payment_id' => $paymentB->id,
             'state' => null,
         ]),

@@ -23,7 +23,7 @@ class PaymentController extends Controller
         ActivityLog::create([
             'performed_by' => $request->user()->id,
             'action' => 'payment-update',
-            'data' => json_encode([
+            'data' => \json_encode([
                 'payment_id' => $payment->id,
                 'state' => request('state'),
             ]),

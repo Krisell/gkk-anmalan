@@ -121,7 +121,7 @@ test('an admin can add an additional user to an event', function () {
         'performed_by' => auth()->id(),
         'user_id' => $user->id,
         'action' => 'event-registration',
-        'data' => json_encode([
+        'data' => \json_encode([
             'event_id' => $event->id,
         ]),
     ]);

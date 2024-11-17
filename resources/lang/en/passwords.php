@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Password Reset Language Lines
@@ -18,5 +17,4 @@ return [
     'throttled' => 'Vänligen vänta innan nya försök görs.',
     'token' => 'Ogiltig begäran.',
     'user' => 'Vi kan inte hitta något konto med denna epost.',
-
 ];

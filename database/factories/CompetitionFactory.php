@@ -22,7 +22,7 @@ class CompetitionFactory extends Factory
     public function definition()
     {
         return [
-            'date' => now()->addDays(random_int(10, 30)),
+            'date' => now()->addDays(\random_int(10, 30)),
             'name' => $this->faker->name,
             'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
         ];

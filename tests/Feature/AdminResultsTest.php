@@ -22,7 +22,7 @@ test('an administrator can add a result', function () {
     $this->assertDatabaseHas(ActivityLog::class, [
         'performed_by' => auth()->id(),
         'action' => 'result-creation',
-        'data' => json_encode($data),
+        'data' => \json_encode($data),
     ]);
 });
 
@@ -38,7 +38,7 @@ test('an administrator can delete a result', function () {
     $this->assertDatabaseHas(ActivityLog::class, [
         'performed_by' => auth()->id(),
         'action' => 'result-deletion',
-        'data' => json_encode([
+        'data' => \json_encode([
             'result_id' => $result->id,
         ]),
     ]);

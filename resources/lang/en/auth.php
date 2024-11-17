@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Language Lines
@@ -15,5 +14,4 @@ return [
 
     'failed' => 'Kunde inte logga in med dessa användaruppgifter.',
     'throttle' => 'För många inloggningsförsök. Vänta en stund innan du försöker igen.',
-
 ];

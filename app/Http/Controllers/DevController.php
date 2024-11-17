@@ -11,7 +11,7 @@ class DevController extends Controller
 
     public function opcache()
     {
-        if (! function_exists('opcache_get_status')) {
+        if (! \function_exists('opcache_get_status')) {
             return 'Opcache is not enabled';
         }
 

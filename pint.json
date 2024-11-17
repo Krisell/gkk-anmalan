@@ -1,0 +1,50 @@
+{
+    "preset": "laravel",
+    "rules": {
+      "native_function_invocation": {
+        "include": ["@internal"]
+      },
+      "trailing_comma_in_multiline": {
+        "elements": ["arrays", "arguments", "parameters", "match"]
+      },
+      "blank_line_before_statement": {
+        "statements": [
+          "break",
+          "continue",
+          "for",
+          "foreach",
+          "if",
+          "include",
+          "include_once",
+          "require",
+          "require_once",
+          "return",
+          "switch",
+          "throw",
+          "try",
+          "phpdoc"
+        ]
+      },
+      "no_extra_blank_lines": {
+        "tokens": [
+          "attribute",
+          "break",
+          "case",
+          "continue",
+          "curly_brace_block",
+          "default",
+          "extra",
+          "parenthesis_brace_block",
+          "return",
+          "square_brace_block",
+          "switch",
+          "throw",
+          "use",
+          "use_trait"
+        ]
+      }
+    },
+    "exclude": ["Docker"],
+    "cache-file": ".pint.cache"
+  }
+  

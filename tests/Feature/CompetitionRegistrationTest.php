@@ -42,13 +42,13 @@ test('a competition registration can be updated given the required data', functi
     $registration = CompetitionRegistration::factory()->create([
         'user_id' => $user->id,
         'competition_id' => $competition->id,
-        'events' => json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
+        'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => false, 'bp' => false]),
     ]);
     $this->post("/competitions/{$competition->id}/registrations", \array_merge($registration->toArray(), [
         'events' => \json_encode(['ksl' => true, 'kbp' => true, 'sl' => true, 'bp' => false]),
     ]))->assertStatus(200);
 
-    $this->assertEquals(true, json_decode($registration->fresh()->events, true)['sl']);
+    $this->assertEquals(true, \json_decode($registration->fresh()->events, true)['sl']);
 });
 
 test('licence number is not required to decline a competition', function () {

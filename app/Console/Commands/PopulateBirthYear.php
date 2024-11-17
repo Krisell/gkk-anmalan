@@ -31,7 +31,7 @@ class PopulateBirthYear extends Command
         $users = User::whereNull('birth_year')->whereNotNull('licence_number')->get();
 
         $users->each(function ($user) {
-            $shortYear = (int) substr($user->licence_number, 0, 2);
+            $shortYear = (int) \substr($user->licence_number, 0, 2);
             $user->update(['birth_year' => ($shortYear >= 40 ? 1900 : 2000) + $shortYear]);
         });
 

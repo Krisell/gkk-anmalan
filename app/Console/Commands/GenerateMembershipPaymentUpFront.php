@@ -29,6 +29,7 @@ class GenerateMembershipPaymentUpFront extends Command
         $users = User::all();
 
         $count = 0;
+
         foreach ($users as $user) {
             if ($user->payments()->where('type', 'MEMBERSHIP')->where('year', $year)->exists()) {
                 continue;

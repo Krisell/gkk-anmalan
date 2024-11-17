@@ -113,7 +113,7 @@ class EventController extends Controller
             'performed_by' => auth()->id(),
             'action' => 'event-registration',
             'user_id' => request('user_id'),
-            'data' => json_encode([
+            'data' => \json_encode([
                 'event_id' => $event->id,
             ]),
         ]);
