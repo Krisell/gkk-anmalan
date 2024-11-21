@@ -1,8 +1,14 @@
-import Vue from 'vue/dist/vue.esm.js'
+import { createApp, configureCompat } from 'vue'
+
+configureCompat({ 
+  WATCH_ARRAY: false, 
+  RENDER_FUNCTION: false,
+  COMPONENT_ASYNC: false,
+})
+
 import ToastPlugin from 'vue-toast-notification'
+import FloatingVue from 'floating-vue'
 import 'vue-toast-notification/dist/theme-bootstrap.css'
-import VModal from 'vue-js-modal'
-import VTooltip from 'v-tooltip'
 import axios from 'axios'
 
 import Link from './components/Link.vue'
@@ -51,13 +57,19 @@ if (typeof window.firebase.analytics === 'function') {
   window.firebase.analytics()
 }
 
-window.Vue = Vue
-Vue.config.ignoredElements = ['trix-editor']
-Vue.use(VModal)
-Vue.use(VTooltip)
-Vue.use(ToastPlugin)
+const app = createApp({
+  config: {
+    isCustomComponent: tag => tag.startsWith('trix-editor')
+  }
+});
 
-Vue.mixin({
+
+app.use(ToastPlugin)
+app.use(FloatingVue)
+
+import 'floating-vue/dist/style.css'
+
+app.mixin({
   methods: {
     location(url) {
       window.location = url
@@ -71,34 +83,31 @@ Vue.mixin({
   },
 })
 
-Vue.component('GkkLink', Link)
-Vue.component('GkkNews', News)
-Vue.component('GkkLogin', Login)
-Vue.component('GkkEvent', Event)
-Vue.component('GkkHeader', Header)
-Vue.component('GkkEvents', Events)
-Vue.component('GkkProfile', Profile)
-Vue.component('GkkRecords', Records)
-Vue.component('GkkAdminNews', AdminNews)
-Vue.component('GkkDocuments', Documents)
-Vue.component('GkkEventCard', EventCard)
-Vue.component('GkkNavigation', Navigation)
-Vue.component('GkkActionCard', ActionCard)
-Vue.component('GkkAdminEvent', AdminEvent)
-Vue.component('GkkAgreements', Agreements)
-Vue.component('GkkAdminEvents', AdminEvents)
-Vue.component('GkkCompetition', Competition)
-Vue.component('GkkAdminResults', AdminResults)
-Vue.component('GkkCompetitions', Competitions)
-Vue.component('GkkAdminAccounts', AdminAccounts)
-Vue.component('GkkAdminDocuments', AdminDocuments)
-Vue.component('GkkAdminNewsEmail', AdminNewsEmail)
-Vue.component('GkkCompetitionCard', CompetitionCard)
-Vue.component('GkkAdminCompetition', AdminCompetition)
-Vue.component('GkkAdminCompetitions', AdminCompetitions)
-Vue.component('LagSM', LagSM)
+app.component('GkkLink', Link)
+app.component('GkkNews', News)
+app.component('GkkLogin', Login)
+app.component('GkkEvent', Event)
+app.component('GkkHeader', Header)
+app.component('GkkEvents', Events)
+app.component('GkkProfile', Profile)
+app.component('GkkRecords', Records)
+app.component('GkkAdminNews', AdminNews)
+app.component('GkkDocuments', Documents)
+app.component('GkkEventCard', EventCard)
+app.component('GkkNavigation', Navigation)
+app.component('GkkActionCard', ActionCard)
+app.component('GkkAdminEvent', AdminEvent)
+app.component('GkkAgreements', Agreements)
+app.component('GkkAdminEvents', AdminEvents)
+app.component('GkkCompetition', Competition)
+app.component('GkkAdminResults', AdminResults)
+app.component('GkkCompetitions', Competitions)
+app.component('GkkAdminAccounts', AdminAccounts)
+app.component('GkkAdminDocuments', AdminDocuments)
+app.component('GkkAdminNewsEmail', AdminNewsEmail)
+app.component('GkkCompetitionCard', CompetitionCard)
+app.component('GkkAdminCompetition', AdminCompetition)
+app.component('GkkAdminCompetitions', AdminCompetitions)
+app.component('LagSM', LagSM)
 
-// eslint-disable-next-line no-new
-new Vue({
-  el: '#app',
-})
+app.mount('#app')

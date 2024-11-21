@@ -252,25 +252,24 @@
       </div>
     </form>
 
-    <modal name="delete-event" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">Är du säker på att du vill radera {{ selectedEvent && selectedEvent.name }}?</h3>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('delete-event')">Nej</el-button>
-        <el-button style="margin-left: 10px" danger primary @click="deleteEvent">Radera</el-button>
-      </div>
-    </modal>
+    <Modal ref="deleteEventModal" :title="`Är du säker på att du vill radera ${ selectedEvent && selectedEvent.name }?`">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click="close">Nej</Button>
+          <Button type="danger" @click="deleteEvent">Radera</Button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script>
+import Modal from './ui/Modal.vue'
 import Button from './ui/Button.vue'
 import ToggleButton from './ui/ToggleButton.vue'
 
 export default {
-  components: { Button, ToggleButton },
+  components: { Button, ToggleButton, Modal },
   props: ['events', 'showingOld'],
   data() {
     return {
@@ -305,8 +304,7 @@ export default {
     },
     confirmDelete(event) {
       this.selectedEvent = event
-      console.log(event)
-      this.$modal.show('delete-event')
+      this.$refs.deleteEventModal.show()
     },
     deleteEvent() {
       window.axios.delete(`/admin/events/${this.selectedEvent.id}`).then(() => window.location.reload())

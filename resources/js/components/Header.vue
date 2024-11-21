@@ -136,7 +136,7 @@
           <div>
             <i v-if="showSubMenu" class="md:hidden fa fa-times-circle-o cursor-pointer z-10 text-3xl absolute left-2 top-0 text-white" @click="showSubMenu = false"></i>
             <nav class="-mb-px flex flex-col fixed h-screen top-[64px] bg-gkk pt-12 w-[210px]" aria-label="Tabs">
-              <a v-for="tab in tabs" :key="tab.name" :href="tab.href" v-if="(!tab.admin) || isAdmin"
+              <a v-for="tab in tabs" :key="tab.name" :href="tab.href" v-show="(!tab.admin) || isAdmin"
                 class="ml-4 mb-3 mt-2 group inline-flex items-center py-2 px-1 font-medium text-sm text-white" 
                 >
                 <i class="mr-2 fa" :class="`fa-${tab.icon}`"></i>
@@ -150,23 +150,20 @@
       </div>
     </div>
 
-    <modal name="impersonate" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px" class="flex flex-col gap-2 items-center">
-        <h3 style="text-align: center">
-          Ange epost eller användarid
-        </h3>
+    <Modal ref="impersonationModal" title="Ange epost eller användarid">
+      <div class="flex flex-col gap-2 items-center">
         <input 
           @keypress.enter="impersonate"
-          class="mx-auto" 
+          class="mx-auto border p-2 rounded" 
           id="impersonatedUser" 
-          v-model="impersonatedUser"
-        >
+          v-model="impersonatedUser">
       </div>
-
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button @click="$modal.hide('impersonate')" type="secondary" class="mx-4">Tillbaka</Button>
-        <Button @click="impersonate" type="danger">Aktivera</Button>
-      </div>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button @click="close" type="secondary">Tillbaka</Button>
+          <Button @click="impersonate" type="danger">Aktivera</Button>
+        </div>
+      </template>
     </modal>
   </div>
 </template>
@@ -174,10 +171,11 @@
 <script>
 import TypeTrigger from '@krisell/type-trigger'
 import Button from './ui/Button.vue'
+import Modal from './ui/Modal.vue'
 import axios from 'axios'
 
 export default {
-  components: { Button },
+  components: { Button, Modal },
   props: ['user', 'site', 'view'],
   data() {
     return {
@@ -220,8 +218,10 @@ export default {
         return
       }
 
-      this.$modal.show('impersonate')
-      setTimeout(() => document.querySelector('#impersonatedUser').focus(), 100)
+      setTimeout(() => {
+        this.$refs.impersonationModal.show() 
+        document.querySelector('#impersonatedUser').focus()
+      }, 100)
     })
 
     TypeTrigger.register('unimpme', async () => {

@@ -275,27 +275,24 @@
       </div>
     </form>
 
-    <modal name="delete-competition" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">
-          Är du säker på att du vill radera {{ selectedCompetition && selectedCompetition.name }}?
-        </h3>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('delete-competition')">Nej</el-button>
-        <el-button style="margin-left: 10px" danger primary @click="deleteCompetition">Radera</el-button>
-      </div>
-    </modal>
+    <Modal ref="deleteCompetitionModal" :title="`Är du säker på att du vill radera ${ selectedCompetition && selectedCompetition.name }?`">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click="close">Nej</Button>
+          <Button type="danger" @click="deleteCompetition">Radera</Button>
+        </div>
+        </template>
+    </Modal>
   </div>
 </template>
 
 <script>
 import ToggleButton from './ui/ToggleButton.vue'
 import Button from './ui/Button.vue'
+import Modal from './ui/Modal.vue'
 
 export default {
-  components: { ToggleButton, Button },
+  components: { ToggleButton, Button, Modal },
   props: ['competitions', 'showingOld'],
   data() {
     return {
@@ -337,7 +334,7 @@ export default {
     },
     confirmDelete(competition) {
       this.selectedCompetition = competition
-      this.$modal.show('delete-competition')
+      this.$refs.deleteCompetitionModal.show()
     },
     deleteCompetition() {
       window.axios.delete(`/admin/competitions/${this.selectedCompetition.id}`).then(this.reload)
