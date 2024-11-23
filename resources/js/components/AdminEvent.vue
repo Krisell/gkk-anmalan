@@ -58,7 +58,10 @@
             <tbody class="bg-white">
               <tr v-for="registration in filteredRegistrations" :key="registration.id">
                 <td class="text-center">
-                  <ToggleButton @input="save(registration)" v-model="registration.presence_confirmed" color="#314270" />
+                  <ToggleButton 
+                    @update:modelValue="$event => save(registration, $event)" 
+                    :modelValue="registration.presence_confirmed" 
+                  />
                 </td>
 
                 <td class="text-center">
@@ -227,10 +230,10 @@ export default {
     dateString(date) {
       return date.substr(0, 10)
     },
-    save(registration) {
+    save(registration, $event) {
       const name = `${registration.user.first_name} ${registration.user.last_name}`
 
-      if (registration.presence_confirmed) {
+      if ($event) {
         this.$toast.success(`Närvaro bekräftad för ${name}`)
       } else {
         this.$toast.warning(`Närvaro borttagen för ${name}`)
@@ -239,7 +242,10 @@ export default {
       return axios({
         url: `/events/${this.event.id}/registrations/${registration.id}`,
         method: 'post',
-        data: registration,
+        data: {
+          ...registration,
+          presence_confirmed: $event,
+        },
       })
     },
     async addUser() {

@@ -4,6 +4,7 @@ configureCompat({
   WATCH_ARRAY: false, 
   RENDER_FUNCTION: false,
   COMPONENT_ASYNC: false,
+  COMPONENT_V_MODEL: false,
 })
 
 import ToastPlugin from 'vue-toast-notification'

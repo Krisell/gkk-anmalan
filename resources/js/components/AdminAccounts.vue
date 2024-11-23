@@ -173,36 +173,32 @@
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <ToggleButton 
                     v-if="showPaymentToggle(account, 2025, 'SSFLICENSE')" 
-                    @input="updatePayment(account, 2025, 'SSFLICENSE')"
-                    :value="hasPaid(account, 2025, 'SSFLICENSE')" 
-                    color="#314270" 
+                    @update:modelValue="updatePayment(account, 2025, 'SSFLICENSE')"
+                    :modelValue="hasPaid(account, 2025, 'SSFLICENSE')" 
                   />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <ToggleButton 
                     v-if="showPaymentToggle(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
-                    @input="updatePayment(account, getCurrentYear() + 1, 'MEMBERSHIP')"
-                    :value="hasPaid(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
-                    color="#314270"
+                    @update:modelValue="$event => updatePayment(account, getCurrentYear() + 1, 'MEMBERSHIP')"
+                    :modelValue="hasPaid(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
                   />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <ToggleButton 
                     v-if="showPaymentToggle(account, getCurrentYear(), 'MEMBERSHIP')" 
-                    @input="updatePayment(account, getCurrentYear(), 'MEMBERSHIP')"
-                    :value="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" 
-                    color="#314270"
+                    @update:modelValue="updatePayment(account, getCurrentYear(), 'MEMBERSHIP')"
+                    :modelValue="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" 
                   />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <ToggleButton 
                     v-if="showPaymentToggle(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
-                    @input="updatePayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
-                    :value="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
-                    color="#314270"
+                    @update:modelValue="updatePayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
+                    :modelValue="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
                   />
                 </td>
                 <td
