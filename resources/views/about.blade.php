@@ -22,6 +22,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 <p class="text-xl leading-normal text-gray-500"><b>Bankgiro:</b> 846-0891</p>
                 <p class="text-xl leading-normal text-gray-500"><b>Swish:</b> 123-581 34 56</p>
                 <img width="200px" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fqr.png?alt=media&token=1692752d-65b1-4723-b36e-2f9065ade3d5">
+                <a class="border-lg border border-black mt-2 p-2 rounded inline-block hover:bg-gray-100" href="https://app.swish.nu/1/p/sw/?sw=1235813456">Om du är på mobil, klicka här för att öppna Swish</a>
 
                 <p class="text-xl leading-normal text-gray-500 mt-4 mb-4">Varmt välkommen att hälsa på och träna ett pass med oss!</p>
                   
