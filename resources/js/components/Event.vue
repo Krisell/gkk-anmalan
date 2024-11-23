@@ -46,22 +46,22 @@
           ></textarea>
         </div>
         <div class="mt-2 flex flex-col justify-center items-center">
-          <Button v-if="registration && canHelp" style="margin-bottom: 10px" @click="register(true)"
+          <Button v-if="registration && canHelp" style="margin-bottom: 10px" @click.prevent="register(true)"
             ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan delta</Button
           >
-          <Button type="secondary" v-if="!registration || !canHelp" style="margin-bottom: 10px" @click="register(true)"
+          <Button type="secondary" v-if="!registration || !canHelp" style="margin-bottom: 10px" @click.prevent="register(true)"
             >Jag kan delta</Button
           >
 
-          <Button type="danger" v-if="registration && !canHelp" style="margin-bottom: 30px" @click="register(false)"
+          <Button type="danger" v-if="registration && !canHelp" style="margin-bottom: 30px" @click.prevent="register(false)"
             ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan inte hjälpa till</Button
           >
-          <Button type="secondary" v-if="!registration || canHelp" style="margin-bottom: 30px" @click="register(false)"
+          <Button type="secondary" v-if="!registration || canHelp" style="margin-bottom: 30px" @click.prevent="register(false)"
             >Jag kan inte hjälpa till</Button
           >
 
           <Button v-if="justSaved" type="secondary" disabled style="margin-bottom: 10px">Sparat!</Button>
-          <Button v-else type="secondary" style="margin-bottom: 10px" @click="save">Spara</Button>
+          <Button v-else type="secondary" style="margin-bottom: 10px" @click.prevent="save">Spara</Button>
         </div>
         <div v-if="registrationStatus === 'error'">
           <Message danger style="margin-top: 20px"> Kunde inte skicka, kontrollera inmatning och anlutning. </Message>
@@ -159,6 +159,8 @@ export default {
 
           this.justSaved = true
           setTimeout(() => (this.justSaved = false), 2000)
+
+          console.log(response)
         })
         .catch((err) => {
           this.registrationStatus = 'error'
