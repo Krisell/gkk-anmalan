@@ -154,11 +154,8 @@
         </div>
         <div class="flex justify-center mt-6">
           <Button
-            @click="
-              chosenFolder = folder
-              $modal.show('add-document')
-            "
-            ><i class="fa fa-plus mr-2"></i>Nytt dokument i mappen {{ folder.name }}</Button
+            @click="addDocumentToFolder(folder)"
+          ><i class="fa fa-plus mr-2"></i>Nytt dokument i mappen {{ folder.name }}</Button
           >
         </div>
       </div>
@@ -167,47 +164,42 @@
         <div class="text-lg font-thin mt-2">Ny mapp</div>
         <input
           v-model="newFolderName"
-          class="my-2 m-auto appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="my-2 m-auto appearance-none rounded relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           name="name"
         />
         <Button @click="newFolder"><i class="fa fa-plus mr-2"></i>Skapa ny mapp</Button>
       </div>
     </div>
 
-    <modal name="delete-document" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">
-          Är du säker på att du vill radera {{ selectedDocument && selectedDocument.name }}?
-        </h3>
-      </div>
+    <Modal ref="deleteDocumentModal" :title="`Är du säker på att du vill radera ${selectedDocument && selectedDocument.name}?`">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click="close">Nej</Button>
+          <Button type="danger" @click="deleteDocument">Radera</Button>
+        </div>
+      </template>
+    </Modal>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button type="secondary" @click="$modal.hide('delete-document')">Nej</Button>
-        <Button style="margin-left: 10px" type="danger" @click="deleteDocument">Radera</Button>
-      </div>
-    </modal>
-
-    <modal name="edit-document" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px" v-if="selectedDocument">
-        <h3 style="text-align: center">Redigera dokumentets namn</h3>
+    <Modal ref="editDocumentModal" title="Redigera dokumentets namn">
+      <div v-if="selectedDocument">
         <div class="mt-1 relative rounded-md shadow-sm">
           <input
             type="text"
             v-model="selectedDocument.name"
-            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
           />
         </div>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button type="secondary" @click="$modal.hide('edit-document')">Stäng</Button>
-        <Button style="margin-left: 10px" type="danger" @click="editDocument">Uppdatera namn</Button>
-      </div>
-    </modal>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click="close">Stäng</Button>
+          <Button type="danger" @click="editDocument">Uppdatera namn</Button>
+        </div>
+      </template>
+    </Modal>
 
-    <modal name="add-document" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h1 class="text-2xl font-thin mt-0 mb-6 text-center">Lägg till dokument/länk</h1>
+    <Modal ref="addDocumentModal" title="Lägg till dokument/länk">
         <div class="flex mb-6 items-center justify-center bg-grey-lighter">
           <h1 class="p-10 text-center">Ladda upp en fil, eller ange valfri URL till en fil eller webbsida.</h1>
           <label
@@ -231,7 +223,7 @@
             type="text"
             v-model="newDocument.name"
             placeholder="Namn"
-            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
           />
         </div>
         <div class="mt-1 relative rounded-md shadow-sm">
@@ -239,29 +231,31 @@
             type="text"
             v-model="newDocument.url"
             placeholder="URL"
-            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
           />
         </div>
-      </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button type="secondary" @click="$modal.hide('add-document')">Stäng</Button>
-        <Button style="margin-left: 10px" type="danger" @click="addDocument">Lägg till dokument</Button>
-      </div>
-    </modal>
+        <template #footer="{ close }">
+          <div class="flex gap-2 items-center justify-center mt-4">
+            <Button type="secondary" @click="close">Stäng</Button>
+            <Button type="danger" @click="addDocument">Lägg till dokument</Button>
+          </div>
+        </template>
+    </Modal>
 
-    <modal name="edit-folder" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px" v-if="selectedFolder">
-        <h3 style="text-align: center">Redigera mappens namn</h3>
+    <Modal ref="editFolderModal" title="Redigera mappens namn">
+      <div v-if="selectedFolder">
         <div class="mt-1 relative rounded-md shadow-sm">
-          <input v-model="selectedFolder.name" class="form-input block w-full sm:text-sm sm:leading-5" />
+          <input v-model="selectedFolder.name" class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border" />
         </div>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button type="secondary" @click="$modal.hide('edit-folder')">Stäng</Button>
-        <Button style="margin-left: 10px" type="danger" @click="editFolderConfirm">Uppdatera namn</Button>
-      </div>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click="close">Stäng</Button>
+          <Button type="danger" @click="editFolderConfirm">Uppdatera namn</Button>
+        </div>
+      </template>
     </modal>
   </div>
 </template>
@@ -269,9 +263,10 @@
 <script>
 import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
 import Button from './ui/Button.vue'
+import Modal from './ui/Modal.vue'
 
 export default {
-  components: { Button },
+  components: { Button, Modal },
   props: ['jwt', 'folders'],
   data() {
     return {
@@ -342,6 +337,10 @@ export default {
       await window.axios.delete(`/admin/document-folders/${folder.id}`)
       window.location.reload()
     },
+    addDocumentToFolder(folder) {
+      this.chosenFolder = folder
+      this.$refs.addDocumentModal.show()
+    },
     addDocument() {
       if (this.newDocument.name.length === 0 || this.newDocument.url.length === 0) {
         return
@@ -360,14 +359,14 @@ export default {
     },
     confirmDelete(document) {
       this.selectedDocument = JSON.parse(JSON.stringify(document))
-      this.$modal.show('delete-document')
+      this.$refs.deleteDocumentModal.show()
     },
     deleteDocument() {
       window.axios.delete(`/admin/documents/${this.selectedDocument.id}`).then(() => window.location.reload())
     },
     confirmEdit(document) {
       this.selectedDocument = JSON.parse(JSON.stringify(document))
-      this.$modal.show('edit-document')
+      this.$refs.editDocumentModal.show()
     },
     editDocument() {
       window.axios
@@ -376,7 +375,7 @@ export default {
     },
     editFolder(folder) {
       this.selectedFolder = JSON.parse(JSON.stringify(folder))
-      this.$modal.show('edit-folder')
+      this.$refs.editFolderModal.show()
     },
     async editFolderConfirm() {
       await window.axios.post(`/admin/document-folders/${this.selectedFolder.id}`, {

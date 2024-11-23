@@ -112,7 +112,7 @@
         />
       </div>
       <div class="flex mt-4">
-        <Button @click="createResult">Skapa resultat</Button>
+        <Button @click.prevent="createResult">Skapa resultat</Button>
       </div>
 
       <div v-if="createResultError" class="mt-2">
@@ -232,7 +232,7 @@
                     </div>
                   </td>
                   <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <i @click="remove(result)" class="fa fa-trash cursor-pointer"></i>
+                    <i @click.prevent="remove(result)" class="fa fa-trash cursor-pointer"></i>
                   </td>
                 </tr>
               </tbody>

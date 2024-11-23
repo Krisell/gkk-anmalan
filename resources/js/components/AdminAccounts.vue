@@ -56,30 +56,28 @@
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-          <template>
-            <div>
-              <div class="relative my-4 w-64 ml-4 lg:mx-auto flex gap-2 text-sm font-thin">
-                <ToggleButton v-model="treasurerMode"  />
-                Kassörsläge
-              </div>
-              <div class="relative my-4 rounded-md shadow-sm w-64 ml-4 lg:mx-auto">
-                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <i class="fa fa-search text-gray-400"></i>
-                </div>
-                <div 
-                  v-if="search.length > 0"
-                  @click="search = ''" 
-                  class="cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3"
-                >
-                  <i class="fa fa-times text-gray-400"></i>
-                </div>
-                <input 
-                  v-model="search" 
-                  class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" placeholder="Sök medlem" 
-                />
-              </div>
+          <div>
+            <div class="relative my-4 w-64 ml-4 lg:mx-auto flex gap-2 text-sm font-thin">
+              <ToggleButton v-model="treasurerMode"  />
+              Kassörsläge
             </div>
-          </template>
+            <div class="relative my-4 rounded-md shadow-sm w-64 ml-4 lg:mx-auto">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <i class="fa fa-search text-gray-400"></i>
+              </div>
+              <div 
+                v-if="search.length > 0"
+                @click="search = ''" 
+                class="cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3"
+              >
+                <i class="fa fa-times text-gray-400"></i>
+              </div>
+              <input 
+                v-model="search" 
+                class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" placeholder="Sök medlem" 
+              />
+            </div>
+          </div>
           <table class="min-w-full">
             <thead>
               <tr>
@@ -137,7 +135,7 @@
                       <div class="text-sm leading-5 font-medium text-gray-900">
                         {{ account.first_name }} {{ account.last_name }} 
                         <i
-                        v-tooltip="`${account.email}<br>Klicka för att kopiera.`" @click="copyEmail(account.email)"
+                        v-tooltip="{content: `${account.email}<br>Klicka för att kopiera.`, html: true}" @click="copyEmail(account.email)"
                         class="fa fa-envelope-o ml-2 cursor-pointer"></i>
                       </div>
                       <span v-if="account.licence_number" class="text-xs font-light">
@@ -175,36 +173,32 @@
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <ToggleButton 
                     v-if="showPaymentToggle(account, 2025, 'SSFLICENSE')" 
-                    @input="updatePayment(account, 2025, 'SSFLICENSE')"
-                    :value="hasPaid(account, 2025, 'SSFLICENSE')" 
-                    color="#314270" 
+                    @update:modelValue="updatePayment(account, 2025, 'SSFLICENSE')"
+                    :modelValue="hasPaid(account, 2025, 'SSFLICENSE')" 
                   />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <ToggleButton 
                     v-if="showPaymentToggle(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
-                    @input="updatePayment(account, getCurrentYear() + 1, 'MEMBERSHIP')"
-                    :value="hasPaid(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
-                    color="#314270"
+                    @update:modelValue="$event => updatePayment(account, getCurrentYear() + 1, 'MEMBERSHIP')"
+                    :modelValue="hasPaid(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
                   />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <ToggleButton 
                     v-if="showPaymentToggle(account, getCurrentYear(), 'MEMBERSHIP')" 
-                    @input="updatePayment(account, getCurrentYear(), 'MEMBERSHIP')"
-                    :value="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" 
-                    color="#314270"
+                    @update:modelValue="updatePayment(account, getCurrentYear(), 'MEMBERSHIP')"
+                    :modelValue="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" 
                   />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <ToggleButton 
                     v-if="showPaymentToggle(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
-                    @input="updatePayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
-                    :value="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
-                    color="#314270"
+                    @update:modelValue="updatePayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
+                    :modelValue="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
                   />
                 </td>
                 <td
@@ -245,7 +239,7 @@
         Epostadresser som redan finns i systemet kommer ignoreras. Tillagda konton kommer automatiskt skicka ut ett
         epost till användaren med en länk för att logga in och ange ett lösenord.
       </div>
-      <textarea v-model="newAccountsString" class="mx-auto w-1/2 h-32"></textarea>
+      <textarea v-model="newAccountsString" class="mx-auto w-1/2 h-32 border rounded p-2"></textarea>
       <Button @click="createAccounts" class="mt-2">Skapa konton</Button>
     </div>
 
@@ -299,57 +293,43 @@
       </div>
     </div>
 
-    <modal name="promote" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">
-          Är du säker på att du vill göra {{ selectedAccount && selectedAccount.email }} till administratör?
-        </h3>
-      </div>
+    <Modal ref="promoteModal" :title="`Är du säker på att du vill göra ${selectedAccount && selectedAccount.email} till administratör?`">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button @click="close" type="secondary">Nej</Button>
+          <Button @click="promote" type="danger">Ja, gör till administratör</Button>
+        </div>
+      </template>
+    </Modal>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button @click="$modal.hide('promote')" type="secondary" class="mx-4">Nej</Button>
-        <Button @click="promotion" type="danger">Ja, gör till administratör</Button>
-      </div>
-    </modal>
+    <Modal ref="demoteModal" :title="`Är du säker på att du vill ta bort administratörsrollen för ${selectedAccount && selectedAccount.email}?`">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button @click="close" type="secondary">Nej</Button>
+          <Button @click="demote" type="danger">Ja, ta bort</Button>
+        </div>
+      </template>
+    </Modal>
 
-    <modal name="demote" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">
-          Är du säker på att du vill ta bort administratörsrollen för {{ selectedAccount && selectedAccount.email }}?
-        </h3>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button @click="$modal.hide('demote')" type="secondary" class="mx-4">Nej</Button>
-        <Button @click="demotion" type="danger">Ja, ta bort</Button>
-      </div>
-    </modal>
-
-    <modal name="inactivate" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">
-          <i class="fa fa-ban text-3xl mb-8"></i>
-        </h3>
-        <h3 style="text-align: center">
-          Är du säker på att du vill inaktiverat kontot för {{ selectedAccount && selectedAccount.email }}?
-        </h3>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button @click="$modal.hide('inactivate')" type="secondary" class="mx-4">Nej</Button>
-        <Button @click="inactivate" type="danger">Ja, inaktivera</Button>
-      </div>
-    </modal>
+    <Modal ref="inactivateModal" :title="`Är du säker på att du vill inaktiverat kontot för ${selectedAccount && selectedAccount.email}?`">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button @click="close" type="secondary">Nej</Button>
+          <Button @click="inactivate" type="danger">Ja, inaktivera</Button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script>
 import ToggleButton from './ui/ToggleButton.vue'
+import Modal from './ui/Modal.vue'
 import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
 
 export default {
-  components: { Button, ToggleButton },
+  components: { Button, ToggleButton, Modal },
   props: {
     initialAccounts: {
       type: Array,
@@ -494,20 +474,20 @@ export default {
     },
     confirmDemotion(account) {
       this.selectedAccount = account
-      this.$modal.show('demote')
+      this.$refs.demoteModal.show()
     },
-    demotion() {
+    demote() {
       axios.post(`/admin/accounts/demote/${this.selectedAccount.id}`).then(() => this.reload())
     },
     confirmPromotion(account) {
       this.selectedAccount = account
-      this.$modal.show('promote')
+      this.$refs.promoteModal.show()
     },
     confirmInactivation(account) {
       this.selectedAccount = account
-      this.$modal.show('inactivate')
+      this.$refs.inactivateModal.show()
     },
-    promotion() {
+    promote() {
       axios.post(`/admin/accounts/promote/${this.selectedAccount.id}`).then(() => this.reload())
     },
     inactivate() {

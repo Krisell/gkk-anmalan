@@ -66,12 +66,12 @@
       <input
         type="text"
         v-model="name.first"
-        class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+        class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
       />
       <input
         type="text"
         v-model="name.last"
-        class="mt-1 form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+        class="mt-1 form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
       />
       <button
         @click="updateName"
@@ -84,7 +84,7 @@
       <input
         v-model="email"
         type="email"
-        class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+        class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
       />
       <button
         @click="updateEmail"
@@ -108,13 +108,13 @@
           v-model="password.new"
           type="password"
           placeholder="Nytt lösenord"
-          class="mt-1 form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+          class="mt-1 form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
         />
         <input
           v-model="password.new_confirmation"
           type="password"
           placeholder="Bekräfta lösenord"
-          class="mt-1 form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md"
+          class="mt-1 form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
         />
         <div style="display: flex">
           <button
@@ -134,29 +134,27 @@
       </div>
     </div>
 
-    <modal name="paymentPendingModal" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 class="text-center text-xl mb-4">
-          Har du genomfört betalningen?
-        </h3>
-        <p class="text-center">Detta verifieras av vår kassör inom några veckor. Tills dess kommer det stå <i>"Verifieras"</i> här. När betalningen är verifierad kommer detta ändras till <i>"Betald"</i>.</p>
-      </div>
+    <Modal ref="paymentPendingModal" title="Har du genomfört betalningen?">
+      <p class="text-center">Detta verifieras av vår kassör inom några veckor. Tills dess kommer det stå <i>"Verifieras"</i> här. När betalningen är verifierad kommer detta ändras till <i>"Betald"</i>.</p>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button @click="$modal.hide('paymentPendingModal')" type="secondary" class="mx-4">Tillbaka</Button>
-        <Button @click="markPaymentAsPending" type="success">Ja, betalningen är genomförd</Button>
-      </div>
-    </modal>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button @click="close" type="secondary">Tillbaka</Button>
+          <Button @click="markPaymentAsPending" type="success">Ja, betalningen är genomförd</Button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script>
 import Documents from '../modules/Documents.js'
 import Button from './ui/Button.vue'
+import Modal from './ui/Modal.vue'
 import QRCode from 'qrcode'
 
 export default {
-  components: { Button },
+  components: { Button, Modal },
   props: ['user', 'payments'],
   data() {
     return {
@@ -205,7 +203,7 @@ export default {
     },
     showPaymentModal(payment) {
       this.paymentInProcess = payment
-      this.$modal.show('paymentPendingModal')
+      this.$refs.paymentPendingModal.show()
     },
     loadURL(url) {
       window.location = url

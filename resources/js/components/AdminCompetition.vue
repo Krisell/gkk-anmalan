@@ -15,7 +15,7 @@
           <label for="location" class="block text-sm leading-5 font-medium text-gray-700">Filtrering</label>
           <select
             v-model="showFilter"
-            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 rounded border"
           >
             <option value="all">Visa alla</option>
             <option value="1">Visa endast de som tackat ja ({{ countYes }} st)</option>
@@ -171,9 +171,7 @@
 
     <GkkLink to="/admin/competitions" text="Tillbaka till alla tävlingar" />
 
-    <modal name="edit-registration" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px" v-if="registrationToEdit">
-        <h2 class="text-center text-xl font-thin">Redigera anmälan</h2>
+    <Modal ref="editRegistrationModal" title="Redigera anmälan">
         <div class="flex items-center">
           <div class="w-full text-center mt-2">
             <div class="text-sm leading-5 font-medium text-gray-900">
@@ -187,7 +185,7 @@
           <select
             v-model="registrationToEdit.status"
             id="location"
-            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 border rounded"
           >
             <option value="1">Ja</option>
             <option value="0">Nej</option>
@@ -198,26 +196,28 @@
             v-model="registrationToEdit.comment"
             rows="5"
             placeholder="Ev. ytterligare info"
-            class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5 p-2 border border-gray-300 rounded-md"
+            class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5 rounded border p-2"
           ></textarea>
-        </div>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button @click="$modal.hide('edit-registration')" type="secondary" class="mx-4">Stäng</Button>
-        <Button @click="confirmEditRegistration" type="danger">Uppdatera</Button>
-      </div>
-    </modal>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button @click="close" type="secondary">Stäng</Button>
+          <Button @click="confirmEditRegistration" type="danger">Uppdatera</Button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script>
+import Modal from './ui/Modal.vue'
 import Button from './ui/Button.vue'
 import LiftingCast from '../modules/LiftingCast.js'
 import PowerliftingLive from '../modules/PowerliftingLive.js'
 
 export default {
-  components: { Button },
+  components: { Button, Modal },
   props: ['competition'],
   data() {
     return {
@@ -280,7 +280,7 @@ export default {
     },
     editRegistration(registration) {
       this.registrationToEdit = JSON.parse(JSON.stringify(registration))
-      this.$modal.show('edit-registration')
+      this.$refs.editRegistrationModal.show()
     },
     confirmEditRegistration() {
       axios({

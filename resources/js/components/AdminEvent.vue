@@ -15,7 +15,7 @@
           <label for="location" class="block text-sm leading-5 font-medium text-gray-700">Filtrering</label>
           <select
             v-model="showFilter"
-            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 border rounded"
           >
             <option value="all">Visa alla</option>
             <option value="1">Visa endast de som tackat ja ({{ countYes }} st)</option>
@@ -58,7 +58,10 @@
             <tbody class="bg-white">
               <tr v-for="registration in filteredRegistrations" :key="registration.id">
                 <td class="text-center">
-                  <ToggleButton @input="save(registration)" v-model="registration.presence_confirmed" color="#314270" />
+                  <ToggleButton 
+                    @update:modelValue="$event => save(registration, $event)" 
+                    :modelValue="registration.presence_confirmed" 
+                  />
                 </td>
 
                 <td class="text-center">
@@ -154,9 +157,7 @@
     </div>
     <GkkLink to="/admin/events" text="Tillbaka till alla event" />
 
-    <modal name="edit-registration" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px" v-if="registrationToEdit">
-        <h2 class="text-center text-xl font-thin">Redigera anmälan</h2>
+    <Modal ref="editRegistrationModal" title="Redigera anmälan" v-if="registrationToEdit">
         <div class="flex items-center">
           <div class="w-full text-center mt-2">
             <div class="text-sm leading-5 font-medium text-gray-900">
@@ -170,7 +171,7 @@
           <select
             v-model="registrationToEdit.status"
             id="location"
-            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 rounded border"
           >
             <option value="1">Ja</option>
             <option value="0">Nej</option>
@@ -181,25 +182,27 @@
             v-model="registrationToEdit.comment"
             rows="5"
             placeholder="Ev. ytterligare info"
-            class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5 p-2 border border-gray-300 rounded-md"
+            class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5 rounded border p-2"
           ></textarea>
-        </div>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('edit-registration')">Stäng</el-button>
-        <el-button style="margin-left: 10px" danger primary @click="confirmEditRegistration">Uppdatera</el-button>
-      </div>
-    </modal>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click="close">Stäng</Button>
+          <Button type="danger" @click="confirmEditRegistration">Uppdatera</Button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script>
 import ToggleButton from './ui/ToggleButton.vue'
 import Button from './ui/Button.vue'
+import Modal from './ui/Modal.vue'
 
 export default {
-  components: { ToggleButton, Button },
+  components: { ToggleButton, Button, Modal },
   props: ['event', 'competingUsers', 'remainingUsers'],
   data() {
     return {
@@ -227,11 +230,22 @@ export default {
     dateString(date) {
       return date.substr(0, 10)
     },
-    save(registration) {
+    save(registration, $event) {
+      const name = `${registration.user.first_name} ${registration.user.last_name}`
+
+      if ($event) {
+        this.$toast.success(`Närvaro bekräftad för ${name}`)
+      } else {
+        this.$toast.warning(`Närvaro borttagen för ${name}`)
+      }
+
       return axios({
         url: `/events/${this.event.id}/registrations/${registration.id}`,
         method: 'post',
-        data: registration,
+        data: {
+          ...registration,
+          presence_confirmed: $event,
+        },
       })
     },
     async addUser() {
@@ -241,7 +255,7 @@ export default {
     },
     editRegistration(registration) {
       this.registrationToEdit = JSON.parse(JSON.stringify(registration))
-      this.$modal.show('edit-registration')
+      this.$nextTick(() => this.$refs.editRegistrationModal.show())
     },
     confirmEditRegistration() {
       this.save(this.registrationToEdit).then((_) => window.location.reload())

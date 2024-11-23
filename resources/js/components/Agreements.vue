@@ -1,17 +1,13 @@
 <template>
   <div style="text-align: center">
-    <modal name="confirmation" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">
-          Är du säker på att du godkänner avtalet? Det är din skyldighet som medlem att känna till avtalets innehåll.
-        </h3>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <Button @click="$modal.hide('confirmation')" type="secondary" class="mx-4">Nej</Button>
+    <Modal ref="agreementConfirmationModal" title="Är du säker på att du godkänner avtalet? Det är din skyldighet som medlem att känna till avtalets innehåll.">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+        <Button @click="close" type="secondary">Nej</Button>
         <Button @click="confirmSignAgreement" type="success">Ja, godkänn avtalet</Button>
       </div>
-    </modal>
+      </template>
+    </Modal>
 
     <div>
       <h3 class="text-center mt-6 font-thin text-xl">
@@ -47,11 +43,12 @@
 
 <script>
 import axios from 'axios'
+import Modal from './ui/Modal.vue'
 import Button from './ui/Button.vue'
 import Documents from '../modules/Documents.js'
 
 export default {
-  components: { Button },
+  components: { Button, Modal },
   props: ['user', 'membershipAgreementStatus', 'antiDopingAgreementStatus'],
   methods: {
     renderDate(date) {
@@ -66,7 +63,7 @@ export default {
     signAgreement(kind) {
       this.signingAgreementKind = kind
 
-      this.$modal.show('confirmation')
+      this.$refs.agreementConfirmationModal.show()
     },
     async confirmSignAgreement() {
       if (this.signingAgreementKind === '') {

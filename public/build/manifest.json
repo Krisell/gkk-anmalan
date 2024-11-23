@@ -1,6 +1,6 @@
 {
   "node_modules/zipcelx/lib/module.js": {
-    "file": "assets/module-Z_s1hQf3.js",
+    "file": "assets/module-Lq7iZDXX.js",
     "name": "module",
     "src": "node_modules/zipcelx/lib/module.js",
     "isDynamicEntry": true,
@@ -9,12 +9,12 @@
     ]
   },
   "resources/css/main.css": {
-    "file": "assets/main-DIFt4pUy.css",
+    "file": "assets/main-BPWXPfK4.css",
     "src": "resources/css/main.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-BngUWj1V.js",
+    "file": "assets/app-NGrpZTkH.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -23,7 +23,7 @@
       "node_modules/zipcelx/lib/module.js"
     ],
     "css": [
-      "assets/app-B-MjK8Nq.css"
+      "assets/app-BlmyZgM9.css"
     ]
   }
 }

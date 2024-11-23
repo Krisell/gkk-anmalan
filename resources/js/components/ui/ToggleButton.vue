@@ -8,29 +8,10 @@
   </label>
 </template>
 
-<script>
-export default {
-  props: {
-    value: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data() {
-    return {
-      id: Math.random(),
-      enabled: this.value,
-    }
-  },
-  watch: {
-    value() {
-      this.enabled = this.value
-    },
-    enabled() {
-      this.$emit('input', this.enabled)
-    },
-  },
-}
-</script>
+<script setup>
+import { useId } from 'vue'
 
-<style></style>
+const id = useId()
+
+const enabled = defineModel()
+</script>

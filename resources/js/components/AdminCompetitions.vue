@@ -43,7 +43,7 @@
               <tr
                 v-for="competition in competitions"
                 :key="competition.id"
-                @click="location(`/admin/competitions/${competition.id}`)"
+                @click.prevent="location(`/admin/competitions/${competition.id}`)"
                 style="cursor: pointer"
               >
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
@@ -76,12 +76,12 @@
                     {{ countYes(competition) }} (av {{ competition.registrations.length }})
                   </div>
                 </td>
-                <td @click="(e) => e.stopPropagation()" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                <td @click.prevent="(e) => e.stopPropagation()" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center justify-center">
                     <svg
                       v-tooltip="'Redigera tävling'"
                       class="w-6 text-gkk-light hover:text-gkk"
-                      @click="edit(competition)"
+                      @click.prevent="edit(competition)"
                       fill="none"
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -97,7 +97,7 @@
                     <svg
                       v-tooltip="'Radera tävling'"
                       class="w-6 ml-2 text-gkk-light hover:text-gkk"
-                      @click="confirmDelete(competition)"
+                      @click.prevent="confirmDelete(competition)"
                       fill="none"
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -125,7 +125,7 @@
     </div>
 
     <div class="w-full flex justify-center items-center">
-      <Button class="mt-2 mx-auto" v-if="!editing" @click="showNewCompetition = !showNewCompetition">
+      <Button class="mt-2 mx-auto" v-if="!editing" @click.prevent="showNewCompetition = !showNewCompetition">
         <div class="flex items-center justify-center">
           <svg
             class="w-6 -ml-2 mr-2"
@@ -248,9 +248,9 @@
       </div>
 
       <div class="flex">
-        <Button v-if="!editing" @click="createCompetition">Skapa tävling</Button>
-        <Button type="secondary" class="mr-2" v-if="editing" @click="cancelUpdate">Ångra</Button>
-        <Button v-if="editing" @click="updateCompetition">Uppdatera tävling</Button>
+        <Button v-if="!editing" @click.prevent="createCompetition">Skapa tävling</Button>
+        <Button type="secondary" class="mr-2" v-if="editing" @click.prevent="cancelUpdate">Ångra</Button>
+        <Button v-if="editing" @click.prevent="updateCompetition">Uppdatera tävling</Button>
       </div>
 
       <div v-if="newCompetitionError" class="mt-2">
@@ -275,27 +275,24 @@
       </div>
     </form>
 
-    <modal name="delete-competition" :adaptive="true" height="auto">
-      <div style="padding: 30px; margin-top: 20px">
-        <h3 style="text-align: center">
-          Är du säker på att du vill radera {{ selectedCompetition && selectedCompetition.name }}?
-        </h3>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px">
-        <el-button secondary @click="$modal.hide('delete-competition')">Nej</el-button>
-        <el-button style="margin-left: 10px" danger primary @click="deleteCompetition">Radera</el-button>
-      </div>
-    </modal>
+    <Modal ref="deleteCompetitionModal" :title="`Är du säker på att du vill radera ${ selectedCompetition && selectedCompetition.name }?`">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click.prevent="close">Nej</Button>
+          <Button type="danger" @click.prevent="deleteCompetition">Radera</Button>
+        </div>
+        </template>
+    </Modal>
   </div>
 </template>
 
 <script>
 import ToggleButton from './ui/ToggleButton.vue'
 import Button from './ui/Button.vue'
+import Modal from './ui/Modal.vue'
 
 export default {
-  components: { ToggleButton, Button },
+  components: { ToggleButton, Button, Modal },
   props: ['competitions', 'showingOld'],
   data() {
     return {
@@ -337,7 +334,7 @@ export default {
     },
     confirmDelete(competition) {
       this.selectedCompetition = competition
-      this.$modal.show('delete-competition')
+      this.$refs.deleteCompetitionModal.show()
     },
     deleteCompetition() {
       window.axios.delete(`/admin/competitions/${this.selectedCompetition.id}`).then(this.reload)

@@ -149,10 +149,10 @@
           ></textarea>
         </div>
         <div class="mt-2 flex flex-col justify-center items-center">
-          <Button v-if="registration && wantsToCompete" style="margin-bottom: 10px" @click="register(true)"
+          <Button v-if="registration && wantsToCompete" style="margin-bottom: 10px" @click.prevent="register(true)"
             ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Ja, jag vill tävla</Button
           >
-          <Button type="secondary" v-if="!registration || !wantsToCompete" style="margin-bottom: 10px" @click="register(true)"
+          <Button type="secondary" v-if="!registration || !wantsToCompete" style="margin-bottom: 10px" @click.prevent="register(true)"
             >Ja, jag vill tävla</Button
           >
 
@@ -171,10 +171,10 @@
             <p class="mt-3">Kom ihåg att <a target="_blank" class="underline text-blue-400" href="/profile">gällande medlemsavtal</a> ställer krav på tävlingsaktiva medlemmar.</p>
           </Message>
 
-          <Button type="danger" v-if="registration && !wantsToCompete" class="mb-4" @click="register(false)"
+          <Button type="danger" v-if="registration && !wantsToCompete" class="mb-4" @click.prevent="register(false)"
             ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag vill inte tävla</Button
           >
-          <Button type="secondary" v-if="!registration || wantsToCompete" class="mb-4" @click="register(false)"
+          <Button type="secondary" v-if="!registration || wantsToCompete" class="mb-4" @click.prevent="register(false)"
             >Jag vill inte tävla</Button
           >
           <div v-if="registrationStatus === 'completed'">
@@ -182,7 +182,7 @@
           </div>
 
           <Button v-if="justSaved" secondary disabled style="margin-bottom: 10px">Sparat!</Button>
-          <Button v-else secondary style="margin-bottom: 10px" @click="save">Spara</Button>
+          <Button v-else secondary style="margin-bottom: 10px" @click.prevent="save">Spara</Button>
         </div>
         <div v-if="registrationStatus === 'error'">
           <Message danger style="margin-top: 20px">
