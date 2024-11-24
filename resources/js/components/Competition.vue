@@ -192,7 +192,7 @@
       </form>
     </div>
 
-    <GkkLink to="/competitions" text="Tillbaka till alla tävlingar" />
+    <Link to="/competitions" text="Tillbaka till alla tävlingar" />
 
     <div class="mt-16" v-if="competition.publish_list_value && competition.publish_list_value.length > 0">
       <h3 class="text-lg font-thin text-center">Följande medlemmar har tackat ja</h3>
@@ -231,19 +231,20 @@
         </tbody>
       </table>
 
-      <GkkLink to="/competitions" text="Tillbaka till alla tävlingar" />
+      <Link to="/competitions" text="Tillbaka till alla tävlingar" />
     </div>
   </div>
 </template>
 
 <script>
+import Link from './ui/Link.vue'
 import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
 import Message from './Message.vue'
 import ToggleButton from './ui/ToggleButton.vue'
 
 export default {
-  components: { Message, Button, ToggleButton },
+  components: { Message, Button, ToggleButton, Link },
   props: ['competition', 'user', '_registration'],
   data() {
     return {

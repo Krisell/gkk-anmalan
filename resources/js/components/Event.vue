@@ -73,7 +73,7 @@
       </form>
     </div>
 
-    <GkkLink to="/events" text="Tillbaka till alla event" />
+    <Link to="/events" text="Tillbaka till alla event" />
 
     <div class="mt-16" v-if="event.publish_list_value && event.publish_list_value.length > 0">
       <h3 class="text-lg font-thin text-center">Följande medlemmar har tackat ja</h3>
@@ -96,7 +96,7 @@
         </tbody>
       </table>
 
-      <GkkLink to="/events" text="Tillbaka till alla event" />
+      <Link to="/events" text="Tillbaka till alla event" />
     </div>
   </div>
 </template>
@@ -105,9 +105,10 @@
 import Date from '../modules/Date.js'
 import Message from './Message.vue'
 import Button from './ui/Button.vue'
+import Link from './ui/Link.vue'
 
 export default {
-  components: { Message, Button },
+  components: { Message, Button, Link },
   props: ['event', 'user', '_registration'],
   data() {
     return {

@@ -5,7 +5,6 @@ import FloatingVue from 'floating-vue'
 import 'vue-toast-notification/dist/theme-bootstrap.css'
 import axios from 'axios'
 
-import Link from './components/Link.vue'
 import News from './components/News.vue'
 import Login from './components/Login.vue'
 import Event from './components/Event.vue'
@@ -76,7 +75,6 @@ app.mixin({
   },
 })
 
-app.component('GkkLink', Link)
 app.component('GkkNews', News)
 app.component('GkkLogin', Login)
 app.component('GkkEvent', Event)

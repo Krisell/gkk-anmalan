@@ -155,7 +155,7 @@
         ></path>
       </svg>
     </div>
-    <GkkLink to="/admin/events" text="Tillbaka till alla event" />
+    <Link to="/admin/events" text="Tillbaka till alla event" />
 
     <Modal ref="editRegistrationModal" title="Redigera anmälan" v-if="registrationToEdit">
         <div class="flex items-center">
@@ -200,9 +200,10 @@
 import ToggleButton from './ui/ToggleButton.vue'
 import Button from './ui/Button.vue'
 import Modal from './ui/Modal.vue'
+import Link from './ui/Link.vue'
 
 export default {
-  components: { ToggleButton, Button, Modal },
+  components: { ToggleButton, Button, Modal, Link },
   props: ['event', 'competingUsers', 'remainingUsers'],
   data() {
     return {

@@ -169,7 +169,7 @@
       </Button>
     </div>
 
-    <GkkLink to="/admin/competitions" text="Tillbaka till alla tävlingar" />
+    <Link to="/admin/competitions" text="Tillbaka till alla tävlingar" />
 
     <Modal ref="editRegistrationModal" title="Redigera anmälan">
         <div class="flex items-center">
@@ -211,13 +211,14 @@
 </template>
 
 <script>
+import Link from './ui/Link.vue'
 import Modal from './ui/Modal.vue'
 import Button from './ui/Button.vue'
 import LiftingCast from '../modules/LiftingCast.js'
 import PowerliftingLive from '../modules/PowerliftingLive.js'
 
 export default {
-  components: { Button, Modal },
+  components: { Button, Modal, Link },
   props: ['competition'],
   data() {
     return {

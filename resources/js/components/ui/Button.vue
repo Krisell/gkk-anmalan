@@ -7,33 +7,22 @@
   </button>
 </template>
 
-<script>
-export default {
-  props: {
-    type: {
-      type: String,
-      default: 'primary',
-    },
-    prevent: {
-      type: Boolean,
-      default: true,
-    },
-    navigate: {
-      type: String,
-    },
-  },
-  computed: {
-    classes() {
-      if (this.type === 'secondary') {
-        return 'bg-white text-gkk border-gkk hover:bg-gray-200 text-sm focus:border-indigo-600 active:bg-gkk'
-      }
+<script setup>
+import { computed } from 'vue'
 
-      if (this.type === 'danger') {
-        return 'bg-[#f8868a] text-white border-[#f8868a] hover:bg-[#c7453d] text-2xs focus:border-[#c7453d] active:bg-[#c7453d]'
-      }
+const { type = 'primary' } = defineProps({
+  type: String,
+})
 
-      return 'bg-gkk hover:bg-gkk-light text-white border-transparent text-sm focus:border-indigo-600 active:bg-gkk'
-    },
-  },
-}
+const classes = computed(() => {
+  if (type === 'secondary') {
+    return 'bg-white text-gkk border-gkk hover:bg-gray-200 text-sm focus:border-indigo-600 active:bg-gkk'
+  }
+
+  if (type === 'danger') {
+    return 'bg-[#f8868a] text-white border-[#f8868a] hover:bg-[#c7453d] text-2xs focus:border-[#c7453d] active:bg-[#c7453d]'
+  }
+
+  return 'bg-gkk hover:bg-gkk-light text-white border-transparent text-sm focus:border-indigo-600 active:bg-gkk'
+})
 </script>

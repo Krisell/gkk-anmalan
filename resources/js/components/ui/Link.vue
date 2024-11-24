@@ -8,11 +8,11 @@
   </div>
 </template>
 
-<script>
-import Button from './ui/Button.vue'
+<script setup>
+import Button from './Button.vue'
 
-export default {
-  components: { Button },
-  props: ['to', 'text'],
-}
+defineProps({
+  to: String,
+  text: String,
+})
 </script>

@@ -12,13 +12,16 @@
   </a>
 </template>
 
-<script>
+<script setup>
 import Button from './ui/Button.vue'
 
-export default {
-  components: { Button },
-  props: ['description', 'icon', 'danger', 'unanswered', 'href'],
-}
+defineProps({
+  description: String,
+  icon: String,
+  danger: Boolean,
+  unanswered: Number,
+  href: String,
+})
 </script>
 
 <style scoped lang="less">
