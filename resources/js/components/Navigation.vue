@@ -7,65 +7,67 @@
       </h3>
     </div>
     <div v-else class="flex flex-col m-6 sm:flex-row items-center justify-center">
-      <gkk-action-card
+      <LinkCard
         v-if="user"
         class="m-4 max-w-xs w-64"
-        @click="location('/competitions')"
+        href="/competitions"
         description="Tävlingsanmälan"
         icon="th-list"
-      ></gkk-action-card>
-      <gkk-action-card
+      ></LinkCard>
+      <LinkCard
         v-if="user"
         class="m-4 max-w-xs w-64"
-        @click="location('/events')"
+        href="/events"
         description="Funktionärsanmälan"
         icon="users"
         :unanswered="unanswered.events"
-      ></gkk-action-card>
-      <gkk-action-card
+      ></LinkCard>
+      <LinkCard
         v-if="user"
         class="m-4 max-w-xs w-64"
-        @click="location('/member-documents')"
+        href="/member-documents"
         description="Dokument"
         icon="file-o"
-      ></gkk-action-card>
-      <gkk-action-card
+      ></LinkCard>
+      <LinkCard
         v-if="user"
         class="m-4 max-w-xs w-64"
-        @click="location('/profile')"
+        href="/profile"
         description="Profil"
         icon="user-circle"
-      ></gkk-action-card>
-      <gkk-action-card
+      ></LinkCard>
+      <LinkCard
         v-if="isAdmin"
         class="m-4 max-w-xs w-64"
-        @click="location('/admin/accounts')"
+        href="/admin/accounts"
         description="Administrera konton"
         icon="list-alt"
         :unanswered="unanswered.ungranted"
-      ></gkk-action-card>
-      <gkk-action-card
+      ></LinkCard>
+      <LinkCard
         v-if="!user"
         class="m-4 max-w-xs w-64"
-        @click="location('/register')"
+        href="/register"
         description="Skapa konto som medlem"
         icon="user-circle"
-      ></gkk-action-card>
-      <gkk-action-card
+      ></LinkCard>
+      <LinkCard
         v-if="!user"
         class="m-4 max-w-xs w-64"
-        @click="location('/login')"
+        href="/login"
         description="Logga in som medlem"
         icon="sign-in"
-      ></gkk-action-card>
+      ></LinkCard>
     </div>
   </div>
 </template>
 
 <script>
+import LinkCard from './LinkCard.vue'
 import axios from 'axios'
 
 export default {
+  components: { LinkCard },
   props: ['user', 'unanswered'],
   computed: {
     isAdmin() {

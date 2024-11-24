@@ -17,7 +17,6 @@ import AdminNews from './components/AdminNews.vue'
 import Documents from './components/Documents.vue'
 import EventCard from './components/EventCard.vue'
 import Navigation from './components/Navigation.vue'
-import ActionCard from './components/ActionCard.vue'
 import Agreements from './components/Agreements.vue'
 import AdminEvent from './components/AdminEvent.vue'
 import AdminEvents from './components/AdminEvents.vue'
@@ -89,7 +88,6 @@ app.component('GkkAdminNews', AdminNews)
 app.component('GkkDocuments', Documents)
 app.component('GkkEventCard', EventCard)
 app.component('GkkNavigation', Navigation)
-app.component('GkkActionCard', ActionCard)
 app.component('GkkAdminEvent', AdminEvent)
 app.component('GkkAgreements', Agreements)
 app.component('GkkAdminEvents', AdminEvents)

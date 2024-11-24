@@ -1,5 +1,5 @@
 <template>
-  <div class="action-button-card relative" :class="{ danger }" @click="$emit('click')">
+  <a :href="href" class="action-button-card relative" :class="{ danger }">
     <div v-if="unanswered > 0" class="unanswered">
       {{ unanswered }}
       <div class="unanswered inside"></div>
@@ -9,7 +9,7 @@
       <slot v-else></slot>
     </div>
     <div class="description" v-html="description"></div>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -17,7 +17,7 @@ import Button from './ui/Button.vue'
 
 export default {
   components: { Button },
-  props: ['description', 'icon', 'danger', 'unanswered'],
+  props: ['description', 'icon', 'danger', 'unanswered', 'href'],
 }
 </script>
 
