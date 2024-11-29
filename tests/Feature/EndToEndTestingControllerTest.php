@@ -4,11 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Document;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class EndToEndTestingControllerTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function the_e2e_routes_are_only_available_in_the_testing_environment()
     {
         app()->detectEnvironment(fn () => 'local');
@@ -23,7 +24,7 @@ class EndToEndTestingControllerTest extends TestCase
         $this->post('__e2e__/loginSuperadmin')->assertNotFound();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_login_a_new_user()
     {
         $this->assertNull(auth()->user());
@@ -43,7 +44,7 @@ class EndToEndTestingControllerTest extends TestCase
         $this->assertDatabaseCount(User::class, 1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_login_a_new_user_with_specified_attributes()
     {
         $this->assertNull(auth()->user());
@@ -67,7 +68,7 @@ class EndToEndTestingControllerTest extends TestCase
         $this->assertDatabaseCount(User::class, 2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_login_an_existing_user()
     {
         $this->assertNull(auth()->user());
@@ -91,7 +92,7 @@ class EndToEndTestingControllerTest extends TestCase
         $this->assertDatabaseCount(User::class, 1);
     }
 
-    /** @test */
+    #[Test]
     public function a_specific_model_can_be_found_and_defaults_to_app_namespace()
     {
         Document::factory()->create();
@@ -106,9 +107,7 @@ class EndToEndTestingControllerTest extends TestCase
         ])->assertJson($document->fresh()->toArray());
     }
 
-    /**
-     * @test
-     **/
+    #[Test]
     public function unrecognized_models_returns_not_found()
     {
         $this->post('__e2e__/factory', [
@@ -116,7 +115,7 @@ class EndToEndTestingControllerTest extends TestCase
         ])->assertNotFound();
     }
 
-    /** @test */
+    #[Test]
     public function a_model_can_be_specified_with_fhe_fully_qualified_classname()
     {
         Document::factory()->create();
@@ -131,7 +130,7 @@ class EndToEndTestingControllerTest extends TestCase
         ])->assertJson($document->fresh()->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function a_model_can_be_created_via_a_factory()
     {
         $this->assertCount(0, Document::all());
@@ -143,7 +142,7 @@ class EndToEndTestingControllerTest extends TestCase
         $this->assertCount(1, Document::all());
     }
 
-    /** @test */
+    #[Test]
     public function a_model_can_be_created_with_specified_attributes()
     {
         $this->post('__e2e__/factory', [
@@ -158,7 +157,7 @@ class EndToEndTestingControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function a_model_can_be_updated()
     {
         $document = Document::factory()->create(['name' => 'Before']);
@@ -176,7 +175,7 @@ class EndToEndTestingControllerTest extends TestCase
         $this->assertEquals('After', $document->fresh()->name);
     }
 
-    /** @test */
+    #[Test]
     public function multiple_models_can_be_created()
     {
         $this->post('__e2e__/factory', [
@@ -187,7 +186,7 @@ class EndToEndTestingControllerTest extends TestCase
         $this->assertCount(3, Document::all());
     }
 
-    /** @test */
+    #[Test]
     public function arbitrary_php_can_be_executed()
     {
         $this->post('__e2e__/php', [
@@ -195,7 +194,7 @@ class EndToEndTestingControllerTest extends TestCase
         ])->assertJson(['result' => 'H14L']);
     }
 
-    /** @test */
+    #[Test]
     public function the_trailing_semicolon_can_be_omitted_for_php_code_for_convenience()
     {
         $this->post('__e2e__/php', [
@@ -203,7 +202,7 @@ class EndToEndTestingControllerTest extends TestCase
         ])->assertJson(['result' => '5']);
     }
 
-    /** @test */
+    #[Test]
     public function the_leading_return_can_be_omitted()
     {
         $this->post('__e2e__/php', [
@@ -211,7 +210,7 @@ class EndToEndTestingControllerTest extends TestCase
         ])->assertJson(['result' => '5']);
     }
 
-    /** @test */
+    #[Test]
     public function code_is_never_evaled_outside_of_the_testing_environment()
     {
         // Cause the testing-env check in the EndToEndTestingController constructor to not abort
