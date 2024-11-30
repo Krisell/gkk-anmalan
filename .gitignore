@@ -24,4 +24,5 @@ public/js/app.js.LICENSE.txt
 /playwright-report/
 /playwright/.cache/
 .pint.cache
+.ignored
 
