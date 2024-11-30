@@ -7,6 +7,8 @@
                 <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">Lag-SM 2024</h2>
             </div>
             <h3 class="text-xl font-extrabold tracking-tight sm:text-2xl">Ställning just nu (serieomgång 4 ej slutrapporterad)</h3>
+            <h3 class="text-xl font-extrabold tracking-tight sm:text-2xl">Top 5 går till finalen i Falkenberg 14-15 december</h3>
+            <p>Kompletta serier hittar ni här: <a class="underline" target="_blank" href="https://online.styrkelyft.se/web/series.aspx">https://online.styrkelyft.se/web/series.aspx</a></p>
               
               <!-- <p class="text-xl leading-normal text-gray-500">
               Den 16-17 december 2023 avögrs Lag-SM i Styrkelyft hos Göteborg Kraftsportklubb.
