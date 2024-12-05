@@ -6,9 +6,8 @@
           <div class="flex items-center">
             <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">Lag-SM 2024</h2>
           </div>
-          <h3 class="text-xl font-extrabold tracking-tight sm:text-2xl">Slutställning i elitserien</h3>
           <h3 class="text-xl font-extrabold tracking-tight sm:text-2xl">
-            Top 5 går till finalen i Falkenberg 14-15 december
+            Slutställning i elitserien - Top 5 går till finalen i Falkenberg 14-15 december
           </h3>
           <p>
             Kompletta serier hittar ni här:
