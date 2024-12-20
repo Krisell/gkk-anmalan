@@ -28,7 +28,7 @@ test('activation endpoint without code initiates the Fortnox OAuth flow', functi
     $redirectUrl = 'https://apps.fortnox.se/oauth-v1/auth?'.\http_build_query([
         'client_id' => config('services.fortnox.client_id'),
         'redirect_uri' => config('app.url').'/fn/activation',
-        'scope' => 'invoice',
+        'scope' => 'invoice customer',
         'access_type' => 'offline',
         'response_type' => 'code',
         'state' => 'fake-random-string',
@@ -83,9 +83,25 @@ test('index endpoint with existing integration token shows the Fortnox index', f
     ]);
 
     Http::fake([
-        'https://api.fortnox.se/3/invoices' => Http::response([
-            ['some' => 'data'],
-            ['more' => 'data'],
+        'https://api.fortnox.se/3/customers?page=1' => Http::response([
+            'Customers' => [
+                ['some' => 'data'],
+                ['more' => 'data'],
+            ],
+            'MetaInformation' => [
+                '@CurrentPage' => 1,
+                '@TotalPages' => 2,
+            ],
+        ]),
+        'https://api.fortnox.se/3/customers?page=2' => Http::response([
+            'Customers' => [
+                ['some' => 'data'],
+                ['more' => 'data'],
+            ],
+            'MetaInformation' => [
+                '@CurrentPage' => 2,
+                '@TotalPages' => 2,
+            ],
         ]),
     ]);
 
@@ -93,4 +109,20 @@ test('index endpoint with existing integration token shows the Fortnox index', f
         ['some' => 'data'],
         ['more' => 'data'],
     ]);
+});
+
+test('disconnect endpoint deletes the Fortnox integration token', function () {
+    loginSuperadmin();
+
+    IntegrationToken::create([
+        'type' => 'fortnox',
+        'scope' => 'invoice',
+        'access_token' => 'test-access-token',
+        'refresh_token' => 'test-refresh-token',
+        'access_token_expires_at' => now()->addSeconds(3600),
+    ]);
+
+    $this->get('/fn/disconnect')->assertRedirect('fn');
+
+    $this->assertNull(IntegrationToken::where('type', 'fortnox')->first());
 });

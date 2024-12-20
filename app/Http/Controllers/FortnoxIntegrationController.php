@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\IntegrationToken;
+use App\Services\Fortnox;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -17,7 +18,7 @@ class FortnoxIntegrationController extends Controller
         $authorizationUrl = $baseURL.'/auth?'.\http_build_query([
             'client_id' => $config['client_id'],
             'redirect_uri' => config('app.url').'/fn/activation',
-            'scope' => 'invoice',
+            'scope' => 'invoice customer',
             'access_type' => 'offline',
             'response_type' => 'code',
             // Following OAuth security best practices, the state parameter should be a random string,
@@ -55,42 +56,35 @@ class FortnoxIntegrationController extends Controller
         return redirect()->route('fortnox.index');
     }
 
-    private function refresh()
+    public function index(Fortnox $fortnox)
     {
-        $baseURL = 'https://apps.fortnox.se/oauth-v1';
-        $config = config('services.fortnox');
+        $customers = [];
 
-        $integrationToken = IntegrationToken::whereType('fortnox')->first();
+        $token = $fortnox->token();
 
-        $response = Http::asForm()->withBasicAuth($config['client_id'], $config['client_secret'])->post($baseURL.'/token', [
-            'refresh_token' => $integrationToken->refresh_token,
-            'grant_type' => 'refresh_token',
-        ]);
-
-        $integrationToken->update([
-            'access_token' => $response->json()['access_token'],
-            'refresh_token' => $response->json()['refresh_token'],
-            'access_token_expires_at' => now()->addSeconds($response->json()['expires_in']),
-        ]);
-
-        return $integrationToken;
-    }
-
-    public function index()
-    {
-        $integrationToken = IntegrationToken::whereType('fortnox')->first();
-
-        if (! $integrationToken) {
+        if (! $token) {
             return redirect()->route('fortnox.activation');
         }
 
-        // Use a 5 minute buffer for token expiration
-        if ($integrationToken->access_token_expires_at->subMinutes(5)->isPast()) {
-            $integrationToken = $this->refresh();
+        $page = 1;
+        while (true) {
+            $response = Http::withToken($fortnox->token())->get('https://api.fortnox.se/3/customers', ['page' => $page]);
+            $customers = \array_merge($customers, $response->json()['Customers']);
+
+            if ($response->json()['MetaInformation']['@TotalPages'] === $response->json()['MetaInformation']['@CurrentPage']) {
+                break;
+            }
+
+            $page += 1;
         }
 
-        $response = Http::withToken($integrationToken->access_token)->get('https://api.fortnox.se/3/invoices');
+        return $customers;
+    }
 
-        return $response->json();
+    public function disconnect()
+    {
+        IntegrationToken::where('type', 'fortnox')->delete();
+
+        return redirect()->route('fortnox.index');
     }
 }

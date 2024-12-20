@@ -162,4 +162,5 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
 Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(function () {
     Route::get('/', [\App\Http\Controllers\FortnoxIntegrationController::class, 'index'])->name('fortnox.index');
     Route::get('activation', [\App\Http\Controllers\FortnoxIntegrationController::class, 'activation'])->name('fortnox.activation');
+    Route::get('disconnect', [\App\Http\Controllers\FortnoxIntegrationController::class, 'disconnect'])->name('fortnox.disconnect');
 });
