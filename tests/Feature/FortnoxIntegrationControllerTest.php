@@ -28,7 +28,7 @@ test('activation endpoint without code initiates the Fortnox OAuth flow', functi
     $redirectUrl = 'https://apps.fortnox.se/oauth-v1/auth?'.\http_build_query([
         'client_id' => config('services.fortnox.client_id'),
         'redirect_uri' => config('app.url').'/fn/activation',
-        'scope' => 'invoice customer',
+        'scope' => 'invoice customer article',
         'access_type' => 'offline',
         'response_type' => 'code',
         'state' => 'fake-random-string',
@@ -76,7 +76,7 @@ test('index endpoint with existing integration token shows the Fortnox index', f
 
     IntegrationToken::create([
         'type' => 'fortnox',
-        'scope' => 'invoice',
+        'scope' => 'invoice customer article',
         'access_token' => 'test-access-token',
         'refresh_token' => 'test-refresh-token',
         'access_token_expires_at' => now()->addSeconds(3600),
@@ -105,7 +105,7 @@ test('index endpoint with existing integration token shows the Fortnox index', f
         ]),
     ]);
 
-    $this->get('/fn')->assertJson([
+    $this->get('/fn/customers')->assertJson([
         ['some' => 'data'],
         ['more' => 'data'],
     ]);
