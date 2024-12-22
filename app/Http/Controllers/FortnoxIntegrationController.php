@@ -18,7 +18,7 @@ class FortnoxIntegrationController extends Controller
         $authorizationUrl = $baseURL.'/auth?'.\http_build_query([
             'client_id' => $config['client_id'],
             'redirect_uri' => config('app.url').'/fn/activation',
-            'scope' => 'invoice customer',
+            'scope' => 'invoice customer article',
             'access_type' => 'offline',
             'response_type' => 'code',
             // Following OAuth security best practices, the state parameter should be a random string,
@@ -41,10 +41,6 @@ class FortnoxIntegrationController extends Controller
         $expiresIn = $response->json()['expires_in'];
         $scope = $response->json()['scope'];
 
-        // Make an API call to verify the token
-        $response = Http::throw()->withToken($accessToken)->get('https://api.fortnox.se/3/invoices');
-        logger($response->json());
-
         IntegrationToken::create([
             'type' => 'fortnox',
             'scope' => $scope,
@@ -58,12 +54,56 @@ class FortnoxIntegrationController extends Controller
 
     public function index(Fortnox $fortnox)
     {
+        $token = $fortnox->token();
+
+        if (! $token) {
+            return redirect()->route('fortnox.activation');
+        }
+
+        return Http::withToken($fortnox->token())->get('https://api.fortnox.se/3/customers/1')->json();
+    }
+
+    public function invoices(Fortnox $fortnox, $invoice = null)
+    {
+        $invoices = [];
+
+        $token = $fortnox->token();
+
+        if (! $token) {
+            return redirect()->route('fortnox.activation');
+        }
+
+        if ($invoice) {
+            return Http::withToken($fortnox->token())->get("https://api.fortnox.se/3/invoices/{$invoice}")->json();
+        }
+
+        $page = 1;
+        while (true) {
+            $response = Http::withToken($fortnox->token())->get('https://api.fortnox.se/3/invoices', ['page' => $page]);
+            $invoices = \array_merge($invoices, $response->json()['Invoices']);
+
+            if ($response->json()['MetaInformation']['@TotalPages'] === $response->json()['MetaInformation']['@CurrentPage']) {
+                break;
+            }
+
+            $page += 1;
+        }
+
+        return $invoices;
+    }
+
+    public function customers(Fortnox $fortnox, $customer = null)
+    {
         $customers = [];
 
         $token = $fortnox->token();
 
         if (! $token) {
             return redirect()->route('fortnox.activation');
+        }
+
+        if ($customer) {
+            return Http::withToken($fortnox->token())->get("https://api.fortnox.se/3/customers/{$customer}")->json();
         }
 
         $page = 1;
@@ -79,6 +119,35 @@ class FortnoxIntegrationController extends Controller
         }
 
         return $customers;
+    }
+
+    public function articles(Fortnox $fortnox, $article = null)
+    {
+        $articles = [];
+
+        $token = $fortnox->token();
+
+        if (! $token) {
+            return redirect()->route('fortnox.activation');
+        }
+
+        if ($article) {
+            return Http::withToken($fortnox->token())->get("https://api.fortnox.se/3/articles/{$article}")->json();
+        }
+
+        $page = 1;
+        while (true) {
+            $response = Http::withToken($fortnox->token())->get('https://api.fortnox.se/3/articles', ['page' => $page]);
+            $articles = \array_merge($articles, $response->json()['Articles']);
+
+            if ($response->json()['MetaInformation']['@TotalPages'] === $response->json()['MetaInformation']['@CurrentPage']) {
+                break;
+            }
+
+            $page += 1;
+        }
+
+        return $articles;
     }
 
     public function disconnect()
