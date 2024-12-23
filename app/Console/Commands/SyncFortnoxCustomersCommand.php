@@ -30,6 +30,12 @@ class SyncFortnoxCustomersCommand extends Command
      */
     public function handle(Fortnox $fortnox)
     {
+        if (! $fortnox->token()) {
+            $this->error('Fortnox integration not activated.');
+
+            return;
+        }
+
         $currentCustomers = Http::withToken($fortnox->token())->get('https://api.fortnox.se/3/customers');
 
         $confirmed = confirm(
@@ -58,7 +64,7 @@ class SyncFortnoxCustomersCommand extends Command
                 \sleep(2);
             }
 
-            $this->info("Syncing user $index");
+            $this->info("Syncing user $user->first_name $user->last_name");
 
             $todaysDate = \date('Y-m-d');
             $response = Http::withToken($fortnox->token())->post('https://api.fortnox.se/3/customers', [

@@ -63,6 +63,35 @@ class FortnoxIntegrationController extends Controller
         return Http::withToken($fortnox->token())->get('https://api.fortnox.se/3/customers/1')->json();
     }
 
+    public function pdfInvoice(Fortnox $fortnox, $invoice)
+    {
+        $token = $fortnox->token();
+
+        if (! $token) {
+            return redirect()->route('fortnox.activation');
+        }
+
+        $response = Http::withToken($fortnox->token())->get("https://api.fortnox.se/3/invoices/{$invoice}/preview");
+
+        return response($response->body(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="invoice.pdf"',
+        ]);
+    }
+
+    public function emailInvoice(Fortnox $fortnox, $invoice)
+    {
+        $token = $fortnox->token();
+
+        if (! $token) {
+            return redirect()->route('fortnox.activation');
+        }
+
+        $response = Http::withToken($fortnox->token())->get("https://api.fortnox.se/3/invoices/{$invoice}/email");
+
+        return $response->json();
+    }
+
     public function invoices(Fortnox $fortnox, $invoice = null)
     {
         $invoices = [];

@@ -161,6 +161,8 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
 
 Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(function () {
     Route::get('/', [\App\Http\Controllers\FortnoxIntegrationController::class, 'index'])->name('fortnox.index');
+    Route::get('/invoices/pdf/{invoice}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'pdfInvoice']);
+    Route::get('/invoices/email/{invoice?}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'emailInvoice']);
     Route::get('/invoices/{invoice?}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'invoices'])->name('fortnox.invoices');
     Route::get('/customers/{customer?}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'customers'])->name('fortnox.customers');
     Route::get('/articles/{article?}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'articles'])->name('fortnox.articles');

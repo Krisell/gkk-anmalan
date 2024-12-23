@@ -14,6 +14,8 @@ class Payment extends Model
 
     protected $casts = [
         'user_id' => 'integer',
+        'fortnox_invoice_created_at' => 'datetime',
+        'fortnox_invoice_emailed_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
