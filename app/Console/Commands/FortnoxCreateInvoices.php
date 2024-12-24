@@ -83,6 +83,7 @@ class FortnoxCreateInvoices extends Command
         $response = Http::withToken($fortnox->token())->post(
             'https://api.fortnox.se/3/invoices', [
                 'Invoice' => [
+                    'DueDate' => now()->addDays(30)->format('Y-m-d'),
                     'Comments' => 'Created by GKK integration',
                     'CustomerNumber' => $user->fortnox_customer_id,
                     'OurReference' => 'GKK Kassör',
