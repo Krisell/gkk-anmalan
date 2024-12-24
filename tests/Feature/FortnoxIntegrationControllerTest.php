@@ -28,7 +28,7 @@ test('activation endpoint without code initiates the Fortnox OAuth flow', functi
     $redirectUrl = 'https://apps.fortnox.se/oauth-v1/auth?'.\http_build_query([
         'client_id' => config('services.fortnox.client_id'),
         'redirect_uri' => config('app.url').'/fn/activation',
-        'scope' => 'invoice customer article',
+        'scope' => 'invoice customer article print',
         'access_type' => 'offline',
         'response_type' => 'code',
         'state' => 'fake-random-string',
@@ -47,7 +47,7 @@ test('activation endpoint with code stores the Fortnox integration token', funct
             'access_token' => 'test-access-token',
             'refresh_token' => 'test-refresh-token',
             'expires_in' => 3600,
-            'scope' => 'invoice',
+            'scope' => 'invoice customer article print',
         ]),
         'https://api.fortnox.se/3/invoices' => Http::response([]),
     ]);
@@ -56,7 +56,7 @@ test('activation endpoint with code stores the Fortnox integration token', funct
 
     $integrationToken = IntegrationToken::where('type', 'fortnox')->first();
     $this->assertEquals('fortnox', $integrationToken->type);
-    $this->assertEquals('invoice', $integrationToken->scope);
+    $this->assertEquals('invoice customer article print', $integrationToken->scope);
     $this->assertEquals('test-access-token', $integrationToken->access_token);
     $this->assertEquals('test-refresh-token', $integrationToken->refresh_token);
     $this->assertEquals(
@@ -76,7 +76,7 @@ test('index endpoint with existing integration token shows the Fortnox index', f
 
     IntegrationToken::create([
         'type' => 'fortnox',
-        'scope' => 'invoice customer article',
+        'scope' => 'invoice customer article print',
         'access_token' => 'test-access-token',
         'refresh_token' => 'test-refresh-token',
         'access_token_expires_at' => now()->addSeconds(3600),
@@ -116,7 +116,7 @@ test('disconnect endpoint deletes the Fortnox integration token', function () {
 
     IntegrationToken::create([
         'type' => 'fortnox',
-        'scope' => 'invoice',
+        'scope' => 'invoice customer article print',
         'access_token' => 'test-access-token',
         'refresh_token' => 'test-refresh-token',
         'access_token_expires_at' => now()->addSeconds(3600),

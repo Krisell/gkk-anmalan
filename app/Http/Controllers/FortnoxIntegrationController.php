@@ -18,7 +18,7 @@ class FortnoxIntegrationController extends Controller
         $authorizationUrl = $baseURL.'/auth?'.\http_build_query([
             'client_id' => $config['client_id'],
             'redirect_uri' => config('app.url').'/fn/activation',
-            'scope' => 'invoice customer article',
+            'scope' => 'invoice customer article print',
             'access_type' => 'offline',
             'response_type' => 'code',
             // Following OAuth security best practices, the state parameter should be a random string,
@@ -184,5 +184,18 @@ class FortnoxIntegrationController extends Controller
         IntegrationToken::where('type', 'fortnox')->delete();
 
         return redirect()->route('fortnox.index');
+    }
+
+    public function printtemplates(Fortnox $fortnox)
+    {
+        $token = $fortnox->token();
+
+        if (! $token) {
+            return redirect()->route('fortnox.activation');
+        }
+
+        $response = Http::withToken($fortnox->token())->get('https://api.fortnox.se/3/printtemplates');
+
+        return $response->json();
     }
 }
