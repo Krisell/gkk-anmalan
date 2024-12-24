@@ -85,6 +85,8 @@ class FortnoxCreateInvoices extends Command
                 'Invoice' => [
                     'Comments' => 'Created by GKK integration',
                     'CustomerNumber' => $user->fortnox_customer_id,
+                    'OurReference' => 'GKK Kassör',
+                    'Country' => 'Sverige',
                     'InvoiceRows' => [
                         [
                             'ArticleNumber' => $articleNumber,
@@ -92,10 +94,6 @@ class FortnoxCreateInvoices extends Command
                             'DeliveredQuantity' => 1,
                             'VAT' => 0,
                         ],
-                    ],
-                    'EmailInformation' => [
-                        'EmailSubject' => 'Faktura till {name} från Göteborg Kraftsportklubb {no}  ',
-                        'EmailBody' => 'Hej!\n\nHär kommer en faktura från Göteborg Kraftsportklubb. \n\nVid betalning, var vänlig märk betalningen med ditt namn eller\nfakturanumret.\n\nMed vänliga hälsningar\GKK Kassör',
                     ],
                 ],
             ],
