@@ -73,6 +73,7 @@ class SyncFortnoxCustomersCommand extends Command
                     'Name' => "$user->first_name $user->last_name",
                     'Email' => $user->email,
                     'Comments' => 'Created by GKK integration on '.\date('Y-m-d H:i:s'),
+                    'Type' => 'PRIVATE', // This is required to get Swish as a payment option on invoices
                 ],
             ]);
 
