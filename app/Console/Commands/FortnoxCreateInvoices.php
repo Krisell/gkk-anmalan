@@ -42,15 +42,23 @@ class FortnoxCreateInvoices extends Command
             options: ['MEMBERSHIP', 'SSFLICENSE'],
         );
 
-        $articleNumber = "GKK-{$type}-2025";
+        $description = match ($type) {
+            'MEMBERSHIP' => 'Medlemsavgift',
+            'SSFLICENSE' => 'Tävlingslicens',
+            default => throw new \Exception('Invalid type'),
+        };
+
+        $year = 2025;
+        $articleNumber = "GKK-{$type}-{$year}";
+
         $this->ensureArticleExists(
             fortnox: $fortnox,
             articleNumber: $articleNumber,
-            description: 'Medlemsavgift 2025 TEST', // TODO: Make dynamic
+            description: "{$description} {$year}",
         );
 
         $payments = Payment::query()
-            ->where('year', 2025)
+            ->where('year', $year)
             ->whereNull('fortnox_invoice_document_number')
             ->whereType($type)
             ->get();
