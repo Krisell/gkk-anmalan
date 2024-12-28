@@ -18,7 +18,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
               <p class="text-xl leading-normal text-gray-500">
 
 Brukar du köra knäböj, bänkpress och marklyft på gymmet och undrar hur det är att tävla i styrkelyft ? Nu kan du få chansen att testa!
-Söndagen 4 februari 2024 anordnar Göteborg Kraftsportklubb en prova på tävling för de som vill testa på hur det är att tävla i styrkelyft. Du behöver inga speciella kläder eller utrustning utan kan ha på dig det du brukar ha när du tränar, men du bör ha tränat knäböj, bänkpress och marklyft vid några tillfällen. 
+Söndagen 26 januari 2025 anordnar Göteborg Kraftsportklubb en prova på-tävling för de som vill testa på hur det är att tävla i styrkelyft. Du behöver inga speciella kläder eller utrustning utan kan ha på dig det du brukar ha när du tränar, men du bör ha tränat lyften knäböj, bänkpress och marklyft samt veta ungefär vad som gäller för att göra godkända lyft. 
 
               </p>
 
@@ -29,27 +29,27 @@ Söndagen 4 februari 2024 anordnar Göteborg Kraftsportklubb en prova på tävli
               </p>
 
               <p class="text-xl">
-                <b>Tid:</b> <span class="text-lg">Söndagen den 4 februari 2024, samling 10.00 och tävlingsstart kl 11.00.</span>
+                <b>Tid:</b> <span class="text-lg">Söndagen 26 januari 2025, samling preliminärt 10.00 och tävlingsstart preliminärt kl 11.00.</span>
                 <br>
-                <b>Gren:</b> <span class="text-lg">Styrkelyft (knäböj, bänkpress och marklyft), eller enbart Bänkpress.</span>
+                <b>Gren:</b> <span class="text-lg"><b>Styrkelyft</b> (knäböj, bänkpress och marklyft), eller <b>enbart Bänkpress</b>.</span>
                 <br>
                 <b>Plats:</b> <span class="text-lg">Göteborg Kraftsportklubb, hos Friskis och Svettis i Majorna, Karl Johansgatan 152.</span>
                 <br>
-                <b>Avgift:</b> <span class="text-lg">200 kr (gratis om du redan är medlem i GKK)</span>
+                <b>Avgift:</b> <span class="text-lg">250 kr (gratis om du redan är medlem i GKK, eller blir medlem före tävlingen).</span>
                 <br>
-                <b>Anmälan:</b> <span class="text-lg">Senast 28 januari till info@gkk-styrkelyft.se. Det finns ett begränsat antal platser, så först till kvarn gäller! Skicka med namn, födelsedatum och ungefärliga startvikter.</span>
+                <b>Anmälan:</b> <span class="text-lg">Senast 20 januari till info@gkk-styrkelyft.se. Det finns ett begränsat antal platser, så först till kvarn gäller! Skicka med namn, födelsedatum och ungefärliga startvikter i grenarna.</span>
                 <br>
               </p>
 
               <p class="text-xl leading-normal text-gray-500">
-                Vi samlas kl 10:00 i GKKs träningslokal på Friskis&Svettis i Majorna där vi i korthet går igenom 
-                tävlingsupplägget och alla får en chans att värma upp Sedan börjar tävlingen ca kl 11:00 och 
-                pågår till ca 14:00. Det kan vara bra att ha med sig tävlingsproviant.
+                Vi samlas kl 10:00 (tid preliminär) i GKKs träningslokal på Friskis & Svettis i Majorna där vi i korthet går igenom 
+                tävlingsupplägget och alla får en chans att värma upp, och få hjälp av licensierade styrkelyftare för att ex. säkerställa att lyften blir godkända. 
+                Sedan börjar tävlingen preliminärt ca kl 11:00 och pågår till ca 14:00. Det kan vara bra att ha med sig tävlingsproviant.
               </p>
               <p class="text-xl leading-normal text-gray-500">
-                Tävlingen hålls i stora jympasalen på Friskis&Svettis i Majorna, Karl Johansgatan 152. Publik välkomnas!
-                Dagen före prova på tävlingen, lördagen den 3 februari, hålls Serie
-                1 i samma lokal för licensierade lyftare, välkomna att heja på och inspireras även då! 
+                Tävlingen hålls i stora gympasalen på Friskis&Svettis i Majorna, Karl Johansgatan 152. Publik välkomnas!
+                Dagen före prova på-tävlingen, lördagen den 25 januari, hålls Serieomgång
+                1 i samma lokal för licensierade lyftare, välkomna att komma och titta, heja på och inspireras! 
               </p>
 
               <div class="h-6"></div>

@@ -27,7 +27,7 @@
           <a :class="site === 'records' ? 'border-b-2 border-black' : ''" href="/klubbrekord">Klubbrekord</a>
         </li>
         <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'gm' ? 'border-b-2 border-black' : ''" href="/gm">GM 2024</a>
+          <a :class="site === 'prova-pa' ? 'border-b-2 border-black' : ''" href="/prova-pa">Prova på-tävling</a>
         </li>
         <li class="mt-4 hover:text-gkk">
           <a :class="site === '' ? 'border-b-2 border-black' : ''" href="/insidan">Insidan</a>
@@ -95,9 +95,9 @@
                 >
                 <a
                   class="ml-6 uppercase hover:border-b-1 text-[#009a79] border border-[#009a79] p-[2px] -m-[2px] px-1"
-                  :class="site === 'gm' ? 'border-b-2 border-[#009a79]' : ''"
-                  href="/gm"
-                  >GM 2024</a
+                  :class="site === 'prova-pa' ? 'border-b-2 border-[#009a79]' : ''"
+                  href="/prova-pa"
+                  >Prova på-tävling</a
                 >
               </div>
             </div>
