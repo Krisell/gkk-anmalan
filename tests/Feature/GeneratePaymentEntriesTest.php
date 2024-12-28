@@ -8,8 +8,11 @@ test('Membership payments can be created up front', function () {
         'birth_year' => 1970,
     ]);
 
-    $this->artisan('generate-membership-payment-up-front')
-        ->expectsQuestion('What year?', '2024')
+    $this->artisan('generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj typ av avgift', 'Medlemsavgift')
+        ->expectsQuestion('Välj målgrupp', 'Alla')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
         ->expectsOutput('3 membership payments created successfully.')
         ->assertExitCode(0);
 
@@ -40,8 +43,11 @@ test('Users with existing payments are skipped', function () {
         'state' => null,
     ]);
 
-    $this->artisan('generate-membership-payment-up-front')
-        ->expectsQuestion('What year?', '2024')
+    $this->artisan('generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj typ av avgift', 'Medlemsavgift')
+        ->expectsQuestion('Välj målgrupp', 'Alla')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
         ->expectsOutput('1 membership payments created successfully.')
         ->assertExitCode(0);
 
@@ -52,8 +58,11 @@ test('Inactivated members are skipped', function () {
     $activeUser = User::factory()->create();
     $inactiveUser = User::factory()->inactivated()->create();
 
-    $this->artisan('generate-membership-payment-up-front')
-        ->expectsQuestion('What year?', '2024')
+    $this->artisan('generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj typ av avgift', 'Medlemsavgift')
+        ->expectsQuestion('Välj målgrupp', 'Alla')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
         ->expectsOutput('1 membership payments created successfully.')
         ->assertExitCode(0);
 
