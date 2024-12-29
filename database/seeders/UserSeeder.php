@@ -55,5 +55,6 @@ class UserSeeder extends Seeder
         ]);
 
         User::factory()->create(['email' => 'sameday@example.com']);
+        User::factory()->honorary()->create(['email' => 'honorary@example.com', 'first_name' => 'Hedersmedlem', 'last_name' => 'Hedersmedlem']);
     }
 }

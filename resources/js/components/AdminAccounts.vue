@@ -137,6 +137,8 @@
                         <i
                         v-tooltip="{content: `${account.email}<br>Klicka för att kopiera.`, html: true}" @click="copyEmail(account.email)"
                         class="fa fa-envelope-o ml-2 cursor-pointer"></i>
+                        <i v-if="account.is_honorary_member" class="fa fa-trophy text-gkk ml-2"
+                        v-tooltip="'Hedersmedlem'"></i>
                       </div>
                       <span v-if="account.licence_number" class="text-xs font-light">
                         {{ account.licence_number }}
@@ -179,24 +181,27 @@
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
                   <ToggleButton 
-                    v-if="showPaymentToggle(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
+                    v-else-if="showPaymentToggle(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
                     @update:modelValue="$event => updatePayment(account, getCurrentYear() + 1, 'MEMBERSHIP')"
                     :modelValue="hasPaid(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
                   />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
                   <ToggleButton 
-                    v-if="showPaymentToggle(account, getCurrentYear(), 'MEMBERSHIP')" 
+                    v-else-if="showPaymentToggle(account, getCurrentYear(), 'MEMBERSHIP')" 
                     @update:modelValue="updatePayment(account, getCurrentYear(), 'MEMBERSHIP')"
                     :modelValue="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" 
                   />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
                   <ToggleButton 
-                    v-if="showPaymentToggle(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
+                    v-else-if="showPaymentToggle(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
                     @update:modelValue="updatePayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
                     :modelValue="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
                   />
