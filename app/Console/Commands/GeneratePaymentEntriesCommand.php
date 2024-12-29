@@ -73,7 +73,8 @@ class GeneratePaymentEntriesCommand extends Command
             $user->payments()->create([
                 'type' => 'MEMBERSHIP',
                 'year' => $year,
-                'sek_amount' => $discountedByAge ? 700 : 1500,
+                'sek_amount' => 1500,
+                'sek_discount' => $discountedByAge ? 800 : 0,
                 'modifier' => $discountedByAge ? 'AGE_DISCOUNT' : null,
             ]);
         }

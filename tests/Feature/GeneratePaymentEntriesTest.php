@@ -102,3 +102,53 @@ test('Honorary members are not skipped for SSF license fees', function () {
     $this->assertDatabaseHas(Payment::class, ['user_id' => $activeUser->id]);
     $this->assertDatabaseHas(Payment::class, ['user_id' => $honoraryUser->id]);
 });
+
+test('A normal user does not receive a discount', function () {
+    $user = User::factory()->create([
+        'birth_year' => now()->subYears(30)->year,
+    ]);
+
+    $this->artisan('generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
+        ->expectsOutput('1 membership payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $user->id,
+        'sek_amount' => 1500,
+        'sek_discount' => 0,
+    ]);
+});
+
+test('Specific ages receive discount', function () {
+    $youngUser = User::factory()->create([
+        'birth_year' => now()->subYears(20)->year,
+    ]);
+
+    $oldUser = User::factory()->create([
+        'birth_year' => now()->subYears(70)->year,
+    ]);
+
+    $this->artisan('generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
+        ->expectsOutput('2 membership payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $youngUser->id,
+        'sek_amount' => 1500,
+        'sek_discount' => 800,
+    ]);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $oldUser->id,
+        'sek_amount' => 1500,
+        'sek_discount' => 800,
+    ]);
+});

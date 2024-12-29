@@ -16,6 +16,8 @@ class Payment extends Model
         'user_id' => 'integer',
         'fortnox_invoice_created_at' => 'datetime',
         'fortnox_invoice_emailed_at' => 'datetime',
+        'sek_amount' => 'integer',
+        'sek_discount' => 'integer',
     ];
 
     public function user(): BelongsTo
