@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'edited_at' => 'datetime',
         'birth_year' => 'integer',
+        'is_honorary_member' => 'boolean',
     ];
 
     public function eventRegistrations(): HasMany

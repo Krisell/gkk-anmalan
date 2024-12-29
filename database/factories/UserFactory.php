@@ -64,4 +64,11 @@ class UserFactory extends Factory
             'birth_year' => \rand(1950, 2020),
         ]);
     }
+
+    public function honorary()
+    {
+        return $this->state(fn () => [
+            'is_honorary_member' => true,
+        ]);
+    }
 }

@@ -10,8 +10,8 @@ test('Membership payments can be created up front', function () {
 
     $this->artisan('generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
-        ->expectsQuestion('Välj typ av avgift', 'Medlemsavgift')
-        ->expectsQuestion('Välj målgrupp', 'Alla')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
         ->expectsQuestion('Hur många användare vill du hämta?', '100')
         ->expectsOutput('3 membership payments created successfully.')
         ->assertExitCode(0);
@@ -45,8 +45,8 @@ test('Users with existing payments are skipped', function () {
 
     $this->artisan('generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
-        ->expectsQuestion('Välj typ av avgift', 'Medlemsavgift')
-        ->expectsQuestion('Välj målgrupp', 'Alla')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
         ->expectsQuestion('Hur många användare vill du hämta?', '100')
         ->expectsOutput('1 membership payments created successfully.')
         ->assertExitCode(0);
@@ -60,12 +60,45 @@ test('Inactivated members are skipped', function () {
 
     $this->artisan('generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
-        ->expectsQuestion('Välj typ av avgift', 'Medlemsavgift')
-        ->expectsQuestion('Välj målgrupp', 'Alla')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
         ->expectsQuestion('Hur många användare vill du hämta?', '100')
         ->expectsOutput('1 membership payments created successfully.')
         ->assertExitCode(0);
 
     $this->assertDatabaseHas(Payment::class, ['user_id' => $activeUser->id]);
     $this->assertDatabaseMissing(Payment::class, ['user_id' => $inactiveUser->id]);
+});
+
+test('Honoraray members are skipped for membership fees', function () {
+    $activeUser = User::factory()->create();
+    $honoraryUser = User::factory()->honorary()->create();
+
+    $this->artisan('generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
+        ->expectsOutput("$honoraryUser->email is an honorary member so no payment was created.")
+        ->expectsOutput('1 membership payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseHas(Payment::class, ['user_id' => $activeUser->id]);
+    $this->assertDatabaseMissing(Payment::class, ['user_id' => $honoraryUser->id]);
+});
+
+test('Honorary members are not skipped for SSF license fees', function () {
+    $activeUser = User::factory()->create();
+    $honoraryUser = User::factory()->honorary()->create();
+
+    $this->artisan('generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj typ av avgift', 'Tävlingslicens')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
+        ->expectsOutput('2 membership payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseHas(Payment::class, ['user_id' => $activeUser->id]);
+    $this->assertDatabaseHas(Payment::class, ['user_id' => $honoraryUser->id]);
 });

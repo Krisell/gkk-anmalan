@@ -34,6 +34,11 @@ class GeneratePaymentEntriesCommand extends Command
             ],
         );
 
+        if ($type === 'SSFLICENSE') {
+            $this->error('SSFLICENSE handling is not implemented yet.');
+            exit;
+        }
+
         $target = select(
             label: 'Välj målgrupp',
             options: [
@@ -48,6 +53,12 @@ class GeneratePaymentEntriesCommand extends Command
 
         foreach ($users as $user) {
             if ($user->payments()->where('type', 'MEMBERSHIP')->where('year', $year)->exists()) {
+                continue;
+            }
+
+            if ($user->is_honorary_member && $type === 'MEMBERSHIP') {
+                $this->info("{$user->email} is an honorary member so no payment was created.");
+
                 continue;
             }
 
