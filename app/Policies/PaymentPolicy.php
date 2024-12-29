@@ -18,4 +18,9 @@ class PaymentPolicy
 
         return $user->id === $payment->user_id;
     }
+
+    public function show(User $user, Payment $payment): bool
+    {
+        return $this->update($user, $payment);
+    }
 }
