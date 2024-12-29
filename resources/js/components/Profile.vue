@@ -27,12 +27,13 @@
               <div v-if="!payment.fortnox_invoice_document_number" class="bg-blue-400 border-blue-400 border rounded p-2 text-white rounded-l-none text-sm text-center px-6 flex items-center">
                 INVÄNTAR FAKTURERING
               </div>
-              <div v-else-if="payment.fortnox_invoice_document_number" class="bg-red-400 border-red-400 p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col cursor-pointer" @click="loadURL(`/invoices/${payment.id}`, true)">
+              <div v-else-if="payment.fortnox_invoice_document_number && payment.state !== 'PAID'" class="bg-red-400 border-red-400 p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col cursor-pointer" @click="loadURL(`/invoices/${payment.id}`, true)">
                 <div>INVÄNTAR BETALNING</div>
                 <div class="text-xs block underline">Klicka för att öppna faktura</div>
               </div>
-              <div v-else-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center">
+              <div v-else-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col cursor-pointer" @click="loadURL(`/invoices/${payment.id}`, true)">
                 BETALD
+                <div class="text-xs block underline">Klicka för att öppna faktura</div>
               </div>
             </div>
             <div v-if="!payment.fortnox_invoice_document_number">
