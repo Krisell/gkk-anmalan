@@ -49,17 +49,23 @@ class FortnoxCreateInvoices extends Command
         };
 
         $year = 2025;
-        $articleNumber = "GKK-{$type}-{$year}";
 
         $this->ensureArticleExists(
             fortnox: $fortnox,
-            articleNumber: $articleNumber,
+            articleNumber: "GKK-{$type}-{$year}",
             description: "{$description} {$year}",
+        );
+
+        $this->ensureArticleExists(
+            fortnox: $fortnox,
+            articleNumber: "GKK-{$type}-{$year}-DISCOUNT",
+            description: "{$description} {$year}, rabatterad",
         );
 
         $payments = Payment::query()
             ->where('year', $year)
             ->whereNull('fortnox_invoice_document_number')
+            ->whereNull('state')
             ->whereType($type)
             ->get();
 
@@ -79,14 +85,20 @@ class FortnoxCreateInvoices extends Command
                 \sleep(2);
             }
 
-            $this->createInvoice($fortnox, $articleNumber, $payment);
+            $this->createInvoice($fortnox, $payment);
         }
     }
 
-    private function createInvoice(Fortnox $fortnox, string $articleNumber, Payment $payment)
+    private function createInvoice(Fortnox $fortnox, Payment $payment)
     {
         /** @var \App\Models\User */
         $user = $payment->user;
+
+        $articleNumber = "GKK-{$payment->type}-{$payment->year}";
+
+        if ($payment->modifier === 'AGE_DISCOUNT' || $payment->modifier === 'STUDENT_DISCOUNT') {
+            $articleNumber .= '-DISCOUNT';
+        }
 
         $response = Http::withToken($fortnox->token())->post(
             'https://api.fortnox.se/3/invoices', [
@@ -100,6 +112,8 @@ class FortnoxCreateInvoices extends Command
                         [
                             'ArticleNumber' => $articleNumber,
                             'Price' => $payment->sek_amount,
+                            'Discount' => $payment->sek_discount,
+                            'DiscountType' => 'AMOUNT',
                             'DeliveredQuantity' => 1,
                             'VAT' => 0,
                         ],

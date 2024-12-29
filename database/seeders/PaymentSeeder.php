@@ -31,8 +31,8 @@ class PaymentSeeder extends Seeder
         ]);
 
         $user->payments()->create([
-            'sek_amount' => 1500,
-            'sek_discount' => 800,
+            'sek_amount' => 700,
+            'sek_discount' => 0, // This is a separate article, discount is used for half year memberships
             'modifier' => 'AGE_DISCOUNT',
             'type' => 'MEMBERSHIP',
             'year' => 2025,

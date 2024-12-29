@@ -142,13 +142,13 @@ test('Specific ages receive discount', function () {
 
     $this->assertDatabaseHas(Payment::class, [
         'user_id' => $youngUser->id,
-        'sek_amount' => 1500,
-        'sek_discount' => 800,
+        'sek_amount' => 700,
+        'sek_discount' => 0, // Currently the age discount is handled as a separate article. This discount field will be used for half year discounts.
     ]);
 
     $this->assertDatabaseHas(Payment::class, [
         'user_id' => $oldUser->id,
-        'sek_amount' => 1500,
-        'sek_discount' => 800,
+        'sek_amount' => 700,
+        'sek_discount' => 0,
     ]);
 });

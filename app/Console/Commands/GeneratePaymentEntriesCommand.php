@@ -73,9 +73,9 @@ class GeneratePaymentEntriesCommand extends Command
             $user->payments()->create([
                 'type' => 'MEMBERSHIP',
                 'year' => $year,
-                'sek_amount' => 1500,
-                'sek_discount' => $discountedByAge ? 800 : 0,
-                'modifier' => $discountedByAge ? 'AGE_DISCOUNT' : null,
+                'sek_amount' => $discountedByAge ? 700 : 1500,
+                'sek_discount' => 0, // Age discounts are handled as separate articles. This field is used for half year memberships.
+                'modifier' => $discountedByAge ? 'AGE_DISCOUNT' : null, // Can also be STUDENT_DISCOUNT
             ]);
         }
 
