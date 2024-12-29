@@ -22,39 +22,47 @@
             <div class="flex">
               <div class="p-2 border rounded border-gkk border-r-0 rounded-r-none text-sm inline-block text-center px-6">
                 <div>{{ paymentTypeText(payment.type) }} {{payment.year }}</div>
-                <div>{{ payment.sek_amount }} SEK</div>
+                <div>{{ payment.sek_amount - payment.sek_discount }} SEK</div>
               </div>
-              <div v-if="!payment.state" class="bg-red-400 border-red-400 border rounded p-2 text-white rounded-l-none text-sm text-center px-6 flex items-center">
-                OBETALD
+              <div v-if="!payment.fortnox_invoice_document_number" class="bg-blue-400 border-blue-400 border rounded p-2 text-white rounded-l-none text-sm text-center px-6 flex items-center">
+                INVÄNTAR FAKTURERING
               </div>
-              <div v-else-if="payment.state === 'PENDING'" class="bg-orange-400 border-orange-400 p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center">
-                VERIFIERAS
+              <div v-else-if="payment.fortnox_invoice_document_number" class="bg-red-400 border-red-400 p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col cursor-pointer" @click="loadURL(invoiceUrl(payment))">
+                <div>INVÄNTAR BETALNING</div>
+                <div class="text-xs block underline">Klicka för att öppna faktura</div>
               </div>
               <div v-else-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center">
                 BETALD
               </div>
             </div>
-            <div v-if="payment.state === 'PENDING'" class="text-sm mt-2">
-              Betalningen är giltig omedelbart och kommer verifieras i systemet av föreningens kassör senast inom några veckor.
-            </div>
-            <div v-if="payment.state !== 'PAID'">
-                <img class="cursor-pointer w-48 mt-3 p-1 border-4 border-black rounded-lg" :src="`${qrCodes[payment.id]}`" />
-                <p class="text-sm italic">Skanna för att betala med Swish</p>
-                <div class="md:hidden">
-                  <Button type="secondary" class="my-2" @click="loadURL(swishUrl(payment))">Klicka här för att öppna Swish på denna enhet</Button>
-                </div>
-                <div class="mt-2">
-                  <Button 
-                    v-show="!payment.state"
-                    @click="showPaymentModal(payment)"
-                    type="primary" 
-                    class="my-2"
-                    >
-                      Klicka här när betalningen är genomförd
-                    </Button>
-                </div>
-                <p class="text-sm mt-3">Vill du betala på annat sätt? Se sidan "Om GKK" för betalningsinstruktioner via Bankgiro. Se till att märka betalningen tydligt med namn och vilken avgift det gäller.</p>
+            <div v-if="!payment.fortnox_invoice_document_number">
+              <div class="mt-4">
+                Faktura kommer skapas och skickas ut inom kort.
               </div>
+              <div class="mt-2">
+                Faktura skickas till din epost och du kommer även kunna se den här.
+              </div>
+              <div class="mt-2">
+                Betalning sker via Swish eller Bankgiro.
+              </div>
+            </div>
+            <div v-else-if="payment.state !== 'PAID'">
+              <div class="mt-4">
+                Faktura har även skickats till din epost.
+              </div>
+              <div class="mt-2">
+                Om fakturan är felaktig, exempelvis om du är student, skicka in studentbevis till <a class="underline text-nowrap" href="mailto:info@gkk-styrkelyft.se">info@gkk-styrkelyft.se</a> så korrigerar vi fakturan inom kort.
+              </div>
+              <div class="mt-2">
+                Betalning sker via Swish eller Bankgiro.
+              </div>
+              <!-- <div>
+                <Button type="secondary" class="my-2" @click="loadURL(swishUrl(payment))">Klicka här för att betala med Swish på denna enhet</Button>
+              </div> -->
+              <div class="mt-2">
+                Efter betalning kan det ta ett par dagar innan status uppdateras här.
+              </div>
+            </div>
           </div>
         </li>
       </ul> 
@@ -133,17 +141,6 @@
         </div>
       </div>
     </div>
-
-    <Modal ref="paymentPendingModal" title="Har du genomfört betalningen?">
-      <p class="text-center">Detta verifieras av vår kassör inom några veckor. Tills dess kommer det stå <i>"Verifieras"</i> här. När betalningen är verifierad kommer detta ändras till <i>"Betald"</i>.</p>
-
-      <template #footer="{ close }">
-        <div class="flex gap-2 items-center justify-center mt-4">
-          <Button @click="close" type="secondary">Tillbaka</Button>
-          <Button @click="markPaymentAsPending" type="success">Ja, betalningen är genomförd</Button>
-        </div>
-      </template>
-    </Modal>
   </div>
 </template>
 
@@ -194,24 +191,13 @@ export default {
       }
   },
   methods: {
-    async markPaymentAsPending() {
-      await axios.patch(`/payments/${this.paymentInProcess.id}`, {
-        state: 'PENDING',
-      })
-
-      window.location.reload()
-    },
-    showPaymentModal(payment) {
-      this.paymentInProcess = payment
-      this.$refs.paymentPendingModal.show()
-    },
     loadURL(url) {
       window.location = url
     },
     swishUrl(payment) {
       const msg = encodeURIComponent(`${payment.type} ${payment.year}, ${this.user.first_name} ${this.user.last_name}`)
       
-      return `https://app.swish.nu/1/p/sw/?sw=1235813456&amt=${payment.sek_amount}&msg=${msg}`
+      return `https://app.swish.nu/1/p/sw/?sw=1235813456&amt=${payment.sek_amount - payment.sek_discount}&msg=${msg}`
     },
     paymentQRCode(payment) {
       return QRCode.toDataURL(this.swishUrl(payment), {
