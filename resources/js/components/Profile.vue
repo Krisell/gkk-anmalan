@@ -57,9 +57,9 @@
               <div class="mt-2">
                 Betalning sker via Swish eller Bankgiro.
               </div>
-              <!-- <div>
-                <Button type="secondary" class="my-2" @click="loadURL(swishUrl(payment))">Klicka här för att betala med Swish på denna enhet</Button>
-              </div> -->
+              <div>
+                <Button type="secondary" class="my-2 md:hidden" @click="loadURL(swishUrl(payment))">Klicka här för att betala med Swish på denna enhet</Button>
+              </div>
               <div class="mt-2">
                 Efter betalning kan det ta ett par dagar innan status uppdateras här.
               </div>
@@ -200,9 +200,11 @@ export default {
       window.location = url
     },
     swishUrl(payment) {
-      const msg = encodeURIComponent(`${payment.type} ${payment.year}, ${this.user.first_name} ${this.user.last_name}`)
+      const swishNumber = 1235813456;
+      const msg = encodeURIComponent(`${payment.fortnox_invoice_document_number} ${this.user.fortnox_customer_id}`)
+      const amount = payment.sek_amount - payment.sek_discount
       
-      return `https://app.swish.nu/1/p/sw/?sw=1235813456&amt=${payment.sek_amount - payment.sek_discount}&msg=${msg}`
+      return `https://app.swish.nu/1/p/sw/?sw=${swishNumber}&amt=${amount}&msg=${msg}`
     },
     paymentQRCode(payment) {
       return QRCode.toDataURL(this.swishUrl(payment), {
