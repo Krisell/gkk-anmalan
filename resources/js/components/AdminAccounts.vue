@@ -115,9 +115,9 @@
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Licens.avg. 2025
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <!-- <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Medl.avg. {{ getCurrentYear() + 1 }}
-                </th>
+                </th> -->
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Medl.avg. {{ getCurrentYear() }}
                 </th>
@@ -179,7 +179,7 @@
                     :modelValue="hasPaid(account, 2025, 'SSFLICENSE')" 
                   />
                 </td>
-                <td
+                <!-- <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
                   <ToggleButton 
@@ -187,7 +187,7 @@
                     @update:modelValue="$event => updatePayment(account, getCurrentYear() + 1, 'MEMBERSHIP')"
                     :modelValue="hasPaid(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
                   />
-                </td>
+                </td> -->
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
