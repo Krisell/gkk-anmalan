@@ -140,7 +140,7 @@
                         <i v-if="account.is_honorary_member" class="fa fa-trophy text-gkk ml-2"
                         v-tooltip="'Hedersmedlem'"></i>
                         <i v-if="isJunior(account)" class="fa fa-child text-gkk ml-2"
-                        v-tooltip="'Ungdom/junior'"></i>
+                        v-tooltip="'Ungdom / Junior'"></i>
                       </div>
                       <span v-if="account.licence_number" class="text-xs font-light">
                         {{ account.licence_number }}
