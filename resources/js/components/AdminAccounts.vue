@@ -139,6 +139,8 @@
                         class="fa fa-envelope-o ml-2 cursor-pointer"></i>
                         <i v-if="account.is_honorary_member" class="fa fa-trophy text-gkk ml-2"
                         v-tooltip="'Hedersmedlem'"></i>
+                        <i v-if="isJunior(account)" class="fa fa-child text-gkk ml-2"
+                        v-tooltip="'Ungdom/junior'"></i>
                       </div>
                       <span v-if="account.licence_number" class="text-xs font-light">
                         {{ account.licence_number }}
@@ -533,6 +535,9 @@ export default {
       }
 
       this.loadAccounts()
+    },
+    isJunior(account) {
+      return new window.Date().getFullYear() - account.birth_year <= 23
     },
   },
 }
