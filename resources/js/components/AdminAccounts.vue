@@ -56,12 +56,18 @@
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-          <div>
-            <div class="relative my-4 w-64 ml-4 lg:mx-auto flex gap-2 text-sm font-thin">
-              <ToggleButton v-model="treasurerMode"  />
-              Kassörsläge
+          <div class="flex flex-col items-center">
+            <div class="relative my-4 ml-4 flex gap-6 text-sm font-thin">
+              <div class="flex flex-col gap-2">
+                Kassörsläge
+                <ToggleButton v-model="treasurerMode"  />
+              </div>
+              <div class="flex flex-col gap-2">
+                Endast ungdomar/juniorer
+                <ToggleButton v-model="onlyJuniors"  />
+              </div>
             </div>
-            <div class="relative my-4 rounded-md shadow-sm w-64 ml-4 lg:mx-auto">
+            <div class="relative my-2 rounded-md shadow-sm w-64 ml-4 lg:mx-auto">
               <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <i class="fa fa-search text-gray-400"></i>
               </div>
@@ -361,6 +367,7 @@ export default {
       accounts: this.initialAccounts,
       search: '',
       treasurerMode: false,
+      onlyJuniors: false,
     }
   },
   async mounted() {
@@ -378,12 +385,18 @@ export default {
   },
   computed: {
     filteredSortedActiveAccounts() {
+      let accounts = this.sortedActiveAccounts
+
+      if (this.onlyJuniors) {
+        accounts = accounts.filter((account) => this.isJunior(account))
+      }
+
       if (this.search === '') {
-        return this.sortedActiveAccounts
+        return accounts
       }
 
       // Fuzzy search on full name and email string
-      return this.sortedActiveAccounts.filter((account) => {
+      return accounts.filter((account) => {
         const search = this.search.toLowerCase()
         const fullName = `${account.first_name} ${account.last_name}`.toLowerCase()
         const email = account.email.toLowerCase()
