@@ -16,7 +16,7 @@ class FortnoxEmailInvoices extends Command
      *
      * @var string
      */
-    protected $signature = 'fortnox-email-invoices';
+    protected $signature = 'fortnox:email-invoices';
 
     /**
      * The console command description.

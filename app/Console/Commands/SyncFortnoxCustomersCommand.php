@@ -16,7 +16,7 @@ class SyncFortnoxCustomersCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'sync-fortnox-customers';
+    protected $signature = 'gkk:sync-fortnox-customers';
 
     /**
      * The console command description.

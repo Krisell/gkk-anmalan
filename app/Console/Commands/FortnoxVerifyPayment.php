@@ -16,7 +16,7 @@ class FortnoxVerifyPayment extends Command
      *
      * @var string
      */
-    protected $signature = 'fortnox-verify-payment';
+    protected $signature = 'fortnox:verify-payment';
 
     /**
      * The console command description.

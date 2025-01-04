@@ -7,7 +7,7 @@ test('Birth year is correctly populated from licence_number', function ($license
 
     $this->assertNull($user->birth_year);
 
-    $this->artisan('populate-birth-year')
+    $this->artisan('gkk:populate-birth-year')
         ->expectsOutput('Populating birth year from licence number ...')
         ->expectsOutput('Birth year successfully populated for 1 users.')
         ->assertExitCode(0);

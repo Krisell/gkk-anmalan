@@ -8,7 +8,7 @@ test('Membership payments can be created up front', function () {
         'birth_year' => 1970,
     ]);
 
-    $this->artisan('generate-payment-entries')
+    $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
         ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
@@ -43,7 +43,7 @@ test('Users with existing payments are skipped', function () {
         'state' => null,
     ]);
 
-    $this->artisan('generate-payment-entries')
+    $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
         ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
@@ -58,7 +58,7 @@ test('Inactivated members are skipped', function () {
     $activeUser = User::factory()->create();
     $inactiveUser = User::factory()->inactivated()->create();
 
-    $this->artisan('generate-payment-entries')
+    $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
         ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
@@ -74,7 +74,7 @@ test('Honoraray members are skipped for membership fees', function () {
     $activeUser = User::factory()->create();
     $honoraryUser = User::factory()->honorary()->create();
 
-    $this->artisan('generate-payment-entries')
+    $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
         ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
@@ -91,7 +91,7 @@ test('Honorary members are not skipped for SSF license fees', function () {
     $activeUser = User::factory()->create();
     $honoraryUser = User::factory()->honorary()->create();
 
-    $this->artisan('generate-payment-entries')
+    $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'Tävlingslicens')
         ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
@@ -108,7 +108,7 @@ test('A normal user does not receive a discount', function () {
         'birth_year' => now()->subYears(30)->year,
     ]);
 
-    $this->artisan('generate-payment-entries')
+    $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
         ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
@@ -132,7 +132,7 @@ test('Specific ages receive discount', function () {
         'birth_year' => now()->subYears(70)->year,
     ]);
 
-    $this->artisan('generate-payment-entries')
+    $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
         ->expectsQuestion('Välj målgrupp', 'MULTIPLE')

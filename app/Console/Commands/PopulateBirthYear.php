@@ -12,7 +12,7 @@ class PopulateBirthYear extends Command
      *
      * @var string
      */
-    protected $signature = 'populate-birth-year';
+    protected $signature = 'gkk:populate-birth-year';
 
     /**
      * The console command description.

@@ -14,7 +14,7 @@ class GeneratePaymentEntriesCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'generate-payment-entries';
+    protected $signature = 'gkk:generate-payment-entries';
 
     /**
      * Execute the console command.

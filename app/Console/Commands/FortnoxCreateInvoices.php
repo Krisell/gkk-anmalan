@@ -17,7 +17,7 @@ class FortnoxCreateInvoices extends Command
      *
      * @var string
      */
-    protected $signature = 'fortnox-create-invoices';
+    protected $signature = 'fortnox:create-invoices';
 
     /**
      * The console command description.
