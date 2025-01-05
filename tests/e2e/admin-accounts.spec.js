@@ -27,12 +27,13 @@ test('The admin can mark and unmark payments', async ({ page }) => {
     await page.goto('/admin/accounts')
 
     const name = `${otherUser.first_name} ${otherUser.last_name}`
-    
-    await page.getByRole('row', { name }).locator('label div').click();
+
+    await page.locator('td:nth-child(9) > .inline-flex > .w-11').click();
+
     await expect(page.getByText(`Medlemsavgiften för ${name} har markerats som betald`)).toBeVisible()
 
     await page.reload()
-    await page.getByRole('row', { name }).locator('label div').click();
+    await page.locator('td:nth-child(9) > .inline-flex > .w-11').click();
     await expect(page.getByText(`Medlemsavgiften för ${name} har markerats som obetald`)).toBeVisible()
 })
 
