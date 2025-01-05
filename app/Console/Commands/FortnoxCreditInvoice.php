@@ -39,7 +39,7 @@ class FortnoxCreditInvoice extends Command
         }
 
         $allUsers = User::all()
-            ->flatMap(fn (User $user) => [$user->id => "{$user->first_name} {$user->last_name}"])
+            ->mapWithKeys(fn (User $user) => [$user->id => "{$user->first_name} {$user->last_name}"])
             ->toArray();
 
         $userId = search(
