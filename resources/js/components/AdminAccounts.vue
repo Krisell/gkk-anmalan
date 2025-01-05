@@ -100,12 +100,10 @@
                   Bekr. funk.<br />(senaste 365 dagarna)
                 </th>
                 <th @click="sortBy('created_at')"
-                  v-show="!treasurerMode"
                   class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Regdatum
                 </th>
                 <th @click="sortBy('last_visited_at')"
-                  v-show="!treasurerMode"
                   class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Senaste besök
                 </th>
@@ -164,10 +162,10 @@
                     }})
                   </div>
                 </td>
-                <td v-show="!treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">{{ dateString(account.created_at) }}</div>
                 </td>
-                <td v-show="!treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">
                     {{ dateString(account.last_visited_at) }}
                   </div>
@@ -187,7 +185,7 @@
                   <ToggleButton 
                     v-else
                     disabled
-                    :modelValue="account.is_student_over_23" 
+                    :modelValue="Boolean(account.is_student_over_23)" 
                     v-tooltip="'Kan inte justeras ännu'"
                   />
                 </td>
