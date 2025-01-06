@@ -52,17 +52,23 @@ class FortnoxCreditInvoice extends Command
         $payments = Payment::query()
             ->where('user_id', $userId)
             ->whereNotNull('fortnox_invoice_document_number')
+            ->whereNull('state')
             ->get();
 
-        $fortnoxInvoiceDocumentNumber = select(
+        $paymentId = select(
             label: 'Välj faktura att kreditera',
-            options: $payments->mapWithKeys(fn (Payment $payment) => [$payment->fortnox_invoice_document_number => "Fakturanummer {$payment->fortnox_invoice_document_number}, {$payment->sek_amount} kr ({$payment->year})"])->toArray(),
+            options: $payments->mapWithKeys(fn (Payment $payment) => [$payment->id => "Fakturanummer {$payment->fortnox_invoice_document_number}, {$payment->sek_amount} kr"])->toArray(),
         );
 
+        $payment = Payment::findOrFail($paymentId);
+
         Http::withToken($fortnox->token())
-            ->put("https://api.fortnox.se/3/invoices/{$fortnoxInvoiceDocumentNumber}/credit")
+            ->put("https://api.fortnox.se/3/invoices/{$payment->fortnox_invoice_document_number}/credit")
             ->throw();
 
-        $this->info("Invoice {$fortnoxInvoiceDocumentNumber} credited.");
+        $this->info("Invoice {$payment->fortnox_invoice_document_number} credited.");
+        $this->info("Deleting payment entry {$payment->id}.");
+
+        $payment->delete();
     }
 }
