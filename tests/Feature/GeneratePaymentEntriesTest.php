@@ -144,11 +144,40 @@ test('Specific ages receive discount', function () {
         'user_id' => $youngUser->id,
         'sek_amount' => 700,
         'sek_discount' => 0, // Currently the age discount is handled as a separate article. This discount field will be used for half year discounts.
+        'modifier' => 'AGE_DISCOUNT',
     ]);
 
     $this->assertDatabaseHas(Payment::class, [
         'user_id' => $oldUser->id,
         'sek_amount' => 700,
         'sek_discount' => 0,
+        'modifier' => 'AGE_DISCOUNT',
+    ]);
+});
+
+test('A user with student state receives discount', function () {
+    $studentUser = User::factory()->student()->create();
+    $normalUser = User::factory()->create();
+
+    $this->artisan('gkk:generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2025')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
+        ->expectsOutput('2 membership payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $studentUser->id,
+        'sek_amount' => 700,
+        'sek_discount' => 0, // Currently the age discount is handled as a separate article. This discount field will be used for half year discounts.
+        'modifier' => 'STUDENT_DISCOUNT',
+    ]);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $normalUser->id,
+        'sek_amount' => 1500,
+        'sek_discount' => 0,
+        'modifier' => null,
     ]);
 });

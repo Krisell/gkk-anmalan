@@ -26,12 +26,14 @@ class UserFactory extends Factory
             'first_name' => $this->faker->name,
             'last_name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
+            'birth_year' => now()->subYears(30)->year, // Not eligible for age discount
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
             'membership_agreement_signed_at' => now(),
             'anti_doping_agreement_signed_at' => now(),
             'inactivated_at' => null,
+            'is_student_over_23' => false,
             'granted_by' => 1,
         ];
     }
@@ -69,6 +71,27 @@ class UserFactory extends Factory
     {
         return $this->state(fn () => [
             'is_honorary_member' => true,
+        ]);
+    }
+
+    public function young()
+    {
+        return $this->state(fn () => [
+            'birth_year' => now()->subYears(20)->year,
+        ]);
+    }
+
+    public function old()
+    {
+        return $this->state(fn () => [
+            'birth_year' => now()->subYears(70)->year,
+        ]);
+    }
+
+    public function student()
+    {
+        return $this->state(fn () => [
+            'is_student_over_23' => true,
         ]);
     }
 }
