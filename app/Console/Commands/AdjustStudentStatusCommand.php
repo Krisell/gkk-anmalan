@@ -2,7 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
+use App\Services\Fortnox;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
+
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\search;
 
 class AdjustStudentStatusCommand extends Command
 {
@@ -18,24 +24,78 @@ class AdjustStudentStatusCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Update student status for a user.';
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(Fortnox $fortnox)
     {
-        // Ask for user
+        if (! $fortnox->token()) {
+            $this->error('Fortnox integration not activated.');
 
-        // Check current student status
+            return;
+        }
 
-        // If not set, confirm if user wants to set it, otherwise inverse
+        $allUsers = User::all()
+            ->mapWithKeys(fn (User $user) => [$user->id => "{$user->first_name} {$user->last_name}"])
+            ->toArray();
 
-        // If user has an unpaid MEMBERSHIP invoice, confirm to do the following:
-        // 1. Credit the invoice
-        // 2. Delete the payment entry
-        // 3. Create a new payment entry with the correct status
-        // 4. Create a new invoice
-        // 5. Send the invoice to the user
+        $userId = search(
+            label: 'Which user do you want to adjust the student status for?',
+            options: fn (string $value) => \strlen($value) > 0
+                ? \array_filter($allUsers, fn (string $option) => \str_contains(\strtolower($option), \strtolower($value)))
+                : [],
+        );
+
+        $user = User::find($userId);
+
+        if ($user->is_student_over_23) {
+            $this->info("{$user->first_name} {$user->last_name} currently has a student status.");
+            $confirmed = confirm('Are you sure you want to remove the student status?');
+
+            if (! $confirmed) {
+                $this->info('Student status not removed.');
+
+                return;
+            }
+
+            $user->update(['is_student_over_23' => false]);
+        } else {
+            $this->info("{$user->first_name} {$user->last_name} currently does not have a student status.");
+            $confirmed = confirm('Are you sure you want to set the student status?');
+
+            if (! $confirmed) {
+                $this->info('Student status not set.');
+
+                return;
+            }
+
+            $user->update(['is_student_over_23' => true]);
+        }
+
+        /** @var ?\App\Models\Payment $payment */
+        $payment = $user->payments()->whereNotNull('fortnox_invoice_document_number')->first();
+
+        if (! $payment) {
+            $this->info('User does not have a MEMBERSHIP invoice.');
+
+            return;
+        }
+
+        if ($payment->state !== 'PAID') {
+            $this->info('User has an unpaid MEMBERSHIP invoice. Trying to credit the invoice.');
+
+            Http::withToken($fortnox->token())
+                ->put("https://api.fortnox.se/3/invoices/{$payment->fortnox_invoice_document_number}/credit")
+                ->throw();
+
+            $this->info('Invoice credited.');
+        }
+
+        $payment->delete();
+
+        $this->info('Payment entry deleted.');
+        $this->info('You can now generate a new payment entry for the user, a then create new invoice and send it.');
     }
 }
