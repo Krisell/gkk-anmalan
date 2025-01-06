@@ -63,8 +63,16 @@
                 <ToggleButton v-model="treasurerMode"  />
               </div>
               <div class="flex flex-col gap-2">
-                Endast ungdomar/juniorer
-                <ToggleButton v-model="onlyJuniors"  />
+                Visa ungdomar/juniorer upp till 23
+                <ToggleButton v-model="show.juniors"  />
+              </div>
+              <div class="flex flex-col gap-2">
+                Visa studenter över 23
+                <ToggleButton v-model="show.studentsOver23"  />
+              </div>
+              <div class="flex flex-col gap-2">
+                Visa övriga
+                <ToggleButton v-model="show.rest"  />
               </div>
             </div>
             <div class="relative my-2 rounded-md shadow-sm w-64 ml-4 lg:mx-auto">
@@ -360,7 +368,11 @@ export default {
       accounts: this.initialAccounts,
       search: '',
       treasurerMode: false,
-      onlyJuniors: false,
+      show: {
+        juniors: true,
+        studentsOver23: true,
+        rest: true,
+      }
     }
   },
   async mounted() {
@@ -380,8 +392,16 @@ export default {
     filteredSortedActiveAccounts() {
       let accounts = this.sortedActiveAccounts
 
-      if (this.onlyJuniors) {
-        accounts = accounts.filter((account) => this.isJunior(account))
+      if (!this.show.juniors) {
+        accounts = accounts.filter((account) => !this.isJunior(account))
+      }
+
+      if (!this.show.studentsOver23) {
+        accounts = accounts.filter((account) => !account.is_student_over_23)
+      }
+
+      if (!this.show.rest) {
+        accounts = accounts.filter((account) => this.isJunior(account) || account.is_student_over_23)
       }
 
       if (this.search === '') {
