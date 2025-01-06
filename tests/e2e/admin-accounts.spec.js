@@ -28,22 +28,23 @@ test('The admin can mark and unmark payments', async ({ page }) => {
 
     const name = `${otherUser.first_name} ${otherUser.last_name}`
 
-    await page.locator('td:nth-child(9) > .inline-flex > .w-11').click();
+    await page.getByRole('row', { name: name }).locator('label div').click();
 
     await expect(page.getByText(`Medlemsavgiften för ${name} har markerats som betald`)).toBeVisible()
 
     await page.reload()
-    await page.locator('td:nth-child(9) > .inline-flex > .w-11').click();
+    await page.getByRole('row', { name: name }).locator('label div').click();
     await expect(page.getByText(`Medlemsavgiften för ${name} har markerats som obetald`)).toBeVisible()
 })
 
-test('The admin can inactivated a member', async ({ page }) => {
+test('The admin can inactivate a member', async ({ page }) => {
     await login(page, { role: 'admin' })
     const user = await create(page, 'User')
 
     await page.goto('/admin/accounts')
+    
+    await page.locator('.fa-ban').nth(1).click();
 
-    await page.getByRole('row', { name: `${user.first_name} ${user.last_name}` }).locator('i').nth(2).click();
     await page.getByRole('button', { name: 'Ja, inaktivera' }).click();
     await page.getByRole('heading', { name: '1 inaktiverade konton' }).click();
 })

@@ -91,6 +91,9 @@
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Namn
                 </th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  
+                </th>
                 <th
                 @click="sortBy('event_registrations')"
                   v-show="!treasurerMode"
@@ -111,13 +114,6 @@
                   v-show="!treasurerMode"
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                   Antal besök
-                </th>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  Avtal
-                </th>
-                <th v-show="treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  Student över 23
                 </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Licens.avg. 2025
@@ -144,16 +140,17 @@
                         <i
                         v-tooltip="{content: `${account.email}<br>Klicka för att kopiera.`, html: true}" @click="copyEmail(account.email)"
                         class="fa fa-envelope-o ml-2 cursor-pointer"></i>
-                        <i v-if="account.is_honorary_member" class="fa fa-trophy text-gkk ml-2"
-                        v-tooltip="'Hedersmedlem'"></i>
-                        <i v-if="isJunior(account)" class="fa fa-child text-gkk ml-2"
-                        v-tooltip="'Ungdom / Junior'"></i>
                       </div>
                       <span v-if="account.licence_number" class="text-xs font-light">
                         {{ account.licence_number }}
                       </span>
                     </div>
                   </div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <i v-if="isJunior(account)" class="fa fa-child text-gkk text-xl" v-tooltip="'Ungdom / Junior'"></i>
+                  <i v-else-if="account.is_student_over_23" class="fa fa-graduation-cap text-gkk text-xl" v-tooltip="'Student över 23'"></i>
+                  <i v-if="account.is_honorary_member" class="fa fa-trophy text-gkk text-xl" v-tooltip="'Hedersmedlem'"></i>
                 </td>
                 <td v-show="!treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">
@@ -174,20 +171,6 @@
                   v-show="!treasurerMode"
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   {{ account.visits }}
-                </td>
-                <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <i class="fa fa-check-circle text-gkk text-lg"
-                    v-if="account.membership_agreement_signed_at && account.anti_doping_agreement_signed_at"></i>
-                </td>
-                <td v-show="treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <i v-if="isJunior(account)" class="fa fa-child text-gkk text-xl" v-tooltip="'Ungdom / Junior'"></i>
-                  <ToggleButton 
-                    v-else
-                    disabled
-                    :modelValue="Boolean(account.is_student_over_23)" 
-                    v-tooltip="'Kan inte justeras ännu'"
-                  />
                 </td>
                 <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
