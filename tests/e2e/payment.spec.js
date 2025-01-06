@@ -48,5 +48,5 @@ test('Payments show status and invoice link after being synced to Fortnox', asyn
     await expect(await page.getByText('Medlemsavgift 2025123 SEKINVÄNTAR BETALNINGKlicka för att öppna faktura')).toBeVisible()
     await expect(await page.getByText('Tävlingslicens 2025456 SEKINVÄNTAR BETALNINGKlicka för att öppna faktura')).toBeVisible()
     await expect(await page.getByText('Faktura har även skickats till din epost.').first()).toBeVisible()
-    await expect(await page.getByText('Efter betalning kan det ta ett par dagar innan status uppdateras här.').first()).toBeVisible()
+    await expect(await page.getByText('Efter betalning kan det ta några bankdagar innan status uppdateras här.').first()).toBeVisible()
 })

@@ -61,7 +61,7 @@
                 <Button type="secondary" class="my-2 md:hidden" @click="loadURL(swishUrl(payment))">Klicka här för att betala med Swish på denna enhet</Button>
               </div>
               <div class="mt-2">
-                Efter betalning kan det ta ett par dagar innan status uppdateras här.
+                Efter betalning kan det ta några bankdagar innan status uppdateras här.
               </div>
             </div>
           </div>
@@ -201,7 +201,7 @@ export default {
     },
     swishUrl(payment) {
       const swishNumber = 1235813456;
-      const msg = encodeURIComponent(`${payment.fortnox_invoice_document_number} ${this.user.fortnox_customer_id}`)
+      const msg = encodeURIComponent(`Fakturanummer ${payment.fortnox_invoice_document_number}, ${this.user.first_name} ${this.user.last_name}`)
       const amount = payment.sek_amount - payment.sek_discount
       
       return `https://app.swish.nu/1/p/sw/?sw=${swishNumber}&amt=${amount}&msg=${msg}`
