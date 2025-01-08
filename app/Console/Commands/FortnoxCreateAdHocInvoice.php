@@ -38,6 +38,7 @@ class FortnoxCreateAdHocInvoice extends Command
         $customerName = text('Enter the customer name');
         $articleName = text('Enter the article name');
         $amount = text('Enter the amount');
+        $invoiceDate = text('Enter the invoice date (YYYY-MM-DD). This must be before the payment in Fortnox.');
 
         $response = Http::withToken($fortnox->token())->post(
             'https://api.fortnox.se/3/customers', [
@@ -66,6 +67,7 @@ class FortnoxCreateAdHocInvoice extends Command
         Http::withToken($fortnox->token())->post(
             'https://api.fortnox.se/3/invoices', [
                 'Invoice' => [
+                    'InvoiceDate' => $invoiceDate,
                     'DueDate' => now()->addDays(30)->format('Y-m-d'),
                     'Comments' => 'Created by GKK integration on '.\date('Y-m-d H:i:s'),
                     'CustomerNumber' => $customer['CustomerNumber'],
