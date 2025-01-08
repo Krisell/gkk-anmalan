@@ -75,6 +75,7 @@ class FortnoxCreateAdHocInvoice extends Command
                     'Country' => 'Sverige',
                     'InvoiceRows' => [
                         [
+                            'AccountNumber' => 3013, // Tävlingsintäkter
                             'ArticleNumber' => $article['ArticleNumber'],
                             'Price' => $amount,
                             'DeliveredQuantity' => 1,
