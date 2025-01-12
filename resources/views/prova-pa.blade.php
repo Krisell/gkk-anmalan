@@ -52,7 +52,7 @@ Brukar du köra knäböj, bänkpress och marklyft på gymmet och undrar hur det 
               <p class="text-xl leading-normal text-gray-500">
                 Vi samlas kl 10:00 i GKKs träningslokal på Friskis & Svettis i Majorna där vi i korthet går igenom 
                 tävlingsupplägget. Sedan får alla chans att värma upp, och få hjälp av licensierade styrkelyftare för att ex. säkerställa att lyften blir godkända. 
-                Tävlingen börjar preliminärt ca kl 11:00 och pågår till ca 14:00. Det kan vara bra att ha med sig tävlingsproviant.
+                Tävlingen börjar ca kl 11:00 och pågår till ca 14:00. Det kan vara bra att ha med sig tävlingsproviant.
               </p>
               <p class="text-xl leading-normal text-gray-500">
                 Tävlingen hålls i stora gympasalen på Friskis & Svettis i Majorna, Karl Johansgatan 152. Publik är varmt välkommen!
