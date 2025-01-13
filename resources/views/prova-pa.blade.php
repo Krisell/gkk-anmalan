@@ -46,7 +46,7 @@ Brukar du köra knäböj, bänkpress och marklyft på gymmet och undrar hur det 
                 <br>
                 <b>Anmälan:</b> <span class="text-lg">Senast 20 januari till info@gkk-styrkelyft.se. Det finns ett begränsat antal platser, så först till kvarn gäller! Skicka med namn, födelsedatum och ungefärliga startvikter i grenarna.</span>
                 <br>
-                <b>Betalning:</b> <span class="text-lg">Sker i samband med anmälan till GKKs Bankgiro eller Swish. Ange "PROVA PÅ" och ditt namn. Swishnummer: 123-581 34 56. <a class="underline" href="https://gkk.test/gkk">Se här för mer info om betalning.</a></span>
+                <b>Betalning:</b> <span class="text-lg">Sker i samband med anmälan till GKKs Bankgiro eller Swish. Ange "PROVA PÅ" och ditt namn. Swishnummer: 123-581 34 56. <a class="underline" href="/gkk">Se här för mer info om betalning.</a></span>
               </p>
 
               <p class="text-xl leading-normal text-gray-500">
