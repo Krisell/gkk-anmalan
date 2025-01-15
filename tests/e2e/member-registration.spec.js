@@ -8,8 +8,6 @@ test('A lifter can register for a competition', async ({ page }) => {
 
     await page.goto('/competitions')
 
-    await expect(page.getByText('Du har inte meddelat om du vill tävla ännu').first()).toBeVisible()
-
     await page.getByText(competition.name).click();
     await page.locator('div').filter({ hasText: /^Herrar$/ }).getByRole('radio').check();
     await page.getByRole('combobox').selectOption('74');

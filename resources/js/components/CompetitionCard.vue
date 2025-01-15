@@ -17,12 +17,11 @@
         <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
       </Message>
       <Message info v-else>
-        <div>Du har inte meddelat om du vill tävla ännu.</div>
         <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
       </Message>
 
       <Message style="margin-top: 10px" v-if="competition.publish_count_value > 0">
-        Hittills har {{ competition.publish_count_value }} GKK-medlemmar tackat ja till denna tävling.
+        Just nu är {{ competition.publish_count_value }} GKK-medlemmar registrerade på denna tävling.
       </Message>
     </div>
   </div>
