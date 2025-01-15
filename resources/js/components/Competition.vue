@@ -156,18 +156,35 @@
             >Ja, jag vill tävla</Button
           >
 
-          <Message v-if="simultaneousEvent && wantsToCompete" info class="mt-2 mb-4">
-            <p>
-              Grymt, vi ses där! Om du tävlar på hemmaplan förväntas du också anmäla dig 
+          <Modal ref="registrationInformationModal" wide :title="`Information om avgifter och funktionärskrav`">
+
+            <template #footer="{ close }">
+              <div class="flex gap-2 items-center justify-center mt-4">
+                <Button @click="close">Ok</Button>
+              </div>
+            </template>
+          </Modal>
+
+          <Message v-if="wantsToCompete" info class="mt-2 mb-4">
+            <h3 class="text-lg font-light">Information om tävlingsavgifter</h3>
+            <p class="mt-2">
+              Medlem betalar aldrig tävlingsavgifter direkt till arrangör utan alltid via GKK. Till vissa större tävlingar beslutar GKK att bekosta avgiften för sina medlemmar. Sådana beslut tas per tävling och i relation till aktuellt budgetutrymme, så enskild medlem ska vara beredd att bekosta samtliga tävlingsstarter.
+            </p>
+            <p class="mt-2">
+              Vid utebliven start från tävling ska medlem betala in anmälningskostnaden till GKK, även i de fall GKK beslutat att föreningen står för avgiften. Giltigt undantag från denna regel är t.ex akut sjukdom/skada eller händelse.
+              </p>
+              <p class="mt-2">
+Vid SM-tävlingar gäller dessutom straffavgift vid utebliven start utan att arrangör har meddelats. Det är därför mycket viktigt att meddela arrangören (direkt) om tävlingsstart uteblir, och vid eventuell straffavgift bekostar medlemmen detta genom insättning till GKK, som betalar arrangören.
+            </p>
+
+            <h3 class="text-lg font-light mt-6">Information om funktionärskrav</h3>
+            <p v-if="simultaneousEvent">
+              Om du tävlar på hemmaplan förväntas du också anmäla dig 
               som funktionär  och hjälpa till exempelvis med framplock eller efter eget tävlande. 
               Du kan <a target="_blank" class="underline text-blue-400" :href="`/events/${simultaneousEvent.id}`">anmäla 
-              dig som funktionär till {{ simultaneousEvent.name }}</a> här. Naturligtvis kommer du inte 
+              dig som funktionär till {{ simultaneousEvent.name }} här</a>. Naturligtvis kommer du inte 
               bli satt på fysisk krävande uppgifter före eget tävlande.
             </p>
-            <p class="mt-3">Kom ihåg att <a target="_blank" class="underline text-blue-400" href="/profile">gällande medlemsavtal</a> ställer krav på tävlingsaktiva medlemmar.</p>
-          </Message>
-          <Message v-else-if="wantsToCompete" info class="mt-2 mb-4">
-            <p>Grymt, vi ses där!</p>
             <p class="mt-3">Kom ihåg att <a target="_blank" class="underline text-blue-400" href="/profile">gällande medlemsavtal</a> ställer krav på tävlingsaktiva medlemmar.</p>
           </Message>
 
@@ -177,9 +194,6 @@
           <Button type="secondary" v-if="!registration || wantsToCompete" class="mb-4" @click.prevent="register(false)"
             >Jag vill inte tävla</Button
           >
-          <div v-if="registrationStatus === 'completed'">
-            <Message v-if="!wantsToCompete" info class="mb-4">Informationen är mottagen.</Message>
-          </div>
 
           <Button v-if="justSaved" secondary disabled style="margin-bottom: 10px">Sparat!</Button>
           <Button v-else secondary style="margin-bottom: 10px" @click.prevent="save">Spara</Button>
