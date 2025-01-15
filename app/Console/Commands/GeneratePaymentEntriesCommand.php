@@ -53,7 +53,9 @@ class GeneratePaymentEntriesCommand extends Command
     {
         // Find users registered to competitions in the selected year but without a generated payment entry.
         $yearCompetitions = Competition::whereBetween('date', ["{$year}-01-01", "{$year}-12-31"])->get();
-        $registeredUsers = $yearCompetitions->flatMap(fn ($competition) => $competition->registrations->pluck('user'))->unique();
+        $registeredUsers = $yearCompetitions->flatMap(function ($competition) {
+            return $competition->registrations->where('status', true)->pluck('user');
+        })->unique();
         $missingLicensesUsers = $registeredUsers->filter(fn ($user) => ! $user->payments()->where('type', 'SSFLICENSE')->where('year', $year)->exists());
 
         $confirmed = confirm("{$missingLicensesUsers->count()} license payments will be created. Do you want to continue?");

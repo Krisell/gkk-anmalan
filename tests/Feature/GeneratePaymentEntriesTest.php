@@ -273,6 +273,29 @@ test('License entries are created with competition registration the relevant yea
     $this->assertDatabaseHas(Payment::class, ['user_id' => $user->id, 'type' => 'SSFLICENSE', 'year' => 2024]);
 });
 
+test('License entries are only created if registration status is true', function () {
+    $user = User::factory()->create();
+
+    $competition = Competition::factory()->create([
+        'date' => '2024-01-01',
+    ]);
+
+    CompetitionRegistration::factory()->create([
+        'user_id' => $user->id,
+        'competition_id' => $competition->id,
+        'status' => false,
+    ]);
+
+    $this->artisan('gkk:generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
+        ->expectsQuestion('0 license payments will be created. Do you want to continue?', true)
+        ->expectsOutput('0 license payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseMissing(Payment::class, ['user_id' => $user->id]);
+});
+
 test('License entries are not created if not confirmed', function () {
     $user = User::factory()->create();
 
