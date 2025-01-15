@@ -96,7 +96,7 @@ class FortnoxCreateInvoices extends Command
 
         $articleNumber = "GKK-{$payment->type}-{$payment->year}";
 
-        if ($payment->modifier === 'AGE_DISCOUNT' || $payment->modifier === 'STUDENT_DISCOUNT') {
+        if ($payment->modifier === 'AGE_DISCOUNT' || $payment->modifier === 'STUDENT_DISCOUNT' || $payment->modifier === 'YOUTH') {
             $articleNumber .= '-DISCOUNT';
         }
 

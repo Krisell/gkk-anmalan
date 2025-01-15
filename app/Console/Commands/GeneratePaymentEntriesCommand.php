@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Competition;
 use App\Models\User;
 use Illuminate\Console\Command;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
 
 class GeneratePaymentEntriesCommand extends Command
@@ -34,11 +36,48 @@ class GeneratePaymentEntriesCommand extends Command
             ],
         );
 
-        if ($type === 'SSFLICENSE') {
-            $this->error('SSFLICENSE handling is not implemented yet.');
+        $handlers = [
+            'MEMBERSHIP' => 'generateMembershipPayments',
+            'SSFLICENSE' => 'generateLicensePayments',
+        ];
+
+        if (! \array_key_exists($type, $handlers)) {
+            $this->error('Invalid payment type.');
             exit;
         }
 
+        $this->{$handlers[$type]}($year);
+    }
+
+    private function generateLicensePayments($year)
+    {
+        // Find users registered to competitions in the selected year but without a generated payment entry.
+        $yearCompetitions = Competition::whereBetween('date', ["{$year}-01-01", "{$year}-12-31"])->get();
+        $registeredUsers = $yearCompetitions->flatMap(fn ($competition) => $competition->registrations->pluck('user'))->unique();
+        $missingLicensesUsers = $registeredUsers->filter(fn ($user) => ! $user->payments()->where('type', 'SSFLICENSE')->where('year', $year)->exists());
+
+        $confirmed = confirm("{$missingLicensesUsers->count()} license payments will be created. Do you want to continue?");
+
+        if (! $confirmed) {
+            return;
+        }
+
+        foreach ($missingLicensesUsers as $user) {
+            $isYouth = ((int) $year - $user->birth_year) <= 18;
+            $user->payments()->create([
+                'type' => 'SSFLICENSE',
+                'year' => $year,
+                'sek_amount' => $isYouth ? 200 : 900, // Correct amounts for 2025, but needs to be updated for 2026.
+                'sek_discount' => 0,
+                'modifier' => $isYouth ? 'YOUTH' : null,
+            ]);
+        }
+
+        $this->info("{$missingLicensesUsers->count()} license payments created successfully.");
+    }
+
+    private function generateMembershipPayments($year)
+    {
         $target = select(
             label: 'Välj målgrupp',
             options: [
@@ -56,7 +95,7 @@ class GeneratePaymentEntriesCommand extends Command
                 continue;
             }
 
-            if ($user->is_honorary_member && $type === 'MEMBERSHIP') {
+            if ($user->is_honorary_member) {
                 $this->info("{$user->email} is an honorary member so no payment was created.");
 
                 continue;
