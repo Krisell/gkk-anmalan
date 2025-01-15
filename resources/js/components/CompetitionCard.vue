@@ -16,8 +16,8 @@
         <div>Du har anmält intresse att tävla!</div>
         <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
       </Message>
-      <Message info v-else>
-        <div v-if="afterLastRegistration(competition)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
+      <Message info v-else-if="afterLastRegistration(competition)">
+        <div class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
       </Message>
 
       <Message style="margin-top: 10px" v-if="competition.publish_count_value > 0">
