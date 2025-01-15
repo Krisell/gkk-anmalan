@@ -16,7 +16,8 @@ test('A lifter can register for a competition', async ({ page }) => {
     await page.locator('.w-11').first().click();
     await page.getByPlaceholder('Ev. kommentar/ytterligare').fill('Some comment');
     await page.getByRole('button', { name: 'Ja, jag vill tävla' }).click();
-    await page.getByText('Grymt, vi ses där!').click();
+    await expect(page.getByText('Information om tävlingsavgifter')).toBeVisible()
+    await expect(page.getByText('Information om funktionärskrav')).toBeVisible()
 
     await page.goto('/competitions')
 
