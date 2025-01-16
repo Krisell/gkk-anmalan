@@ -17,7 +17,7 @@ const PowerliftingLive = {
         weightClass = (lifter.gender === 'Män') ? '120+' : '84+'
       }
 
-      csv += `${lifter.licence_number};Senior;${weightClass};${lifter.user.first_name};${lifter.user.last_name};Göteborg KK;;1\n`;
+      csv += `${lifter.user.licence_number};Senior;${weightClass};${lifter.user.first_name};${lifter.user.last_name};Göteborg KK;;1\n`;
     })
 
     File.save('powerlifting-live-import.csv', csv, 'data:text/csv;charset=utf-8')
