@@ -317,19 +317,21 @@ test('License entries are not created if not confirmed', function () {
     $this->assertDatabaseMissing(Payment::class, ['user_id' => $user->id]);
 });
 
-test('The correct fee is set for payment registrations', function () {
-    $currentYear = 2024;
+test('The correct fee and discount is set for payment registrations', function () {
+    $currentYear = 2025;
 
-    $userA = User::factory()->create(['birth_year' => $currentYear - 17]); // Discounted license fee
-    $userB = User::factory()->create(['birth_year' => $currentYear - 18]); // Discounted license fee
-    $userC = User::factory()->create(['birth_year' => $currentYear - 19]); // Full license fee
-    $userD = User::factory()->create(['birth_year' => $currentYear - 80]); // Full license fee
+    $userA = User::factory()->create(['birth_year' => $currentYear - 17]); // Youth license fee + discount
+    $userB = User::factory()->create(['birth_year' => $currentYear - 18]); // Youth license fee + discount
+    $userC = User::factory()->create(['birth_year' => $currentYear - 19]); // Discounted license fee
+    $userD = User::factory()->create(['birth_year' => $currentYear - 25]); // Discounted license fee
+    $userE = User::factory()->create(['birth_year' => $currentYear - 26]); // Full license fee
+    $userF = User::factory()->create(['birth_year' => $currentYear - 80]); // Full license fee
 
     $competition = Competition::factory()->create([
-        'date' => '2024-08-04',
+        'date' => '2025-08-04',
     ]);
 
-    foreach ([$userA, $userB, $userC, $userD] as $user) {
+    foreach ([$userA, $userB, $userC, $userD, $userE, $userF] as $user) {
         CompetitionRegistration::factory()->create([
             'user_id' => $user->id,
             'competition_id' => $competition->id,
@@ -337,37 +339,57 @@ test('The correct fee is set for payment registrations', function () {
     }
 
     $this->artisan('gkk:generate-payment-entries')
-        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj år för avgift', '2025')
         ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
-        ->expectsQuestion('4 license payments will be created. Do you want to continue?', true)
-        ->expectsOutput('4 license payments created successfully.')
+        ->expectsQuestion('6 license payments will be created. Do you want to continue?', true)
+        ->expectsOutput('6 license payments created successfully.')
         ->assertExitCode(0);
 
     $this->assertDatabaseHas(Payment::class, [
         'user_id' => $userA->id,
         'type' => 'SSFLICENSE',
-        'year' => 2024,
+        'year' => 2025,
         'sek_amount' => 200,
+        'sek_discount' => 300,
     ]);
 
     $this->assertDatabaseHas(Payment::class, [
         'user_id' => $userB->id,
         'type' => 'SSFLICENSE',
-        'year' => 2024,
+        'year' => 2025,
         'sek_amount' => 200,
+        'sek_discount' => 300,
     ]);
 
     $this->assertDatabaseHas(Payment::class, [
         'user_id' => $userC->id,
         'type' => 'SSFLICENSE',
-        'year' => 2024,
+        'year' => 2025,
         'sek_amount' => 900,
+        'sek_discount' => 300,
     ]);
 
     $this->assertDatabaseHas(Payment::class, [
         'user_id' => $userD->id,
         'type' => 'SSFLICENSE',
-        'year' => 2024,
+        'year' => 2025,
         'sek_amount' => 900,
+        'sek_discount' => 300,
+    ]);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $userE->id,
+        'type' => 'SSFLICENSE',
+        'year' => 2025,
+        'sek_amount' => 900,
+        'sek_discount' => 0,
+    ]);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $userF->id,
+        'type' => 'SSFLICENSE',
+        'year' => 2025,
+        'sek_amount' => 900,
+        'sek_discount' => 0,
     ]);
 });

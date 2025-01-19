@@ -56,5 +56,48 @@ class UserSeeder extends Seeder
 
         User::factory()->create(['email' => 'sameday@example.com']);
         User::factory()->honorary()->create(['email' => 'honorary@example.com', 'first_name' => 'Hedersmedlem', 'last_name' => 'Hedersmedlem']);
+
+        User::factory()->create([
+            'first_name' => 'Youth',
+            'last_name' => 'Member',
+            'birth_year' => now()->subYears(15)->year,
+            'email' => 'youth@example.com',
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'Junior',
+            'last_name' => 'Member',
+            'birth_year' => now()->subYears(20)->year,
+            'email' => 'junior@example.com',
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'Lok',
+            'last_name' => 'Member',
+            'birth_year' => now()->subYears(24)->year,
+            'email' => 'lok@example.com',
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'Student',
+            'last_name' => 'Member',
+            'birth_year' => now()->subYears(30)->year,
+            'email' => 'student@example.com',
+            'is_student_over_23' => true,
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'Adult',
+            'last_name' => 'Member',
+            'birth_year' => now()->subYears(30)->year,
+            'email' => 'adult@example.com',
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'Senior',
+            'last_name' => 'Member',
+            'birth_year' => now()->subYears(65)->year,
+            'email' => 'senior@example.com',
+        ]);
     }
 }

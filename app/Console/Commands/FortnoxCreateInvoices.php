@@ -100,27 +100,27 @@ class FortnoxCreateInvoices extends Command
             $articleNumber .= '-DISCOUNT';
         }
 
-        $response = Http::withToken($fortnox->token())->post(
-            'https://api.fortnox.se/3/invoices', [
-                'Invoice' => [
-                    'DueDate' => now()->addDays(30)->format('Y-m-d'),
-                    'Comments' => 'Created by GKK integration',
-                    'CustomerNumber' => $user->fortnox_customer_id,
-                    'OurReference' => 'GKK Kassör',
-                    'Country' => 'Sverige',
-                    'InvoiceRows' => [
-                        [
-                            'ArticleNumber' => $articleNumber,
-                            'Price' => $payment->sek_amount,
-                            'Discount' => $payment->sek_discount,
-                            'DiscountType' => 'AMOUNT',
-                            'DeliveredQuantity' => 1,
-                            'VAT' => 0,
-                        ],
+        $data = [
+            'Invoice' => [
+                'DueDate' => now()->addDays(30)->format('Y-m-d'),
+                'Comments' => 'Created by GKK integration',
+                'CustomerNumber' => $user->fortnox_customer_id,
+                'OurReference' => 'GKK Kassör',
+                'Country' => 'Sverige',
+                'InvoiceRows' => [
+                    [
+                        'ArticleNumber' => $articleNumber,
+                        'Price' => $payment->sek_amount,
+                        'Discount' => $payment->sek_discount,
+                        'DiscountType' => 'AMOUNT',
+                        'DeliveredQuantity' => 1,
+                        'VAT' => 0,
                     ],
                 ],
             ],
-        );
+        ];
+
+        $response = Http::withToken($fortnox->token())->post('https://api.fortnox.se/3/invoices', $data);
 
         $invoice = $response->json()['Invoice'];
 

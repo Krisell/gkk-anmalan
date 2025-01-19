@@ -21,10 +21,18 @@ class CompetitionSeeder extends Seeder
             'date' => now()->addDays(10),
         ]);
 
-        CompetitionRegistration::factory()
-            ->for(User::whereEmail('sameday@example.com')->first())
-            ->for($competition)
-            ->create();
+        foreach ([
+            'youth@example.com',
+            'junior@example.com',
+            'lok@example.com',
+            'student@example.com',
+            'sameday@example.com',
+        ] as $email) {
+            CompetitionRegistration::factory()
+                ->for(User::whereEmail($email)->first())
+                ->for($competition)
+                ->create();
+        }
 
         Competition::factory(3)->create([
             'name' => 'Some other competition',
