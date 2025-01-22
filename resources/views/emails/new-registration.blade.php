@@ -4,9 +4,9 @@
 En ny medlem har skapat ett konto som har blivit godkänt.
 
 
-{{ $name }}
-{{ $email }}
-Födelseår: {{ $birthYear }}
+{{ $name }}<br>
+{{ $email }}<br>
+Födelseår: {{ $birthYear }}<br>
 
 Hälsningar,<br>
 {{ config('app.name') }}
