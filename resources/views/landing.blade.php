@@ -23,14 +23,14 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     <i class="fa fa-file-pdf-o mr-2"></i>Kallelse och föredragningslista årsmöte 2025-02-16 kl 12.00
                   </a>
                 </div>
-                {{-- <div>
+                <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FLbWn2RCC8LrT0wVJTWOK2ZbwfyIY7r.pdf?alt=media&token=2f57c4a8-c3d3-42fc-b4bb-76a7e367abad">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2023, uppdaterad 2024-02-23.
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FDGBk9fasuGZeQ8bWAX4Uop2EZFUi7J.pdf?alt=media&token=ff4e6a0d-602d-4797-b7f3-ce1683d2f111">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2024
                   </a>
-                </div> --}}
+                </div>
                 {{-- <div>
                   <a 
                     target="_blank"
@@ -55,14 +55,29 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     <i class="fa fa-file-pdf-o mr-2"></i>Valberedningens förslag för 2025
                   </a>
                 </div>
-                {{-- <div>
+                <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FRevisionsberattelse_2023_Goteborg_Kraftsportklubb%20(1).pdf?alt=media&token=c5d4d798-82e6-4d86-995c-4cef2cf38bfc">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Revisionsberättelse 2023
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FocGMIpBbUbFUteTxgxr5Bu5bJKbrvZ.pdf?alt=media&token=4f9b5ff7-f004-4fc2-bb2f-e821414aa589">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Revisionsberättelse 2024
                   </a>
-                </div> --}}
+                </div>
+                <div>
+                  <a 
+                    target="_blank"
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FXSlmDdMsbMNAUo2SkErTwfIzf93sDQ.pdf?alt=media&token=6346e687-ffac-4e86-8111-7641adf5aae1">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Motion (Veteranutskott) och styrelsens yttrande
+                  </a>
+                </div>
+                <div>
+                  <p class="text-xl leading-normal text-black">
+                    Ytterligare möteshandlingar hittar medlemmar på "Insidan" under "Dokument".
+                  </p>
+                </div>
+
+                
 
                 {{-- <a href="/gm" class="mt-6 block">
                   <div class="rounded p-2 border-gkk border-2">
