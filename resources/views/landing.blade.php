@@ -27,7 +27,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FDGBk9fasuGZeQ8bWAX4Uop2EZFUi7J.pdf?alt=media&token=ff4e6a0d-602d-4797-b7f3-ce1683d2f111">
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2Fn3Gc8wTbI8OygNYumrXnwoDd8p7VUp.pdf?alt=media&token=dd7cb0d9-9d0e-463a-b8d1-31f029219478">
                     <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2024
                   </a>
                 </div>
