@@ -96,6 +96,6 @@ class AdjustStudentStatusCommand extends Command
         $payment->delete();
 
         $this->info('Payment entry deleted.');
-        $this->info('You can now generate a new payment entry for the user, a then create new invoice and send it.');
+        $this->info('You can now generate a new payment entry for the user, and then create new invoice and send it.');
     }
 }
