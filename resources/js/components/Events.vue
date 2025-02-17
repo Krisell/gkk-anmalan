@@ -14,7 +14,7 @@
     </div>
 
     <div v-else>
-      <h2 class="text-center text-xl font-thin m-6">Just nu finns inga tävlingar att anmäla sig till.</h2>
+      <h2 class="text-center text-xl font-thin m-6">Just nu finns inga funktionärsuppdrag eller event att anmäla sig till.</h2>
     </div>
   </div>
 </template>
