@@ -15,7 +15,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Välkommen till Göteborg Kraftsportklubb</h2>
                 </div>
 
-                <div>
+                {{-- <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
@@ -30,7 +30,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2Fn3Gc8wTbI8OygNYumrXnwoDd8p7VUp.pdf?alt=media&token=dd7cb0d9-9d0e-463a-b8d1-31f029219478">
                     <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2024
                   </a>
-                </div>
+                </div> --}}
                 {{-- <div>
                   <a 
                     target="_blank"
@@ -47,7 +47,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     <i class="fa fa-file-pdf-o mr-2"></i>Ekonomiskt resultat 2023
                   </a>
                 </div> --}}
-                <div>
+                {{-- <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
@@ -75,7 +75,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <p class="text-xl leading-normal text-black">
                     Ytterligare möteshandlingar hittar medlemmar på "Insidan" under "Dokument".
                   </p>
-                </div>
+                </div> --}}
 
                 
 
