@@ -26,7 +26,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
 
                 <p class="text-xl leading-normal text-gray-500 mt-4 mb-4">Varmt välkommen att hälsa på och träna ett pass med oss!</p>
                   
-                <h3 class="mt-8 -mb-6 text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2024</h3>
+                <h3 class="mt-8 -mb-6 text-2xl font-extrabold tracking-tight sm:text-4xl">Förtroendevalda 2025</h3>
                 </div>
                 <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
@@ -101,7 +101,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
                       <div class="w-32 h-32 flex-shrink-0 mx-auto rounded-full overflow-hidden">
-                        <img src="https://media.licdn.com/dms/image/D4D03AQGkPTFT6yS5oA/profile-displayphoto-shrink_800_800/0/1709116948089?e=1716422400&v=beta&t=kotPjB_C648SOZH_k66N-gMEN8iO5_SqkqkxwAigFaM" alt="">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGkPTFT6yS5oA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1709116948089?e=2147483647&v=beta&t=PMk6RPkdleWR8xAFD9vYj2IdWNFPQF1CD6P1k-h_zjk" alt="">
                       </div>
                       <h3 class="mt-6 text-gray-900 text-sm font-medium">Sebastian Bratland</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
@@ -111,8 +111,8 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   </li>
                   <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
                     <div class="flex-1 flex flex-col p-8">
-                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://goteborg-kraftsportklubb.web.app/img/styrelsen_tobias.jpg" alt="">
-                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Tobias Nilsson</h3>
+                      <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fmaximus2.png?alt=media&token=0e728e58-5db1-42b5-99c8-6ef86a53ff8e" alt="">
+                      <h3 class="mt-6 text-gray-900 text-sm font-medium">Maximus Sörnes Andersson</h3>
                       <dl class="mt-1 flex-grow flex flex-col justify-between">
                         <dd class="text-gray-500 text-sm">Suppleant</dd>
                       </dl>
