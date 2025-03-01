@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\select;
 
 class FortnoxVerifyPayment extends Command
 {
@@ -36,10 +37,23 @@ class FortnoxVerifyPayment extends Command
             return;
         }
 
-        $payments = Payment::query()
+        $target = select(
+            label: 'Vill du kontrollera alla betalningar eller enbart senaste 10?',
+            options: [
+                'LATEST_10' => 'Senaste 10',
+                'ALL' => 'Alla',
+            ],
+        );
+
+        $paymentsQuery = Payment::query()
             ->whereNotNull('fortnox_invoice_document_number')
-            ->whereNull('state')
-            ->get();
+            ->whereNull('state');
+
+        if ($target === 'LATEST_10') {
+            $paymentsQuery->latest()->take(10);
+        }
+
+        $payments = $paymentsQuery->get();
 
         $confirmed = confirm(
             label: "{$payments->count()} fakturor är inte markerade som betalda. Vill du kontrollera dessa mot Fortnox?",
