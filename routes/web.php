@@ -101,6 +101,10 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::post('/', [\App\Http\Controllers\AdminCreateAccountsController::class, 'store']);
     });
 
+    Route::prefix('license/{user}/{year}')->group(function () {
+        Route::post('/', [\App\Http\Controllers\LicenseAdminController::class, 'store']);
+    });
+
     Route::prefix('events')->controller(EventController::class)->group(function () {
         Route::get('/{event}', 'admin');
         Route::get('/', 'adminIndex');
