@@ -619,6 +619,7 @@ export default {
               [
                 { value: 'Namn', type: 'string' },
                 { value: 'Epost', type: 'string' },
+                { value: 'Födelseår', type: 'string' },
                 { value: 'Licensnummer', type: 'string' },
                 { value: 'Har betalt medlemsavgift för ' + this.getCurrentYear(), type: 'string' },
                 { value: 'Registreringsdatum', type: 'string' },
@@ -629,6 +630,7 @@ export default {
                 return [
                   { value: `${user.first_name} ${user.last_name}`, type: 'string' },
                   { value: user.email, type: 'string' },
+                  { value: user.birth_year, type: 'string' },
                   { value: user.licence_number, type: 'string' },
                   { value: user.is_honorary_member ? 'Hedersmedlem' : this.hasPaid(user, this.getCurrentYear(), 'MEMBERSHIP') ? 'Ja' : 'Nej', type: 'string' },
                   { value: this.dateString(user.created_at), type: 'string' },
