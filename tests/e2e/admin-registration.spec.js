@@ -21,6 +21,29 @@ test('A competition registration can be seen and edited', async ({ page }) => {
     expect(updatedRegistration.comment).toBe('Some admin comment') 
 })
 
+test('A superadmin can edit events for a registration', async ({ page }) => {
+    await login(page, { role: 'admin' })
+
+    const competition = await create(page, 'Competition', { date: '2030-01-01' })
+    const registration = await create(page, 'CompetitionRegistration', { competition_id: competition.id })
+    const user = await first(page, 'User', { id: registration.user_id })
+
+    await page.goto('/admin/competitions')
+
+    await page.getByText(competition.name).click();
+
+    await expect(page.getByText(`${user.first_name} ${user.last_name}`)).toBeVisible()
+    await expect(page.getByText('KSL')).toBeVisible()
+    await expect(page.getByText('KBP')).toBeVisible()
+
+    await page.getByRole('cell', { name: '' }).locator('i').click();
+    await page.locator('div:nth-child(2) > .inline-flex > .w-11').click();
+    await page.getByRole('button', { name: 'Uppdatera' }).click();
+    
+    await expect(page.getByText('KSL')).toBeVisible()
+    await expect(page.getByText('KBP')).toBeHidden()
+})
+
 test('An event registration can be seen and edited', async ({ page }) => {
     await login(page, { role: 'admin' })
 

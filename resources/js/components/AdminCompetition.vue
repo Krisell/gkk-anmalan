@@ -181,6 +181,31 @@
           </div>
         </div>
         <div>
+        <!-- Events -->
+        <label for="location" class="block text-sm leading-5 font-medium text-gray-700">Gren</label>
+        <div class="mt-4">
+          <div v-if="hasEvent('ksl')" class="flex mb-2 items-center">
+            <ToggleButton v-model="registrationToEdit.events.ksl" />
+            <div class="ml-2 font-thin">Klassisk Styrkelyft</div>
+          </div>
+
+          <div v-if="hasEvent('kbp')" class="flex mb-2 items-center">
+            <ToggleButton v-model="registrationToEdit.events.kbp" />
+            <div class="ml-2 font-thin">Klassisk Bänkpress</div>
+          </div>
+
+          <div v-if="hasEvent('sl')" class="flex mb-2 items-center">
+            <ToggleButton v-model="registrationToEdit.events.sl" />
+            <div class="ml-2 font-thin">Styrkelyft (utrustat)</div>
+          </div>
+
+          <div v-if="hasEvent('bp')" class="flex mb-2 items-center">
+            <ToggleButton v-model="registrationToEdit.events.bp" />
+            <div class="ml-2 font-thin">Bänkpress (utrustat)</div>
+          </div>
+        </div>
+
+
           <label for="location" class="block text-sm leading-5 font-medium text-gray-700">Anmäld</label>
           <select
             v-model="registrationToEdit.status"
@@ -216,9 +241,10 @@ import Modal from './ui/Modal.vue'
 import Button from './ui/Button.vue'
 import LiftingCast from '../modules/LiftingCast.js'
 import PowerliftingLive from '../modules/PowerliftingLive.js'
+import ToggleButton from './ui/ToggleButton.vue'
 
 export default {
-  components: { Button, Modal, Link },
+  components: { Button, Modal, Link, ToggleButton },
   props: ['competition'],
   data() {
     return {
@@ -272,6 +298,9 @@ export default {
         .map(([event]) => event.toUpperCase())
         .join(', ')
     },
+    hasEvent(event) {
+      return JSON.parse(this.competition.events)[event]
+    },
     sortBy(key) {
       if (this.sortKey === key) {
         this.sortOrder *= -1
@@ -281,6 +310,7 @@ export default {
     },
     editRegistration(registration) {
       this.registrationToEdit = JSON.parse(JSON.stringify(registration))
+      this.registrationToEdit.events = JSON.parse(this.registrationToEdit.events)
       this.$refs.editRegistrationModal.show()
     },
     confirmEditRegistration() {
