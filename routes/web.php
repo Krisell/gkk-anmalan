@@ -101,7 +101,7 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::post('/', [\App\Http\Controllers\AdminCreateAccountsController::class, 'store']);
     });
 
-    Route::prefix('license/{user}/{year}')->group(function () {
+    Route::prefix('licenses/{user}/{year}')->group(function () {
         Route::post('/', [\App\Http\Controllers\LicenseAdminController::class, 'store']);
     });
 

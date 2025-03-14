@@ -7,12 +7,12 @@ test('Only admin can hit the endpoint', function () {
 
     $this
         ->actingAs(User::factory()->create())
-        ->post("/admin/license/{$user->id}/2025")
+        ->post("/admin/licenses/{$user->id}/2025")
         ->assertStatus(401);
 
     $this
         ->actingAs(User::factory()->admin()->create())
-        ->post("/admin/license/{$user->id}/2025")
+        ->post("/admin/licenses/{$user->id}/2025")
         ->assertStatus(200);
 });
 
@@ -23,7 +23,7 @@ test('A license can be activated for a user', function () {
 
     $this
         ->actingAs(User::factory()->admin()->create())
-        ->post("/admin/license/{$user->id}/2025")
+        ->post("/admin/licenses/{$user->id}/2025")
         ->assertStatus(200);
 
     $this->assertDatabaseHas('payments', [

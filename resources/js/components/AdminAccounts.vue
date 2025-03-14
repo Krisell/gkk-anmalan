@@ -190,6 +190,10 @@
                     @update:modelValue="updatePayment(account, 2025, 'SSFLICENSE')"
                     :modelValue="hasPaid(account, 2025, 'SSFLICENSE')" 
                   />
+                  <i v-else 
+                    @click="confirmCreateMissingLicense(account, 2025)"
+                    class="fa fa-plus-circle cursor-pointer transition hover:scale-125"
+                  ></i>
                 </td>
                 <!-- <td
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
@@ -349,6 +353,15 @@
       </div>
     </div>
 
+    <Modal ref="createMissingLicenseModal" :title="`Är du säker på att du vill skapa licensavgift för ${selectedAccount && selectedAccount.email}?`">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button @click="close" type="secondary">Nej</Button>
+          <Button @click="createMissingLicense" type="danger">Ja, skapa licensavgift</Button>
+        </div>
+      </template>
+    </Modal>
+
     <Modal ref="promoteModal" :title="`Är du säker på att du vill göra ${selectedAccount && selectedAccount.email} till administratör?`">
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
@@ -403,6 +416,7 @@ export default {
   data() {
     return {
       selectedAccount: null,
+      selectedYear: null,
       grantStatus: '',
       sortKey: 'visits',
       sortOrder: -1,
@@ -550,6 +564,14 @@ export default {
     confirmDemotion(account) {
       this.selectedAccount = account
       this.$refs.demoteModal.show()
+    },
+    confirmCreateMissingLicense(account, year) {
+      this.selectedAccount = account
+      this.selectedYear = year
+      this.$refs.createMissingLicenseModal.show()
+    },
+    createMissingLicense() {
+      axios.post(`/admin/licenses/${this.selectedAccount.id}/${this.selectedYear}`).then(() => this.reload())
     },
     demote() {
       axios.post(`/admin/accounts/demote/${this.selectedAccount.id}`).then(() => this.reload())
