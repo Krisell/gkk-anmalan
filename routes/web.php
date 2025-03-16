@@ -180,4 +180,4 @@ Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(fu
     Route::get('disconnect', [\App\Http\Controllers\FortnoxIntegrationController::class, 'disconnect'])->name('fortnox.disconnect');
 });
 
-Route::get('/webhooks', WebhookController::class)->name('webhook');
+Route::get('/webhooks/{action}', WebhookController::class)->name('webhook');

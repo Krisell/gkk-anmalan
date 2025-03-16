@@ -8,10 +8,8 @@ use Illuminate\Support\Facades\URL;
 
 class WebhookController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, $action = null)
     {
-        $action = request('action');
-
         abort_unless(URL::hasValidSignature($request), 403);
         abort_unless(\method_exists($this, $action), 403);
 

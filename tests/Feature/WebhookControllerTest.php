@@ -17,12 +17,6 @@ test('Webhook cannot be called with a signed URL and non-existing action', funct
     $this->get($url)->assertForbidden();
 });
 
-test('Webhook cannot be called with a signed URL and missing action parameter', function () {
-    $url = URL::signedRoute('webhook');
-
-    $this->get($url)->assertForbidden();
-});
-
 test('Webhook cannot be called with a non-signed URL', function () {
     $this->get(route('webhook', ['action' => 'log']))->assertForbidden();
 });
