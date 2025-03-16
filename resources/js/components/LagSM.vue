@@ -7,14 +7,14 @@
             <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">Lag-SM 2024</h2>
           </div>
           <h3 class="text-xl font-extrabold tracking-tight sm:text-2xl">
-            Slutställning i elitserien - Top 5 går till finalen i Falkenberg 14-15 december
+            GKK Tog medalj i alla 4 tävlingsklasser (Herrar och Damer i Klassisk Styrkelyft och Klassisk Bänkpress). Årets bedrift!
           </h3>
-          <p>
+          <!-- <p>
             Kompletta serier hittar ni här:
             <a class="underline" target="_blank" href="https://online.styrkelyft.se/web/series.aspx"
               >https://online.styrkelyft.se/web/series.aspx</a
             >
-          </p>
+          </p> -->
 
           <!-- <p class="text-xl leading-normal text-gray-500">
               Den 16-17 december 2023 avögrs Lag-SM i Styrkelyft hos Göteborg Kraftsportklubb.
@@ -65,7 +65,7 @@
                 <option value="three">Visa ställningen efter 3 avslutade omgångar</option>
             </select>
         </p> -->
-      <div class="mt-4 mb-32 flex items-between lg:items-center justify-start flex-col lg:flex-row">
+      <!-- <div class="mt-4 mb-32 flex items-between lg:items-center justify-start flex-col lg:flex-row">
         <div class="flex flex-1">
           <div class="flex-1">
             <h3 class="mt-4 font-bold">KSL Herrar</h3>
@@ -219,7 +219,7 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -241,17 +241,6 @@ export default {
       KBPDam: [],
       showRound: 'latest',
     }
-  },
-  async mounted() {
-    // const response = await fetch('http://127.0.0.1:5001/goteborg-kraftsportklubb/europe-north1/readEliteSeries')
-    const response = await fetch('https://readeliteseries-td5gx4uymq-lz.a.run.app')
-
-    this.series = await response.json()
-
-    this.KSLHerr = [...this.series.find((serie) => serie.name === 'KSL Herr').top10]
-    this.KSLDam = [...this.series.find((serie) => serie.name === 'KSL Dam').top10]
-    this.KBPHerr = [...this.series.find((serie) => serie.name === 'KBP Herr').top10]
-    this.KBPDam = [...this.series.find((serie) => serie.name === 'KBP Dam').top10]
   },
   methods: {
     teamImage(team) {
