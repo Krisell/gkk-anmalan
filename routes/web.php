@@ -4,6 +4,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LagSMController;
 use App\Http\Controllers\SignAgreementsController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
 use App\Http\Middleware\SuperadminMiddleware;
@@ -178,3 +179,5 @@ Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(fu
     Route::get('activation', [\App\Http\Controllers\FortnoxIntegrationController::class, 'activation'])->name('fortnox.activation');
     Route::get('disconnect', [\App\Http\Controllers\FortnoxIntegrationController::class, 'disconnect'])->name('fortnox.disconnect');
 });
+
+Route::get('/webhooks', WebhookController::class)->name('webhook');
