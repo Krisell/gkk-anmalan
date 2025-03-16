@@ -15,7 +15,7 @@
         <div class="ml-6 text-sm italic">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
       </div>
 
-      <h2 class="mt-8 mb-1 text-2xl">Avgifter</h2>
+      <h2 class="mt-8 mb-1 text-2xl">Medlemsavgifter och SSF-licens</h2>
       <ul>
         <li v-for="payment in payments" :key="payment.id" class="mt-2">
           <div class="border-4 rounded p-4">
