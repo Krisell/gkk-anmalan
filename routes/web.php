@@ -181,3 +181,5 @@ Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(fu
 });
 
 Route::get('/webhooks/{action}', WebhookController::class)->name('webhook');
+
+Route::view('/slides-for-screen', 'slides')->name('slides');
