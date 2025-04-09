@@ -20,6 +20,11 @@ import ImageSlide from './ImageSlide.vue'
 import TextSlide from './TextSlide.vue'
 import axios from 'axios'
 
+// If userAgent contains CrOS, set localStorage id to 'gkk-room'
+if (navigator.userAgent.includes('CrOS')) {
+    localStorage.setItem('id', 'gkk-room')
+}
+
 setInterval(() => {
     axios.post('/slideshow/log', { id: localStorage.getItem('id') })
 }, 60 * 1000)
@@ -28,14 +33,15 @@ const slide = ref(0)
 
 const interval = setInterval(() => {
     slide.value = (slide.value + 1) % 6
-}, 5000)
+}, 30 * 1000)
 
-// Reload page after 30 minutes. This might break the slideshow if the device is currently
-// offline. That will be solved by adding a service worker for offline loading.
+// Reload page after 10 minutes. This might break the slideshow if the device is currently
+// offline. That will be solved by adding a service worker for offline loading. It also looks
+// like Chrome automatically reloads the page in the offline state.
 setTimeout(() => {
     clearInterval(interval)
     window.location.reload()
-}, 30 * 60 * 1000)
+}, 10 * 60 * 1000)
 
 </script>
 
