@@ -2,11 +2,12 @@
         <ImageSlide v-if="slide == 0" imageUrl="https://goteborg-kraftsportklubb.web.app/img/logo-min.png" />
         <TextSlide v-if="slide == 1" text="GKKs slideshow - kommer snart!" />
         <ImageSlide v-if="slide == 2" imageUrl="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fsta%CC%88dschema.png?alt=media&token=8d8e4060-08a2-40df-804f-b4cc6b26467a" />
-        <TextSlide v-if="slide == 3" text="https://goteborgkk.se" />
+        <TextSlide v-if="slide == 3" text="goteborgkk.se" />
+        <ImageSlide v-if="slide == 4" imageUrl="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FLokalregler.png?alt=media&token=f6eacaf7-01cb-4983-81d8-5549679592e4" />
 
         <!-- Add loading bar at the bottom, covering the full width -->
         <div class="fixed bottom-0 left-0 w-full h-2 bg-gray-300">
-            <div class="h-full bg-gkk transition-all duration-500" :style="{ width: (slide + 1) * 25 + '%' }"></div>
+            <div class="h-full bg-gkk transition-all duration-500" :style="{ width: (slide + 1) * 20 + '%' }"></div>
         </div>
 </template>
 
@@ -18,7 +19,7 @@ import TextSlide from './TextSlide.vue'
 const slide = ref(0)
 
 const interval = setInterval(() => {
-    slide.value = (slide.value + 1) % 4
+    slide.value = (slide.value + 1) % 5
 }, 5000)
 
 // Reload page after 30 minutes. This might break the slideshow if the device is currently
