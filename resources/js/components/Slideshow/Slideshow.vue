@@ -1,4 +1,5 @@
 <template>
+    <div class="cursor-none">
         <ImageSlide v-if="slide == 0" imageUrl="https://goteborg-kraftsportklubb.web.app/img/logo-min.png" />
         <TextSlide v-if="slide == 1" text="GKKs slideshow - kommer snart!" />
         <ImageSlide v-if="slide == 2" imageUrl="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fsta%CC%88dschema.png?alt=media&token=8d8e4060-08a2-40df-804f-b4cc6b26467a" />
@@ -9,6 +10,7 @@
         <div class="fixed bottom-0 left-0 w-full h-2 bg-gray-300">
             <div class="h-full bg-gkk transition-all duration-500" :style="{ width: (slide + 1) * 20 + '%' }"></div>
         </div>
+    </div>
 </template>
 
 <script setup>
