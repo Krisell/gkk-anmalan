@@ -4,6 +4,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LagSMController;
 use App\Http\Controllers\SignAgreementsController;
+use App\Http\Controllers\SlideshowController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
@@ -183,3 +184,4 @@ Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(fu
 Route::get('/webhooks/{action}', WebhookController::class)->name('webhook');
 
 Route::view('/slides-for-screen', 'slides')->name('slides');
+Route::post('slideshow/log', [SlideshowController::class, 'log']);

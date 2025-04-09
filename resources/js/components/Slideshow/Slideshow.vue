@@ -15,6 +15,11 @@
 import { ref } from 'vue'
 import ImageSlide from './ImageSlide.vue'
 import TextSlide from './TextSlide.vue'
+import axios from 'axios'
+
+setInterval(() => {
+    axios.post('/slideshow/log')
+}, 60 * 1000)
 
 const slide = ref(0)
 
