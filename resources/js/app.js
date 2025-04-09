@@ -23,6 +23,7 @@ import Competition from './components/Competition.vue'
 import AdminResults from './components/AdminResults.vue'
 import Competitions from './components/Competitions.vue'
 import AdminAccounts from './components/AdminAccounts.vue'
+import Slideshow from './components/Slideshow/Slideshow.vue'
 import AdminNewsEmail from './components/AdminNewsEmail.vue'
 import AdminDocuments from './components/AdminDocuments.vue'
 import CompetitionCard from './components/CompetitionCard.vue'
@@ -85,6 +86,7 @@ app.component('GkkRecords', Records)
 app.component('GkkAdminNews', AdminNews)
 app.component('GkkDocuments', Documents)
 app.component('GkkEventCard', EventCard)
+app.component('GkkSlideshow', Slideshow)
 app.component('GkkNavigation', Navigation)
 app.component('GkkAdminEvent', AdminEvent)
 app.component('GkkAgreements', Agreements)
