@@ -17,16 +17,16 @@
 
 <script setup>
 import { ref } from 'vue'
-import ImageSlide from './ImageSlide.vue'
-import TextSlide from './TextSlide.vue'
+import Slide from './Slide.vue'
 import axios from 'axios'
 
 const slides = [
-    { id: 0, type: ImageSlide, props: { imageUrl: 'https://goteborg-kraftsportklubb.web.app/img/logo-min.png' } },
-    { id: 1, type: TextSlide, props: { text: 'GKKs slideshow - kommer snart!' } },
-    { id: 2, type: ImageSlide, props: { imageUrl: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fsta%CC%88dschema.png?alt=media&token=8d8e4060-08a2-40df-804f-b4cc6b26467a' } },
-    { id: 4, type: ImageSlide, props: { imageUrl: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FLokalregler.png?alt=media&token=f6eacaf7-01cb-4983-81d8-5549679592e4' } },
-    { id: 5, type: ImageSlide, props: { imageUrl: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FVa%CC%88lkommen.png?alt=media&token=448520ae-092b-43d6-b72e-4092cc55e435' } }
+    { id: 0, type: Slide, props: { image: 'https://goteborg-kraftsportklubb.web.app/img/logo-min.png' } },
+    { id: 1, type: Slide, props: { text: 'GKKs slideshow - kommer snart!' } },
+    { id: 2, type: Slide, props: { text: 'Städschema', image: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fsta%CC%88dschema.png?alt=media&token=8d8e4060-08a2-40df-804f-b4cc6b26467a' } },
+    { id: 4, type: Slide, props: { image: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FLokalregler.png?alt=media&token=f6eacaf7-01cb-4983-81d8-5549679592e4' } },
+    { id: 6, type: Slide, props: { text: 'Veckans meme', image: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2F27FE51DA-89FC-43DE-BB99-087315ADBC52.jpg?alt=media&token=e94405b0-5483-4705-b0d6-9c86f37d6a09' } },
+    { id: 7, type: Slide, props: { text: 'Klubblokalen januari 2019', subText: 'Före golvet gjordes om', image: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FlokalenJanuari2019.png?alt=media&token=499ede71-8975-4c52-a4cf-fb3bff2ec810' } },
 ]
 
 // If userAgent contains CrOS, set localStorage id to 'gkk-room'
