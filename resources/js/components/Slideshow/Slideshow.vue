@@ -29,11 +29,6 @@ const slides = [
     { id: 7, type: Slide, props: { text: 'Klubblokalen januari 2019', subText: 'Före golvet gjordes om', image: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FlokalenJanuari2019.png?alt=media&token=499ede71-8975-4c52-a4cf-fb3bff2ec810' } },
 ]
 
-// If userAgent contains CrOS, set localStorage id to 'gkk-room'
-if (navigator.userAgent.includes('CrOS')) {
-    localStorage.setItem('id', 'gkk-room')
-}
-
 setInterval(() => {
     axios.post('/slideshow/log', { id: localStorage.getItem('id') })
 }, 60 * 1000)
