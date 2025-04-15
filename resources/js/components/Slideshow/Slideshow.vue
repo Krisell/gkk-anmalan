@@ -1,11 +1,16 @@
 <template>
+    <div v-if="state == 'loading'" class="cursor-none">
+        <div class="flex flex-col items-center justify-center h-screen gap-4 max-h-screen">
+            <img class="max-w-[97%] max-h-[97%] overflow-auto" src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png" />
+        </div>
+    </div>
     <div class="cursor-none">
         <div class="fixed bottom-0 right-0 p-4 text-gkk text-3xl opacity-70">
             {{ currentSlide + 1 }} / {{ slides.length }}
         </div>
 
         <template v-for="(slide, index) in slides" :key="index">
-            <Component :is="slide.type" v-bind="slide.props" v-show="currentSlide == index" class="w-full h-full" />
+            <Component :is="component(slide.type)" v-bind="slide.data" v-show="currentSlide == index" class="w-full h-full" />
         </template>
 
         <div 
@@ -16,18 +21,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Slide from './Slide.vue'
 import axios from 'axios'
 
-const slides = [
-    { type: Slide, props: { image: 'https://goteborg-kraftsportklubb.web.app/img/logo-min.png' } },
-    { type: Slide, props: { text: 'Glöm inte anmäla er som funktionär till serie 2!' } },
-    { type: Slide, props: { text: 'Städschema', image: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fsta%CC%88dschema.png?alt=media&token=8d8e4060-08a2-40df-804f-b4cc6b26467a' } },
-    { type: Slide, props: { image: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FLokalregler.png?alt=media&token=f6eacaf7-01cb-4983-81d8-5549679592e4' } },
-    { type: Slide, props: { text: 'Veckans meme', image: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2F27FE51DA-89FC-43DE-BB99-087315ADBC52.jpg?alt=media&token=e94405b0-5483-4705-b0d6-9c86f37d6a09' } },
-    { type: Slide, props: { text: 'Klubblokalen januari 2019', subText: 'Före golvet gjordes om', image: 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FlokalenJanuari2019.png?alt=media&token=ab029c13-3d5f-4fff-bd5a-28dcbd4e5181' } },
-]
+let state = ref('loading')
+let slides = ref([])
+
+onMounted(async () => {
+    const response = await axios.get('/slideshow/slides')
+    slides.value = response.data
+    state.value = 'loaded'
+})
+
+function component(type) {
+    if (type === 'Slide') {
+        return Slide
+    }
+
+    return null
+}
 
 setInterval(() => {
     axios.post('/slideshow/log', { id: localStorage.getItem('id') })
@@ -40,13 +53,13 @@ let progressInterval = null
 let progress = ref(0)
 
 function nextSlide() {
-    currentSlide.value = (currentSlide.value + 1) % slides.length
+    currentSlide.value = (currentSlide.value + 1) % slides.value.length
     startTime = Date.now()
     restartInterval()
 }
 
 function previousSlide() {
-    currentSlide.value = (currentSlide.value - 1 + slides.length) % slides.length
+    currentSlide.value = (currentSlide.value - 1 + slides.value.length) % slides.value.length
     startTime = Date.now()
     restartInterval()
 }

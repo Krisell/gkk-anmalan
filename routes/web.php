@@ -184,4 +184,8 @@ Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(fu
 Route::get('/webhooks/{action}', WebhookController::class)->name('webhook');
 
 Route::view('/slides-for-screen', 'slides')->name('slides');
-Route::post('slideshow/log', [SlideshowController::class, 'log']);
+
+Route::prefix('slideshow')->controller(SlideshowController::class)->group(function () {
+    Route::post('log', 'log');
+    Route::get('slides', 'index');
+});

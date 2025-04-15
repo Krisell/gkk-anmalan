@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Slide;
+
 class SlideshowController extends Controller
 {
+    public function index()
+    {
+        return Slide::all(['type', 'data', 'order']);
+    }
+
     public function log()
     {
         if (request('id') == null) {

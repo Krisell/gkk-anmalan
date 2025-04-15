@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             CompetitionSeeder::class,
             EventSeeder::class,
             PaymentSeeder::class,
+            SlideSeeder::class,
         ]);
     }
 }

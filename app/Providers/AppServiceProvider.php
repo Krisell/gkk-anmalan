@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Illuminate\Database\Eloquent\Casts\Json::encodeUsing(
+            fn ($value) => \json_encode($value, JSON_UNESCAPED_UNICODE),
+        );
     }
 }
