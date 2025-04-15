@@ -27,11 +27,22 @@ import axios from 'axios'
 
 let state = ref('loading')
 let slides = ref([])
+let slidesHash = ref('')
 
 onMounted(async () => {
     const response = await axios.get('/slideshow/slides')
-    slides.value = response.data
+    slides.value = response.data.slides
+    slidesHash.value = response.data.hash
     state.value = 'loaded'
+
+    setInterval(async () => {
+        const response = await axios.get('/slideshow/slides')
+
+        // If Slideshow has changed, reload to get recent version
+        if (response.data.hash !== slidesHash.value) {
+            location.reload()
+        }
+    }, 10 * 1000)
 })
 
 function component(type) {

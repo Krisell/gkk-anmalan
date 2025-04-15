@@ -8,7 +8,12 @@ class SlideshowController extends Controller
 {
     public function index()
     {
-        return Slide::all(['type', 'data', 'order']);
+        $slides = Slide::all(['type', 'data', 'order']);
+
+        return [
+            'slides' => $slides,
+            'hash' => \hash('sha256', \json_encode($slides)),
+        ];
     }
 
     public function log()
