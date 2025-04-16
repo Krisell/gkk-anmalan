@@ -193,4 +193,5 @@ Route::view('/slides-for-screen', 'slides')->name('slides');
 Route::prefix('slideshow')->controller(SlideshowController::class)->group(function () {
     Route::post('log', 'log');
     Route::get('slides', 'index');
+    Route::post('order', 'updateOrder');
 });
