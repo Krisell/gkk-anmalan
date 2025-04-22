@@ -14,5 +14,6 @@ class Slide extends Model
 
     protected $casts = [
         'data' => 'json',
+        'is_visible' => 'boolean',
     ];
 }

@@ -31,7 +31,7 @@ let slidesHash = ref('')
 
 onMounted(async () => {
     const response = await axios.get('/slideshow/slides')
-    slides.value = response.data.slides
+    slides.value = response.data.slides.filter(slide => slide.is_visible)
     slidesHash.value = response.data.hash
     state.value = 'loaded'
 

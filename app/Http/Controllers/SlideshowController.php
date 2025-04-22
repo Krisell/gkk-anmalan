@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Slide;
+use Illuminate\Http\Request;
 
 class SlideshowController extends Controller
 {
     public function index()
     {
-        $slides = Slide::select(['id', 'type', 'data', 'order'])->orderBy('order')->get();
+        $slides = Slide::select(['id', 'type', 'data', 'order', 'is_visible'])->orderBy('order')->get();
 
         return [
             'slides' => $slides,
@@ -46,5 +47,16 @@ class SlideshowController extends Controller
         }
 
         logger('User Agent: '.request()->header('User-Agent'));
+    }
+
+    public function update(Slide $slide, Request $request)
+    {
+        $validated = $request->validate([
+            'is_visible' => 'required|boolean',
+        ]);
+
+        $slide->update($validated);
+
+        return $slide;
     }
 }

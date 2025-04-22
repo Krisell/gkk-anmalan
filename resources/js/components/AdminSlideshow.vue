@@ -16,6 +16,18 @@
               v-tooltip="'Redigera'"
             ></i>
             <i 
+            class="cursor-pointer fa fa-eye-slash hover:scale-110 transition-all"
+            v-tooltip="'Visa'"
+            v-if="!slide.is_visible"
+            @click="setVisibility(slide.id, true)"
+            ></i>
+            <i 
+              class="cursor-pointer fa fa-eye hover:scale-110 transition-all"
+              v-tooltip="'Göm'"
+              v-if="slide.is_visible"
+              @click="setVisibility(slide.id, false)"
+              ></i>
+            <i 
               class="fa fa-arrow-down hover:scale-110 transition-all" 
               :class="{ 'text-gray-400': index === slides.length - 1, 'cursor-pointer': index !== slides.length - 1 }"
               v-tooltip="'Flytta ner'"
@@ -43,6 +55,28 @@ import axios from 'axios'
 
 const $toast = useToast();
 const slides = ref([])
+
+async function setVisibility(id, isVisible) {
+  try {
+    await axios.patch(`/slideshow/slides/${id}`, { is_visible: isVisible })
+
+    const slide = slides.value.find(slide => slide.id === id)
+    if (slide) {
+      slide.is_visible = isVisible
+    }
+
+    $toast.success(`Sliden är nu ${isVisible ? 'synlig' : 'gömd'}`, {
+      duration: 2000,
+      type: 'success'
+    })
+  } catch (error) {
+    console.error('Error updating slide visibility:', error)
+    $toast.error('Sliden kunde inte ändras', {
+      duration: 2000,
+      type: 'error'
+    })
+  }
+}
 
 async function moveByIndex(index, direction) {
   const newIndex = index + direction

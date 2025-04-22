@@ -194,4 +194,5 @@ Route::prefix('slideshow')->controller(SlideshowController::class)->group(functi
     Route::post('log', 'log');
     Route::get('slides', 'index');
     Route::post('order', 'updateOrder');
+    Route::patch('slides/{slide}', 'update');
 });
