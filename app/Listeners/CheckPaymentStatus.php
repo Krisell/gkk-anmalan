@@ -12,6 +12,7 @@ class CheckPaymentStatus
 
         $pendingPayments = $user->payments()
             ->whereNull('state')
+            ->where('year', now()->year)
             ->where('created_at', '<=', now()->subDays(3))
             ->get();
 
