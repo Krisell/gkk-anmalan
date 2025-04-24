@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Events\UserWasActiveEvent;
 use Closure;
 
 class LogVisitsMiddleware
@@ -19,10 +20,7 @@ class LogVisitsMiddleware
         }
 
         if ($request->user() && (! $request->user()->last_visited_at || now()->subMinutes(30)->gt($request->user()->last_visited_at))) {
-            $request->user()->update([
-                'visits' => $request->user()->visits + 1,
-                'last_visited_at' => now(),
-            ]);
+            UserWasActiveEvent::dispatch($request->user());
         }
 
         return $next($request);

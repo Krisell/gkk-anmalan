@@ -34,7 +34,11 @@
 @yield('css')
 
 <div id="app" class="mt-16">
-<gkk-header :user='@json(auth()->user())' :site='@json($site ?? '')' :view='@json($view ?? '')'></gkk-header>
+<gkk-header 
+    :user='@json(auth()->user())' 
+    :site='@json($site ?? '')' 
+    :view='@json($view ?? '')'
+></gkk-header>
 
 <main class="mt-16">
 @yield('content')

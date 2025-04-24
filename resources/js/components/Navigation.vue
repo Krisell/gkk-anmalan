@@ -1,5 +1,10 @@
 <template>
   <div style="text-align: center">
+    <div v-if="hasPendingPayments">
+      <h3 class="text-center mt-6 text-md text-red-600 max-w-[90%] mx-auto">
+        Du har obetalda avgifter. Klicka på "Profil" för mer information.<br>Efter betalning kan det ta några dagar innan denna notisering försvinner.
+      </h3>
+    </div>
     <div v-if="user && user.granted_by == 0">
       <h3 class="text-center mt-6 font-thin text-xl">
         Välkommen till GKK!<br />
@@ -68,7 +73,7 @@ import axios from 'axios'
 
 export default {
   components: { LinkCard },
-  props: ['user', 'unanswered'],
+  props: ['user', 'unanswered', 'hasPendingPayments'],
   computed: {
     isAdmin() {
       return this.user && ['admin', 'superadmin'].includes(this.user.role)
