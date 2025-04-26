@@ -1,6 +1,6 @@
 {
   "node_modules/zipcelx/lib/module.js": {
-    "file": "assets/module-lhfJlWk_.js",
+    "file": "assets/module-BaqJz1kE.js",
     "name": "module",
     "src": "node_modules/zipcelx/lib/module.js",
     "isDynamicEntry": true,
@@ -14,7 +14,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-fQk58RuS.js",
+    "file": "assets/app-CEGjpdwd.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,

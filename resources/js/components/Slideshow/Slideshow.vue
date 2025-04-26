@@ -34,16 +34,16 @@ onMounted(async () => {
     slides.value = response.data.slides.filter(slide => slide.is_visible)
     slidesHash.value = response.data.hash
     state.value = 'loaded'
-
-    setInterval(async () => {
-        const response = await axios.get('/slideshow/slides')
-
-        // If Slideshow has changed, reload to get recent version
-        if (response.data.hash !== slidesHash.value) {
-            location.reload()
-        }
-    }, 10 * 1000)
 })
+
+setInterval(async () => {
+    const response = await axios.get('/slideshow/slides')
+
+    // If Slideshow has changed, reload to get recent version
+    if (response.data.hash !== slidesHash.value) {
+        location.reload()
+    }
+}, 10 * 1000)
 
 function component(type) {
     if (type === 'Slide') {
