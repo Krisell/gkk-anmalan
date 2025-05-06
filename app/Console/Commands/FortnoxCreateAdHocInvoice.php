@@ -38,7 +38,10 @@ class FortnoxCreateAdHocInvoice extends Command
         $customerName = text('Enter the customer name');
         $articleName = text('Enter the article name');
         $amount = text('Enter the amount');
-        $invoiceDate = text('Enter the invoice date (YYYY-MM-DD). This must be before the payment in Fortnox.');
+        $invoiceDate = text(
+            'Enter the invoice date (YYYY-MM-DD). This must be before the payment in Fortnox.',
+            default: now()->subDays(5)->format('Y-m-d'),
+        );
 
         $response = Http::withToken($fortnox->token())->post(
             'https://api.fortnox.se/3/customers', [
