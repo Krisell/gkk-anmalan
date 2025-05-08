@@ -118,22 +118,8 @@
       </div>
     </div>
 
-    <div class="mb-2 mt-6 flex items-end">
-      <div>
-        <select
-          v-model="userToAdd"
-          class="mt-1 block form-select w-72 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-        >
-          <option value=''>Lägg till ytterligare tävlande manuellt</option>
-          <option v-for="lifter in remainingUsers" :key="lifter.key" :value="lifter.id">
-            {{ lifter.first_name }} {{ lifter.last_name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="flex mt-4 ml-4">
-        <Button @click="addUser">Lägg till (redigera för att välja gren)</Button>
-      </div>
+    <div class="mb-2 mt-6 flex justify-center">
+      <Button @click="addUser">Lägg till tävlande</Button>
     </div>
 
     <div class="text-center mt-4" v-tooltip="'Hämta Excel-fil'">
@@ -250,6 +236,47 @@
         </div>
       </template>
     </Modal>
+
+    <Modal ref="addUserModal" title="Lägg till tävlande">
+      <div>
+        <label for="user" class="block text-sm leading-5 font-medium text-gray-700">Välj tävlande</label>
+        <select
+          v-model="userToAdd"
+          id="user"
+          class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 border rounded"
+        >
+          <option value=''>Välj tävlande</option>
+          <option v-for="lifter in remainingUsers" :key="lifter.key" :value="lifter.id">
+            {{ lifter.first_name }} {{ lifter.last_name }}
+          </option>
+        </select>
+      </div>
+      <div class="mt-4">
+        <label for="events" class="block text-sm leading-5 font-medium text-gray-700">Gren</label>
+        <div v-if="hasEvent('ksl')" class="flex mb-2 items-center">
+          <ToggleButton v-model="newUserEvents.ksl" />
+          <div class="ml-2 font-thin">Klassisk Styrkelyft</div>
+        </div>
+        <div v-if="hasEvent('kbp')" class="flex mb-2 items-center">
+          <ToggleButton v-model="newUserEvents.kbp" />
+          <div class="ml-2 font-thin">Klassisk Bänkpress</div>
+        </div>
+        <div v-if="hasEvent('sl')" class="flex mb-2 items-center">
+          <ToggleButton v-model="newUserEvents.sl" />
+          <div class="ml-2 font-thin">Styrkelyft (utrustat)</div>
+        </div>
+        <div v-if="hasEvent('bp')" class="flex mb-2 items-center">
+          <ToggleButton v-model="newUserEvents.bp" />
+          <div class="ml-2 font-thin">Bänkpress (utrustat)</div>
+        </div>
+      </div>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button @click="close" type="secondary">Stäng</Button>
+          <Button @click="confirmAddUser" type="danger">Lägg till</Button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -271,6 +298,12 @@ export default {
       sortKey: '',
       sortOrder: 1,
       userToAdd: '',
+      newUserEvents: {
+        ksl: false,
+        kbp: false,
+        sl: false,
+        bp: false,
+      },
     }
   },
   computed: {
@@ -309,8 +342,13 @@ export default {
   },
   methods: {
     async addUser() {
-      await axios.post(`/admin/competitions/${this.competition.id}/registrations`, { user_id: this.userToAdd })
-
+      this.$refs.addUserModal.show()
+    },
+    async confirmAddUser() {
+      await axios.post(`/admin/competitions/${this.competition.id}/registrations`, {
+        user_id: this.userToAdd,
+        events: JSON.stringify(this.newUserEvents),
+      })
       window.location.reload()
     },
     dateString(date) {

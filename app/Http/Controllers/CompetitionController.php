@@ -86,7 +86,10 @@ class CompetitionController extends Controller
 
     public function add(Competition $competition, Request $request)
     {
-        $request->validate(['user_id' => 'required|exists:users,id']);
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'events' => 'required|json',
+        ]);
 
         $user = User::findOrFail($request->user_id);
 
@@ -97,7 +100,7 @@ class CompetitionController extends Controller
             'comment' => 'Tillagd av admin',
             'gender' => $user->gender,
             'weight_class' => $user->weight_class,
-            'events' => \json_encode(['ksl' => false, 'kbp' => false, 'sl' => false, 'bp' => false]),
+            'events' => $request->events,
         ]);
 
         ActivityLog::create([
