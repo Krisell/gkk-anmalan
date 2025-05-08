@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Competition;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CompetitionController extends Controller
@@ -66,14 +68,46 @@ class CompetitionController extends Controller
 
     public function admin(Competition $competition)
     {
+        $remainingUsers = User::query()
+            ->whereNotIn('id', $competition->registrations->pluck('user_id'))
+            ->orderBy('first_name', 'asc')
+            ->get();
+
         return view('admin.competition', [
             'competition' => $competition->load('registrations.user'),
+            'remainingUsers' => $remainingUsers,
         ]);
     }
 
     public function destroy(Competition $competition)
     {
         $competition->delete();
+    }
+
+    public function add(Competition $competition, Request $request)
+    {
+        $request->validate(['user_id' => 'required|exists:users,id']);
+
+        $user = User::findOrFail($request->user_id);
+
+        $competition->registrations()->updateOrCreate([
+            'user_id' => $user->id,
+        ], [
+            'status' => true,
+            'comment' => 'Tillagd av admin',
+            'gender' => $user->gender,
+            'weight_class' => $user->weight_class,
+            'events' => \json_encode(['ksl' => false, 'kbp' => false, 'sl' => false, 'bp' => false]),
+        ]);
+
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'competition-registration',
+            'user_id' => $user->id,
+            'data' => \json_encode([
+                'event_id' => $competition->id,
+            ]),
+        ]);
     }
 
     private function validated(Request $request)

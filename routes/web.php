@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminSlideshowController;
+use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LagSMController;
@@ -118,12 +119,14 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::post('/{event}/registrations/', 'add');
     });
 
-    Route::prefix('competitions')->group(function () {
-        Route::get('/{competition}', [\App\Http\Controllers\CompetitionController::class, 'admin']);
-        Route::get('/', [\App\Http\Controllers\CompetitionController::class, 'adminIndex']);
-        Route::post('/', [\App\Http\Controllers\CompetitionController::class, 'store']);
-        Route::patch('/{competition}', [\App\Http\Controllers\CompetitionController::class, 'update']);
-        Route::delete('/{competition}', [\App\Http\Controllers\CompetitionController::class, 'destroy']);
+    Route::prefix('competitions')->controller(CompetitionController::class)->group(function () {
+        Route::get('/{competition}', 'admin');
+        Route::get('/', 'adminIndex');
+        Route::post('/', 'store');
+        Route::patch('/{competition}', 'update');
+        Route::delete('/{competition}', 'destroy');
+
+        Route::post('/{competition}/registrations/', 'add');
     });
 
     Route::prefix('accounts')->group(function () {

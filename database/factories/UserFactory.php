@@ -22,6 +22,8 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $male = \random_int(0, 1) === 0;
+
         return [
             'first_name' => $this->faker->name,
             'last_name' => $this->faker->name,
@@ -35,6 +37,8 @@ class UserFactory extends Factory
             'inactivated_at' => null,
             'is_student_over_23' => false,
             'granted_by' => 1,
+            'gender' => $male ? 'm' : 'f',
+            'weight_class' => $male ? '74' : '63',
         ];
     }
 

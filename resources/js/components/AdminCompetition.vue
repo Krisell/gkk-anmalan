@@ -118,6 +118,24 @@
       </div>
     </div>
 
+    <div class="mb-2 mt-6 flex items-end">
+      <div>
+        <select
+          v-model="userToAdd"
+          class="mt-1 block form-select w-72 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+        >
+          <option value=''>Lägg till ytterligare tävlande manuellt</option>
+          <option v-for="lifter in remainingUsers" :key="lifter.key" :value="lifter.id">
+            {{ lifter.first_name }} {{ lifter.last_name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="flex mt-4 ml-4">
+        <Button @click="addUser">Lägg till (redigera för att välja gren)</Button>
+      </div>
+    </div>
+
     <div class="text-center mt-4" v-tooltip="'Hämta Excel-fil'">
       <svg
         @click="excel"
@@ -245,13 +263,14 @@ import ToggleButton from './ui/ToggleButton.vue'
 
 export default {
   components: { Button, Modal, Link, ToggleButton },
-  props: ['competition'],
+  props: ['competition', 'remainingUsers'],
   data() {
     return {
       registrationToEdit: null,
       showFilter: '1',
       sortKey: '',
       sortOrder: 1,
+      userToAdd: '',
     }
   },
   computed: {
@@ -289,6 +308,11 @@ export default {
     },
   },
   methods: {
+    async addUser() {
+      await axios.post(`/admin/competitions/${this.competition.id}/registrations`, { user_id: this.userToAdd })
+
+      window.location.reload()
+    },
     dateString(date) {
       return date.substr(0, 10)
     },
