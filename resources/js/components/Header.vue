@@ -130,11 +130,11 @@
         <div 
           @click="showSubMenu = true" 
           class="md:hidden bg-gkk cursor-pointer text-white relative inline-flex items-center px-4 py-2 border leading-5 font-medium focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out -mt-4 -ml-2 rounded-br-lg">
-          Visa meny&nbsp;&nbsp;➦
+          Insidan meny&nbsp;&nbsp;<i class="fa fa-arrow-right"></i>
         </div>
         <div class="-ml-64 md:ml-0 transition-all md:block" :class="{ 'ml-0': showSubMenu }">
           <div>
-            <i v-if="showSubMenu" class="md:hidden fa fa-times-circle-o cursor-pointer z-10 text-3xl absolute left-2 top-0 text-white" @click="showSubMenu = false"></i>
+            <i v-if="showSubMenu" class="md:hidden fa fa-arrow-left cursor-pointer z-10 text-xl absolute left-2 top-0 text-white" @click="showSubMenu = false"></i>
             <nav class="-mb-px flex flex-col fixed h-screen top-[64px] bg-gkk pt-12 w-[210px]" aria-label="Tabs">
               <a v-for="tab in tabs" :key="tab.name" :href="tab.href" v-show="(!tab.admin) || isAdmin"
                 class="ml-4 mb-3 mt-2 group inline-flex items-center py-2 px-1 font-medium text-sm text-white" 
