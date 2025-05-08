@@ -125,7 +125,7 @@
       </div>
     </nav>
 
-    <div v-if="user && site === ''" class="fixed top-[70px]">
+    <div v-if="user && site === ''" class="fixed top-[70px] z-10">
       <div>
         <div 
           @click="showSubMenu = true" 
