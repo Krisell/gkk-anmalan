@@ -5,8 +5,11 @@
         </div>
     </div>
     <div class="cursor-none">
-        <div class="fixed bottom-0 right-0 p-4 text-gkk text-3xl opacity-70">
-            {{ currentSlide + 1 }} / {{ slides.length }}
+        <div class="fixed bottom-0 right-0 p-2">
+            <div class="bg-white p-2 rounded-lg shadow-md text-2xl text-center text-gkk">
+                <div class="min-w-32">{{ currentDateTime }}</div>
+                <div>{{ currentSlide + 1 }} / {{ slides.length }}</div>
+            </div>
         </div>
 
         <template v-for="(slide, index) in slides" :key="index">
@@ -28,6 +31,20 @@ import axios from 'axios'
 let state = ref('loading')
 let slides = ref([])
 let slidesHash = ref('')
+let currentDateTime = ref('')
+
+function updateDateTime() {
+    const now = new Date();
+    // Format time explicitly as 24h format with hours, minutes, and seconds
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    currentDateTime.value = `${hours}:${minutes}:${seconds}`;
+}
+
+// Update time immediately and then every second
+updateDateTime();
+const timeInterval = setInterval(updateDateTime, 1000);
 
 onMounted(async () => {
     const response = await axios.get('/slideshow/slides')
@@ -100,6 +117,7 @@ document.body.addEventListener('keydown', (e) => {
 // like Chrome automatically tries to reloads the page while in the offline state.
 setTimeout(() => {
     clearInterval(interval)
+    clearInterval(timeInterval)
     window.location.reload()
 }, 10 * 60 * 1000)
 
