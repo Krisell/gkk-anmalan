@@ -5,9 +5,16 @@
         </div>
     </div>
     <div class="cursor-none">
-        <div class="fixed bottom-0 right-0 p-2">
+        <div class="fixed bottom-3 left-0 p-2">
             <div class="bg-white p-2 rounded-lg shadow-md text-2xl text-center text-gkk">
-                <div class="min-w-32">{{ currentDateTime }}</div>
+                <div class="min-w-32">{{ day }} {{ month }}</div>
+                <div class="text-xl">vecka {{ weekNumber }}</div>
+            </div>
+        </div>
+        
+        <div class="fixed bottom-3 right-0 p-2">
+            <div class="bg-white p-2 rounded-lg shadow-md text-2xl text-center text-gkk">
+                <div class="min-w-32">{{ time }}</div>
                 <div>{{ currentSlide + 1 }} / {{ slides.length }}</div>
             </div>
         </div>
@@ -27,19 +34,28 @@
 import { ref, onMounted } from 'vue'
 import Slide from './Slide.vue'
 import axios from 'axios'
+import { getISOWeek, getSwedishMonthName } from '../../utils/date'
 
 let state = ref('loading')
 let slides = ref([])
 let slidesHash = ref('')
-let currentDateTime = ref('')
+let time = ref('')
+let day = ref('')
+let month = ref('')
+let weekNumber = ref('')
 
 function updateDateTime() {
-    const now = new Date();
+    const now = new Date()
     // Format time explicitly as 24h format with hours, minutes, and seconds
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    currentDateTime.value = `${hours}:${minutes}:${seconds}`;
+    const hours = String(now.getHours()).padStart(2, '0')
+    const minutes = String(now.getMinutes()).padStart(2, '0')
+    const seconds = String(now.getSeconds()).padStart(2, '0')
+
+    day.value = String(now.getDate())
+    month.value = getSwedishMonthName(now.getMonth())
+    weekNumber.value = getISOWeek(now)
+    
+    time.value = `${hours}:${minutes}:${seconds}`
 }
 
 // Update time immediately and then every second
