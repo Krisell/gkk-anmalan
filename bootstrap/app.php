@@ -1,6 +1,7 @@
 <?php
 
 use App\Providers\AppServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -40,6 +41,10 @@ return Application::configure(basePath: \dirname(__DIR__))
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Illuminate\Auth\Middleware\Authorize::class,
         ]);
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->command('fortnox:verify-payment --all')->dailyAt('07:30')->timezone('Europe/Stockholm');
+        $schedule->command('fortnox:verify-payment --all')->dailyAt('13:30')->timezone('Europe/Stockholm');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

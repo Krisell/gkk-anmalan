@@ -17,7 +17,7 @@ class FortnoxVerifyPayment extends Command
      *
      * @var string
      */
-    protected $signature = 'fortnox:verify-payment';
+    protected $signature = 'fortnox:verify-payment {--all : Kontrollera alla betalningar}';
 
     /**
      * The console command description.
@@ -37,13 +37,19 @@ class FortnoxVerifyPayment extends Command
             return;
         }
 
-        $target = select(
-            label: 'Vill du kontrollera alla betalningar eller enbart senaste 10?',
-            options: [
-                'LATEST_10' => 'Senaste 10',
-                'ALL' => 'Alla',
-            ],
-        );
+        $target = 'ALL';
+
+        if ($this->option('all')) {
+            $this->info('Kontrollerar alla omarkerade betalningar mot Fortnox.');
+        } else {
+            $target = select(
+                label: 'Vill du kontrollera alla betalningar eller enbart senaste 10?',
+                options: [
+                    'LATEST_10' => 'Senaste 10',
+                    'ALL' => 'Alla',
+                ],
+            );
+        }
 
         $paymentsQuery = Payment::query()
             ->whereNotNull('fortnox_invoice_document_number')
@@ -55,12 +61,16 @@ class FortnoxVerifyPayment extends Command
 
         $payments = $paymentsQuery->get();
 
-        $confirmed = confirm(
-            label: "{$payments->count()} fakturor är inte markerade som betalda. Vill du kontrollera dessa mot Fortnox?",
-            default: false,
-            yes: 'Ja',
-            no: 'Nej',
-        );
+        if ($this->option('all')) {
+            $confirmed = true;
+        } else {
+            $confirmed = confirm(
+                label: "{$payments->count()} fakturor är inte markerade som betalda. Vill du kontrollera dessa mot Fortnox?",
+                default: false,
+                yes: 'Ja',
+                no: 'Nej',
+            );
+        }
 
         if (! $confirmed) {
             return;
