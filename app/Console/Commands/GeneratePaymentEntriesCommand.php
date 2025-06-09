@@ -108,11 +108,23 @@ class GeneratePaymentEntriesCommand extends Command
 
             $sekAmount = ($discountedByAge || $discountedByStudentState) ? 700 : 1500;
 
+            $sekDiscount = 0;
+
+            // If date is more than june 15, add a half year discount, i.e. 1/2 of the full amount.
+            if (now()->month > 6 || (now()->month === 6 && now()->day > 15)) {
+                $sekDiscount = (int) ($sekAmount / 2);
+            }
+
+            // If date is more than september 15, add a quarter year discount, i.e. 3/4 of the full amount.
+            if (now()->month > 9 || (now()->month === 9 && now()->day > 15)) {
+                $sekDiscount = (int) ($sekAmount / 4) * 3;
+            }
+
             $user->payments()->create([
                 'type' => 'MEMBERSHIP',
                 'year' => $year,
                 'sek_amount' => $sekAmount,
-                'sek_discount' => 0, // Age discounts are handled as separate articles. This field is used for half year memberships.
+                'sek_discount' => $sekDiscount, // Note that age discounts are handled as separate articles
                 'modifier' => $discountedByAge ? 'AGE_DISCOUNT' : ($discountedByStudentState ? 'STUDENT_DISCOUNT' : null),
             ]);
         }

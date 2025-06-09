@@ -393,3 +393,77 @@ test('The correct fee and discount is set for payment registrations', function (
         'sek_discount' => 0,
     ]);
 });
+
+test('Half year discounts are given for membership fee for new members', function () {
+    $this->travelTo('2025-06-18');
+
+    $normalUser = User::factory()->create(['birth_year' => now()->subYears(30)->year]);
+    $youngUser = User::factory()->create(['birth_year' => now()->subYears(20)->year]);
+    $oldUser = User::factory()->create(['birth_year' => now()->subYears(70)->year]);
+
+    $this->artisan('gkk:generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2025')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
+        ->expectsOutput('3 membership payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $youngUser->id,
+        'sek_amount' => 700,
+        'sek_discount' => 350, // Half year discount
+        'modifier' => 'AGE_DISCOUNT',
+    ]);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $oldUser->id,
+        'sek_amount' => 700,
+        'sek_discount' => 350, // Half year discount
+        'modifier' => 'AGE_DISCOUNT',
+    ]);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $normalUser->id,
+        'sek_amount' => 1500,
+        'sek_discount' => 750, // Half year discount
+        'modifier' => null,
+    ]);
+});
+
+test('Quarter year discounts are given for membership fee for new members', function () {
+    $this->travelTo('2025-09-18');
+
+    $normalUser = User::factory()->create(['birth_year' => now()->subYears(30)->year]);
+    $youngUser = User::factory()->create(['birth_year' => now()->subYears(20)->year]);
+    $oldUser = User::factory()->create(['birth_year' => now()->subYears(70)->year]);
+
+    $this->artisan('gkk:generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2025')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
+        ->expectsOutput('3 membership payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $youngUser->id,
+        'sek_amount' => 700,
+        'sek_discount' => 525, // Quarter year discount
+        'modifier' => 'AGE_DISCOUNT',
+    ]);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $oldUser->id,
+        'sek_amount' => 700,
+        'sek_discount' => 525, // Quarter year discount
+        'modifier' => 'AGE_DISCOUNT',
+    ]);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $normalUser->id,
+        'sek_amount' => 1500,
+        'sek_discount' => 1125, // Quarter year discount
+        'modifier' => null,
+    ]);
+});
