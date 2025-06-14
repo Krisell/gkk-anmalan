@@ -24,7 +24,33 @@ class WebhookController extends Controller
 
     public function scheduleRun()
     {
-        Artisan::call('schedule:run');
-        logger(Artisan::output());
+        // Due to php setting disable_functions, we cannot use the schedule:work command.
+
+        // [2025-06-13 11:30:11] production.ERROR: The Process class relies on proc_open, which is not available
+        // on your PHP installation. {"exception":"[object] (Symfony\\Component\\Process\\Exception\\LogicException(code: 0):
+        // The Process class relies on proc_open, which is not available on your PHP installation. at
+        // /customers/9/a/3/goteborgkk.se/httpd.private/web/vendor/symfony/process/Process.php:149)
+        // $schedule->command('fortnox:verify-payment --all')->dailyAt('07:30')->timezone('Europe/Stockholm');
+        // $schedule->command('fortnox:verify-payment --all')->dailyAt('13:30')->timezone('Europe/Stockholm');
+
+        // The current workaround is to run artisan commands directly in this webhook request cycle. Note that
+        // there might be maximum execution time limits imposed by the web server or PHP configuration, probably
+        // 30 seconds.
+
+        $currentMinute = now()->timezone('Europe/Stockholm')->format('H:i');
+
+        if (! \in_array($currentMinute, ['07:30', '13:30'])) {
+            return 'No scheduled tasks to run at this time.';
+        }
+
+        Artisan::call('fortnox:verify-payment --all');
+        $output = Artisan::output();
+
+        logger($output);
+
+        return response()->json([
+            'message' => 'Scheduled tasks executed successfully.',
+            'output' => $output,
+        ]);
     }
 }
