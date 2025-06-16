@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import * as Sentry from "@sentry/vue";
 
 import ToastPlugin from 'vue-toast-notification'
 import FloatingVue from 'floating-vue'
@@ -103,5 +104,12 @@ app.component('GkkCompetitionCard', CompetitionCard)
 app.component('GkkAdminCompetition', AdminCompetition)
 app.component('GkkAdminCompetitions', AdminCompetitions)
 app.component('LagSM', LagSM)
+
+Sentry.init({
+  app,
+  dsn: "https://8bc6e0c7e49295e24ee19574114b058c@o4509509926060032.ingest.de.sentry.io/4509509927174224",
+  sendDefaultPii: true,
+  integrations: [],
+});
 
 app.mount('#app')
