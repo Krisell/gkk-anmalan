@@ -123,6 +123,8 @@ test('A normal user does not receive a discount', function () {
         'birth_year' => now()->subYears(30)->year,
     ]);
 
+    $this->travelTo('2024-01-03');
+
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
@@ -146,6 +148,8 @@ test('Specific ages receive discount', function () {
     $oldUser = User::factory()->create([
         'birth_year' => now()->subYears(70)->year,
     ]);
+
+    $this->travelTo('2024-01-03');
 
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
@@ -173,6 +177,8 @@ test('Specific ages receive discount', function () {
 test('A user with student state receives discount', function () {
     $studentUser = User::factory()->student()->create();
     $normalUser = User::factory()->create();
+
+    $this->travelTo('2025-01-03');
 
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2025')
