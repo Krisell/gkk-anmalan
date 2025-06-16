@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+use Sentry\Laravel\Integration;
 
 return Application::configure(basePath: \dirname(__DIR__))
     ->withProviders()
@@ -55,5 +56,5 @@ return Application::configure(basePath: \dirname(__DIR__))
         // The current workaround is to run artisan commands directly in a webhook request cycle.
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        Integration::handles($exceptions);
     })->create();
