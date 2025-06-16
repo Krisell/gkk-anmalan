@@ -21,6 +21,9 @@ class PaymentFactory extends Factory
             'user_id' => User::factory(),
             'type' => 'MEMBERSHIP',
             'year' => $this->faker->year,
+            'sek_amount' => $this->faker->numberBetween(100, 1000),
+            'fortnox_invoice_created_at' => $this->faker->dateTimeBetween('-60 days', '-45 days'),
+            'fortnox_invoice_emailed_at' => $this->faker->dateTimeBetween('-45 days', '-1 days'),
         ];
     }
 }
