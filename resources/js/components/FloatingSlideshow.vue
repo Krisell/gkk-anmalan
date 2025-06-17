@@ -1,7 +1,7 @@
 <template>
   <div v-if="visible" :class="[
     'fixed bottom-4 right-4 bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out z-50 flex flex-col',
-    isMinimized ? 'w-1/3 h-1/3 min-w-[400px] min-h-[300px] cursor-pointer' : 'w-[96%] h-[96%] bottom-[2%] right-[2%]'
+    isMinimized ? 'w-1/3 h-1/3 min-w-[350px] min-h-[300px] cursor-pointer' : 'w-[96%] h-[96%] bottom-[2%] right-[2%]'
   ]" ref="slideshowContainer">
     <div class="bg-gray-800 text-white p-2 flex justify-between items-center flex-shrink-0 h-[40px]">
       <div class="text-sm font-medium">GKK Slideshow</div>
