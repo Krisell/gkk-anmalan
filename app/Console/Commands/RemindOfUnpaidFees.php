@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use function Laravel\Prompts\select;
 use function Laravel\Prompts\table;
 
 class RemindOfUnpaidFees extends Command
@@ -20,24 +21,39 @@ class RemindOfUnpaidFees extends Command
      *
      * @var string
      */
-    protected $description = 'Allows sending reminders to users about unpaid fees.';
+    protected $description = 'Allows sending reminders to users about unpaid fees for membership or licenses.';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $payments = \App\Models\Payment::whereNull('state')
-            ->where('fortnox_invoice_emailed_at', '<=', now()->subDays(30))
-            ->get();
+        $paymentType = select(
+            'Which payment type do you want to check?',
+            [
+                'MEMBERSHIP' => 'Membership fees',
+                'SSFLICENSE' => 'SSF License fees',
+                'ALL' => 'All fees',
+            ],
+            'ALL',
+        );
+
+        $query = \App\Models\Payment::whereNull('state')
+            ->where('fortnox_invoice_emailed_at', '<=', now()->subDays(30));
+
+        if ($paymentType !== 'ALL') {
+            $query->where('type', $paymentType);
+        }
+
+        $payments = $query->get();
 
         if ($payments->isEmpty()) {
-            $this->info('No unpaid fees found.');
+            $this->info('No unpaid fees found for '.($paymentType === 'ALL' ? 'all payment types' : $paymentType).'.');
 
             return;
         }
 
-        $this->info('Found '.$payments->count().' unpaid fees.');
+        $this->info('Found '.$payments->count().' unpaid '.($paymentType === 'ALL' ? '' : \strtolower($paymentType).' ').'fees.');
 
         table(
             headers: ['User', 'Payment Type', 'Year', 'Amount'],
