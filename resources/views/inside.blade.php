@@ -18,4 +18,6 @@
         </div>
     </div>
 </div>
+
+<gkk-floating-slideshow></gkk-floating-slideshow>
 @endsection

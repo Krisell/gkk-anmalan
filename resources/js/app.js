@@ -32,6 +32,7 @@ import CompetitionCard from './components/CompetitionCard.vue'
 import AdminCompetition from './components/AdminCompetition.vue'
 import AdminCompetitions from './components/AdminCompetitions.vue'
 import LagSM from './components/LagSM.vue'
+import FloatingSlideshow from './components/FloatingSlideshow.vue'
 
 window.axios = axios
 
@@ -103,6 +104,7 @@ app.component('GkkAdminNewsEmail', AdminNewsEmail)
 app.component('GkkCompetitionCard', CompetitionCard)
 app.component('GkkAdminCompetition', AdminCompetition)
 app.component('GkkAdminCompetitions', AdminCompetitions)
+app.component('GkkFloatingSlideshow', FloatingSlideshow)
 app.component('LagSM', LagSM)
 
 Sentry.init({

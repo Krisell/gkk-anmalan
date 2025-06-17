@@ -1,10 +1,10 @@
 <template>
-    <div v-if="state == 'loading'" class="cursor-none">
+    <div v-if="state == 'loading'" class="cursor-none" :class="{ 'cursor-default': inIframe }">
         <div class="flex flex-col items-center justify-center h-screen gap-4 max-h-screen">
             <img class="max-w-[97%] max-h-[97%] overflow-auto" src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png" />
         </div>
     </div>
-    <div class="cursor-none">
+    <div class="cursor-none" :class="{ 'cursor-default': inIframe }">
         <div class="fixed bottom-3 left-0 p-2">
             <div class="bg-white p-2 rounded-lg shadow-md text-2xl text-center text-gkk">
                 <div class="min-w-32">{{ day }} {{ month }}</div>
@@ -43,6 +43,7 @@ let time = ref('')
 let day = ref('')
 let month = ref('')
 let weekNumber = ref('')
+let inIframe = window.self !== window.top
 
 function updateDateTime() {
     const now = new Date()
@@ -128,11 +129,23 @@ document.body.addEventListener('keydown', (e) => {
     }
 })
 
+// Listen for postMessage navigation from parent frame
+window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'slideshow-control') {
+        if (event.data.action === 'next') {
+            nextSlide()
+        } else if (event.data.action === 'previous') {
+            previousSlide()
+        }
+    }
+})
+
 // Reload page after 10 minutes. This might break the slideshow if the device is currently
 // offline. That will be solved by adding a service worker for offline loading. It also looks
 // like Chrome automatically tries to reloads the page while in the offline state.
 setTimeout(() => {
-    clearInterval(interval)
+    clearInterval(slideInterval)
+    clearInterval(progressInterval)
     clearInterval(timeInterval)
     window.location.reload()
 }, 10 * 60 * 1000)

@@ -30,7 +30,7 @@
 
     @yield('head')
 </head>
-<body class="bg-gray-50 h-full min-h-full">
+<body class="bg-gray-50 h-full min-h-full overflow-hidden">
 @yield('css')
 
 <div id="app">
