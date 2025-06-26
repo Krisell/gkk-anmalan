@@ -7,9 +7,16 @@ use App\Models\User;
 test('a user has many payments', function () {
     $user = User::factory()->create();
 
-    Payment::factory(3)->create([
+    Payment::factory(2)->create([
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
+        'year' => 2022,
+    ]);
+
+    Payment::factory()->create([
+        'user_id' => $user->id,
+        'type' => 'COMPETITION',
+        'sek_amount' => 700,
         'year' => 2022,
     ]);
 

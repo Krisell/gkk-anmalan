@@ -39,12 +39,14 @@ class FortnoxCreateInvoices extends Command
 
         $type = select(
             label: 'Välj vilken avgift som ska skapas som fakturor i Fortnox',
-            options: ['MEMBERSHIP', 'SSFLICENSE'],
+            options: ['MEMBERSHIP', 'SSFLICENSE', 'COMPETITION', 'OTHER'],
         );
 
         $description = match ($type) {
             'MEMBERSHIP' => 'Medlemsavgift',
             'SSFLICENSE' => 'Tävlingslicens',
+            'COMPETITION' => 'Tävlingavgift',
+            'OTHER' => 'Övrig avgift',
             default => throw new \Exception('Invalid type'),
         };
 
@@ -56,11 +58,13 @@ class FortnoxCreateInvoices extends Command
             description: "{$description} {$year}",
         );
 
-        $this->ensureArticleExists(
-            fortnox: $fortnox,
-            articleNumber: "GKK-{$type}-{$year}-DISCOUNT",
-            description: "{$description} {$year}, rabatterad",
-        );
+        if ($type === 'MEMBERSHIP' || $type === 'SSFLICENSE') {
+            $this->ensureArticleExists(
+                fortnox: $fortnox,
+                articleNumber: "GKK-{$type}-{$year}-DISCOUNT",
+                description: "{$description} {$year}, rabatterad",
+            );
+        }
 
         $payments = Payment::query()
             ->where('year', $year)

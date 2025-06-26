@@ -49,5 +49,29 @@ class PaymentSeeder extends Seeder
             'type' => 'SSFLICENSE',
             'year' => 2025,
         ]);
+
+        $user = User::factory()->create([
+            'email' => 'unpaid-competition-fee@example.com',
+            'first_name' => 'Unpaid',
+            'last_name' => 'Competition Fee',
+        ]);
+
+        $user->payments()->create([
+            'sek_amount' => 500,
+            'type' => 'COMPETITION',
+            'year' => 2025,
+        ]);
+
+        $user = User::factory()->create([
+            'email' => 'unpaid-other-fee@example.com',
+            'first_name' => 'Unpaid',
+            'last_name' => 'Other Fee',
+        ]);
+
+        $user->payments()->create([
+            'sek_amount' => 300,
+            'type' => 'OTHER',
+            'year' => 2025,
+        ]);
     }
 }

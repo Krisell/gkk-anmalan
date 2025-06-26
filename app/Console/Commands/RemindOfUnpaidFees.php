@@ -33,6 +33,8 @@ class RemindOfUnpaidFees extends Command
             [
                 'MEMBERSHIP' => 'Membership fees',
                 'SSFLICENSE' => 'SSF License fees',
+                'COMPETITION' => 'Competition fees',
+                'OTHER' => 'Other fees',
                 'ALL' => 'All fees',
             ],
             'ALL',
