@@ -196,7 +196,7 @@ Vid SM-tävlingar gäller dessutom straffavgift vid utebliven start utan att arr
           >
 
           <Button v-if="justSaved" secondary disabled style="margin-bottom: 10px">Sparat!</Button>
-          <Button v-else secondary style="margin-bottom: 10px" @click.prevent="save">Spara</Button>
+          <Button v-else-if="wantsToCompete !== null" secondary style="margin-bottom: 10px" @click.prevent="save">Spara</Button>
         </div>
         <div v-if="registrationStatus === 'error'">
           <Message danger style="margin-top: 20px">
