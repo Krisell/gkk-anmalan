@@ -234,10 +234,12 @@ export default {
     save(registration, $event) {
       const name = `${registration.user.first_name} ${registration.user.last_name}`
 
-      if ($event) {
-        this.$toast.success(`Närvaro bekräftad för ${name}`)
-      } else {
-        this.$toast.warning(`Närvaro borttagen för ${name}`)
+      if ($event !== undefined) {
+        if ($event) {
+          this.$toast.success(`Närvaro bekräftad för ${name}`)
+        } else {
+          this.$toast.warning(`Närvaro borttagen för ${name}`)
+        }
       }
 
       return axios({
