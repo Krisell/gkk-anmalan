@@ -5,7 +5,7 @@ Administratören för GKK har skapat ett konto åt dig på GKK-webben. Där hant
 
 Följ länken nedan för att logga in. Om din epost är kopplad till Google eller Microsoft kan du direkt logga in den vägen. Annars behöver du klicka på *"Glöm ditt lösenord?"* för att begära ett epost där du kan välja lösenord.
 
-https://anmalan.gkk-styrkelyft.se/login
+https://goteborgkk.se/insidan
 
 Välkommen in! 
 

@@ -3,7 +3,7 @@
 
 Nu har ditt konto godkänts av administratören. Välkommen in! 
 
-https://anmalan.gkk-styrkelyft.se
+https://goteborgkk.se/insidan
 
 Hälsningar,<br>
 {{ config('app.name') }}
