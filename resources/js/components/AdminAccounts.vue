@@ -239,8 +239,9 @@
                       <i v-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
                     </div>
                     <i @click="confirmInactivation(account)" class="fa fa-ban cursor-pointer"
-                      v-tooltip="'Inaktivera konto – personen kommer inte kunna logga in förrän kontot återaktiveras.'">
-                    </i>
+                      v-tooltip="'Inaktivera konto – personen kommer inte kunna logga in förrän kontot återaktiveras.'"
+                      :data-testid="`inactivate-${account.id}`"
+                    ></i>
                   </div>
                 </td>
               </tr>
@@ -380,7 +381,7 @@
       </template>
     </Modal>
 
-    <Modal ref="inactivateModal" :title="`Är du säker på att du vill inaktiverat kontot för ${selectedAccount && selectedAccount.email}?`">
+    <Modal ref="inactivateModal" :title="`Är du säker på att du vill inaktivera kontot för ${selectedAccount && selectedAccount.email}?`">
       <template #footer="{ close }">
         <div class="flex flex-col gap-2 items-center justify-center mt-4">
           <Button @click="inactivateWithEmail" type="danger">Inaktivera och skicka enkät</Button>

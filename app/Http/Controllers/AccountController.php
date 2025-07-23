@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AccountGrantedMail;
+use App\Mail\ExitSurveyMail;
 use App\Mail\NotifyAboutNewRegistrationMail;
 use App\Models\ActivityLog;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class AccountController extends Controller
@@ -72,11 +74,15 @@ class AccountController extends Controller
         }
     }
 
-    public function inactivate(User $user)
+    public function inactivate(User $user, Request $request)
     {
         $user->update([
             'inactivated_at' => now(),
         ]);
+
+        if ($request->boolean('sendSurveyEmail')) {
+            Mail::to($user->email)->send(new ExitSurveyMail($user));
+        }
     }
 
     public function reactivate(User $user)
