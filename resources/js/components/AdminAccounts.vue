@@ -382,9 +382,10 @@
 
     <Modal ref="inactivateModal" :title="`Är du säker på att du vill inaktiverat kontot för ${selectedAccount && selectedAccount.email}?`">
       <template #footer="{ close }">
-        <div class="flex gap-2 items-center justify-center mt-4">
-          <Button @click="close" type="secondary">Nej</Button>
-          <Button @click="inactivate" type="danger">Ja, inaktivera</Button>
+        <div class="flex flex-col gap-2 items-center justify-center mt-4">
+          <Button @click="inactivateWithEmail" type="danger">Inaktivera och skicka enkät</Button>
+          <Button @click="inactivateWithoutEmail" type="warning">Inaktivera utan enkät</Button>
+          <Button @click="close" type="secondary">Avbryt</Button>
         </div>
       </template>
     </Modal>
@@ -587,8 +588,11 @@ export default {
     promote() {
       axios.post(`/admin/accounts/promote/${this.selectedAccount.id}`).then(() => this.reload())
     },
-    inactivate() {
-      axios.post(`/admin/accounts/inactivate/${this.selectedAccount.id}`).then(() => this.reload())
+    inactivateWithEmail() {
+      axios.post(`/admin/accounts/inactivate/${this.selectedAccount.id}`, { sendSurveyEmail: true }).then(() => this.reload())
+    },
+    inactivateWithoutEmail() {
+      axios.post(`/admin/accounts/inactivate/${this.selectedAccount.id}`, { sendSurveyEmail: false }).then(() => this.reload())
     },
     reactivate(account) {
       axios.post(`/admin/accounts/reactivate/${account.id}`).then(() => this.reload())
