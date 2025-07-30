@@ -15,7 +15,7 @@ class HomeController extends Controller
 
     public function dm()
     {
-        return view('dm2022', ['site' => 'dm']);
+        return view('dm2025', ['site' => 'dm']);
     }
 
     public function gm()
