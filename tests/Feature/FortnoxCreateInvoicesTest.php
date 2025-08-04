@@ -93,7 +93,8 @@ test('command creates invoices for ssflicense payments', function () {
                $request->hasHeader('Authorization', 'Bearer test-token') &&
                $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-SSFLICENSE-2025-DISCOUNT' &&
                $request['Invoice']['InvoiceRows'][0]['Price'] === 300 &&
-               $request['Invoice']['InvoiceRows'][0]['Discount'] === 50;
+               $request['Invoice']['InvoiceRows'][0]['Discount'] === 50 &&
+               ! isset($request['Invoice']['InvoiceRows'][0]['AccountNumber']);
     });
 });
 
@@ -129,6 +130,14 @@ test('command creates invoices for competition payments', function () {
 
     $payment->refresh();
     expect($payment->fortnox_invoice_document_number)->toBe('INV003');
+
+    Http::assertSent(function ($request) {
+        return $request->url() === 'https://api.fortnox.se/3/invoices' &&
+               $request->hasHeader('Authorization', 'Bearer test-token') &&
+               $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-COMPETITION-2025' &&
+               $request['Invoice']['InvoiceRows'][0]['AccountNumber'] === 3410 &&
+               $request['Invoice']['InvoiceRows'][0]['Price'] === 200;
+    });
 });
 
 test('command creates invoices for other payments', function () {
@@ -298,7 +307,8 @@ test('command handles discount modifiers correctly', function () {
                $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-MEMBERSHIP-2025-DISCOUNT' &&
                $request['Invoice']['InvoiceRows'][0]['Price'] === 300 &&
                $request['Invoice']['InvoiceRows'][0]['Discount'] === 100 &&
-               $request['Invoice']['InvoiceRows'][0]['DiscountType'] === 'AMOUNT';
+               $request['Invoice']['InvoiceRows'][0]['DiscountType'] === 'AMOUNT' &&
+               ! isset($request['Invoice']['InvoiceRows'][0]['AccountNumber']);
     });
 });
 

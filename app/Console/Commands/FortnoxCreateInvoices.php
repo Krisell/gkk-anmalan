@@ -104,6 +104,21 @@ class FortnoxCreateInvoices extends Command
             $articleNumber .= '-DISCOUNT';
         }
 
+        $invoiceRow = [
+            'ArticleNumber' => $articleNumber,
+            'Price' => $payment->sek_amount,
+            'Discount' => $payment->sek_discount,
+            'DiscountType' => 'AMOUNT',
+            'DeliveredQuantity' => 1,
+            'VAT' => 0,
+        ];
+
+        if ($payment->type === 'COMPETITION') {
+            $invoiceRow['AccountNumber'] = 3410;
+        }
+
+        $invoiceRows = [$invoiceRow];
+
         $data = [
             'Invoice' => [
                 'DueDate' => now()->addDays(30)->format('Y-m-d'),
@@ -111,16 +126,7 @@ class FortnoxCreateInvoices extends Command
                 'CustomerNumber' => $user->fortnox_customer_id,
                 'OurReference' => 'GKK Kassör',
                 'Country' => 'Sverige',
-                'InvoiceRows' => [
-                    [
-                        'ArticleNumber' => $articleNumber,
-                        'Price' => $payment->sek_amount,
-                        'Discount' => $payment->sek_discount,
-                        'DiscountType' => 'AMOUNT',
-                        'DeliveredQuantity' => 1,
-                        'VAT' => 0,
-                    ],
-                ],
+                'InvoiceRows' => $invoiceRows,
             ],
         ];
 
