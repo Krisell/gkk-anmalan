@@ -216,6 +216,7 @@ export default {
       return {
         MEMBERSHIP: 'Medlemsavgift',
         SSFLICENSE: 'Tävlingslicens',
+        COMPETITION: 'Tävlingsavgift',
       }[paymentType] || 'Okänd avgift'
     },
     showMemberShipAgreement() {
