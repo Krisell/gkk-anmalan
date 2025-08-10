@@ -70,9 +70,33 @@ class CreateCompetitionPayments extends Command
             return;
         }
 
+        $userOptions = $registrations->mapWithKeys(function ($registration) {
+            /** @var \App\Models\User $user */
+            $user = $registration->user;
+            $label = "{$user->first_name} {$user->last_name}";
+
+            if ($user->birth_year) {
+                $label .= " ({$user->birth_year})";
+            }
+
+            return [$user->id => $label];
+        })->toArray();
+
+        $userOptions = ['all' => 'Alla användare'] + $userOptions;
+
+        $selectedUserId = select(
+            label: 'Välj användare',
+            options: $userOptions,
+        );
+
+        if ($selectedUserId !== 'all') {
+            $registrations = $registrations->where('user.id', $selectedUserId);
+        }
+
+        $userIds = $registrations->pluck('user.id');
         $existingPayments = Payment::where('type', 'COMPETITION')
             ->where('year', $currentYear)
-            ->whereIn('user_id', $registrations->pluck('user.id'))
+            ->whereIn('user_id', $userIds)
             ->whereHas('user.competitionRegistrations', function ($query) use ($competitionId) {
                 $query->where('competition_id', $competitionId);
             })
@@ -87,6 +111,12 @@ class CreateCompetitionPayments extends Command
         }
 
         $this->info("Tävling: {$competition->name}");
+
+        if ($selectedUserId !== 'all') {
+            /** @var \App\Models\User $selectedUser */
+            $selectedUser = $registrations->first()->user;
+            $this->info("Användare: {$selectedUser->first_name} {$selectedUser->last_name}");
+        }
         $this->info("Senior avgift: {$seniorAmount} SEK");
         $this->info("Junior avgift: {$juniorAmount} SEK");
         $this->info("Antal nya betalningar: {$newPaymentsCount}");
