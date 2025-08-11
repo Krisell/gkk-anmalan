@@ -19,5 +19,5 @@
     </div>
 </div>
 
-<gkk-floating-slideshow></gkk-floating-slideshow>
+<gkk-floating-slideshow :user='@json($user)'></gkk-floating-slideshow>
 @endsection

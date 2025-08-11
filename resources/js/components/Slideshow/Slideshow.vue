@@ -1,10 +1,10 @@
 <template>
-    <div v-if="state == 'loading'" :class="{ 'cursor-default': inIframe, 'cursor-none': !inIframe }">
+    <div v-if="state == 'loading'" :class="{ 'cursor-default': inIframe, 'cursor-none': !inIframe }" class="select-none">
         <div class="flex flex-col items-center justify-center h-screen gap-4 max-h-screen">
             <img class="max-w-[97%] max-h-[97%] overflow-auto" src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png" />
         </div>
     </div>
-    <div :class="{ 'cursor-default': inIframe, 'cursor-none': !inIframe }">
+    <div :class="{ 'cursor-default': inIframe, 'cursor-none': !inIframe }" class="select-none">
         <div class="fixed bottom-3 left-0 p-2">
             <div class="bg-white p-2 rounded-lg shadow-md text-2xl text-center text-gkk">
                 <div class="min-w-32">{{ day }} {{ month }}</div>
