@@ -29,6 +29,7 @@ test('command shows info about unpaid fees', function () {
 
     $this->artisan('gkk:remind-of-unpaid-fees')
         ->expectsQuestion('Which payment type do you want to check?', 'ALL')
+        ->expectsQuestion('Do you want to remind all users or select a specific user?', 'ALL')
         ->expectsConfirmation('Vill du skicka påminnelser via email till 1 användare?', 'no')
         ->assertSuccessful()
         ->expectsOutput('Found 1 unpaid fees.')
@@ -91,6 +92,7 @@ test('command filters by MEMBERSHIP payment type', function () {
 
     $this->artisan('gkk:remind-of-unpaid-fees')
         ->expectsQuestion('Which payment type do you want to check?', 'MEMBERSHIP')
+        ->expectsQuestion('Do you want to remind all users or select a specific user?', 'ALL')
         ->expectsConfirmation('Vill du skicka påminnelser via email till 1 användare?', 'no')
         ->assertSuccessful()
         ->expectsOutput('Found 1 unpaid membership fees.')
@@ -123,6 +125,7 @@ test('command filters by SSFLICENSE payment type', function () {
 
     $this->artisan('gkk:remind-of-unpaid-fees')
         ->expectsQuestion('Which payment type do you want to check?', 'SSFLICENSE')
+        ->expectsQuestion('Do you want to remind all users or select a specific user?', 'ALL')
         ->expectsConfirmation('Vill du skicka påminnelser via email till 1 användare?', 'no')
         ->assertSuccessful()
         ->expectsOutput('Found 1 unpaid ssflicense fees.')
@@ -155,6 +158,7 @@ test('command shows all payment types when ALL is selected', function () {
 
     $this->artisan('gkk:remind-of-unpaid-fees')
         ->expectsQuestion('Which payment type do you want to check?', 'ALL')
+        ->expectsQuestion('Do you want to remind all users or select a specific user?', 'ALL')
         ->expectsConfirmation('Vill du skicka påminnelser via email till 2 användare?', 'no')
         ->assertSuccessful()
         ->expectsOutput('Found 2 unpaid fees.')
@@ -196,6 +200,7 @@ test('command sends emails when user confirms', function () {
 
     $this->artisan('gkk:remind-of-unpaid-fees')
         ->expectsQuestion('Which payment type do you want to check?', 'ALL')
+        ->expectsQuestion('Do you want to remind all users or select a specific user?', 'ALL')
         ->expectsConfirmation('Vill du skicka påminnelser via email till 2 användare?', 'yes')
         ->assertSuccessful()
         ->expectsOutput('Skickar påminnelser...')
@@ -238,6 +243,7 @@ test('command does not send emails when user declines', function () {
 
     $this->artisan('gkk:remind-of-unpaid-fees')
         ->expectsQuestion('Which payment type do you want to check?', 'ALL')
+        ->expectsQuestion('Do you want to remind all users or select a specific user?', 'ALL')
         ->expectsConfirmation('Vill du skicka påminnelser via email till 1 användare?', 'no')
         ->assertSuccessful()
         ->expectsOutput('Inga emails skickade.');
@@ -265,6 +271,7 @@ test('command sends correct email content', function () {
 
     $this->artisan('gkk:remind-of-unpaid-fees')
         ->expectsQuestion('Which payment type do you want to check?', 'ALL')
+        ->expectsQuestion('Do you want to remind all users or select a specific user?', 'ALL')
         ->expectsConfirmation('Vill du skicka påminnelser via email till 1 användare?', 'yes')
         ->assertSuccessful();
 
@@ -278,4 +285,96 @@ test('command sends correct email content', function () {
                \str_contains($renderedMail, $payment->year) &&
                \str_contains($renderedMail, $payment->sek_amount);
     });
+});
+
+test('command allows selecting a single user to remind', function () {
+    Mail::fake();
+
+    $user1 = User::factory()->create([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'email' => 'john@example.com',
+    ]);
+
+    $user2 = User::factory()->create([
+        'first_name' => 'Jane',
+        'last_name' => 'Smith',
+        'email' => 'jane@example.com',
+    ]);
+
+    $payment1 = Payment::factory()->create([
+        'user_id' => $user1->id,
+        'type' => 'MEMBERSHIP',
+        'sek_amount' => 500,
+        'year' => 2025,
+        'state' => null,
+        'fortnox_invoice_emailed_at' => now()->subDays(45),
+    ]);
+
+    $payment2 = Payment::factory()->create([
+        'user_id' => $user2->id,
+        'type' => 'SSFLICENSE',
+        'sek_amount' => 300,
+        'year' => 2025,
+        'state' => null,
+        'fortnox_invoice_emailed_at' => now()->subDays(45),
+    ]);
+
+    $this->artisan('gkk:remind-of-unpaid-fees')
+        ->expectsQuestion('Which payment type do you want to check?', 'ALL')
+        ->expectsQuestion('Do you want to remind all users or select a specific user?', 'SINGLE')
+        ->expectsQuestion('Select a user to remind:', $user1->id)
+        ->expectsConfirmation('Vill du skicka påminnelser via email till 1 användare?', 'yes')
+        ->assertSuccessful()
+        ->expectsOutput('✓ Påminnelse skickad till John Doe (john@example.com)')
+        ->doesntExpectOutputToContain('jane@example.com');
+
+    Mail::assertSent(UnpaidFeeReminderMail::class, 1);
+
+    Mail::assertSent(UnpaidFeeReminderMail::class, function ($mail) use ($user1, $payment1) {
+        return $mail->hasTo($user1->email) &&
+               $mail->user->id === $user1->id &&
+               $mail->payment->id === $payment1->id;
+    });
+
+    Mail::assertNotSent(UnpaidFeeReminderMail::class, function ($mail) use ($user2) {
+        return $mail->hasTo($user2->email);
+    });
+});
+
+test('command shows correct user options when selecting single user', function () {
+    $user1 = User::factory()->create([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ]);
+
+    $user2 = User::factory()->create([
+        'first_name' => 'Jane',
+        'last_name' => 'Smith',
+    ]);
+
+    Payment::factory()->create([
+        'user_id' => $user1->id,
+        'type' => 'MEMBERSHIP',
+        'year' => 2024,
+        'state' => null,
+        'fortnox_invoice_emailed_at' => now()->subDays(45),
+    ]);
+
+    Payment::factory()->create([
+        'user_id' => $user2->id,
+        'type' => 'SSFLICENSE',
+        'year' => 2025,
+        'state' => null,
+        'fortnox_invoice_emailed_at' => now()->subDays(45),
+    ]);
+
+    $this->artisan('gkk:remind-of-unpaid-fees')
+        ->expectsQuestion('Which payment type do you want to check?', 'ALL')
+        ->expectsQuestion('Do you want to remind all users or select a specific user?', 'SINGLE')
+        ->expectsQuestion('Select a user to remind:', $user2->id)
+        ->expectsConfirmation('Vill du skicka påminnelser via email till 1 användare?', 'no')
+        ->assertSuccessful()
+        ->expectsOutput('Found 1 unpaid fees.')
+        ->expectsOutputToContain('Jane Smith');
 });

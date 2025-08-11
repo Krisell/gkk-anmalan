@@ -58,6 +58,31 @@ class RemindOfUnpaidFees extends Command
             return;
         }
 
+        $userSelection = select(
+            'Do you want to remind all users or select a specific user?',
+            [
+                'ALL' => 'All users with unpaid fees',
+                'SINGLE' => 'Select a specific user',
+            ],
+            'ALL',
+        );
+
+        if ($userSelection === 'SINGLE') {
+            $userOptions = $payments->mapWithKeys(function ($payment) {
+                /** @var \App\Models\User $user */
+                $user = $payment->user;
+
+                return [$user->id => "{$user->first_name} {$user->last_name} ({$payment->type}, {$payment->year})"];
+            })->unique()->toArray();
+
+            $selectedUserId = select(
+                'Select a user to remind:',
+                $userOptions,
+            );
+
+            $payments = $payments->where('user_id', $selectedUserId);
+        }
+
         $this->info('Found '.$payments->count().' unpaid '.($paymentType === 'ALL' ? '' : \strtolower($paymentType).' ').'fees.');
 
         table(
