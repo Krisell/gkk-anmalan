@@ -139,7 +139,7 @@
               </tr>
             </thead>
             <tbody class="bg-white">
-              <tr v-for="account in filteredSortedActiveAccounts" :key="account.id">
+              <tr v-for="account in filteredSortedActiveAccounts" :key="account.id" :data-testid="`account-${account.id}`">
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -308,7 +308,7 @@
       <h2 class="text-2xl font-thin text-center m-4">{{ inactiveAccounts.length }} inaktiverade konton</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-          <table class="min-w-full">
+          <table data-testid="inactive-accounts-table" class="min-w-full">
             <thead>
               <tr>
                 <th
@@ -323,7 +323,7 @@
               </tr>
             </thead>
             <tbody class="bg-white">
-              <tr v-for="account in inactiveAccounts" :key="account.id">
+              <tr v-for="account in inactiveAccounts" :key="account.id" :data-testid="`inactive-account-${account.id}`">
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">

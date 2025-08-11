@@ -18,6 +18,6 @@ test('An admin can add a lifter to a competition', async ({ page }) => {
     await page.getByRole('button', { name: 'Lägg till' }).click();
 
     await expect(page.getByText(`${user.first_name} ${user.last_name}`)).toBeVisible()
-    await expect(page.getByText('KSL')).toBeVisible() // Verifies the event is displayed
+    await expect(page.getByTestId('competition-table').getByText('KSL')).toBeVisible() // Verifies the event is displayed
     await page.getByText('Tillagd av admin').click();
 })

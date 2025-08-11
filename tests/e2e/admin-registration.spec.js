@@ -33,15 +33,15 @@ test('A superadmin can edit events for a registration', async ({ page }) => {
     await page.getByText(competition.name).click();
 
     await expect(page.getByText(`${user.first_name} ${user.last_name}`)).toBeVisible()
-    await expect(page.getByText('KSL')).toBeVisible()
-    await expect(page.getByText('KBP')).toBeVisible()
+    await expect(page.getByTestId('competition-table').getByText('KSL')).toBeVisible()
+    await expect(page.getByTestId('competition-table').getByText('KBP')).toBeVisible()
 
     await page.getByRole('cell', { name: '' }).locator('i').click();
     await page.locator('div:nth-child(2) > .inline-flex > .w-11').click();
     await page.getByRole('button', { name: 'Uppdatera' }).click();
     
-    await expect(page.getByText('KSL')).toBeVisible()
-    await expect(page.getByText('KBP')).toBeHidden()
+    await expect(page.getByTestId('competition-table').getByText('KSL')).toBeVisible()
+    await expect(page.getByTestId('competition-table').getByText('KBP')).toBeHidden()
 })
 
 test('An event registration can be seen and edited', async ({ page }) => {

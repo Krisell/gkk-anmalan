@@ -43,13 +43,13 @@ test('The admin can inactivate a member', async ({ page }) => {
 
     await page.goto('/admin/accounts')
     
-    await page.locator('.fa-ban').nth(1).click();
+    await page.getByTestId(`inactivate-${user.id}`).click();
 
     await page.getByRole('button', { name: 'Inaktivera utan enkät' }).click();
-    await page.getByRole('heading', { name: '1 inaktiverade konton' }).click();
+    await page.getByTestId('inactive-accounts-table').getByText(`${user.first_name} ${user.last_name}`).click();
 })
 
-test.only('The admin can inactivate a member with survey email', async ({ page }) => {
+test('The admin can inactivate a member with survey email', async ({ page }) => {
     await login(page, { role: 'admin' })
     const user = await create(page, 'User')
 
@@ -66,7 +66,7 @@ test.only('The admin can inactivate a member with survey email', async ({ page }
     const postData = JSON.parse(request.postData());
     expect(postData).toEqual({ sendSurveyEmail: true });
     
-    await page.getByRole('heading', { name: '1 inaktiverade konton' }).click();
+    await page.getByTestId('inactive-accounts-table').getByText(`${user.first_name} ${user.last_name}`).click();
 })
 
 test('The admin can inactivate a member without survey email', async ({ page }) => {
@@ -87,5 +87,8 @@ test('The admin can inactivate a member without survey email', async ({ page }) 
     const postData = JSON.parse(request.postData());
     expect(postData).toEqual({ sendSurveyEmail: false });
     
-    await page.getByRole('heading', { name: '1 inaktiverade konton' }).click();
+    console.log(`${user.first_name} ${user.last_name}`)
+    await page.pause()
+    
+    await page.getByTestId('inactive-accounts-table').getByText(`${user.first_name} ${user.last_name}`).click();
 })
