@@ -6,9 +6,9 @@ Hej {{ $user->first_name }},
 Du har en obetald avgift som behöver betalas.
 
 **Detaljer:**
-- Typ: {{ $payment->type }}
-- År: {{ $payment->year }}
-- Belopp: {{ $payment->sek_amount }} SEK
+ℹ️ Avgiften gäller: {{ $payment->type }}
+ℹ️ År: {{ $payment->year }}
+ℹ️ Belopp: {{ $payment->sek_amount }} SEK
 
 Om du loggar in på Insidan och klickar på "Profil" kan du se dina obetalda fakturor.
 
