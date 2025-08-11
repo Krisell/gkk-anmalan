@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\UnpaidFeeReminderMail;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\table;
 
@@ -71,5 +74,33 @@ class RemindOfUnpaidFees extends Command
                 ];
             })->toArray(),
         );
+
+        $confirmed = confirm(
+            label: "Vill du skicka påminnelser via email till {$payments->count()} användare?",
+            default: false,
+            yes: 'Ja',
+            no: 'Nej',
+        );
+
+        if (! $confirmed) {
+            $this->info('Inga emails skickade.');
+
+            return;
+        }
+
+        $this->info('Skickar påminnelser...');
+
+        $sentCount = 0;
+
+        foreach ($payments as $payment) {
+            /** @var \App\Models\User $user */
+            $user = $payment->user;
+
+            Mail::to($user->email)->send(new UnpaidFeeReminderMail($user, $payment));
+            $sentCount++;
+            $this->line("✓ Påminnelse skickad till {$user->first_name} {$user->last_name} ({$user->email})");
+        }
+
+        $this->info("Totalt {$sentCount} påminnelser skickade.");
     }
 }
