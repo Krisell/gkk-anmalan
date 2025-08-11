@@ -16,6 +16,8 @@ class UnpaidFeeReminderMail extends Mailable
 
     public $payment;
 
+    public $typeText;
+
     /**
      * Create a new message instance.
      *
@@ -25,6 +27,14 @@ class UnpaidFeeReminderMail extends Mailable
     {
         $this->user = $user;
         $this->payment = $payment;
+
+        $map = [
+            'COMPETITION' => 'Tävlingsavgift',
+            'SSF_LICENSE' => 'SSF-licens',
+            'MEMBERSHIP' => 'Medlemsavgift',
+        ];
+
+        $this->typeText = $map[$payment->type] ?? $payment->type;
     }
 
     /**

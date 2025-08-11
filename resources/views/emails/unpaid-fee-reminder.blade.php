@@ -6,7 +6,7 @@ Hej {{ $user->first_name }},
 Du har en obetald avgift som behöver betalas.
 
 **Detaljer**<br>
-ℹ️ Avgiften gäller: {{ $payment->type }}<br>
+ℹ️ Avgiften gäller: {{ $typeText }}<br>
 ℹ️ År: {{ $payment->year }}<br>
 ℹ️ Belopp: {{ $payment->sek_amount }} SEK<br>
 

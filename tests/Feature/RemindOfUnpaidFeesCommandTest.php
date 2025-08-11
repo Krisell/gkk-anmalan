@@ -281,7 +281,7 @@ test('command sends correct email content', function () {
         return $mail->hasTo($user->email) &&
                $mail->hasSubject('Påminnelse om obetald avgift') &&
                \str_contains($renderedMail, $user->first_name) &&
-               \str_contains($renderedMail, $payment->type) &&
+               \str_contains($renderedMail, 'Medlemsavgift') &&
                \str_contains($renderedMail, $payment->year) &&
                \str_contains($renderedMail, $payment->sek_amount);
     });
