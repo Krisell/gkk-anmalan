@@ -33,6 +33,7 @@ import AdminCompetition from './components/AdminCompetition.vue'
 import AdminCompetitions from './components/AdminCompetitions.vue'
 import LagSM from './components/LagSM.vue'
 import FloatingSlideshow from './components/FloatingSlideshow.vue'
+import PointsHighScore from './components/PointsHighScore.vue'
 
 window.axios = axios
 
@@ -106,6 +107,7 @@ app.component('GkkAdminCompetition', AdminCompetition)
 app.component('GkkAdminCompetitions', AdminCompetitions)
 app.component('GkkFloatingSlideshow', FloatingSlideshow)
 app.component('LagSM', LagSM)
+app.component('GkkPointsHighScore', PointsHighScore)
 
 Sentry.init({
   app,

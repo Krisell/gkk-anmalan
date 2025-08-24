@@ -5,6 +5,7 @@ use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LagSMController;
+use App\Http\Controllers\RankingController;
 use App\Http\Controllers\SignAgreementsController;
 use App\Http\Controllers\SlideshowController;
 use App\Http\Controllers\WebhookController;
@@ -41,6 +42,10 @@ Route::prefix('insidan')->middleware(EnsureAgreementsAreSignedMiddleware::class)
     Route::get('/', [HomeController::class, 'inside']);
 });
 
+Route::prefix('api')->middleware(['auth', EnsureAgreementsAreSignedMiddleware::class])->group(function () {
+    Route::get('/ranking/points', [\App\Http\Controllers\RankingController::class, 'getPointsRanking']);
+});
+
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
 Route::post('/sign-agreements/{agreement}', [SignAgreementsController::class, 'store'])->middleware('auth');
 Route::view('/inactivated', 'inactivated')->name('inactivated');
@@ -69,6 +74,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware(\App\Http\Middleware\GrantedUserMiddleware::class)->group(function () {
+        Route::get('/points', [RankingController::class, 'index']);
+
         Route::prefix('member-documents')->group(function () {
             Route::get('/', [\App\Http\Controllers\DocumentController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
         });
