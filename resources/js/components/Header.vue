@@ -183,6 +183,7 @@ export default {
         { name: 'Insidan start', href: '/insidan', icon: 'newspaper-o', current: this.view === 'inside' },
         { name: 'Tävlingsanmälan', href: '/competitions', icon: 'th-list', current: this.view === 'competition' },
         { name: 'Funktionärsanmälan', href: '/events', icon: 'users', current: this.view === 'event' },
+        { name: 'Poängtoppen', href: '/points', icon: 'trophy', current: this.view === 'points' },
         { name: 'Dokument', href: '/member-documents', icon: 'file-o', current: this.view === 'member-documents' },
         { name: 'Profil', href: '/profile', icon: 'user-circle', current: this.view === 'profile' },
         { name: 'Admin - Rekord', href: '/admin/results', icon: 'trophy', current: this.view === 'records', admin: true },
