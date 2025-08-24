@@ -21,33 +21,13 @@ class RankingController extends Controller
         $year = $request->get('year', \date('Y'));
         $competitionType = $request->get('competition_type', 1);
 
-        $data = Cache::remember("ranking_{$year}_{$competitionType}", now()->addMinutes(10), function () use ($year, $competitionType) {
-            $informationRequest = Http::timeout(10)->get('https://data-api.styrkelyft.se/api/results/ranking', [
-                'discipline' => 'points',
+        $data = Cache::remember("ranking_{$year}_{$competitionType}", now()->addSeconds(20), function () use ($year, $competitionType) {
+            return Http::timeout(30)->get('https://europe-north1-goteborg-kraftsportklubb.cloudfunctions.net/rankings', [
                 'competition_type' => $competitionType,
-                'start_date' => $year.'-01-01',
-                'page_size' => 1, // Determine count and calculate number of pages with a page_size of 100
-            ]);
-
-            $pageSize = 200;
-            $pageCount = \ceil($informationRequest->json('page_count') / $pageSize);
-
-            $requestURLs = [];
-
-            for ($i = 1; $i <= $pageCount; $i++) {
-                $requestURLs[] = "https://data-api.styrkelyft.se/api/results/ranking?discipline=points&competition_type={$competitionType}&start_date={$year}-01-01&page={$i}&page_size={$pageSize}";
-            }
-
-            $response = collect(Http::pool(fn (Pool $pool) => [
-                ...\array_map(fn ($url) => $pool->get($url), $requestURLs),
-            ]));
-
-            $data = $response->map->json('results')->flatten(1);
-
-            return $data->filter(function ($result) {
-                return isset($result['club']['name']) && $result['club']['name'] === 'Göteborg KK';
-            });
+                'year' => $year,
+            ])->json();
         });
+
         // Process and categorize results
         $categorizedResults = $this->categorizeResults($data);
 
