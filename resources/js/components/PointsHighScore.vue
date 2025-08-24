@@ -42,13 +42,7 @@
               >
                 <td class="px-4 py-3 whitespace-nowrap">
                   <div class="flex items-center">
-                    <span 
-                      v-if="index < 3"
-                      class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold"
-                    >
-                      {{ index + 1 }}
-                    </span>
-                    <span v-else class="text-sm text-gray-900">{{ index + 1 }}</span>
+                    <span class="text-sm text-gray-900">{{ index + 1 }}</span>
                   </div>
                 </td>
                 <td class="px-4 py-3 whitespace-nowrap">
