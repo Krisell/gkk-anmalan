@@ -87,7 +87,6 @@ test('The admin can inactivate a member without survey email', async ({ page }) 
     const postData = JSON.parse(request.postData());
     expect(postData).toEqual({ sendSurveyEmail: false });
     
-    console.log(`${user.first_name} ${user.last_name}`)
     await page.pause()
     
     await page.getByTestId('inactive-accounts-table').getByText(`${user.first_name} ${user.last_name}`).click();
