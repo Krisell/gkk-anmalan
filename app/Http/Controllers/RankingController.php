@@ -21,7 +21,7 @@ class RankingController extends Controller
         $year = $request->get('year', \date('Y'));
         $competitionType = $request->get('competition_type', 1);
 
-        $data = Cache::remember("ranking_{$year}_{$competitionType}", now()->addSeconds(20), function () use ($year, $competitionType) {
+        $data = Cache::remember("ranking_{$year}_{$competitionType}", now()->addMinutes(10), function () use ($year, $competitionType) {
             return Http::timeout(30)->get('https://europe-north1-goteborg-kraftsportklubb.cloudfunctions.net/rankings', [
                 'competition_type' => $competitionType,
                 'year' => $year,
