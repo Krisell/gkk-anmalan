@@ -14,6 +14,7 @@ class Payment extends Model
 
     protected $casts = [
         'user_id' => 'integer',
+        'competition_id' => 'integer',
         'fortnox_invoice_created_at' => 'datetime',
         'fortnox_invoice_emailed_at' => 'datetime',
         'sek_amount' => 'integer',
@@ -23,5 +24,10 @@ class Payment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function competition(): BelongsTo
+    {
+        return $this->belongsTo(Competition::class);
     }
 }

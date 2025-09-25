@@ -127,6 +127,7 @@ test('command skips users with existing payments', function () {
 
     Payment::factory()->create([
         'user_id' => $user1->id,
+        'competition_id' => $competition->id,
         'type' => 'COMPETITION',
         'year' => now()->year,
         'sek_amount' => 500,
@@ -174,6 +175,7 @@ test('command handles all users already having payments', function () {
 
     Payment::factory()->create([
         'user_id' => $user->id,
+        'competition_id' => $competition->id,
         'type' => 'COMPETITION',
         'year' => now()->year,
         'sek_amount' => 500,
@@ -461,6 +463,7 @@ test('command shows no new payments when selected user already has payment', fun
 
     Payment::factory()->create([
         'user_id' => $user1->id,
+        'competition_id' => $competition->id,
         'type' => 'COMPETITION',
         'year' => now()->year,
         'sek_amount' => 500,

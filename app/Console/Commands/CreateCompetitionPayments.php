@@ -96,10 +96,8 @@ class CreateCompetitionPayments extends Command
         $userIds = $registrations->pluck('user.id');
         $existingPayments = Payment::where('type', 'COMPETITION')
             ->where('year', $currentYear)
+            ->where('competition_id', $competitionId)
             ->whereIn('user_id', $userIds)
-            ->whereHas('user.competitionRegistrations', function ($query) use ($competitionId) {
-                $query->where('competition_id', $competitionId);
-            })
             ->count();
 
         $newPaymentsCount = $registrations->count() - $existingPayments;
@@ -142,9 +140,7 @@ class CreateCompetitionPayments extends Command
             $existingPayment = Payment::where('type', 'COMPETITION')
                 ->where('year', $currentYear)
                 ->where('user_id', $user->id)
-                ->whereHas('user.competitionRegistrations', function ($query) use ($competitionId) {
-                    $query->where('competition_id', $competitionId);
-                })
+                ->where('competition_id', $competitionId)
                 ->exists();
 
             if ($existingPayment) {
@@ -158,6 +154,7 @@ class CreateCompetitionPayments extends Command
 
             Payment::create([
                 'user_id' => $user->id,
+                'competition_id' => $competitionId,
                 'type' => 'COMPETITION',
                 'year' => $currentYear,
                 'sek_amount' => $amount,
