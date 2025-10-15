@@ -15,7 +15,7 @@ test('The list of users can be seen', async ({ page }) => {
 })
 
 test('The admin can mark and unmark payments', async ({ page }) => {
-    const user = await login(page, { role: 'admin' })
+    await login(page, { role: 'admin' })
 
     const otherUser = await create(page, 'User', { licence_number: '1234567890' })
     await create(page, 'Payment', { 

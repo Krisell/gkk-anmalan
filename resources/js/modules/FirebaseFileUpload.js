@@ -6,7 +6,7 @@ const FirebaseFileUpload = {
 
     const storage = window.firebase.storage()
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       return storage
         .ref()
         .child(`/uploaded/${Random.randomString(30)}.${extension}`)

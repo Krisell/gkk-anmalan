@@ -1,4 +1,4 @@
-import { Page, test as base, expect } from '@playwright/test'
+import { Page, test as base } from '@playwright/test'
 import * as fs from 'node:fs'
 import path from 'path'
 

@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import { test, login, create } from './helpers.ts'
+import { test, login } from './helpers.ts'
 
 test('An admin can create a competition', async ({ page }) => {
     await login(page, { role: 'admin' })

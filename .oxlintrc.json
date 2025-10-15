@@ -1,0 +1,3 @@
+{
+  "ignorePatterns": ["vendor", "node_modules", "public"]
+}

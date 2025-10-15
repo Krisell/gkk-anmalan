@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import { test, login, create, update } from './helpers.ts'
+import { test, login, create } from './helpers.ts'
 
 test('Payments only show status before being synced to Fortnox', async ({ page }) => {
     const user = await login(page)
@@ -11,7 +11,7 @@ test('Payments only show status before being synced to Fortnox', async ({ page }
         sek_amount: 123,
     })
 
-    const payment = await create(page, 'Payment', { 
+    await create(page, 'Payment', { 
         user_id: user.id, 
         type: 'SSFLICENSE', 
         year: 2025,
@@ -35,7 +35,7 @@ test('Payments show status and invoice link after being synced to Fortnox', asyn
         sek_amount: 123,
     })
 
-    const payment = await create(page, 'Payment', { 
+    await create(page, 'Payment', { 
         user_id: user.id, 
         type: 'SSFLICENSE', 
         year: 2025,
