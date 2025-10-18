@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Firebase;
+
 class AdminSlideshowController extends Controller
 {
     public function index()
@@ -9,6 +11,7 @@ class AdminSlideshowController extends Controller
         return view('admin.slideshow', [
             'user' => auth()->user(),
             'view' => 'slideshow',
+            'jwt' => Firebase::makeAdminJwt(),
         ]);
     }
 }

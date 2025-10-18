@@ -59,4 +59,44 @@ class SlideshowController extends Controller
 
         return $slide;
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'type' => 'required|string',
+            'data' => 'required|array',
+            'is_visible' => 'boolean',
+        ]);
+
+        $maxOrder = Slide::max('order') ?? -1;
+
+        $slide = Slide::create([
+            'type' => $validated['type'],
+            'data' => $validated['data'],
+            'order' => $maxOrder + 1,
+            'is_visible' => $validated['is_visible'] ?? true,
+        ]);
+
+        return $slide;
+    }
+
+    public function updateSlide(Slide $slide, Request $request)
+    {
+        $validated = $request->validate([
+            'type' => 'string',
+            'data' => 'array',
+            'is_visible' => 'boolean',
+        ]);
+
+        $slide->update($validated);
+
+        return $slide;
+    }
+
+    public function destroy(Slide $slide)
+    {
+        $slide->delete();
+
+        return response()->json(['message' => 'Slide deleted successfully']);
+    }
 }

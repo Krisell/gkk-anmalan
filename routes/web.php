@@ -203,6 +203,9 @@ Route::view('/slides-for-screen', 'slides')->name('slides');
 Route::prefix('slideshow')->controller(SlideshowController::class)->group(function () {
     Route::post('log', 'log');
     Route::get('slides', 'index');
-    Route::post('order', 'updateOrder');
-    Route::patch('slides/{slide}', 'update');
+    Route::post('order', 'updateOrder')->middleware(['auth', AdminMiddleware::class]);
+    Route::patch('slides/{slide}', 'update')->middleware(['auth', AdminMiddleware::class]);
+    Route::post('slides', 'store')->middleware(['auth', AdminMiddleware::class]);
+    Route::put('slides/{slide}', 'updateSlide')->middleware(['auth', AdminMiddleware::class]);
+    Route::delete('slides/{slide}', 'destroy')->middleware(['auth', AdminMiddleware::class]);
 });
