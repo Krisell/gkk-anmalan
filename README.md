@@ -20,15 +20,24 @@ Applikationen är helt webbaserad och bygger på ramverken Vue.js och Laravel (P
 
 ## Uppdatera live-versionen
 
-Efter att önskade ändringar är utvecklade, mergade till rätt branch och pushade hit används följande steg för att publicera en ny version:
+### Automatisk deploy av frontend-assets
+
+Frontend-assets (JavaScript och CSS) byggs och deployas automatiskt via GitHub Actions när ändringar pushas till `master` eller `main` branchen. Detta sköts av `.github/workflows/deploy.yml` som:
+
+1. Bygger assets med `npm run build`
+2. Deployas automatiskt till servern via FTP
+
+**Notera:** Build-assets (public/build/, public/js/, public/css/) ingår inte längre i source control utan genereras automatiskt vid deploy.
+
+### Manuell uppdatering av backend
+
+Efter att önskade ändringar är utvecklade, mergade till rätt branch och pushade hit används följande steg för att publicera backend-ändringar:
 
 - Logga in på servern
-- I mappen för aktuell branch, kör kommandot `bin/update.sh` som automatiserar `git pull`, uppdatering av publika assets samt Laravel-specifika optimeringskommandon.
+- I mappen för aktuell branch, kör kommandot `bin/update.sh` som automatiserar `git pull` samt Laravel-specifika optimeringskommandon.
 - Om PHP-beroenden har uppdaterats, kör också `php composer.phar install --no-dev`
 
 Deploy är i nuläget inte helt atomär utan en kort period (några sekunder) av nertid kan upplevas (särskilt i samband med `composer install`). Detta är acceptabelt i nuläget men kan komma att förändras om användningen av systemet ökar.
-
-Eftersom GKK ligger på One.com utan möjlighet att själv konfigurera virtuella hosts (subdomänen mappas automatiskt till en mapp) måste ev. uppdateringar till public-mappen kopieras till `webroot/anmalan/`, och detta sköts alltså automaiskt enligt ovan. Observera att Laravels `index.php` har justerats för att hitta rätt, så den ska _inte_ uppdateras. För tillfället är det endast innehållet i js/ och css/, samt frontend-manifest (för cache-busting), som kopieras.
 
 ## Utveckla lokalt
 

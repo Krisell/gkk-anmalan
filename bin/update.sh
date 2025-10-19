@@ -2,10 +2,10 @@
 
 git pull
 
-cp /customers/9/a/3/goteborgkk.se/httpd.private/web/public/css/* /customers/9/a/3/goteborgkk.se/httpd.www/css
-cp /customers/9/a/3/goteborgkk.se/httpd.private/web/public/js/* /customers/9/a/3/goteborgkk.se/httpd.www/js
-yes | cp -r /customers/9/a/3/goteborgkk.se/httpd.private/web/public/build /customers/9/a/3/goteborgkk.se/httpd.www
+# Note: Build assets are now deployed automatically via GitHub Actions
+# No need to copy them manually anymore
+
 php /customers/9/a/3/goteborgkk.se/httpd.private/web/artisan config:cache
 php /customers/9/a/3/goteborgkk.se/httpd.private/web/artisan route:cache
 
-echo Assets updated!
+echo Backend updated! Frontend assets are deployed automatically via GitHub Actions.
