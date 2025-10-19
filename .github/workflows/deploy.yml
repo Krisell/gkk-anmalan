@@ -13,13 +13,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+        uses: actions/setup-node@v6
 
       - name: Install dependencies
         run: npm ci
@@ -36,7 +33,7 @@ jobs:
           ls -lh build-assets-${{ github.sha }}.zip
 
       - name: Upload to GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.sha }}
           name: Build Assets ${{ github.sha }}
