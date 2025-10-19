@@ -39,12 +39,25 @@ class WebhookController extends Controller
 
         $currentMinute = now()->timezone('Europe/Stockholm')->format('H:i');
 
-        if (! \in_array($currentMinute, ['07:30', '13:30'])) {
-            return 'No scheduled tasks to run at this time.';
+        $hasRunATask = false;
+
+        $output = '';
+
+        if ($currentMinute === '07:20') {
+            $hasRunATask = true;
+            Artisan::call('gkk:notify-competition-deadlines');
+            $output .= Artisan::output();
         }
 
-        Artisan::call('fortnox:verify-payment --all');
-        $output = Artisan::output();
+        if (\in_array($currentMinute, ['07:30', '13:30'])) {
+            $hasRunATask = true;
+            Artisan::call('fortnox:verify-payment --all');
+            $output .= Artisan::output();
+        }
+
+        if (! $hasRunATask) {
+            return 'No scheduled tasks to run at this time.';
+        }
 
         logger($output);
 
