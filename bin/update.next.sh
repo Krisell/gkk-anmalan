@@ -21,6 +21,7 @@ if curl -L -f -o "build-assets.zip" "${ASSETS_URL}"; then
     
     # Extract to the web root
     unzip -o "build-assets.zip" -d /customers/9/a/3/goteborgkk.se/httpd.www/
+    unzip -o "build-assets.zip" -d /customers/9/a/3/goteborgkk.se/httpd.private/web/public/
     
     echo "Build assets deployed successfully"
     
