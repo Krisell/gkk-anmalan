@@ -26,3 +26,6 @@ public/js/app.js.LICENSE.txt
 .pint.cache
 .ignored
 
+# Build assets (built by GitHub Actions)
+/public/build/
+
