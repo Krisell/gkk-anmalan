@@ -61,7 +61,7 @@ npm run build
 ```
 
 The built files will appear in:
-- `public/build/` - Vite build output with versioned assets and manifest
+- `public/build/` - Vite build output containing versioned JavaScript, CSS, and other frontend assets, plus a manifest file for cache-busting
 
 This directory is automatically excluded from version control.
 
