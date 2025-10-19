@@ -37,7 +37,7 @@
           :disabled="!canCreateSlide"
           class="px-4 py-2 bg-gkk text-white rounded hover:bg-gkk-dark disabled:bg-gray-300 disabled:cursor-not-allowed"
         >
-          Skapa slide
+          Skapa ny slide
         </button>
       </div>
     </div>
