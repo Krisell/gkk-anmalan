@@ -95,7 +95,7 @@ class CompetitionController extends Controller
 
         // Get all granted users with email addresses
         $users = User::whereNotNull('email')
-            ->where('granted', true)
+            ->where('granted_by', '>', 0)
             ->get();
 
         $recipientCount = 0;
