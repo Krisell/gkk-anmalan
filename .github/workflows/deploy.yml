@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Release Assets
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     
     steps:
@@ -27,25 +27,25 @@ jobs:
       - name: Build assets
         run: npm run build
 
-      - name: Deploy to server via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Create build archive
+        run: |
+          cd public
+          zip -r ../build-assets-${{ github.sha }}.zip build/
+          cd ..
+          echo "Created build-assets-${{ github.sha }}.zip"
+          ls -lh build-assets-${{ github.sha }}.zip
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v1
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./public/
-          server-dir: /httpd.www/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/storage/**
-            **/hot
-            **/.htaccess
-            **/index.php
-            **/favicon.ico
-            **/favicon.png
-            **/appIconGKK.png
-            **/qr.png
-            **/robots.txt
-            **/vendor/**
+          tag_name: build-${{ github.sha }}
+          name: Build Assets ${{ github.sha }}
+          body: |
+            Automated build assets for commit ${{ github.sha }}
+            
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+          files: build-assets-${{ github.sha }}.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: true

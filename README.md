@@ -22,10 +22,11 @@ Applikationen är helt webbaserad och bygger på ramverken Vue.js och Laravel (P
 
 ### Automatisk deploy av frontend-assets
 
-Frontend-assets (JavaScript och CSS) byggs och deployas automatiskt via GitHub Actions när ändringar pushas till `master` eller `main` branchen. Detta sköts av `.github/workflows/deploy.yml` som:
+Frontend-assets (JavaScript och CSS) byggs och publiceras automatiskt till GitHub Releases via GitHub Actions när ändringar pushas till `master` eller `main` branchen. Detta sköts av `.github/workflows/deploy.yml` som:
 
 1. Bygger assets med `npm run build`
-2. Deployas automatiskt till servern via FTP
+2. Skapar en zip-fil med namnet `build-assets-{commit-sha}.zip`
+3. Publicerar en GitHub Release taggad som `build-{commit-sha}` med zip-filen bifogad
 
 **Notera:** Build-assets (public/build/, public/js/, public/css/) ingår inte längre i source control utan genereras automatiskt vid deploy.
 
@@ -34,10 +35,13 @@ Frontend-assets (JavaScript och CSS) byggs och deployas automatiskt via GitHub A
 Efter att önskade ändringar är utvecklade, mergade till rätt branch och pushade hit används följande steg för att publicera backend-ändringar:
 
 - Logga in på servern
-- I mappen för aktuell branch, kör kommandot `bin/update.sh` som automatiserar `git pull` samt Laravel-specifika optimeringskommandon.
+- I mappen för aktuell branch, kör kommandot `bin/update.sh` som automatiserar:
+  - `git pull` för att hämta senaste koden
+  - Nedladdning av build-assets från GitHub Releases för aktuell commit
+  - Laravel-specifika optimeringskommandon
 - Om PHP-beroenden har uppdaterats, kör också `php composer.phar install --no-dev`
 
-Deploy är i nuläget inte helt atomär utan en kort period (några sekunder) av nertid kan upplevas (särskilt i samband med `composer install`). Detta är acceptabelt i nuläget men kan komma att förändras om användningen av systemet ökar.
+Deploy-scriptet laddar automatiskt ner rätt version av frontend-assets baserat på commit-hash, vilket möjliggör enkel rollback till tidigare versioner.
 
 ## Utveckla lokalt
 
