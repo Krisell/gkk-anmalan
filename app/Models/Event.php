@@ -25,6 +25,12 @@ class Event extends Model
         return $this->hasMany(EventRegistration::class);
     }
 
+    public function notificationLogs(): HasMany
+    {
+        return $this->hasMany(NotificationLog::class, 'notifiable_id')
+            ->where('notifiable_type', self::class);
+    }
+
     public function getPublishCountValueAttribute()
     {
         return $this->registrations()->whereStatus(1)->count();

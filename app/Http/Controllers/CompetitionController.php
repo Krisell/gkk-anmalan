@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EventCompetitionNotificationMail;
 use App\Models\ActivityLog;
 use App\Models\Competition;
+use App\Models\NotificationLog;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CompetitionController extends Controller
 {
@@ -82,6 +85,57 @@ class CompetitionController extends Controller
     public function destroy(Competition $competition)
     {
         $competition->delete();
+    }
+
+    public function sendNotification(Competition $competition, Request $request)
+    {
+        $request->validate([
+            'confirmed' => 'required|boolean|accepted',
+        ]);
+
+        // Get all granted users with email addresses
+        $users = User::whereNotNull('email')
+            ->where('granted', true)
+            ->get();
+
+        $recipientCount = 0;
+
+        foreach ($users as $user) {
+            try {
+                Mail::to($user->email)->send(
+                    new EventCompetitionNotificationMail($competition, 'competition')
+                );
+                $recipientCount++;
+            } catch (\Exception $e) {
+                // Log error but continue sending to other users
+                \Log::error("Failed to send competition notification to user {$user->id}: ".$e->getMessage());
+            }
+        }
+
+        // Log the notification
+        NotificationLog::create([
+            'notifiable_type' => Competition::class,
+            'notifiable_id' => $competition->id,
+            'sent_by' => auth()->id(),
+            'recipients_count' => $recipientCount,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'recipients_count' => $recipientCount,
+        ]);
+    }
+
+    public function notificationStatus(Competition $competition)
+    {
+        $logs = $competition->notificationLogs()
+            ->with('sentBy:id,first_name,last_name')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'notifications' => $logs,
+        ]);
     }
 
     public function add(Competition $competition, Request $request)

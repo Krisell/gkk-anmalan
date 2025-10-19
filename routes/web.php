@@ -124,6 +124,8 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::delete('/{event}', 'destroy');
 
         Route::post('/{event}/registrations/', 'add');
+        Route::post('/{event}/send-notification', 'sendNotification');
+        Route::get('/{event}/notification-status', 'notificationStatus');
     });
 
     Route::prefix('competitions')->controller(CompetitionController::class)->group(function () {
@@ -134,6 +136,8 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::delete('/{competition}', 'destroy');
 
         Route::post('/{competition}/registrations/', 'add');
+        Route::post('/{competition}/send-notification', 'sendNotification');
+        Route::get('/{competition}/notification-status', 'notificationStatus');
     });
 
     Route::prefix('accounts')->group(function () {
