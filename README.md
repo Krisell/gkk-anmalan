@@ -28,7 +28,7 @@ Frontend-assets (JavaScript och CSS) byggs och publiceras automatiskt till GitHu
 2. Skapar en zip-fil med namnet `build-assets-{commit-sha}.zip`
 3. Publicerar en GitHub Release taggad som `build-{commit-sha}` med zip-filen bifogad
 
-**Notera:** Build-assets (public/build/, public/js/, public/css/) ingår inte längre i source control utan genereras automatiskt vid deploy.
+**Notera:** Build-assets (public/build/, public/js/, public/css/) ingår för tillfället fortfarande i source control men publiceras även automatiskt till GitHub Releases.
 
 ### Manuell uppdatering av backend
 
@@ -37,11 +37,11 @@ Efter att önskade ändringar är utvecklade, mergade till rätt branch och push
 - Logga in på servern
 - I mappen för aktuell branch, kör kommandot `bin/update.sh` som automatiserar:
   - `git pull` för att hämta senaste koden
-  - Nedladdning av build-assets från GitHub Releases för aktuell commit
+  - Kopiering av build-assets från repository till webbrot
   - Laravel-specifika optimeringskommandon
 - Om PHP-beroenden har uppdaterats, kör också `php composer.phar install --no-dev`
 
-Deploy-scriptet laddar automatiskt ner rätt version av frontend-assets baserat på commit-hash, vilket möjliggör enkel rollback till tidigare versioner.
+**Ny deploy-metod (experimentell):** Ett nytt script `bin/update.next.sh` finns tillgängligt som laddar ner build-assets från GitHub Releases istället för att kopiera från repository. Detta möjliggör enklare rollback till tidigare versioner baserat på commit-hash.
 
 ## Utveckla lokalt
 

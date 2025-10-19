@@ -23,7 +23,19 @@ The releases are marked as pre-releases and contain:
 
 ## Server Deployment
 
+### Current Deployment (using tracked build assets)
+
 When you run `bin/update.sh` on the server:
+
+1. The script pulls the latest code with `git pull`
+2. Copies build assets from the repository to the web root
+3. Updates Laravel caches
+
+This is the current stable deployment method that uses build assets tracked in source control.
+
+### Future Deployment (using GitHub Releases)
+
+A new deployment script `bin/update.next.sh` is available that downloads build assets from GitHub Releases:
 
 1. The script pulls the latest code with `git pull`
 2. Determines the current commit SHA
@@ -32,6 +44,8 @@ When you run `bin/update.sh` on the server:
 5. Updates Laravel caches
 
 **No GitHub secrets or credentials are required** - the releases are publicly accessible.
+
+To use this method, simply run `bin/update.next.sh` instead of `bin/update.sh`. Once verified to work correctly, `update.next.sh` can be renamed to `update.sh`.
 
 ## Manual Deployment
 
