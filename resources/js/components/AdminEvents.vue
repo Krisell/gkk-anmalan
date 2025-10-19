@@ -92,6 +92,19 @@
                       <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                     <svg
+                      v-tooltip="'Skicka mail till medlemmar'"
+                      class="w-6 ml-2 text-gkk-light hover:text-gkk"
+                      @click.prevent="confirmSendNotification(event)"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <svg
                       v-tooltip="'Radera event'"
                       class="w-6 ml-2 text-gkk-light hover:text-gkk"
                       @click.prevent="confirmDelete(event)"
@@ -260,6 +273,41 @@
         </div>
       </template>
     </Modal>
+
+    <Modal ref="sendNotificationModal" :title="`Skicka mail om ${ selectedEvent && selectedEvent.name }?`">
+      <div v-if="notificationStatus && notificationStatus.length > 0" class="mb-4">
+        <p class="text-sm text-gray-600 mb-2">Tidigare utskick:</p>
+        <div v-for="log in notificationStatus" :key="log.id" class="text-xs text-gray-500 mb-1">
+          {{ new Date(log.created_at).toLocaleString('sv-SE') }} - 
+          {{ log.sent_by.first_name }} {{ log.sent_by.last_name }} 
+          ({{ log.recipients_count }} mottagare)
+        </div>
+      </div>
+      <p class="text-sm text-gray-700 mb-4">
+        Detta kommer att skicka ett mail till alla registrerade medlemmar med information om eventet.
+        <strong>Är du säker på att du vill fortsätta?</strong>
+      </p>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click.prevent="close">Avbryt</Button>
+          <Button @click.prevent="sendNotification">Skicka mail</Button>
+        </div>
+      </template>
+    </Modal>
+
+    <Modal ref="notificationResultModal" :title="notificationResult.success ? 'Mail skickat!' : 'Fel uppstod'">
+      <p v-if="notificationResult.success" class="text-sm text-gray-700">
+        Mailet skickades till {{ notificationResult.recipients_count }} medlemmar.
+      </p>
+      <p v-else class="text-sm text-red-600">
+        Ett fel uppstod när mailet skulle skickas. Försök igen eller kontakta administratör.
+      </p>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button @click.prevent="close">Stäng</Button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -277,6 +325,8 @@ export default {
       showNewEvent: false,
       newEventError: false,
       selectedEvent: null,
+      notificationStatus: [],
+      notificationResult: {},
       event: {
         name: '',
         date: '',
@@ -349,6 +399,40 @@ export default {
           this.newEventError = true
           console.log(err)
         })
+    },
+    async confirmSendNotification(event) {
+      this.selectedEvent = event
+      this.notificationStatus = []
+
+      try {
+        const response = await window.axios.get(`/admin/events/${event.id}/notification-status`)
+        this.notificationStatus = response.data.notifications
+      } catch (err) {
+        console.error('Failed to fetch notification status:', err)
+      }
+
+      this.$refs.sendNotificationModal.show()
+    },
+    async sendNotification() {
+      this.$refs.sendNotificationModal.close()
+
+      try {
+        const response = await window.axios.post(`/admin/events/${this.selectedEvent.id}/send-notification`, {
+          confirmed: true,
+        })
+
+        this.notificationResult = {
+          success: true,
+          recipients_count: response.data.recipients_count,
+        }
+      } catch (err) {
+        console.error('Failed to send notification:', err)
+        this.notificationResult = {
+          success: false,
+        }
+      }
+
+      this.$refs.notificationResultModal.show()
     },
   },
 }
