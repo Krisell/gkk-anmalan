@@ -34,4 +34,23 @@ class NewsEmailController extends Controller
 
         Mail::to(auth()->user())->send(new NewsMail($item));
     }
+
+    public function sendToAll()
+    {
+        $item = new NewsItem([
+            'body' => request('body'),
+            'title' => request('title'),
+        ]);
+
+        $users = \App\Models\User::where('granted_by', '>', 0)->get();
+
+        foreach ($users as $user) {
+            Mail::to($user)->send(new NewsMail($item));
+        }
+
+        return response()->json([
+            'message' => 'Email sent successfully',
+            'count' => $users->count(),
+        ]);
+    }
 }

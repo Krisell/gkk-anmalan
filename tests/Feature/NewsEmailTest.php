@@ -77,3 +77,73 @@ test('a news email can be sent as a test to the signed in user', function () {
 
     Mail::assertSent(NewsMail::class, fn ($mail) => $mail->hasTo($user->email));
 });
+
+test('a news email can be sent to all members', function () {
+    Mail::fake();
+
+    $item = NewsItem::create([
+        'title' => 'Important News',
+        'body' => 'This is important content',
+    ]);
+
+    // Create some approved members
+    $approvedUser1 = \App\Models\User::factory()->create(['granted_by' => 1]);
+    $approvedUser2 = \App\Models\User::factory()->create(['granted_by' => 2]);
+    $approvedUser3 = \App\Models\User::factory()->create(['granted_by' => 1]);
+
+    // Create an unapproved user (should not receive email)
+    $unapprovedUser = \App\Models\User::factory()->create(['granted_by' => 0]);
+
+    loginAdmin();
+
+    $response = $this->post('/admin/news/email/send-all', [
+        'body' => $item->body,
+        'title' => $item->title,
+    ])->assertOk();
+
+    $response->assertJson([
+        'message' => 'Email sent successfully',
+        'count' => 4, // 3 approved users + 1 admin
+    ]);
+
+    Mail::assertSent(NewsMail::class, function ($mail) use ($approvedUser1) {
+        return $mail->hasTo($approvedUser1->email);
+    });
+
+    Mail::assertSent(NewsMail::class, function ($mail) use ($approvedUser2) {
+        return $mail->hasTo($approvedUser2->email);
+    });
+
+    Mail::assertSent(NewsMail::class, function ($mail) use ($approvedUser3) {
+        return $mail->hasTo($approvedUser3->email);
+    });
+
+    Mail::assertNotSent(NewsMail::class, function ($mail) use ($unapprovedUser) {
+        return $mail->hasTo($unapprovedUser->email);
+    });
+});
+
+test('only administrators can send news emails to all members', function () {
+    Mail::fake();
+
+    $item = NewsItem::create([
+        'title' => 'Important News',
+        'body' => 'This is important content',
+    ]);
+
+    $this->post('/admin/news/email/send-all', [
+        'body' => $item->body,
+        'title' => $item->title,
+    ])->assertRedirect();
+
+    Mail::assertNotSent(NewsMail::class);
+
+    login();
+
+    $this->post('/admin/news/email/send-all', [
+        'body' => $item->body,
+        'title' => $item->title,
+    ])->assertUnauthorized();
+
+    Mail::assertNotSent(NewsMail::class);
+});

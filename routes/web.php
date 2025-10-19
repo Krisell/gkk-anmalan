@@ -156,6 +156,7 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::prefix('email')->group(function () {
             Route::post('/preview', [\App\Http\Controllers\NewsEmailController::class, 'preview']);
             Route::post('/test', [\App\Http\Controllers\NewsEmailController::class, 'test']);
+            Route::post('/send-all', [\App\Http\Controllers\NewsEmailController::class, 'sendToAll']);
             Route::get('/{item}', [\App\Http\Controllers\NewsEmailController::class, 'show']);
         });
     });

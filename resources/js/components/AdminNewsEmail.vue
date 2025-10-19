@@ -20,12 +20,16 @@
       input="news-content"
     ></trix-editor>
 
-    <p v-if="status === 'test-successful'">Testmail skickat!</p>
+    <p v-if="status === 'test-successful'" class="text-green-600 font-semibold mt-2">Testmail skickat!</p>
+    <p v-if="status === 'send-all-successful'" class="text-green-600 font-semibold mt-2">
+      Epost har skickats till {{ sentCount }} medlemmar!
+    </p>
+    <p v-if="status === 'sending'" class="text-blue-600 font-semibold mt-2">Skickar epost...</p>
 
     <Button v-if="item" class="mt-2 mr-2" @click="showPreview"> Se färdigt mail i webbläsaren </Button>
-    <Button v-if="item" class="mt-2" @click="testSend"> Gör provutskick till endast dig själv </Button>
-    <Button v-if="item" type="secondary" class="mt-2">
-      Denna knapp ska göra utskick till samtliga medlemmar, men det är inte implementerat ännu
+    <Button v-if="item" class="mt-2 mr-2" @click="testSend"> Gör provutskick till endast dig själv </Button>
+    <Button v-if="item" type="danger" class="mt-2" @click="confirmSendToAll">
+      Skicka till samtliga medlemmar
     </Button>
   </div>
 </template>
@@ -40,6 +44,7 @@ export default {
   data() {
     return {
       status: '',
+      sentCount: 0,
     }
   },
   methods: {
@@ -69,6 +74,31 @@ export default {
           body: this.item.body,
         },
       })
+    },
+    confirmSendToAll() {
+      const confirmed = window.confirm(
+        'Är du säker på att du vill skicka detta mail till ALLA medlemmar? Detta kan inte ångras.'
+      )
+
+      if (confirmed) {
+        this.sendToAll()
+      }
+    },
+    sendToAll() {
+      this.status = 'sending'
+      axios
+        .post('/admin/news/email/send-all', {
+          title: this.item.title,
+          body: this.item.body,
+        })
+        .then((response) => {
+          this.sentCount = response.data.count
+          this.status = 'send-all-successful'
+        })
+        .catch((error) => {
+          this.status = ''
+          alert('Ett fel uppstod vid utskick av epost: ' + (error.response?.data?.message || error.message))
+        })
     },
   },
 }
