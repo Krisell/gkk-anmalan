@@ -1,14 +1,15 @@
 #!/usr/bin/bash
 
-# Get the current git commit hash
-COMMIT_SHA=$(git rev-parse HEAD)
-ASSETS_URL="https://github.com/Krisell/gkk-anmalan/releases/download/build-${COMMIT_SHA}/build-assets-${COMMIT_SHA}.zip"
 TEMP_DIR="/tmp/gkk-build-assets"
-
-echo "Updating to commit: ${COMMIT_SHA}"
 
 # Pull latest code
 git pull
+
+# Get the current git commit hash after pulling
+COMMIT_SHA=$(git rev-parse HEAD)
+ASSETS_URL="https://github.com/Krisell/gkk-anmalan/releases/download/build-${COMMIT_SHA}/build-assets-${COMMIT_SHA}.zip"
+
+echo "Updating to commit: ${COMMIT_SHA}"
 
 # Download and extract build assets
 echo "Downloading build assets from GitHub..."
