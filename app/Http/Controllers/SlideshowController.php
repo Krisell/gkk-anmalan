@@ -68,12 +68,13 @@ class SlideshowController extends Controller
             'is_visible' => 'boolean',
         ]);
 
-        $maxOrder = Slide::max('order') ?? -1;
+        // Increment order of all existing slides to make room at position 0
+        Slide::query()->increment('order');
 
         $slide = Slide::create([
             'type' => $validated['type'],
             'data' => $validated['data'],
-            'order' => $maxOrder + 1,
+            'order' => 0,
             'is_visible' => $validated['is_visible'] ?? true,
         ]);
 

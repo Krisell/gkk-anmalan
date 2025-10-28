@@ -107,6 +107,12 @@
               @click="moveByIndex(index, -1)"
             ></i>
             <i
+              class="cursor-pointer fa fa-angle-double-up hover:scale-110 transition-all"
+              :class="{ 'text-gray-400': index === 0 }"
+              v-tooltip="'Skicka till toppen'"
+              @click="moveToTop(index)"
+            ></i>
+            <i
               class="cursor-pointer fa fa-pencil hover:scale-110 transition-all"
               v-tooltip="'Redigera'"
               @click="startEdit(slide)"
@@ -127,6 +133,12 @@
               class="cursor-pointer fa fa-trash hover:scale-110 transition-all text-red-500"
               v-tooltip="'Ta bort'"
               @click="deleteSlide(slide.id)"
+            ></i>
+            <i
+              class="cursor-pointer fa fa-angle-double-down hover:scale-110 transition-all"
+              :class="{ 'text-gray-400': index === slides.length - 1 }"
+              v-tooltip="'Skicka till botten'"
+              @click="moveToBottom(index)"
             ></i>
             <i
               class="fa fa-arrow-down hover:scale-110 transition-all"
@@ -271,7 +283,8 @@ async function createSlide() {
       is_visible: true
     })
 
-    slides.value.push(response.data)
+    // Add new slide to the beginning of the array
+    slides.value.unshift(response.data)
 
     // Reset form
     newSlide.value = {
@@ -421,6 +434,66 @@ async function moveByIndex(index, direction) {
     // Revert the changes if the request fails
     slides.value[newIndex] = slides.value[index]
     slides.value[index] = temp
+    return
+  }
+}
+
+async function moveToTop(index) {
+  if (index === 0) return
+
+  const slide = slides.value.splice(index, 1)[0]
+  slides.value.unshift(slide)
+
+  try {
+    await axios.post('/slideshow/order', {
+      slides: slides.value.map((slide, index) => ({
+        id: slide.id,
+        order: index
+      }))
+    })
+
+    $toast.success('Sliden har skickats till toppen', {
+      duration: 2000,
+      type: 'success'
+    })
+  } catch (error) {
+    $toast.error('Sliden kunde inte flyttas', {
+      duration: 2000,
+      type: 'error'
+    })
+    // Revert the changes if the request fails
+    slides.value.splice(0, 1)
+    slides.value.splice(index, 0, slide)
+    return
+  }
+}
+
+async function moveToBottom(index) {
+  if (index === slides.value.length - 1) return
+
+  const slide = slides.value.splice(index, 1)[0]
+  slides.value.push(slide)
+
+  try {
+    await axios.post('/slideshow/order', {
+      slides: slides.value.map((slide, index) => ({
+        id: slide.id,
+        order: index
+      }))
+    })
+
+    $toast.success('Sliden har skickats till botten', {
+      duration: 2000,
+      type: 'success'
+    })
+  } catch (error) {
+    $toast.error('Sliden kunde inte flyttas', {
+      duration: 2000,
+      type: 'error'
+    })
+    // Revert the changes if the request fails
+    slides.value.splice(slides.value.length - 1, 1)
+    slides.value.splice(index, 0, slide)
     return
   }
 }
