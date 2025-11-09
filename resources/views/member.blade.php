@@ -35,7 +35,7 @@ background-position-y: 30%; background-position-x: 50%; max-height: 50vh;" class
                 <div class="mt-8">
                   <h2 class="text-xl font-extrabold tracking-tight-mb-2">Avgifter</h2>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
-                    <div class="text-xl leading-normal text-gray-500"><b>Medlemsavgift (inkl träningsavgift):</b> 1500 kr per år för seniorer, 700 kr per år för studerande, ungdom/junior (upp till året man fyller 23) och för pensionärer. Träningsavgiten ger tillgång till föreningens lokal och utrustning, men entré till Friskis krävs också, se nedan.</div>
+                    <div class="text-xl leading-normal text-gray-500"><b>Medlemsavgift (inkl träningsavgift):</b> 1500 kr per år för seniorer, 700 kr per år för studerande, ungdom/junior (upp till året man fyller 23) och för pensionärer. Medlemsavgiften inkluderar en träningsavgift och ger tillgång till föreningens lokal och utrustning, men entré till Friskis krävs också, se nedan.</div>
                     <div class="text-xl leading-normal text-gray-500 mt-2"><b>Avgift för tävlingslicens:</b> För ungdomar (året man fyller 18): 200kr, för övriga 900 kr per år. Denna avgift betalas endast om man vill tävla och i samband med sin första tävling. Föreningen skickar ut faktura efter i samband med första tävlingen för året. <b>Under 2025 har GKK beslutat att subventionera tävlingslicensen för alla upp till 25 år med 300 kr.</b></div>
                     <div class="text-xl leading-normal text-gray-500 mt-2"><b>Träningskort hos Friskis:</b> 15 % rabatt. Se <a target="_blank" class="underline" href="https://www.friskissvettis.se/goteborg/tranahar/majorna">Friskis och Svettis i Majorna</a>.</div>
                   </p>
