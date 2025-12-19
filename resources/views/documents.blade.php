@@ -14,22 +14,22 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
               <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
                 <div>
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Klubbkläder via Intersport</h2>
-                  <div class="mt-4">
+                  <div class="mt-4 flex gap-1 items-center">
                     <i class="fa fa-link"></i>
                     <a class="underline" target="_blank" href="https://team.intersport.se/goteborg-kraftsportklubb">Webbshop (se till att logga in för att få rätt pris).</a>
                   </div>
                 </div>
               <div>
                 <h2 class="mt-12 text-3xl font-extrabold tracking-tight sm:text-4xl">Länkar</h2>
-                <div class="mt-4">
+                <div class="mt-4 flex gap-1 items-center">
                   <i class="fa fa-link"></i>
                   <a class="underline" target="_blank" href="https://styrkelyft.se">Svenska Styrkelyftsförbundet (SSF)</a>
                 </div>
-                <div class="mt-4">
+                <div class="mt-4 flex gap-1 items-center">
                   <i class="fa fa-link"></i>
                   <a class="underline" target="_blank" href="https://www.styrkelyft.se/dokument/dokument-blanketter">Dokument för tävling mm på förbundets hemsida</a>
                 </div>
-                <div class="mt-4">
+                <div class="mt-4 flex gap-1 items-center">
                   <i class="fa fa-link"></i>
                   <a class="underline" target="_blank" href="https://online.styrkelyft.se/">Databasen för resultatregistrering</a>
                 </div>
@@ -37,19 +37,23 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
 
                 <div>
                   <h2 class="mt-12 text-3xl font-extrabold tracking-tight sm:text-4xl">Dokument</h2>
-                  <div class="mt-4">
+                  <div class="mt-4 flex gap-1 items-center">
                     <i class="fa fa-file-pdf-o"></i>
                     <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FAntidopingavtal.pdf?alt=media&token=f43b48b7-62e8-405e-8b3e-f75ac2c465c6">Antidopingavtal mellan medlem och förening (PDF)</a>
                   </div>
-                  <div class="mt-4">
+                  <div class="mt-4 flex gap-1 items-center">
+                    <i class="fa fa-file-pdf-o"></i>
+                    <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FKdSJ2FmrTSijNpxOXVGx0aNtERwoe6.pdf?alt=media&token=9fe3519c-7f6a-473e-851f-897561086e31">Antidopingplan 2026-2028</a>
+                  </div>
+                  <div class="mt-4 flex gap-1 items-center">
                     <i class="fa fa-file-pdf-o"></i>
                     <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK%202022-09-20.pages.pdf?alt=media&token=52b3f7dd-e27c-49f2-a63d-0bdf2a0a0188">Medlemsavtal mellan medlem och förening (PDF)</a>
                   </div>
-                  <div class="mt-4">
+                  <div class="mt-4 flex gap-1 items-center">
                     <i class="fa fa-file-pdf-o"></i>
                     <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FN0TGPEf5Nto75XNm2Nux7Lpojez7pz.pdf?alt=media&token=3204252d-8c0c-43f0-baa2-de7b11ca277c">Föreningens stadgar, antagna 2022-02-19 (PDF)</a>
                   </div>
-                  <div class="mt-4">
+                  <div class="mt-4 flex gap-1 items-center">
                     <i class="fa fa-file-pdf-o"></i>
                     <a class="underline" target="_blank" href="https://goteborg-kraftsportklubb.web.app/img/gkk-integritetspolicy.pdf">Föreningens integritetspolicy (PDF)</a>
                   </div>
@@ -57,7 +61,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
 
                 <div>
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl mt-12">Samarbete med SportRehab</h2>
-                  <div class="mt-4">
+                  <div class="mt-4 flex gap-1 items-center">
                     <i class="fa fa-file-pdf-o"></i>
                     <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FpUSeLCEIjkrZnfyjNXw7DEIrrlsBTH.pdf?alt=media&token=97fb01f5-6a40-4c7d-9d2e-8605b1893163">Samarbete med SportRehab</a>
                   </div>
@@ -105,11 +109,11 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                     <img width="100px" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FMonokrom-pa%CC%8A-mo%CC%88rk-bakgrund.png?alt=media&token=aa0b2c8a-4059-42ed-a36e-7436f7b24a39">
                     <div class="ml-2">Monokrom mot mörk bakgrund</div>
                   </div>
-                  <div class="mt-4"> 
+                  <div class="mt-4 flex gap-1 items-center">
                     <i class="fa fa-file-pdf-o"></i>
                     <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FMonokrom-pa%CC%8A-mo%CC%88rk-bakgrund.pdf?alt=media&token=f49672e6-dc0b-4dcc-a973-bc7a2e47ffd4">Monokrom mot mörk bakgrund för tryck/utskrift (PDF)</a>
                   </div>
-                  <div class="mt-4">
+                  <div class="mt-4 flex gap-1 items-center">
                     <i class="fa fa-file-pdf-o"></i>
                     <a class="underline" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FTva%CC%8Afa%CC%88rg-pa%CC%8A-mo%CC%88rk-bakgrund.pdf?alt=media&token=e2779fa9-486f-491f-81ed-14d1b1d0d15b">Tvåfärg på mörk bakgrund för tryck/utskrift (PDF)</a>
                   </div>
