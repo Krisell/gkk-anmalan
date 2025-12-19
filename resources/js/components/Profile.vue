@@ -14,6 +14,9 @@
         <Button type="secondary" @click="showAntiDopingAgreement">Visa antidopingavtal</Button>
         <div class="ml-6 text-sm italic">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
       </div>
+      <div class="mt-2 flex items-center">
+        <Button type="secondary" @click="showAntiDopingPlan">Visa antidopingplan</Button>
+      </div>
 
       <h2 class="mt-8 mb-1 text-2xl">Medlemsavgift och SSF-licens</h2>
       <ul>
@@ -224,6 +227,9 @@ export default {
     },
     showAntiDopingAgreement() {
       window.open(Documents.ANTI_DOPING_AGREEMENT)
+    },
+    showAntiDopingPlan() {
+      window.open(Documents.ANTI_DOPING_PLAN)
     },
     renderDate(date) {
       return new Date(date).toLocaleDateString('sv-SE')

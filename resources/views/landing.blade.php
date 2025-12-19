@@ -15,15 +15,15 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Välkommen till Göteborg Kraftsportklubb</h2>
                 </div>
 
-                {{-- <div>
+                <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2Fflu0NgLlIc94AqodG8jCJOmasuuXc1.pdf?alt=media&token=f089085e-808e-4ebc-b4b4-0ec3e40028d5">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Kallelse och föredragningslista årsmöte 2025-02-16 kl 12.00
+                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FDszgogxmrxsz3hOJauVM8p7gwj6Hnw.pdf?alt=media&token=523767fd-aeee-4167-92d2-f502aa1d4662">
+                    <i class="fa fa-file-pdf-o mr-2"></i>Kallelse och föredragningslista årsmöte 2026-02-07 kl 12.00
                   </a>
                 </div>
-                <div>
+                {{-- <div>
                   <a 
                     target="_blank"
                     class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
