@@ -62,7 +62,7 @@ class HomeController extends Controller
         }
 
         return view('inside', [
-            'user' => auth()->user(),
+            'user' => auth()->user()?->load('eventRegistrations.event'),
             'unanswered' => $unanswered,
             'news' => $news,
             'view' => 'inside',
