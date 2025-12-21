@@ -7,7 +7,7 @@
     </div>
     <div v-if="user && helperCount === 0 && isUserOlderThanOneMonth">
       <h3 class="text-center mt-6 text-md text-orange-600 max-w-[90%] mx-auto">
-        .
+        Du har inte hjälpt till som funktionär det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar.<br>Kontakta styrelsen om du har frågor.
       </h3>
     </div>
     <div v-if="user && user.granted_by == 0">
