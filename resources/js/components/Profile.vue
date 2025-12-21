@@ -18,6 +18,23 @@
         <Button type="secondary" @click="showAntiDopingPlan">Visa antidopingplan</Button>
       </div>
 
+      <h2 class="mt-8 mb-1 text-2xl">Funktionärsaktivitet</h2>
+      <div v-if="showHelperWarning" class="mt-4 p-4 border-4 border-orange-500 rounded bg-orange-50">
+        <div class="text-orange-700 font-semibold">⚠️ Varning</div>
+        <div class="mt-2 text-orange-600">
+          Du har inte hjälpt till som funktionär det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar.
+          <br>Kontakta styrelsen om du har frågor.
+        </div>
+      </div>
+      <div class="mt-4">
+        <div v-if="lastHelperDate" class="text-sm">
+          Senast hjälpte du till som funktionär: <strong>{{ renderDate(lastHelperDate) }}</strong>
+        </div>
+        <div v-else class="text-sm text-gray-600">
+          Inga registrerade funktionärsaktiviteter det senaste året.
+        </div>
+      </div>
+
       <h2 class="mt-8 mb-1 text-2xl">Medlemsavgift och SSF-licens</h2>
       <ul>
         <li v-for="payment in payments" :key="payment.id" class="mt-2">
@@ -156,7 +173,7 @@ import QRCode from 'qrcode'
 
 export default {
   components: { Button, Modal },
-  props: ['user', 'payments'],
+  props: ['user', 'payments', 'lastHelperDate'],
   data() {
     return {
       isAdjusted: {
@@ -185,6 +202,34 @@ export default {
       qrCodes: {},
       paymentInProcess: null,
     }
+  },
+  computed: {
+    showHelperWarning() {
+      // Don't show warning for new users (first month)
+      if (!this.user?.created_at) {
+        return false
+      }
+
+      const createdAt = new window.Date(this.user.created_at)
+      const oneMonthAgo = new window.Date()
+      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1)
+
+      // User is less than 1 month old, don't show warning
+      if (createdAt >= oneMonthAgo) {
+        return false
+      }
+
+      // Show warning if no helper activity in the last year
+      if (!this.lastHelperDate) {
+        return true
+      }
+
+      const lastHelper = new window.Date(this.lastHelperDate)
+      const oneYearAgo = new window.Date()
+      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+
+      return lastHelper < oneYearAgo
+    },
   },
   async created() {
       for (const payment of this.payments) {

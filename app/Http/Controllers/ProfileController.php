@@ -8,12 +8,25 @@ class ProfileController extends Controller
 {
     public function index(Request $request)
     {
+        $user = $request->user()->load('eventRegistrations.event');
         $payments = $request->user()->payments()->where('year', '>=', 2025)->get();
 
+        // Find last helper activity
+        $lastHelperDate = $user->eventRegistrations()
+            ->whereHas('event')
+            ->where('presence_confirmed', true)
+            ->whereHas('event', function ($query) {
+                $query->where('date', '>=', now()->subYear());
+            })
+            ->join('events', 'event_registrations.event_id', '=', 'events.id')
+            ->orderBy('events.date', 'desc')
+            ->value('events.date');
+
         return view('profile', [
-            'user' => $request->user(),
+            'user' => $user,
             'view' => 'profile',
             'payments' => $payments,
+            'lastHelperDate' => $lastHelperDate,
         ]);
     }
 
