@@ -5,10 +5,10 @@
         Du har obetalda avgifter. Klicka på "Profil" för mer information.<br>Efter betalning kan det ta några dagar innan denna notisering försvinner.
       </h3>
     </div>
-    <div v-if="user && helperCount === 0 && isUserOlderThanOneMonth">
-      <h3 class="text-center mt-6 text-md text-orange-600 max-w-[90%] mx-auto">
-        Du har inte hjälpt till som funktionär det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar.<br>Kontakta styrelsen om du har frågor.
-      </h3>
+    <div v-if="user && helperCount === 0 && !user.explicit_registration_approval && isUserOlderThanOneMonth" class="max-w-[90%] mx-auto mt-6">
+      <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded max-w-[800px] border-l-4 border-l-yellow-500 m-auto text-left">
+        Du har inte hjälpt till som funktionär det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar. Kontakta styrelsen om du har frågor.
+      </div>
     </div>
     <div v-if="user && user.granted_by == 0">
       <h3 class="text-center mt-6 font-thin text-xl">

@@ -28,9 +28,10 @@
       </div>
       <div class="mt-4">
         <div v-if="lastHelperDate" class="text-sm">
-          Senast hjälpte du till som funktionär: <strong>{{ renderDate(lastHelperDate) }}</strong>
+          Alla tävlingsaktiva medlemmar behöver ställa upp som funktionär minst en gång per år.<br />Du hjälpte till som funktionär senast <strong>{{ renderDate(lastHelperDate) }}</strong>
         </div>
         <div v-else class="text-sm text-gray-600">
+          Alla tävlingsaktiva medlemmar behöver ställa upp som funktionär minst en gång per år.<br />
           Inga registrerade funktionärsaktiviteter det senaste året.
         </div>
       </div>
