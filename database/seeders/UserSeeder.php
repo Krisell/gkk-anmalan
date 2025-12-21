@@ -99,5 +99,17 @@ class UserSeeder extends Seeder
             'birth_year' => now()->subYears(65)->year,
             'email' => 'senior@example.com',
         ]);
+
+        User::create([
+            'first_name' => 'Gammal',
+            'last_name' => 'Användare',
+            'birth_year' => 1985,
+            'email' => 'gammal@example.com',
+            'password' => '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq', // asdasdasd
+            'role' => null,
+            'granted_by' => 1,
+            'created_at' => now()->subMonths(2),
+            'updated_at' => now()->subMonths(2),
+        ]);
     }
 }

@@ -5,7 +5,7 @@
         Du har obetalda avgifter. Klicka på "Profil" för mer information.<br>Efter betalning kan det ta några dagar innan denna notisering försvinner.
       </h3>
     </div>
-    <div v-if="user && helperCount === 0 && !user.explicit_registration_approval">
+    <div v-if="user && helperCount === 0 && !user.explicit_registration_approval && isUserOlderThanOneMonth">
       <h3 class="text-center mt-6 text-md text-orange-600 max-w-[90%] mx-auto">
         Du har inte hjälpt till som funktionär det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar.<br>Kontakta styrelsen om du har frågor.
       </h3>
@@ -90,6 +90,17 @@ export default {
       }
 
       return this.presentLastYear(this.user.event_registrations)
+    },
+    isUserOlderThanOneMonth() {
+      if (!this.user || !this.user.created_at) {
+        return true
+      }
+
+      const createdAt = new window.Date(this.user.created_at)
+      const oneMonthAgo = new window.Date()
+      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1)
+
+      return createdAt < oneMonthAgo
     },
   },
   methods: {
