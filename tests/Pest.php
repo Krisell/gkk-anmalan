@@ -44,7 +44,7 @@ expect()->extend('toBeOne', function () {
 
 function login(?User $user = null)
 {
-    $user = $user ?: User::factory()->create();
+    $user = $user ?: User::factory()->withExplicitApproval()->create();
 
     Auth::login($user);
 

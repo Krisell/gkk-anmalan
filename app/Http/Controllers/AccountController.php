@@ -91,4 +91,22 @@ class AccountController extends Controller
             'inactivated_at' => null,
         ]);
     }
+
+    public function updateCompetitionPermission(User $user, Request $request)
+    {
+        $data = $request->validate([
+            'explicit_registration_approval' => 'required|boolean',
+        ]);
+
+        $user->update($data);
+
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'explicit-registration-approval-update',
+            'user_id' => $user->id,
+            'data' => $data['explicit_registration_approval'] ? 'granted' : 'revoked',
+        ]);
+
+        return response()->json(['message' => 'Registration approval updated successfully']);
+    }
 }

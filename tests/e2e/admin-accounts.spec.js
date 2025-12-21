@@ -28,12 +28,12 @@ test('The admin can mark and unmark payments', async ({ page }) => {
 
     const name = `${otherUser.first_name} ${otherUser.last_name}`
 
-    await page.getByRole('row', { name: name }).locator('label div').click();
+    await page.getByRole('row', { name: name }).getByTestId('membership-current-year').locator('label div').click();
 
     await expect(page.getByText(`Medlemsavgiften för ${name} har markerats som betald`)).toBeVisible()
 
     await page.reload()
-    await page.getByRole('row', { name: name }).locator('label div').click();
+    await page.getByRole('row', { name: name }).getByTestId('membership-current-year').locator('label div').click();
     await expect(page.getByText(`Medlemsavgiften för ${name} har markerats som obetald`)).toBeVisible()
 })
 

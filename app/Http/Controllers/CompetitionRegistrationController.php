@@ -28,6 +28,20 @@ class CompetitionRegistrationController extends Controller
             abort_if(now()->toDateString() > $competition->last_registration_at->toDateString(), 401);
         }
 
+        // Check if user wants to compete and validate helper status
+        if ($data['status'] && ! auth()->user()->explicit_registration_approval) {
+            $helperCount = auth()->user()->eventRegistrations()
+                ->whereHas('event', function ($query) {
+                    $query->where('date', '>=', now()->subYear());
+                })
+                ->where('presence_confirmed', true)
+                ->count();
+
+            if ($helperCount === 0) {
+                return response()->json(['error' => 'Du kan inte anmäla dig till tävlingar eftersom du inte har hjälpt till som funktionär det senaste året.'], 403);
+            }
+        }
+
         $registration = CompetitionRegistration::updateOrCreate(
             ['competition_id' => $competition->id, 'user_id' => auth()->id()],
             $data,

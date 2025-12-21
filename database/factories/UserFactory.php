@@ -39,6 +39,7 @@ class UserFactory extends Factory
             'granted_by' => 1,
             'gender' => $male ? 'm' : 'f',
             'weight_class' => $male ? '74' : '63',
+            'explicit_registration_approval' => false,
         ];
     }
 
@@ -96,6 +97,13 @@ class UserFactory extends Factory
     {
         return $this->state(fn () => [
             'is_student_over_23' => true,
+        ]);
+    }
+
+    public function withExplicitApproval()
+    {
+        return $this->state(fn () => [
+            'explicit_registration_approval' => true,
         ]);
     }
 }

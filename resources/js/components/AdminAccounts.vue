@@ -138,6 +138,9 @@
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Medl.avg. {{ getCurrentYear() - 1 }}
                 </th>
+                <th v-show="!treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" v-tooltip="'Tillåt tävlingsanmälan trots 0 funktionärstillfällen'">
+                  Tävlingsundantag
+                </th>
                 <th v-show="!treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
               </tr>
             </thead>
@@ -220,6 +223,7 @@
                   />
                 </td> -->
                 <td
+                  data-testid="membership-current-year"
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
                   <ToggleButton 
@@ -235,6 +239,14 @@
                     v-else-if="showPaymentToggle(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
                     @update:modelValue="updatePayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
                     :modelValue="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
+                  />
+                </td>
+                <td
+                  v-show="!treasurerMode"
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  <ToggleButton
+                    @update:modelValue="updateCompetitionRegistrationPermission(account)"
+                    :modelValue="account.explicit_registration_approval"
                   />
                 </td>
                 <td
@@ -645,6 +657,26 @@ export default {
       }
 
       this.loadAccounts()
+    },
+    async updateCompetitionRegistrationPermission(account) {
+      const approval = !account.explicit_registration_approval
+      const name = `${account.first_name} ${account.last_name}`
+
+      try {
+        await axios.patch(`/admin/accounts/${account.id}/competition-permission`, {
+          explicit_registration_approval: approval
+        })
+
+        if (approval) {
+          this.$toast.success(`${name} har fått explicit godkännande att anmäla sig till tävlingar`)
+        } else {
+          this.$toast.warning(`${name}s explicita godkännande för tävlingsanmälan har tagits bort`)
+        }
+
+        account.explicit_registration_approval = approval
+      } catch (error) {
+        this.$toast.error('Kunde inte uppdatera tävlingsrättigheter')
+      }
     },
     isJunior(account) {
       return new window.Date().getFullYear() - account.birth_year <= 23

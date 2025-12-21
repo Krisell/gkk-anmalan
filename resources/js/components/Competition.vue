@@ -199,7 +199,10 @@ Vid SM-tävlingar gäller dessutom straffavgift vid utebliven start utan att arr
           <Button v-else-if="wantsToCompete !== null" secondary style="margin-bottom: 10px" @click.prevent="save">Spara</Button>
         </div>
         <div v-if="registrationStatus === 'error'">
-          <Message danger style="margin-top: 20px">
+          <Message danger style="margin-top: 20px" v-if="registrationErrorReason === 'no_helper_status'">
+            Du kan inte anmäla dig till tävlingar eftersom du inte har hjälpt till som funktionär det senaste året. Kontakta styrelsen för mer information.
+          </Message>
+          <Message danger style="margin-top: 20px" v-else>
             Kunde inte skicka, kontrollera inmatning och anlutning.
           </Message>
         </div>
@@ -317,6 +320,12 @@ export default {
 
       return new window.Date().setHours(0, 0, 0, 0) > new window.Date(this.competition.last_registration_at)
     },
+    helperCount() {
+      if (!this.user || !this.user.event_registrations) {
+        return 0
+      }
+      return this.presentLastYear(this.user.event_registrations)
+    },
   },
   methods: {
     eventsToString(events) {
@@ -328,12 +337,24 @@ export default {
     hasEvent(event) {
       return JSON.parse(this.competition.events)[event]
     },
+    presentLastYear(registrations) {
+      return registrations.filter(
+        (registration) => registration.presence_confirmed && Date.withinAYear(registration.event.date),
+      ).length
+    },
     save() {
       this.register(this.wantsToCompete)
     },
     register(wantsToCompete) {
       this.registrationStatus = ''
       this.registrationErrorReason = ''
+
+      // Check if user has helped as function official in the last year
+      if (wantsToCompete && this.helperCount === 0 && !this.user.explicit_registration_approval) {
+        this.registrationStatus = 'error'
+        this.registrationErrorReason = 'no_helper_status'
+        return
+      }
 
       window
         .axios({
@@ -358,6 +379,9 @@ export default {
         })
         .catch((err) => {
           this.registrationStatus = 'error'
+          if (err.response && err.response.status === 403) {
+            this.registrationErrorReason = 'no_helper_status'
+          }
         })
     },
   },

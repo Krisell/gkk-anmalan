@@ -5,6 +5,11 @@
         Du har obetalda avgifter. Klicka på "Profil" för mer information.<br>Efter betalning kan det ta några dagar innan denna notisering försvinner.
       </h3>
     </div>
+    <div v-if="user && helperCount === 0 && !user.explicit_registration_approval">
+      <h3 class="text-center mt-6 text-md text-orange-600 max-w-[90%] mx-auto">
+        Du har inte hjälpt till som funktionär det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar.<br>Kontakta styrelsen om du har frågor.
+      </h3>
+    </div>
     <div v-if="user && user.granted_by == 0">
       <h3 class="text-center mt-6 font-thin text-xl">
         Välkommen till GKK!<br />
@@ -70,6 +75,7 @@
 <script>
 import LinkCard from './LinkCard.vue'
 import axios from 'axios'
+import Date from '../modules/Date.js'
 
 export default {
   components: { LinkCard },
@@ -78,8 +84,20 @@ export default {
     isAdmin() {
       return this.user && ['admin', 'superadmin'].includes(this.user.role)
     },
+    helperCount() {
+      if (!this.user || !this.user.event_registrations) {
+        return 0
+      }
+
+      return this.presentLastYear(this.user.event_registrations)
+    },
   },
   methods: {
+    presentLastYear(registrations) {
+      return registrations.filter(
+        (registration) => registration.presence_confirmed && Date.withinAYear(registration.event.date),
+      ).length
+    },
     logout() {
       axios.post('/logout').then(() => {
         window.location.reload()
