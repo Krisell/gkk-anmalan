@@ -138,10 +138,10 @@
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Medl.avg. {{ getCurrentYear() - 1 }}
                 </th>
-                <th v-show="!treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" v-tooltip="'Tillåt tävlingsanmälan trots 0 funktionärstillfällen'">
-                  Tävlingsundantag
-                </th>
                 <th v-show="!treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Inställningar
+                </th>
               </tr>
             </thead>
             <tbody class="bg-white">
@@ -150,7 +150,7 @@
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div class="text-sm leading-5 font-medium text-gray-900">
-                        {{ account.first_name }} {{ account.last_name }} 
+                        {{ account.first_name }} {{ account.last_name }}
                         <i
                         v-tooltip="{content: `${account.email}<br>Klicka för att kopiera.`, html: true}" @click="copyEmail(account.email)"
                         class="fa fa-envelope-o ml-2 cursor-pointer"></i>
@@ -168,6 +168,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2"><path d="m37.278 14.519-21.203-2.45a4 4 0 0 0-4.433 3.514l-.763 6.606" style="fill:none;stroke:#222a33;stroke-width:2px"/><path d="m15.001 20.404.322-2.782a1.867 1.867 0 0 1 2.069-1.641l2.976.344M53.202 19.117a4.001 4.001 0 0 0-4.609-3.28l-38.149 6.425a4.001 4.001 0 0 0-3.28 4.609l3.634 21.575a4 4 0 0 0 4.609 3.28l38.149-6.425a4.003 4.003 0 0 0 3.28-4.609l-3.634-21.575z" style="fill:none;stroke:#222a33;stroke-width:2px"/><path d="m19.474 47.253-2.823.476a1.999 1.999 0 0 1-2.305-1.64l-.443-2.632m30.623-23.148 2.823-.475a1.998 1.998 0 0 1 2.305 1.64l.443 2.631m-38.365 6.462-.443-2.632a1.999 1.999 0 0 1 1.64-2.304l2.823-.476M52.268 36.996l.443 2.631a1.999 1.999 0 0 1-1.64 2.305l-2.823.475M33.221 29.788A2.334 2.334 0 1 0 32 33.781a2.336 2.336 0 0 1 2.69 1.914 2.336 2.336 0 0 1-3.911 2.079M31.225 29.177l-.311-1.841M33.086 40.226l-.311-1.841" style="fill:none;stroke:#222a33;stroke-width:2px"/></svg>
                   </div>
                   <i v-if="account.is_honorary_member" class="fa fa-trophy text-gkk text-xl" v-tooltip="'Hedersmedlem'"></i>
+                  <i v-if="account.explicit_registration_approval" class="fa fa-exclamation-triangle text-yellow-500 text-xl" v-tooltip="'Har explicit godkännande att anmäla sig till tävlingar trots 0 funktionärstillfällen'"></i>
                 </td>
                 <td v-show="!treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">
@@ -243,14 +244,6 @@
                 </td>
                 <td
                   v-show="!treasurerMode"
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <ToggleButton
-                    @update:modelValue="updateCompetitionRegistrationPermission(account)"
-                    :modelValue="account.explicit_registration_approval"
-                  />
-                </td>
-                <td
-                  v-show="!treasurerMode"
                   class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                   <div class="flex items-center gap-2">
                     <div v-if="user.role === 'superadmin'">
@@ -265,11 +258,13 @@
                       <i v-if="account.role === 'admin'" class="fa fa-star" v-tooltip="'Administratör'"></i>
                       <i v-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
                     </div>
-                    <i @click="confirmInactivation(account)" class="fa fa-ban cursor-pointer"
-                      v-tooltip="'Inaktivera konto – personen kommer inte kunna logga in förrän kontot återaktiveras.'"
-                      :data-testid="`inactivate-${account.id}`"
-                    ></i>
                   </div>
+                </td>
+                <td class="px-6 py-2 whitespace-no-wrap text-center border-b border-gray-200 text-sm leading-5 font-medium">
+                  <i @click="openSettingsModal(account)" class="fa fa-ellipsis-v cursor-pointer text-gray-500 hover:text-gray-700"
+                    v-tooltip="'Ytterligare inställningar'"
+                    :data-testid="`settings-${account.id}`"
+                  ></i>
                 </td>
               </tr>
             </tbody>
@@ -414,6 +409,40 @@
           <Button @click="inactivateWithEmail" type="danger">Inaktivera och skicka enkät</Button>
           <Button @click="inactivateWithoutEmail" type="warning">Inaktivera utan enkät</Button>
           <Button @click="close" type="secondary">Avbryt</Button>
+        </div>
+      </template>
+    </Modal>
+
+    <Modal ref="settingsModal" :title="`Inställningar för ${selectedAccount && selectedAccount.first_name} ${selectedAccount && selectedAccount.last_name}`">
+      <div class="space-y-6 p-4">
+        <div class="flex items-center justify-between flex-col gap-2">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">Tävlingsundantag</h3>
+            <p class="text-sm text-gray-500">Tillåt tävlingsanmälan trots 0 funktionärstillfällen</p>
+          </div>
+          <ToggleButton
+            v-if="selectedAccount"
+            @update:modelValue="updateCompetitionRegistrationPermissionFromModal"
+            :modelValue="selectedAccount.explicit_registration_approval"
+          />
+        </div>
+
+        <div class="border-t border-gray-200 pt-6">
+          <div class="flex items-center justify-between flex-col gap-2">
+            <div>
+              <h3 class="text-lg font-medium text-gray-900">Inaktivera konto</h3>
+              <p class="text-sm text-gray-500">Personen kommer inte kunna logga in förrän kontot återaktiveras</p>
+            </div>
+            <Button @click="confirmInactivationFromModal" type="danger" size="sm">
+              Inaktivera konto
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <template #footer="{ close }">
+        <div class="flex justify-center mt-4">
+          <Button @click="close" type="secondary">Stäng</Button>
         </div>
       </template>
     </Modal>
@@ -677,6 +706,18 @@ export default {
       } catch (error) {
         this.$toast.error('Kunde inte uppdatera tävlingsrättigheter')
       }
+    },
+    openSettingsModal(account) {
+      this.selectedAccount = account
+      this.$refs.settingsModal.show()
+    },
+    async updateCompetitionRegistrationPermissionFromModal() {
+      if (!this.selectedAccount) return
+      await this.updateCompetitionRegistrationPermission(this.selectedAccount)
+    },
+    confirmInactivationFromModal() {
+      this.$refs.settingsModal.close()
+      this.$refs.inactivateModal.show()
     },
     isJunior(account) {
       return new window.Date().getFullYear() - account.birth_year <= 23

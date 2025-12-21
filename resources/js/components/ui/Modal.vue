@@ -44,6 +44,6 @@
     open.value = false
   }
 
-  defineExpose({ show })
+  defineExpose({ show, close })
   </script>
   

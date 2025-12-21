@@ -42,9 +42,10 @@ test('The admin can inactivate a member', async ({ page }) => {
     const user = await create(page, 'User')
 
     await page.goto('/admin/accounts')
-    
-    await page.getByTestId(`inactivate-${user.id}`).click();
 
+    await page.getByTestId(`settings-${user.id}`).click();
+    
+    await page.getByRole('button', { name: 'Inaktivera konto' }).click();
     await page.getByRole('button', { name: 'Inaktivera utan enkät' }).click();
     await page.getByTestId('inactive-accounts-table').getByText(`${user.first_name} ${user.last_name}`).click();
 })
@@ -59,7 +60,8 @@ test('The admin can inactivate a member with survey email', async ({ page }) => 
         return request.url().includes(`/admin/accounts/inactivate/${user.id}`) && request.method() === 'POST'
     });
     
-    await page.getByTestId(`inactivate-${user.id}`).click();
+    await page.getByTestId(`settings-${user.id}`).click();
+    await page.getByRole('button', { name: 'Inaktivera konto' }).click();
     await page.getByRole('button', { name: 'Inaktivera och skicka enkät' }).click();
     
     const request = await requestPromise;
@@ -80,14 +82,13 @@ test('The admin can inactivate a member without survey email', async ({ page }) 
         request.method() === 'POST'
     );
     
-    await page.getByTestId(`inactivate-${user.id}`).click();
+    await page.getByTestId(`settings-${user.id}`).click();
+    await page.getByRole('button', { name: 'Inaktivera konto' }).click();
     await page.getByRole('button', { name: 'Inaktivera utan enkät' }).click();
     
     const request = await requestPromise;
     const postData = JSON.parse(request.postData());
     expect(postData).toEqual({ sendSurveyEmail: false });
-    
-    await page.pause()
     
     await page.getByTestId('inactive-accounts-table').getByText(`${user.first_name} ${user.last_name}`).click();
 })
