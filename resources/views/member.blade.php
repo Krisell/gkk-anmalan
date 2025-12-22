@@ -57,7 +57,10 @@ background-position-y: 30%; background-position-x: 50%; max-height: 50vh;" class
                 </div>
 
                 <div class="mt-8">
-                  <h2 class="text-xl font-extrabold tracking-tight -mb-2">Tävlingssugen?</h2>
+                  <h2 class="text-xl font-extrabold tracking-tight -mb-2">Vill du tävla?</h2>
+                  <p class="text-xl leading-normal text-gray-500 mt-4">
+                    Många av våra medlemmar tävlar i styrkelyft och bänkpress på olika nivåer, allt ifrån serietävlingar på hemmaplan till internationella mästerskap. Att tävla och utmana sig själv är ett fantastiskt sätt att utvecklas inom sporten utvecklas i sitt lyftande, oavsett ambitionsnivå.
+                  </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
                     Före din första tävling behöver du vara med och hjälpa till när GKK arrangerar, både för att lära dig mer om hur en tävling går till och för att lära känna föreningen bättre. På våra interna medlemssidor sker anmälan till sådana funktionärsuppdrag. Som tävlingsaktiv förväntas du hjälpa till på våra arrangemang vid minst ett tillfälle per år.
                   </p>
@@ -75,6 +78,12 @@ background-position-y: 30%; background-position-x: 50%; max-height: 50vh;" class
                   </p>
                   <p class="text-xl leading-normal text-gray-500 mt-4">
                     I vår anmälningsportal kommer du också få läsa och godkänna vårt antidopingavtal.
+                  </p>
+                </div>
+                <div class="mt-8">
+                  <h2 class="text-xl font-extrabold tracking-tight -mb-2">Antidopingarbete</h2>
+                  <p class="text-xl leading-normal text-gray-500 mt-4">
+                    Vi arbetar förebyggande för en ren idrott och har ett löpande antidopingarbete genom vår <a class="underline"  target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FKdSJ2FmrTSijNpxOXVGx0aNtERwoe6.pdf?alt=media&token=9fe3519c-7f6a-473e-851f-897561086e31">antidopingplan</a> och med en utsett antidopingansvarig. Alla medlemmar får skriva på ett antidopingavtal, och före första tävlingen behöver alla genomföra onlineutbildningen <a class="underline" target="_blank" href="https://www.renvinnare.se">Ren Vinnare</a> genom Antidoping Sverige. Det genomförs också kontinuerligt dopingkontroller både vid tävling och träning.
                   </p>
                 </div>
             </div>
