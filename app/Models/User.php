@@ -26,6 +26,7 @@ class User extends Authenticatable
         'is_honorary_member' => 'boolean',
         'is_student_over_23' => 'boolean',
         'explicit_registration_approval' => 'boolean',
+        'ren_vinnare_education_completed_at' => 'datetime',
     ];
 
     public function eventRegistrations(): HasMany

@@ -109,4 +109,24 @@ class AccountController extends Controller
 
         return response()->json(['message' => 'Registration approval updated successfully']);
     }
+
+    public function updateRenVinnareEducation(User $user, Request $request)
+    {
+        $data = $request->validate([
+            'ren_vinnare_education_completed' => 'required|boolean',
+        ]);
+
+        $user->update([
+            'ren_vinnare_education_completed_at' => $data['ren_vinnare_education_completed'] ? now() : null,
+        ]);
+
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'ren-vinnare-education-update',
+            'user_id' => $user->id,
+            'data' => $data['ren_vinnare_education_completed'] ? 'completed' : 'cleared',
+        ]);
+
+        return response()->json(['message' => 'Ren Vinnare education status updated successfully']);
+    }
 }

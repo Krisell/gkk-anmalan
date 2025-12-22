@@ -94,3 +94,76 @@ test('updating competition permission requires valid boolean value', function ()
     $response->assertStatus(422);
     $response->assertJsonValidationErrors(['explicit_registration_approval']);
 });
+
+test('an admin can mark a user as completed Ren Vinnare education', function () {
+    $admin = loginAdmin();
+    $user = User::factory()->create(['ren_vinnare_education_completed_at' => null]);
+
+    $response = $this->patch("/admin/accounts/{$user->id}/ren-vinnare-education", [
+        'ren_vinnare_education_completed' => true,
+    ]);
+
+    $response->assertOk();
+    $response->assertJson(['message' => 'Ren Vinnare education status updated successfully']);
+
+    $this->assertNotNull($user->fresh()->ren_vinnare_education_completed_at);
+});
+
+test('an admin can clear Ren Vinnare education completion from a user', function () {
+    $admin = loginAdmin();
+    $user = User::factory()->create(['ren_vinnare_education_completed_at' => now()]);
+
+    $response = $this->patch("/admin/accounts/{$user->id}/ren-vinnare-education", [
+        'ren_vinnare_education_completed' => false,
+    ]);
+
+    $response->assertOk();
+    $response->assertJson(['message' => 'Ren Vinnare education status updated successfully']);
+
+    $this->assertNull($user->fresh()->ren_vinnare_education_completed_at);
+});
+
+test('a non-admin cannot update Ren Vinnare education status', function () {
+    $user = login(); // Regular user
+    $targetUser = User::factory()->create(['ren_vinnare_education_completed_at' => null]);
+
+    $response = $this->patch("/admin/accounts/{$targetUser->id}/ren-vinnare-education", [
+        'ren_vinnare_education_completed' => true,
+    ]);
+
+    $response->assertUnauthorized();
+    $this->assertNull($targetUser->fresh()->ren_vinnare_education_completed_at);
+});
+
+test('updating Ren Vinnare education requires valid boolean value', function () {
+    $admin = loginAdmin();
+    $user = User::factory()->create();
+
+    $response = $this->patchJson("/admin/accounts/{$user->id}/ren-vinnare-education", [
+        'ren_vinnare_education_completed' => 'invalid',
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['ren_vinnare_education_completed']);
+});
+
+test('updating Ren Vinnare education creates activity log entry', function () {
+    $admin = loginAdmin();
+    $user = User::factory()->create(['ren_vinnare_education_completed_at' => null]);
+
+    $initialLogCount = \App\Models\ActivityLog::count();
+
+    $response = $this->patch("/admin/accounts/{$user->id}/ren-vinnare-education", [
+        'ren_vinnare_education_completed' => true,
+    ]);
+
+    $response->assertOk();
+
+    $this->assertDatabaseCount('activity_logs', $initialLogCount + 1);
+
+    $latestLog = \App\Models\ActivityLog::latest()->first();
+    $this->assertEquals($admin->id, $latestLog->performed_by);
+    $this->assertEquals('ren-vinnare-education-update', $latestLog->action);
+    $this->assertEquals($user->id, $latestLog->user_id);
+    $this->assertEquals('completed', $latestLog->data);
+});

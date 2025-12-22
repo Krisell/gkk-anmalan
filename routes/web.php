@@ -141,6 +141,7 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::post('/{user}/grant', [\App\Http\Controllers\AccountController::class, 'grant']);
         Route::delete('/{user}/grant', [\App\Http\Controllers\AccountController::class, 'destroyUngranted']);
         Route::patch('/{user}/competition-permission', [\App\Http\Controllers\AccountController::class, 'updateCompetitionPermission']);
+        Route::patch('/{user}/ren-vinnare-education', [\App\Http\Controllers\AccountController::class, 'updateRenVinnareEducation']);
     });
 
     Route::prefix('slideshow')->controller(AdminSlideshowController::class)->group(function () {

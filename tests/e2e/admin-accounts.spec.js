@@ -89,6 +89,33 @@ test('The admin can inactivate a member without survey email', async ({ page }) 
     const request = await requestPromise;
     const postData = JSON.parse(request.postData());
     expect(postData).toEqual({ sendSurveyEmail: false });
-    
+
     await page.getByTestId('inactive-accounts-table').getByText(`${user.first_name} ${user.last_name}`).click();
+})
+
+test('The admin can mark and unmark Ren Vinnare education completion', async ({ page }) => {
+    await login(page, { role: 'admin' })
+    const user = await create(page, 'User')
+
+    await page.goto('/admin/accounts')
+
+    const name = `${user.first_name} ${user.last_name}`
+
+    await page.getByTestId(`settings-${user.id}`).click()
+    await page.getByTestId('ren-vinnare-education-toggle').click()
+    await expect(page.getByText(`${name} har markerats som genomfört Ren Vinnare-utbildningen`)).toBeVisible()
+
+    await page.getByRole('button', { name: 'Stäng' }).click()
+
+    await expect(page.getByRole('row', { name: name }).locator('div.text-green-600')).toBeVisible()
+
+    await page.getByTestId(`settings-${user.id}`).click()
+
+    await page.getByTestId('ren-vinnare-education-toggle').click()
+
+    await expect(page.getByText(`${name}s Ren Vinnare-markering har tagits bort`)).toBeVisible()
+
+    await page.getByRole('button', { name: 'Stäng' }).click()
+
+    await expect(page.getByRole('row', { name: name }).locator('div.text-green-600')).not.toBeVisible()
 })

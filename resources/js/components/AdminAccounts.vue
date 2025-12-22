@@ -149,11 +149,15 @@
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
-                      <div class="text-sm leading-5 font-medium text-gray-900">
+                      <div
+                        class="text-sm leading-5 font-medium"
+                        :class="account.ren_vinnare_education_completed_at ? 'text-green-600' : 'text-gray-900'"
+                        v-tooltip="account.ren_vinnare_education_completed_at ? 'Markerad som har genomfört Ren Vinnare-utbildningen' : ''"
+                      >
                         {{ account.first_name }} {{ account.last_name }}
                         <i
                         v-tooltip="{content: `${account.email}<br>Klicka för att kopiera.`, html: true}" @click="copyEmail(account.email)"
-                        class="fa fa-envelope-o ml-2 cursor-pointer"></i>
+                        class="fa fa-envelope-o ml-2 cursor-pointer text-black"></i>
                       </div>
                       <span v-if="account.licence_number" class="text-xs font-light">
                         {{ account.licence_number }}
@@ -349,8 +353,12 @@
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
-                      <div class="text-sm leading-5 font-medium text-gray-900">
-                        {{ account.first_name }} {{ account.last_name }} 
+                      <div
+                        class="text-sm leading-5 font-medium"
+                        :class="account.ren_vinnare_education_completed_at ? 'text-green-600' : 'text-gray-900'"
+                        v-tooltip="account.ren_vinnare_education_completed_at ? 'Markerad som har genomfört Ren Vinnare-utbildningen' : ''"
+                      >
+                        {{ account.first_name }} {{ account.last_name }}
                         <i
                         v-tooltip="`${account.email}<br>Klicka för att kopiera.`" @click="copyEmail(account.email)"
                         class="fa fa-envelope-o ml-2 cursor-pointer"></i>
@@ -425,6 +433,21 @@
             @update:modelValue="updateCompetitionRegistrationPermissionFromModal"
             :modelValue="selectedAccount.explicit_registration_approval"
           />
+        </div>
+
+        <div class="border-t border-gray-200 pt-6">
+          <div class="flex items-center justify-between flex-col gap-2">
+            <div>
+              <h3 class="text-lg font-medium text-gray-900">Ren Vinnare Antidoping</h3>
+              <p class="text-sm text-gray-500">Markera att medlemmen genomfört den obligatoriska online-utbildningen "Ren Vinnare"</p>
+            </div>
+            <ToggleButton
+              data-testid="ren-vinnare-education-toggle"
+              v-if="selectedAccount"
+              @update:modelValue="updateRenVinnareEducationFromModal"
+              :modelValue="!!selectedAccount.ren_vinnare_education_completed_at"
+            />
+          </div>
         </div>
 
         <div class="border-t border-gray-200 pt-6">
@@ -714,6 +737,31 @@ export default {
     async updateCompetitionRegistrationPermissionFromModal() {
       if (!this.selectedAccount) return
       await this.updateCompetitionRegistrationPermission(this.selectedAccount)
+    },
+    async updateRenVinnareEducation(account) {
+      const completion = !account.ren_vinnare_education_completed_at
+      const name = `${account.first_name} ${account.last_name}`
+
+      try {
+        await axios.patch(`/admin/accounts/${account.id}/ren-vinnare-education`, {
+          ren_vinnare_education_completed: completion
+        })
+
+        if (completion) {
+          this.$toast.success(`${name} har markerats som genomfört Ren Vinnare-utbildningen`)
+          account.ren_vinnare_education_completed_at = new window.Date().toISOString()
+        } else {
+          this.$toast.warning(`${name}s Ren Vinnare-markering har tagits bort`)
+          account.ren_vinnare_education_completed_at = null
+        }
+      } catch (error) {
+        console.log(error)
+        this.$toast.error('Kunde inte uppdatera Ren Vinnare-status')
+      }
+    },
+    async updateRenVinnareEducationFromModal() {
+      if (!this.selectedAccount) return
+      await this.updateRenVinnareEducation(this.selectedAccount)
     },
     confirmInactivationFromModal() {
       this.$refs.settingsModal.close()
