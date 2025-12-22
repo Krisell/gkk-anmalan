@@ -26,9 +26,9 @@
         <li class="mt-4 hover:text-gkk">
           <a :class="site === 'records' ? 'border-b-2 border-black' : ''" href="/klubbrekord">Klubbrekord</a>
         </li>
-        <li class="mt-4 hover:text-gkk">
+        <!-- <li class="mt-4 hover:text-gkk">
           <a :class="site === 'dm' ? 'border-b-2 border-black' : ''" href="/dm">DM KSL 2025</a>
-        </li>
+        </li> -->
         <li class="mt-4 hover:text-gkk">
           <a :class="site === '' ? 'border-b-2 border-black' : ''" href="/insidan">Insidan</a>
         </li>
@@ -93,12 +93,12 @@
                   href="/klubbrekord"
                   >Klubbrekord</a
                 >
-                <a
+                <!-- <a
                   class="ml-6 uppercase hover:border-b-1 text-[#009a79] border border-[#009a79] p-[2px] -m-[2px] px-1"
                   :class="site === 'dm' ? 'border-b-2 border-[#009a79]' : ''"
                   href="/dm"
                   >DM KSL 2025</a
-                >
+                > -->
               </div>
             </div>
           </div>
