@@ -50,7 +50,7 @@ class FortnoxCreateInvoices extends Command
             default => throw new \Exception('Invalid type'),
         };
 
-        $year = 2025;
+        $year = 2026;
 
         $this->ensureArticleExists(
             fortnox: $fortnox,

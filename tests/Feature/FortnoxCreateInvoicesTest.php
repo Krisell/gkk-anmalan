@@ -30,7 +30,7 @@ test('command creates invoices for membership payments', function () {
     $payment = Payment::factory()->create([
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
-        'year' => 2025,
+        'year' => 2026,
         'sek_amount' => 500,
         'sek_discount' => 0,
         'modifier' => null,
@@ -39,16 +39,16 @@ test('command creates invoices for membership payments', function () {
     ]);
 
     Http::fake([
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025']], 200),
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025-DISCOUNT']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026-DISCOUNT']], 200),
         'https://api.fortnox.se/3/invoices' => Http::response(['Invoice' => ['DocumentNumber' => 'INV001']], 200),
     ]);
 
     $this->artisan('fortnox:create-invoices')
         ->expectsChoice('Välj vilken avgift som ska skapas som fakturor i Fortnox', 'MEMBERSHIP', ['MEMBERSHIP', 'SSFLICENSE', 'COMPETITION', 'OTHER'])
         ->expectsConfirmation('1 betalningar kommer att skapas som fakturor i Fortnox. Vill du fortsätta?', 'yes')
-        ->expectsOutput('Artikeln GKK-MEMBERSHIP-2025 finns i Fortnox.')
-        ->expectsOutput('Artikeln GKK-MEMBERSHIP-2025-DISCOUNT finns i Fortnox.')
+        ->expectsOutput('Artikeln GKK-MEMBERSHIP-2026 finns i Fortnox.')
+        ->expectsOutput('Artikeln GKK-MEMBERSHIP-2026-DISCOUNT finns i Fortnox.')
         ->expectsOutput('Faktura INV001 skapad för John Doe.')
         ->assertExitCode(0);
 
@@ -69,7 +69,7 @@ test('command creates invoices for ssflicense payments', function () {
     $payment = Payment::factory()->create([
         'user_id' => $user->id,
         'type' => 'SSFLICENSE',
-        'year' => 2025,
+        'year' => 2026,
         'sek_amount' => 300,
         'sek_discount' => 50,
         'modifier' => 'AGE_DISCOUNT',
@@ -78,8 +78,8 @@ test('command creates invoices for ssflicense payments', function () {
     ]);
 
     Http::fake([
-        'https://api.fortnox.se/3/articles/GKK-SSFLICENSE-2025' => Http::response(['Article' => ['ArticleNumber' => 'GKK-SSFLICENSE-2025']], 200),
-        'https://api.fortnox.se/3/articles/GKK-SSFLICENSE-2025-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-SSFLICENSE-2025-DISCOUNT']], 200),
+        'https://api.fortnox.se/3/articles/GKK-SSFLICENSE-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-SSFLICENSE-2026']], 200),
+        'https://api.fortnox.se/3/articles/GKK-SSFLICENSE-2026-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-SSFLICENSE-2026-DISCOUNT']], 200),
         'https://api.fortnox.se/3/invoices' => Http::response(['Invoice' => ['DocumentNumber' => 'INV002']], 200),
     ]);
 
@@ -91,7 +91,7 @@ test('command creates invoices for ssflicense payments', function () {
     Http::assertSent(function ($request) {
         return $request->url() === 'https://api.fortnox.se/3/invoices' &&
                $request->hasHeader('Authorization', 'Bearer test-token') &&
-               $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-SSFLICENSE-2025-DISCOUNT' &&
+               $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-SSFLICENSE-2026-DISCOUNT' &&
                $request['Invoice']['InvoiceRows'][0]['Price'] === 300 &&
                $request['Invoice']['InvoiceRows'][0]['Discount'] === 50 &&
                ! isset($request['Invoice']['InvoiceRows'][0]['AccountNumber']);
@@ -110,7 +110,7 @@ test('command creates invoices for competition payments', function () {
     $payment = Payment::factory()->create([
         'user_id' => $user->id,
         'type' => 'COMPETITION',
-        'year' => 2025,
+        'year' => 2026,
         'sek_amount' => 200,
         'sek_discount' => 0,
         'modifier' => null,
@@ -119,7 +119,7 @@ test('command creates invoices for competition payments', function () {
     ]);
 
     Http::fake([
-        'https://api.fortnox.se/3/articles/GKK-COMPETITION-2025' => Http::response(['Article' => ['ArticleNumber' => 'GKK-COMPETITION-2025']], 200),
+        'https://api.fortnox.se/3/articles/GKK-COMPETITION-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-COMPETITION-2026']], 200),
         'https://api.fortnox.se/3/invoices' => Http::response(['Invoice' => ['DocumentNumber' => 'INV003']], 200),
     ]);
 
@@ -134,7 +134,7 @@ test('command creates invoices for competition payments', function () {
     Http::assertSent(function ($request) {
         return $request->url() === 'https://api.fortnox.se/3/invoices' &&
                $request->hasHeader('Authorization', 'Bearer test-token') &&
-               $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-COMPETITION-2025' &&
+               $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-COMPETITION-2026' &&
                $request['Invoice']['InvoiceRows'][0]['AccountNumber'] === 3410 &&
                $request['Invoice']['InvoiceRows'][0]['Price'] === 200;
     });
@@ -152,7 +152,7 @@ test('command creates invoices for other payments', function () {
     $payment = Payment::factory()->create([
         'user_id' => $user->id,
         'type' => 'OTHER',
-        'year' => 2025,
+        'year' => 2026,
         'sek_amount' => 150,
         'sek_discount' => 0,
         'modifier' => null,
@@ -161,7 +161,7 @@ test('command creates invoices for other payments', function () {
     ]);
 
     Http::fake([
-        'https://api.fortnox.se/3/articles/GKK-OTHER-2025' => Http::response(['Article' => ['ArticleNumber' => 'GKK-OTHER-2025']], 200),
+        'https://api.fortnox.se/3/articles/GKK-OTHER-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-OTHER-2026']], 200),
         'https://api.fortnox.se/3/invoices' => Http::response(['Invoice' => ['DocumentNumber' => 'INV004']], 200),
     ]);
 
@@ -182,14 +182,14 @@ test('command skips payments that already have invoice numbers', function () {
     Payment::factory()->create([
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
-        'year' => 2025,
+        'year' => 2026,
         'fortnox_invoice_document_number' => 'EXISTING123',
         'state' => null,
     ]);
 
     Http::fake([
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025']], 200),
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025-DISCOUNT']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026-DISCOUNT']], 200),
     ]);
 
     Http::preventingStrayRequests();
@@ -208,14 +208,14 @@ test('command exits early when user cancels confirmation', function () {
     Payment::factory()->create([
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
-        'year' => 2025,
+        'year' => 2026,
         'fortnox_invoice_document_number' => null,
         'state' => null,
     ]);
 
     Http::fake([
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025']], 200),
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025-DISCOUNT']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026-DISCOUNT']], 200),
     ]);
 
     $this->artisan('fortnox:create-invoices')
@@ -240,7 +240,7 @@ test('command creates missing articles when confirmed', function () {
     $payment = Payment::factory()->create([
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
-        'year' => 2025,
+        'year' => 2026,
         'sek_amount' => 500,
         'sek_discount' => 0,
         'modifier' => null,
@@ -249,24 +249,24 @@ test('command creates missing articles when confirmed', function () {
     ]);
 
     Http::fake([
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025' => Http::response([], 404),
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025-DISCOUNT' => Http::response([], 404),
-        'https://api.fortnox.se/3/articles' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025']], 201),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026' => Http::response([], 404),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026-DISCOUNT' => Http::response([], 404),
+        'https://api.fortnox.se/3/articles' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026']], 201),
         'https://api.fortnox.se/3/invoices' => Http::response(['Invoice' => ['DocumentNumber' => 'INV001']], 200),
     ]);
 
     $this->artisan('fortnox:create-invoices')
         ->expectsChoice('Välj vilken avgift som ska skapas som fakturor i Fortnox', 'MEMBERSHIP', ['MEMBERSHIP', 'SSFLICENSE', 'COMPETITION', 'OTHER'])
-        ->expectsConfirmation('Artikeln GKK-MEMBERSHIP-2025 finns inte i Fortnox. Vill du skapa den?', 'yes')
-        ->expectsConfirmation('Artikeln GKK-MEMBERSHIP-2025-DISCOUNT finns inte i Fortnox. Vill du skapa den?', 'yes')
+        ->expectsConfirmation('Artikeln GKK-MEMBERSHIP-2026 finns inte i Fortnox. Vill du skapa den?', 'yes')
+        ->expectsConfirmation('Artikeln GKK-MEMBERSHIP-2026-DISCOUNT finns inte i Fortnox. Vill du skapa den?', 'yes')
         ->expectsConfirmation('1 betalningar kommer att skapas som fakturor i Fortnox. Vill du fortsätta?', 'yes')
         ->assertExitCode(0);
 
     Http::assertSent(function ($request) {
         return $request->url() === 'https://api.fortnox.se/3/articles' &&
                $request->hasHeader('Authorization', 'Bearer test-token') &&
-               $request['Article']['ArticleNumber'] === 'GKK-MEMBERSHIP-2025' &&
-               $request['Article']['Description'] === 'Medlemsavgift 2025';
+               $request['Article']['ArticleNumber'] === 'GKK-MEMBERSHIP-2026' &&
+               $request['Article']['Description'] === 'Medlemsavgift 2026';
     });
 });
 
@@ -282,7 +282,7 @@ test('command handles discount modifiers correctly', function () {
     $payment = Payment::factory()->create([
         'user_id' => $user->id,
         'type' => 'MEMBERSHIP',
-        'year' => 2025,
+        'year' => 2026,
         'sek_amount' => 300,
         'sek_discount' => 100,
         'modifier' => 'YOUTH',
@@ -291,8 +291,8 @@ test('command handles discount modifiers correctly', function () {
     ]);
 
     Http::fake([
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025']], 200),
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025-DISCOUNT']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026-DISCOUNT']], 200),
         'https://api.fortnox.se/3/invoices' => Http::response(['Invoice' => ['DocumentNumber' => 'INV005']], 200),
     ]);
 
@@ -304,7 +304,7 @@ test('command handles discount modifiers correctly', function () {
     Http::assertSent(function ($request) {
         return $request->url() === 'https://api.fortnox.se/3/invoices' &&
                $request->hasHeader('Authorization', 'Bearer test-token') &&
-               $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-MEMBERSHIP-2025-DISCOUNT' &&
+               $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-MEMBERSHIP-2026-DISCOUNT' &&
                $request['Invoice']['InvoiceRows'][0]['Price'] === 300 &&
                $request['Invoice']['InvoiceRows'][0]['Discount'] === 100 &&
                $request['Invoice']['InvoiceRows'][0]['DiscountType'] === 'AMOUNT' &&
@@ -323,7 +323,7 @@ test('command processes multiple payments with rate limiting', function () {
         Payment::factory()->create([
             'user_id' => $user->id,
             'type' => 'MEMBERSHIP',
-            'year' => 2025,
+            'year' => 2026,
             'sek_amount' => 500,
             'sek_discount' => 0,
             'modifier' => null,
@@ -333,8 +333,8 @@ test('command processes multiple payments with rate limiting', function () {
     }
 
     Http::fake([
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025']], 200),
-        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2025-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2025-DISCOUNT']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026']], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026-DISCOUNT' => Http::response(['Article' => ['ArticleNumber' => 'GKK-MEMBERSHIP-2026-DISCOUNT']], 200),
         'https://api.fortnox.se/3/invoices' => Http::sequence()
             ->push(['Invoice' => ['DocumentNumber' => 'INV001']], 200)
             ->push(['Invoice' => ['DocumentNumber' => 'INV002']], 200)
