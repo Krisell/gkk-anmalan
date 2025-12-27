@@ -97,7 +97,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                       Är du intresserad av att prova på att tävla i styrkelyft eller bänkpress? 
                     </p>
                     <p class="text-xl leading-bold text-gkk">
-                      Den 4 februari 2024 håller GKK en prova-på-tävling där alla som inte ännu tävlar i styrkelyft
+                      Den 15 februari 2026 håller GKK en prova-på-tävling där alla som inte ännu tävlar i styrkelyft
                       får möjligheten att testa hur det är! Mer information om tävlingen <span class="underline">hittar du här</span>.
                     </p>
                   </div>

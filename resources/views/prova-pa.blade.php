@@ -23,7 +23,7 @@ Brukar du köra knäböj, bänkpress och marklyft på gymmet och undrar hur det 
               </p>
 
               <p class="text-xl leading-normal text-gray-500">
-                Söndagen 26 januari 2025 anordnar GKK en prova på-tävling för de som vill testa på 
+                Söndagen 15 februari 2026 anordnar GKK en prova på-tävling för de som vill testa på 
                 hur det är att tävla i styrkelyft. Du behöver inga speciella kläder eller utrustning utan kan ha på 
                 dig det du brukar ha när du tränar, men du bör ha tränat lyften knäböj, bänkpress och marklyft samt 
                 veta ungefär vad som gäller för att göra godkända lyft. 
@@ -36,15 +36,15 @@ Brukar du köra knäböj, bänkpress och marklyft på gymmet och undrar hur det 
               </p>
 
               <p class="text-xl">
-                <b>Tid:</b> <span class="text-lg">Söndagen 26 januari 2025. Samling 10.00 och tävlingsstart ca 11.00.</span>
+                <b>Tid:</b> <span class="text-lg">Söndagen 15 februari 2026. Samling 10.00 och tävlingsstart ca 11.00.</span>
                 <br>
                 <b>Gren:</b> <span class="text-lg"><i>Styrkelyft</i> (knäböj, bänkpress och marklyft), eller <i>enbart Bänkpress</i>.</span>
                 <br>
                 <b>Plats:</b> <span class="text-lg">Göteborg Kraftsportklubb, hos Friskis och Svettis i Majorna, Karl Johansgatan 152.</span>
                 <br>
-                <b>Avgift:</b> <span class="text-lg">250 kr (gratis om du redan är medlem i GKK, eller blir medlem före tävlingen).</span>
+                <b>Avgift:</b> <span class="text-lg">300 kr (gratis om du redan är medlem i GKK, eller blir medlem före tävlingen).</span>
                 <br>
-                <b>Anmälan:</b> <span class="text-lg">Senast 20 januari till info@gkk-styrkelyft.se. Det finns ett begränsat antal platser, så först till kvarn gäller! Skicka med namn, födelsedatum och ungefärliga startvikter i grenarna.</span>
+                <b>Anmälan:</b> <span class="text-lg">Senast 6 februari till info@gkk-styrkelyft.se. Det finns ett begränsat antal platser, så först till kvarn gäller! Skicka med namn, födelsedatum och ungefärliga startvikter i grenarna för ev. gruppindelning.</span>
                 <br>
                 <b>Betalning:</b> <span class="text-lg">Sker i samband med anmälan till GKKs Bankgiro eller Swish. Ange "PROVA PÅ" och ditt namn. Swishnummer: 123-581 34 56. <a class="underline" href="/gkk">Se här för mer info om betalning.</a></span>
               </p>
@@ -52,15 +52,15 @@ Brukar du köra knäböj, bänkpress och marklyft på gymmet och undrar hur det 
               <p class="text-xl leading-normal text-gray-500">
                 Vi samlas kl 10:00 i GKKs träningslokal på Friskis & Svettis i Majorna där vi i korthet går igenom 
                 tävlingsupplägget. Sedan får alla chans att värma upp, och få hjälp av licensierade styrkelyftare för att ex. säkerställa att lyften blir godkända. 
-                Tävlingen börjar ca kl 11:00 och pågår till ca 14:00. Det kan vara bra att ha med sig tävlingsproviant.
+                Tävlingen börjar ca kl 11:00 och pågår till ca 14:00. Det kan vara bra att ha med sig tävlingsproviant och kiosk med mindre utbud finns på Friskis.
               </p>
               <p class="text-xl leading-normal text-gray-500">
                 Tävlingen hålls i stora gympasalen på Friskis & Svettis i Majorna, Karl Johansgatan 152. Publik är varmt välkommen!
               </p>
               <p class="text-xl leading-normal text-gray-500">
-                Dagen före prova på-tävlingen, lördagen den 25 januari, hålls Serieomgång
-                1 i samma lokal för licensierade lyftare, välkomna att komma och titta, heja på och inspireras! 
-              </p<
+                Dagen före prova på-tävlingen, lördagen den 14 februari, hålls Serieomgång
+                1 i samma lokal för licensierade lyftare. Välkomna att komma och titta, heja på och inspireras! 
+              </p>
 
               <div class="h-6"></div>
               <div class="flex justify-center max-w-full mt-20 overflow-x-hidden space-x-4 xl:justify-between">
