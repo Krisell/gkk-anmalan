@@ -15,6 +15,18 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Välkommen till Göteborg Kraftsportklubb</h2>
                 </div>
 
+                <a href="/prova-pa" class="mt-6 block">
+                  <div class="rounded p-2 border-gkk border-2">
+                    <p class="text-3xl leading-bold text-gkk">
+                      Är du intresserad av att prova på att tävla i styrkelyft eller bänkpress? 
+                    </p>
+                    <p class="text-xl leading-bold text-gkk">
+                      Söndagen 15 februari 2026 håller GKK en prova-på-tävling där alla som inte ännu tävlar i styrkelyft
+                      får möjligheten att testa hur det är! Mer information om tävlingen <span class="underline">hittar du här</span>.
+                    </p>
+                  </div>
+                </a>
+
                 <div>
                   <a 
                     target="_blank"
@@ -90,18 +102,6 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   </div>
                 </a> --}}
 
-
-                {{-- <a href="/prova-pa" class="mt-6 block">
-                  <div class="rounded p-2 border-gkk border-2">
-                    <p class="text-3xl leading-bold text-gkk">
-                      Är du intresserad av att prova på att tävla i styrkelyft eller bänkpress? 
-                    </p>
-                    <p class="text-xl leading-bold text-gkk">
-                      Den 15 februari 2026 håller GKK en prova-på-tävling där alla som inte ännu tävlar i styrkelyft
-                      får möjligheten att testa hur det är! Mer information om tävlingen <span class="underline">hittar du här</span>.
-                    </p>
-                  </div>
-                </a> --}}
 
                 <p class="text-xl leading-normal text-gray-500">
                   Göteborg Kraftsportklubb (GKK) är en idrottsförening som bildades 1933. Vi ägnar oss åt idrotten Styrkelyft och tränar och tävlar därmed i knäböj, bänkpress och marklyft. I föreningen finns allt från motionärer till elitaktiva på högsta nivå. Vi tränar tillsammans, hjälper varandra och tror på att styrka kommer från gemenskap.
