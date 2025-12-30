@@ -62,6 +62,51 @@ test('User with explicit admin approval can register despite no helper activity'
     await expect(page.getByText('Information om funktionärskrav')).toBeVisible()
 })
 
+test('User with recent helper activity can register for competition', async ({ page }) => {
+    // Create a user without explicit approval but with recent helper activity
+    const user = await login(page, {
+        role: 'member',
+        explicit_registration_approval: false,
+        email: `test-${Date.now()}@example.com`
+    })
+
+    // Create an event within the last year (recent enough to count as helper activity)
+    const event = await create(page, '\\App\\Models\\Event', {
+        date: '2025-06-01'
+    })
+
+    // Create an event registration showing the user helped and attended
+    await create(page, 'EventRegistration', {
+        user_id: user.id,
+        event_id: event.id,
+        status: true,
+        presence_confirmed: true
+    })
+
+    const competition = await create(page, 'Competition', {
+        date: '2030-01-01',
+        last_registration_at: '2029-12-01'
+    })
+
+    await page.goto('/competitions')
+    await page.getByText(competition.name).click()
+
+    // Fill out competition registration form
+    await page.locator('div').filter({ hasText: /^Herrar$/ }).getByRole('radio').check()
+    await page.getByRole('combobox').selectOption('74')
+    await page.locator('.w-11').first().click()
+
+    // Try to register - this should work because user has recent helper activity
+    await page.getByRole('button', { name: 'Ja, jag vill tävla' }).click()
+
+    // Should show success indicators (competition registration information)
+    await expect(page.getByText('Information om tävlingsavgifter')).toBeVisible()
+    await expect(page.getByText('Information om funktionärskrav')).toBeVisible()
+
+    // Verify that the "Sparat!" button appears, confirming successful registration
+    await expect(page.getByRole('button', { name: 'Sparat!' })).toBeVisible()
+})
+
 test('Declining competition always works regardless of approval status', async ({ page }) => {
     // Create a user without explicit approval
     const user = await login(page, {
