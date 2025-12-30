@@ -35,7 +35,7 @@ class CompetitionController extends Controller
 
         return view('competition', [
             'competition' => $competition,
-            'user' => auth()->user(),
+            'user' => auth()->user()->load('eventRegistrations.event'),
             'registration' => auth()->user()->competitionRegistrations()->whereCompetitionId($competition->id)->first(),
             'view' => 'competition',
         ]);
