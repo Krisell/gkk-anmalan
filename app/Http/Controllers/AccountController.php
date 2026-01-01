@@ -15,12 +15,20 @@ class AccountController extends Controller
     public function index()
     {
         if (request()->wantsJson()) {
-            return User::with(['eventRegistrations.event', 'payments'])->get();
+            return User::with([
+                'eventRegistrations' => fn ($query) => $query->select('id', 'user_id', 'event_id', 'presence_confirmed'),
+                'eventRegistrations.event' => fn ($query) => $query->select('id', 'name', 'date'),
+                'payments',
+            ])->get();
         }
 
         return view('admin.accounts', [
             'ungranted' => User::whereGrantedBy(0)->get(),
-            'accounts' => User::with(['eventRegistrations.event', 'payments'])->get(),
+            'accounts' => User::with([
+                'eventRegistrations' => fn ($query) => $query->select('id', 'user_id', 'event_id', 'presence_confirmed'),
+                'eventRegistrations.event' => fn ($query) => $query->select('id', 'name', 'date'),
+                'payments',
+            ])->get(),
             'user' => auth()->user(),
             'view' => 'accounts',
         ]);
