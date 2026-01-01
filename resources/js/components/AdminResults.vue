@@ -1,243 +1,182 @@
 <template>
-  <div class="container mx-auto max-w-3xl">
-    <h1 class="text-center text-3xl font-thin m2-6">Administration av klubbrekord</h1>
+  <div class="container mx-auto max-w-5xl px-4">
+    <h1 class="text-center text-3xl font-thin mt-10 mb-6">Administration av klubbrekord</h1>
 
-    <h3 class="text-center text-xl font-thin m2-6">Nytt resultat</h3>
-    <form class="mt-4 mb-6 max-w-xl mx-auto">
-      <div class="mt-4">
-        <div class="flex items-center">
-          <input
-            value="F"
-            v-model="result.gender"
-            type="radio"
-            id="gender_F"
-            class="form-radio h-6 w-6 text-gkk transition duration-150 ease-in-out"
-          />
-          <label for="gender_F" class="ml-3">
-            <span class="block text-sm leading-5 font-medium text-gray-700">Kvinnor</span>
-          </label>
-        </div>
-        <div class="mt-4 flex items-center">
-          <input
-            value="M"
-            v-model="result.gender"
-            type="radio"
-            id="gender_M"
-            class="form-radio h-6 w-6 text-gkk transition duration-150 ease-in-out"
-          />
-          <label for="gender_M" class="ml-3">
-            <span class="block text-sm leading-5 font-medium text-gray-700">Män</span>
-          </label>
-        </div>
+    <!-- Add New Record Form -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+      <div class="bg-gray-800 px-5 py-3">
+        <h2 class="text-white font-medium">Lägg till nytt rekord</h2>
       </div>
 
-      <div class="mb-2 mt-6">
-        <h4 class="ml-2 text-md font-thin">Lyftare</h4>
-        <select
-          v-model="result.user_id"
-          class="mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-        >
-          <option v-for="lifter in sortedUsers" :key="lifter.key" :value="lifter.id">
-            {{ lifter.first_name }} {{ lifter.last_name }}
-          </option>
-        </select>
-        <h5 class="text-xs font-thin">Om personen saknas här behöver han/hon först skapa ett konto.</h5>
-      </div>
-
-      <div class="mb-2 mt-6">
-        <h4 class="ml-2 text-md font-thin">Viktklass (kg)</h4>
-        <select
-          v-model="result.weight_class"
-          v-if="result.gender === 'M'"
-          class="mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-        >
-          <option>52</option>
-          <option>59</option>
-          <option>66</option>
-          <option>74</option>
-          <option>83</option>
-          <option>93</option>
-          <option>105</option>
-          <option>120</option>
-          <option>120+</option>
-        </select>
-
-        <select
-          v-model="result.weight_class"
-          v-if="result.gender === 'F'"
-          class="mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-        >
-          <option>43</option>
-          <option>47</option>
-          <option>52</option>
-          <option>57</option>
-          <option>63</option>
-          <option>69</option>
-          <option>76</option>
-          <option>84</option>
-          <option>84+</option>
-        </select>
-      </div>
-
-      <div class="mb-2 mt-2">
-        <h4 class="ml-2 text-md font-thin">Gren</h4>
-        <select
-          v-model="result.event"
-          class="mt-1 block form-select w-64 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-        >
-          <option>Knäböj</option>
-          <option>Bänkpress</option>
-          <option>Marklyft</option>
-          <option>Total</option>
-        </select>
-      </div>
-
-      <div class="mb-2 mt-2">
-        <h4 class="ml-2 text-md font-thin">Datum</h4>
-        <input
-          v-model="result.competition_date"
-          class="appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-          type="date"
-          name="date"
-        />
-      </div>
-
-      <div class="mb-2 mt-2">
-        <h4 class="ml-2 text-md font-thin">Resultat (kg)</h4>
-        <input
-          v-model="result.result"
-          class="appearance-none rounded-none relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-          type="number"
-          name="date"
-        />
-      </div>
-      <div class="flex mt-4">
-        <Button @click.prevent="createResult">Skapa resultat</Button>
-      </div>
-
-      <div v-if="createResultError" class="mt-2">
-        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fill-rule="evenodd"
-                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+      <form class="p-5">
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Kön</label>
+            <div class="flex gap-3">
+              <label
+                v-for="g in genders"
+                :key="g.value"
+                :class="[
+                  'flex-1 flex items-center justify-center px-3 py-2 border rounded-lg cursor-pointer transition-all text-sm',
+                  result.gender === g.value
+                    ? 'border-gkk bg-gkk/5 text-gkk font-medium'
+                    : 'border-gray-300 hover:border-gray-400',
+                ]"
+              >
+                <input type="radio" :value="g.value" v-model="result.gender" class="sr-only" />
+                {{ g.label }}
+              </label>
             </div>
-            <div class="ml-3">
-              <p class="text-sm leading-5 text-yellow-700">
-                Kunde inte skapa tävling, kontrollera inmatning och anlutning.
-              </p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Lyftare</label>
+            <select
+              v-model="result.user_id"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+            >
+              <option value="">Välj lyftare...</option>
+              <option v-for="lifter in sortedUsers" :key="lifter.id" :value="lifter.id">
+                {{ lifter.first_name }} {{ lifter.last_name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Viktklass</label>
+            <select
+              v-model="result.weight_class"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+            >
+              <option value="">Välj...</option>
+              <option v-for="wc in weightClassesForForm" :key="wc" :value="wc">{{ wc }} kg</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Gren</label>
+            <select
+              v-model="result.event"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+            >
+              <option v-for="event in events" :key="event" :value="event">{{ event }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Datum</label>
+            <input
+              v-model="result.competition_date"
+              type="date"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">Resultat (kg)</label>
+            <input
+              v-model="result.result"
+              type="number"
+              step="0.5"
+              placeholder="0"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+            />
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center gap-3">
+          <Button @click.prevent="createResult">Spara rekord</Button>
+          <span v-if="saving" class="text-sm text-gray-500">Sparar...</span>
+        </div>
+
+        <div v-if="createResultError" class="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+          Kunde inte spara rekordet. Kontrollera att alla fält är ifyllda.
+        </div>
+      </form>
+    </div>
+
+    <!-- Records Display -->
+    <div v-for="gender in genders" :key="gender.value" class="mb-6">
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          v-for="weightClass in weightClassesFor(gender.value)"
+          :key="weightClass"
+          class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200"
+        >
+          <div class="bg-gray-800 px-4 py-2.5">
+            <h3 class="text-white font-medium">{{ gender.label }} {{ weightClass }} kg</h3>
+          </div>
+
+          <div class="divide-y divide-gray-100">
+            <div
+              v-for="event in events"
+              :key="event"
+              class="px-4 py-3 hover:bg-gray-50 transition-colors"
+            >
+              <div class="text-xs text-gray-400 uppercase tracking-wide font-medium">{{ event }}</div>
+              <div v-if="getRecord(gender.value, weightClass, event)" class="mt-1">
+                <div class="flex items-end justify-between gap-2">
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-gray-900 truncate">
+                      {{ getRecord(gender.value, weightClass, event).name || name(getRecord(gender.value, weightClass, event).user) }}
+                    </div>
+                    <div class="flex items-baseline gap-2 mt-0.5">
+                      <span class="text-xl font-bold text-gray-600">{{ getRecord(gender.value, weightClass, event).result }}</span>
+                      <span class="text-sm text-gray-400">kg</span>
+                      <span
+                        :class="['text-xs ml-auto', withinAYear(getRecord(gender.value, weightClass, event).competition_date) ? 'text-green-600 font-medium' : 'text-gray-400']"
+                        v-tooltip.bottom="withinAYear(getRecord(gender.value, weightClass, event).competition_date) ? 'Nytt senaste året' : null"
+                      >
+                        {{ formatDate(getRecord(gender.value, weightClass, event).competition_date) }}
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    @click.prevent="confirmDelete(getRecord(gender.value, weightClass, event))"
+                    class="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded transition-colors flex-shrink-0"
+                    title="Ta bort"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div v-else class="text-sm text-gray-300 mt-1">—</div>
             </div>
           </div>
         </div>
       </div>
-    </form>
+    </div>
 
-    <div class="text-center">
-      <div class="flex flex-col" v-for="gender in ['Kvinnor', 'Män']" :key="gender">
-        <h2 class="font-thin text-2xl mb-4 mt-6">{{ gender }}</h2>
-        <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-          <div
-            class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200"
+    <div v-if="hasNoRecords" class="text-center py-12 text-gray-500">
+      Inga rekord registrerade ännu.
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div
+      v-if="deleteConfirm"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      @click.self="deleteConfirm = null"
+    >
+      <div class="bg-white rounded-lg shadow-xl p-5 max-w-sm mx-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Ta bort rekord?</h3>
+        <p class="text-gray-600 text-sm mb-4">
+          Ta bort rekordet för <strong>{{ deleteConfirm.name || name(deleteConfirm.user) }}</strong> i {{ deleteConfirm.event }} ({{ deleteConfirm.weight_class }} kg)?
+        </p>
+        <div class="flex justify-end gap-2">
+          <button
+            @click="deleteConfirm = null"
+            class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
           >
-            <table class="min-w-full">
-              <thead>
-                <tr>
-                  <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Klass
-                  </th>
-                  <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Gren (KSL)
-                  </th>
-                  <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Namn
-                  </th>
-                  <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Vikt (kg)
-                  </th>
-                  <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Datum
-                  </th>
-                  <th
-                    class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                  ></th>
-                </tr>
-              </thead>
-              <tbody class="bg-white">
-                <tr v-for="result in recordsFor(gender)" :key="result.id">
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div class="text-sm leading-5 text-gray-900">
-                          {{ result.weight_class }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div class="text-sm leading-5 text-gray-900">
-                          {{ result.event }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div class="text-sm leading-5 text-gray-900">
-                          {{ result.name || name(result.user) }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div class="text-sm leading-5 text-gray-900">
-                          {{ result.result }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div
-                          v-if="withinAYear(result.competition_date)"
-                          v-tooltip.bottom="'Nytt senaste året'"
-                          class="text-sm leading-5 text-green-500"
-                        >
-                          {{ result.competition_date }}
-                        </div>
-                        <div v-else class="text-sm leading-5 text-gray-900">
-                          {{ result.competition_date }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <i @click.prevent="remove(result)" class="fa fa-trash cursor-pointer"></i>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            Avbryt
+          </button>
+          <button
+            @click="remove(deleteConfirm)"
+            class="px-3 py-1.5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Ta bort
+          </button>
         </div>
       </div>
     </div>
@@ -254,15 +193,24 @@ export default {
   props: ['results', 'users'],
   data() {
     return {
+      genders: [
+        { value: 'F', label: 'Kvinnor' },
+        { value: 'M', label: 'Män' },
+      ],
+      events: ['Knäböj', 'Bänkpress', 'Marklyft', 'Total'],
+      maleClasses: ['52', '59', '66', '74', '83', '93', '105', '120', '120+'],
+      femaleClasses: ['43', '47', '52', '57', '63', '69', '76', '84', '84+'],
       result: {
         gender: 'F',
         competition_date: '',
         weight_class: '',
         event: 'Knäböj',
-        user_id: 0,
+        user_id: '',
         result: '',
       },
       createResultError: false,
+      saving: false,
+      deleteConfirm: null,
     }
   },
   computed: {
@@ -271,13 +219,42 @@ export default {
         .slice()
         .sort((a, b) => `${a.first_name} ${a.last_name}`.localeCompare(`${b.first_name} ${b.last_name}`))
     },
+    weightClassesForForm() {
+      return this.result.gender === 'M' ? this.maleClasses : this.femaleClasses
+    },
+    hasNoRecords() {
+      return this.results.length === 0
+    },
   },
   methods: {
+    weightClassesFor(gender) {
+      const classes = gender === 'M' ? this.maleClasses : this.femaleClasses
+      const genderResults = this.results.filter((r) => r.gender === gender)
+      return classes.filter((wc) => genderResults.some((r) => r.weight_class === wc))
+    },
+    getRecord(gender, weightClass, event) {
+      const records = this.results.filter(
+        (r) => r.gender === gender && r.weight_class === weightClass && r.event === event,
+      )
+      if (records.length === 0) return null
+      return records.reduce((best, current) => (Number(current.result) > Number(best.result) ? current : best))
+    },
+    confirmDelete(result) {
+      this.deleteConfirm = result
+    },
     remove(result) {
       axios.delete(`/admin/results/${result.id}`).then(() => window.location.reload())
     },
     createResult() {
-      axios.post('/admin/results', this.result).then(() => window.location.reload())
+      this.saving = true
+      this.createResultError = false
+      axios
+        .post('/admin/results', this.result)
+        .then(() => window.location.reload())
+        .catch(() => {
+          this.createResultError = true
+          this.saving = false
+        })
     },
     withinAYear(date) {
       return Date.withinAYear(date)
@@ -285,28 +262,10 @@ export default {
     name(user) {
       return user ? `${user.first_name} ${user.last_name}` : ''
     },
-    recordsFor(gender) {
-      const genderResults = this.results.filter((result) =>
-        gender === 'Kvinnor' ? result.gender === 'F' : result.gender === 'M',
-      )
-
-      // Filter out the best result in each class, and then sort based on class and event
-      return genderResults
-        .filter(
-          (res) =>
-            genderResults.filter(
-              (r) =>
-                r.weight_class === res.weight_class && r.event === res.event && Number(r.result) > Number(res.result),
-            ).length === 0,
-        )
-        .sort((a, b) => {
-          if (a.weight_class !== b.weight_class) {
-            return a.weight_class.localeCompare(b.weight_class, undefined, { numeric: true, sensitivity: 'base' })
-          }
-
-          const eventOrder = ['Knäböj', 'Bänkpress', 'Marklyft', 'Totalt']
-          return eventOrder.indexOf(a.event) - eventOrder.indexOf(b.event)
-        })
+    formatDate(dateStr) {
+      if (!dateStr) return ''
+      const date = new window.Date(dateStr)
+      return date.toLocaleDateString('sv-SE', { year: 'numeric', month: 'short', day: 'numeric' })
     },
   },
 }

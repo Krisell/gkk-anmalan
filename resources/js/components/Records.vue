@@ -1,159 +1,49 @@
 <template>
-  <div class="container mx-auto max-w-3xl">
-    <h1 class="text-center text-3xl font-thin mt-24">Klubbrekord</h1>
+  <div class="container mx-auto max-w-5xl px-4">
+    <div class="h-4"> </div>
+    <div v-for="gender in genders" :key="gender.value" class="mb-6">
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          v-for="weightClass in weightClassesFor(gender.value)"
+          :key="weightClass"
+          class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-200"
+        >
+          <div class="bg-gray-800 px-4 py-2.5">
+            <h3 class="text-white font-medium">{{ gender.label }} {{ weightClass }} kg</h3>
+          </div>
 
-    <div class="text-center">
-      <div class="flex flex-col" v-for="gender in ['Kvinnor', 'Män']" :key="gender">
-        <h2 class="font-thin text-2xl mb-4 mt-6">{{ gender }}</h2>
-        <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-          <div
-            class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200"
-          >
-            <table class="min-w-full">
-              <thead>
-                <tr>
-                  <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
+          <div class="divide-y divide-gray-100">
+            <div
+              v-for="event in events"
+              :key="event"
+              class="px-4 py-3 hover:bg-gray-50 transition-colors"
+              :data-testid="`record-${gender.value}-${weightClass}-${event}`"
+            >
+              <div class="text-xs text-gray-400 uppercase tracking-wide font-medium">{{ event }}</div>
+              <div v-if="getRecord(gender.value, weightClass, event)" class="mt-1">
+                <div class="font-semibold text-gray-900">
+                  {{ getRecord(gender.value, weightClass, event).name || name(getRecord(gender.value, weightClass, event).user) }}
+                </div>
+                <div class="flex items-baseline gap-2 mt-0.5">
+                  <span class="text-xl font-bold text-gray-600">{{ getRecord(gender.value, weightClass, event).result }}</span>
+                  <span class="text-sm text-gray-400">kg</span>
+                  <span
+                    :class="['text-xs ml-auto', withinAYear(getRecord(gender.value, weightClass, event).competition_date) ? 'text-green-600 font-medium' : 'text-gray-400']"
+                    v-tooltip.bottom="withinAYear(getRecord(gender.value, weightClass, event).competition_date) ? 'Nytt senaste året' : null"
                   >
-                    Klass
-                  </th>
-                  <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
-                  >
-                    Gren (KSL)
-                  </th>
-                  <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
-                  >
-                    Namn
-                  </th>
-                  <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
-                  >
-                    Vikt (kg)
-                  </th>
-                  <th
-                    class="
-                      px-6
-                      py-3
-                      border-b border-gray-200
-                      bg-gray-50
-                      text-center text-xs
-                      leading-4
-                      font-medium
-                      text-gray-500
-                      uppercase
-                      tracking-wider
-                    "
-                  >
-                    Datum
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="bg-white">
-                <tr v-for="result in recordsFor(gender)" :key="result.id">
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div class="text-sm leading-5 text-gray-900">
-                          {{ result.weight_class }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div class="text-sm leading-5 text-gray-900">
-                          {{ result.event }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div class="text-sm leading-5 text-gray-900">
-                          {{ result.name || name(result.user) }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div class="text-sm leading-5 text-gray-900">
-                          {{ result.result }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                    <div class="flex items-center">
-                      <div class="mx-auto">
-                        <div
-                          v-if="withinAYear(result.competition_date)"
-                          v-tooltip.bottom="'Nytt senaste året'"
-                          class="text-sm leading-5 text-green-500"
-                        >
-                          {{ result.competition_date }}
-                        </div>
-                        <div v-else class="text-sm leading-5 text-gray-900">
-                          {{ result.competition_date }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    {{ formatDate(getRecord(gender.value, weightClass, event).competition_date) }}
+                  </span>
+                </div>
+              </div>
+              <div v-else class="text-sm text-gray-300 mt-1">—</div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-if="hasNoRecords" class="text-center py-12 text-gray-500">
+      Inga rekord registrerade ännu.
     </div>
   </div>
 </template>
@@ -163,35 +53,45 @@ import Date from '../modules/Date.js'
 
 export default {
   props: ['results'],
+  data() {
+    return {
+      genders: [
+        { value: 'F', label: 'Kvinnor' },
+        { value: 'M', label: 'Män' },
+      ],
+      events: ['Knäböj', 'Bänkpress', 'Marklyft', 'Total'],
+      maleClasses: ['52', '59', '66', '74', '83', '93', '105', '120', '120+'],
+      femaleClasses: ['43', '47', '52', '57', '63', '69', '76', '84', '84+'],
+    }
+  },
+  computed: {
+    hasNoRecords() {
+      return this.results.length === 0
+    },
+  },
   methods: {
+    weightClassesFor(gender) {
+      const classes = gender === 'M' ? this.maleClasses : this.femaleClasses
+      const genderResults = this.results.filter((r) => r.gender === gender)
+      return classes.filter((wc) => genderResults.some((r) => r.weight_class === wc))
+    },
+    getRecord(gender, weightClass, event) {
+      const records = this.results.filter(
+        (r) => r.gender === gender && r.weight_class === weightClass && r.event === event,
+      )
+      if (records.length === 0) return null
+      return records.reduce((best, current) => (Number(current.result) > Number(best.result) ? current : best))
+    },
     withinAYear(date) {
       return Date.withinAYear(date)
     },
     name(user) {
       return user ? `${user.first_name} ${user.last_name}` : ''
     },
-    recordsFor(gender) {
-      const genderResults = this.results.filter((result) =>
-        gender === 'Kvinnor' ? result.gender === 'F' : result.gender === 'M',
-      )
-
-      // Filter out the best result in each class, and then sort based on class and event
-      return genderResults
-        .filter(
-          (res) =>
-            genderResults.filter(
-              (r) =>
-                r.weight_class === res.weight_class && r.event === res.event && Number(r.result) > Number(res.result),
-            ).length === 0,
-        )
-        .sort((a, b) => {
-          if (a.weight_class !== b.weight_class) {
-            return a.weight_class.localeCompare(b.weight_class, undefined, { numeric: true, sensitivity: 'base' })
-          }
-
-          const eventOrder = ['Knäböj', 'Bänkpress', 'Marklyft', 'Totalt']
-          return eventOrder.indexOf(a.event) - eventOrder.indexOf(b.event)
-        })
+    formatDate(dateStr) {
+      if (!dateStr) return ''
+      const date = new window.Date(dateStr)
+      return date.toLocaleDateString('sv-SE', { year: 'numeric', month: 'short', day: 'numeric' })
     },
   },
 }

@@ -25,11 +25,11 @@ test('Records are visible', async ({ page }) => {
     await expect(page.locator('body')).toContainText('Kvinnor')
     await expect(page.locator('body')).toContainText('Män')
 
-    await expect(page.getByRole('cell', { name: 'Some Good Lifter' })).toBeVisible()
-    await expect(page.getByRole('cell', { name: '100' }).locator('div').first()).toBeVisible()
+    await expect(page.getByTestId('record-M-83-Total').getByText('Other Good Lifter')).toBeVisible()
+    await expect(page.getByTestId('record-M-83-Total').getByText('900')).toBeVisible()
 
-    await expect(page.getByRole('cell', { name: 'Other Good Lifter' })).toBeVisible()
-    await expect(page.getByRole('cell', { name: '900' }).locator('div').first()).toBeVisible()
+    await expect(page.getByTestId('record-F-63-Knäböj').getByText('Some Good Lifter')).toBeVisible()
+    await expect(page.getByTestId('record-F-63-Knäböj').getByText('100')).toBeVisible()
 })
 
 test('Only the best result is visible', async ({ page }) => {
@@ -53,9 +53,9 @@ test('Only the best result is visible', async ({ page }) => {
 
     await page.goto('/klubbrekord')
 
-    await expect(page.getByRole('cell', { name: 'Previous record holder' })).not.toBeVisible()
-    await expect(page.getByRole('cell', { name: '150' }).locator('div').first()).not.toBeVisible()
+    await expect(page.getByTestId('record-M-74-Bänkpress').getByText('Previous record holder')).not.toBeVisible()
+    await expect(page.getByTestId('record-M-74-Bänkpress').getByText('150')).not.toBeVisible()
 
-    await expect(page.getByRole('cell', { name: 'New record holder' })).toBeVisible()
-    await expect(page.getByRole('cell', { name: '200' }).locator('div').first()).toBeVisible()
+    await expect(page.getByTestId('record-M-74-Bänkpress').getByText('New record holder')).toBeVisible()
+    await expect(page.getByTestId('record-M-74-Bänkpress').getByText('200')).toBeVisible()
 })

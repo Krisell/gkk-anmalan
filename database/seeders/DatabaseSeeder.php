@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             PaymentSeeder::class,
             SlideSeeder::class,
+            ResultSeeder::class,
         ]);
     }
 }
