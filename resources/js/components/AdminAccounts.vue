@@ -459,7 +459,7 @@
           <div class="flex items-center justify-between flex-col gap-2">
             <div>
               <h3 class="text-lg font-medium text-gray-900">Utdrag från belastningsregister</h3>
-              <p class="text-sm text-gray-500">Ange datum då utdraget lämnades in</p>
+              <p class="text-sm text-gray-500">Ange datum som utdraget gäller från</p>
             </div>
             <div class="flex items-center gap-2" v-if="selectedAccount">
               <input
