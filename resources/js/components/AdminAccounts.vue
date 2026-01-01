@@ -74,6 +74,10 @@
                 Visa övriga
                 <ToggleButton v-model="show.rest"  />
               </div>
+              <div class="flex flex-col gap-2">
+                Endast med belastningsregisterutdrag
+                <ToggleButton v-model="show.onlyBackgroundCheck"  />
+              </div>
             </div>
             <div class="relative my-2 rounded-md shadow-sm w-64 ml-4 lg:mx-auto">
               <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -173,6 +177,7 @@
                   </div>
                   <i v-if="account.is_honorary_member" class="fa fa-trophy text-gkk text-xl" v-tooltip="'Hedersmedlem'"></i>
                   <i v-if="account.explicit_registration_approval" class="fa fa-exclamation-triangle text-yellow-500 text-xl" v-tooltip="'Har explicit godkännande att anmäla sig till tävlingar trots 0 funktionärstillfällen'"></i>
+                  <i v-if="account.background_check_valid_from" class="fa fa-shield text-gkk text-xl" v-tooltip="'Har lämnat in utdrag från belastningsregistret (' + account.background_check_valid_from + ')'"></i>
                 </td>
                 <td v-show="!treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">
@@ -453,6 +458,32 @@
         <div class="border-t border-gray-200 pt-6">
           <div class="flex items-center justify-between flex-col gap-2">
             <div>
+              <h3 class="text-lg font-medium text-gray-900">Utdrag från belastningsregister</h3>
+              <p class="text-sm text-gray-500">Ange datum då utdraget lämnades in</p>
+            </div>
+            <div class="flex items-center gap-2" v-if="selectedAccount">
+              <input
+                type="date"
+                data-testid="background-check-date"
+                class="block rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+                :value="selectedAccount.background_check_valid_from"
+                @change="updateBackgroundCheckFromModal($event.target.value)"
+              />
+              <button
+                v-if="selectedAccount.background_check_valid_from"
+                @click="updateBackgroundCheckFromModal(null)"
+                class="text-red-500 hover:text-red-700"
+                v-tooltip="'Ta bort datum'"
+              >
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-6">
+          <div class="flex items-center justify-between flex-col gap-2">
+            <div>
               <h3 class="text-lg font-medium text-gray-900">Inaktivera konto</h3>
               <p class="text-sm text-gray-500">Personen kommer inte kunna logga in förrän kontot återaktiveras</p>
             </div>
@@ -509,6 +540,7 @@ export default {
         juniors: true,
         studentsOver23: true,
         rest: true,
+        onlyBackgroundCheck: false,
       }
     }
   },
@@ -539,6 +571,10 @@ export default {
 
       if (!this.show.rest) {
         accounts = accounts.filter((account) => this.isJunior(account) || account.is_student_over_23)
+      }
+
+      if (this.show.onlyBackgroundCheck) {
+        accounts = accounts.filter((account) => account.background_check_valid_from)
       }
 
       if (this.search === '') {
@@ -762,6 +798,30 @@ export default {
     async updateRenVinnareEducationFromModal() {
       if (!this.selectedAccount) return
       await this.updateRenVinnareEducation(this.selectedAccount)
+    },
+    async updateBackgroundCheck(account, date) {
+      const name = `${account.first_name} ${account.last_name}`
+
+      try {
+        await axios.patch(`/admin/accounts/${account.id}/background-check`, {
+          background_check_valid_from: date
+        })
+
+        if (date) {
+          this.$toast.success(`${name} har registrerats med belastningsregisterutdrag från ${date}`)
+          account.background_check_valid_from = date
+        } else {
+          this.$toast.warning(`${name}s belastningsregisterutdrag har tagits bort`)
+          account.background_check_valid_from = null
+        }
+      } catch (error) {
+        console.log(error)
+        this.$toast.error('Kunde inte uppdatera belastningsregisterutdrag')
+      }
+    },
+    async updateBackgroundCheckFromModal(date) {
+      if (!this.selectedAccount) return
+      await this.updateBackgroundCheck(this.selectedAccount, date)
     },
     confirmInactivationFromModal() {
       this.$refs.settingsModal.close()

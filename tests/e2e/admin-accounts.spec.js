@@ -119,3 +119,32 @@ test('The admin can mark and unmark Ren Vinnare education completion', async ({ 
 
     await expect(page.getByRole('row', { name: name }).locator('div.text-green-600')).not.toBeVisible()
 })
+
+test('The admin can set and clear background check date', async ({ page }) => {
+    await login(page, { role: 'admin' })
+    const user = await create(page, 'User')
+
+    await page.goto('/admin/accounts')
+
+    const name = `${user.first_name} ${user.last_name}`
+
+    // Open settings modal and set a date
+    await page.getByTestId(`settings-${user.id}`).click()
+    await page.getByTestId('background-check-date').fill('2025-06-15')
+    await expect(page.getByText(`${name} har registrerats med belastningsregisterutdrag från 2025-06-15`)).toBeVisible()
+
+    await page.getByRole('button', { name: 'Stäng' }).click()
+
+    // Verify the shield icon is visible
+    await expect(page.getByRole('row', { name: name }).locator('i.fa-shield')).toBeVisible()
+
+    // Open settings and clear the date
+    await page.getByTestId(`settings-${user.id}`).click()
+    await page.locator('[data-testid="background-check-date"]').evaluate(el => el.closest('.flex').querySelector('button').click())
+    await expect(page.getByText(`${name}s belastningsregisterutdrag har tagits bort`)).toBeVisible()
+
+    await page.getByRole('button', { name: 'Stäng' }).click()
+
+    // Verify the shield icon is no longer visible
+    await expect(page.getByRole('row', { name: name }).locator('i.fa-shield')).not.toBeVisible()
+})

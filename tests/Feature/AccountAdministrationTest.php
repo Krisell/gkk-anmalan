@@ -167,3 +167,76 @@ test('updating Ren Vinnare education creates activity log entry', function () {
     $this->assertEquals($user->id, $latestLog->user_id);
     $this->assertEquals('completed', $latestLog->data);
 });
+
+test('an admin can set background check date for a user', function () {
+    $admin = loginAdmin();
+    $user = User::factory()->create(['background_check_valid_from' => null]);
+
+    $response = $this->patch("/admin/accounts/{$user->id}/background-check", [
+        'background_check_valid_from' => '2025-06-15',
+    ]);
+
+    $response->assertOk();
+    $response->assertJson(['message' => 'Background check status updated successfully']);
+
+    $this->assertEquals('2025-06-15', $user->fresh()->background_check_valid_from->format('Y-m-d'));
+});
+
+test('an admin can clear background check date from a user', function () {
+    $admin = loginAdmin();
+    $user = User::factory()->create(['background_check_valid_from' => '2025-01-01']);
+
+    $response = $this->patch("/admin/accounts/{$user->id}/background-check", [
+        'background_check_valid_from' => null,
+    ]);
+
+    $response->assertOk();
+    $response->assertJson(['message' => 'Background check status updated successfully']);
+
+    $this->assertNull($user->fresh()->background_check_valid_from);
+});
+
+test('a non-admin cannot update background check', function () {
+    $user = login();
+    $targetUser = User::factory()->create(['background_check_valid_from' => null]);
+
+    $response = $this->patch("/admin/accounts/{$targetUser->id}/background-check", [
+        'background_check_valid_from' => '2025-06-15',
+    ]);
+
+    $response->assertUnauthorized();
+    $this->assertNull($targetUser->fresh()->background_check_valid_from);
+});
+
+test('updating background check requires valid date value', function () {
+    $admin = loginAdmin();
+    $user = User::factory()->create();
+
+    $response = $this->patchJson("/admin/accounts/{$user->id}/background-check", [
+        'background_check_valid_from' => 'invalid-date',
+    ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['background_check_valid_from']);
+});
+
+test('updating background check creates activity log entry', function () {
+    $admin = loginAdmin();
+    $user = User::factory()->create(['background_check_valid_from' => null]);
+
+    $initialLogCount = \App\Models\ActivityLog::count();
+
+    $response = $this->patch("/admin/accounts/{$user->id}/background-check", [
+        'background_check_valid_from' => '2025-06-15',
+    ]);
+
+    $response->assertOk();
+
+    $this->assertDatabaseCount('activity_logs', $initialLogCount + 1);
+
+    $latestLog = \App\Models\ActivityLog::latest()->first();
+    $this->assertEquals($admin->id, $latestLog->performed_by);
+    $this->assertEquals('background-check-update', $latestLog->action);
+    $this->assertEquals($user->id, $latestLog->user_id);
+    $this->assertEquals('2025-06-15', $latestLog->data);
+});

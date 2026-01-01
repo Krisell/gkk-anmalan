@@ -27,6 +27,7 @@ class User extends Authenticatable
         'is_student_over_23' => 'boolean',
         'explicit_registration_approval' => 'boolean',
         'ren_vinnare_education_completed_at' => 'datetime',
+        'background_check_valid_from' => 'date',
     ];
 
     public function eventRegistrations(): HasMany

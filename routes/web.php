@@ -142,6 +142,7 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::delete('/{user}/grant', [\App\Http\Controllers\AccountController::class, 'destroyUngranted']);
         Route::patch('/{user}/competition-permission', [\App\Http\Controllers\AccountController::class, 'updateCompetitionPermission']);
         Route::patch('/{user}/ren-vinnare-education', [\App\Http\Controllers\AccountController::class, 'updateRenVinnareEducation']);
+        Route::patch('/{user}/background-check', [\App\Http\Controllers\AccountController::class, 'updateBackgroundCheck']);
     });
 
     Route::prefix('slideshow')->controller(AdminSlideshowController::class)->group(function () {

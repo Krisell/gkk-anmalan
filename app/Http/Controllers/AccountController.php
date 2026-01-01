@@ -129,4 +129,24 @@ class AccountController extends Controller
 
         return response()->json(['message' => 'Ren Vinnare education status updated successfully']);
     }
+
+    public function updateBackgroundCheck(User $user, Request $request)
+    {
+        $data = $request->validate([
+            'background_check_valid_from' => 'nullable|date',
+        ]);
+
+        $user->update([
+            'background_check_valid_from' => $data['background_check_valid_from'],
+        ]);
+
+        ActivityLog::create([
+            'performed_by' => auth()->id(),
+            'action' => 'background-check-update',
+            'user_id' => $user->id,
+            'data' => $data['background_check_valid_from'] ?? 'cleared',
+        ]);
+
+        return response()->json(['message' => 'Background check status updated successfully']);
+    }
 }
