@@ -22,7 +22,7 @@
       <div v-if="showHelperWarning" class="mt-4 p-4 border-4 border-orange-500 rounded bg-orange-50">
         <div class="text-orange-700 font-semibold">⚠️ Varning</div>
         <div class="mt-2 text-orange-600">
-          Du har inte hjälpt till som funktionär det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar.
+          Systemet kan inte se att du har hjälpt till som funktionär under det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar.
           <br>Kontakta styrelsen om du har frågor.
         </div>
       </div>

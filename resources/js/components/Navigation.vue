@@ -7,7 +7,7 @@
     </div>
     <div v-if="user && helperCount === 0 && !user.explicit_registration_approval && isUserOlderThanOneMonth" class="max-w-[90%] mx-auto mt-6">
       <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded max-w-[800px] border-l-4 border-l-yellow-500 m-auto text-left">
-        Du har inte hjälpt till som funktionär det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar. Kontakta styrelsen om du har frågor.
+        Systemet kan inte se att du har hjälpt till som funktionär under det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar. Kontakta styrelsen om du har frågor.
       </div>
     </div>
     <div v-if="user && user.granted_by == 0">
