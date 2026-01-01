@@ -1,40 +1,75 @@
 @extends('layouts.app')
 
 @section('content')
-<div style="background-image: url(https://goteborg-kraftsportklubb.web.app/img/bella-min.jpg); 
-height: 500px;
-background-size: cover;
-background-position-y: center; max-height: 50vh;" class="flex items-center">
+<div class="relative">
+  <div style="background-image: url(https://goteborg-kraftsportklubb.web.app/img/bella-min.jpg);
+  height: 500px;
+  background-size: cover;
+  background-position-y: center; max-height: 50vh;" class="flex items-center">
+  </div>
+  <div class="absolute inset-0 bg-black/40"></div>
+  <div class="absolute inset-0 flex items-center justify-center px-4">
+    <div class="text-center">
+      {{-- <p class="text-white/80 uppercase tracking-[0.3em] text-sm mb-3 drop-shadow">Sedan 1933</p> --}}
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg tracking-tight">Göteborg Kraftsportklubb</h1>
+      <div class="mt-4 flex items-center justify-center gap-3">
+        <span class="h-px w-12 bg-white/50"></span>
+        {{-- <p class="text-white/90 text-lg sm:text-xl drop-shadow">Styrka genom gemenskap</p> --}}
+        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow">Sedan 1933</p>
+        <span class="h-px w-12 bg-white/50"></span>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="container mx-auto">
     <div>
-        <div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8">
-          <div class="space-y-12">
+        <div class="mx-auto py-8 px-4 max-w-7xl sm:px-6 lg:px-8">
+          <div class="space-y-10">
             <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
-                <div class="flex items-center">
-                  <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Välkommen till Göteborg Kraftsportklubb</h2>
-                </div>
-
-                <a href="/prova-pa" class="mt-6 block">
-                  <div class="rounded p-2 border-gkk border-2">
-                    <p class="text-3xl leading-bold text-gkk">
-                      Är du intresserad av att prova på att tävla i styrkelyft eller bänkpress? 
-                    </p>
-                    <p class="text-xl leading-bold text-gkk">
-                      Söndagen 15 februari 2026 håller GKK en prova-på-tävling där alla som inte ännu tävlar i styrkelyft
-                      får möjligheten att testa hur det är! Mer information om tävlingen <span class="underline">hittar du här</span>.
-                    </p>
+                <a href="/prova-pa" class="block group">
+                  <div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-gkk to-gkk-light p-6 sm:p-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01]">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10"></div>
+                    <div class="absolute bottom-0 left-0 -mb-8 -ml-8 h-32 w-32 rounded-full bg-white/5"></div>
+                    <div class="relative">
+                      <div class="inline-block bg-white/20 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4">
+                        <i class="fa fa-calendar mr-1"></i> 15 februari 2026
+                      </div>
+                      <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
+                        Prova på-tävling i styrkelyft
+                      </h3>
+                      <p class="text-white/90 text-base sm:text-lg leading-relaxed">
+                        Är du nyfiken på att tävla i styrkelyft eller bänkpress? Nu får du chansen att testa hur det är under avslappnade former!
+                      </p>
+                      <div class="mt-4 inline-flex items-center text-white font-medium group-hover:translate-x-1 transition-transform duration-200">
+                        Läs mer och anmäl dig
+                        <i class="fa fa-arrow-right ml-2"></i>
+                      </div>
+                    </div>
                   </div>
                 </a>
 
-                <div>
-                  <a 
-                    target="_blank"
-                    class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
-                    href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FDszgogxmrxsz3hOJauVM8p7gwj6Hnw.pdf?alt=media&token=523767fd-aeee-4167-92d2-f502aa1d4662">
-                    <i class="fa fa-file-pdf-o mr-2"></i>Kallelse och föredragningslista årsmöte 2026-02-07 kl 12.00
-                  </a>
-                </div>
+                <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FDszgogxmrxsz3hOJauVM8p7gwj6Hnw.pdf?alt=media&token=523767fd-aeee-4167-92d2-f502aa1d4662" target="_blank" class="block group">
+                  <div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-700 to-gray-800 p-6 sm:p-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01]">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/5"></div>
+                    <div class="absolute bottom-0 left-0 -mb-8 -ml-8 h-32 w-32 rounded-full bg-white/5"></div>
+                    <div class="relative">
+                      <div class="inline-block bg-white/20 text-white text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4">
+                        <i class="fa fa-calendar mr-1"></i> 7 februari 2026 kl 10:00
+                      </div>
+                      <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
+                        Årsmöte 2026
+                      </h3>
+                      <p class="text-white/90 text-base sm:text-lg leading-relaxed">
+                        Kallelse och föredragningslista för GKKs årsmöte. Alla medlemmar är välkomna!
+                      </p>
+                      <div class="mt-4 inline-flex items-center text-white font-medium group-hover:translate-x-1 transition-transform duration-200">
+                        <i class="fa fa-file-pdf-o mr-2"></i>
+                        Öppna kallelse
+                        <i class="fa fa-arrow-right ml-2"></i>
+                      </div>
+                    </div>
+                  </div>
+                </a>
                 {{-- <div>
                   <a 
                     target="_blank"
@@ -103,61 +138,47 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 </a> --}}
 
 
-                <p class="text-xl leading-normal text-gray-500">
+                <p class="text-lg leading-relaxed text-gray-600">
                   Göteborg Kraftsportklubb (GKK) är en idrottsförening som bildades 1933. Vi ägnar oss åt idrotten Styrkelyft och tränar och tävlar därmed i knäböj, bänkpress och marklyft. I föreningen finns allt från motionärer till elitaktiva på högsta nivå. Vi tränar tillsammans, hjälper varandra och tror på att styrka kommer från gemenskap.
                 </p>
-                <p class="text-xl leading-normal text-gray-500">
-                  Sedan december 2018 har vi vår egna klubb- och träningslokal hos <a class="underline" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. För att träna hos oss behöver du därmed också vara medlem och ha träningskort hos Friskis & Svettis. Träning kan ske även under obemannade tider genom att registrera en kod i kassan. Mer information om du är intresserad av att bli medlem i GKK hittar du under <a class="underline" href="/medlem">Medlemskap</a>.
+                <p class="text-lg leading-relaxed text-gray-600">
+                  Sedan december 2018 har vi vår egna klubb- och träningslokal hos <a class="underline hover:text-gkk transition-colors" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. För att träna hos oss behöver du därmed också vara medlem och ha träningskort hos Friskis & Svettis. Träning kan ske även under obemannade tider genom att registrera en kod i kassan. Mer information om du är intresserad av att bli medlem i GKK hittar du under <a class="underline hover:text-gkk transition-colors" href="/medlem">Medlemskap</a>.
                 </p>
-                <p class="text-xl leading-normal text-gray-500">
-                  GKK finns även på <a class="underline" href="https://www.instagram.com/goteborgkk/" target="_blank">Instagram</a> där du kan hitta foton och löpande information från föreningen.
+                <p class="text-lg leading-relaxed text-gray-600">
+                  GKK finns även på <a class="underline hover:text-gkk transition-colors" href="https://www.instagram.com/goteborgkk/" target="_blank">Instagram</a> där du kan hitta foton och löpande information från föreningen.
                 </p>
             </div>
-            <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/bjorn_och_klas-min.jpeg" alt="">
-                  </div>
+            <ul role="list" class="space-y-6 sm:grid sm:grid-cols-2 sm:gap-6 sm:space-y-0 lg:grid-cols-3 lg:gap-8">
+              <li class="group">
+                <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+                  <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/bjorn_och_klas-min.jpeg" alt="">
                 </div>
               </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/bjornlyftare-min.jpg" alt="">
-                  </div>
+              <li class="group">
+                <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+                  <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/bjornlyftare-min.jpg" alt="">
                 </div>
               </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/bankpress-min.jpg" alt="">
-                  </div>
+              <li class="group">
+                <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+                  <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/bankpress-min.jpg" alt="">
                 </div>
               </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/tavling-min.jpg" alt="">
-                  </div>
+              <li class="group">
+                <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+                  <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/tavling-min.jpg" alt="">
                 </div>
               </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/mark-min.jpg" alt="">
-                  </div>
+              <li class="group">
+                <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+                  <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/mark-min.jpg" alt="">
                 </div>
               </li>
-              <li>
-                <div class="space-y-4">
-                  <div class="aspect-w-3 aspect-h-2">
-                    <img style="height: 300px" class="object-cover shadow-lg rounded-lg" src="https://goteborg-kraftsportklubb.web.app/img/clara-min.jpg" alt="">
-                  </div>
+              <li class="group">
+                <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+                  <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/clara-min.jpg" alt="">
                 </div>
               </li>
-      
-              <!-- More people... -->
             </ul>
           </div>
         </div>

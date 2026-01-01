@@ -1,36 +1,36 @@
 <template>
   <div>
     <nav
-      class="bg-white fixed flex h-screen p-4 shadow-xl top-16 transition-all w-48 z-10"
-      :class="[navIsOpen ? 'left-0' : '-left-48']"
+      class="bg-white fixed flex h-screen p-5 shadow-xl top-16 transition-all duration-300 w-52 z-10"
+      :class="[navIsOpen ? 'left-0' : '-left-52']"
     >
-      <ul class="flex flex-col uppercase">
-        <li class="mr-8" @click="navIsOpen = false">
-          <div class="cursor-pointer text-teachiq-red">Stäng</div>
+      <ul class="flex flex-col uppercase text-sm tracking-wide w-full">
+        <li class="mb-6" @click="navIsOpen = false">
+          <div class="cursor-pointer text-gray-400 hover:text-gkk transition-colors text-xs">Stäng</div>
         </li>
-        <li class="mt-8 hover:text-gkk">
-          <a :class="site === 'landing' ? 'border-b-2 border-black' : ''" href="/">Start</a>
+        <li class="py-2 hover:text-gkk transition-colors">
+          <a :class="site === 'landing' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/">Start</a>
         </li>
-        <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'powerlifting' ? 'border-b-2 border-black' : ''" href="/styrkelyft">Styrkelyft</a>
+        <li class="py-2 hover:text-gkk transition-colors">
+          <a :class="site === 'powerlifting' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/styrkelyft">Styrkelyft</a>
         </li>
-        <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'about' ? 'border-b-2 border-black' : ''" href="/gkk">Om GKK</a>
+        <li class="py-2 hover:text-gkk transition-colors">
+          <a :class="site === 'about' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/gkk">Om GKK</a>
         </li>
-        <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'member' ? 'border-b-2 border-black' : ''" href="/medlem">Medlemskap</a>
+        <li class="py-2 hover:text-gkk transition-colors">
+          <a :class="site === 'member' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/medlem">Medlemskap</a>
         </li>
-        <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'documents' ? 'border-b-2 border-black' : ''" href="/dokument">Länkar</a>
+        <li class="py-2 hover:text-gkk transition-colors">
+          <a :class="site === 'documents' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/dokument">Länkar</a>
         </li>
-        <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'records' ? 'border-b-2 border-black' : ''" href="/klubbrekord">Klubbrekord</a>
+        <li class="py-2 hover:text-gkk transition-colors">
+          <a :class="site === 'records' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/klubbrekord">Klubbrekord</a>
         </li>
-        <!-- <li class="mt-4 hover:text-gkk">
-          <a :class="site === 'dm' ? 'border-b-2 border-black' : ''" href="/dm">DM KSL 2025</a>
-        </li> -->
-        <li class="mt-4 hover:text-gkk">
-          <a :class="site === '' ? 'border-b-2 border-black' : ''" href="/insidan">Insidan</a>
+        <li class="py-2 mt-4 border-t pt-4">
+          <a
+            class="px-3 py-1.5 rounded-md transition-all"
+            :class="site === '' ? 'bg-gkk text-white' : 'text-gkk hover:bg-gkk/10'"
+            href="/insidan">Insidan</a>
         </li>
       </ul>
     </nav>
@@ -53,72 +53,64 @@
               </a>
 
               <div class="flex lg:hidden absolute left-16">
-                <i @click="navIsOpen = !navIsOpen" class="ml-2 fa fa-bars text-2xl cursor-pointer"></i>
-                <!-- <div class="ml-8 lg:ml-8 uppercase border-b-2 border-black">Start</div> -->
+                <i @click="navIsOpen = !navIsOpen" class="ml-2 fa fa-bars text-2xl cursor-pointer text-gray-600 hover:text-gkk transition-colors"></i>
               </div>
-              <div data-cy="navbar" class="hidden lg:flex absolute left-0 lg:left-24">
+              <div data-cy="navbar" class="hidden lg:flex absolute left-0 lg:left-24 items-center">
                 <a
-                  class="ml-16 lg:ml-8 uppercase hover:border-b-1 hover:border-black"
-                  :class="site === 'landing' ? 'border-b-2 border-black' : ''"
+                  class="ml-16 lg:ml-8 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
+                  :class="site === 'landing' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
                   href="/"
                   >Start</a
                 >
                 <a
-                  class="ml-2 lg:ml-6 uppercase hover:border-b-1 hover:border-black"
-                  :class="site === 'powerlifting' ? 'border-b-2 border-black' : ''"
+                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
+                  :class="site === 'powerlifting' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
                   href="/styrkelyft"
                   >Styrkelyft</a
                 >
                 <a
-                  class="ml-2 lg:ml-6 uppercase hover:border-b-1 hover:border-black"
-                  :class="site === 'about' ? 'border-b-2 border-black' : ''"
+                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
+                  :class="site === 'about' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
                   href="/gkk"
                   >Om GKK</a
                 >
                 <a
-                  class="ml-6 uppercase hover:border-b-1 hover:border-black"
-                  :class="site === 'member' ? 'border-b-2 border-black' : ''"
+                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
+                  :class="site === 'member' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
                   href="/medlem"
                   >Medlemskap</a
                 >
                 <a
-                  class="ml-6 uppercase hover:border-b-1 hover:border-black"
-                  :class="site === 'documents' ? 'border-b-2 border-black' : ''"
+                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
+                  :class="site === 'documents' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
                   href="/dokument"
                   >Länkar</a
                 >
                 <a
-                  class="ml-6 uppercase hover:border-b-1 hover:border-black"
-                  :class="site === 'records' ? 'border-b-2 border-black' : ''"
+                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
+                  :class="site === 'records' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
                   href="/klubbrekord"
                   >Klubbrekord</a
                 >
-                <!-- <a
-                  class="ml-6 uppercase hover:border-b-1 text-[#009a79] border border-[#009a79] p-[2px] -m-[2px] px-1"
-                  :class="site === 'dm' ? 'border-b-2 border-[#009a79]' : ''"
-                  href="/dm"
-                  >DM KSL 2025</a
-                > -->
               </div>
             </div>
           </div>
-          <div class="flex items-center">
+          <div class="flex items-center gap-3">
             <div class="flex-shrink-0">
-              <span class="rounded-md shadow-sm">
-                <div data-cy="inside">
-                  <a class="uppercase" :class="site === '' ? 'border-b-2 border-black' : ''" href="/insidan">
-                    Insidan
-                  </a>
-                </div>
-              </span>
+              <div data-cy="inside">
+                <a
+                  class="uppercase text-sm tracking-wide px-3 py-1.5 rounded-md transition-all duration-200"
+                  :class="site === '' ? 'bg-gkk text-white' : 'text-gkk hover:bg-gkk/10'"
+                  href="/insidan">
+                  Insidan
+                </a>
+              </div>
             </div>
 
-            <div v-if="user" class="flex-shrink-0 ml-4">
-              <span class="rounded-md shadow-sm">
-                <div @click="logout">
-                  <a class="uppercase text-xs" href="#"> Logga ut </a>
-                </div>
-              </span>
+            <div v-if="user" class="flex-shrink-0">
+              <div @click="logout">
+                <a class="uppercase text-xs text-gray-500 hover:text-gkk transition-colors duration-200 cursor-pointer"> Logga ut </a>
+              </div>
             </div>
           </div>
         </div>
