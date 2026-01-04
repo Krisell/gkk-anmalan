@@ -54,9 +54,11 @@ class GeneratePaymentEntriesCommand extends Command
     {
         // Find users registered to competitions in the selected year but without a generated payment entry.
         $yearCompetitions = Competition::whereBetween('date', ["{$year}-01-01", "{$year}-12-31"])->get();
-        $registeredUsers = $yearCompetitions->flatMap(function ($competition) {
-            return $competition->registrations->where('status', true)->pluck('user');
+        $registeredUserIds = $yearCompetitions->flatMap(function ($competition) {
+            return $competition->registrations->where('status', true)->pluck('user_id');
         })->unique();
+
+        $registeredUsers = User::whereIn('id', $registeredUserIds)->get();
         $missingLicensesUsers = $registeredUsers->filter(fn ($user) => ! $user->payments()->where('type', 'SSFLICENSE')->where('year', $year)->exists());
 
         if ($missingLicensesUsers->count() === 0) {
@@ -191,6 +193,14 @@ class GeneratePaymentEntriesCommand extends Command
             options: $users->map(fn ($user) => $user->email)->toArray(),
         );
 
-        return $users->where('email', $email);
+        $filteredUsers = $users->where('email', \trim($email));
+
+        if ($filteredUsers->count() === 0) {
+            $this->error("Could not find user with email: '{$email}'");
+            $this->error('Available emails: '.$users->pluck('email')->implode(', '));
+            exit;
+        }
+
+        return $filteredUsers;
     }
 }

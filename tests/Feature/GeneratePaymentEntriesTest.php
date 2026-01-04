@@ -507,3 +507,51 @@ test('Single license payment can be created from competition-registered users', 
     $this->assertDatabaseHas(Payment::class, ['user_id' => $userA->id, 'type' => 'SSFLICENSE']);
     $this->assertDatabaseMissing(Payment::class, ['user_id' => $userB->id, 'type' => 'SSFLICENSE']);
 });
+
+test('Bug reproduces when selecting second user from relationship-loaded collection', function () {
+    // This test reproduces the bug by having multiple users and selecting the second one
+    $userFirst = User::factory()->create(['email' => 'first.user@example.com']);
+    $userSecond = User::factory()->create(['email' => 'second.user@example.com']);
+
+    $competition = Competition::factory()->create(['date' => '2024-01-01']);
+
+    // Register both users
+    CompetitionRegistration::factory()->create([
+        'user_id' => $userFirst->id,
+        'competition_id' => $competition->id,
+    ]);
+
+    CompetitionRegistration::factory()->create([
+        'user_id' => $userSecond->id,
+        'competition_id' => $competition->id,
+    ]);
+
+    // Test the old implementation (relationship loading)
+    $yearCompetitions = Competition::whereBetween('date', ['2024-01-01', '2024-12-31'])->get();
+    $relationshipLoadedUsers = $yearCompetitions->flatMap(function ($competition) {
+        return $competition->registrations->where('status', true)->pluck('user');
+    })->unique();
+
+    expect($relationshipLoadedUsers->count())->toBe(2);
+
+    // Try to select the second user (this is where the bug might occur)
+    $selectedUsers = $relationshipLoadedUsers->where('email', 'second.user@example.com');
+
+    // Debug: Let's see what's in the collection
+    $availableEmails = $relationshipLoadedUsers->pluck('email')->toArray();
+
+    if ($selectedUsers->count() === 0) {
+        $this->fail('Bug reproduced! User "second.user@example.com" not found in relationship-loaded collection. Available emails: '.\implode(', ', $availableEmails));
+    }
+
+    expect($selectedUsers->count())->toBe(1, 'Should find the second user');
+
+    // Compare with the fixed approach
+    $registeredUserIds = $yearCompetitions->flatMap(function ($competition) {
+        return $competition->registrations->where('status', true)->pluck('user_id');
+    })->unique();
+    $freshLoadedUsers = User::whereIn('id', $registeredUserIds)->get();
+
+    $freshSelectedUsers = $freshLoadedUsers->where('email', 'second.user@example.com');
+    expect($freshSelectedUsers->count())->toBe(1, 'Fresh-loaded approach should always work');
+});
