@@ -190,7 +190,7 @@ class GeneratePaymentEntriesCommand extends Command
     {
         $email = select(
             label: 'Välj användare',
-            options: $users->map(fn ($user) => $user->email)->toArray(),
+            options: $users->map(fn ($user) => $user->email)->values()->toArray(),
         );
 
         $filteredUsers = $users->where('email', \trim($email));
