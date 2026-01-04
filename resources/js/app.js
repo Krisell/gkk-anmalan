@@ -109,11 +109,13 @@ app.component('GkkFloatingSlideshow', FloatingSlideshow)
 app.component('LagSM', LagSM)
 app.component('GkkPointsHighScore', PointsHighScore)
 
-Sentry.init({
-  app,
-  dsn: "https://8bc6e0c7e49295e24ee19574114b058c@o4509509926060032.ingest.de.sentry.io/4509509927174224",
-  sendDefaultPii: true,
-  integrations: [],
-});
+if (!window.location.hostname.endsWith('.test')) {
+  Sentry.init({
+    app,
+    dsn: "https://8bc6e0c7e49295e24ee19574114b058c@o4509509926060032.ingest.de.sentry.io/4509509927174224",
+    sendDefaultPii: true,
+    integrations: [],
+  });
+}
 
 app.mount('#app')
