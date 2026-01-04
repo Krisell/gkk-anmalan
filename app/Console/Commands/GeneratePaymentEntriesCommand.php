@@ -59,17 +59,37 @@ class GeneratePaymentEntriesCommand extends Command
         })->unique();
         $missingLicensesUsers = $registeredUsers->filter(fn ($user) => ! $user->payments()->where('type', 'SSFLICENSE')->where('year', $year)->exists());
 
-        $confirmed = confirm("{$missingLicensesUsers->count()} license payments will be created. Do you want to continue?");
+        if ($missingLicensesUsers->count() === 0) {
+            $this->info('No users found that need license payments.');
+
+            return;
+        }
+
+        $target = select(
+            label: 'Välj målgrupp',
+            options: [
+                'SINGLE' => 'Enskild medlem',
+                'ALL' => "Alla ({$missingLicensesUsers->count()} användare)",
+            ],
+        );
+
+        if ($target === 'SINGLE') {
+            $users = $this->getSingleUserFromCollection($missingLicensesUsers);
+        } else {
+            $users = $missingLicensesUsers;
+        }
+
+        $confirmed = confirm("{$users->count()} license payments will be created. Do you want to continue?");
 
         if (! $confirmed) {
             return;
         }
 
-        foreach ($missingLicensesUsers as $user) {
+        foreach ($users as $user) {
             SSFLicense::createFor($user, $year);
         }
 
-        $this->info("{$missingLicensesUsers->count()} license payments created successfully.");
+        $this->info("{$users->count()} license payments created successfully.");
     }
 
     private function generateMembershipPayments($year)
@@ -156,6 +176,16 @@ class GeneratePaymentEntriesCommand extends Command
             exit;
         }
 
+        $email = select(
+            label: 'Välj användare',
+            options: $users->map(fn ($user) => $user->email)->toArray(),
+        );
+
+        return $users->where('email', $email);
+    }
+
+    private function getSingleUserFromCollection($users)
+    {
         $email = select(
             label: 'Välj användare',
             options: $users->map(fn ($user) => $user->email)->toArray(),

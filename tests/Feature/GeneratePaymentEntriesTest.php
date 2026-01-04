@@ -110,6 +110,7 @@ test('Honorary members are not skipped for SSF license fees', function () {
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
+        ->expectsQuestion('Välj målgrupp', 'ALL')
         ->expectsQuestion('2 license payments will be created. Do you want to continue?', true)
         ->expectsOutput('2 license payments created successfully.')
         ->assertExitCode(0);
@@ -209,7 +210,7 @@ test('No license entries are created without competition registrations', functio
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
-        ->expectsQuestion('0 license payments will be created. Do you want to continue?', true)
+        ->expectsOutput('No users found that need license payments.')
         ->assertExitCode(0);
 
     $this->assertDatabaseMissing(Payment::class, ['user_id' => $user->id]);
@@ -230,7 +231,7 @@ test('No license entries are created for competition registration the previous y
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
-        ->expectsQuestion('0 license payments will be created. Do you want to continue?', true)
+        ->expectsOutput('No users found that need license payments.')
         ->assertExitCode(0);
 
     $this->assertDatabaseMissing(Payment::class, ['user_id' => $user->id]);
@@ -251,7 +252,7 @@ test('No license entries are created for competition registration the nextc year
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
-        ->expectsQuestion('0 license payments will be created. Do you want to continue?', true)
+        ->expectsOutput('No users found that need license payments.')
         ->assertExitCode(0);
 
     $this->assertDatabaseMissing(Payment::class, ['user_id' => $user->id]);
@@ -272,6 +273,7 @@ test('License entries are created with competition registration the relevant yea
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
+        ->expectsQuestion('Välj målgrupp', 'ALL')
         ->expectsQuestion('1 license payments will be created. Do you want to continue?', true)
         ->expectsOutput('1 license payments created successfully.')
         ->assertExitCode(0);
@@ -295,8 +297,7 @@ test('License entries are only created if registration status is true', function
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
-        ->expectsQuestion('0 license payments will be created. Do you want to continue?', true)
-        ->expectsOutput('0 license payments created successfully.')
+        ->expectsOutput('No users found that need license payments.')
         ->assertExitCode(0);
 
     $this->assertDatabaseMissing(Payment::class, ['user_id' => $user->id]);
@@ -317,6 +318,7 @@ test('License entries are not created if not confirmed', function () {
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2024')
         ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
+        ->expectsQuestion('Välj målgrupp', 'ALL')
         ->expectsQuestion('1 license payments will be created. Do you want to continue?', false)
         ->assertExitCode(0);
 
@@ -347,6 +349,7 @@ test('The correct fee and discount is set for payment registrations', function (
     $this->artisan('gkk:generate-payment-entries')
         ->expectsQuestion('Välj år för avgift', '2026')
         ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
+        ->expectsQuestion('Välj målgrupp', 'ALL')
         ->expectsQuestion('6 license payments will be created. Do you want to continue?', true)
         ->expectsOutput('6 license payments created successfully.')
         ->assertExitCode(0);
@@ -472,4 +475,35 @@ test('Quarter year discounts are given for membership fee for new members', func
         'sek_discount' => 1125, // Quarter year discount
         'modifier' => null,
     ]);
+});
+
+test('Single license payment can be created from competition-registered users', function () {
+    $userA = User::factory()->create(['email' => 'user.a@example.com']);
+    $userB = User::factory()->create(['email' => 'user.b@example.com']);
+
+    $competition = Competition::factory()->create([
+        'date' => '2024-01-01',
+    ]);
+
+    CompetitionRegistration::factory()->create([
+        'user_id' => $userA->id,
+        'competition_id' => $competition->id,
+    ]);
+
+    CompetitionRegistration::factory()->create([
+        'user_id' => $userB->id,
+        'competition_id' => $competition->id,
+    ]);
+
+    $this->artisan('gkk:generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2024')
+        ->expectsQuestion('Välj typ av avgift', 'SSFLICENSE')
+        ->expectsQuestion('Välj målgrupp', 'SINGLE')
+        ->expectsQuestion('Välj användare', 'user.a@example.com')
+        ->expectsQuestion('1 license payments will be created. Do you want to continue?', true)
+        ->expectsOutput('1 license payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseHas(Payment::class, ['user_id' => $userA->id, 'type' => 'SSFLICENSE']);
+    $this->assertDatabaseMissing(Payment::class, ['user_id' => $userB->id, 'type' => 'SSFLICENSE']);
 });
