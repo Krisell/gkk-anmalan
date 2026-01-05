@@ -32,6 +32,18 @@
         </div>
       </div>
 
+      <!-- Load Paid Payments Button -->
+      <div class="mb-4">
+        <button
+          @click="loadPaidPayments"
+          :disabled="loading || includePaidPayments"
+          class="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white text-sm font-medium rounded-md transition-colors duration-200"
+        >
+          <i v-if="loading" class="fa fa-spinner fa-spin mr-2"></i>
+          {{ includePaidPayments ? 'Betalda betalningar laddade' : 'Ladda betalda betalningar' }}
+        </button>
+      </div>
+
       <!-- Search -->
       <div class="relative rounded-md shadow-sm w-64">
         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -171,7 +183,9 @@ export default {
         type: '',
         state: '',
         year: '',
-      }
+      },
+      loading: false,
+      includePaidPayments: false,
     }
   },
   computed: {
@@ -282,6 +296,20 @@ export default {
         case 'SSFLICENSE': return 'bg-green-100 text-green-800'
         case 'COMPETITION': return 'bg-purple-100 text-purple-800'
         default: return 'bg-gray-100 text-gray-800'
+      }
+    },
+    async loadPaidPayments() {
+      this.loading = true
+      try {
+        const response = await fetch('/admin/payments?include_paid=true')
+        const data = await response.json()
+        this.payments = data.payments || data
+        this.includePaidPayments = true
+      } catch (error) {
+        console.error('Failed to load paid payments:', error)
+        alert('Kunde inte ladda betalda betalningar. Försök igen.')
+      } finally {
+        this.loading = false
       }
     },
   }
