@@ -12,7 +12,7 @@ class AdminPaymentsController extends Controller
             'payments' => Payment::with([
                 'user:id,first_name,last_name,email',
                 'competition:id,name,date',
-            ])->get(),
+            ])->where('state', '!=', 'PAID')->get(),
             'user' => auth()->user(),
             'view' => 'payments',
         ]);
