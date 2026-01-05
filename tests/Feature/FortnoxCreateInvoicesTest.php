@@ -140,6 +140,104 @@ test('command creates invoices for competition payments', function () {
     });
 });
 
+test('command creates invoices for competition payments with description from competition name and date', function () {
+    $this->fortnoxMock->shouldReceive('token')->andReturn('test-token');
+
+    $user = User::factory()->create([
+        'fortnox_customer_id' => 'CUST789',
+        'first_name' => 'Bob',
+        'last_name' => 'Johnson',
+    ]);
+
+    $competition = \App\Models\Competition::factory()->create([
+        'name' => 'Vårtävling 2026',
+        'date' => '2026-05-15',
+    ]);
+
+    $payment = Payment::factory()->create([
+        'user_id' => $user->id,
+        'competition_id' => $competition->id,
+        'type' => 'COMPETITION',
+        'year' => 2026,
+        'sek_amount' => 200,
+        'sek_discount' => 0,
+        'modifier' => null,
+        'fortnox_invoice_document_number' => null,
+        'state' => null,
+    ]);
+
+    Http::fake([
+        'https://api.fortnox.se/3/articles/GKK-COMPETITION-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-COMPETITION-2026']], 200),
+        'https://api.fortnox.se/3/invoices' => Http::response(['Invoice' => ['DocumentNumber' => 'INV003']], 200),
+    ]);
+
+    $this->artisan('fortnox:create-invoices')
+        ->expectsChoice('Välj vilken avgift som ska skapas som fakturor i Fortnox', 'COMPETITION', ['MEMBERSHIP', 'SSFLICENSE', 'COMPETITION', 'OTHER'])
+        ->expectsConfirmation('1 betalningar kommer att skapas som fakturor i Fortnox. Vill du fortsätta?', 'yes')
+        ->assertExitCode(0);
+
+    $payment->refresh();
+    expect($payment->fortnox_invoice_document_number)->toBe('INV003');
+
+    Http::assertSent(function ($request) {
+        return $request->url() === 'https://api.fortnox.se/3/invoices' &&
+               $request->hasHeader('Authorization', 'Bearer test-token') &&
+               $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-COMPETITION-2026' &&
+               $request['Invoice']['InvoiceRows'][0]['AccountNumber'] === 3410 &&
+               $request['Invoice']['InvoiceRows'][0]['Price'] === 200 &&
+               $request['Invoice']['InvoiceRows'][0]['Description'] === 'Vårtävling 2026 (2026-05-15)';
+    });
+});
+
+test('command creates invoices for competition payments with description from competition name without date', function () {
+    $this->fortnoxMock->shouldReceive('token')->andReturn('test-token');
+
+    $user = User::factory()->create([
+        'fortnox_customer_id' => 'CUST789',
+        'first_name' => 'Bob',
+        'last_name' => 'Johnson',
+    ]);
+
+    $competition = \App\Models\Competition::factory()->create([
+        'name' => 'Höstträning',
+        'date' => null,
+    ]);
+
+    $payment = Payment::factory()->create([
+        'user_id' => $user->id,
+        'competition_id' => $competition->id,
+        'type' => 'COMPETITION',
+        'year' => 2026,
+        'sek_amount' => 150,
+        'sek_discount' => 0,
+        'modifier' => null,
+        'fortnox_invoice_document_number' => null,
+        'state' => null,
+    ]);
+
+    Http::fake([
+        'https://api.fortnox.se/3/articles/GKK-COMPETITION-2026' => Http::response(['Article' => ['ArticleNumber' => 'GKK-COMPETITION-2026']], 200),
+        'https://api.fortnox.se/3/invoices' => Http::response(['Invoice' => ['DocumentNumber' => 'INV004']], 200),
+    ]);
+
+    $this->artisan('fortnox:create-invoices')
+        ->expectsChoice('Välj vilken avgift som ska skapas som fakturor i Fortnox', 'COMPETITION', ['MEMBERSHIP', 'SSFLICENSE', 'COMPETITION', 'OTHER'])
+        ->expectsConfirmation('1 betalningar kommer att skapas som fakturor i Fortnox. Vill du fortsätta?', 'yes')
+        ->assertExitCode(0);
+
+    $payment->refresh();
+    expect($payment->fortnox_invoice_document_number)->toBe('INV004');
+
+    Http::assertSent(function ($request) {
+        return $request->url() === 'https://api.fortnox.se/3/invoices' &&
+               $request->hasHeader('Authorization', 'Bearer test-token') &&
+               $request['Invoice']['InvoiceRows'][0]['ArticleNumber'] === 'GKK-COMPETITION-2026' &&
+               $request['Invoice']['InvoiceRows'][0]['AccountNumber'] === 3410 &&
+               $request['Invoice']['InvoiceRows'][0]['Price'] === 150 &&
+               $request['Invoice']['InvoiceRows'][0]['Description'] === 'Höstträning';
+    });
+});
+
 test('command creates invoices for other payments', function () {
     $this->fortnoxMock->shouldReceive('token')->andReturn('test-token');
 

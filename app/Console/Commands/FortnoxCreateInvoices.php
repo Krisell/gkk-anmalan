@@ -71,6 +71,7 @@ class FortnoxCreateInvoices extends Command
             ->whereNull('fortnox_invoice_document_number')
             ->whereNull('state')
             ->whereType($type)
+            ->with('competition')
             ->get();
 
         $confirmed = confirm(
@@ -115,6 +116,22 @@ class FortnoxCreateInvoices extends Command
 
         if ($payment->type === 'COMPETITION') {
             $invoiceRow['AccountNumber'] = 3410;
+
+            /** @var ?\App\Models\Competition $competition */
+            $competition = $payment->competition;
+
+            if ($competition) {
+                $competitionName = $competition->name;
+                $competitionDate = $competition->date ? $competition->date->format('Y-m-d') : null;
+
+                $description = $competitionName;
+
+                if ($competitionDate) {
+                    $description .= " ({$competitionDate})";
+                }
+
+                $invoiceRow['Description'] = $description;
+            }
         }
 
         $invoiceRows = [$invoiceRow];

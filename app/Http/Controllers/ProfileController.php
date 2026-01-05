@@ -9,7 +9,7 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         $user = $request->user()->load('eventRegistrations.event');
-        $payments = $request->user()->payments()->where('year', '>=', 2025)->get();
+        $payments = $request->user()->payments()->where('year', '>=', 2025)->with('competition')->get();
 
         // Find last helper activity
         $lastHelperDate = $user->eventRegistrations()

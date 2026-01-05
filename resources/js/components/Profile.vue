@@ -43,6 +43,10 @@
             <div class="flex">
               <div class="p-2 border rounded border-gkk border-r-0 rounded-r-none text-sm inline-block text-center px-6">
                 <div>{{ paymentTypeText(payment.type) }} {{payment.year }}</div>
+                <div v-if="payment.type === 'COMPETITION' && payment.competition">
+                  {{ payment.competition.name }}
+                  <span v-if="payment.competition.date">({{ renderDate(payment.competition.date) }})</span>
+                </div>
                 <div>{{ Math.max(payment.sek_amount - payment.sek_discount, 0) }} SEK</div>
               </div>
               <div v-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col cursor-pointer">
