@@ -17,7 +17,7 @@ class FortnoxCreateInvoices extends Command
      *
      * @var string
      */
-    protected $signature = 'fortnox:create-invoices';
+    protected $signature = 'fortnox:create-invoices {year? : The year to create invoices for (defaults to current year)}';
 
     /**
      * The console command description.
@@ -50,7 +50,7 @@ class FortnoxCreateInvoices extends Command
             default => throw new \Exception('Invalid type'),
         };
 
-        $year = 2026;
+        $year = $this->argument('year') ?? now()->year;
 
         $this->ensureArticleExists(
             fortnox: $fortnox,
