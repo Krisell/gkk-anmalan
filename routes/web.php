@@ -145,6 +145,10 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::patch('/{user}/background-check', [\App\Http\Controllers\AccountController::class, 'updateBackgroundCheck']);
     });
 
+    Route::prefix('payments')->group(function () {
+        Route::get('/', [\App\Http\Controllers\AdminPaymentsController::class, 'index']);
+    });
+
     Route::prefix('slideshow')->controller(AdminSlideshowController::class)->group(function () {
         Route::get('/', 'index');
     });

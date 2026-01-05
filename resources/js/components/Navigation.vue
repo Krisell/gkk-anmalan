@@ -55,6 +55,13 @@
         :unanswered="unanswered.ungranted"
       ></LinkCard>
       <LinkCard
+        v-if="isAdmin"
+        class="m-4 max-w-xs w-64"
+        href="/admin/payments"
+        description="Betalningsadministration"
+        icon="credit-card"
+      ></LinkCard>
+      <LinkCard
         v-if="!user"
         class="m-4 max-w-xs w-64"
         href="/register"
