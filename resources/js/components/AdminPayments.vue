@@ -160,6 +160,7 @@
 
 <script>
 import ToggleButton from './ui/ToggleButton.vue'
+import axios from 'axios'
 
 export default {
   components: { ToggleButton },
@@ -301,8 +302,11 @@ export default {
     async loadPaidPayments() {
       this.loading = true
       try {
-        const response = await fetch('/admin/payments?include_paid=true')
-        const data = await response.json()
+        const response = await axios.get('/admin/payments', {
+          params: { include_paid: true }
+        })
+        
+        const data = response.data
         this.payments = data.payments || data
         this.includePaidPayments = true
       } catch (error) {

@@ -131,16 +131,7 @@
                   Licens.avg. 2026
                 </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  Licens.avg. 2025
-                </th>
-                <!-- <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  Medl.avg. {{ getCurrentYear() + 1 }}
-                </th> -->
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                   Medl.avg. {{ getCurrentYear() }}
-                </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  Medl.avg. {{ getCurrentYear() - 1 }}
                 </th>
                 <th v-show="!treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
@@ -212,27 +203,6 @@
                   ></i>
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <ToggleButton 
-                    v-if="showPaymentToggle(account, 2025, 'SSFLICENSE')" 
-                    @update:modelValue="updatePayment(account, 2025, 'SSFLICENSE')"
-                    :modelValue="hasPaid(account, 2025, 'SSFLICENSE')" 
-                  />
-                  <i v-else 
-                    @click="confirmCreateMissingLicense(account, 2025)"
-                    class="fa fa-plus-circle cursor-pointer transition hover:scale-125"
-                  ></i>
-                </td>
-                <!-- <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
-                  <ToggleButton 
-                    v-else-if="showPaymentToggle(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
-                    @update:modelValue="$event => updatePayment(account, getCurrentYear() + 1, 'MEMBERSHIP')"
-                    :modelValue="hasPaid(account, getCurrentYear() + 1, 'MEMBERSHIP')" 
-                  />
-                </td> -->
-                <td
                   data-testid="membership-current-year"
                   class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
                   <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
@@ -240,15 +210,6 @@
                     v-else-if="showPaymentToggle(account, getCurrentYear(), 'MEMBERSHIP')" 
                     @update:modelValue="updatePayment(account, getCurrentYear(), 'MEMBERSHIP')"
                     :modelValue="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" 
-                  />
-                </td>
-                <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
-                  <ToggleButton 
-                    v-else-if="showPaymentToggle(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
-                    @update:modelValue="updatePayment(account, getCurrentYear() - 1, 'MEMBERSHIP')"
-                    :modelValue="hasPaid(account, getCurrentYear() - 1, 'MEMBERSHIP')" 
                   />
                 </td>
                 <td
