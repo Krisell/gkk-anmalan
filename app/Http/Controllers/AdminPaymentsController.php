@@ -25,6 +25,10 @@ class AdminPaymentsController extends Controller
 
         // If this is an AJAX request for including paid payments, return JSON
         if (request()->has('include_paid') && request()->ajax()) {
+            $payments = $payments->filter(function ($payment) {
+                return $payment->user !== null;
+            })->values();
+
             return response()->json(['payments' => $payments]);
         }
 
