@@ -125,10 +125,29 @@
                   <span v-else class="text-gray-400">-</span>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-center">
-                  <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                    :class="getStatusClass(payment.state)">
-                    {{ getStatusText(payment.state) }}
-                  </span>
+                  <div v-if="payment.state === 'PAID'" class="flex flex-col items-center gap-1">
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                      Betald
+                    </span>
+                    <button
+                      @click="confirmMarkAsUnpaid(payment)"
+                      class="text-xs text-gray-500 hover:text-red-600 underline"
+                    >
+                      Markera som obetald
+                    </button>
+                  </div>
+                  <div v-else class="flex flex-col items-center gap-1">
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                      :class="getStatusClass(payment.state)">
+                      {{ getStatusText(payment.state) }}
+                    </span>
+                    <button
+                      @click="confirmMarkAsPaid(payment)"
+                      class="text-xs text-green-600 hover:text-green-700 underline"
+                    >
+                      Markera som betald
+                    </button>
+                  </div>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-center text-sm text-gray-500">
                   {{ dateString(payment.created_at) }}
@@ -155,15 +174,58 @@
         <p class="text-3xl font-bold text-red-600">{{ unpaidCount }}</p>
       </div>
     </div>
+
+    <!-- Modal for marking as paid -->
+    <Modal ref="markAsPaidModal" :title="`Markera betalning som betald för ${selectedPayment && selectedPayment.user ? selectedPayment.user.first_name + ' ' + selectedPayment.user.last_name : ''}?`">
+      <div v-if="selectedPayment" class="p-4">
+        <p class="text-gray-700 mb-4">
+          Du är på väg att markera följande betalning som betald:
+        </p>
+        <div class="bg-gray-50 p-3 rounded">
+          <p><strong>Typ:</strong> {{ getTypeText(selectedPayment.type) }}</p>
+          <p><strong>År:</strong> {{ selectedPayment.year }}</p>
+          <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? selectedPayment.sek_amount + ' kr' : 'Ej angivet' }}</p>
+          <p v-if="selectedPayment.competition"><strong>Tävling:</strong> {{ selectedPayment.competition.name }}</p>
+        </div>
+      </div>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <button @click="close" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded transition-colors duration-200">Avbryt</button>
+          <button @click="markAsPaid" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded transition-colors duration-200">Markera som betald</button>
+        </div>
+      </template>
+    </Modal>
+
+    <!-- Modal for marking as unpaid -->
+    <Modal ref="markAsUnpaidModal" :title="`Markera betalning som obetald för ${selectedPayment && selectedPayment.user ? selectedPayment.user.first_name + ' ' + selectedPayment.user.last_name : ''}?`">
+      <div v-if="selectedPayment" class="p-4">
+        <p class="text-gray-700 mb-4">
+          Du är på väg att markera följande betalning som obetald:
+        </p>
+        <div class="bg-gray-50 p-3 rounded">
+          <p><strong>Typ:</strong> {{ getTypeText(selectedPayment.type) }}</p>
+          <p><strong>År:</strong> {{ selectedPayment.year }}</p>
+          <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? selectedPayment.sek_amount + ' kr' : 'Ej angivet' }}</p>
+          <p v-if="selectedPayment.competition"><strong>Tävling:</strong> {{ selectedPayment.competition.name }}</p>
+        </div>
+      </div>
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <button @click="close" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded transition-colors duration-200">Avbryt</button>
+          <button @click="markAsUnpaid" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded transition-colors duration-200">Markera som obetald</button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script>
 import ToggleButton from './ui/ToggleButton.vue'
+import Modal from './ui/Modal.vue'
 import axios from 'axios'
 
 export default {
-  components: { ToggleButton },
+  components: { ToggleButton, Modal },
   props: {
     initialPayments: {
       type: Array,
@@ -187,6 +249,7 @@ export default {
       },
       loading: false,
       includePaidPayments: false,
+      selectedPayment: null,
     }
   },
   computed: {
@@ -305,15 +368,71 @@ export default {
         const response = await axios.get('/admin/payments', {
           params: { include_paid: true }
         })
-        
+
         const data = response.data
         this.payments = data.payments || data
         this.includePaidPayments = true
       } catch (error) {
         console.error('Failed to load paid payments:', error)
-        alert('Kunde inte ladda betalda betalningar. Försök igen.')
+        this.$toast.error('Kunde inte ladda betalda betalningar. Försök igen.')
       } finally {
         this.loading = false
+      }
+    },
+    confirmMarkAsPaid(payment) {
+      this.selectedPayment = payment
+      this.$refs.markAsPaidModal.show()
+    },
+    confirmMarkAsUnpaid(payment) {
+      this.selectedPayment = payment
+      this.$refs.markAsUnpaidModal.show()
+    },
+    async markAsPaid() {
+      if (!this.selectedPayment) return
+
+      try {
+        await axios.patch(`/payments/${this.selectedPayment.id}`, {
+          state: 'PAID'
+        })
+
+        // Update the payment in the local array
+        const index = this.payments.findIndex(p => p.id === this.selectedPayment.id)
+        if (index !== -1) {
+          this.payments[index].state = 'PAID'
+        }
+
+        // Show success message
+        const userName = `${this.selectedPayment.user.first_name} ${this.selectedPayment.user.last_name}`
+        this.$toast.info(`Betalning för ${userName} har markerats som betald`)
+
+        this.$refs.markAsPaidModal.close()
+      } catch (error) {
+        console.error('Failed to update payment status:', error)
+        this.$toast.error('Kunde inte uppdatera betalningsstatus. Försök igen.')
+      }
+    },
+    async markAsUnpaid() {
+      if (!this.selectedPayment) return
+
+      try {
+        await axios.patch(`/payments/${this.selectedPayment.id}`, {
+          state: null
+        })
+
+        // Update the payment in the local array
+        const index = this.payments.findIndex(p => p.id === this.selectedPayment.id)
+        if (index !== -1) {
+          this.payments[index].state = null
+        }
+
+        // Show success message
+        const userName = `${this.selectedPayment.user.first_name} ${this.selectedPayment.user.last_name}`
+        this.$toast.warning(`Betalning för ${userName} har markerats som obetald`)
+
+        this.$refs.markAsUnpaidModal.close()
+      } catch (error) {
+        console.error('Failed to update payment status:', error)
+        this.$toast.error('Kunde inte uppdatera betalningsstatus. Försök igen.')
       }
     },
   }
