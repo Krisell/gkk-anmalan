@@ -17,7 +17,7 @@ class AdjustStudentStatusCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'gkk:adjust-student-status';
+    protected $signature = 'gkk:adjust-student-status {year : The year for which to adjust the student status}';
 
     /**
      * The console command description.
@@ -75,7 +75,11 @@ class AdjustStudentStatusCommand extends Command
         }
 
         /** @var ?\App\Models\Payment $payment */
-        $payment = $user->payments()->whereNotNull('fortnox_invoice_document_number')->first();
+        $payment = $user->payments()
+            ->where('type', 'MEMBERSHIP')
+            ->where('year', $this->argument('year'))
+            ->whereNotNull('fortnox_invoice_document_number')
+            ->first();
 
         if (! $payment) {
             $this->info('User does not have a MEMBERSHIP invoice.');
