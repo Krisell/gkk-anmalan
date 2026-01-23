@@ -48,8 +48,7 @@
                   </div>
                 </a>
 
-                <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FDszgogxmrxsz3hOJauVM8p7gwj6Hnw.pdf?alt=media&token=523767fd-aeee-4167-92d2-f502aa1d4662" target="_blank" class="block group">
-                  <div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-700 to-gray-800 p-6 sm:p-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01]">
+                <div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-700 to-gray-800 p-6 sm:p-8 shadow-lg">
                     <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/5"></div>
                     <div class="absolute bottom-0 left-0 -mb-8 -ml-8 h-32 w-32 rounded-full bg-white/5"></div>
                     <div class="relative">
@@ -59,17 +58,27 @@
                       <h3 class="text-xl sm:text-2xl font-bold text-white mb-2">
                         Årsmöte 2026
                       </h3>
-                      <p class="text-white/90 text-base sm:text-lg leading-relaxed">
+                      <p class="text-white/90 text-base sm:text-lg leading-relaxed mb-6">
                         Kallelse och föredragningslista för GKKs årsmöte. Alla medlemmar är välkomna!
                       </p>
-                      <div class="mt-4 inline-flex items-center text-white font-medium group-hover:translate-x-1 transition-transform duration-200">
-                        <i class="fa fa-file-pdf-o mr-2"></i>
-                        Öppna kallelse
-                        <i class="fa fa-arrow-right ml-2"></i>
+                      <div class="space-y-3">
+                        <div>
+                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FDszgogxmrxsz3hOJauVM8p7gwj6Hnw.pdf?alt=media&token=523767fd-aeee-4167-92d2-f502aa1d4662" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
+                            <i class="fa fa-file-pdf-o mr-2"></i>
+                            Kallelse och föredragningslista
+                            <i class="fa fa-external-link ml-2 text-sm"></i>
+                          </a>
+                        </div>
+                        <div>
+                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FTdyPoE0TYusCkmhZaqkw5tGyxa3eAA.pdf?alt=media&token=3ee8858a-678a-4e98-984b-2c70e9e4aa7d" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
+                            <i class="fa fa-file-pdf-o mr-2"></i>
+                            Motion: Arvode till styrelsemedlemmar
+                            <i class="fa fa-external-link ml-2 text-sm"></i>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </a>
                 {{-- <div>
                   <a 
                     target="_blank"
