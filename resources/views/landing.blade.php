@@ -61,7 +61,7 @@
                       <p class="text-white/90 text-base sm:text-lg leading-relaxed mb-6">
                         Kallelse och föredragningslista för GKKs årsmöte. Alla medlemmar är välkomna!
                       </p>
-                      <div class="space-y-3">
+                      <div class="sm:space-y-3 space-y-5">
                         <div>
                           <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FDszgogxmrxsz3hOJauVM8p7gwj6Hnw.pdf?alt=media&token=523767fd-aeee-4167-92d2-f502aa1d4662" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
                             <i class="fa fa-file-pdf-o mr-2"></i>
