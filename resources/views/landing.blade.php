@@ -104,6 +104,41 @@
                             <i class="fa fa-external-link ml-2 text-sm"></i>
                           </a>
                         </div>
+                        <div>
+                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FpjYLYN7NyUgTlxW4Ypd9VgnblvtXUa.pdf?alt=media&token=27da4b32-b0d0-4a8b-bc8d-d2190220e3ec" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
+                            <i class="fa fa-file-pdf-o mr-2"></i>
+                            Budgetbeskrivning 2026
+                            <i class="fa fa-external-link ml-2 text-sm"></i>
+                          </a>
+                        </div>
+                        <div>
+                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FkDHYic7TOoCdqWHnzG4P68UOcWP1xh.pdf?alt=media&token=5690eb30-56b5-4497-bade-606bb88cccb6" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
+                            <i class="fa fa-file-pdf-o mr-2"></i>
+                            Budget 2026
+                            <i class="fa fa-external-link ml-2 text-sm"></i>
+                          </a>
+                        </div>
+                        <div>
+                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2F0ZHr5N4dJ9hMCwrqQbFmyIZ9ZLxoDY.pdf?alt=media&token=67f4c436-8e05-4050-85a8-da7d7f4783bc" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
+                            <i class="fa fa-file-pdf-o mr-2"></i>
+                            Resultaträkning
+                            <i class="fa fa-external-link ml-2 text-sm"></i>
+                          </a>
+                        </div>
+                        <div>
+                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FKU6Ci1znpmcXkYj4Y1LmbhbVAbgE3G.pdf?alt=media&token=d7b4caef-ab40-45e6-abe2-5781f40cd3e7" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
+                            <i class="fa fa-file-pdf-o mr-2"></i>
+                            Balansräkning
+                            <i class="fa fa-external-link ml-2 text-sm"></i>
+                          </a>
+                        </div>
+                        <div>
+                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2Fr6Q8tc6ETz4becj2PpQFj3CZcKKaLI.pdf?alt=media&token=11261d27-bddc-49cd-bbcb-7eb51ca68f9e" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
+                            <i class="fa fa-file-pdf-o mr-2"></i>
+                            Ekonomisk berättelse
+                            <i class="fa fa-external-link ml-2 text-sm"></i>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
