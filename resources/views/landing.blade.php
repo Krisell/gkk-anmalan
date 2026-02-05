@@ -84,7 +84,7 @@
                           </a>
                         </div>
                         <div>
-                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FVgNyWD3Vkr9fdE4JK8U6YlE1F1CMMV.pdf?alt=media&token=4db9405a-2763-4525-925e-78563df95644" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
+                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FQSdFJd0OmEBcmCioe60ug4X2whj7AO.pdf?alt=media&token=7d841940-f7f0-4be9-a19b-bb2dfb558475" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
                             <i class="fa fa-file-pdf-o mr-2"></i>
                             Verksamhetsplan 2026
                             <i class="fa fa-external-link ml-2 text-sm"></i>
