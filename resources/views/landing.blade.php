@@ -133,7 +133,7 @@
                           </a>
                         </div>
                         <div>
-                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2Fr6Q8tc6ETz4becj2PpQFj3CZcKKaLI.pdf?alt=media&token=11261d27-bddc-49cd-bbcb-7eb51ca68f9e" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
+                          <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FAr9V5mNTs8BwsXTEDjITQlyCMpGwdj.pdf?alt=media&token=ad278c2d-ceef-439e-a304-e9e4afc1141d" target="_blank" class="inline-flex items-center bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-200 hover:translate-x-1">
                             <i class="fa fa-file-pdf-o mr-2"></i>
                             Ekonomisk berättelse
                             <i class="fa fa-external-link ml-2 text-sm"></i>
