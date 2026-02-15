@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Firebase;
 use App\Models\ActivityLog;
 use App\Models\Competition;
 use App\Models\User;
@@ -63,6 +64,7 @@ class CompetitionController extends Controller
             'competitions' => $competitions->latest()->get(),
             'showingOld' => $request->has('all'),
             'view' => 'competition',
+            'jwt' => Firebase::makeAdminJwt(),
         ]);
     }
 
@@ -127,6 +129,7 @@ class CompetitionController extends Controller
             'publish_list' => 'nullable',
             'last_registration_at' => 'nullable',
             'show_status' => 'required',
+            'pdf_url' => 'nullable',
         ]);
     }
 }

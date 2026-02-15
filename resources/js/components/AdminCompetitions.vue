@@ -225,6 +225,32 @@
         ></textarea>
       </div>
 
+      <div class="mt-4">
+        <div class="text-lg font-thin">PDF-bilaga</div>
+        <div v-if="pdfUploadStatus === 'pending'" class="text-sm text-gray-500 mt-1">Laddar upp...</div>
+        <div v-else-if="competition.pdf_url" class="flex items-center mt-1">
+          <span class="text-sm text-green-600">PDF bifogad</span>
+          <a
+            :href="competition.pdf_url"
+            target="_blank"
+            class="ml-3 text-sm text-blue-500 hover:text-blue-700 underline"
+          >Visa PDF</a>
+          <button
+            @click.prevent="$refs.deletePdfModal.show()"
+            class="ml-3 text-sm text-red-500 hover:text-red-700 underline"
+          >Ta bort PDF</button>
+        </div>
+        <div v-else>
+          <label class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm text-gray-700 hover:bg-gray-50 cursor-pointer mt-1">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+            </svg>
+            Ladda upp PDF
+            <input @change="uploadPdf" ref="pdfUpload" type="file" accept=".pdf" class="hidden" />
+          </label>
+        </div>
+      </div>
+
       <div class="flex mt-2 mb-2 items-center">
         <ToggleButton v-model="competition.publish_count" />
         <div class="ml-2 text-lg font-thin">Visa antal anmälda för medlemmar</div>
@@ -283,6 +309,15 @@
         </div>
         </template>
     </Modal>
+
+    <Modal ref="deletePdfModal" title="Ta bort PDF-bilaga?">
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click.prevent="close">Avbryt</Button>
+          <Button type="danger" @click.prevent="removePdf">Ta bort</Button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -290,15 +325,17 @@
 import ToggleButton from './ui/ToggleButton.vue'
 import Button from './ui/Button.vue'
 import Modal from './ui/Modal.vue'
+import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
 
 export default {
   components: { ToggleButton, Button, Modal },
-  props: ['competitions', 'showingOld'],
+  props: ['competitions', 'showingOld', 'jwt'],
   data() {
     return {
       editing: false,
       showNewCompetition: false,
       newCompetitionError: false,
+      pdfUploadStatus: '',
       selectedCompetition: null,
       events: {
         ksl: true,
@@ -316,6 +353,7 @@ export default {
         publish_list: false,
         last_registration_at: null,
         show_status: 'default',
+        pdf_url: '',
       },
       showStatusOptions: [
         { value: 'default', label: 'Default (visas tills datum passerat)' },
@@ -372,6 +410,23 @@ export default {
     },
     cancelUpdate() {
       this.reload()
+    },
+    removePdf() {
+      this.competition.pdf_url = ''
+      this.$refs.deletePdfModal.close()
+    },
+    async uploadPdf() {
+      this.pdfUploadStatus = 'pending'
+      const file = this.$refs.pdfUpload.files[0]
+
+      if (!file) {
+        this.pdfUploadStatus = ''
+        return
+      }
+
+      const extension = file.name.split('.').pop()
+      this.competition.pdf_url = await FirebaseFileUpload.upload(this.jwt, file, extension)
+      this.pdfUploadStatus = ''
     },
     updateCompetition() {
       this.newCompetitionError = false
