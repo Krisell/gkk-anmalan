@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminPaymentToolsController;
 use App\Http\Controllers\AdminSlideshowController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\EventController;
@@ -184,6 +185,26 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::get('/', [\App\Http\Controllers\ResultsController::class, 'index']);
         Route::post('/', [\App\Http\Controllers\ResultsController::class, 'store']);
         Route::delete('/{result}', [\App\Http\Controllers\ResultsController::class, 'destroy']);
+    });
+
+    Route::prefix('payment-tools')->controller(AdminPaymentToolsController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/generate-memberships/preview', 'previewGenerateMemberships');
+        Route::post('/generate-memberships/execute', 'executeGenerateMemberships');
+        Route::post('/generate-licenses/preview', 'previewGenerateLicenses');
+        Route::post('/generate-licenses/execute', 'executeGenerateLicenses');
+        Route::post('/competition-payments/preview', 'previewCreateCompetitionPayments');
+        Route::post('/competition-payments/execute', 'executeCreateCompetitionPayments');
+        Route::post('/sync-customers/preview', 'previewSyncCustomers');
+        Route::post('/sync-customers/execute', 'executeSyncCustomers');
+        Route::post('/create-invoices/preview', 'previewCreateInvoices');
+        Route::post('/create-invoices/execute', 'executeCreateInvoices');
+        Route::post('/email-invoices/preview', 'previewEmailInvoices');
+        Route::post('/email-invoices/execute', 'executeEmailInvoices');
+        Route::post('/verify-payments/preview', 'previewVerifyPayments');
+        Route::post('/verify-payments/execute', 'executeVerifyPayments');
+        Route::post('/remind-unpaid/preview', 'previewRemindUnpaidFees');
+        Route::post('/remind-unpaid/execute', 'executeRemindUnpaidFees');
     });
 });
 

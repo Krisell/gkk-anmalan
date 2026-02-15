@@ -181,6 +181,7 @@ export default {
         { name: 'Admin - Rekord', href: '/admin/results', icon: 'trophy', current: this.view === 'records', admin: true },
         { name: 'Admin - Konton', href: '/admin/accounts', icon: 'list-alt', current: this.view === 'accounts', admin: true },
         { name: 'Admin - Slideshow', href: '/admin/slideshow', icon: 'television', current: this.view === 'slideshow', admin: true },
+        { name: 'Admin - Betalningsverktyg', href: '/admin/payment-tools', icon: 'wrench', current: this.view === 'payment-tools', admin: true },
       ],
       navIsOpen: false,
       showSubMenu: false,
