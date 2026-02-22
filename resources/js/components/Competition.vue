@@ -23,6 +23,16 @@
             Visa tävlingsinformation (PDF)
           </a>
         </div>
+        <div v-if="competition.link_url" class="mt-4">
+          <a
+            :href="competition.link_url"
+            target="_blank"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+          >
+            <i class="fa fa-external-link mr-2 text-blue-500" style="font-size: 16px"></i>
+            Länk till tävling
+          </a>
+        </div>
       </div>
     </div>
 

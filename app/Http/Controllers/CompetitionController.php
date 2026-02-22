@@ -130,6 +130,7 @@ class CompetitionController extends Controller
             'last_registration_at' => 'nullable',
             'show_status' => 'required',
             'pdf_url' => 'nullable',
+            'link_url' => 'nullable',
         ]);
     }
 }

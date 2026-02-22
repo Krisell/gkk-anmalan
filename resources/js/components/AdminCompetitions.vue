@@ -251,6 +251,16 @@
         </div>
       </div>
 
+      <div class="mt-4">
+        <div class="text-lg font-thin">Länk</div>
+        <input
+          v-model="competition.link_url"
+          class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          name="link_url"
+          placeholder="https://..."
+        />
+      </div>
+
       <div class="flex mt-2 mb-2 items-center">
         <ToggleButton v-model="competition.publish_count" />
         <div class="ml-2 text-lg font-thin">Visa antal anmälda för medlemmar</div>
@@ -354,6 +364,7 @@ export default {
         last_registration_at: null,
         show_status: 'default',
         pdf_url: '',
+        link_url: '',
       },
       showStatusOptions: [
         { value: 'default', label: 'Default (visas tills datum passerat)' },

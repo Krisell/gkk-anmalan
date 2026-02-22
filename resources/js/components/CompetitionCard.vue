@@ -8,6 +8,12 @@
         class="fa fa-file-pdf-o ml-1 text-red-500"
         style="font-size: 14px"
       ></i>
+      <i
+        v-if="competition.link_url"
+        v-tooltip="'Länk bifogad'"
+        class="fa fa-external-link ml-1 text-blue-500"
+        style="font-size: 14px"
+      ></i>
     </div>
     <div v-if="competition.last_registration_at" style="text-align: center">
       Sista anmälningsdag: {{ competition.last_registration_at }}
