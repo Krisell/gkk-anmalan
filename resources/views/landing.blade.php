@@ -26,8 +26,7 @@
         <div class="mx-auto py-8 px-4 max-w-7xl sm:px-6 lg:px-8">
           <div class="space-y-10">
             <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
-                <a href="/prova-pa" class="block group">
-                  <div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-gkk to-gkk-light p-6 sm:p-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01]">
+                <div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-gkk to-gkk-light p-6 sm:p-8 shadow-lg">
                     <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10"></div>
                     <div class="absolute bottom-0 left-0 -mb-8 -ml-8 h-32 w-32 rounded-full bg-white/5"></div>
                     <div class="relative">
@@ -38,16 +37,12 @@
                         Prova på-tävling i styrkelyft
                       </h3>
                       <p class="text-white/90 text-base sm:text-lg leading-relaxed">
-                        Är du nyfiken på att tävla i styrkelyft eller bänkpress? Nu får du chansen att testa hur det är under avslappnade former!
+                        Tack till alla tävlande och GKKare som ställde upp som funktionärer!<br>Fler prova-på-tävlingar kommer, men är du sugen på Styrkelyft så föreslår vi att du kommer och provtränar hos oss.
                       </p>
-                      <div class="mt-4 inline-flex items-center text-white font-medium group-hover:translate-x-1 transition-transform duration-200">
-                        Läs mer och anmäl dig
-                        <i class="fa fa-arrow-right ml-2"></i>
-                      </div>
                     </div>
                   </div>
-                </a>
 
+                {{-- Årsmöte 2026 - kommenterat efter avslutat årsmöte, återanvänd nästa år
                 <div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-700 to-gray-800 p-6 sm:p-8 shadow-lg">
                     <div class="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/5"></div>
                     <div class="absolute bottom-0 left-0 -mb-8 -ml-8 h-32 w-32 rounded-full bg-white/5"></div>
@@ -142,6 +137,7 @@
                       </div>
                     </div>
                   </div>
+                --}}
                 {{-- <div>
                   <a 
                     target="_blank"
