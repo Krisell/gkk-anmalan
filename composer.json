@@ -40,6 +40,12 @@
     },
     "allow-plugins": {
       "pestphp/pest-plugin": true
+    },
+    "audit": {
+      "ignore": [
+        "Ignore disputed CVE for firebase/php-jwt for now, see https://github.com/firebase/php-jwt/issues/620",
+        "CVE-2025-45769"
+      ]
     }
   },
   "extra": {

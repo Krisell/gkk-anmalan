@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Database\Factories\SlideFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Slide extends Model
 {
-    /** @use HasFactory<\Database\Factories\SlideFactory> */
+    /** @use HasFactory<SlideFactory> */
     use HasFactory;
 
     protected $guarded = [];

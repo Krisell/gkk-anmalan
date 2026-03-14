@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Mail\UnpaidFeeReminderMail;
+use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -43,7 +45,7 @@ class RemindOfUnpaidFees extends Command
             'ALL',
         );
 
-        $query = \App\Models\Payment::whereNull('state')
+        $query = Payment::whereNull('state')
             ->where('fortnox_invoice_emailed_at', '<=', now()->subDays(30));
 
         if ($paymentType !== 'ALL') {
@@ -69,7 +71,7 @@ class RemindOfUnpaidFees extends Command
 
         if ($userSelection === 'SINGLE') {
             $userOptions = $payments->mapWithKeys(function ($payment) {
-                /** @var \App\Models\User $user */
+                /** @var User $user */
                 $user = $payment->user;
 
                 return [$user->id => "{$user->first_name} {$user->last_name} ({$payment->type}, {$payment->year})"];
@@ -88,7 +90,7 @@ class RemindOfUnpaidFees extends Command
         table(
             headers: ['User', 'Payment Type', 'Year', 'Amount'],
             rows: $payments->map(function ($payment) {
-                /** @var \App\Models\User $user */
+                /** @var User $user */
                 $user = $payment->user;
 
                 return [
@@ -118,7 +120,7 @@ class RemindOfUnpaidFees extends Command
         $sentCount = 0;
 
         foreach ($payments as $payment) {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = $payment->user;
 
             Mail::to($user->email)->send(new UnpaidFeeReminderMail($user, $payment));

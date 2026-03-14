@@ -1,17 +1,38 @@
 <?php
 
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdminCreateAccountsController;
+use App\Http\Controllers\AdminPaymentsController;
 use App\Http\Controllers\AdminPaymentToolsController;
 use App\Http\Controllers\AdminSlideshowController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompetitionController;
+use App\Http\Controllers\CompetitionRegistrationController;
+use App\Http\Controllers\DevController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentFolderController;
+use App\Http\Controllers\DocumentsAdministratorController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventRegistrationController;
+use App\Http\Controllers\FortnoxIntegrationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImpersonationController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LagSMController;
+use App\Http\Controllers\LicenseAdminController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NewsEmailController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RankingController;
+use App\Http\Controllers\RecordsController;
+use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\SignAgreementsController;
 use App\Http\Controllers\SlideshowController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
+use App\Http\Middleware\GrantedUserMiddleware;
 use App\Http\Middleware\SuperadminMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,7 +65,7 @@ Route::prefix('insidan')->middleware(EnsureAgreementsAreSignedMiddleware::class)
 });
 
 Route::prefix('api')->middleware(['auth', EnsureAgreementsAreSignedMiddleware::class])->group(function () {
-    Route::get('/ranking/points', [\App\Http\Controllers\RankingController::class, 'getPointsRanking']);
+    Route::get('/ranking/points', [RankingController::class, 'getPointsRanking']);
 });
 
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
@@ -52,69 +73,69 @@ Route::post('/sign-agreements/{agreement}', [SignAgreementsController::class, 's
 Route::view('/inactivated', 'inactivated')->name('inactivated');
 
 Route::prefix('klubbrekord')->group(function () {
-    Route::get('/', [\App\Http\Controllers\RecordsController::class, 'index']);
+    Route::get('/', [RecordsController::class, 'index']);
 });
 
 Route::prefix('auth')->group(function () {
-    Route::post('google', [\App\Http\Controllers\AuthController::class, 'google']);
-    Route::post('microsoft', [\App\Http\Controllers\AuthController::class, 'microsoft']);
+    Route::post('google', [AuthController::class, 'google']);
+    Route::post('microsoft', [AuthController::class, 'microsoft']);
 });
 
 Route::middleware('auth')->group(function () {
-    Route::delete('/impersonate', [\App\Http\Controllers\ImpersonationController::class, 'delete']);
+    Route::delete('/impersonate', [ImpersonationController::class, 'delete']);
 
     Route::prefix('admin')->middleware(SuperadminMiddleware::class)->group(function () {
-        Route::post('/accounts/promote/{user}', [\App\Http\Controllers\AccountController::class, 'promote']);
-        Route::post('/accounts/demote/{user}', [\App\Http\Controllers\AccountController::class, 'demote']);
-        Route::post('/impersonate/{userOrId}', [\App\Http\Controllers\ImpersonationController::class, 'store']);
+        Route::post('/accounts/promote/{user}', [AccountController::class, 'promote']);
+        Route::post('/accounts/demote/{user}', [AccountController::class, 'demote']);
+        Route::post('/impersonate/{userOrId}', [ImpersonationController::class, 'store']);
 
         Route::prefix('dev')->group(function () {
-            Route::get('/phpinfo', [\App\Http\Controllers\DevController::class, 'phpinfo']);
-            Route::get('/opcache', [\App\Http\Controllers\DevController::class, 'opcache']);
+            Route::get('/phpinfo', [DevController::class, 'phpinfo']);
+            Route::get('/opcache', [DevController::class, 'opcache']);
         });
     });
 
-    Route::middleware(\App\Http\Middleware\GrantedUserMiddleware::class)->group(function () {
+    Route::middleware(GrantedUserMiddleware::class)->group(function () {
         Route::get('/points', [RankingController::class, 'index']);
 
         Route::prefix('member-documents')->group(function () {
-            Route::get('/', [\App\Http\Controllers\DocumentController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
+            Route::get('/', [DocumentController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
         });
 
         Route::prefix('events')->group(function () {
-            Route::get('/', [\App\Http\Controllers\EventController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
-            Route::get('{event}', [\App\Http\Controllers\EventController::class, 'show']);
-            Route::post('{event}/registrations', [\App\Http\Controllers\EventRegistrationController::class, 'store']);
-            Route::post('{event}/registrations/{registration}', [\App\Http\Controllers\EventRegistrationController::class, 'update']);
+            Route::get('/', [EventController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
+            Route::get('{event}', [EventController::class, 'show']);
+            Route::post('{event}/registrations', [EventRegistrationController::class, 'store']);
+            Route::post('{event}/registrations/{registration}', [EventRegistrationController::class, 'update']);
         });
 
         Route::prefix('competitions')->group(function () {
-            Route::get('/', [\App\Http\Controllers\CompetitionController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
-            Route::get('{competition}', [\App\Http\Controllers\CompetitionController::class, 'show']);
-            Route::post('{competition}/registrations', [\App\Http\Controllers\CompetitionRegistrationController::class, 'store']);
-            Route::post('{competition}/registrations/{registration}', [\App\Http\Controllers\CompetitionRegistrationController::class, 'update']);
+            Route::get('/', [CompetitionController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
+            Route::get('{competition}', [CompetitionController::class, 'show']);
+            Route::post('{competition}/registrations', [CompetitionRegistrationController::class, 'store']);
+            Route::post('{competition}/registrations/{registration}', [CompetitionRegistrationController::class, 'update']);
         });
     });
 
     Route::prefix('profile')->middleware(EnsureAgreementsAreSignedMiddleware::class)->group(function () {
-        Route::get('/', [\App\Http\Controllers\ProfileController::class, 'index']);
-        Route::post('/name', [\App\Http\Controllers\ProfileController::class, 'updateName']);
-        Route::post('/email', [\App\Http\Controllers\ProfileController::class, 'updateEmail']);
-        Route::post('/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword']);
+        Route::get('/', [ProfileController::class, 'index']);
+        Route::post('/name', [ProfileController::class, 'updateName']);
+        Route::post('/email', [ProfileController::class, 'updateEmail']);
+        Route::post('/password', [ProfileController::class, 'updatePassword']);
     });
 
-    Route::patch('/payments/{payment}', [\App\Http\Controllers\PaymentController::class, 'update']);
+    Route::patch('/payments/{payment}', [PaymentController::class, 'update']);
 });
 
 Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::prefix('accounts')->group(function () {
-        Route::post('/inactivate/{user}', [\App\Http\Controllers\AccountController::class, 'inactivate']);
-        Route::post('/reactivate/{user}', [\App\Http\Controllers\AccountController::class, 'reactivate']);
-        Route::post('/', [\App\Http\Controllers\AdminCreateAccountsController::class, 'store']);
+        Route::post('/inactivate/{user}', [AccountController::class, 'inactivate']);
+        Route::post('/reactivate/{user}', [AccountController::class, 'reactivate']);
+        Route::post('/', [AdminCreateAccountsController::class, 'store']);
     });
 
     Route::prefix('licenses/{user}/{year}')->group(function () {
-        Route::post('/', [\App\Http\Controllers\LicenseAdminController::class, 'store']);
+        Route::post('/', [LicenseAdminController::class, 'store']);
     });
 
     Route::prefix('events')->controller(EventController::class)->group(function () {
@@ -138,16 +159,16 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
     });
 
     Route::prefix('accounts')->group(function () {
-        Route::get('', [\App\Http\Controllers\AccountController::class, 'index']);
-        Route::post('/{user}/grant', [\App\Http\Controllers\AccountController::class, 'grant']);
-        Route::delete('/{user}/grant', [\App\Http\Controllers\AccountController::class, 'destroyUngranted']);
-        Route::patch('/{user}/competition-permission', [\App\Http\Controllers\AccountController::class, 'updateCompetitionPermission']);
-        Route::patch('/{user}/ren-vinnare-education', [\App\Http\Controllers\AccountController::class, 'updateRenVinnareEducation']);
-        Route::patch('/{user}/background-check', [\App\Http\Controllers\AccountController::class, 'updateBackgroundCheck']);
+        Route::get('', [AccountController::class, 'index']);
+        Route::post('/{user}/grant', [AccountController::class, 'grant']);
+        Route::delete('/{user}/grant', [AccountController::class, 'destroyUngranted']);
+        Route::patch('/{user}/competition-permission', [AccountController::class, 'updateCompetitionPermission']);
+        Route::patch('/{user}/ren-vinnare-education', [AccountController::class, 'updateRenVinnareEducation']);
+        Route::patch('/{user}/background-check', [AccountController::class, 'updateBackgroundCheck']);
     });
 
     Route::prefix('payments')->group(function () {
-        Route::get('/', [\App\Http\Controllers\AdminPaymentsController::class, 'index']);
+        Route::get('/', [AdminPaymentsController::class, 'index']);
     });
 
     Route::prefix('slideshow')->controller(AdminSlideshowController::class)->group(function () {
@@ -155,36 +176,36 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
     });
 
     Route::prefix('news')->group(function () {
-        Route::get('/', [\App\Http\Controllers\NewsController::class, 'index']);
-        Route::get('/{news}', [\App\Http\Controllers\NewsController::class, 'edit']);
-        Route::post('/', [\App\Http\Controllers\NewsController::class, 'store']);
-        Route::post('/{news}', [\App\Http\Controllers\NewsController::class, 'update']);
-        Route::delete('/{news}', [\App\Http\Controllers\NewsController::class, 'destroy']);
+        Route::get('/', [NewsController::class, 'index']);
+        Route::get('/{news}', [NewsController::class, 'edit']);
+        Route::post('/', [NewsController::class, 'store']);
+        Route::post('/{news}', [NewsController::class, 'update']);
+        Route::delete('/{news}', [NewsController::class, 'destroy']);
 
         Route::prefix('email')->group(function () {
-            Route::post('/preview', [\App\Http\Controllers\NewsEmailController::class, 'preview']);
-            Route::post('/test', [\App\Http\Controllers\NewsEmailController::class, 'test']);
-            Route::get('/{item}', [\App\Http\Controllers\NewsEmailController::class, 'show']);
+            Route::post('/preview', [NewsEmailController::class, 'preview']);
+            Route::post('/test', [NewsEmailController::class, 'test']);
+            Route::get('/{item}', [NewsEmailController::class, 'show']);
         });
     });
 
     Route::prefix('documents')->group(function () {
-        Route::get('/', [\App\Http\Controllers\DocumentsAdministratorController::class, 'index']);
-        Route::post('/', [\App\Http\Controllers\DocumentsAdministratorController::class, 'store']);
-        Route::post('/{document}', [\App\Http\Controllers\DocumentsAdministratorController::class, 'update']);
-        Route::delete('/{document}', [\App\Http\Controllers\DocumentsAdministratorController::class, 'destroy']);
+        Route::get('/', [DocumentsAdministratorController::class, 'index']);
+        Route::post('/', [DocumentsAdministratorController::class, 'store']);
+        Route::post('/{document}', [DocumentsAdministratorController::class, 'update']);
+        Route::delete('/{document}', [DocumentsAdministratorController::class, 'destroy']);
     });
 
     Route::prefix('document-folders')->group(function () {
-        Route::post('/', [\App\Http\Controllers\DocumentFolderController::class, 'store']);
-        Route::post('/{folder}', [\App\Http\Controllers\DocumentFolderController::class, 'update']);
-        Route::delete('/{folder}', [\App\Http\Controllers\DocumentFolderController::class, 'destroy']);
+        Route::post('/', [DocumentFolderController::class, 'store']);
+        Route::post('/{folder}', [DocumentFolderController::class, 'update']);
+        Route::delete('/{folder}', [DocumentFolderController::class, 'destroy']);
     });
 
     Route::prefix('results')->group(function () {
-        Route::get('/', [\App\Http\Controllers\ResultsController::class, 'index']);
-        Route::post('/', [\App\Http\Controllers\ResultsController::class, 'store']);
-        Route::delete('/{result}', [\App\Http\Controllers\ResultsController::class, 'destroy']);
+        Route::get('/', [ResultsController::class, 'index']);
+        Route::post('/', [ResultsController::class, 'store']);
+        Route::delete('/{result}', [ResultsController::class, 'destroy']);
     });
 
     Route::prefix('payment-tools')->controller(AdminPaymentToolsController::class)->group(function () {
@@ -209,19 +230,19 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/invoices/{payment}', [\App\Http\Controllers\InvoiceController::class, 'show']);
+    Route::get('/invoices/{payment}', [InvoiceController::class, 'show']);
 });
 
 Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(function () {
-    Route::get('/', [\App\Http\Controllers\FortnoxIntegrationController::class, 'index'])->name('fortnox.index');
-    Route::get('/invoices/pdf/{invoice}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'pdfInvoice']);
-    Route::get('/invoices/email/{invoice?}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'emailInvoice']);
-    Route::get('/invoices/{invoice?}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'invoices'])->name('fortnox.invoices');
-    Route::get('/customers/{customer?}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'customers'])->name('fortnox.customers');
-    Route::get('/articles/{article?}', [\App\Http\Controllers\FortnoxIntegrationController::class, 'articles'])->name('fortnox.articles');
-    Route::get('printtemplates', [\App\Http\Controllers\FortnoxIntegrationController::class, 'printtemplates']);
-    Route::get('activation', [\App\Http\Controllers\FortnoxIntegrationController::class, 'activation'])->name('fortnox.activation');
-    Route::get('disconnect', [\App\Http\Controllers\FortnoxIntegrationController::class, 'disconnect'])->name('fortnox.disconnect');
+    Route::get('/', [FortnoxIntegrationController::class, 'index'])->name('fortnox.index');
+    Route::get('/invoices/pdf/{invoice}', [FortnoxIntegrationController::class, 'pdfInvoice']);
+    Route::get('/invoices/email/{invoice?}', [FortnoxIntegrationController::class, 'emailInvoice']);
+    Route::get('/invoices/{invoice?}', [FortnoxIntegrationController::class, 'invoices'])->name('fortnox.invoices');
+    Route::get('/customers/{customer?}', [FortnoxIntegrationController::class, 'customers'])->name('fortnox.customers');
+    Route::get('/articles/{article?}', [FortnoxIntegrationController::class, 'articles'])->name('fortnox.articles');
+    Route::get('printtemplates', [FortnoxIntegrationController::class, 'printtemplates']);
+    Route::get('activation', [FortnoxIntegrationController::class, 'activation'])->name('fortnox.activation');
+    Route::get('disconnect', [FortnoxIntegrationController::class, 'disconnect'])->name('fortnox.disconnect');
 });
 
 Route::get('/webhooks/{action}', WebhookController::class)->name('webhook');

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Competition;
 use App\Models\CompetitionRegistration;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 use function Laravel\Prompts\confirm;
@@ -71,7 +72,7 @@ class CreateCompetitionPayments extends Command
         }
 
         $userOptions = $registrations->mapWithKeys(function ($registration) {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = $registration->user;
             $label = "{$user->first_name} {$user->last_name}";
 
@@ -111,7 +112,7 @@ class CreateCompetitionPayments extends Command
         $this->info("Tävling: {$competition->name}");
 
         if ($selectedUserId !== 'all') {
-            /** @var \App\Models\User $selectedUser */
+            /** @var User $selectedUser */
             $selectedUser = $registrations->first()->user;
             $this->info("Användare: {$selectedUser->first_name} {$selectedUser->last_name}");
         }
@@ -134,7 +135,7 @@ class CreateCompetitionPayments extends Command
         $skipped = 0;
 
         foreach ($registrations as $registration) {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = $registration->user;
 
             $existingPayment = Payment::where('type', 'COMPETITION')

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Competition;
 use App\Models\Payment;
 use App\Models\User;
 use App\Services\Fortnox;
@@ -149,7 +150,7 @@ test('command creates invoices for competition payments with description from co
         'last_name' => 'Johnson',
     ]);
 
-    $competition = \App\Models\Competition::factory()->create([
+    $competition = Competition::factory()->create([
         'name' => 'Vårtävling 2026',
         'date' => '2026-05-15',
     ]);
@@ -198,7 +199,7 @@ test('command creates invoices for competition payments with description from co
         'last_name' => 'Johnson',
     ]);
 
-    $competition = \App\Models\Competition::factory()->create([
+    $competition = Competition::factory()->create([
         'name' => 'Höstträning',
         'date' => null,
     ]);

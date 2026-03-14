@@ -2,11 +2,13 @@
 
 use App\Models\Payment;
 use App\Models\User;
+use App\Services\Fortnox;
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\Console\Exception\RuntimeException;
 
 beforeEach(function () {
     // Mock Fortnox token
-    $this->mock(\App\Services\Fortnox::class, function ($mock) {
+    $this->mock(Fortnox::class, function ($mock) {
         $mock->shouldReceive('token')->andReturn('fake-token');
     });
 
@@ -16,14 +18,14 @@ beforeEach(function () {
 });
 
 test('command requires year parameter', function () {
-    $this->expectException(\Symfony\Component\Console\Exception\RuntimeException::class);
+    $this->expectException(RuntimeException::class);
     $this->expectExceptionMessage('Not enough arguments (missing: "year")');
 
     $this->artisan('gkk:adjust-student-status');
 });
 
 test('command shows error when fortnox integration not activated', function () {
-    $this->mock(\App\Services\Fortnox::class, function ($mock) {
+    $this->mock(Fortnox::class, function ($mock) {
         $mock->shouldReceive('token')->andReturn(null);
     });
 

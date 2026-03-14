@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Competition;
 use App\Models\Payment;
+use App\Models\User;
 use App\Services\Fortnox;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
@@ -96,7 +98,7 @@ class FortnoxCreateInvoices extends Command
 
     private function createInvoice(Fortnox $fortnox, Payment $payment)
     {
-        /** @var \App\Models\User */
+        /** @var User */
         $user = $payment->user;
 
         $articleNumber = "GKK-{$payment->type}-{$payment->year}";
@@ -117,7 +119,7 @@ class FortnoxCreateInvoices extends Command
         if ($payment->type === 'COMPETITION') {
             $invoiceRow['AccountNumber'] = 3410;
 
-            /** @var ?\App\Models\Competition $competition */
+            /** @var ?Competition $competition */
             $competition = $payment->competition;
 
             if ($competition) {

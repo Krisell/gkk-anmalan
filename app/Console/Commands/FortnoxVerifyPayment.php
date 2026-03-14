@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Payment;
+use App\Models\User;
 use App\Services\Fortnox;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
@@ -87,7 +88,7 @@ class FortnoxVerifyPayment extends Command
 
     private function verifyPayment(Fortnox $fortnox, Payment $payment)
     {
-        /** @var \App\Models\User */
+        /** @var User */
         $user = $payment->user;
 
         $response = Http::withToken($fortnox->token())->get("https://api.fortnox.se/3/invoices/{$payment->fortnox_invoice_document_number}");

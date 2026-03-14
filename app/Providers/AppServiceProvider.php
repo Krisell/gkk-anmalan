@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \Illuminate\Database\Eloquent\Casts\Json::encodeUsing(
+        Json::encodeUsing(
             fn ($value) => \json_encode($value, JSON_UNESCAPED_UNICODE),
         );
     }

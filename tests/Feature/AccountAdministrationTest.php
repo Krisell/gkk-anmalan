@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ActivityLog;
 use App\Models\Payment;
 use App\Models\User;
 
@@ -151,7 +152,7 @@ test('updating Ren Vinnare education creates activity log entry', function () {
     $admin = loginAdmin();
     $user = User::factory()->create(['ren_vinnare_education_completed_at' => null]);
 
-    $initialLogCount = \App\Models\ActivityLog::count();
+    $initialLogCount = ActivityLog::count();
 
     $response = $this->patch("/admin/accounts/{$user->id}/ren-vinnare-education", [
         'ren_vinnare_education_completed' => true,
@@ -161,7 +162,7 @@ test('updating Ren Vinnare education creates activity log entry', function () {
 
     $this->assertDatabaseCount('activity_logs', $initialLogCount + 1);
 
-    $latestLog = \App\Models\ActivityLog::latest()->first();
+    $latestLog = ActivityLog::latest()->first();
     $this->assertEquals($admin->id, $latestLog->performed_by);
     $this->assertEquals('ren-vinnare-education-update', $latestLog->action);
     $this->assertEquals($user->id, $latestLog->user_id);
@@ -224,7 +225,7 @@ test('updating background check creates activity log entry', function () {
     $admin = loginAdmin();
     $user = User::factory()->create(['background_check_valid_from' => null]);
 
-    $initialLogCount = \App\Models\ActivityLog::count();
+    $initialLogCount = ActivityLog::count();
 
     $response = $this->patch("/admin/accounts/{$user->id}/background-check", [
         'background_check_valid_from' => '2025-06-15',
@@ -234,7 +235,7 @@ test('updating background check creates activity log entry', function () {
 
     $this->assertDatabaseCount('activity_logs', $initialLogCount + 1);
 
-    $latestLog = \App\Models\ActivityLog::latest()->first();
+    $latestLog = ActivityLog::latest()->first();
     $this->assertEquals($admin->id, $latestLog->performed_by);
     $this->assertEquals('background-check-update', $latestLog->action);
     $this->assertEquals($user->id, $latestLog->user_id);

@@ -1,11 +1,19 @@
 <?php
 
+use App\Http\Middleware\EnsureUserIsNotInactivatedMiddleware;
+use App\Http\Middleware\LogVisitsMiddleware;
 use App\Providers\AppServiceProvider;
+use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Sentry\Laravel\Integration;
 
 return Application::configure(basePath: \dirname(__DIR__))
@@ -30,17 +38,17 @@ return Application::configure(basePath: \dirname(__DIR__))
         ]);
 
         $middleware->web([
-            \App\Http\Middleware\LogVisitsMiddleware::class,
-            \App\Http\Middleware\EnsureUserIsNotInactivatedMiddleware::class,
+            LogVisitsMiddleware::class,
+            EnsureUserIsNotInactivatedMiddleware::class,
         ]);
 
         $middleware->priority([
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class,
-            \Illuminate\Session\Middleware\AuthenticateSession::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Illuminate\Auth\Middleware\Authorize::class,
+            StartSession::class,
+            ShareErrorsFromSession::class,
+            ThrottleRequests::class,
+            AuthenticateSession::class,
+            SubstituteBindings::class,
+            Authorize::class,
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {

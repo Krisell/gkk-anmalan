@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Payment;
 use App\Models\User;
 use App\Services\Fortnox;
 use Illuminate\Console\Command;
@@ -74,7 +75,7 @@ class AdjustStudentStatusCommand extends Command
             $user->update(['is_student_over_23' => true]);
         }
 
-        /** @var ?\App\Models\Payment $payment */
+        /** @var ?Payment $payment */
         $payment = $user->payments()
             ->where('type', 'MEMBERSHIP')
             ->where('year', $this->argument('year'))
