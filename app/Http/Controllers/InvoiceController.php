@@ -15,6 +15,15 @@ class InvoiceController extends Controller
         $token = $fortnox->token();
 
         if (! $token) {
+            $dummyPath = storage_path('app/dummy-invoice.pdf');
+
+            if (\file_exists($dummyPath)) {
+                return response(\file_get_contents($dummyPath), 200, [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => 'inline; filename="invoice.pdf"',
+                ]);
+            }
+
             return;
         }
 

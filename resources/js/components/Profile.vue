@@ -168,6 +168,14 @@
       </div>
     </div>
   </div>
+
+  <!-- Full-screen loading overlay -->
+  <div v-if="loadingReceipt" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 flex flex-col items-center shadow-xl">
+      <i class="fa fa-spinner fa-spin text-3xl text-gkk mb-3"></i>
+      <span class="text-gray-700">Laddar kvitto...</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -207,6 +215,7 @@ export default {
       },
       qrCodes: {},
       paymentInProcess: null,
+      loadingReceipt: false,
     }
   },
   computed: {
@@ -249,28 +258,33 @@ export default {
     async downloadReceipt(payment) {
       if (payment.state !== 'PAID') return
 
-      const response = await window.axios.get(`/invoices/${payment.id}`, { responseType: 'arraybuffer' })
-      const pdfDoc = await PDFDocument.load(response.data)
+      this.loadingReceipt = true
+      try {
+        const response = await window.axios.get(`/invoices/${payment.id}`, { responseType: 'arraybuffer' })
+        const pdfDoc = await PDFDocument.load(response.data)
 
-      const pages = pdfDoc.getPages()
-      const firstPage = pages[0]
-      const { width, height } = firstPage.getSize()
+        const pages = pdfDoc.getPages()
+        const firstPage = pages[0]
+        const { width, height } = firstPage.getSize()
 
-      const stampText = 'BETALD'
-      const fontSize = 60
+        const stampText = 'BETALD'
+        const fontSize = 60
 
-      firstPage.drawText(stampText, {
-        x: width / 2 - 100,
-        y: height / 2,
-        size: fontSize,
-        color: rgb(0, 0.5, 0),
-        rotate: degrees(30),
-        opacity: 0.4,
-      })
+        firstPage.drawText(stampText, {
+          x: width / 2 - 100,
+          y: height / 2,
+          size: fontSize,
+          color: rgb(0, 0.5, 0),
+          rotate: degrees(30),
+          opacity: 0.4,
+        })
 
-      const pdfBytes = await pdfDoc.save()
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' })
-      window.open(URL.createObjectURL(blob))
+        const pdfBytes = await pdfDoc.save()
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' })
+        window.open(URL.createObjectURL(blob))
+      } finally {
+        this.loadingReceipt = false
+      }
     },
     loadURL(url, newTab = false) {
       if (newTab) {
