@@ -40,7 +40,7 @@
       <ul>
         <li v-for="payment in payments" :key="payment.id" class="mt-2">
           <div class="border-4 rounded p-4">
-            <div class="flex">
+            <div class="flex" :class="{ 'cursor-pointer': payment.fortnox_invoice_document_number }" @click="payment.state === 'PAID' ? downloadReceipt(payment) : payment.fortnox_invoice_document_number ? loadURL(`/invoices/${payment.id}`, true) : null">
               <div class="p-2 border rounded border-gkk border-r-0 rounded-r-none text-sm inline-block text-center px-6">
                 <div>{{ paymentTypeText(payment.type) }} {{payment.year }}</div>
                 <div v-if="payment.type === 'COMPETITION' && payment.competition">
@@ -49,14 +49,14 @@
                 </div>
                 <div>{{ Math.max(payment.sek_amount - payment.sek_discount, 0) }} SEK</div>
               </div>
-              <div v-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col cursor-pointer">
+              <div v-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col">
                 BETALD
-                <div @click="downloadReceipt(payment)" v-if="payment.fortnox_invoice_document_number" class="text-xs block underline">Klicka för att öppna kvitto</div>
+                <div v-if="payment.fortnox_invoice_document_number" class="text-xs block underline">Klicka för att öppna kvitto</div>
               </div>
               <div v-else-if="!payment.fortnox_invoice_document_number" class="bg-blue-400 border-blue-400 border rounded p-2 text-white rounded-l-none text-sm text-center px-6 flex items-center">
                 INVÄNTAR FAKTURERING
               </div>
-              <div v-else-if="payment.fortnox_invoice_document_number && payment.state !== 'PAID'" class="bg-red-400 border-red-400 p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col cursor-pointer" @click="loadURL(`/invoices/${payment.id}`, true)">
+              <div v-else class="bg-red-400 border-red-400 p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col">
                 <div>INVÄNTAR BETALNING</div>
                 <div class="text-xs block underline">Klicka för att öppna faktura</div>
               </div>
