@@ -38,7 +38,7 @@
 
       <h2 class="mt-8 mb-1 text-2xl">Medlemsavgift och SSF-licens</h2>
       <div class="space-y-3 mt-3">
-        <div v-for="payment in payments" :key="payment.id">
+        <div v-for="payment in sortedPayments" :key="payment.id">
           <div
             class="rounded-lg border border-gray-200 overflow-hidden transition-all duration-150 bg-white"
             :class="payment.fortnox_invoice_document_number ? 'cursor-pointer hover:shadow-md hover:border-gray-300 group' : ''"
@@ -238,6 +238,9 @@ export default {
       oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
 
       return lastHelper < oneYearAgo
+    },
+    sortedPayments() {
+      return [...this.payments].sort((a, b) => b.id - a.id)
     },
   },
   async created() {
