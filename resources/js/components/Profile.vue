@@ -37,61 +37,53 @@
       </div>
 
       <h2 class="mt-8 mb-1 text-2xl">Medlemsavgift och SSF-licens</h2>
-      <ul>
-        <li v-for="payment in payments" :key="payment.id" class="mt-2">
-          <div class="border-4 rounded p-4">
-            <div class="flex" :class="{ 'cursor-pointer': payment.fortnox_invoice_document_number }" @click="payment.state === 'PAID' ? downloadReceipt(payment) : payment.fortnox_invoice_document_number ? loadURL(`/invoices/${payment.id}`, true) : null">
-              <div class="p-2 border rounded border-gkk border-r-0 rounded-r-none text-sm inline-block text-center px-6">
-                <div>{{ paymentTypeText(payment.type) }} {{payment.year }}</div>
-                <div v-if="payment.type === 'COMPETITION' && payment.competition">
+      <div class="space-y-3 mt-3">
+        <div v-for="payment in payments" :key="payment.id">
+          <div
+            class="rounded-lg shadow-sm border border-gray-300 overflow-hidden transition-all duration-150"
+            :class="payment.fortnox_invoice_document_number ? 'cursor-pointer hover:shadow-md' : ''"
+            @click="payment.state === 'PAID' ? downloadReceipt(payment) : payment.fortnox_invoice_document_number ? loadURL(`/invoices/${payment.id}`, true) : null"
+          >
+            <div class="flex items-stretch">
+              <div class="flex-1 p-4">
+                <div class="font-medium text-gray-900">{{ paymentTypeText(payment.type) }} {{ payment.year }}</div>
+                <div v-if="payment.type === 'COMPETITION' && payment.competition" class="text-sm text-gray-500 mt-0.5">
                   {{ payment.competition.name }}
                   <span v-if="payment.competition.date">({{ renderDate(payment.competition.date) }})</span>
                 </div>
-                <div>{{ Math.max(payment.sek_amount - payment.sek_discount, 0) }} SEK</div>
+                <div class="text-sm text-gray-500 mt-0.5">{{ Math.max(payment.sek_amount - payment.sek_discount, 0) }} SEK</div>
               </div>
-              <div v-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col">
-                BETALD
-                <div v-if="payment.fortnox_invoice_document_number" class="text-xs block underline">Klicka för att öppna kvitto</div>
+              <div v-if="payment.state === 'PAID'" class="bg-gkk text-white w-32 shrink-0 flex items-center justify-center">
+                <div class="text-center">
+                  <div class="font-semibold tracking-wide">BETALD</div>
+                  <div v-if="payment.fortnox_invoice_document_number" class="text-xs opacity-80 mt-0.5">Visa kvitto</div>
+                </div>
               </div>
-              <div v-else-if="!payment.fortnox_invoice_document_number" class="bg-blue-400 border-blue-400 border rounded p-2 text-white rounded-l-none text-sm text-center px-6 flex items-center">
-                INVÄNTAR FAKTURERING
+              <div v-else-if="!payment.fortnox_invoice_document_number" class="bg-amber-400 text-white w-32 shrink-0 flex items-center justify-center">
+                <div class="text-center font-semibold tracking-wide text-sm">INVÄNTAR<br>FAKTURERING</div>
               </div>
-              <div v-else class="bg-red-400 border-red-400 p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col">
-                <div>INVÄNTAR BETALNING</div>
-                <div class="text-xs block underline">Klicka för att öppna faktura</div>
-              </div>
-            </div>
-            <div v-if="!payment.fortnox_invoice_document_number">
-              <div class="mt-4">
-                Faktura kommer skapas och skickas ut inom kort.
-              </div>
-              <div class="mt-2">
-                Faktura skickas till din epost och du kommer även kunna se den här.
-              </div>
-              <div class="mt-2">
-                Betalning sker via Swish eller Bankgiro.
+              <div v-else class="bg-red-400 text-white w-32 shrink-0 flex items-center justify-center">
+                <div class="text-center">
+                  <div class="font-semibold tracking-wide text-sm">INVÄNTAR<br>BETALNING</div>
+                  <div class="text-xs opacity-80 mt-0.5">Visa faktura</div>
+                </div>
               </div>
             </div>
-            <div v-else-if="payment.state !== 'PAID'">
-              <div class="mt-4">
-                Faktura har även skickats till din epost.
-              </div>
-              <div class="mt-2">
-                Om fakturan är felaktig, exempelvis om du är student, skicka in studentbevis till <a class="underline text-nowrap" href="mailto:info@gkk-styrkelyft.se">info@gkk-styrkelyft.se</a> så korrigerar vi fakturan inom kort.
-              </div>
-              <div class="mt-2">
-                Betalning sker via Swish eller Bankgiro.
-              </div>
-              <div>
-                <Button type="secondary" class="my-2 md:hidden" @click="loadURL(swishUrl(payment))">Klicka här för att betala med Swish på denna enhet</Button>
-              </div>
-              <div class="mt-2">
-                Efter betalning kan det ta några bankdagar innan status uppdateras här.
-              </div>
+            <div v-if="!payment.fortnox_invoice_document_number" class="border-t px-4 py-3 text-sm text-gray-500 space-y-1" @click.stop>
+              <p>Faktura kommer skapas och skickas ut inom kort.</p>
+              <p>Faktura skickas till din epost och du kommer även kunna se den här.</p>
+              <p>Betalning sker via Swish eller Bankgiro.</p>
+            </div>
+            <div v-else-if="payment.state !== 'PAID'" class="border-t px-4 py-3 text-sm text-gray-500 space-y-1" @click.stop>
+              <p>Faktura har även skickats till din epost.</p>
+              <p>Om fakturan är felaktig, exempelvis om du är student, skicka in studentbevis till <a class="underline text-nowrap" href="mailto:info@gkk-styrkelyft.se">info@gkk-styrkelyft.se</a> så korrigerar vi fakturan inom kort.</p>
+              <p>Betalning sker via Swish eller Bankgiro.</p>
+              <Button type="secondary" class="my-1 md:hidden" @click.stop="loadURL(swishUrl(payment))">Klicka här för att betala med Swish på denna enhet</Button>
+              <p>Efter betalning kan det ta några bankdagar innan status uppdateras här.</p>
             </div>
           </div>
-        </li>
-      </ul> 
+        </div>
+      </div> 
 
       <h2 class="mt-8 mb-1 text-2xl">Kontouppgifter</h2>
       <h3 class="font-light mt-2 mb-2">Födelseår</h3>

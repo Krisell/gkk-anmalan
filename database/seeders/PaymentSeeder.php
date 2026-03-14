@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Competition;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -65,12 +66,48 @@ class PaymentSeeder extends Seeder
         $admin = User::where('email', 'admin@example.com')->first();
 
         if ($admin) {
+            // Paid membership 2025
             $admin->payments()->create([
                 'sek_amount' => 1500,
                 'type' => 'MEMBERSHIP',
                 'year' => 2025,
                 'state' => 'PAID',
                 'fortnox_invoice_document_number' => 'SEED-001',
+            ]);
+
+            // Paid SSF license 2025
+            $admin->payments()->create([
+                'sek_amount' => 900,
+                'type' => 'SSFLICENSE',
+                'year' => 2025,
+                'state' => 'PAID',
+                'fortnox_invoice_document_number' => 'SEED-002',
+            ]);
+
+            // Paid competition fee with linked competition
+            $competition = Competition::first();
+            $admin->payments()->create([
+                'sek_amount' => 700,
+                'type' => 'COMPETITION',
+                'year' => 2025,
+                'state' => 'PAID',
+                'fortnox_invoice_document_number' => 'SEED-003',
+                'competition_id' => $competition?->id,
+            ]);
+
+            // Unpaid membership 2026 - invoiced but not yet paid
+            $admin->payments()->create([
+                'sek_amount' => 1500,
+                'type' => 'MEMBERSHIP',
+                'year' => 2026,
+                'fortnox_invoice_document_number' => 'SEED-004',
+            ]);
+
+            // SSF license 2026 - awaiting invoicing (no fortnox number)
+            $admin->payments()->create([
+                'sek_amount' => 1050,
+                'type' => 'SSFLICENSE',
+                'year' => 2026,
             ]);
 
             $this->generateDummyInvoicePdf();
