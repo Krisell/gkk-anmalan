@@ -51,7 +51,7 @@
               </div>
               <div v-if="payment.state === 'PAID'" class="bg-gkk border-gkk p-2 text-white border rounded rounded-l-none text-sm text-center px-6 flex items-center flex-col cursor-pointer">
                 BETALD
-                <div @click="loadURL(`/invoices/${payment.id}`, true)" v-if="payment.fortnox_invoice_document_number" class="text-xs block underline">Klicka för att öppna faktura</div>
+                <div @click="downloadReceipt(payment)" v-if="payment.fortnox_invoice_document_number" class="text-xs block underline">Klicka för att öppna kvitto</div>
               </div>
               <div v-else-if="!payment.fortnox_invoice_document_number" class="bg-blue-400 border-blue-400 border rounded p-2 text-white rounded-l-none text-sm text-center px-6 flex items-center">
                 INVÄNTAR FAKTURERING
@@ -175,6 +175,7 @@ import Documents from '../modules/Documents.js'
 import Button from './ui/Button.vue'
 import Modal from './ui/Modal.vue'
 import QRCode from 'qrcode'
+import { PDFDocument, rgb, degrees } from 'pdf-lib'
 
 export default {
   components: { Button, Modal },
@@ -245,6 +246,32 @@ export default {
       }
   },
   methods: {
+    async downloadReceipt(payment) {
+      if (payment.state !== 'PAID') return
+
+      const response = await window.axios.get(`/invoices/${payment.id}`, { responseType: 'arraybuffer' })
+      const pdfDoc = await PDFDocument.load(response.data)
+
+      const pages = pdfDoc.getPages()
+      const firstPage = pages[0]
+      const { width, height } = firstPage.getSize()
+
+      const stampText = 'BETALD'
+      const fontSize = 60
+
+      firstPage.drawText(stampText, {
+        x: width / 2 - 100,
+        y: height / 2,
+        size: fontSize,
+        color: rgb(0, 0.5, 0),
+        rotate: degrees(30),
+        opacity: 0.4,
+      })
+
+      const pdfBytes = await pdfDoc.save()
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' })
+      window.open(URL.createObjectURL(blob))
+    },
     loadURL(url, newTab = false) {
       if (newTab) {
         return window.open(url)
