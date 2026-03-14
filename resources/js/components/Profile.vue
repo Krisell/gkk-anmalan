@@ -40,41 +40,43 @@
       <div class="space-y-3 mt-3">
         <div v-for="payment in payments" :key="payment.id">
           <div
-            class="rounded-lg shadow-sm border border-gray-300 overflow-hidden transition-all duration-150"
-            :class="payment.fortnox_invoice_document_number ? 'cursor-pointer hover:shadow-md' : ''"
+            class="rounded-lg border border-gray-200 overflow-hidden transition-all duration-150 bg-white"
+            :class="payment.fortnox_invoice_document_number ? 'cursor-pointer hover:shadow-md hover:border-gray-300 group' : ''"
             @click="payment.state === 'PAID' ? downloadReceipt(payment) : payment.fortnox_invoice_document_number ? loadURL(`/invoices/${payment.id}`, true) : null"
           >
-            <div class="flex items-stretch">
-              <div class="flex-1 p-4">
-                <div class="font-medium text-gray-900">{{ paymentTypeText(payment.type) }} {{ payment.year }}</div>
+            <div class="flex items-center p-4">
+              <!-- Left color accent -->
+              <div class="w-1 self-stretch rounded-full shrink-0 -ml-0.5 mr-4" :class="payment.state === 'PAID' ? 'bg-green-500' : payment.fortnox_invoice_document_number ? 'bg-red-400' : 'bg-amber-400'"></div>
+
+              <!-- Content -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="font-medium text-gray-900">{{ paymentTypeText(payment.type) }} {{ payment.year }}</span>
+                  <span v-if="payment.state === 'PAID'" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">BETALD</span>
+                  <span v-else-if="!payment.fortnox_invoice_document_number" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">INVÄNTAR FAKTURERING</span>
+                  <span v-else class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">INVÄNTAR BETALNING</span>
+                </div>
                 <div v-if="payment.type === 'COMPETITION' && payment.competition" class="text-sm text-gray-500 mt-0.5">
                   {{ payment.competition.name }}
                   <span v-if="payment.competition.date">({{ renderDate(payment.competition.date) }})</span>
                 </div>
                 <div class="text-sm text-gray-500 mt-0.5">{{ Math.max(payment.sek_amount - payment.sek_discount, 0) }} SEK</div>
               </div>
-              <div v-if="payment.state === 'PAID'" class="bg-gkk text-white w-32 shrink-0 flex items-center justify-center">
-                <div class="text-center">
-                  <div class="font-semibold tracking-wide">BETALD</div>
-                  <div v-if="payment.fortnox_invoice_document_number" class="text-xs opacity-80 mt-0.5">Visa kvitto</div>
-                </div>
-              </div>
-              <div v-else-if="!payment.fortnox_invoice_document_number" class="bg-amber-400 text-white w-32 shrink-0 flex items-center justify-center">
-                <div class="text-center font-semibold tracking-wide text-sm">INVÄNTAR<br>FAKTURERING</div>
-              </div>
-              <div v-else class="bg-red-400 text-white w-32 shrink-0 flex items-center justify-center">
-                <div class="text-center">
-                  <div class="font-semibold tracking-wide text-sm">INVÄNTAR<br>BETALNING</div>
-                  <div class="text-xs opacity-80 mt-0.5">Visa faktura</div>
-                </div>
+
+              <!-- Action hint -->
+              <div v-if="payment.fortnox_invoice_document_number" class="shrink-0 ml-4 flex flex-col items-center text-gray-400 group-hover:text-gkk transition-colors">
+                <i class="fa fa-external-link text-sm"></i>
+                <span class="text-xs mt-0.5">{{ payment.state === 'PAID' ? 'Visa kvitto' : 'Visa faktura' }}</span>
               </div>
             </div>
-            <div v-if="!payment.fortnox_invoice_document_number" class="border-t px-4 py-3 text-sm text-gray-500 space-y-1" @click.stop>
+
+            <!-- Info section for unpaid -->
+            <div v-if="!payment.fortnox_invoice_document_number" class="border-t border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-500 space-y-1" @click.stop>
               <p>Faktura kommer skapas och skickas ut inom kort.</p>
               <p>Faktura skickas till din epost och du kommer även kunna se den här.</p>
               <p>Betalning sker via Swish eller Bankgiro.</p>
             </div>
-            <div v-else-if="payment.state !== 'PAID'" class="border-t px-4 py-3 text-sm text-gray-500 space-y-1" @click.stop>
+            <div v-else-if="payment.state !== 'PAID'" class="border-t border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-500 space-y-1" @click.stop>
               <p>Faktura har även skickats till din epost.</p>
               <p>Om fakturan är felaktig, exempelvis om du är student, skicka in studentbevis till <a class="underline text-nowrap" href="mailto:info@gkk-styrkelyft.se">info@gkk-styrkelyft.se</a> så korrigerar vi fakturan inom kort.</p>
               <p>Betalning sker via Swish eller Bankgiro.</p>
