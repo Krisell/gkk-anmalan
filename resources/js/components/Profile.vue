@@ -19,20 +19,25 @@
       </div>
 
       <h2 class="mt-8 mb-1 text-2xl">Funktionärsaktivitet</h2>
-      <div v-if="showHelperWarning" class="mt-4 p-4 border-4 border-orange-500 rounded bg-orange-50">
-        <div class="text-orange-700 font-semibold">⚠️ Varning</div>
-        <div class="mt-2 text-orange-600">
-          Systemet kan inte se att du har hjälpt till som funktionär under det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar.
-          <br>Kontakta styrelsen om du har frågor.
+      <div class="mt-4 p-4 rounded-lg border" :class="helperAlertClasses">
+        <div class="flex items-center gap-2 font-semibold" :class="helperAlertTitleClass">
+          <i class="fa" :class="helperAlertIcon"></i>
+          <span>{{ helperAlertTitle }}</span>
         </div>
-      </div>
-      <div class="mt-4">
-        <div v-if="lastHelperDate" class="text-sm">
-          Alla tävlingsaktiva medlemmar behöver ställa upp som funktionär minst en gång per år.<br />Du hjälpte till som funktionär senast <strong>{{ renderDate(lastHelperDate) }}</strong>
-        </div>
-        <div v-else class="text-sm text-gray-600">
-          Alla tävlingsaktiva medlemmar behöver ställa upp som funktionär minst en gång per år.<br />
-          Inga registrerade funktionärsaktiviteter det senaste året.
+        <div class="mt-2 text-sm" :class="helperAlertTextClass">
+          <template v-if="lastHelperDate">
+            Du hjälpte senast till som funktionär <strong>{{ renderDate(lastHelperDate) }}</strong>.
+          </template>
+          <template v-else>
+            Vi har ingen registrerad funktionärsaktivitet för dig.
+          </template>
+          <br>Alla tävlingsaktiva medlemmar behöver ställa upp som funktionär minst en gång per år.
+          <template v-if="helperStatus === 'error'">
+            <br>Du kan för närvarande inte anmäla dig till tävlingar. Kontakta styrelsen om du har frågor.
+          </template>
+          <template v-else-if="helperStatus === 'warning'">
+            <br>Det börjar bli dags att hjälpa till igen för att behålla din tävlingsrätt.
+          </template>
         </div>
       </div>
 
@@ -213,31 +218,62 @@ export default {
     }
   },
   computed: {
-    showHelperWarning() {
-      // Don't show warning for new users (first month)
-      if (!this.user?.created_at) {
-        return false
-      }
-
+    helperDaysSinceLast() {
+      if (!this.lastHelperDate) return Infinity
+      const last = new window.Date(this.lastHelperDate)
+      const now = new window.Date()
+      return Math.floor((now - last) / (1000 * 60 * 60 * 24))
+    },
+    isNewMember() {
+      if (!this.user?.created_at) return false
       const createdAt = new window.Date(this.user.created_at)
-      const oneMonthAgo = new window.Date()
-      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1)
-
-      // User is less than 1 month old, don't show warning
-      if (createdAt >= oneMonthAgo) {
-        return false
-      }
-
-      // Show warning if no helper activity in the last year
-      if (!this.lastHelperDate) {
-        return true
-      }
-
-      const lastHelper = new window.Date(this.lastHelperDate)
       const oneYearAgo = new window.Date()
       oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
-
-      return lastHelper < oneYearAgo
+      return createdAt > oneYearAgo
+    },
+    helperStatus() {
+      // 12 months + 3 weeks ≈ 386 days
+      if (this.helperDaysSinceLast > 386) {
+        return this.isNewMember ? 'warning' : 'error'
+      }
+      // 10 months ≈ 304 days
+      if (this.helperDaysSinceLast > 304) return 'warning'
+      return 'success'
+    },
+    helperAlertClasses() {
+      return {
+        'bg-red-50 border-red-300': this.helperStatus === 'error',
+        'bg-amber-50 border-amber-300': this.helperStatus === 'warning',
+        'bg-green-50 border-green-300': this.helperStatus === 'success',
+      }
+    },
+    helperAlertTitleClass() {
+      return {
+        'text-red-700': this.helperStatus === 'error',
+        'text-amber-700': this.helperStatus === 'warning',
+        'text-green-700': this.helperStatus === 'success',
+      }
+    },
+    helperAlertTextClass() {
+      return {
+        'text-red-600': this.helperStatus === 'error',
+        'text-amber-600': this.helperStatus === 'warning',
+        'text-green-600': this.helperStatus === 'success',
+      }
+    },
+    helperAlertIcon() {
+      return {
+        'fa-times-circle': this.helperStatus === 'error',
+        'fa-exclamation-triangle': this.helperStatus === 'warning',
+        'fa-check-circle': this.helperStatus === 'success',
+      }
+    },
+    helperAlertTitle() {
+      return {
+        error: 'Funktionärskrav ej uppfyllt',
+        warning: 'Funktionärskrav löper snart ut',
+        success: 'Funktionärskrav uppfyllt',
+      }[this.helperStatus]
     },
     sortedPayments() {
       return [...this.payments].sort((a, b) => b.id - a.id)
