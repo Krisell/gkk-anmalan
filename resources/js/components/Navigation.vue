@@ -62,6 +62,13 @@
         icon="credit-card"
       ></LinkCard>
       <LinkCard
+        v-if="isAdmin"
+        class="m-4 max-w-xs w-64"
+        href="/admin/activity-logs"
+        description="Aktivitetslogg"
+        icon="history"
+      ></LinkCard>
+      <LinkCard
         v-if="!user"
         class="m-4 max-w-xs w-64"
         href="/register"

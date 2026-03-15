@@ -33,6 +33,7 @@ import CompetitionCard from './components/CompetitionCard.vue'
 import AdminCompetition from './components/AdminCompetition.vue'
 import AdminCompetitions from './components/AdminCompetitions.vue'
 import AdminPaymentTools from './components/AdminPaymentTools.vue'
+import AdminActivityLogs from './components/AdminActivityLogs.vue'
 import LagSM from './components/LagSM.vue'
 import FloatingSlideshow from './components/FloatingSlideshow.vue'
 import PointsHighScore from './components/PointsHighScore.vue'
@@ -109,6 +110,7 @@ app.component('GkkCompetitionCard', CompetitionCard)
 app.component('GkkAdminCompetition', AdminCompetition)
 app.component('GkkAdminCompetitions', AdminCompetitions)
 app.component('GkkAdminPaymentTools', AdminPaymentTools)
+app.component('GkkAdminActivityLogs', AdminActivityLogs)
 app.component('GkkFloatingSlideshow', FloatingSlideshow)
 app.component('LagSM', LagSM)
 app.component('GkkPointsHighScore', PointsHighScore)

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
             SlideSeeder::class,
             ResultSeeder::class,
+            ActivityLogSeeder::class,
         ]);
     }
 }

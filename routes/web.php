@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AdminCreateAccountsController;
 use App\Http\Controllers\AdminPaymentsController;
 use App\Http\Controllers\AdminPaymentToolsController;
@@ -170,6 +171,8 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
     Route::prefix('payments')->group(function () {
         Route::get('/', [AdminPaymentsController::class, 'index']);
     });
+
+    Route::get('/activity-logs', [ActivityLogController::class, 'index']);
 
     Route::prefix('slideshow')->controller(AdminSlideshowController::class)->group(function () {
         Route::get('/', 'index');
