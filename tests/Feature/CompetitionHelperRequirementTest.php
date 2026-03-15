@@ -70,7 +70,7 @@ test('a user without recent helper activity and explicit_registration_approval=f
     $user = login();
     $user->update(['explicit_registration_approval' => false]);
 
-    $event = Event::factory()->create(['date' => now()->subDays(400)]);
+    $event = Event::factory()->create(['date' => now()->subYear()->subWeeks(3)->subDay()]);
     EventRegistration::factory()->create([
         'user_id' => $user->id,
         'event_id' => $event->id,

@@ -32,7 +32,7 @@ class CompetitionRegistrationController extends Controller
         if ($data['status'] && ! auth()->user()->explicit_registration_approval) {
             $helperCount = auth()->user()->eventRegistrations()
                 ->whereHas('event', function ($query) {
-                    $query->where('date', '>=', now()->subYear());
+                    $query->where('date', '>=', now()->subYear()->subWeeks(3));
                 })
                 ->where('presence_confirmed', true)
                 ->count();
