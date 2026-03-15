@@ -69,7 +69,7 @@
       <!-- Betalningar -->
       <div class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
         <div class="px-5 py-4 border-b border-gray-100">
-          <h2 class="text-lg font-medium text-gray-900">Medlemsavgift och SSF-licens</h2>
+          <h2 class="text-lg font-medium text-gray-900">Avgifter</h2>
         </div>
         <div class="divide-y divide-gray-100">
           <div v-for="payment in sortedPayments" :key="payment.id">
