@@ -117,29 +117,70 @@
       </div>
     </nav>
 
-    <div v-if="user && site === ''" class="fixed top-[70px] z-10">
-      <div>
-        <div 
-          @click="showSubMenu = true" 
-          class="md:hidden bg-gkk cursor-pointer text-white relative inline-flex items-center px-4 py-2 border leading-5 font-medium focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out -mt-4 -ml-2 rounded-br-lg">
-          Insidan meny&nbsp;&nbsp;<i class="fa fa-arrow-right"></i>
-        </div>
-        <div class="-ml-64 md:ml-0 transition-all md:block" :class="{ 'ml-0': showSubMenu }">
-          <div>
-            <i v-if="showSubMenu" class="md:hidden fa fa-arrow-left cursor-pointer z-10 text-xl absolute left-2 top-0 text-white" @click="showSubMenu = false"></i>
-            <nav class="-mb-px flex flex-col fixed h-screen top-[64px] bg-gkk pt-12 w-[210px]" aria-label="Tabs">
-              <a v-for="tab in tabs" :key="tab.name" :href="tab.href" v-show="(!tab.admin) || isAdmin"
-                class="ml-4 mb-3 mt-2 group inline-flex items-center py-2 px-1 font-medium text-sm text-white" 
-                >
-                <i class="mr-2 fa" :class="`fa-${tab.icon}`"></i>
-                <span :class="[tab.current ? 'underline' : '']">{{ tab.name }}</span>
-              </a>
+    <div v-if="user && site === ''" class="fixed top-[64px] z-10">
+      <!-- Mobile menu button -->
+      <div
+        @click="showSubMenu = true"
+        class="md:hidden bg-white cursor-pointer text-gkk inline-flex items-center gap-2 px-4 py-2.5 shadow-md rounded-br-lg border-b border-r border-gray-200 text-sm font-medium"
+      >
+        <i class="fa fa-bars"></i>
+        <span>Meny</span>
+      </div>
 
-              <div v-if="user" class="fixed bottom-2 left-2 text-white text-xs">Inloggad som<br/> {{ user.email }}</div>
-            </nav>
+      <!-- Backdrop -->
+      <transition name="fade">
+        <div
+          v-if="showSubMenu"
+          class="md:hidden fixed inset-0 bg-black/30 -top-[64px]"
+          @click="showSubMenu = false"
+        ></div>
+      </transition>
+
+      <!-- Sidebar -->
+      <nav
+        class="fixed top-[64px] h-[calc(100vh-64px)] w-[240px] bg-white border-r border-gray-200 flex flex-col transition-transform duration-300 md:translate-x-0 overflow-y-auto"
+        :class="showSubMenu ? 'translate-x-0' : '-translate-x-full'"
+        aria-label="Tabs"
+      >
+        <div class="flex-1 pt-16 pb-4">
+          <!-- Regular links -->
+          <div class="px-3 mb-2">
+            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 px-3 mb-2">Medlem</div>
+            <a
+              v-for="tab in memberTabs"
+              :key="tab.name"
+              :href="tab.href"
+              @click="showSubMenu = false"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-0.5"
+              :class="tab.current ? 'bg-gkk/10 text-gkk' : 'text-gray-700 hover:bg-gray-100'"
+            >
+              <i class="fa w-5 text-center" :class="[`fa-${tab.icon}`, tab.current ? 'text-gkk' : 'text-gray-400']"></i>
+              <span>{{ tab.name }}</span>
+            </a>
+          </div>
+
+          <!-- Admin links -->
+          <div v-if="isAdmin" class="px-3 mt-4">
+            <div class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 px-3 mb-2">Admin</div>
+            <a
+              v-for="tab in adminTabs"
+              :key="tab.name"
+              :href="tab.href"
+              @click="showSubMenu = false"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-0.5"
+              :class="tab.current ? 'bg-gkk/10 text-gkk' : 'text-gray-700 hover:bg-gray-100'"
+            >
+              <i class="fa w-5 text-center" :class="[`fa-${tab.icon}`, tab.current ? 'text-gkk' : 'text-gray-400']"></i>
+              <span>{{ tab.name }}</span>
+            </a>
           </div>
         </div>
-      </div>
+
+        <!-- User info at bottom -->
+        <div v-if="user" class="border-t border-gray-200 px-4 py-3">
+          <div class="text-xs text-gray-500 truncate">{{ user.email }}</div>
+        </div>
+      </nav>
     </div>
 
     <Modal ref="impersonationModal" title="Ange epost eller användarid">
@@ -171,17 +212,21 @@ export default {
   props: ['user', 'site', 'view'],
   data() {
     return {
-      tabs: [
-        { name: 'Insidan start', href: '/insidan', icon: 'newspaper-o', current: this.view === 'inside' },
+      memberTabs: [
+        { name: 'Start', href: '/insidan', icon: 'newspaper-o', current: this.view === 'inside' },
         { name: 'Tävlingsanmälan', href: '/competitions', icon: 'th-list', current: this.view === 'competition' },
         { name: 'Funktionärsanmälan', href: '/events', icon: 'users', current: this.view === 'event' },
         { name: 'Poängtoppen', href: '/points', icon: 'trophy', current: this.view === 'points' },
         { name: 'Dokument', href: '/member-documents', icon: 'file-o', current: this.view === 'member-documents' },
         { name: 'Profil', href: '/profile', icon: 'user-circle', current: this.view === 'profile' },
-        { name: 'Admin - Rekord', href: '/admin/results', icon: 'trophy', current: this.view === 'records', admin: true },
-        { name: 'Admin - Konton', href: '/admin/accounts', icon: 'list-alt', current: this.view === 'accounts', admin: true },
-        { name: 'Admin - Slideshow', href: '/admin/slideshow', icon: 'television', current: this.view === 'slideshow', admin: true },
-        { name: 'Admin - Betalningsverktyg', href: '/admin/payment-tools', icon: 'wrench', current: this.view === 'payment-tools', admin: true },
+      ],
+      adminTabs: [
+        { name: 'Rekord', href: '/admin/results', icon: 'trophy', current: this.view === 'records' },
+        { name: 'Konton', href: '/admin/accounts', icon: 'list-alt', current: this.view === 'accounts' },
+        { name: 'Betalningar', href: '/admin/payments', icon: 'credit-card', current: this.view === 'payments' },
+        { name: 'Aktivitetslogg', href: '/admin/activity-logs', icon: 'history', current: this.view === 'activity-logs' },
+        { name: 'Slideshow', href: '/admin/slideshow', icon: 'television', current: this.view === 'slideshow' },
+        { name: 'Betalningsverktyg', href: '/admin/payment-tools', icon: 'wrench', current: this.view === 'payment-tools' },
       ],
       navIsOpen: false,
       showSubMenu: false,
@@ -230,3 +275,12 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+</style>
