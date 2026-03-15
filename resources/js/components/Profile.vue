@@ -40,28 +40,35 @@
         <div class="px-5 py-4 border-b border-gray-100">
           <h2 class="text-lg font-medium text-gray-900">Avtal</h2>
         </div>
-        <div class="px-5 py-4 space-y-3">
-          <div class="flex items-center justify-between">
+        <div class="divide-y divide-gray-100">
+          <div class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors" @click="showMemberShipAgreement">
             <div>
               <div class="text-sm font-medium text-gray-900">Medlemsavtal</div>
               <div class="text-xs text-gray-500">Signerat {{ renderDate(user.membership_agreement_signed_at) }}</div>
             </div>
-            <Button type="secondary" @click="showMemberShipAgreement">Visa</Button>
+            <div class="shrink-0 ml-4 flex flex-col items-center text-gray-400 hover:text-gkk transition-colors">
+              <i class="fa fa-external-link text-sm"></i>
+              <span class="text-xs mt-0.5">Visa avtal</span>
+            </div>
           </div>
-          <div class="border-t border-gray-100"></div>
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors" @click="showAntiDopingAgreement">
             <div>
               <div class="text-sm font-medium text-gray-900">Antidopingavtal</div>
               <div class="text-xs text-gray-500">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
             </div>
-            <Button type="secondary" @click="showAntiDopingAgreement">Visa</Button>
+            <div class="shrink-0 ml-4 flex flex-col items-center text-gray-400 hover:text-gkk transition-colors">
+              <i class="fa fa-external-link text-sm"></i>
+              <span class="text-xs mt-0.5">Visa avtal</span>
+            </div>
           </div>
-          <div class="border-t border-gray-100"></div>
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors" @click="showAntiDopingPlan">
             <div>
               <div class="text-sm font-medium text-gray-900">Antidopingplan</div>
             </div>
-            <Button type="secondary" @click="showAntiDopingPlan">Visa</Button>
+            <div class="shrink-0 ml-4 flex flex-col items-center text-gray-400 hover:text-gkk transition-colors">
+              <i class="fa fa-external-link text-sm"></i>
+              <span class="text-xs mt-0.5">Visa plan</span>
+            </div>
           </div>
         </div>
       </div>
