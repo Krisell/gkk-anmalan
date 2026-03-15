@@ -46,7 +46,7 @@
               <div class="text-sm font-medium text-gray-900">Medlemsavtal</div>
               <div class="text-xs text-gray-500">Signerat {{ renderDate(user.membership_agreement_signed_at) }}</div>
             </div>
-            <div class="shrink-0 ml-4 flex flex-col items-center text-gray-400 hover:text-gkk transition-colors">
+            <div class="shrink-0 ml-4 flex flex-col items-center text-gray-500 hover:text-gkk transition-colors">
               <i class="fa fa-external-link text-sm"></i>
               <span class="text-xs mt-0.5">Visa avtal</span>
             </div>
@@ -56,7 +56,7 @@
               <div class="text-sm font-medium text-gray-900">Antidopingavtal</div>
               <div class="text-xs text-gray-500">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
             </div>
-            <div class="shrink-0 ml-4 flex flex-col items-center text-gray-400 hover:text-gkk transition-colors">
+            <div class="shrink-0 ml-4 flex flex-col items-center text-gray-500 hover:text-gkk transition-colors">
               <i class="fa fa-external-link text-sm"></i>
               <span class="text-xs mt-0.5">Visa avtal</span>
             </div>
@@ -65,7 +65,7 @@
             <div>
               <div class="text-sm font-medium text-gray-900">Antidopingplan</div>
             </div>
-            <div class="shrink-0 ml-4 flex flex-col items-center text-gray-400 hover:text-gkk transition-colors">
+            <div class="shrink-0 ml-4 flex flex-col items-center text-gray-500 hover:text-gkk transition-colors">
               <i class="fa fa-external-link text-sm"></i>
               <span class="text-xs mt-0.5">Visa plan</span>
             </div>
@@ -105,7 +105,7 @@
                 </div>
 
                 <!-- Action hint -->
-                <div v-if="payment.fortnox_invoice_document_number" class="shrink-0 ml-4 flex flex-col items-center text-gray-400 group-hover:text-gkk transition-colors">
+                <div v-if="payment.fortnox_invoice_document_number" class="shrink-0 ml-4 flex flex-col items-center text-gray-500 group-hover:text-gkk transition-colors">
                   <i class="fa fa-external-link text-sm"></i>
                   <span class="text-xs mt-0.5">{{ payment.state === 'PAID' ? 'Visa kvitto' : 'Visa faktura' }}</span>
                 </div>
