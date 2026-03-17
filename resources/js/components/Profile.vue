@@ -32,6 +32,9 @@
           <template v-else-if="helperStatus === 'warning'">
             <br>Det börjar bli dags att hjälpa till igen för att behålla din tävlingsrätt.
           </template>
+          <template v-if="helperStatus === 'error' || helperStatus === 'warning'">
+            <br><a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2F9TitYSrq6xtm6KLWDoCU7Azz8nIXep.pdf?alt=media&token=5cb38219-19c2-469b-9301-785f9eea3c28" target="_blank" class="underline font-semibold">Läs mer om funktionärskraven</a>
+          </template>
         </div>
       </div>
 
