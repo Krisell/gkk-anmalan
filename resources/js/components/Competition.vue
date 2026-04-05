@@ -194,7 +194,7 @@
               Vid utebliven start från tävling ska medlem betala in anmälningskostnaden till GKK, även i de fall GKK beslutat att föreningen står för avgiften. Giltigt undantag från denna regel är t.ex akut sjukdom/skada eller händelse.
               </p>
               <p class="mt-2">
-Vid SM-tävlingar gäller dessutom straffavgift vid utebliven start utan att arrangör har meddelats. Det är därför mycket viktigt att meddela arrangören (direkt) om tävlingsstart uteblir, och vid eventuell straffavgift bekostar medlemmen detta genom insättning till GKK, som betalar arrangören.
+Vid SM-tävlingar gäller dessutom straffavgift från SSF vid utebliven start utan att arrangör har meddelats. Det är därför mycket viktigt att meddela arrangören (direkt) om tävlingsstart uteblir, och vid eventuell straffavgift bekostar medlemmen detta genom insättning till GKK, som betalar arrangören.
             </p>
 
             <h3 class="text-lg font-light mt-6">Information om funktionärskrav</h3>
