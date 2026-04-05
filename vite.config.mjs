@@ -26,7 +26,7 @@ export default defineConfig({
     include: ['tests/client/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   },
   build: {
-    chunkSizeWarningLimit: 1024,
+    chunkSizeWarningLimit: 2048,
   },
   resolve: {
     alias: {
