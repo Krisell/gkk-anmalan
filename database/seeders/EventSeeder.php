@@ -29,5 +29,22 @@ class EventSeeder extends Seeder
         Event::factory(2)->create([
             'date' => now()->addDays(30),
         ]);
+
+        $this->seedHelperCase('helper.ok@example.com', now()->subMonths(2));
+        $this->seedHelperCase('helper.warning@example.com', now()->subDays(330));
+        $this->seedHelperCase('helper.expired@example.com', now()->subMonths(14));
+    }
+
+    private function seedHelperCase(string $email, \DateTimeInterface $eventDate): void
+    {
+        $event = Event::factory()->create([
+            'name' => 'Funktionärsaktivitet',
+            'date' => $eventDate,
+        ]);
+
+        EventRegistration::factory()
+            ->for(User::whereEmail($email)->first())
+            ->for($event)
+            ->create(['presence_confirmed' => true]);
     }
 }

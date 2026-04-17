@@ -15,9 +15,6 @@ class ProfileController extends Controller
         $lastHelperDate = $user->eventRegistrations()
             ->whereHas('event')
             ->where('presence_confirmed', true)
-            ->whereHas('event', function ($query) {
-                $query->where('date', '>=', now()->subYear());
-            })
             ->join('events', 'event_registrations.event_id', '=', 'events.id')
             ->orderBy('events.date', 'desc')
             ->value('events.date');

@@ -111,5 +111,45 @@ class UserSeeder extends Seeder
             'created_at' => now()->subMonths(2),
             'updated_at' => now()->subMonths(2),
         ]);
+
+        $helperPassword = '$2y$04$ZanbmQomv/1y7qYst7tJW.1PdfM6MpTYIUSEWB9wlMfI/rRNQfgmq'; // asdasdasd
+
+        User::factory()->create([
+            'first_name' => 'HelperOk',
+            'last_name' => 'Member',
+            'email' => 'helper.ok@example.com',
+            'password' => $helperPassword,
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'HelperWarning',
+            'last_name' => 'Member',
+            'email' => 'helper.warning@example.com',
+            'password' => $helperPassword,
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'HelperExpired',
+            'last_name' => 'Member',
+            'email' => 'helper.expired@example.com',
+            'password' => $helperPassword,
+            'created_at' => now()->subYears(2),
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'HelperNone',
+            'last_name' => 'Member',
+            'email' => 'helper.none@example.com',
+            'password' => $helperPassword,
+            'created_at' => now()->subYears(2),
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'HelperNewMember',
+            'last_name' => 'Member',
+            'email' => 'helper.new@example.com',
+            'password' => $helperPassword,
+            'created_at' => now()->subMonths(3),
+        ]);
     }
 }
