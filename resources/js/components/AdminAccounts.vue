@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto">
+  <div class="container mx-auto -mt-8">
     <div v-if="ungranted.length > 0" class="flex flex-col mb-8">
       <h2 class="text-2xl font-thin text-center m-4">Väntar på godkännande</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -46,54 +46,59 @@
       </div>
     </div>
 
-    <h2 class="text-2xl font-thin text-center m-4">
-      Lista med {{ sortedActiveAccounts.length }} aktiva konton
-      <i style="margin-left: 20px; cursor: pointer"
-        v-tooltip="'Klicka för att kopiera epostadresserna för alla ej inaktiverade konton'" @click="copyEmails"
-        class="fa fa-envelope"></i>
-    </h2>
-
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-          <div class="flex flex-col items-center">
-            <div class="relative my-4 ml-4 flex gap-6 text-sm font-thin">
-              <div class="flex flex-col gap-2">
-                Kassörsläge
-                <ToggleButton v-model="treasurerMode"  />
+          <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="text-sm font-medium text-gray-600 whitespace-nowrap">
+                {{ sortedActiveAccounts.length }} aktiva konton
               </div>
-              <div class="flex flex-col gap-2">
-                Visa ungdomar/juniorer upp till 23
-                <ToggleButton v-model="show.juniors"  />
+              <div class="relative flex-1 min-w-[200px] max-w-md">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                  <i class="fa fa-search text-gray-400"></i>
+                </div>
+                <div
+                  v-if="search.length > 0"
+                  @click="search = ''"
+                  class="cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3"
+                >
+                  <i class="fa fa-times text-gray-400"></i>
+                </div>
+                <input
+                  v-model="search"
+                  class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" placeholder="Sök medlem"
+                />
               </div>
-              <div class="flex flex-col gap-2">
-                Visa studenter över 23
-                <ToggleButton v-model="show.studentsOver23"  />
+              <div ref="filtersContainer">
+                <Button type="secondary" @click="toggleFilters" class="whitespace-nowrap">
+                  <i class="fa fa-sliders mr-2"></i>
+                  Filter
+                  <span v-if="activeFilterCount > 0" class="ml-2 bg-gkk text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center">
+                    {{ activeFilterCount }}
+                  </span>
+                </Button>
+                <Teleport to="body">
+                  <div
+                    v-if="showFilters"
+                    ref="filtersPopover"
+                    class="fixed w-[28rem] max-w-[calc(100vw-2rem)] bg-white rounded-md shadow-lg ring-1 ring-black/5 z-50 p-4"
+                    :style="{ top: popoverPosition.top + 'px', left: popoverPosition.left + 'px' }"
+                  >
+                    <div class="flex flex-col gap-3 text-sm font-thin">
+                      <ToggleButton v-model="treasurerMode"><span class="ml-2">Kassörsläge</span></ToggleButton>
+                      <ToggleButton v-model="show.juniors"><span class="ml-2">Visa ungdomar/juniorer upp till 23</span></ToggleButton>
+                      <ToggleButton v-model="show.studentsOver23"><span class="ml-2">Visa studenter över 23</span></ToggleButton>
+                      <ToggleButton v-model="show.rest"><span class="ml-2">Visa övriga</span></ToggleButton>
+                      <ToggleButton v-model="show.onlyBackgroundCheck"><span class="ml-2">Endast med belastningsregisterutdrag</span></ToggleButton>
+                    </div>
+                  </div>
+                </Teleport>
               </div>
-              <div class="flex flex-col gap-2">
-                Visa övriga
-                <ToggleButton v-model="show.rest"  />
-              </div>
-              <div class="flex flex-col gap-2">
-                Endast med belastningsregisterutdrag
-                <ToggleButton v-model="show.onlyBackgroundCheck"  />
-              </div>
-            </div>
-            <div class="relative my-2 rounded-md shadow-sm w-64 ml-4 lg:mx-auto">
-              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <i class="fa fa-search text-gray-400"></i>
-              </div>
-              <div 
-                v-if="search.length > 0"
-                @click="search = ''" 
-                class="cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3"
-              >
-                <i class="fa fa-times text-gray-400"></i>
-              </div>
-              <input 
-                v-model="search" 
-                class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" placeholder="Sök medlem" 
-              />
+              <Button type="secondary" @click="copyEmails" class="whitespace-nowrap" v-tooltip="'Kopierar e-postadresserna för alla icke-inaktiverade konton (ignorerar filter och sökning)'">
+                <i class="fa fa-envelope mr-2"></i>
+                Kopiera alla aktiva e-postadresser
+              </Button>
             </div>
           </div>
           <table class="min-w-full">
@@ -497,6 +502,8 @@ export default {
       accounts: this.initialAccounts,
       search: '',
       treasurerMode: false,
+      showFilters: false,
+      popoverPosition: { top: 0, left: 0 },
       show: {
         juniors: true,
         studentsOver23: true,
@@ -517,6 +524,13 @@ export default {
     if (order) {
       this.sortOrder = parseInt(order)
     }
+
+    document.addEventListener('click', this.handleFiltersClickOutside)
+    window.addEventListener('scroll', this.handleScrollCloseFilters, true)
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.handleFiltersClickOutside)
+    window.removeEventListener('scroll', this.handleScrollCloseFilters, true)
   },
   computed: {
     filteredSortedActiveAccounts() {
@@ -567,8 +581,44 @@ export default {
     inactiveAccounts() {
       return this.accounts.filter((account) => account.inactivated_at !== null)
     },
+    activeFilterCount() {
+      let count = 0
+      if (this.treasurerMode) count++
+      if (!this.show.juniors) count++
+      if (!this.show.studentsOver23) count++
+      if (!this.show.rest) count++
+      if (this.show.onlyBackgroundCheck) count++
+      return count
+    },
   },
   methods: {
+    toggleFilters() {
+      if (!this.showFilters) {
+        const rect = this.$refs.filtersContainer.getBoundingClientRect()
+        const popoverWidth = Math.min(448, window.innerWidth - 32)
+        const maxLeft = window.innerWidth - popoverWidth - 16
+        this.popoverPosition = {
+          top: rect.bottom + 8,
+          left: Math.max(16, Math.min(rect.left, maxLeft)),
+        }
+      }
+      this.showFilters = !this.showFilters
+    },
+    handleScrollCloseFilters() {
+      if (this.showFilters) {
+        this.showFilters = false
+      }
+    },
+    handleFiltersClickOutside(event) {
+      if (!this.showFilters) return
+      const container = this.$refs.filtersContainer
+      const popover = this.$refs.filtersPopover
+      const inButton = container && container.contains(event.target)
+      const inPopover = popover && popover.contains(event.target)
+      if (!inButton && !inPopover) {
+        this.showFilters = false
+      }
+    },
     async loadAccounts() {
       const response = await axios.get('/admin/accounts')
       this.accounts = response.data

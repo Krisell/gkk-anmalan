@@ -33,3 +33,5 @@ public/js/app.js.LICENSE.txt
 **/caddy
 frankenphp
 frankenphp-worker.php
+
+.playwright-mcp
