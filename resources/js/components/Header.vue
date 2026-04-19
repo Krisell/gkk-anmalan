@@ -223,10 +223,10 @@ export default {
       adminTabs: [
         { name: 'Rekord', href: '/admin/results', icon: 'trophy', current: this.view === 'records' },
         { name: 'Konton', href: '/admin/accounts', icon: 'list-alt', current: this.view === 'accounts' },
-        { name: 'Betalningar', href: '/admin/payments', icon: 'credit-card', current: this.view === 'payments' },
-        { name: 'Aktivitetslogg', href: '/admin/activity-logs', icon: 'history', current: this.view === 'activity-logs' },
         { name: 'Slideshow', href: '/admin/slideshow', icon: 'television', current: this.view === 'slideshow' },
-        { name: 'Betalningsverktyg', href: '/admin/payment-tools', icon: 'wrench', current: this.view === 'payment-tools' },
+        { name: 'Betalningar', href: '/admin/payments', icon: 'credit-card', current: this.view === 'payments' },
+        { name: 'Fortnox', href: '/admin/payment-tools', icon: 'wrench', current: this.view === 'payment-tools' },
+        { name: 'Aktivitetslogg', href: '/admin/activity-logs', icon: 'history', current: this.view === 'activity-logs' },
       ],
       navIsOpen: false,
       showSubMenu: false,
