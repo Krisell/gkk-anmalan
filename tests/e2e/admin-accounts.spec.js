@@ -7,7 +7,7 @@ test('The list of users can be seen', async ({ page }) => {
     const otherUser = await create(page, 'User', { licence_number: 'SOME-LICENSE-NUMBER-123' })
 
     await page.goto('/insidan')
-    await page.locator('div').filter({ hasText: /^Administrera konton$/ }).first().click()
+    await page.locator('div').filter({ hasText: /^Konton$/ }).first().click()
   
     await expect(page.getByText(`${user.first_name} ${user.last_name}`)).toBeVisible()
     await expect(page.getByText(`${otherUser.first_name} ${otherUser.last_name}`)).toBeVisible()
