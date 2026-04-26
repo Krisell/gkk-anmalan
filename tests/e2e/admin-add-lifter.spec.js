@@ -8,7 +8,7 @@ test('An admin can add a lifter to a competition', async ({ page }) => {
     const user = await create(page, 'User')
 
     await page.goto('/competitions')
-    await page.getByRole('button', { name: 'Klicka för att administrera' }).click()
+    await page.getByRole('link', { name: 'Klicka för att administrera' }).click()
     await page.getByText(competition.name).click()
 
     

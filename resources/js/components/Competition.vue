@@ -1,36 +1,47 @@
 <template>
-  <div class="container mx-auto max-w-lg">
-    <h1 class="text-center text-3xl font-thin mb-2">Tävlingsanmälan</h1>
+  <div class="max-w-6xl mx-auto px-4 pt-6">
+    <h1 class="text-2xl font-semibold mb-6 flex flex-wrap items-center">
+      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
+        <i class="fa fa-angle-left"></i>
+        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
+      </a>
+      <span class="text-gray-300 mx-2">/</span>
+      <a href="/competitions" class="text-gray-400 hover:text-gkk underline underline-offset-4 decoration-gray-300 hover:decoration-gkk transition-colors">Tävlingsanmälan</a>
+      <span class="text-gray-300 mx-2">/</span>
+      <span class="text-gkk">{{ competition.name }}</span>
+    </h1>
 
-    <div class="bg-white shadow sm:rounded-lg text-center mb-4">
-      <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">
-          {{ competition.name }}
-        </h3>
-        <div class="mt-2 max-w-xl text-sm leading-5 text-gray-500">
-          <p v-html="dateString"></p>
+    <div class="max-w-lg mx-auto">
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm mb-6 p-4 flex items-stretch gap-4">
+      <DateBlock :date="competition.date" :end-date="competition.end_date" />
+      <div class="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
+        <h3 class="text-base font-semibold text-gkk">{{ competition.name }}</h3>
+        <div class="flex items-center gap-1.5 text-sm text-gray-600">
+          <i class="fa fa-calendar-o text-gray-400"></i>
+          <span>{{ plainDateString }}</span>
         </div>
-        <div class="mt-5">
-          <h3 class="text-md font-thin mt-2 whitespace-pre-wrap">{{ competition.description }}</h3>
+        <div v-if="competition.description" class="flex items-start gap-1.5 text-sm text-gray-600">
+          <i class="fa fa-users text-gray-400 mt-1"></i>
+          <span class="whitespace-pre-wrap">{{ competition.description }}</span>
         </div>
-        <div v-if="competition.pdf_url" class="mt-4">
+        <div v-if="competition.pdf_url || competition.link_url" class="flex flex-wrap gap-2 mt-1">
           <a
+            v-if="competition.pdf_url"
             :href="competition.pdf_url"
             target="_blank"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50"
           >
-            <i class="fa fa-file-pdf-o mr-2 text-red-500" style="font-size: 16px"></i>
-            Visa tävlingsinformation (PDF)
+            <i class="fa fa-file-pdf-o text-red-500"></i>
+            <span>PDF-inbjudan</span>
           </a>
-        </div>
-        <div v-if="competition.link_url" class="mt-4">
           <a
+            v-if="competition.link_url"
             :href="competition.link_url"
             target="_blank"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-gray-200 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50"
           >
-            <i class="fa fa-external-link mr-2 text-blue-500" style="font-size: 16px"></i>
-            Länk till tävling
+            <i class="fa fa-external-link text-gkk"></i>
+            <span>Länk till tävling</span>
           </a>
         </div>
       </div>
@@ -229,8 +240,6 @@ Vid SM-tävlingar gäller dessutom straffavgift från SSF vid utebliven start ut
       </form>
     </div>
 
-    <Link to="/competitions" text="Tillbaka till alla tävlingar" />
-
     <div class="mt-16" v-if="competition.publish_list_value && competition.publish_list_value.length > 0">
       <h3 class="text-lg font-thin text-center">Följande medlemmar har tackat ja</h3>
       <table class="min-w-full" v-if="competition.publish_list">
@@ -268,20 +277,20 @@ Vid SM-tävlingar gäller dessutom straffavgift från SSF vid utebliven start ut
         </tbody>
       </table>
 
-      <Link to="/competitions" text="Tillbaka till alla tävlingar" />
+    </div>
     </div>
   </div>
 </template>
 
 <script>
-import Link from './ui/Link.vue'
 import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
 import Message from './Message.vue'
 import ToggleButton from './ui/ToggleButton.vue'
+import DateBlock from './DateBlock.vue'
 
 export default {
-  components: { Message, Button, ToggleButton, Link },
+  components: { Message, Button, ToggleButton, DateBlock },
   props: ['competition', 'user', '_registration'],
   data() {
     return {
@@ -324,6 +333,13 @@ export default {
       }
 
       return `${Date.string(this.competition.date)} (${this.competition.date})`
+    },
+    plainDateString() {
+      if (this.competition.end_date) {
+        return `${Date.string(this.competition.date)} – ${Date.string(this.competition.end_date)}`
+      }
+
+      return Date.string(this.competition.date)
     },
     eventsString() {
       return Object.entries(this.events)

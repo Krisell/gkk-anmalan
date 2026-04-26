@@ -1,8 +1,18 @@
 <template>
-  <div class="container mx-auto max-w-lg">
-    <h1 class="text-center text-3xl font-thin mb-2 mt-8">Funktionärsanmälan</h1>
+  <div class="max-w-6xl mx-auto px-4 pt-6">
+    <h1 class="text-2xl font-semibold mb-6 flex flex-wrap items-center">
+      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
+        <i class="fa fa-angle-left"></i>
+        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
+      </a>
+      <span class="text-gray-300 mx-2">/</span>
+      <a href="/events" class="text-gray-400 hover:text-gkk underline underline-offset-4 decoration-gray-300 hover:decoration-gkk transition-colors">Funktionärsanmälan</a>
+      <span class="text-gray-300 mx-2">/</span>
+      <span class="text-gkk">{{ event.name }}</span>
+    </h1>
 
-    <div class="bg-white shadow sm:rounded-lg text-center mb-4">
+    <div class="max-w-lg mx-auto">
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm text-center mb-4">
       <div class="px-4 py-5 sm:p-6">
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {{ event.name }}
@@ -73,8 +83,6 @@
       </form>
     </div>
 
-    <Link to="/events" text="Tillbaka till alla event" />
-
     <div class="mt-16" v-if="event.publish_list_value && event.publish_list_value.length > 0">
       <h3 class="text-lg font-thin text-center">Följande medlemmar har tackat ja</h3>
       <table class="min-w-full" v-if="event.publish_list">
@@ -96,7 +104,7 @@
         </tbody>
       </table>
 
-      <Link to="/events" text="Tillbaka till alla event" />
+    </div>
     </div>
   </div>
 </template>
@@ -105,10 +113,9 @@
 import Date from '../modules/Date.js'
 import Message from './Message.vue'
 import Button from './ui/Button.vue'
-import Link from './ui/Link.vue'
 
 export default {
-  components: { Message, Button, Link },
+  components: { Message, Button },
   props: ['event', 'user', '_registration'],
   data() {
     return {

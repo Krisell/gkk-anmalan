@@ -63,6 +63,16 @@
                 <div class="text-xs text-gray-500 leading-snug min-w-0">{{ card.description }}</div>
                 <i class="fa fa-angle-right text-gray-400 group-hover:text-gkk transition-colors text-lg shrink-0"></i>
               </div>
+              <span
+                v-if="card.adminHref && isAdmin"
+                role="link"
+                tabindex="0"
+                @click.stop.prevent="location(card.adminHref)"
+                class="inline-flex items-center gap-1 mt-2 px-2 py-0.5 rounded-full bg-gkk/10 text-gkk text-[10px] font-semibold uppercase tracking-wider hover:bg-gkk/20 cursor-pointer"
+              >
+                <i class="fa fa-lock"></i>
+                Admin
+              </span>
             </div>
           </a>
         </div>
@@ -115,6 +125,7 @@ export default {
           title: 'Tävling',
           description: 'Tävlingsanmälan',
           icon: 'trophy',
+          adminHref: '/admin/competitions',
         },
         {
           href: '/events',
@@ -122,6 +133,7 @@ export default {
           description: 'Hjälp till vid tävlingar',
           icon: 'users',
           unanswered: this.unanswered?.events,
+          adminHref: '/admin/events',
         },
         {
           href: '/member-documents',

@@ -1,29 +1,41 @@
 <template>
-  <div class="action-button-card max-w-xl mx-auto" @click="$emit('click')">
-    <div class="description">{{ event.name }} ({{ dateString }})</div>
-    <div v-if="event.last_registration_at" style="text-align: center">
-      Sista anmälningsdag: {{ event.last_registration_at }}
-    </div>
-    <div class="description" style="font-size: 12px; margin-top: 0; white-space: pre-wrap">
-      {{ event.description }}
-    </div>
-    <div style="margin-top: 30px">
-      <Message warning v-if="registration && registration.status == 0">
-        <div>Du har anmält att du inte kan komma.</div>
-        <div v-if="afterLastRegistration(event)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
-      </Message>
-      <Message success v-else-if="registration && registration.status == 1">
-        <div>Du är anmäld som funktionär, tack!</div>
-        <div v-if="afterLastRegistration(event)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
-      </Message>
-      <Message info v-else>
-        <div>Du har inte meddelat om du kan delta ännu.</div>
-        <div v-if="afterLastRegistration(event)" class="lastDatePassed">Sista anmälningsdatum har passerat.</div>
-      </Message>
+  <div
+    class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer p-4 flex items-stretch gap-4"
+    @click="$emit('click')"
+  >
+    <DateBlock :date="event.date" :end-date="event.end_date" />
 
-      <Message style="margin-top: 10px" v-if="event.publish_count_value > 0">
-        Hittills har {{ event.publish_count_value }} GKK-medlemmar tackat ja till detta event.
-      </Message>
+    <div class="flex-1 min-w-0 flex flex-col gap-3">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <div class="flex items-baseline flex-wrap gap-x-2">
+            <h3 class="text-base font-semibold text-gkk">{{ event.name }}</h3>
+            <span class="text-sm text-gray-500">({{ dateString }})</span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-sm text-gray-600">
+            <div v-if="event.last_registration_at" class="flex items-center gap-1.5">
+              <i class="fa fa-calendar-o text-gray-400"></i>
+              <span>Sista anmälningsdag: {{ event.last_registration_at }}</span>
+            </div>
+            <div v-if="event.description" class="flex items-start gap-1.5 min-w-0">
+              <i class="fa fa-users text-gray-400 mt-1"></i>
+              <span class="whitespace-pre-wrap">{{ event.description }}</span>
+            </div>
+          </div>
+        </div>
+
+        <i class="fa fa-angle-right text-gray-400 group-hover:text-gkk transition-colors text-2xl shrink-0 self-center"></i>
+      </div>
+
+      <div v-if="messages.length" class="flex flex-col gap-2">
+        <Message v-for="(msg, i) in messages" :key="i">
+          <div class="flex items-center gap-2">
+            <i class="fa fa-info-circle shrink-0 text-[#439cd6]"></i>
+            <span>{{ msg }}</span>
+          </div>
+        </Message>
+      </div>
     </div>
   </div>
 </template>
@@ -31,9 +43,10 @@
 <script>
 import Date from '../modules/Date.js'
 import Message from './Message.vue'
+import DateBlock from './DateBlock.vue'
 
 export default {
-  components: { Message },
+  components: { Message, DateBlock },
   props: ['event', 'registration'],
   computed: {
     dateString() {
@@ -43,95 +56,34 @@ export default {
 
       return Date.string(this.event.date)
     },
-  },
-  methods: {
-    afterLastRegistration(event) {
-      if (!event.last_registration_at) {
+    afterLastRegistration() {
+      if (!this.event.last_registration_at) {
         return false
       }
 
-      return new window.Date().setHours(0, 0, 0, 0) > new window.Date(event.last_registration_at)
+      return new window.Date().setHours(0, 0, 0, 0) > new window.Date(this.event.last_registration_at)
+    },
+    messages() {
+      const list = []
+
+      if (this.registration && this.registration.status == 1) {
+        list.push('Du är anmäld som funktionär, tack!')
+      } else if (this.registration && this.registration.status == 0) {
+        list.push('Du har anmält att du inte kan komma.')
+      } else {
+        list.push('Du har inte meddelat om du kan delta ännu.')
+      }
+
+      if (this.afterLastRegistration) {
+        list.push('Sista anmälningsdatum har passerat.')
+      }
+
+      if (this.event.publish_count_value > 0) {
+        list.push(`Hittills har ${this.event.publish_count_value} GKK-medlemmar tackat ja till detta event.`)
+      }
+
+      return list
     },
   },
 }
 </script>
-
-<style scoped lang="less">
-.icon {
-  min-height: 50px;
-  color: #19274a;
-}
-
-i.icon {
-  align-items: center;
-  justify-content: center;
-  display: flex;
-}
-
-.action-button-card {
-  background: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
-  font-size: 12px;
-  cursor: pointer;
-  flex: 1;
-  // margin-right: 10px;
-  padding: 30px;
-  color: #ff9e02;
-  color: black;
-  border: none;
-
-  -webkit-transition: all 0.1s ease-in-out;
-  transition: all 0.1s ease-in-out;
-  -webkit-animation-duration: 0.1s;
-  animation-duration: 0.1s;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  }
-
-  &:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-
-  &.danger {
-    border: 1px solid #d84a38;
-    color: #d84a38;
-  }
-
-  border-top: 3px solid #243868;
-}
-
-.action-button-card .description {
-  //  margin-top: 20px;
-  font-size: 16px;
-  color: black;
-  text-align: center;
-}
-
-.action-button-card i {
-  font-size: 40px;
-}
-
-.action-button-card-activated {
-  background: #ffffff;
-  border: 1px solid #45c458;
-  color: #45c458;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
-}
-
-.action-button-card-danger {
-  background: #ffffff;
-  border: 1px solid #d84a38;
-  color: #d84a38;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
-}
-
-.lastDatePassed {
-  font-size: 12px;
-}
-</style>

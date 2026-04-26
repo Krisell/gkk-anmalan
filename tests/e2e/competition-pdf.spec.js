@@ -13,10 +13,10 @@ test('A competition with a PDF shows a link on the registration page', async ({ 
     })
 
     await page.goto(`/competitions/${competition.id}`)
-    await expect(page.getByText('PDF Test Competition')).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Visa tävlingsinformation (PDF)' })).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Visa tävlingsinformation (PDF)' })).toHaveAttribute('href', 'https://example.com/test.pdf')
-    await expect(page.getByRole('link', { name: 'Visa tävlingsinformation (PDF)' })).toHaveAttribute('target', '_blank')
+    await expect(page.getByRole('heading', { name: 'PDF Test Competition', exact: true })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'PDF-inbjudan' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'PDF-inbjudan' })).toHaveAttribute('href', 'https://example.com/test.pdf')
+    await expect(page.getByRole('link', { name: 'PDF-inbjudan' })).toHaveAttribute('target', '_blank')
 })
 
 test('A competition without a PDF does not show a PDF link', async ({ page }) => {
@@ -30,8 +30,8 @@ test('A competition without a PDF does not show a PDF link', async ({ page }) =>
     })
 
     await page.goto(`/competitions/${competition.id}`)
-    await expect(page.getByText('No PDF Competition')).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Visa tävlingsinformation (PDF)' })).not.toBeVisible()
+    await expect(page.getByRole('heading', { name: 'No PDF Competition', exact: true })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'PDF-inbjudan' })).not.toBeVisible()
 })
 
 test('An admin can edit a competition and see the existing PDF', async ({ page }) => {
