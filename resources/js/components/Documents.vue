@@ -12,10 +12,10 @@
       <a
         v-if="isAdmin"
         href="/admin/documents"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gkk text-white font-medium text-sm hover:bg-gkk-light transition-colors"
+        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gkk/10 text-gkk text-[10px] font-semibold uppercase tracking-wider hover:bg-gkk/20"
       >
         <i class="fa fa-lock"></i>
-        <span>Klicka för att administrera</span>
+        Admin
       </a>
     </div>
 
