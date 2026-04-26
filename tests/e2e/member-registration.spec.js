@@ -77,7 +77,7 @@ test('A lifter can register for an event', async ({ page }) => {
 
     await page.goto('/events')
 
-    await expect(page.getByText('Du har inte meddelat om du kan delta').first()).toBeVisible()
+    await expect(page.getByText('Ej svarat').first()).toBeVisible()
 
     await page.getByText(event.name).click();
     await page.getByPlaceholder('Ev. kommentar/ytterligare').fill('Some comment');
@@ -86,5 +86,5 @@ test('A lifter can register for an event', async ({ page }) => {
 
     await page.goto('/events')
 
-    await expect(page.getByText('Du är anmäld som funktionär, tack!')).toBeVisible()
+    await expect(page.getByText('Anmäld!')).toBeVisible()
 })

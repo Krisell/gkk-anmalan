@@ -7,10 +7,28 @@
 
     <div class="flex-1 min-w-0 flex flex-col gap-3">
       <div class="flex items-start justify-between gap-3">
-        <div class="min-w-0">
+        <div class="min-w-0 flex-1">
           <div class="flex items-baseline flex-wrap gap-x-2">
             <h3 class="text-base font-semibold text-gkk">{{ event.name }}</h3>
             <span class="text-sm text-gray-500">({{ dateString }})</span>
+            <span
+              v-if="registration && registration.status == 1"
+              class="inline-flex items-center px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium"
+            >
+              Anmäld!
+            </span>
+            <span
+              v-else-if="registration && registration.status == 0"
+              class="inline-flex items-center px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium"
+            >
+              Tackat nej
+            </span>
+            <span
+              v-else
+              class="inline-flex items-center px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium"
+            >
+              Ej svarat
+            </span>
           </div>
 
           <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-sm text-gray-600">
@@ -35,6 +53,10 @@
             <span>{{ msg }}</span>
           </div>
         </Message>
+      </div>
+
+      <div v-if="event.publish_count_value > 0" class="text-xs text-gray-400 text-right mt-auto">
+        {{ event.publish_count_value }} medlemmar har tackat ja
       </div>
     </div>
   </div>
@@ -66,20 +88,8 @@ export default {
     messages() {
       const list = []
 
-      if (this.registration && this.registration.status == 1) {
-        list.push('Du är anmäld som funktionär, tack!')
-      } else if (this.registration && this.registration.status == 0) {
-        list.push('Du har anmält att du inte kan komma.')
-      } else {
-        list.push('Du har inte meddelat om du kan delta ännu.')
-      }
-
       if (this.afterLastRegistration) {
         list.push('Sista anmälningsdatum har passerat.')
-      }
-
-      if (this.event.publish_count_value > 0) {
-        list.push(`Hittills har ${this.event.publish_count_value} GKK-medlemmar tackat ja till detta event.`)
       }
 
       return list
