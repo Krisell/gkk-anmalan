@@ -1,6 +1,14 @@
 <template>
   <div class="max-w-[95%] mx-auto pb-12">
     <div class="max-w-3xl mx-auto">
+      <h1 class="text-2xl font-semibold mb-6">
+        <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
+          <i class="fa fa-angle-left"></i>
+          <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
+        </a>
+        <span class="text-gray-300 mx-2">/</span>
+        <span class="text-gkk">Profil</span>
+      </h1>
       <!-- Medlem -->
       <div class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6 px-5 py-4 flex items-center gap-4">
         <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gkk text-white font-semibold text-lg shrink-0">
