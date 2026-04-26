@@ -19,7 +19,7 @@ test('A lifter can register for a competition', async ({ page }) => {
 
     await page.goto('/competitions')
 
-    await expect(page.getByText('Du har anmält intresse att tävla').first()).toBeVisible()
+    await expect(page.getByText('Anmäld!').first()).toBeVisible()
 })
 
 test('A lifter without explicit approval can register for a competition', async ({ page }) => {
@@ -47,7 +47,7 @@ test('A lifter without explicit approval can register for a competition', async 
 
     await page.goto('/competitions')
 
-    await expect(page.getByText('Du har anmält intresse att tävla').first()).toBeVisible()
+    await expect(page.getByText('Anmäld!').first()).toBeVisible()
 })
 
 test('A lifter without approval cant register for a competition', async ({ page }) => {
@@ -67,7 +67,7 @@ test('A lifter without approval cant register for a competition', async ({ page 
 
     await page.goto('/competitions')
 
-    await expect(page.getByText('Du har anmält intresse att tävla').first()).not.toBeVisible()
+    await expect(page.getByText('Anmäld!').first()).not.toBeVisible()
 })
 
 test('A lifter can register for an event', async ({ page }) => {

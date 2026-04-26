@@ -38,5 +38,13 @@ class CompetitionSeeder extends Seeder
             'name' => 'Some other competition',
             'date' => now()->addDays(30),
         ]);
+
+        Competition::factory()->create([
+            'name' => 'Veteran SM klassisk styrkelyft',
+            'date' => now()->addDays(45),
+            'end_date' => now()->addDays(47),
+            'pdf_url' => 'https://www.africau.edu/images/default/sample.pdf',
+            'link_url' => 'https://data.styrkelyft.se/',
+        ]);
     }
 }

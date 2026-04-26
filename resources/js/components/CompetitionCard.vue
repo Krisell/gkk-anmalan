@@ -7,30 +7,22 @@
 
     <div class="flex-1 min-w-0 flex flex-col gap-3">
       <div class="flex items-start justify-between gap-3">
-        <div class="min-w-0">
+        <div class="min-w-0 flex-1">
           <div class="flex items-baseline flex-wrap gap-x-2">
             <h3 class="text-base font-semibold text-gkk">{{ competition.name }}</h3>
             <span class="text-sm text-gray-500">({{ dateString }})</span>
-            <a
-              v-if="competition.pdf_url"
-              :href="competition.pdf_url"
-              target="_blank"
-              @click.stop
-              v-tooltip="'PDF-inbjudan bifogad'"
-              class="text-red-500 hover:text-red-600"
+            <span
+              v-if="registration && registration.status == 1"
+              class="inline-flex items-center px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium"
             >
-              <i class="fa fa-file-pdf-o"></i>
-            </a>
-            <a
-              v-if="competition.link_url"
-              :href="competition.link_url"
-              target="_blank"
-              @click.stop
-              v-tooltip="'Länk bifogad'"
-              class="text-gkk hover:text-gkk-light"
+              Anmäld!
+            </span>
+            <span
+              v-else-if="registration && registration.status == 0"
+              class="inline-flex items-center px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs font-medium"
             >
-              <i class="fa fa-external-link"></i>
-            </a>
+              Tackat nej
+            </span>
           </div>
 
           <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-sm text-gray-600">
@@ -42,6 +34,29 @@
               <i class="fa fa-users text-gray-400 mt-1"></i>
               <span class="whitespace-pre-wrap">{{ competition.description }}</span>
             </div>
+          </div>
+
+          <div v-if="competition.pdf_url || competition.link_url" class="flex flex-wrap gap-2 mt-3">
+            <a
+              v-if="competition.pdf_url"
+              :href="competition.pdf_url"
+              target="_blank"
+              @click.stop
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-gray-200 text-xs font-medium text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors"
+            >
+              <i class="fa fa-file-pdf-o"></i>
+              <span>PDF-inbjudan</span>
+            </a>
+            <a
+              v-if="competition.link_url"
+              :href="competition.link_url"
+              target="_blank"
+              @click.stop
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-gray-200 text-xs font-medium text-gkk hover:bg-gkk/5 hover:border-gkk/20 transition-colors"
+            >
+              <i class="fa fa-external-link"></i>
+              <span>Mer information</span>
+            </a>
           </div>
         </div>
 
@@ -55,6 +70,10 @@
             <span>{{ msg }}</span>
           </div>
         </Message>
+      </div>
+
+      <div v-if="competition.publish_count_value > 0" class="text-xs text-gray-400 text-right mt-auto">
+        {{ competition.publish_count_value }} medlemmar registrerade
       </div>
     </div>
   </div>
@@ -86,18 +105,8 @@ export default {
     messages() {
       const list = []
 
-      if (this.registration && this.registration.status == 1) {
-        list.push('Du har anmält intresse att tävla!')
-      } else if (this.registration && this.registration.status == 0) {
-        list.push('Du har tackat nej till denna tävling.')
-      }
-
       if (this.afterLastRegistration) {
         list.push('Sista anmälningsdatum har passerat.')
-      }
-
-      if (this.competition.publish_count_value > 0) {
-        list.push(`Just nu är ${this.competition.publish_count_value} GKK-medlemmar registrerade på denna tävling.`)
       }
 
       return list

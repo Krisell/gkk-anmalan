@@ -1,6 +1,13 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-center text-3xl font-thin mb-6">Admin - Funktionärsanmälningar</h1>
+    <h1 class="text-2xl font-semibold mb-6 pl-4">
+      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
+        <i class="fa fa-angle-left"></i>
+        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
+      </a>
+      <span class="text-gray-300 mx-2">/</span>
+      <span class="text-gkk">Admin - Funktionärsanmälningar</span>
+    </h1>
 
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">

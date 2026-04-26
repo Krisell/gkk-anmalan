@@ -130,7 +130,7 @@ export default {
         {
           href: '/events',
           title: 'Funktionär',
-          description: 'Hjälp till vid tävlingar',
+          description: 'Funktionärsanmälan',
           icon: 'users',
           unanswered: this.unanswered?.events,
           adminHref: '/admin/events',
@@ -140,6 +140,7 @@ export default {
           title: 'Dokument',
           description: 'Protokoll mm',
           icon: 'file-text-o',
+          adminHref: '/admin/documents',
         },
       ]
 
