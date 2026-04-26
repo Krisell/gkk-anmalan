@@ -1,5 +1,5 @@
 <template>
-  <div :id="`news-${item.id}`" class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden" :class="{ 'bg-gkk/5': expanded }">
+  <div :id="`news-${item.id}`" class="bg-white rounded-lg shadow-sm border border-gray-100" :class="{ 'bg-gkk/5': expanded }">
     <div class="flex items-start gap-3 p-4 cursor-pointer" @click="expanded = !expanded">
       <div class="w-10 h-10 rounded-full bg-gkk/10 text-gkk flex items-center justify-center shrink-0">
         <i class="fa fa-bullhorn"></i>

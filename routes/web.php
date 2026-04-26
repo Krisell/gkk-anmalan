@@ -189,6 +189,8 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
             Route::post('/preview', [NewsEmailController::class, 'preview']);
             Route::post('/test', [NewsEmailController::class, 'test']);
             Route::get('/{item}', [NewsEmailController::class, 'show']);
+            Route::get('/{item}/recipients', [NewsEmailController::class, 'recipients']);
+            Route::post('/{item}/send', [NewsEmailController::class, 'send']);
         });
     });
 
