@@ -5,7 +5,7 @@ test('An admin can create a competition', async ({ page }) => {
     await login(page, { role: 'admin' })
 
     await page.goto('/competitions')
-    await page.getByRole('link', { name: 'Klicka för att administrera' }).click();
+    await page.getByRole('link', { name: 'Admin' }).click();
     await page.getByRole('button', { name: 'Ny tävling' }).click();
 
     await page.locator('input[name="name"]').fill('Some Competition');
@@ -25,7 +25,7 @@ test('An admin can create an event', async ({ page }) => {
     await login(page, { role: 'admin' })
 
     await page.goto('/events')
-    await page.getByRole('link', { name: 'Klicka för att administrera' }).click();
+    await page.getByRole('link', { name: 'Admin' }).click();
     await page.getByRole('button', { name: 'Nytt event' }).click();
 
     await page.locator('input[name="name"]').fill('Some Event');

@@ -40,7 +40,7 @@
     :view='@json($view ?? '')'
 ></gkk-header>
 
-<main class="mt-16">
+<main class="mt-16 @yield('main-class', 'page-transition-subtle')">
 @yield('content')
 </main>
 
