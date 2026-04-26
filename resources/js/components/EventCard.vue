@@ -29,9 +29,15 @@
             >
               Ej svarat
             </span>
+            <span
+              v-if="afterLastRegistration"
+              class="inline-flex items-center px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs font-medium"
+            >
+              Anmälan stängd
+            </span>
           </div>
 
-          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-sm text-gray-600">
+          <div class="flex flex-col gap-1 mt-1.5 text-sm text-gray-600">
             <div v-if="event.last_registration_at" class="flex items-center gap-1.5">
               <i class="fa fa-calendar-o text-gray-400"></i>
               <span>Sista anmälningsdag: {{ event.last_registration_at }}</span>
@@ -46,15 +52,6 @@
         <i class="fa fa-angle-right text-gray-400 group-hover:text-gkk transition-colors text-2xl shrink-0 self-center"></i>
       </div>
 
-      <div v-if="messages.length" class="flex flex-col gap-2">
-        <Message v-for="(msg, i) in messages" :key="i">
-          <div class="flex items-center gap-2">
-            <i class="fa fa-info-circle shrink-0 text-[#439cd6]"></i>
-            <span>{{ msg }}</span>
-          </div>
-        </Message>
-      </div>
-
       <div v-if="event.publish_count_value > 0" class="text-xs text-gray-400 text-right mt-auto">
         {{ event.publish_count_value }} medlemmar har tackat ja
       </div>
@@ -64,11 +61,10 @@
 
 <script>
 import Date from '../modules/Date.js'
-import Message from './Message.vue'
 import DateBlock from './DateBlock.vue'
 
 export default {
-  components: { Message, DateBlock },
+  components: { DateBlock },
   props: ['event', 'registration'],
   computed: {
     dateString() {
@@ -84,15 +80,6 @@ export default {
       }
 
       return new window.Date().setHours(0, 0, 0, 0) > new window.Date(this.event.last_registration_at)
-    },
-    messages() {
-      const list = []
-
-      if (this.afterLastRegistration) {
-        list.push('Sista anmälningsdatum har passerat.')
-      }
-
-      return list
     },
   },
 }
