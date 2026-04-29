@@ -64,10 +64,10 @@
           >
 
           <Button type="danger" v-if="registration && !canHelp" style="margin-bottom: 30px" @click.prevent="register(false)"
-            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan inte hjälpa till</Button
+            ><i class="fa fa-check-circle-o" style="margin-right: 10px"></i>Jag kan inte delta</Button
           >
           <Button type="secondary" v-if="!registration || canHelp" style="margin-bottom: 30px" @click.prevent="register(false)"
-            >Jag kan inte hjälpa till</Button
+            >Jag kan inte delta</Button
           >
 
           <Button v-if="justSaved" type="secondary" disabled style="margin-bottom: 10px">Sparat!</Button>
