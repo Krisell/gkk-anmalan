@@ -233,50 +233,39 @@ class AdminPaymentToolsController extends Controller
             return response()->json(['error' => 'Fortnox-integrationen är inte aktiverad.'], 422);
         }
 
-        $users = $this->usersWithoutFortnoxId()->get();
-        $total = $users->count();
+        $user = $this->usersWithoutFortnoxId()->first();
 
-        return response()->stream(function () use ($users, $total, $fortnox) {
-            foreach ($users as $index => $user) {
-                if ($index > 0 && $index % 5 === 0) {
-                    \sleep(2);
-                }
+        if (! $user) {
+            return response()->json(['processed' => false, 'remaining' => 0]);
+        }
 
-                $todaysDate = \date('Y-m-d');
-                $response = Http::withToken($fortnox->token())->post('https://api.fortnox.se/3/customers', [
-                    'Customer' => [
-                        'CustomerNumber' => "GKK-{$todaysDate}-{$user->id}",
-                        'Name' => "{$user->first_name} {$user->last_name}",
-                        'Email' => $user->email,
-                        'Comments' => 'Created by GKK integration on '.\date('Y-m-d H:i:s'),
-                        'Type' => 'PRIVATE',
-                    ],
-                ]);
+        $todaysDate = \date('Y-m-d');
+        $response = Http::withToken($fortnox->token())->post('https://api.fortnox.se/3/customers', [
+            'Customer' => [
+                'CustomerNumber' => "GKK-{$todaysDate}-{$user->id}",
+                'Name' => "{$user->first_name} {$user->last_name}",
+                'Email' => $user->email,
+                'Comments' => 'Created by GKK integration on '.\date('Y-m-d H:i:s'),
+                'Type' => 'PRIVATE',
+            ],
+        ]);
 
-                $status = 'ok';
+        $status = 'ok';
 
-                if ($response->failed()) {
-                    $status = 'error';
-                } else {
-                    $user->update([
-                        'fortnox_customer_id' => $response->json()['Customer']['CustomerNumber'],
-                    ]);
-                }
+        if ($response->failed()) {
+            $status = 'error';
+        } else {
+            $user->update([
+                'fortnox_customer_id' => $response->json()['Customer']['CustomerNumber'],
+            ]);
+        }
 
-                echo \json_encode([
-                    'current' => $index + 1,
-                    'total' => $total,
-                    'status' => $status,
-                    'message' => "{$user->first_name} {$user->last_name}",
-                ])."\n";
-                \ob_flush();
-                \flush();
-            }
-
-            echo \json_encode(['done' => true, 'processed' => $total])."\n";
-            \ob_flush();
-            \flush();
-        }, 200, ['Content-Type' => 'text/plain', 'X-Accel-Buffering' => 'no', 'Cache-Control' => 'no-cache']);
+        return response()->json([
+            'processed' => true,
+            'status' => $status,
+            'message' => "{$user->first_name} {$user->last_name}",
+            'remaining' => $this->usersWithoutFortnoxId()->count(),
+        ]);
     }
 
     // --- Create Fortnox Invoices ---
@@ -304,100 +293,87 @@ class AdminPaymentToolsController extends Controller
         $type = $request->input('type', 'MEMBERSHIP');
         $year = $request->input('year', now()->year);
 
-        $description = $this->paymentTypeDescription($type);
+        $payment = $this->uninvoicedPayments($type, $year)->with('competition')->first();
 
-        // Ensure articles exist
+        if (! $payment) {
+            return response()->json(['processed' => false, 'remaining' => 0]);
+        }
+
+        $description = $this->paymentTypeDescription($type);
         $this->ensureArticleExists($fortnox, "GKK-{$type}-{$year}", "{$description} {$year}");
 
         if ($type === 'MEMBERSHIP' || $type === 'SSFLICENSE') {
             $this->ensureArticleExists($fortnox, "GKK-{$type}-{$year}-DISCOUNT", "{$description} {$year}, rabatterad");
         }
 
-        $payments = $this->uninvoicedPayments($type, $year)->with('competition')->get();
-        $total = $payments->count();
+        /** @var User $user */
+        $user = $payment->user;
+        $articleNumber = "GKK-{$payment->type}-{$payment->year}";
 
-        return response()->stream(function () use ($payments, $total, $fortnox) {
-            foreach ($payments as $index => $payment) {
-                if ($index > 0 && $index % 5 === 0) {
-                    \sleep(2);
+        if (\in_array($payment->modifier, ['AGE_DISCOUNT', 'STUDENT_DISCOUNT', 'YOUTH'])) {
+            $articleNumber .= '-DISCOUNT';
+        }
+
+        $invoiceRow = [
+            'ArticleNumber' => $articleNumber,
+            'Price' => $payment->sek_amount,
+            'Discount' => $payment->sek_discount,
+            'DiscountType' => 'AMOUNT',
+            'DeliveredQuantity' => 1,
+            'VAT' => 0,
+        ];
+
+        if ($payment->type === 'COMPETITION') {
+            $invoiceRow['AccountNumber'] = 3410;
+            $competition = $payment->competition;
+
+            /** @var ?Competition $competition */
+            if ($competition) {
+                $competitionName = $competition->name;
+                $competitionDate = $competition->date ? $competition->date->format('Y-m-d') : null;
+                $desc = $competitionName;
+
+                if ($competitionDate) {
+                    $desc .= " ({$competitionDate})";
                 }
-
-                /** @var User $user */
-                $user = $payment->user;
-                $articleNumber = "GKK-{$payment->type}-{$payment->year}";
-
-                if (\in_array($payment->modifier, ['AGE_DISCOUNT', 'STUDENT_DISCOUNT', 'YOUTH'])) {
-                    $articleNumber .= '-DISCOUNT';
-                }
-
-                $invoiceRow = [
-                    'ArticleNumber' => $articleNumber,
-                    'Price' => $payment->sek_amount,
-                    'Discount' => $payment->sek_discount,
-                    'DiscountType' => 'AMOUNT',
-                    'DeliveredQuantity' => 1,
-                    'VAT' => 0,
-                ];
-
-                if ($payment->type === 'COMPETITION') {
-                    $invoiceRow['AccountNumber'] = 3410;
-                    $competition = $payment->competition;
-
-                    /** @var ?Competition $competition */
-                    if ($competition) {
-                        $competitionName = $competition->name;
-                        $competitionDate = $competition->date ? $competition->date->format('Y-m-d') : null;
-                        $desc = $competitionName;
-
-                        if ($competitionDate) {
-                            $desc .= " ({$competitionDate})";
-                        }
-                        $invoiceRow['Description'] = $desc;
-                    }
-                }
-
-                $data = [
-                    'Invoice' => [
-                        'DueDate' => now()->addDays(30)->format('Y-m-d'),
-                        'Comments' => 'Created by GKK integration',
-                        'CustomerNumber' => $user->fortnox_customer_id,
-                        'OurReference' => 'GKK Kassör',
-                        'Country' => 'Sverige',
-                        'InvoiceRows' => [$invoiceRow],
-                    ],
-                ];
-
-                $response = Http::withToken($fortnox->token())->post('https://api.fortnox.se/3/invoices', $data);
-
-                $status = 'ok';
-                $message = '';
-
-                if ($response->successful()) {
-                    $invoice = $response->json()['Invoice'];
-                    $payment->update([
-                        'fortnox_invoice_document_number' => $invoice['DocumentNumber'],
-                        'fortnox_invoice_created_at' => now(),
-                    ]);
-                    $message = "Faktura {$invoice['DocumentNumber']} skapad för {$user->first_name} {$user->last_name}";
-                } else {
-                    $status = 'error';
-                    $message = "Fel vid skapande av faktura för {$user->first_name} {$user->last_name}";
-                }
-
-                echo \json_encode([
-                    'current' => $index + 1,
-                    'total' => $total,
-                    'status' => $status,
-                    'message' => $message,
-                ])."\n";
-                \ob_flush();
-                \flush();
+                $invoiceRow['Description'] = $desc;
             }
+        }
 
-            echo \json_encode(['done' => true, 'processed' => $total])."\n";
-            \ob_flush();
-            \flush();
-        }, 200, ['Content-Type' => 'text/plain', 'X-Accel-Buffering' => 'no', 'Cache-Control' => 'no-cache']);
+        $data = [
+            'Invoice' => [
+                'DueDate' => now()->addDays(30)->format('Y-m-d'),
+                'Comments' => 'Created by GKK integration',
+                'CustomerNumber' => $user->fortnox_customer_id,
+                'OurReference' => 'GKK Kassör',
+                'Country' => 'Sverige',
+                'InvoiceRows' => [$invoiceRow],
+            ],
+        ];
+
+        $response = Http::withToken($fortnox->token())->post('https://api.fortnox.se/3/invoices', $data);
+
+        $status = 'ok';
+        $message = '';
+
+        if ($response->successful()) {
+            $invoice = $response->json()['Invoice'];
+            $payment->update([
+                'fortnox_invoice_document_number' => $invoice['DocumentNumber'],
+                'fortnox_invoice_created_at' => now(),
+            ]);
+            $message = "Faktura {$invoice['DocumentNumber']} skapad för {$user->first_name} {$user->last_name}";
+        } else {
+            $status = 'error';
+            $message = "Fel vid skapande av faktura för {$user->first_name} {$user->last_name}";
+        }
+
+        return response()->json([
+            'processed' => true,
+            'status' => $status,
+            'message' => $message,
+            'remaining' => $this->uninvoicedPayments($type, $year)->count(),
+        ]);
     }
 
     // --- Email Invoices ---
@@ -418,37 +394,26 @@ class AdminPaymentToolsController extends Controller
             return response()->json(['error' => 'Fortnox-integrationen är inte aktiverad.'], 422);
         }
 
-        $payments = $this->unemailedInvoices()->with('user')->get();
-        $total = $payments->count();
+        $payment = $this->unemailedInvoices()->with('user')->first();
 
-        return response()->stream(function () use ($payments, $total, $fortnox) {
-            foreach ($payments as $index => $payment) {
-                if ($index > 0 && $index % 5 === 0) {
-                    \sleep(2);
-                }
+        if (! $payment) {
+            return response()->json(['processed' => false, 'remaining' => 0]);
+        }
 
-                /** @var User $user */
-                $user = $payment->user;
+        /** @var User $user */
+        $user = $payment->user;
 
-                Http::withToken($fortnox->token())
-                    ->get("https://api.fortnox.se/3/invoices/{$payment->fortnox_invoice_document_number}/email");
+        Http::withToken($fortnox->token())
+            ->get("https://api.fortnox.se/3/invoices/{$payment->fortnox_invoice_document_number}/email");
 
-                $payment->update(['fortnox_invoice_emailed_at' => now()]);
+        $payment->update(['fortnox_invoice_emailed_at' => now()]);
 
-                echo \json_encode([
-                    'current' => $index + 1,
-                    'total' => $total,
-                    'status' => 'ok',
-                    'message' => "Faktura skickad till {$user->email}",
-                ])."\n";
-                \ob_flush();
-                \flush();
-            }
-
-            echo \json_encode(['done' => true, 'processed' => $total])."\n";
-            \ob_flush();
-            \flush();
-        }, 200, ['Content-Type' => 'text/plain', 'X-Accel-Buffering' => 'no', 'Cache-Control' => 'no-cache']);
+        return response()->json([
+            'processed' => true,
+            'status' => 'ok',
+            'message' => "Faktura skickad till {$user->email}",
+            'remaining' => $this->unemailedInvoices()->count(),
+        ]);
     }
 
     // --- Verify Payments ---
@@ -469,43 +434,30 @@ class AdminPaymentToolsController extends Controller
             return response()->json(['error' => 'Fortnox-integrationen är inte aktiverad.'], 422);
         }
 
-        $payments = $this->unverifiedPayments()->with('user')->get();
-        $total = $payments->count();
+        $payment = $this->unverifiedPayments()->with('user')->first();
 
-        return response()->stream(function () use ($payments, $total, $fortnox) {
-            $paidCount = 0;
+        if (! $payment) {
+            return response()->json(['processed' => false, 'remaining' => 0]);
+        }
 
-            foreach ($payments as $index => $payment) {
-                if ($index > 0 && $index % 5 === 0) {
-                    \sleep(2);
-                }
+        /** @var User $user */
+        $user = $payment->user;
+        $response = Http::withToken($fortnox->token())
+            ->get("https://api.fortnox.se/3/invoices/{$payment->fortnox_invoice_document_number}");
 
-                /** @var User $user */
-                $user = $payment->user;
-                $response = Http::withToken($fortnox->token())
-                    ->get("https://api.fortnox.se/3/invoices/{$payment->fortnox_invoice_document_number}");
+        $paid = $response->json('Invoice.FinalPayDate') !== null;
 
-                $paid = $response->json('Invoice.FinalPayDate') !== null;
+        if ($paid) {
+            $payment->update(['state' => 'PAID']);
+        }
 
-                if ($paid) {
-                    $payment->update(['state' => 'PAID']);
-                    $paidCount++;
-                }
-
-                echo \json_encode([
-                    'current' => $index + 1,
-                    'total' => $total,
-                    'status' => $paid ? 'paid' : 'unpaid',
-                    'message' => "{$user->first_name} {$user->last_name} - Faktura {$payment->fortnox_invoice_document_number}: ".($paid ? 'Betald' : 'Ej betald'),
-                ])."\n";
-                \ob_flush();
-                \flush();
-            }
-
-            echo \json_encode(['done' => true, 'processed' => $total, 'paid' => $paidCount])."\n";
-            \ob_flush();
-            \flush();
-        }, 200, ['Content-Type' => 'text/plain', 'X-Accel-Buffering' => 'no', 'Cache-Control' => 'no-cache']);
+        return response()->json([
+            'processed' => true,
+            'status' => $paid ? 'paid' : 'unpaid',
+            'paid' => $paid,
+            'message' => "{$user->first_name} {$user->last_name} - Faktura {$payment->fortnox_invoice_document_number}: ".($paid ? 'Betald' : 'Ej betald'),
+            'remaining' => $this->unverifiedPayments()->count(),
+        ]);
     }
 
     // --- Remind Unpaid Fees ---

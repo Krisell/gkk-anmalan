@@ -5,7 +5,16 @@ use App\Models\Competition;
 use App\Models\CompetitionRegistration;
 use App\Models\Payment;
 use App\Models\User;
+use App\Services\Fortnox;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+
+function mockFortnoxToken(): void
+{
+    $mock = Mockery::mock(Fortnox::class);
+    $mock->shouldReceive('token')->andReturn('test-token');
+    app()->instance(Fortnox::class, $mock);
+}
 
 // --- Auth ---
 
@@ -662,4 +671,208 @@ test('execute verify payments returns error when fortnox not activated', functio
 
     $response->assertStatus(422);
     expect($response->json('error'))->toContain('Fortnox');
+});
+
+// --- Single-record execute behavior ---
+
+test('execute sync customers processes one user per call and reports remaining', function () {
+    $admin = loginAdmin();
+    $admin->update(['fortnox_customer_id' => 'CUST-admin']);
+    mockFortnoxToken();
+
+    User::factory(2)->create(['fortnox_customer_id' => null]);
+
+    Http::fake([
+        'https://api.fortnox.se/3/customers' => Http::response(['Customer' => ['CustomerNumber' => 'CUST-new']], 200),
+    ]);
+
+    $response = $this->postJson('/admin/payment-tools/sync-customers/execute');
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeTrue();
+    expect($response->json('status'))->toBe('ok');
+    expect($response->json('remaining'))->toBe(1);
+    expect(User::whereNull('fortnox_customer_id')->count())->toBe(1);
+});
+
+test('execute sync customers returns processed false when nothing remains', function () {
+    $admin = loginAdmin();
+    $admin->update(['fortnox_customer_id' => 'CUST-admin']);
+    mockFortnoxToken();
+
+    Http::preventingStrayRequests();
+
+    $response = $this->postJson('/admin/payment-tools/sync-customers/execute');
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeFalse();
+    expect($response->json('remaining'))->toBe(0);
+});
+
+test('execute sync customers reports error status on fortnox failure', function () {
+    $admin = loginAdmin();
+    $admin->update(['fortnox_customer_id' => 'CUST-admin']);
+    mockFortnoxToken();
+
+    $user = User::factory()->create(['fortnox_customer_id' => null]);
+
+    Http::fake([
+        'https://api.fortnox.se/3/customers' => Http::response([], 500),
+    ]);
+
+    $response = $this->postJson('/admin/payment-tools/sync-customers/execute');
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeTrue();
+    expect($response->json('status'))->toBe('error');
+    expect($user->fresh()->fortnox_customer_id)->toBeNull();
+});
+
+test('execute create invoices processes one payment per call and reports remaining', function () {
+    loginAdmin();
+    mockFortnoxToken();
+
+    $user = User::factory()->create(['fortnox_customer_id' => 'CUST123']);
+    Payment::factory(2)->create([
+        'user_id' => $user->id,
+        'type' => 'MEMBERSHIP',
+        'year' => 2026,
+        'sek_amount' => 500,
+        'sek_discount' => 0,
+        'modifier' => null,
+        'fortnox_invoice_document_number' => null,
+        'state' => null,
+    ]);
+
+    Http::fake([
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026' => Http::response(['Article' => []], 200),
+        'https://api.fortnox.se/3/articles/GKK-MEMBERSHIP-2026-DISCOUNT' => Http::response(['Article' => []], 200),
+        'https://api.fortnox.se/3/invoices' => Http::response(['Invoice' => ['DocumentNumber' => 'INV-1']], 200),
+    ]);
+
+    $response = $this->postJson('/admin/payment-tools/create-invoices/execute', [
+        'type' => 'MEMBERSHIP',
+        'year' => 2026,
+    ]);
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeTrue();
+    expect($response->json('status'))->toBe('ok');
+    expect($response->json('remaining'))->toBe(1);
+    expect(Payment::whereNotNull('fortnox_invoice_document_number')->count())->toBe(1);
+});
+
+test('execute create invoices returns processed false when nothing remains', function () {
+    loginAdmin();
+    mockFortnoxToken();
+
+    Http::preventingStrayRequests();
+
+    $response = $this->postJson('/admin/payment-tools/create-invoices/execute', [
+        'type' => 'MEMBERSHIP',
+        'year' => 2026,
+    ]);
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeFalse();
+    expect($response->json('remaining'))->toBe(0);
+});
+
+test('execute email invoices processes one invoice per call and reports remaining', function () {
+    loginAdmin();
+    mockFortnoxToken();
+
+    $user = User::factory()->create(['email' => 'a@b.se']);
+    Payment::factory(2)->create([
+        'user_id' => $user->id,
+        'fortnox_invoice_document_number' => '12345',
+        'fortnox_invoice_emailed_at' => null,
+    ]);
+
+    Http::fake([
+        'https://api.fortnox.se/3/invoices/*/email' => Http::response([], 200),
+    ]);
+
+    $response = $this->postJson('/admin/payment-tools/email-invoices/execute');
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeTrue();
+    expect($response->json('status'))->toBe('ok');
+    expect($response->json('remaining'))->toBe(1);
+    expect(Payment::whereNotNull('fortnox_invoice_emailed_at')->count())->toBe(1);
+});
+
+test('execute email invoices returns processed false when nothing remains', function () {
+    loginAdmin();
+    mockFortnoxToken();
+
+    Http::preventingStrayRequests();
+
+    $response = $this->postJson('/admin/payment-tools/email-invoices/execute');
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeFalse();
+    expect($response->json('remaining'))->toBe(0);
+});
+
+test('execute verify payments marks paid invoices and reports paid status', function () {
+    loginAdmin();
+    mockFortnoxToken();
+
+    $payment = Payment::factory()->create([
+        'fortnox_invoice_document_number' => '12345',
+        'state' => null,
+    ]);
+
+    Http::fake([
+        'https://api.fortnox.se/3/invoices/12345' => Http::response([
+            'Invoice' => ['FinalPayDate' => '2026-04-15'],
+        ], 200),
+    ]);
+
+    $response = $this->postJson('/admin/payment-tools/verify-payments/execute');
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeTrue();
+    expect($response->json('paid'))->toBeTrue();
+    expect($response->json('status'))->toBe('paid');
+    expect($response->json('remaining'))->toBe(0);
+    expect($payment->fresh()->state)->toBe('PAID');
+});
+
+test('execute verify payments leaves unpaid invoices unchanged', function () {
+    loginAdmin();
+    mockFortnoxToken();
+
+    $payment = Payment::factory()->create([
+        'fortnox_invoice_document_number' => '12345',
+        'state' => null,
+    ]);
+
+    Http::fake([
+        'https://api.fortnox.se/3/invoices/12345' => Http::response([
+            'Invoice' => ['FinalPayDate' => null],
+        ], 200),
+    ]);
+
+    $response = $this->postJson('/admin/payment-tools/verify-payments/execute');
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeTrue();
+    expect($response->json('paid'))->toBeFalse();
+    expect($response->json('status'))->toBe('unpaid');
+    expect($payment->fresh()->state)->toBeNull();
+});
+
+test('execute verify payments returns processed false when nothing remains', function () {
+    loginAdmin();
+    mockFortnoxToken();
+
+    Http::preventingStrayRequests();
+
+    $response = $this->postJson('/admin/payment-tools/verify-payments/execute');
+
+    $response->assertOk();
+    expect($response->json('processed'))->toBeFalse();
+    expect($response->json('remaining'))->toBe(0);
 });

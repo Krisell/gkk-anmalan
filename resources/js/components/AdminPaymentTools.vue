@@ -88,7 +88,7 @@
           Förhandsgranska
         </button>
       </div>
-      <PreviewResult :tool="syncCustomers" @execute="executeStream('syncCustomers')" :streaming="true" />
+      <PreviewResult :tool="syncCustomers" @execute="executeBatched('syncCustomers')" />
       <StreamProgress :tool="syncCustomers" />
     </ToolCard>
 
@@ -118,7 +118,7 @@
           Förhandsgranska
         </button>
       </div>
-      <PreviewResult :tool="createInvoices" @execute="executeStream('createInvoices')" :streaming="true" />
+      <PreviewResult :tool="createInvoices" @execute="executeBatched('createInvoices')" />
       <StreamProgress :tool="createInvoices" />
     </ToolCard>
 
@@ -133,7 +133,7 @@
           Förhandsgranska
         </button>
       </div>
-      <PreviewResult :tool="emailInvoices" @execute="executeStream('emailInvoices')" :streaming="true" />
+      <PreviewResult :tool="emailInvoices" @execute="executeBatched('emailInvoices')" />
       <StreamProgress :tool="emailInvoices" />
     </ToolCard>
 
@@ -148,7 +148,7 @@
           Förhandsgranska
         </button>
       </div>
-      <PreviewResult :tool="verifyPayments" @execute="executeStream('verifyPayments')" :streaming="true" />
+      <PreviewResult :tool="verifyPayments" @execute="executeBatched('verifyPayments')" />
       <StreamProgress :tool="verifyPayments" />
     </ToolCard>
 
@@ -236,7 +236,7 @@ const ToolCard = {
 }
 
 const PreviewResult = {
-  props: ['tool', 'streaming'],
+  props: ['tool'],
   emits: ['execute'],
   template: `
     <div v-if="tool.previewData && !tool.result && !tool.executing" class="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
@@ -398,7 +398,7 @@ export default {
       }
     },
 
-    async executeStream(name) {
+    async executeBatched(name) {
       const tool = this[name]
       tool.executing = true
       tool.result = null
@@ -414,49 +414,41 @@ export default {
       }
 
       const params = this.getParams(name)
+      let processed = 0
+      let paidCount = 0
 
       try {
-        const response = await fetch(endpoints[name], {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': this.csrfToken, 'Accept': 'application/json' },
-          body: JSON.stringify(params),
-        })
-
-        if (!response.ok) {
-          const data = await response.json()
-          tool.error = data.error || 'Ett fel uppstod.'
-          tool.executing = false
-          return
-        }
-
-        const reader = response.body.getReader()
-        const decoder = new TextDecoder()
-        let buffer = ''
-
         while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
+          const response = await fetch(endpoints[name], {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': this.csrfToken, 'Accept': 'application/json' },
+            body: JSON.stringify(params),
+          })
+          const data = await response.json()
 
-          buffer += decoder.decode(value, { stream: true })
-          const lines = buffer.split('\n')
-          buffer = lines.pop()
-
-          for (const line of lines) {
-            if (!line.trim()) continue
-            try {
-              const data = JSON.parse(line)
-              if (data.done) {
-                tool.result = { message: `Klart! ${data.processed} poster behandlade.${data.paid !== undefined ? ` ${data.paid} markerade som betalda.` : ''}` }
-                tool.previewData = null
-              } else {
-                tool.progress = data
-                tool.streamLog.push(data)
-              }
-            } catch (e) {
-              // skip malformed lines
-            }
+          if (!response.ok) {
+            tool.error = data.error || 'Ett fel uppstod.'
+            return
           }
+
+          if (!data.processed) break
+
+          processed++
+          if (data.paid) paidCount++
+
+          tool.progress = {
+            current: processed,
+            total: processed + data.remaining,
+            message: data.message,
+          }
+          tool.streamLog.push({ status: data.status, message: data.message })
+
+          if (data.remaining === 0) break
         }
+
+        const paidSuffix = name === 'verifyPayments' ? ` ${paidCount} markerade som betalda.` : ''
+        tool.result = { message: `Klart! ${processed} poster behandlade.${paidSuffix}` }
+        tool.previewData = null
       } catch (e) {
         tool.error = 'Anslutningen avbröts.'
       } finally {
