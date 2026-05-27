@@ -33,6 +33,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Slide from './Slide.vue'
+import KlubbrekordSlide from './KlubbrekordSlide.vue'
 import axios from 'axios'
 import { getISOWeek, getSwedishMonthName } from '../../utils/date'
 
@@ -66,6 +67,8 @@ const timeInterval = setInterval(updateDateTime, 1000);
 onMounted(async () => {
     const response = await axios.get('/slideshow/slides')
     slides.value = response.data.slides.filter(slide => slide.is_visible)
+    // The latest club records are always shown as the first slide in the rotation.
+    slides.value.unshift({ type: 'Klubbrekord', data: {} })
     slidesHash.value = response.data.hash
     state.value = 'loaded'
 })
@@ -82,6 +85,10 @@ setInterval(async () => {
 function component(type) {
     if (type === 'Slide') {
         return Slide
+    }
+
+    if (type === 'Klubbrekord') {
+        return KlubbrekordSlide
     }
 
     return null

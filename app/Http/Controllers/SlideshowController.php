@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Result;
 use App\Models\Slide;
 use Illuminate\Http\Request;
 
@@ -15,6 +16,19 @@ class SlideshowController extends Controller
             'slides' => $slides,
             'hash' => \hash('sha256', \json_encode($slides)),
         ];
+    }
+
+    public function records()
+    {
+        // A club record is the best (highest) result for a given gender,
+        // weight class and event. Return the 5 most recently set records.
+        return Result::with('user:id,first_name,last_name')
+            ->get()
+            ->groupBy(fn (Result $result) => $result->gender.'|'.$result->weight_class.'|'.$result->event)
+            ->map(fn ($group) => $group->sortByDesc(fn (Result $result) => (float) \str_replace(',', '.', $result->result))->first())
+            ->sortByDesc('competition_date')
+            ->take(5)
+            ->values();
     }
 
     public function updateOrder()
