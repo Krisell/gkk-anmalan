@@ -1,30 +1,30 @@
 <template>
-    <div class="flex flex-col items-center justify-center h-screen gap-8 max-h-screen px-8">
-        <div class="text-6xl text-center text-gkk font-thin">
+    <div class="flex flex-col items-center justify-center h-screen gap-6 max-h-screen overflow-hidden px-8 py-8">
+        <div class="text-5xl text-center text-gkk font-thin">
             {{ title }}
         </div>
 
-        <div v-if="records.length" class="flex flex-col gap-4 w-full max-w-5xl">
+        <div v-if="records.length" class="grid grid-cols-2 gap-4 w-full max-w-[110rem]">
             <div
                 v-for="record in records"
                 :key="record.id"
-                class="bg-white rounded-2xl shadow-md overflow-hidden flex items-stretch"
-                :class="{ 'ring-4 ring-green-400': withinAYear(record.competition_date) }"
+                class="bg-white rounded-xl shadow-md overflow-hidden flex items-stretch"
+                :class="{ 'ring-2 ring-green-400': withinAYear(record.competition_date) }"
             >
-                <div class="bg-gkk text-white flex flex-col items-center justify-center px-8 py-5 min-w-[14rem]">
-                    <div class="text-3xl font-semibold">{{ record.event }}</div>
-                    <div class="text-xl font-thin">{{ genderLabel(record.gender) }} {{ record.weight_class }} kg</div>
+                <div class="bg-gkk text-white flex flex-col items-center justify-center px-6 py-3 min-w-[11rem]">
+                    <div class="text-2xl font-semibold">{{ record.event }}</div>
+                    <div class="text-base font-thin">{{ genderLabel(record.gender) }} {{ record.weight_class }} kg</div>
                 </div>
-                <div class="flex-1 flex items-center justify-between px-8 py-5">
-                    <div class="text-4xl text-gkk font-thin truncate">
+                <div class="flex-1 flex items-center justify-between px-6 py-3 min-w-0">
+                    <div class="text-3xl text-gkk font-thin truncate">
                         {{ athleteName(record) }}
                     </div>
                     <div class="flex flex-col items-end ml-6">
-                        <div class="text-5xl font-bold text-gkk whitespace-nowrap">
-                            {{ record.result }} <span class="text-2xl font-thin">kg</span>
+                        <div class="text-4xl font-bold text-gkk whitespace-nowrap">
+                            {{ record.result }} <span class="text-xl font-thin">kg</span>
                         </div>
                         <div
-                            class="text-lg"
+                            class="text-base"
                             :class="withinAYear(record.competition_date) ? 'text-green-600 font-medium' : 'text-gray-400'"
                         >
                             {{ formatDate(record.competition_date) }}
