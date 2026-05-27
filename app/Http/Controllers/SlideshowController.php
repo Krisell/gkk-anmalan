@@ -21,13 +21,13 @@ class SlideshowController extends Controller
     public function records()
     {
         // A club record is the best (highest) result for a given gender,
-        // weight class and event. Return the 5 most recently set records.
+        // weight class and event. Return the 10 most recently set records.
         return Result::with('user:id,first_name,last_name')
             ->get()
             ->groupBy(fn (Result $result) => $result->gender.'|'.$result->weight_class.'|'.$result->event)
             ->map(fn ($group) => $group->sortByDesc(fn (Result $result) => (float) \str_replace(',', '.', $result->result))->first())
             ->sortByDesc('competition_date')
-            ->take(5)
+            ->take(10)
             ->values();
     }
 
