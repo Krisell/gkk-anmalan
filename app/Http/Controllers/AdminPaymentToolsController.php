@@ -63,7 +63,7 @@ class AdminPaymentToolsController extends Controller
 
             $sekDiscount = 0;
 
-            if (now()->month > 6 || (now()->month === 6 && now()->day > 15)) {
+            if (now()->month > 6 || (now()->month === 6 && now()->day >= 15)) {
                 $sekDiscount = (int) ($sekAmount / 2);
             }
 

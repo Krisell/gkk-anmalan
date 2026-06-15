@@ -440,6 +440,27 @@ test('Half year discounts are given for membership fee for new members', functio
     ]);
 });
 
+test('Half year discount is given on the june 15 boundary', function () {
+    $this->travelTo('2025-06-15');
+
+    $normalUser = User::factory()->create(['birth_year' => now()->subYears(30)->year]);
+
+    $this->artisan('gkk:generate-payment-entries')
+        ->expectsQuestion('Välj år för avgift', '2025')
+        ->expectsQuestion('Välj typ av avgift', 'MEMBERSHIP')
+        ->expectsQuestion('Välj målgrupp', 'MULTIPLE')
+        ->expectsQuestion('Hur många användare vill du hämta?', '100')
+        ->expectsOutput('1 membership payments created successfully.')
+        ->assertExitCode(0);
+
+    $this->assertDatabaseHas(Payment::class, [
+        'user_id' => $normalUser->id,
+        'sek_amount' => 1500,
+        'sek_discount' => 750, // Half year discount applies on june 15
+        'modifier' => null,
+    ]);
+});
+
 test('Quarter year discounts are given for membership fee for new members', function () {
     $this->travelTo('2025-09-18');
 

@@ -132,8 +132,8 @@ class GeneratePaymentEntriesCommand extends Command
 
             $sekDiscount = 0;
 
-            // If date is more than june 15, add a half year discount, i.e. 1/2 of the full amount.
-            if (now()->month > 6 || (now()->month === 6 && now()->day > 15)) {
+            // If date is on or after june 15, add a half year discount, i.e. 1/2 of the full amount.
+            if (now()->month > 6 || (now()->month === 6 && now()->day >= 15)) {
                 $sekDiscount = (int) ($sekAmount / 2);
             }
 
