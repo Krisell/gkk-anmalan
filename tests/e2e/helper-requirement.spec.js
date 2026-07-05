@@ -71,8 +71,9 @@ test('User with recent helper activity can register for competition', async ({ p
     })
 
     // Create an event within the last year (recent enough to count as helper activity)
+    const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
     const event = await create(page, '\\App\\Models\\Event', {
-        date: '2025-06-01'
+        date: oneMonthAgo
     })
 
     // Create an event registration showing the user helped and attended
