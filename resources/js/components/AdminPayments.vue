@@ -128,7 +128,13 @@
                   {{ payment.year }}
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-center text-sm text-gray-500">
-                  <span v-if="payment.sek_amount">{{ payment.sek_amount }} kr</span>
+                  <div v-if="payment.sek_amount">
+                    {{ netAmount(payment) }} kr
+                    <div v-if="payment.sek_discount" class="text-xs text-gray-400">
+                      <span class="line-through">{{ payment.sek_amount }} kr</span>
+                      −{{ payment.sek_discount }} kr rabatt
+                    </div>
+                  </div>
                   <span v-else class="text-gray-400">-</span>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-center">
@@ -191,7 +197,7 @@
         <div class="bg-gray-50 p-3 rounded">
           <p><strong>Typ:</strong> {{ getTypeText(selectedPayment.type) }}</p>
           <p><strong>År:</strong> {{ selectedPayment.year }}</p>
-          <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? selectedPayment.sek_amount + ' kr' : 'Ej angivet' }}</p>
+          <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? netAmount(selectedPayment) + ' kr' : 'Ej angivet' }}<span v-if="selectedPayment.sek_discount"> ({{ selectedPayment.sek_amount }} kr − {{ selectedPayment.sek_discount }} kr rabatt)</span></p>
           <p v-if="selectedPayment.competition"><strong>Tävling:</strong> {{ selectedPayment.competition.name }}</p>
         </div>
       </div>
@@ -212,7 +218,7 @@
         <div class="bg-gray-50 p-3 rounded">
           <p><strong>Typ:</strong> {{ getTypeText(selectedPayment.type) }}</p>
           <p><strong>År:</strong> {{ selectedPayment.year }}</p>
-          <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? selectedPayment.sek_amount + ' kr' : 'Ej angivet' }}</p>
+          <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? netAmount(selectedPayment) + ' kr' : 'Ej angivet' }}<span v-if="selectedPayment.sek_discount"> ({{ selectedPayment.sek_amount }} kr − {{ selectedPayment.sek_discount }} kr rabatt)</span></p>
           <p v-if="selectedPayment.competition"><strong>Tävling:</strong> {{ selectedPayment.competition.name }}</p>
         </div>
       </div>
@@ -307,6 +313,12 @@ export default {
           bVal = `${b.user.first_name} ${b.user.last_name}`
         }
 
+        // Sort by the amount after discount, as shown in the table
+        if (this.sortKey === 'sek_amount') {
+          aVal = this.netAmount(a)
+          bVal = this.netAmount(b)
+        }
+
         if (aVal === null || aVal === undefined) aVal = ''
         if (bVal === null || bVal === undefined) bVal = ''
 
@@ -321,6 +333,9 @@ export default {
     }
   },
   methods: {
+    netAmount(payment) {
+      return Math.max(payment.sek_amount - (payment.sek_discount || 0), 0)
+    },
     sortBy(key) {
       if (this.sortKey === key) {
         this.sortOrder *= -1
