@@ -29,6 +29,8 @@ use App\Http\Controllers\RankingController;
 use App\Http\Controllers\RecordsController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\SignAgreementsController;
+use App\Http\Controllers\SignatureController;
+use App\Http\Controllers\SignatureRequestAdminController;
 use App\Http\Controllers\SlideshowController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\AdminMiddleware;
@@ -207,6 +209,16 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         Route::delete('/{folder}', [DocumentFolderController::class, 'destroy']);
     });
 
+    Route::prefix('signature-requests')->controller(SignatureRequestAdminController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('/{signatureRequest}', 'show');
+        Route::post('/', 'store');
+        Route::post('/{signatureRequest}', 'update');
+        Route::delete('/{signatureRequest}', 'destroy');
+        Route::post('/{signatureRequest}/activate', 'activate');
+        Route::post('/{signatureRequest}/complete', 'complete');
+    });
+
     Route::prefix('results')->group(function () {
         Route::get('/', [ResultsController::class, 'index']);
         Route::post('/', [ResultsController::class, 'store']);
@@ -251,6 +263,11 @@ Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(fu
 });
 
 Route::get('/webhooks/{action}', WebhookController::class)->name('webhook');
+
+Route::prefix('sign')->controller(SignatureController::class)->middleware('signed')->group(function () {
+    Route::get('/{signer:token}', 'show')->name('sign.show');
+    Route::post('/{signer:token}', 'store')->name('sign.store');
+});
 
 Route::view('/slides-for-screen', 'slides')->name('slides');
 

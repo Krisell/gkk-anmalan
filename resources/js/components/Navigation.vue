@@ -165,6 +165,13 @@ export default {
           admin: true,
         },
         {
+          href: '/admin/signature-requests',
+          title: 'Signering',
+          description: 'Skicka ut dokument för signering',
+          icon: 'pencil-square-o',
+          admin: true,
+        },
+        {
           href: '/admin/activity-logs',
           title: 'Aktivitetslogg',
           description: 'Se vad som hänt',
