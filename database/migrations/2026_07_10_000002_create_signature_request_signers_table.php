@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('ip_address')->nullable();
             $table->timestamps();
 
-            $table->unique(['signature_request_id', 'user_id']);
+            // Explicit name — the auto-generated one exceeds MySQL's 64-char
+            // identifier limit once the production table prefix is added.
+            $table->unique(['signature_request_id', 'user_id'], 'signature_request_signers_request_user_unique');
         });
     }
 
