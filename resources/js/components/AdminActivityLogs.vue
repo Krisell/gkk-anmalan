@@ -22,7 +22,7 @@
       </div>
 
       <!-- Search -->
-      <div class="relative rounded-md shadow-sm w-64">
+      <div class="relative rounded-md shadow-xs w-64">
         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           <i class="fa fa-search text-gray-400"></i>
         </div>
@@ -44,7 +44,7 @@
     <!-- Table -->
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>

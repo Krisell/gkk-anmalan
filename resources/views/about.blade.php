@@ -14,7 +14,7 @@
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg tracking-tight">Göteborg Kraftsportklubb</h1>
       <div class="mt-4 flex items-center justify-center gap-3">
         <span class="h-px w-12 bg-white/50"></span>
-        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow">Sedan 1933</p>
+        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow-sm">Sedan 1933</p>
         <span class="h-px w-12 bg-white/50"></span>
       </div>
     </div>
@@ -87,7 +87,7 @@
           <img width="100" class="rounded-lg" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fqr.png?alt=media&token=1692752d-65b1-4723-b36e-2f9065ade3d5">
           <div>
             <p class="text-2xl font-bold text-gkk mb-2">123-581 34 56</p>
-            <a href="https://app.swish.nu/1/p/sw/?sw=1235813456" class="inline-flex items-center px-3 py-1.5 mr-4 bg-gkk text-white font-medium rounded-lg shadow hover:bg-gkk-light transition-all duration-200">
+            <a href="https://app.swish.nu/1/p/sw/?sw=1235813456" class="inline-flex items-center px-3 py-1.5 mr-4 bg-gkk text-white font-medium rounded-lg shadow-sm hover:bg-gkk-light transition-all duration-200">
               <i class="fa fa-mobile mr-1.5"></i>
               Öppna Swish
             </a>
@@ -108,35 +108,35 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
       <div class="group">
         <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mx-auto rounded-full object-cover mb-3" src="https://goteborg-kraftsportklubb.web.app/img/stryrelsen_carl-1.jpeg" alt="">
+          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://goteborg-kraftsportklubb.web.app/img/stryrelsen_carl-1.jpeg" alt="">
           <h3 class="text-gray-900 text-sm font-medium">Carl Öberg</h3>
           <p class="text-gkk text-xs font-semibold mt-1">Ordförande</p>
         </div>
       </div>
       <div class="group">
         <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mx-auto rounded-full object-cover mb-3" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fjenny.png?alt=media&token=8c1c612e-75ca-4eac-849e-e5ef0b060f67" alt="">
+          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fjenny.png?alt=media&token=8c1c612e-75ca-4eac-849e-e5ef0b060f67" alt="">
           <h3 class="text-gray-900 text-sm font-medium">Jenny Karlsson</h3>
           <p class="text-gkk text-xs font-semibold mt-1">Kassör</p>
         </div>
       </div>
       <div class="group">
         <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mx-auto rounded-full object-cover mb-3" src="https://avatars.githubusercontent.com/u/25909128?v=4" alt="">
+          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://avatars.githubusercontent.com/u/25909128?v=4" alt="">
           <h3 class="text-gray-900 text-sm font-medium">Martin Sandström Krisell</h3>
           <p class="text-gkk text-xs font-semibold mt-1">Sekreterare</p>
         </div>
       </div>
       <div class="group">
         <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mx-auto rounded-full object-cover mb-3" src="https://goteborg-kraftsportklubb.web.app/img/styrelsen_albin.jpg" alt="">
+          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://goteborg-kraftsportklubb.web.app/img/styrelsen_albin.jpg" alt="">
           <h3 class="text-gray-900 text-sm font-medium">Albin Björkman</h3>
           <p class="text-gkk text-xs font-semibold mt-1">Ledamot</p>
         </div>
       </div>
       <div class="group">
         <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mx-auto rounded-full overflow-hidden mb-3">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full overflow-hidden mb-3">
             <img class="w-full h-full object-cover" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FPhilip.png?alt=media&token=5018ed03-a106-4999-95da-d5db596e4e8a" alt="">
           </div>
           <h3 class="text-gray-900 text-sm font-medium">Philip Larsson</h3>
@@ -145,7 +145,7 @@
       </div>
       <div class="group">
         <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mx-auto rounded-full overflow-hidden mb-3">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full overflow-hidden mb-3">
             <img class="w-full h-full object-cover" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FIdaV.png?alt=media&token=a779389c-ccbc-4d4a-aece-14a8a9312431" alt="">
           </div>
           <h3 class="text-gray-900 text-sm font-medium">Ida Vingesand</h3>
@@ -154,14 +154,14 @@
       </div>
       <div class="group">
         <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mx-auto rounded-full object-cover mb-3" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FIda.png?alt=media&token=371aa963-19a4-494a-9146-3fe63a0562ed" alt="">
+          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FIda.png?alt=media&token=371aa963-19a4-494a-9146-3fe63a0562ed" alt="">
           <h3 class="text-gray-900 text-sm font-medium">Ida Anemyr</h3>
           <p class="text-gkk text-xs font-semibold mt-1">Ledamot</p>
         </div>
       </div>
       <div class="group">
         <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mx-auto rounded-full overflow-hidden mb-3">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full overflow-hidden mb-3">
             <img class="w-full h-full object-cover" src="https://media.licdn.com/dms/image/v2/D4D03AQGkPTFT6yS5oA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1709116948089?e=2147483647&v=beta&t=PMk6RPkdleWR8xAFD9vYj2IdWNFPQF1CD6P1k-h_zjk" alt="">
           </div>
           <h3 class="text-gray-900 text-sm font-medium">Sebastian Bratland</h3>
@@ -170,7 +170,7 @@
       </div>
       <div class="group">
         <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mx-auto rounded-full object-cover mb-3" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fmaximus2.png?alt=media&token=0e728e58-5db1-42b5-99c8-6ef86a53ff8e" alt="">
+          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fmaximus2.png?alt=media&token=0e728e58-5db1-42b5-99c8-6ef86a53ff8e" alt="">
           <h3 class="text-gray-900 text-sm font-medium">Maximus Sörnes Andersson</h3>
           <p class="text-gray-500 text-xs mt-1">Suppleant</p>
         </div>

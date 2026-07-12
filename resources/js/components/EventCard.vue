@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer p-4 flex items-stretch gap-4"
+    class="group bg-white rounded-xl border border-gray-100 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer p-4 flex items-stretch gap-4"
     @click="$emit('click')"
   >
     <DateBlock :date="event.date" :end-date="event.end_date" />

@@ -10,12 +10,12 @@
   <div class="absolute inset-0 bg-black/40"></div>
   <div class="absolute inset-0 flex items-center justify-center px-4">
     <div class="text-center">
-      {{-- <p class="text-white/80 uppercase tracking-[0.3em] text-sm mb-3 drop-shadow">Sedan 1933</p> --}}
+      {{-- <p class="text-white/80 uppercase tracking-[0.3em] text-sm mb-3 drop-shadow-sm">Sedan 1933</p> --}}
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg tracking-tight">Göteborg Kraftsportklubb</h1>
       <div class="mt-4 flex items-center justify-center gap-3">
         <span class="h-px w-12 bg-white/50"></span>
-        {{-- <p class="text-white/90 text-lg sm:text-xl drop-shadow">Styrka genom gemenskap</p> --}}
-        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow">Sedan 1933</p>
+        {{-- <p class="text-white/90 text-lg sm:text-xl drop-shadow-sm">Styrka genom gemenskap</p> --}}
+        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow-sm">Sedan 1933</p>
         <span class="h-px w-12 bg-white/50"></span>
       </div>
     </div>
@@ -141,7 +141,7 @@
                 {{-- <div>
                   <a 
                     target="_blank"
-                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2Fn3Gc8wTbI8OygNYumrXnwoDd8p7VUp.pdf?alt=media&token=dd7cb0d9-9d0e-463a-b8d1-31f029219478">
                     <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsberättelse 2024
                   </a>
@@ -149,7 +149,7 @@
                 {{-- <div>
                   <a 
                     target="_blank"
-                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FVerksamhetsplan%20och%20budget%202024.pdf?alt=media&token=d15bbc76-f0dd-4d2a-a678-11b60fe2c79d">
                     <i class="fa fa-file-pdf-o mr-2"></i>Verksamhetsplan och budget 2024
                   </a>
@@ -157,7 +157,7 @@
                 {{-- <div>
                   <a 
                     target="_blank"
-                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FEkonomiskt%20resultat%202023.pdf?alt=media&token=990c709a-2ad8-41cb-997f-5898c306db36">
                     <i class="fa fa-file-pdf-o mr-2"></i>Ekonomiskt resultat 2023
                   </a>
@@ -165,7 +165,7 @@
                 {{-- <div>
                   <a 
                     target="_blank"
-                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FEuEFEZcycAXmSp1d1JJjc5VEbv1lgh.pdf?alt=media&token=3687af19-bfaa-4d65-9826-c4a646d70b79">
                     <i class="fa fa-file-pdf-o mr-2"></i>Valberedningens förslag för 2025
                   </a>
@@ -173,7 +173,7 @@
                 <div>
                   <a 
                     target="_blank"
-                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FocGMIpBbUbFUteTxgxr5Bu5bJKbrvZ.pdf?alt=media&token=4f9b5ff7-f004-4fc2-bb2f-e821414aa589">
                     <i class="fa fa-file-pdf-o mr-2"></i>Revisionsberättelse 2024
                   </a>
@@ -181,7 +181,7 @@
                 <div>
                   <a 
                     target="_blank"
-                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                    class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                     href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FXSlmDdMsbMNAUo2SkErTwfIzf93sDQ.pdf?alt=media&token=6346e687-ffac-4e86-8111-7641adf5aae1">
                     <i class="fa fa-file-pdf-o mr-2"></i>Motion (Veteranutskott) och styrelsens yttrande
                   </a>
@@ -195,7 +195,7 @@
                 
 
                 {{-- <a href="/gm" class="mt-6 block">
-                  <div class="rounded p-2 border-gkk border-2">
+                  <div class="rounded-sm p-2 border-gkk border-2">
                     <p class="text-3xl leading-bold text-gkk">
                       Götalandsmästerskapen 10-12 maj 2024
                     </p>

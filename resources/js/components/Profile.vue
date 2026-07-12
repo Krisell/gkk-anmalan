@@ -10,7 +10,7 @@
         <span class="text-gkk">Profil</span>
       </h1>
       <!-- Medlem -->
-      <div class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6 px-5 py-4 flex items-center gap-4">
+      <div class="bg-white rounded-lg border border-gray-200 shadow-xs mb-6 px-5 py-4 flex items-center gap-4">
         <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gkk text-white font-semibold text-lg shrink-0">
           {{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}
         </div>
@@ -47,7 +47,7 @@
       </div>
 
       <!-- Avtal -->
-      <div class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
+      <div class="bg-white rounded-lg border border-gray-200 shadow-xs mb-6">
         <div class="px-5 py-4 border-b border-gray-100">
           <h2 class="text-lg font-medium text-gray-900">Avtal</h2>
         </div>
@@ -85,7 +85,7 @@
       </div>
 
       <!-- Betalningar -->
-      <div class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
+      <div class="bg-white rounded-lg border border-gray-200 shadow-xs mb-6">
         <div class="px-5 py-4 border-b border-gray-100">
           <h2 class="text-lg font-medium text-gray-900">Avgifter</h2>
         </div>
@@ -141,7 +141,7 @@
       </div>
 
       <!-- Kontouppgifter -->
-      <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+      <div class="bg-white rounded-lg border border-gray-200 shadow-xs">
         <div class="px-5 py-4 border-b border-gray-100">
           <h2 class="text-lg font-medium text-gray-900">Kontouppgifter</h2>
         </div>
@@ -217,7 +217,7 @@
   </div>
 
   <!-- Full-screen loading overlay -->
-  <div v-if="loadingReceipt" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+  <div v-if="loadingReceipt" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-8 flex flex-col items-center shadow-xl">
       <i class="fa fa-spinner fa-spin text-3xl text-gkk mb-3"></i>
       <span class="text-gray-700">Laddar kvitto...</span>

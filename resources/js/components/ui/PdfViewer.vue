@@ -6,7 +6,7 @@
     <div
       v-for="page in pages"
       :key="page.index"
-      class="relative shadow border border-gray-300 bg-white"
+      class="relative shadow-sm border border-gray-300 bg-white"
       :style="{ width: page.cssWidth + 'px', height: page.cssHeight + 'px' }"
     >
       <canvas :ref="(el) => (canvases[page.index] = el)"></canvas>

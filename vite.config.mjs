@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
 import createVuePlugin from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     process.env.VITEST
       ? null
       : laravel({

@@ -32,7 +32,7 @@
       ></gkk-event-card>
     </div>
 
-    <div v-else class="bg-white rounded-xl border border-gray-100 shadow-sm p-8 text-center text-gray-500">
+    <div v-else class="bg-white rounded-xl border border-gray-100 shadow-xs p-8 text-center text-gray-500">
       Just nu finns inga funktionärsuppdrag eller event att anmäla sig till.
     </div>
   </div>

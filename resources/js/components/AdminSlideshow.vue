@@ -3,20 +3,20 @@
     <p class="text-left -mt-6 text-3xl mb-4">Administrera Slideshow</p>
 
     <!-- Create new slide section -->
-    <div class="rounded shadow bg-white p-6 mb-6">
+    <div class="rounded-sm shadow-sm bg-white p-6 mb-6">
       <h2 class="text-xl font-semibold mb-4">Skapa ny slide</h2>
       <div class="flex flex-col gap-4">
         <input
           v-model="newSlide.text"
           type="text"
           placeholder="Text (valfritt)"
-          class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
         />
         <input
           v-model="newSlide.subText"
           type="text"
           placeholder="Undertext (valfritt)"
-          class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
         />
         <div class="flex flex-col gap-2">
           <label class="text-sm text-gray-700">Bild (valfritt)</label>
@@ -25,17 +25,17 @@
             type="file"
             accept="image/*"
             @change="handleImageUpload"
-            class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+            class="appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           />
-          <div v-if="uploadProgress > 0 && uploadProgress < 100" class="w-full bg-gray-200 rounded">
-            <div class="bg-gkk text-xs leading-none py-1 text-center text-white rounded" :style="{ width: uploadProgress + '%' }">{{ uploadProgress }}%</div>
+          <div v-if="uploadProgress > 0 && uploadProgress < 100" class="w-full bg-gray-200 rounded-sm">
+            <div class="bg-gkk text-xs leading-none py-1 text-center text-white rounded-sm" :style="{ width: uploadProgress + '%' }">{{ uploadProgress }}%</div>
           </div>
-          <img v-if="newSlide.image" :src="newSlide.image" alt="Preview" class="mt-2 rounded w-64">
+          <img v-if="newSlide.image" :src="newSlide.image" alt="Preview" class="mt-2 rounded-sm w-64">
         </div>
         <button
           @click="createSlide"
           :disabled="!canCreateSlide"
-          class="px-4 py-2 bg-gkk text-white rounded hover:bg-gkk-dark disabled:bg-gray-300 disabled:cursor-not-allowed"
+          class="px-4 py-2 bg-gkk text-white rounded-sm hover:bg-gkk-dark disabled:bg-gray-300 disabled:cursor-not-allowed"
         >
           Skapa slide
         </button>
@@ -43,7 +43,7 @@
     </div>
 
     <!-- Edit slide modal -->
-    <div v-if="editingSlide" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="cancelEdit">
+    <div v-if="editingSlide" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="cancelEdit">
       <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
         <h2 class="text-xl font-semibold mb-4">Redigera slide</h2>
         <div class="flex flex-col gap-4">
@@ -51,13 +51,13 @@
             v-model="editingSlide.data.text"
             type="text"
             placeholder="Text (valfritt)"
-            class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+            class="appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           />
           <input
             v-model="editingSlide.data.subText"
             type="text"
             placeholder="Undertext (valfritt)"
-            class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+            class="appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           />
           <div class="flex flex-col gap-2">
             <label class="text-sm text-gray-700">Bild (valfritt)</label>
@@ -66,14 +66,14 @@
               type="file"
               accept="image/*"
               @change="handleEditImageUpload"
-              class="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+              class="appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
             />
-            <div v-if="editUploadProgress > 0 && editUploadProgress < 100" class="w-full bg-gray-200 rounded">
-              <div class="bg-gkk text-xs leading-none py-1 text-center text-white rounded" :style="{ width: editUploadProgress + '%' }">{{ editUploadProgress }}%</div>
+            <div v-if="editUploadProgress > 0 && editUploadProgress < 100" class="w-full bg-gray-200 rounded-sm">
+              <div class="bg-gkk text-xs leading-none py-1 text-center text-white rounded-sm" :style="{ width: editUploadProgress + '%' }">{{ editUploadProgress }}%</div>
             </div>
             <div v-if="editingSlide.data.image" class="flex items-center gap-4">
-              <img :src="editingSlide.data.image" alt="Preview" class="mt-2 rounded w-64">
-              <button @click="removeEditImage" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+              <img :src="editingSlide.data.image" alt="Preview" class="mt-2 rounded-sm w-64">
+              <button @click="removeEditImage" class="px-3 py-1 bg-red-500 text-white rounded-sm hover:bg-red-600">
                 Ta bort bild
               </button>
             </div>
@@ -81,13 +81,13 @@
           <div class="flex gap-2 justify-end">
             <button
               @click="cancelEdit"
-              class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+              class="px-4 py-2 bg-gray-300 text-gray-700 rounded-sm hover:bg-gray-400"
             >
               Avbryt
             </button>
             <button
               @click="saveEdit"
-              class="px-4 py-2 bg-gkk text-white rounded hover:bg-gkk-dark"
+              class="px-4 py-2 bg-gkk text-white rounded-sm hover:bg-gkk-dark"
             >
               Spara
             </button>
@@ -99,7 +99,7 @@
     <div class="flex flex-col justify-center mx-auto gap-4 text-center">
       <TransitionGroup name="list" tag="div" class="flex flex-col gap-4">
         <div v-for="(slide, index) in slides" :key="slide.id" class="relative flex gap-6">
-          <div class="flex flex-col items-center justify-center gap-3 text-2xl text-gkk rounded shadow bg-white p-4">
+          <div class="flex flex-col items-center justify-center gap-3 text-2xl text-gkk rounded-sm shadow-sm bg-white p-4">
             <i
               class="fa fa-arrow-up hover:scale-110 transition-all"
               :class="{ 'text-gray-400': index === 0, 'cursor-pointer': index !== 0 }"
@@ -147,11 +147,11 @@
               @click="moveByIndex(index, 1)"
             ></i>
           </div>
-          <div class="rounded shadow bg-white p-4 flex flex-col items-center justify-center">
+          <div class="rounded-sm shadow-sm bg-white p-4 flex flex-col items-center justify-center">
             <p v-if="slide.data.text">{{ slide.data.text }}</p>
             <p v-if="slide.data.subText" class="text-sm text-gray-500">{{  slide.data.subText }}</p>
             <a v-if="slide.data.image" :href="slide.data.image" target="_blank" class="block mt-2 text-blue-500 hover:underline">
-              <img :src="slide.data.image" alt="Slide Image" class="mt-2 rounded w-64 mx-auto">
+              <img :src="slide.data.image" alt="Slide Image" class="mt-2 rounded-sm w-64 mx-auto">
             </a>
           </div>
         </div>

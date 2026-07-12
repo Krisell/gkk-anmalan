@@ -10,7 +10,7 @@
     </h1>
 
     <!-- Signers -->
-    <div class="bg-white shadow sm:rounded-lg p-4 mb-6">
+    <div class="bg-white shadow-sm sm:rounded-lg p-4 mb-6">
       <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Signerare</h2>
 
       <table v-if="request.sent_at" class="min-w-full">
@@ -41,7 +41,7 @@
       <div v-else>
         <div v-for="userId in signerUserIds" :key="userId" class="flex items-center gap-2 py-1 text-sm">
           <span class="inline-block w-3 h-3 rounded-full" :style="{ backgroundColor: signerColor(userId) }"></span>
-          <span class="flex-grow">{{ signerName(userId) }}</span>
+          <span class="grow">{{ signerName(userId) }}</span>
           <button class="text-gray-400 hover:text-red-600" @click="removeSigner(userId)"><i class="fa fa-times"></i></button>
         </div>
 
@@ -61,7 +61,7 @@
     </div>
 
     <!-- Placement instructions / actions -->
-    <div v-if="!request.sent_at" class="bg-white shadow sm:rounded-lg p-4 mb-6">
+    <div v-if="!request.sent_at" class="bg-white shadow-sm sm:rounded-lg p-4 mb-6">
       <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Placera signaturfält</h2>
       <div v-if="signerUserIds.length === 0" class="text-sm text-gray-500">Lägg till minst en signerare först.</div>
       <div v-else>
@@ -88,7 +88,7 @@
     </div>
 
     <!-- Completed actions -->
-    <div v-if="request.sent_at" class="bg-white shadow sm:rounded-lg p-4 mb-6">
+    <div v-if="request.sent_at" class="bg-white shadow-sm sm:rounded-lg p-4 mb-6">
       <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Signerat dokument</h2>
 
       <div v-if="!allSigned" class="text-sm text-gray-500">
@@ -125,7 +125,7 @@
           <div
             v-for="field in fieldsOnPage(pageIndex)"
             :key="field.key"
-            class="absolute border-2 rounded flex items-center justify-center overflow-hidden select-none"
+            class="absolute border-2 rounded-sm flex items-center justify-center overflow-hidden select-none"
             :class="{ 'cursor-move': !request.sent_at }"
             :style="{
               left: field.left + 'px',

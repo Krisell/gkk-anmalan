@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-2 border-l-8 border-l-[#439cd6] rounded bg-[#eef3fa]"
+    class="p-2 border-l-8 border-l-[#439cd6] rounded-sm bg-[#eef3fa]"
     :class="{
       'bg-[#dbf1d6] border-l-[#00bba9]': success,
       'bg-[#ffecca] border-l-[#ffc561]': warning,

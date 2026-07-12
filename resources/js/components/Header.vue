@@ -38,7 +38,7 @@
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex">
-            <div class="flex-shrink-0 flex items-center">
+            <div class="shrink-0 flex items-center">
               <a href="/" class="flex items-center">
                 <img
                   class="hidden lg:flex absolute left-3 top-3 w-24 h-24"
@@ -96,7 +96,7 @@
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
               <div data-cy="inside">
                 <a
                   class="uppercase text-sm tracking-wide px-3 py-1.5 rounded-md transition-all duration-200"
@@ -107,7 +107,7 @@
               </div>
             </div>
 
-            <div v-if="user" class="flex-shrink-0">
+            <div v-if="user" class="shrink-0">
               <div @click="logout">
                 <a class="uppercase text-xs text-gray-500 hover:text-gkk transition-colors duration-200 cursor-pointer"> Logga ut </a>
               </div>
@@ -187,7 +187,7 @@
       <div class="flex flex-col gap-2 items-center">
         <input 
           @keypress.enter="impersonate"
-          class="mx-auto border p-2 rounded" 
+          class="mx-auto border p-2 rounded-sm" 
           id="impersonatedUser" 
           v-model="impersonatedUser">
       </div>

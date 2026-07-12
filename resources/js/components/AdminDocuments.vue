@@ -15,7 +15,7 @@
         :key="folder.id"
         class="py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -171,7 +171,7 @@
         <div class="text-lg font-thin mt-2">Ny mapp</div>
         <input
           v-model="newFolderName"
-          class="my-2 m-auto appearance-none rounded relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          class="my-2 m-auto appearance-none rounded-sm relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           name="name"
         />
         <Button @click="newFolder"><i class="fa fa-plus mr-2"></i>Skapa ny mapp</Button>
@@ -189,7 +189,7 @@
 
     <Modal ref="editDocumentModal" title="Redigera dokumentets namn">
       <div v-if="selectedDocument">
-        <div class="mt-1 relative rounded-md shadow-sm">
+        <div class="mt-1 relative rounded-md shadow-xs">
           <input
             type="text"
             v-model="selectedDocument.name"
@@ -225,7 +225,7 @@
             <input @change="upload" ref="fileUpload" type="file" class="hidden" />
           </label>
         </div>
-        <div class="mt-1 relative rounded-md shadow-sm">
+        <div class="mt-1 relative rounded-md shadow-xs">
           <input
             type="text"
             v-model="newDocument.name"
@@ -233,7 +233,7 @@
             class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
           />
         </div>
-        <div class="mt-1 relative rounded-md shadow-sm">
+        <div class="mt-1 relative rounded-md shadow-xs">
           <input
             type="text"
             v-model="newDocument.url"
@@ -252,7 +252,7 @@
 
     <Modal ref="editFolderModal" title="Redigera mappens namn">
       <div v-if="selectedFolder">
-        <div class="mt-1 relative rounded-md shadow-sm">
+        <div class="mt-1 relative rounded-md shadow-xs">
           <input v-model="selectedFolder.name" class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border" />
         </div>
       </div>

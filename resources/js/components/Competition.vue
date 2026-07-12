@@ -12,7 +12,7 @@
     </h1>
 
     <div class="max-w-lg mx-auto">
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm mb-6 p-4 flex items-stretch gap-4">
+    <div class="bg-white rounded-xl border border-gray-100 shadow-xs mb-6 p-4 flex items-stretch gap-4">
       <DateBlock :date="competition.date" :end-date="competition.end_date" />
       <div class="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
         <h3 class="text-base font-semibold text-gkk">{{ competition.name }}</h3>
@@ -118,7 +118,7 @@
         <select
           v-model="weightClass['Män']"
           v-show="gender === 'Män'"
-          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-xs focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option>¯\_(ツ)_/¯</option>
           <option>53</option>
@@ -135,7 +135,7 @@
         <select
           v-model="weightClass['Kvinnor']"
           v-show="gender === 'Kvinnor'"
-          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+          class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-xs focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option>¯\_(ツ)_/¯</option>
           <option>43</option>

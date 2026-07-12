@@ -3,7 +3,7 @@
     <h1 class="text-center text-3xl font-thin mt-10 mb-6">Administration av klubbrekord</h1>
 
     <!-- Add New Record Form -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-xs border border-gray-200 mb-8 overflow-hidden">
       <div class="bg-gray-800 px-5 py-3">
         <h2 class="text-white font-medium">Lägg till nytt rekord</h2>
       </div>
@@ -33,7 +33,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1.5">Lyftare</label>
             <select
               v-model="result.user_id"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-hidden focus:ring-1 focus:ring-gkk focus:border-gkk"
             >
               <option value="">Välj lyftare...</option>
               <option v-for="lifter in sortedUsers" :key="lifter.id" :value="lifter.id">
@@ -46,7 +46,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1.5">Viktklass</label>
             <select
               v-model="result.weight_class"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-hidden focus:ring-1 focus:ring-gkk focus:border-gkk"
             >
               <option value="">Välj...</option>
               <option v-for="wc in weightClassesForForm" :key="wc" :value="wc">{{ wc }} kg</option>
@@ -57,7 +57,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1.5">Gren</label>
             <select
               v-model="result.event"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-hidden focus:ring-1 focus:ring-gkk focus:border-gkk"
             >
               <option v-for="event in events" :key="event" :value="event">{{ event }}</option>
             </select>
@@ -68,7 +68,7 @@
             <input
               v-model="result.competition_date"
               type="date"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-hidden focus:ring-1 focus:ring-gkk focus:border-gkk"
             />
           </div>
 
@@ -79,7 +79,7 @@
               type="number"
               step="0.5"
               placeholder="0"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gkk focus:border-gkk"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-hidden focus:ring-1 focus:ring-gkk focus:border-gkk"
             />
           </div>
         </div>
@@ -101,7 +101,7 @@
         <div
           v-for="weightClass in weightClassesFor(gender.value)"
           :key="weightClass"
-          class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200"
+          class="bg-white rounded-lg shadow-xs overflow-hidden border border-gray-200"
         >
           <div class="bg-gray-800 px-4 py-2.5">
             <h3 class="text-white font-medium">{{ gender.label }} {{ weightClass }} kg</h3>
@@ -133,7 +133,7 @@
                   </div>
                   <button
                     @click.prevent="confirmDelete(getRecord(gender.value, weightClass, event))"
-                    class="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded transition-colors flex-shrink-0"
+                    class="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-sm transition-colors shrink-0"
                     title="Ta bort"
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

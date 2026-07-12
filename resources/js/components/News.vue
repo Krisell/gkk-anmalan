@@ -19,7 +19,7 @@
       </div>
 
       <aside v-if="news.length" class="lg:sticky lg:top-24 self-start">
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4">
+        <div class="bg-white rounded-lg shadow-xs border border-gray-100 p-4">
           <div class="flex items-center justify-between mb-3">
             <h3 class="font-semibold text-gkk">Senaste nyheterna</h3>
           </div>

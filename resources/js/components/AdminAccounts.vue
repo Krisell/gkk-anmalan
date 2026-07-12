@@ -11,7 +11,7 @@
     <div v-if="ungranted.length > 0" class="flex flex-col mb-8">
       <h2 class="text-2xl font-thin text-center m-4">Väntar på godkännande</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -56,7 +56,7 @@
 
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
             <div class="flex flex-wrap items-center gap-3">
               <div class="text-sm font-medium text-gray-600 whitespace-nowrap">
@@ -305,14 +305,14 @@
         Epostadresser som redan finns i systemet kommer ignoreras. Tillagda konton kommer automatiskt skicka ut ett
         epost till användaren med en länk för att logga in och ange ett lösenord.
       </div>
-      <textarea v-model="newAccountsString" class="mx-auto w-1/2 h-32 border rounded p-2"></textarea>
+      <textarea v-model="newAccountsString" class="mx-auto w-1/2 h-32 border rounded-sm p-2"></textarea>
       <Button @click="createAccounts" class="mt-2">Skapa konton</Button>
     </div>
 
     <div v-if="inactiveAccounts.length > 0" class="flex flex-col mb-8 mt-8">
       <h2 class="text-2xl font-thin text-center m-4">{{ inactiveAccounts.length }} inaktiverade konton</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table data-testid="inactive-accounts-table" class="min-w-full">
             <thead>
               <tr>

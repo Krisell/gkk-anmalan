@@ -6,7 +6,7 @@
         <div
           v-for="weightClass in weightClassesFor(gender.value)"
           :key="weightClass"
-          class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-200"
+          class="bg-white rounded-lg shadow-xs overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-200"
         >
           <div class="bg-gray-800 px-4 py-2.5">
             <h3 class="text-white font-medium">{{ gender.label }} {{ weightClass }} kg</h3>

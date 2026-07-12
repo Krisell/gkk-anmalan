@@ -14,7 +14,7 @@
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg tracking-tight">Styrkelyft</h1>
       <div class="mt-4 flex items-center justify-center gap-3">
         <span class="h-px w-12 bg-white/50"></span>
-        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow">Knäböj, bänkpress och marklyft</p>
+        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow-sm">Knäböj, bänkpress och marklyft</p>
         <span class="h-px w-12 bg-white/50"></span>
       </div>
     </div>

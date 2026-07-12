@@ -5,7 +5,7 @@
     viewState === 'small' ? 'w-1/3 h-1/3 min-w-[350px] min-h-[300px]' : 
     'w-[96%] h-[96%] bottom-[2%] right-[2%]'
   ]" ref="slideshowContainer">
-    <div class="bg-gray-800 text-white p-2 flex justify-between items-center flex-shrink-0 h-[40px]" 
+    <div class="bg-gray-800 text-white p-2 flex justify-between items-center shrink-0 h-[40px]" 
          :class="{ 'cursor-pointer': viewState === 'titlebar' }"
          @click="handleTitlebarClick">
       <div class="text-sm font-medium">GKK Slideshow</div>
@@ -14,26 +14,26 @@
           <i class="fa fa-square-o"></i>
         </div>
         <div v-else class="flex space-x-2">
-          <button @click.stop="prevSlide" class="hover:text-gray-300 hover:scale-110 focus:outline-none px-2">
+          <button @click.stop="prevSlide" class="hover:text-gray-300 hover:scale-110 focus:outline-hidden px-2">
             <i class="fa fa-arrow-left"></i>
           </button>
-          <button @click.stop="nextSlide" class="hover:text-gray-300 hover:scale-110 focus:outline-none px-2">
+          <button @click.stop="nextSlide" class="hover:text-gray-300 hover:scale-110 focus:outline-hidden px-2">
             <i class="fa fa-arrow-right"></i>
           </button>
-          <button @click.stop="minimize" class="hover:text-gray-300 hover:scale-110 focus:outline-none px-2">
+          <button @click.stop="minimize" class="hover:text-gray-300 hover:scale-110 focus:outline-hidden px-2">
             <i class="fa fa-minus"></i>
           </button>
-          <button @click.stop="toggleView" class="hover:text-gray-300 hover:scale-110 focus:outline-none px-2">
+          <button @click.stop="toggleView" class="hover:text-gray-300 hover:scale-110 focus:outline-hidden px-2">
             <i :class="viewState === 'maximized' ? 'fa fa-compress' : 'fa fa-expand'"></i>
           </button>
-          <button @click.stop="close" class="hover:text-gray-300 hover:scale-110 focus:outline-none px-2">
+          <button @click.stop="close" class="hover:text-gray-300 hover:scale-110 focus:outline-hidden px-2">
             <i class="fa fa-times"></i>
           </button>
         </div>
       </div>
     </div>
     
-    <div v-show="viewState !== 'titlebar'" class="w-full flex-grow overflow-hidden">
+    <div v-show="viewState !== 'titlebar'" class="w-full grow overflow-hidden">
       <iframe 
         ref="slideshowFrame"
         src="/slides-for-screen" 

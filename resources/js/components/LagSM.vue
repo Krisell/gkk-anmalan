@@ -59,7 +59,7 @@
         <p>
             <select
                 v-model="showRound"
-                class="mt-4 form-select block pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
+                class="mt-4 form-select block pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5"
             >
                 <option value="latest">Visa aktuell ställning under pågående omgång</option>
                 <option value="three">Visa ställningen efter 3 avslutade omgångar</option>

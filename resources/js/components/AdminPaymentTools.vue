@@ -215,7 +215,7 @@ const defaultToolState = () => ({
 const ToolCard = {
   props: ['title', 'description'],
   template: `
-    <div class="bg-white rounded-lg shadow mb-6 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-sm mb-6 overflow-hidden">
       <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 cursor-pointer" @click="open = !open">
         <div class="flex justify-between items-center">
           <div>
@@ -277,7 +277,7 @@ const StreamProgress = {
       <div v-else class="flex items-center gap-2 text-sm text-gray-500">
         <i class="fa fa-spinner fa-spin"></i> Startar...
       </div>
-      <div v-if="tool.streamLog && tool.streamLog.length > 0" class="mt-3 max-h-40 overflow-y-auto bg-gray-50 rounded p-2">
+      <div v-if="tool.streamLog && tool.streamLog.length > 0" class="mt-3 max-h-40 overflow-y-auto bg-gray-50 rounded-sm p-2">
         <div v-for="(entry, i) in tool.streamLog" :key="i" class="text-xs py-0.5" :class="entry.status === 'error' ? 'text-red-600' : 'text-gray-600'">
           {{ entry.message }}
         </div>
@@ -475,6 +475,8 @@ export default {
 </script>
 
 <style scoped>
+@reference '../../css/main.css';
+
 .input-field {
   @apply rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm;
 }

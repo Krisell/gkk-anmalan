@@ -25,7 +25,7 @@
     <p class="text-white/90 mb-4">
       Beställ klubbkläder via vår webbshop hos Intersport. Se till att logga in för att få rätt pris.
     </p>
-    <a href="https://team.intersport.se/goteborg-kraftsportklubb" target="_blank" class="inline-flex items-center px-4 py-2 bg-white text-gkk font-semibold rounded-lg shadow hover:bg-gray-100 transition-all duration-200">
+    <a href="https://team.intersport.se/goteborg-kraftsportklubb" target="_blank" class="inline-flex items-center px-4 py-2 bg-white text-gkk font-semibold rounded-lg shadow-sm hover:bg-gray-100 transition-all duration-200">
       <i class="fa fa-external-link mr-2"></i>
       Öppna webbshopen
     </a>
@@ -38,7 +38,7 @@
     </h2>
     <div class="space-y-4">
       <a href="https://styrkelyft.se" target="_blank" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors group">
-        <div class="flex-shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
+        <div class="shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
           <i class="fa fa-globe text-gkk"></i>
         </div>
         <div class="flex-1">
@@ -47,7 +47,7 @@
         <i class="fa fa-arrow-right text-gray-400 group-hover:text-gkk transition-colors"></i>
       </a>
       <a href="https://www.styrkelyft.se/dokument/dokument-blanketter" target="_blank" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors group">
-        <div class="flex-shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
+        <div class="shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
           <i class="fa fa-file-text-o text-gkk"></i>
         </div>
         <div class="flex-1">
@@ -56,7 +56,7 @@
         <i class="fa fa-arrow-right text-gray-400 group-hover:text-gkk transition-colors"></i>
       </a>
       <a href="https://data.styrkelyft.se/" target="_blank" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors group">
-        <div class="flex-shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
+        <div class="shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
           <i class="fa fa-database text-gkk"></i>
         </div>
         <div class="flex-1">
@@ -73,8 +73,8 @@
       <i class="fa fa-file-pdf-o mr-2"></i> Dokument
     </h2>
     <div class="grid gap-4 sm:grid-cols-2">
-      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FAntidopingavtal.pdf?alt=media&token=f43b48b7-62e8-405e-8b3e-f75ac2c465c6" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-gkk/30 transition-all group">
-        <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FAntidopingavtal.pdf?alt=media&token=f43b48b7-62e8-405e-8b3e-f75ac2c465c6" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-xs hover:shadow-md hover:border-gkk/30 transition-all group">
+        <div class="shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
           <i class="fa fa-file-pdf-o text-red-600"></i>
         </div>
         <div class="flex-1 min-w-0">
@@ -82,8 +82,8 @@
           <p class="text-gray-500 text-xs">Mellan medlem och förening</p>
         </div>
       </a>
-      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FKdSJ2FmrTSijNpxOXVGx0aNtERwoe6.pdf?alt=media&token=9fe3519c-7f6a-473e-851f-897561086e31" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-gkk/30 transition-all group">
-        <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FKdSJ2FmrTSijNpxOXVGx0aNtERwoe6.pdf?alt=media&token=9fe3519c-7f6a-473e-851f-897561086e31" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-xs hover:shadow-md hover:border-gkk/30 transition-all group">
+        <div class="shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
           <i class="fa fa-file-pdf-o text-red-600"></i>
         </div>
         <div class="flex-1 min-w-0">
@@ -91,8 +91,8 @@
           <p class="text-gray-500 text-xs">2026-2028</p>
         </div>
       </a>
-      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK%202022-09-20.pages.pdf?alt=media&token=52b3f7dd-e27c-49f2-a63d-0bdf2a0a0188" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-gkk/30 transition-all group">
-        <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK%202022-09-20.pages.pdf?alt=media&token=52b3f7dd-e27c-49f2-a63d-0bdf2a0a0188" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-xs hover:shadow-md hover:border-gkk/30 transition-all group">
+        <div class="shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
           <i class="fa fa-file-pdf-o text-red-600"></i>
         </div>
         <div class="flex-1 min-w-0">
@@ -100,8 +100,8 @@
           <p class="text-gray-500 text-xs">Mellan medlem och förening</p>
         </div>
       </a>
-      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FN0TGPEf5Nto75XNm2Nux7Lpojez7pz.pdf?alt=media&token=3204252d-8c0c-43f0-baa2-de7b11ca277c" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-gkk/30 transition-all group">
-        <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FN0TGPEf5Nto75XNm2Nux7Lpojez7pz.pdf?alt=media&token=3204252d-8c0c-43f0-baa2-de7b11ca277c" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-xs hover:shadow-md hover:border-gkk/30 transition-all group">
+        <div class="shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
           <i class="fa fa-file-pdf-o text-red-600"></i>
         </div>
         <div class="flex-1 min-w-0">
@@ -109,8 +109,8 @@
           <p class="text-gray-500 text-xs">Antagna 2022-02-19</p>
         </div>
       </a>
-      <a href="https://goteborg-kraftsportklubb.web.app/img/gkk-integritetspolicy.pdf" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-gkk/30 transition-all group">
-        <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+      <a href="https://goteborg-kraftsportklubb.web.app/img/gkk-integritetspolicy.pdf" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-xs hover:shadow-md hover:border-gkk/30 transition-all group">
+        <div class="shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
           <i class="fa fa-file-pdf-o text-red-600"></i>
         </div>
         <div class="flex-1 min-w-0">
@@ -118,8 +118,8 @@
           <p class="text-gray-500 text-xs">Föreningens policy</p>
         </div>
       </a>
-      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FpUSeLCEIjkrZnfyjNXw7DEIrrlsBTH.pdf?alt=media&token=97fb01f5-6a40-4c7d-9d2e-8605b1893163" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-gkk/30 transition-all group">
-        <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+      <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FpUSeLCEIjkrZnfyjNXw7DEIrrlsBTH.pdf?alt=media&token=97fb01f5-6a40-4c7d-9d2e-8605b1893163" target="_blank" class="flex items-center p-4 bg-white rounded-xl border border-gray-200 shadow-xs hover:shadow-md hover:border-gkk/30 transition-all group">
+        <div class="shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
           <i class="fa fa-file-pdf-o text-red-600"></i>
         </div>
         <div class="flex-1 min-w-0">
@@ -138,20 +138,20 @@
     </h2>
     <div class="space-y-6">
       <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FBeard-Press%202021-02-14.xlsx?alt=media&token=30924370-12aa-4ddf-8bf1-2fd45cc70717" target="_blank" class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
-        <img width="80" class="rounded-lg shadow-sm mr-4" src="https://goteborg-kraftsportklubb.web.app/img/beardpress-logo-excel.png" alt="Beard Press">
+        <img width="80" class="rounded-lg shadow-xs mr-4" src="https://goteborg-kraftsportklubb.web.app/img/beardpress-logo-excel.png" alt="Beard Press">
         <div class="flex-1">
           <h3 class="font-bold text-gray-900 group-hover:text-gkk transition-colors">Beard Press</h3>
           <p class="text-gray-600 text-sm">Ett bänkpressprogram av Karl Malmberg (@kraftkarlos)</p>
-          <span class="inline-block mt-1 text-xs text-gray-500 bg-gray-200 px-2 py-0.5 rounded">Excelfil</span>
+          <span class="inline-block mt-1 text-xs text-gray-500 bg-gray-200 px-2 py-0.5 rounded-sm">Excelfil</span>
         </div>
         <i class="fa fa-download text-gray-400 group-hover:text-gkk transition-colors ml-2"></i>
       </a>
       <a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FBa%CC%88nkprogram%20CalleO%CC%88berg.xlsx?alt=media&token=731f217f-fe83-4950-88b6-402515862445" target="_blank" class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
-        <img width="80" class="rounded-lg shadow-sm mr-4" src="https://goteborg-kraftsportklubb.web.app/img/hemside-bild.png" alt="Carl Öbergs bänkpressprogram">
+        <img width="80" class="rounded-lg shadow-xs mr-4" src="https://goteborg-kraftsportklubb.web.app/img/hemside-bild.png" alt="Carl Öbergs bänkpressprogram">
         <div class="flex-1">
           <h3 class="font-bold text-gray-900 group-hover:text-gkk transition-colors">Carl Öbergs bänkpressprogram</h3>
           <p class="text-gray-600 text-sm">Hög volym och hög intensitet. Riktar sig till dig med år av dedikerad bänkpressträning.</p>
-          <span class="inline-block mt-1 text-xs text-gray-500 bg-gray-200 px-2 py-0.5 rounded">Excelfil</span>
+          <span class="inline-block mt-1 text-xs text-gray-500 bg-gray-200 px-2 py-0.5 rounded-sm">Excelfil</span>
         </div>
         <i class="fa fa-download text-gray-400 group-hover:text-gkk transition-colors ml-2"></i>
       </a>
@@ -164,19 +164,19 @@
       <i class="fa fa-paint-brush mr-2"></i> Grafik
     </h2>
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-      <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm text-center">
+      <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-xs text-center">
         <img class="w-16 h-16 mx-auto mb-2" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FTva%CC%8Afa%CC%88rg-pa%CC%8A-ljus-bakgrund.png?alt=media&token=be907bc2-2491-45e6-ae62-a5a78b080d41" alt="Tvåfärg ljus">
         <p class="text-xs text-gray-600">Tvåfärg mot ljus bakgrund</p>
       </div>
-      <div class="bg-gray-800 rounded-xl p-4 shadow-sm text-center">
+      <div class="bg-gray-800 rounded-xl p-4 shadow-xs text-center">
         <img class="w-16 h-16 mx-auto mb-2" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FTva%CC%8Afa%CC%88rg-pa%CC%8A-mo%CC%88rk-bakgrund-300x300.png?alt=media&token=f1942878-84fa-4519-a051-08bbec625fa7" alt="Tvåfärg mörk">
         <p class="text-xs text-gray-300">Tvåfärg mot mörk bakgrund</p>
       </div>
-      <div class="bg-gray-800 rounded-xl p-4 shadow-sm text-center">
+      <div class="bg-gray-800 rounded-xl p-4 shadow-xs text-center">
         <img class="w-16 h-16 mx-auto mb-2" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FTva%CC%8Afa%CC%88rg-pa%CC%8A-mo%CC%88rk-bakgrund-transparent.png?alt=media&token=def700f9-01c7-4786-a246-28475a5e32f1" alt="Tvåfärg mörk transparent">
         <p class="text-xs text-gray-300">Tvåfärg transparent</p>
       </div>
-      <div class="bg-gray-800 rounded-xl p-4 shadow-sm text-center">
+      <div class="bg-gray-800 rounded-xl p-4 shadow-xs text-center">
         <img class="w-16 h-16 mx-auto mb-2" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FMonokrom-pa%CC%8A-mo%CC%88rk-bakgrund.png?alt=media&token=aa0b2c8a-4059-42ed-a36e-7436f7b24a39" alt="Monokrom mörk">
         <p class="text-xs text-gray-300">Monokrom mot mörk bakgrund</p>
       </div>

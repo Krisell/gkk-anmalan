@@ -21,7 +21,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                 {{-- <img class="w-64 shadow-xl rounded-xl" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Flogo%20centered.png?alt=media&token=f0ea09ac-77b6-4e8a-b532-68cd7b3953e1"> --}}
 
                 <a 
-                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                 href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FGM2024Resultat.pdf?alt=media&token=36d75118-d229-4e9a-a0df-07aca2460f48"
                 target="_blank">
                 <i class="fa fa-file-pdf-o mr-2"></i>Resultat Götalandsmästerskapen 2024
@@ -29,20 +29,20 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
               <div></div>
 
                 <a 
-                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                 href="https://drive.google.com/drive/u/1/folders/1j93alpHQXl39rY0pC6iVb92QOLNNarlg"
                 target="_blank">
                 <i class="fa fa-youtube-play mr-2"></i>Stream från alla dagar
               </a>
               <a 
-                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                 href="https://www.youtube.com/watch?v=_EQ4qmLdgVM"
                 target="_blank">
                 <i class="fa fa-youtube-play mr-2"></i>Stream Söndag - Start 08.30
               </a>
               <div></div>
 
-                <div class="rounded p-2 border-gkk border-2">
+                <div class="rounded-sm p-2 border-gkk border-2">
                   <p class="text-3xl leading-bold text-gkk">
                     Information om Bastu
                   </p>
@@ -51,7 +51,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
                   </p>
                 </div>
 
-                <div class="rounded p-2 border-gkk border-2">
+                <div class="rounded-sm p-2 border-gkk border-2">
                   <p class="text-3xl leading-bold text-gkk">
                     Foto / media
                   </p>
@@ -63,7 +63,7 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
 
               <div class="mt-8"></div>
                 <a 
-                  class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                  class="inline-flex items-center px-4 py-2 border border-gkk bg-gkk text-white leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                   href="https://online.styrkelyft.se/web/Docs/3781/2972.pdf"
                   target="_blank">
                   <i class="fa fa-file-pdf-o mr-2"></i>Inbjudan Götalandsmästerskapen 2024
@@ -73,20 +73,20 @@ background-position-y: center; max-height: 50vh;" class="flex items-center">
 
                 <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FAnma%CC%88lda%20GM%202024%202024-04-22.pdf?alt=media&token=6d8bcf6c-dcec-417b-92af-627042c2eb44">
                   <p 
-                  class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
+                  class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
                     ><i class="fa fa-file-pdf-o mr-2"></i>Startlistor och tävlingstider (uppd. 2024-04-22)</p>
                 </a>
                 <div></div>
                 <a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FLottnummer_och_invagningsordning%20(4).pdf?alt=media&token=c40fde28-4d96-4c0d-9af8-b5a9f886f744">
                   <p 
-                  class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
+                  class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out hover:bg-gkk hover:text-white" 
                     ><i class="fa fa-file-pdf-o mr-2"></i>Lottnummer och invägningsordning (uppd. 2024-04-22)</p>
                 </a>
                 <div></div>
 
                 <a target="_blank" href="https://www.facebook.com/events/6992337070876164">
                   <p 
-                  class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-none focus:shadow-outline-indigo transition duration-150 ease-in-out" 
+                  class="inline-flex items-center px-4 py-2 border border-gkk bg-white text-gkk leading-5 font-medium rounded-md focus:outline-hidden focus:shadow-outline-indigo transition duration-150 ease-in-out" 
                     ><svg class="w-8 mr-2 h-8" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 30 30">
                       <path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"></path>
                   </svg>Klicka för att se Facebookevent för tävlingen</p>

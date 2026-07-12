@@ -1,6 +1,38 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/*
+  Font Awesome is imported into the `base` layer so that Tailwind's
+  utilities (a later layer) can override e.g. its `font-size: inherit`.
+*/
+@import 'font-awesome/css/font-awesome.css' layer(base);
+
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --color-gkk: #314270;
+  --color-gkk-light: #45557e;
+  --color-gkk-lightest: #a6acb9;
+}
+
+/*
+  Preserve Tailwind v3 defaults: borders without an explicit color were
+  gray-200 (v4 uses currentColor), and buttons had cursor: pointer.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
 
 @keyframes page-fade-in {
   from {

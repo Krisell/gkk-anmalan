@@ -14,7 +14,7 @@
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg tracking-tight">Medlemskap</h1>
       <div class="mt-4 flex items-center justify-center gap-3">
         <span class="h-px w-12 bg-white/50"></span>
-        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow">Styrka bygger man tillsammans</p>
+        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow-sm">Styrka bygger man tillsammans</p>
         <span class="h-px w-12 bg-white/50"></span>
       </div>
     </div>
@@ -63,7 +63,7 @@
     </div>
     <div class="space-y-6">
       <div class="flex items-start">
-        <div class="flex-shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
+        <div class="shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
           <i class="fa fa-id-card text-gkk"></i>
         </div>
         <div>
@@ -78,7 +78,7 @@
         </div>
       </div>
       <div class="flex items-start">
-        <div class="flex-shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
+        <div class="shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
           <i class="fa fa-trophy text-gkk"></i>
         </div>
         <div>
@@ -90,13 +90,13 @@
           <p class="text-gray-500 text-sm mt-1">
             Betalas endast om man vill tävla. Faktura skickas ut i samband med årets första tävling.
           </p>
-          <div class="mt-2 inline-block bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
+          <div class="mt-2 inline-block bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-sm">
             GKK subventionerar licensen med 300 kr för alla upp till 25 år
           </div>
         </div>
       </div>
       <div class="flex items-start">
-        <div class="flex-shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
+        <div class="shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
           <i class="fa fa-percent text-gkk"></i>
         </div>
         <div>

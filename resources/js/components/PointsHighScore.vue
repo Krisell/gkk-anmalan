@@ -10,7 +10,7 @@
       <p class="text-red-600">{{ error }}</p>
       <button 
         @click="fetchRanking"
-        class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
       >
         Försök igen
       </button>

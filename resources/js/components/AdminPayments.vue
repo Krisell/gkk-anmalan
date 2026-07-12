@@ -52,7 +52,7 @@
       </div>
 
       <!-- Search -->
-      <div class="relative rounded-md shadow-sm w-64">
+      <div class="relative rounded-md shadow-xs w-64">
         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           <i class="fa fa-search text-gray-400"></i>
         </div>
@@ -74,7 +74,7 @@
     <!-- Payments Table -->
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -174,15 +174,15 @@
 
     <!-- Summary Stats -->
     <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-white p-6 rounded-lg shadow">
+      <div class="bg-white p-6 rounded-lg shadow-sm">
         <h3 class="text-lg font-medium text-gray-900 mb-2">Total antal betalningar</h3>
         <p class="text-3xl font-bold text-gray-700">{{ filteredSortedPayments.length }}</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow">
+      <div class="bg-white p-6 rounded-lg shadow-sm">
         <h3 class="text-lg font-medium text-gray-900 mb-2">Betalda</h3>
         <p class="text-3xl font-bold text-green-600">{{ paidCount }}</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow">
+      <div class="bg-white p-6 rounded-lg shadow-sm">
         <h3 class="text-lg font-medium text-gray-900 mb-2">Väntande/Obetalda</h3>
         <p class="text-3xl font-bold text-red-600">{{ unpaidCount }}</p>
       </div>
@@ -194,7 +194,7 @@
         <p class="text-gray-700 mb-4">
           Du är på väg att markera följande betalning som betald:
         </p>
-        <div class="bg-gray-50 p-3 rounded">
+        <div class="bg-gray-50 p-3 rounded-sm">
           <p><strong>Typ:</strong> {{ getTypeText(selectedPayment.type) }}</p>
           <p><strong>År:</strong> {{ selectedPayment.year }}</p>
           <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? netAmount(selectedPayment) + ' kr' : 'Ej angivet' }}<span v-if="selectedPayment.sek_discount"> ({{ selectedPayment.sek_amount }} kr − {{ selectedPayment.sek_discount }} kr rabatt)</span></p>
@@ -203,8 +203,8 @@
       </div>
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
-          <button @click="close" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded transition-colors duration-200">Avbryt</button>
-          <button @click="markAsPaid" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded transition-colors duration-200">Markera som betald</button>
+          <button @click="close" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded-sm transition-colors duration-200">Avbryt</button>
+          <button @click="markAsPaid" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-sm transition-colors duration-200">Markera som betald</button>
         </div>
       </template>
     </Modal>
@@ -215,7 +215,7 @@
         <p class="text-gray-700 mb-4">
           Du är på väg att markera följande betalning som obetald:
         </p>
-        <div class="bg-gray-50 p-3 rounded">
+        <div class="bg-gray-50 p-3 rounded-sm">
           <p><strong>Typ:</strong> {{ getTypeText(selectedPayment.type) }}</p>
           <p><strong>År:</strong> {{ selectedPayment.year }}</p>
           <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? netAmount(selectedPayment) + ' kr' : 'Ej angivet' }}<span v-if="selectedPayment.sek_discount"> ({{ selectedPayment.sek_amount }} kr − {{ selectedPayment.sek_discount }} kr rabatt)</span></p>
@@ -224,8 +224,8 @@
       </div>
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
-          <button @click="close" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded transition-colors duration-200">Avbryt</button>
-          <button @click="markAsUnpaid" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded transition-colors duration-200">Markera som obetald</button>
+          <button @click="close" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded-sm transition-colors duration-200">Avbryt</button>
+          <button @click="markAsUnpaid" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-sm transition-colors duration-200">Markera som obetald</button>
         </div>
       </template>
     </Modal>

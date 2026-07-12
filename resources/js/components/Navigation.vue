@@ -1,13 +1,13 @@
 <template>
   <div>
     <div v-if="hasPendingPayments" class="max-w-6xl mx-auto px-4 mt-4">
-      <div class="bg-red-50 border border-red-200 border-l-4 border-l-red-500 text-red-700 px-4 py-3 rounded">
+      <div class="bg-red-50 border border-red-200 border-l-4 border-l-red-500 text-red-700 px-4 py-3 rounded-sm">
         Du har obetalda avgifter. Klicka på "Profil" för mer information.<br>Efter betalning kan det ta några dagar innan denna notisering försvinner.
       </div>
     </div>
 
     <div v-if="user && helperCount === 0 && !user.explicit_registration_approval && isUserOlderThanOneMonth" class="max-w-6xl mx-auto px-4 mt-4">
-      <div class="bg-yellow-50 border border-yellow-200 border-l-4 border-l-yellow-500 text-yellow-700 px-4 py-3 rounded">
+      <div class="bg-yellow-50 border border-yellow-200 border-l-4 border-l-yellow-500 text-yellow-700 px-4 py-3 rounded-sm">
         Systemet kan inte se att du har hjälpt till som funktionär under det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar. Kontakta styrelsen om du har frågor.
       </div>
     </div>
@@ -39,7 +39,7 @@
             v-for="card in cards"
             :key="card.href"
             :href="card.href"
-            class="group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-4 flex flex-col gap-6"
+            class="group relative bg-white rounded-xl border border-gray-100 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all p-4 flex flex-col gap-6"
             :class="{ 'ring-1 ring-gkk/20 bg-gkk/5': card.admin }"
           >
             <div
@@ -82,14 +82,14 @@
     <div v-if="!user" class="flex flex-col sm:flex-row items-center justify-center gap-4 m-6">
       <a
         href="/register"
-        class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all p-6 flex flex-col items-center justify-center w-64 text-center"
+        class="bg-white rounded-xl border border-gray-100 shadow-xs hover:shadow-md transition-all p-6 flex flex-col items-center justify-center w-64 text-center"
       >
         <i class="fa fa-user-circle text-3xl text-gkk mb-3"></i>
         <div class="font-semibold text-gray-900">Skapa konto som medlem</div>
       </a>
       <a
         href="/login"
-        class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all p-6 flex flex-col items-center justify-center w-64 text-center"
+        class="bg-white rounded-xl border border-gray-100 shadow-xs hover:shadow-md transition-all p-6 flex flex-col items-center justify-center w-64 text-center"
       >
         <i class="fa fa-sign-in text-3xl text-gkk mb-3"></i>
         <div class="font-semibold text-gray-900">Logga in som medlem</div>

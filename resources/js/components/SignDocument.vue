@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto max-w-4xl px-4">
-    <div v-if="done" class="bg-white shadow sm:rounded-lg p-8 text-center max-w-lg mx-auto">
+    <div v-if="done" class="bg-white shadow-sm sm:rounded-lg p-8 text-center max-w-lg mx-auto">
       <i class="fa fa-check-circle text-green-600 text-5xl mb-4"></i>
       <h1 class="text-2xl font-semibold mb-2">Tack, {{ signer.name }}!</h1>
       <p class="text-gray-600">Din signatur av <strong>{{ documentName }}</strong> har sparats.</p>
@@ -19,7 +19,7 @@
             <div
               v-for="(field, index) in fieldsOnPage(pageIndex)"
               :key="index"
-              class="absolute border-2 border-gkk rounded bg-gkk/10 flex items-center justify-center overflow-hidden"
+              class="absolute border-2 border-gkk rounded-sm bg-gkk/10 flex items-center justify-center overflow-hidden"
               :style="{
                 left: field.left + 'px',
                 top: field.top + 'px',
@@ -34,7 +34,7 @@
         </template>
       </PdfViewer>
 
-      <div class="bg-white shadow sm:rounded-lg p-4 mt-6 max-w-xl mx-auto">
+      <div class="bg-white shadow-sm sm:rounded-lg p-4 mt-6 max-w-xl mx-auto">
         <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Din signatur</h2>
 
         <SignaturePadInput ref="signatureInput" :initial-name="signer.name" />

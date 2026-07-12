@@ -9,13 +9,13 @@
         class="fa fa-clipboard"
       ></i>
     </h2>
-    <div class="bg-white shadow sm:rounded-lg mb-6">
+    <div class="bg-white shadow-sm sm:rounded-lg mb-6">
       <div class="px-4 py-5 sm:p-6">
         <div>
           <label for="location" class="block text-sm leading-5 font-medium text-gray-700">Filtrering</label>
           <select
             v-model="showFilter"
-            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 border rounded"
+            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 border rounded-sm"
           >
             <option value="all">Visa alla</option>
             <option value="1">Visa endast de som tackat ja ({{ countYes }} st)</option>
@@ -26,7 +26,7 @@
     </div>
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -102,7 +102,7 @@
       <div>
         <select
           v-model="userToAdd"
-          class="mt-1 block form-select w-72 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+          class="mt-1 block form-select w-72 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-xs focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
         >
           <option value=''>Lägg till ytterligare medlem manuellt</option>
           <option v-for="lifter in remainingUsers" :key="lifter.key" :value="lifter.id">
@@ -171,7 +171,7 @@
           <select
             v-model="registrationToEdit.status"
             id="location"
-            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 rounded border"
+            class="mt-1 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 rounded-sm border"
           >
             <option value="1">Ja</option>
             <option value="0">Nej</option>
@@ -182,7 +182,7 @@
             v-model="registrationToEdit.comment"
             rows="5"
             placeholder="Ev. ytterligare info"
-            class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5 rounded border p-2"
+            class="form-textarea block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5 rounded-sm border p-2"
           ></textarea>
       </div>
 

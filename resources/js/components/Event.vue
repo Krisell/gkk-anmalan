@@ -12,7 +12,7 @@
     </h1>
 
     <div class="max-w-lg mx-auto">
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm text-center mb-4">
+    <div class="bg-white rounded-xl border border-gray-100 shadow-xs text-center mb-4">
       <div class="px-4 py-5 sm:p-6">
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           {{ event.name }}

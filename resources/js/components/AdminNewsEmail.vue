@@ -21,7 +21,7 @@
 
     <input
       placeholder="Nyhetens titel"
-      class="appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+      class="appearance-none rounded-none relative block w-full px-3 py-2 mb-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
       v-model="item.title"
     />
     <input v-if="item" id="news-content" :value="item.body" type="hidden" name="content" />
@@ -85,7 +85,7 @@
             <button class="text-gkk underline" @click="selectUnsent">Markera endast de som inte fått det</button>
           </div>
 
-          <div class="border rounded max-h-80 overflow-y-auto bg-white">
+          <div class="border rounded-sm max-h-80 overflow-y-auto bg-white">
             <label
               v-for="recipient in recipients"
               :key="recipient.id"
