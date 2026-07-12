@@ -59,15 +59,18 @@ export default {
       firebase.auth().languageCode = 'sv'
       const provider = new firebase.auth.GoogleAuthProvider()
       provider.addScope('email')
-      firebase.auth().signInWithPopup(provider).then(result => {
-        PostRedirect.send({
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+          PostRedirect.send({
             url: '/auth/google',
             data: {
               idToken: result.credential.idToken,
               to: this.to,
             },
           })
-      })
+        })
     },
     microsoft() {
       firebase

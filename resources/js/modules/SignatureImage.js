@@ -34,7 +34,9 @@ const SignatureImage = {
     const trimmed = document.createElement('canvas')
     trimmed.width = maxX - minX + 1
     trimmed.height = maxY - minY + 1
-    trimmed.getContext('2d').drawImage(canvas, minX, minY, trimmed.width, trimmed.height, 0, 0, trimmed.width, trimmed.height)
+    trimmed
+      .getContext('2d')
+      .drawImage(canvas, minX, minY, trimmed.width, trimmed.height, 0, 0, trimmed.width, trimmed.height)
 
     return trimmed.toDataURL('image/png')
   },

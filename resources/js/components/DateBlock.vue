@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-gkk/5 rounded-xl px-4 py-3 flex flex-col items-center justify-center min-w-[96px] shrink-0 self-stretch">
+  <div
+    class="bg-gkk/5 rounded-xl px-4 py-3 flex flex-col items-center justify-center min-w-[96px] shrink-0 self-stretch"
+  >
     <div class="text-[11px] font-semibold text-gkk/70 uppercase tracking-wider">{{ monthLabel }}</div>
     <div class="text-2xl font-bold text-gkk leading-tight mt-0.5">{{ dayLabel }}</div>
     <div class="text-[11px] font-semibold text-gkk/70 uppercase tracking-wider mt-0.5">{{ weekdayLabel }}</div>

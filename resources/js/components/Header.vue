@@ -9,28 +9,54 @@
           <div class="cursor-pointer text-gray-400 hover:text-gkk transition-colors text-xs">Stäng</div>
         </li>
         <li class="py-2 hover:text-gkk transition-colors">
-          <a :class="site === 'landing' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/">Start</a>
+          <a
+            :class="site === 'landing' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
+            href="/"
+            >Start</a
+          >
         </li>
         <li class="py-2 hover:text-gkk transition-colors">
-          <a :class="site === 'powerlifting' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/styrkelyft">Styrkelyft</a>
+          <a
+            :class="site === 'powerlifting' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
+            href="/styrkelyft"
+            >Styrkelyft</a
+          >
         </li>
         <li class="py-2 hover:text-gkk transition-colors">
-          <a :class="site === 'about' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/gkk">Om GKK</a>
+          <a
+            :class="site === 'about' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
+            href="/gkk"
+            >Om GKK</a
+          >
         </li>
         <li class="py-2 hover:text-gkk transition-colors">
-          <a :class="site === 'member' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/medlem">Medlemskap</a>
+          <a
+            :class="site === 'member' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
+            href="/medlem"
+            >Medlemskap</a
+          >
         </li>
         <li class="py-2 hover:text-gkk transition-colors">
-          <a :class="site === 'documents' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/dokument">Länkar</a>
+          <a
+            :class="site === 'documents' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
+            href="/dokument"
+            >Länkar</a
+          >
         </li>
         <li class="py-2 hover:text-gkk transition-colors">
-          <a :class="site === 'records' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'" href="/klubbrekord">Klubbrekord</a>
+          <a
+            :class="site === 'records' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
+            href="/klubbrekord"
+            >Klubbrekord</a
+          >
         </li>
         <li class="py-2 mt-4 border-t pt-4">
           <a
             class="px-3 py-1.5 rounded-md transition-all"
             :class="site === '' ? 'bg-gkk text-white' : 'text-gkk hover:bg-gkk/10'"
-            href="/insidan">Insidan</a>
+            href="/insidan"
+            >Insidan</a
+          >
         </li>
       </ul>
     </nav>
@@ -53,7 +79,10 @@
               </a>
 
               <div class="flex lg:hidden absolute left-16">
-                <i @click="navIsOpen = !navIsOpen" class="ml-2 fa fa-bars text-2xl cursor-pointer text-gray-600 hover:text-gkk transition-colors"></i>
+                <i
+                  @click="navIsOpen = !navIsOpen"
+                  class="ml-2 fa fa-bars text-2xl cursor-pointer text-gray-600 hover:text-gkk transition-colors"
+                ></i>
               </div>
               <div data-cy="navbar" class="hidden lg:flex absolute left-0 lg:left-24 items-center">
                 <a
@@ -101,7 +130,8 @@
                 <a
                   class="uppercase text-sm tracking-wide px-3 py-1.5 rounded-md transition-all duration-200"
                   :class="site === '' ? 'bg-gkk text-white' : 'text-gkk hover:bg-gkk/10'"
-                  href="/insidan">
+                  href="/insidan"
+                >
                   Insidan
                 </a>
               </div>
@@ -109,7 +139,9 @@
 
             <div v-if="user" class="shrink-0">
               <div @click="logout">
-                <a class="uppercase text-xs text-gray-500 hover:text-gkk transition-colors duration-200 cursor-pointer"> Logga ut </a>
+                <a class="uppercase text-xs text-gray-500 hover:text-gkk transition-colors duration-200 cursor-pointer">
+                  Logga ut
+                </a>
               </div>
             </div>
           </div>
@@ -185,11 +217,12 @@
 
     <Modal ref="impersonationModal" title="Ange epost eller användarid">
       <div class="flex flex-col gap-2 items-center">
-        <input 
+        <input
           @keypress.enter="impersonate"
-          class="mx-auto border p-2 rounded-sm" 
-          id="impersonatedUser" 
-          v-model="impersonatedUser">
+          class="mx-auto border p-2 rounded-sm"
+          id="impersonatedUser"
+          v-model="impersonatedUser"
+        />
       </div>
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
@@ -197,7 +230,7 @@
           <Button @click="impersonate" type="danger">Aktivera</Button>
         </div>
       </template>
-    </modal>
+    </Modal>
   </div>
 </template>
 
@@ -213,20 +246,80 @@ export default {
   data() {
     return {
       memberTabs: [
-        { name: 'Start', href: '/insidan', icon: 'newspaper-o', current: this.view === 'inside' },
-        { name: 'Tävlingsanmälan', href: '/competitions', icon: 'th-list', current: this.view === 'competition' },
-        { name: 'Funktionärsanmälan', href: '/events', icon: 'users', current: this.view === 'event' },
-        { name: 'Poängtoppen', href: '/points', icon: 'trophy', current: this.view === 'points' },
-        { name: 'Dokument', href: '/member-documents', icon: 'file-o', current: this.view === 'member-documents' },
-        { name: 'Profil', href: '/profile', icon: 'user-circle', current: this.view === 'profile' },
+        {
+          name: 'Start',
+          href: '/insidan',
+          icon: 'newspaper-o',
+          current: this.view === 'inside',
+        },
+        {
+          name: 'Tävlingsanmälan',
+          href: '/competitions',
+          icon: 'th-list',
+          current: this.view === 'competition',
+        },
+        {
+          name: 'Funktionärsanmälan',
+          href: '/events',
+          icon: 'users',
+          current: this.view === 'event',
+        },
+        {
+          name: 'Poängtoppen',
+          href: '/points',
+          icon: 'trophy',
+          current: this.view === 'points',
+        },
+        {
+          name: 'Dokument',
+          href: '/member-documents',
+          icon: 'file-o',
+          current: this.view === 'member-documents',
+        },
+        {
+          name: 'Profil',
+          href: '/profile',
+          icon: 'user-circle',
+          current: this.view === 'profile',
+        },
       ],
       adminTabs: [
-        { name: 'Rekord', href: '/admin/results', icon: 'trophy', current: this.view === 'records' },
-        { name: 'Konton', href: '/admin/accounts', icon: 'list-alt', current: this.view === 'accounts' },
-        { name: 'Slideshow', href: '/admin/slideshow', icon: 'television', current: this.view === 'slideshow' },
-        { name: 'Betalningar', href: '/admin/payments', icon: 'credit-card', current: this.view === 'payments' },
-        { name: 'Fortnox', href: '/admin/payment-tools', icon: 'wrench', current: this.view === 'payment-tools' },
-        { name: 'Aktivitetslogg', href: '/admin/activity-logs', icon: 'history', current: this.view === 'activity-logs' },
+        {
+          name: 'Rekord',
+          href: '/admin/results',
+          icon: 'trophy',
+          current: this.view === 'records',
+        },
+        {
+          name: 'Konton',
+          href: '/admin/accounts',
+          icon: 'list-alt',
+          current: this.view === 'accounts',
+        },
+        {
+          name: 'Slideshow',
+          href: '/admin/slideshow',
+          icon: 'television',
+          current: this.view === 'slideshow',
+        },
+        {
+          name: 'Betalningar',
+          href: '/admin/payments',
+          icon: 'credit-card',
+          current: this.view === 'payments',
+        },
+        {
+          name: 'Fortnox',
+          href: '/admin/payment-tools',
+          icon: 'wrench',
+          current: this.view === 'payment-tools',
+        },
+        {
+          name: 'Aktivitetslogg',
+          href: '/admin/activity-logs',
+          icon: 'history',
+          current: this.view === 'activity-logs',
+        },
       ],
       navIsOpen: false,
       showSubMenu: false,
@@ -244,7 +337,7 @@ export default {
     },
     async impersonate() {
       await axios.post(`/admin/impersonate/${this.impersonatedUser}`)
-      
+
       window.location = '/profile'
     },
   },
@@ -254,12 +347,12 @@ export default {
         return
       }
 
-      if (! this.user || this.user.role !== 'superadmin') {
+      if (!this.user || this.user.role !== 'superadmin') {
         return
       }
 
       setTimeout(() => {
-        this.$refs.impersonationModal.show() 
+        this.$refs.impersonationModal.show()
         document.querySelector('#impersonatedUser').focus()
       }, 100)
     })
@@ -277,10 +370,12 @@ export default {
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.2s ease;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

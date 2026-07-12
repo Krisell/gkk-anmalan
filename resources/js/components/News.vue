@@ -30,7 +30,9 @@
                   <i class="fa fa-bullhorn text-sm"></i>
                 </div>
                 <div class="min-w-0">
-                  <div class="text-sm text-gray-900 group-hover:text-gkk transition-colors truncate">{{ item.title }}</div>
+                  <div class="text-sm text-gray-900 group-hover:text-gkk transition-colors truncate">
+                    {{ item.title }}
+                  </div>
                   <div class="text-xs text-gray-400 mt-0.5">{{ publishDate(item) }}</div>
                 </div>
               </a>

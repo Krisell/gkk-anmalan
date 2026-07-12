@@ -11,16 +11,20 @@
     <div v-if="ungranted.length > 0" class="flex flex-col mb-8">
       <h2 class="text-2xl font-thin text-center m-4">Väntar på godkännande</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div
+          class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200"
+        >
           <table class="min-w-full">
             <thead>
               <tr>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Namn
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Datum reg.
                 </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
@@ -43,7 +47,8 @@
                 </td>
 
                 <td
-                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
+                >
                   <Button @click="grantAccount(account)">Godkänn konto</Button>
                   <Button class="ml-2" type="secondary" @click="deleteAccount(account)">Radera konto</Button>
                 </td>
@@ -56,7 +61,9 @@
 
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div
+          class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200"
+        >
           <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
             <div class="flex flex-wrap items-center gap-3">
               <div class="text-sm font-medium text-gray-600 whitespace-nowrap">
@@ -75,14 +82,18 @@
                 </div>
                 <input
                   v-model="search"
-                  class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" placeholder="Sök medlem"
+                  class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  placeholder="Sök medlem"
                 />
               </div>
               <div ref="filtersContainer">
                 <Button type="secondary" @click="toggleFilters" class="whitespace-nowrap">
                   <i class="fa fa-sliders mr-2"></i>
                   Filter
-                  <span v-if="activeFilterCount > 0" class="ml-2 bg-gkk text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center">
+                  <span
+                    v-if="activeFilterCount > 0"
+                    class="ml-2 bg-gkk text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center"
+                  >
                     {{ activeFilterCount }}
                   </span>
                 </Button>
@@ -95,15 +106,26 @@
                   >
                     <div class="flex flex-col gap-3 text-sm font-thin">
                       <ToggleButton v-model="treasurerMode"><span class="ml-2">Kassörsläge</span></ToggleButton>
-                      <ToggleButton v-model="show.juniors"><span class="ml-2">Visa ungdomar/juniorer upp till 23</span></ToggleButton>
-                      <ToggleButton v-model="show.studentsOver23"><span class="ml-2">Visa studenter över 23</span></ToggleButton>
+                      <ToggleButton v-model="show.juniors"
+                        ><span class="ml-2">Visa ungdomar/juniorer upp till 23</span></ToggleButton
+                      >
+                      <ToggleButton v-model="show.studentsOver23"
+                        ><span class="ml-2">Visa studenter över 23</span></ToggleButton
+                      >
                       <ToggleButton v-model="show.rest"><span class="ml-2">Visa övriga</span></ToggleButton>
-                      <ToggleButton v-model="show.onlyBackgroundCheck"><span class="ml-2">Endast med belastningsregisterutdrag</span></ToggleButton>
+                      <ToggleButton v-model="show.onlyBackgroundCheck"
+                        ><span class="ml-2">Endast med belastningsregisterutdrag</span></ToggleButton
+                      >
                     </div>
                   </div>
                 </Teleport>
               </div>
-              <Button type="secondary" @click="copyEmails" class="whitespace-nowrap" v-tooltip="'Kopierar e-postadresserna för alla icke-inaktiverade konton (ignorerar filter och sökning)'">
+              <Button
+                type="secondary"
+                @click="copyEmails"
+                class="whitespace-nowrap"
+                v-tooltip="'Kopierar e-postadresserna för alla icke-inaktiverade konton (ignorerar filter och sökning)'"
+              >
                 <i class="fa fa-envelope mr-2"></i>
                 Kopiera alla aktiva e-postadresser
               </Button>
@@ -112,60 +134,84 @@
           <table class="min-w-full">
             <thead>
               <tr>
-                <th @click="sortBy('first_name')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th
+                  @click="sortBy('first_name')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   Namn
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                  
-                </th>
                 <th
-                @click="sortBy('event_registrations')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                ></th>
+                <th
+                  @click="sortBy('event_registrations')"
                   v-show="!treasurerMode"
                   class="cursor-pointer px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                   v-tooltip="'Bekräftad närvaro som funktionär. Inom parentes senaste 365 dagarna'"
                 >
                   Bekr. funk.<br />(senaste 365 dagarna)
                 </th>
-                <th @click="sortBy('created_at')"
-                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th
+                  @click="sortBy('created_at')"
+                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   Regdatum
                 </th>
-                <th @click="sortBy('last_visited_at')"
-                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th
+                  @click="sortBy('last_visited_at')"
+                  class="w-[130px] px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   Senaste besök
                 </th>
-                <th @click="sortBy('visits')"
+                <th
+                  @click="sortBy('visits')"
                   v-show="!treasurerMode"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   Antal besök
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Licens.avg. 2026
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Medl.avg. {{ getCurrentYear() }}
                 </th>
                 <th v-show="!treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Inställningar
                 </th>
               </tr>
             </thead>
             <tbody class="bg-white">
-              <tr v-for="account in filteredSortedActiveAccounts" :key="account.id" :data-testid="`account-${account.id}`">
+              <tr
+                v-for="account in filteredSortedActiveAccounts"
+                :key="account.id"
+                :data-testid="`account-${account.id}`"
+              >
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div
                         class="text-sm leading-5 font-medium"
                         :class="account.ren_vinnare_education_completed_at ? 'text-green-600' : 'text-gray-900'"
-                        v-tooltip="account.ren_vinnare_education_completed_at ? 'Markerad som har genomfört Ren Vinnare-utbildningen' : ''"
+                        v-tooltip="
+                          account.ren_vinnare_education_completed_at
+                            ? 'Markerad som har genomfört Ren Vinnare-utbildningen'
+                            : ''
+                        "
                       >
                         {{ account.first_name }} {{ account.last_name }}
                         <i
-                        v-tooltip="{content: `${account.email}<br>Klicka för att kopiera.`, html: true}" @click="copyEmail(account.email)"
-                        class="fa fa-envelope-o ml-2 cursor-pointer text-black"></i>
+                          v-tooltip="{ content: `${account.email}<br>Klicka för att kopiera.`, html: true }"
+                          @click="copyEmail(account.email)"
+                          class="fa fa-envelope-o ml-2 cursor-pointer text-black"
+                        ></i>
                       </div>
                       <span v-if="account.licence_number" class="text-xs font-light">
                         {{ account.licence_number }}
@@ -173,15 +219,59 @@
                     </div>
                   </div>
                 </td>
-                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                <td
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
+                >
                   <i v-if="isJunior(account)" class="fa fa-child text-gkk text-xl" v-tooltip="'Ungdom / Junior'"></i>
-                  <i v-else-if="account.is_student_over_23" class="fa fa-graduation-cap text-gkk text-xl" v-tooltip="'Student över 23'"></i>
+                  <i
+                    v-else-if="account.is_student_over_23"
+                    class="fa fa-graduation-cap text-gkk text-xl"
+                    v-tooltip="'Student över 23'"
+                  ></i>
                   <div v-if="isLOKAllowed(account)" class="text-gkk text-xl" v-tooltip="'LOK-berättigad'">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2"><path d="m37.278 14.519-21.203-2.45a4 4 0 0 0-4.433 3.514l-.763 6.606" style="fill:none;stroke:#222a33;stroke-width:2px"/><path d="m15.001 20.404.322-2.782a1.867 1.867 0 0 1 2.069-1.641l2.976.344M53.202 19.117a4.001 4.001 0 0 0-4.609-3.28l-38.149 6.425a4.001 4.001 0 0 0-3.28 4.609l3.634 21.575a4 4 0 0 0 4.609 3.28l38.149-6.425a4.003 4.003 0 0 0 3.28-4.609l-3.634-21.575z" style="fill:none;stroke:#222a33;stroke-width:2px"/><path d="m19.474 47.253-2.823.476a1.999 1.999 0 0 1-2.305-1.64l-.443-2.632m30.623-23.148 2.823-.475a1.998 1.998 0 0 1 2.305 1.64l.443 2.631m-38.365 6.462-.443-2.632a1.999 1.999 0 0 1 1.64-2.304l2.823-.476M52.268 36.996l.443 2.631a1.999 1.999 0 0 1-1.64 2.305l-2.823.475M33.221 29.788A2.334 2.334 0 1 0 32 33.781a2.336 2.336 0 0 1 2.69 1.914 2.336 2.336 0 0 1-3.911 2.079M31.225 29.177l-.311-1.841M33.086 40.226l-.311-1.841" style="fill:none;stroke:#222a33;stroke-width:2px"/></svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 64 64"
+                      xml:space="preserve"
+                      style="
+                        fill-rule: evenodd;
+                        clip-rule: evenodd;
+                        stroke-linecap: round;
+                        stroke-linejoin: round;
+                        stroke-miterlimit: 2;
+                      "
+                    >
+                      <path
+                        d="m37.278 14.519-21.203-2.45a4 4 0 0 0-4.433 3.514l-.763 6.606"
+                        style="fill: none; stroke: #222a33; stroke-width: 2px"
+                      />
+                      <path
+                        d="m15.001 20.404.322-2.782a1.867 1.867 0 0 1 2.069-1.641l2.976.344M53.202 19.117a4.001 4.001 0 0 0-4.609-3.28l-38.149 6.425a4.001 4.001 0 0 0-3.28 4.609l3.634 21.575a4 4 0 0 0 4.609 3.28l38.149-6.425a4.003 4.003 0 0 0 3.28-4.609l-3.634-21.575z"
+                        style="fill: none; stroke: #222a33; stroke-width: 2px"
+                      />
+                      <path
+                        d="m19.474 47.253-2.823.476a1.999 1.999 0 0 1-2.305-1.64l-.443-2.632m30.623-23.148 2.823-.475a1.998 1.998 0 0 1 2.305 1.64l.443 2.631m-38.365 6.462-.443-2.632a1.999 1.999 0 0 1 1.64-2.304l2.823-.476M52.268 36.996l.443 2.631a1.999 1.999 0 0 1-1.64 2.305l-2.823.475M33.221 29.788A2.334 2.334 0 1 0 32 33.781a2.336 2.336 0 0 1 2.69 1.914 2.336 2.336 0 0 1-3.911 2.079M31.225 29.177l-.311-1.841M33.086 40.226l-.311-1.841"
+                        style="fill: none; stroke: #222a33; stroke-width: 2px"
+                      />
+                    </svg>
                   </div>
-                  <i v-if="account.is_honorary_member" class="fa fa-trophy text-gkk text-xl" v-tooltip="'Hedersmedlem'"></i>
-                  <i v-if="account.explicit_registration_approval" class="fa fa-exclamation-triangle text-yellow-500 text-xl" v-tooltip="'Har explicit godkännande att anmäla sig till tävlingar trots 0 funktionärstillfällen'"></i>
-                  <i v-if="account.background_check_valid_from" class="fa fa-shield text-gkk text-xl" v-tooltip="'Har lämnat in utdrag från belastningsregistret (' + account.background_check_valid_from + ')'"></i>
+                  <i
+                    v-if="account.is_honorary_member"
+                    class="fa fa-trophy text-gkk text-xl"
+                    v-tooltip="'Hedersmedlem'"
+                  ></i>
+                  <i
+                    v-if="account.explicit_registration_approval"
+                    class="fa fa-exclamation-triangle text-yellow-500 text-xl"
+                    v-tooltip="'Har explicit godkännande att anmäla sig till tävlingar trots 0 funktionärstillfällen'"
+                  ></i>
+                  <i
+                    v-if="account.background_check_valid_from"
+                    class="fa fa-shield text-gkk text-xl"
+                    v-tooltip="
+                      'Har lämnat in utdrag från belastningsregistret (' + account.background_check_valid_from + ')'
+                    "
+                  ></i>
                 </td>
                 <td v-show="!treasurerMode" class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500 text-center">
@@ -200,42 +290,60 @@
                 </td>
                 <td
                   v-show="!treasurerMode"
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
+                >
                   {{ account.visits }}
                 </td>
                 <td
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
-                  <ToggleButton 
-                    v-if="showPaymentToggle(account, 2026, 'SSFLICENSE')" 
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
+                >
+                  <ToggleButton
+                    v-if="showPaymentToggle(account, 2026, 'SSFLICENSE')"
                     @update:modelValue="updatePayment(account, 2026, 'SSFLICENSE')"
-                    :modelValue="hasPaid(account, 2026, 'SSFLICENSE')" 
+                    :modelValue="hasPaid(account, 2026, 'SSFLICENSE')"
                   />
-                  <i v-else 
+                  <i
+                    v-else
                     @click="confirmCreateMissingLicense(account, 2026)"
                     class="fa fa-plus-circle cursor-pointer transition hover:scale-125"
                   ></i>
                 </td>
                 <td
                   data-testid="membership-current-year"
-                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center">
+                  class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500 text-center"
+                >
                   <span v-if="account.is_honorary_member" class="text-xs italic">Hedersmedlem</span>
-                  <ToggleButton 
-                    v-else-if="showPaymentToggle(account, getCurrentYear(), 'MEMBERSHIP')" 
+                  <ToggleButton
+                    v-else-if="showPaymentToggle(account, getCurrentYear(), 'MEMBERSHIP')"
                     @update:modelValue="updatePayment(account, getCurrentYear(), 'MEMBERSHIP')"
-                    :modelValue="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')" 
+                    :modelValue="hasPaid(account, getCurrentYear(), 'MEMBERSHIP')"
                   />
                 </td>
                 <td
                   v-show="!treasurerMode"
-                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
+                >
                   <div class="flex items-center gap-2">
                     <div v-if="user.role === 'superadmin'">
-                      <i @click="confirmDemotion(account)" v-if="account.role === 'admin'" style="cursor: pointer"
-                        class="fa fa-star" v-tooltip="'Administratör, klicka för att ta bort rollen'"></i>
-                      <i v-else-if="account.role === 'superadmin'" class="fa fa-star"
-                        v-tooltip="'Superadministratör'"></i>
-                      <i @click="confirmPromotion(account)" v-else class="fa fa-star-o" style="cursor: pointer"
-                        v-tooltip="'Gör till administratör'"></i>
+                      <i
+                        @click="confirmDemotion(account)"
+                        v-if="account.role === 'admin'"
+                        style="cursor: pointer"
+                        class="fa fa-star"
+                        v-tooltip="'Administratör, klicka för att ta bort rollen'"
+                      ></i>
+                      <i
+                        v-else-if="account.role === 'superadmin'"
+                        class="fa fa-star"
+                        v-tooltip="'Superadministratör'"
+                      ></i>
+                      <i
+                        @click="confirmPromotion(account)"
+                        v-else
+                        class="fa fa-star-o"
+                        style="cursor: pointer"
+                        v-tooltip="'Gör till administratör'"
+                      ></i>
                     </div>
                     <div v-else>
                       <i v-if="account.role === 'admin'" class="fa fa-star" v-tooltip="'Administratör'"></i>
@@ -243,8 +351,12 @@
                     </div>
                   </div>
                 </td>
-                <td class="px-6 py-2 whitespace-no-wrap text-center border-b border-gray-200 text-sm leading-5 font-medium">
-                  <i @click="openSettingsModal(account)" class="fa fa-ellipsis-v cursor-pointer text-gray-500 hover:text-gray-700"
+                <td
+                  class="px-6 py-2 whitespace-no-wrap text-center border-b border-gray-200 text-sm leading-5 font-medium"
+                >
+                  <i
+                    @click="openSettingsModal(account)"
+                    class="fa fa-ellipsis-v cursor-pointer text-gray-500 hover:text-gray-700"
                     v-tooltip="'Ytterligare inställningar'"
                     :data-testid="`settings-${account.id}`"
                   ></i>
@@ -252,7 +364,6 @@
               </tr>
             </tbody>
           </table>
-
         </div>
         <div class="text-center mt-4" v-tooltip="'Excel-fil med medlemmarna som visas ovan'">
           <svg
@@ -312,16 +423,20 @@
     <div v-if="inactiveAccounts.length > 0" class="flex flex-col mb-8 mt-8">
       <h2 class="text-2xl font-thin text-center m-4">{{ inactiveAccounts.length }} inaktiverade konton</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div
+          class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200"
+        >
           <table data-testid="inactive-accounts-table" class="min-w-full">
             <thead>
               <tr>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Namn
                 </th>
                 <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Registreringsdatum
                 </th>
                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
@@ -335,12 +450,18 @@
                       <div
                         class="text-sm leading-5 font-medium"
                         :class="account.ren_vinnare_education_completed_at ? 'text-green-600' : 'text-gray-900'"
-                        v-tooltip="account.ren_vinnare_education_completed_at ? 'Markerad som har genomfört Ren Vinnare-utbildningen' : ''"
+                        v-tooltip="
+                          account.ren_vinnare_education_completed_at
+                            ? 'Markerad som har genomfört Ren Vinnare-utbildningen'
+                            : ''
+                        "
                       >
                         {{ account.first_name }} {{ account.last_name }}
                         <i
-                        v-tooltip="`${account.email}<br>Klicka för att kopiera.`" @click="copyEmail(account.email)"
-                        class="fa fa-envelope-o ml-2 cursor-pointer"></i>
+                          v-tooltip="`${account.email}<br>Klicka för att kopiera.`"
+                          @click="copyEmail(account.email)"
+                          class="fa fa-envelope-o ml-2 cursor-pointer"
+                        ></i>
                       </div>
                       <span v-if="account.licence_number" class="text-xs font-light">
                         {{ account.licence_number }}
@@ -353,7 +474,8 @@
                 </td>
 
                 <td
-                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                  class="px-6 py-2 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
+                >
                   <Button @click="reactivate(account)">Återaktivera konto</Button>
                 </td>
               </tr>
@@ -363,7 +485,10 @@
       </div>
     </div>
 
-    <Modal ref="createMissingLicenseModal" :title="`Är du säker på att du vill skapa licensavgift för ${selectedAccount && selectedAccount.email}?`">
+    <Modal
+      ref="createMissingLicenseModal"
+      :title="`Är du säker på att du vill skapa licensavgift för ${selectedAccount && selectedAccount.email}?`"
+    >
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
           <Button @click="close" type="secondary">Nej</Button>
@@ -372,7 +497,10 @@
       </template>
     </Modal>
 
-    <Modal ref="promoteModal" :title="`Är du säker på att du vill göra ${selectedAccount && selectedAccount.email} till administratör?`">
+    <Modal
+      ref="promoteModal"
+      :title="`Är du säker på att du vill göra ${selectedAccount && selectedAccount.email} till administratör?`"
+    >
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
           <Button @click="close" type="secondary">Nej</Button>
@@ -381,7 +509,10 @@
       </template>
     </Modal>
 
-    <Modal ref="demoteModal" :title="`Är du säker på att du vill ta bort administratörsrollen för ${selectedAccount && selectedAccount.email}?`">
+    <Modal
+      ref="demoteModal"
+      :title="`Är du säker på att du vill ta bort administratörsrollen för ${selectedAccount && selectedAccount.email}?`"
+    >
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
           <Button @click="close" type="secondary">Nej</Button>
@@ -390,7 +521,10 @@
       </template>
     </Modal>
 
-    <Modal ref="inactivateModal" :title="`Är du säker på att du vill inaktivera kontot för ${selectedAccount && selectedAccount.email}?`">
+    <Modal
+      ref="inactivateModal"
+      :title="`Är du säker på att du vill inaktivera kontot för ${selectedAccount && selectedAccount.email}?`"
+    >
       <template #footer="{ close }">
         <div class="flex flex-col gap-2 items-center justify-center mt-4">
           <Button @click="inactivateWithEmail" type="danger">Inaktivera och skicka enkät</Button>
@@ -400,7 +534,10 @@
       </template>
     </Modal>
 
-    <Modal ref="settingsModal" :title="`Inställningar för ${selectedAccount && selectedAccount.first_name} ${selectedAccount && selectedAccount.last_name}`">
+    <Modal
+      ref="settingsModal"
+      :title="`Inställningar för ${selectedAccount && selectedAccount.first_name} ${selectedAccount && selectedAccount.last_name}`"
+    >
       <div class="space-y-6 p-4">
         <div class="flex items-center justify-between flex-col gap-2">
           <div>
@@ -418,7 +555,9 @@
           <div class="flex items-center justify-between flex-col gap-2">
             <div>
               <h3 class="text-lg font-medium text-gray-900">Ren Vinnare Antidoping</h3>
-              <p class="text-sm text-gray-500">Markera att medlemmen genomfört den obligatoriska online-utbildningen "Ren Vinnare"</p>
+              <p class="text-sm text-gray-500">
+                Markera att medlemmen genomfört den obligatoriska online-utbildningen "Ren Vinnare"
+              </p>
             </div>
             <ToggleButton
               data-testid="ren-vinnare-education-toggle"
@@ -461,9 +600,7 @@
               <h3 class="text-lg font-medium text-gray-900">Inaktivera konto</h3>
               <p class="text-sm text-gray-500">Personen kommer inte kunna logga in förrän kontot återaktiveras</p>
             </div>
-            <Button @click="confirmInactivationFromModal" type="danger" size="sm">
-              Inaktivera konto
-            </Button>
+            <Button @click="confirmInactivationFromModal" type="danger" size="sm"> Inaktivera konto </Button>
           </div>
         </div>
       </div>
@@ -517,7 +654,7 @@ export default {
         studentsOver23: true,
         rest: true,
         onlyBackgroundCheck: false,
-      }
+      },
     }
   },
   async mounted() {
@@ -578,13 +715,17 @@ export default {
         .filter((account) => account.inactivated_at === null)
         .sort((a, b) => {
           if (this.sortKey === 'event_registrations') {
-            return this.sortOrder * (this.presentLastYear(b.event_registrations) - this.presentLastYear(a.event_registrations))
+            return (
+              this.sortOrder *
+              (this.presentLastYear(b.event_registrations) - this.presentLastYear(a.event_registrations))
+            )
           }
 
-          return this.sortOrder *
+          return (
+            this.sortOrder *
             String(a[this.sortKey]).localeCompare(String(b[this.sortKey]), undefined, { numeric: true })
-        }
-        )
+          )
+        })
     },
     inactiveAccounts() {
       return this.accounts.filter((account) => account.inactivated_at !== null)
@@ -650,7 +791,7 @@ export default {
           .sort((a, b) => a.localeCompare(b))
           .join('; '),
 
-        this.$toast.success('Epostadresser kopierade')
+        this.$toast.success('Epostadresser kopierade'),
       )
     },
     sortBy(key) {
@@ -724,10 +865,14 @@ export default {
       axios.post(`/admin/accounts/promote/${this.selectedAccount.id}`).then(() => this.reload())
     },
     inactivateWithEmail() {
-      axios.post(`/admin/accounts/inactivate/${this.selectedAccount.id}`, { sendSurveyEmail: true }).then(() => this.reload())
+      axios
+        .post(`/admin/accounts/inactivate/${this.selectedAccount.id}`, { sendSurveyEmail: true })
+        .then(() => this.reload())
     },
     inactivateWithoutEmail() {
-      axios.post(`/admin/accounts/inactivate/${this.selectedAccount.id}`, { sendSurveyEmail: false }).then(() => this.reload())
+      axios
+        .post(`/admin/accounts/inactivate/${this.selectedAccount.id}`, { sendSurveyEmail: false })
+        .then(() => this.reload())
     },
     reactivate(account) {
       axios.post(`/admin/accounts/reactivate/${account.id}`).then(() => this.reload())
@@ -745,14 +890,16 @@ export default {
       console.log(response)
     },
     hasPaid(user, year, paymentType) {
-      return user.payments.some(payment => payment.type === paymentType && payment.year === year && payment.state === 'PAID')
+      return user.payments.some(
+        (payment) => payment.type === paymentType && payment.year === year && payment.state === 'PAID',
+      )
     },
     showPaymentToggle(user, year, paymentType) {
-      return user.payments.some(payment => payment.type === paymentType && payment.year === year)
+      return user.payments.some((payment) => payment.type === paymentType && payment.year === year)
     },
     async updatePayment(user, year, paymentType) {
       const paymentTypeMessage = paymentType == 'MEMBERSHIP' ? 'Medlemsavgiften' : 'Licens'
-      const payment = user.payments.find(payment => payment.type === paymentType && payment.year === year)
+      const payment = user.payments.find((payment) => payment.type === paymentType && payment.year === year)
       const name = `${user.first_name} ${user.last_name}`
 
       if (this.hasPaid(user, year, paymentType)) {
@@ -771,7 +918,7 @@ export default {
 
       try {
         await axios.patch(`/admin/accounts/${account.id}/competition-permission`, {
-          explicit_registration_approval: approval
+          explicit_registration_approval: approval,
         })
 
         if (approval) {
@@ -799,7 +946,7 @@ export default {
 
       try {
         await axios.patch(`/admin/accounts/${account.id}/ren-vinnare-education`, {
-          ren_vinnare_education_completed: completion
+          ren_vinnare_education_completed: completion,
         })
 
         if (completion) {
@@ -823,7 +970,7 @@ export default {
 
       try {
         await axios.patch(`/admin/accounts/${account.id}/background-check`, {
-          background_check_valid_from: date
+          background_check_valid_from: date,
         })
 
         if (date) {
@@ -874,7 +1021,14 @@ export default {
                   { value: user.email, type: 'string' },
                   { value: user.birth_year, type: 'string' },
                   { value: user.licence_number, type: 'string' },
-                  { value: user.is_honorary_member ? 'Hedersmedlem' : this.hasPaid(user, this.getCurrentYear(), 'MEMBERSHIP') ? 'Ja' : 'Nej', type: 'string' },
+                  {
+                    value: user.is_honorary_member
+                      ? 'Hedersmedlem'
+                      : this.hasPaid(user, this.getCurrentYear(), 'MEMBERSHIP')
+                        ? 'Ja'
+                        : 'Nej',
+                    type: 'string',
+                  },
                   { value: this.dateString(user.created_at), type: 'string' },
                   { value: this.dateString(user.last_visited_at), type: 'string' },
                   { value: user.visits, type: 'string' },

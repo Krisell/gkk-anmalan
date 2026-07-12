@@ -14,7 +14,10 @@
       <div class="flex gap-4 mb-4">
         <div class="flex flex-col gap-2">
           <label class="text-sm font-medium text-gray-700">Händelse</label>
-          <select v-model="filters.action" class="rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+          <select
+            v-model="filters.action"
+            class="rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+          >
             <option value="">Alla händelser</option>
             <option v-for="action in availableActions" :key="action" :value="action">{{ actionLabel(action) }}</option>
           </select>
@@ -44,23 +47,35 @@
     <!-- Table -->
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div
+          class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200"
+        >
           <table class="min-w-full">
             <thead>
               <tr>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Datum
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Utförd av
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Händelse
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Medlem
                 </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Detaljer
                 </th>
               </tr>
@@ -75,7 +90,10 @@
                   <span v-else class="text-gray-400">-</span>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                  <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" :class="actionClass(log.action)">
+                  <span
+                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                    :class="actionClass(log.action)"
+                  >
                     {{ actionLabel(log.action) }}
                   </span>
                 </td>
@@ -118,24 +136,20 @@ export default {
   },
   computed: {
     availableActions() {
-      return [...new Set(this.logs.map(l => l.action))].sort()
+      return [...new Set(this.logs.map((l) => l.action))].sort()
     },
     filteredLogs() {
       let filtered = this.logs
 
       if (this.filters.action) {
-        filtered = filtered.filter(l => l.action === this.filters.action)
+        filtered = filtered.filter((l) => l.action === this.filters.action)
       }
 
       if (this.search) {
         const searchLower = this.search.toLowerCase()
-        filtered = filtered.filter(l => {
-          const performedBy = l.performer
-            ? `${l.performer.first_name} ${l.performer.last_name}`.toLowerCase()
-            : ''
-          const affectedUser = l.user
-            ? `${l.user.first_name} ${l.user.last_name}`.toLowerCase()
-            : ''
+        filtered = filtered.filter((l) => {
+          const performedBy = l.performer ? `${l.performer.first_name} ${l.performer.last_name}`.toLowerCase() : ''
+          const affectedUser = l.user ? `${l.user.first_name} ${l.user.last_name}`.toLowerCase() : ''
           return performedBy.includes(searchLower) || affectedUser.includes(searchLower)
         })
       }

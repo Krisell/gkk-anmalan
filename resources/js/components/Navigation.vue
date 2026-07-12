@@ -2,13 +2,20 @@
   <div>
     <div v-if="hasPendingPayments" class="max-w-6xl mx-auto px-4 mt-4">
       <div class="bg-red-50 border border-red-200 border-l-4 border-l-red-500 text-red-700 px-4 py-3 rounded-sm">
-        Du har obetalda avgifter. Klicka på "Profil" för mer information.<br>Efter betalning kan det ta några dagar innan denna notisering försvinner.
+        Du har obetalda avgifter. Klicka på "Profil" för mer information.<br />Efter betalning kan det ta några dagar
+        innan denna notisering försvinner.
       </div>
     </div>
 
-    <div v-if="user && helperCount === 0 && !user.explicit_registration_approval && isUserOlderThanOneMonth" class="max-w-6xl mx-auto px-4 mt-4">
-      <div class="bg-yellow-50 border border-yellow-200 border-l-4 border-l-yellow-500 text-yellow-700 px-4 py-3 rounded-sm">
-        Systemet kan inte se att du har hjälpt till som funktionär under det senaste året. Detta kan påverka din möjlighet att anmäla dig till tävlingar. Kontakta styrelsen om du har frågor.
+    <div
+      v-if="user && helperCount === 0 && !user.explicit_registration_approval && isUserOlderThanOneMonth"
+      class="max-w-6xl mx-auto px-4 mt-4"
+    >
+      <div
+        class="bg-yellow-50 border border-yellow-200 border-l-4 border-l-yellow-500 text-yellow-700 px-4 py-3 rounded-sm"
+      >
+        Systemet kan inte se att du har hjälpt till som funktionär under det senaste året. Detta kan påverka din
+        möjlighet att anmäla dig till tävlingar. Kontakta styrelsen om du har frågor.
       </div>
     </div>
 
@@ -24,7 +31,8 @@
         <div class="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <h1 class="text-2xl font-semibold text-gkk">
-              Välkommen tillbaka<template v-if="user.first_name">, {{ user.first_name }}</template>!
+              Välkommen tillbaka<template v-if="user.first_name">, {{ user.first_name }}</template
+              >!
             </h1>
             <p class="text-gray-500 mt-1 text-sm">Här är vad som händer i klubben just nu.</p>
           </div>

@@ -22,11 +22,7 @@
     <div v-show="mode === 'drawn'">
       <div class="border border-gray-300 rounded-md bg-white relative" style="touch-action: none">
         <canvas ref="canvas" class="w-full block rounded-md" style="height: 200px"></canvas>
-        <button
-          type="button"
-          class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-sm"
-          @click="clear"
-        >
+        <button type="button" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-sm" @click="clear">
           <i class="fa fa-eraser mr-1"></i>Rensa
         </button>
       </div>

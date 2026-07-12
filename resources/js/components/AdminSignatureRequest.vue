@@ -1,7 +1,10 @@
 <template>
   <div class="container mx-auto max-w-4xl px-4">
     <h1 class="text-2xl font-semibold mb-6">
-      <a href="/admin/signature-requests" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
+      <a
+        href="/admin/signature-requests"
+        class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group"
+      >
         <i class="fa fa-angle-left"></i>
         <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Signering</span>
       </a>
@@ -17,11 +20,16 @@
         <tbody>
           <tr v-for="signer in request.signers" :key="signer.id" class="border-b border-gray-100 last:border-0">
             <td class="py-2 text-sm text-gray-900">
-              <span class="inline-block w-3 h-3 rounded-full mr-2" :style="{ backgroundColor: signerColor(signer.user_id) }"></span>
+              <span
+                class="inline-block w-3 h-3 rounded-full mr-2"
+                :style="{ backgroundColor: signerColor(signer.user_id) }"
+              ></span>
               {{ signerName(signer.user_id) }}
             </td>
             <td class="py-2 text-sm">
-              <span v-if="signer.signed_at" class="text-green-700"><i class="fa fa-check-circle mr-1"></i>Signerade {{ formatDate(signer.signed_at) }}</span>
+              <span v-if="signer.signed_at" class="text-green-700"
+                ><i class="fa fa-check-circle mr-1"></i>Signerade {{ formatDate(signer.signed_at) }}</span
+              >
               <span v-else class="text-gray-500">Väntar på signatur</span>
             </td>
             <td class="py-2 text-right">
@@ -42,7 +50,9 @@
         <div v-for="userId in signerUserIds" :key="userId" class="flex items-center gap-2 py-1 text-sm">
           <span class="inline-block w-3 h-3 rounded-full" :style="{ backgroundColor: signerColor(userId) }"></span>
           <span class="grow">{{ signerName(userId) }}</span>
-          <button class="text-gray-400 hover:text-red-600" @click="removeSigner(userId)"><i class="fa fa-times"></i></button>
+          <button class="text-gray-400 hover:text-red-600" @click="removeSigner(userId)">
+            <i class="fa fa-times"></i>
+          </button>
         </div>
 
         <div class="flex gap-2 mt-3">
@@ -65,13 +75,20 @@
       <h2 class="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Placera signaturfält</h2>
       <div v-if="signerUserIds.length === 0" class="text-sm text-gray-500">Lägg till minst en signerare först.</div>
       <div v-else>
-        <div class="text-sm text-gray-600 mb-2">Välj en signerare och klicka i dokumentet för att placera ett fält. Dra för att flytta, dra i hörnet för att ändra storlek.</div>
+        <div class="text-sm text-gray-600 mb-2">
+          Välj en signerare och klicka i dokumentet för att placera ett fält. Dra för att flytta, dra i hörnet för att
+          ändra storlek.
+        </div>
         <div class="flex flex-wrap gap-2">
           <button
             v-for="userId in signerUserIds"
             :key="userId"
             class="px-3 py-1 rounded-full text-sm border"
-            :style="activeUserId === userId ? { backgroundColor: signerColor(userId), color: 'white', borderColor: signerColor(userId) } : { borderColor: signerColor(userId), color: signerColor(userId) }"
+            :style="
+              activeUserId === userId
+                ? { backgroundColor: signerColor(userId), color: 'white', borderColor: signerColor(userId) }
+                : { borderColor: signerColor(userId), color: signerColor(userId) }
+            "
             @click="activeUserId = activeUserId === userId ? null : userId"
           >
             {{ signerName(userId) }}
@@ -109,7 +126,9 @@
             <option :value="null" disabled>Välj mapp...</option>
             <option v-for="folder in folders" :key="folder.id" :value="folder.id">{{ folder.name }}</option>
           </select>
-          <Button type="secondary" @click="addToDocuments" :disabled="!selectedFolderId">Lägg till i medlemsdokument</Button>
+          <Button type="secondary" @click="addToDocuments" :disabled="!selectedFolderId"
+            >Lägg till i medlemsdokument</Button
+          >
         </template>
       </div>
     </div>
@@ -142,7 +161,11 @@
               :src="signatureFor(field.user_id)"
               class="max-w-full max-h-full pointer-events-none"
             />
-            <span v-else class="text-xs pointer-events-none px-1 truncate" :style="{ color: signerColor(field.user_id) }">
+            <span
+              v-else
+              class="text-xs pointer-events-none px-1 truncate"
+              :style="{ color: signerColor(field.user_id) }"
+            >
               {{ signerName(field.user_id) }}
             </span>
 
@@ -168,8 +191,8 @@
 
     <Modal ref="sendModal" title="Aktivera signering?">
       <div class="text-sm text-gray-600 text-center">
-        Varje signerare får en personlig länk som du kopierar och delar hur du vill (t.ex. Discord).
-        Efter aktiveringen kan dokumentet och fälten inte ändras.
+        Varje signerare får en personlig länk som du kopierar och delar hur du vill (t.ex. Discord). Efter aktiveringen
+        kan dokumentet och fälten inte ändras.
       </div>
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
@@ -316,7 +339,8 @@ export default {
         return
       }
 
-      const { field, mode, startX, startY, origLeft, origTop, origWidth, origHeight, maxWidth, maxHeight } = this.dragState
+      const { field, mode, startX, startY, origLeft, origTop, origWidth, origHeight, maxWidth, maxHeight } =
+        this.dragState
       const deltaX = event.clientX - startX
       const deltaY = event.clientY - startY
 

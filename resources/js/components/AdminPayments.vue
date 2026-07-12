@@ -14,7 +14,10 @@
       <div class="flex gap-4 mb-4">
         <div class="flex flex-col gap-2">
           <label class="text-sm font-medium text-gray-700">Betalningstyp</label>
-          <select v-model="filters.type" class="rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+          <select
+            v-model="filters.type"
+            class="rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+          >
             <option value="">Alla typer</option>
             <option value="MEMBERSHIP">Medlemsavgift</option>
             <option value="SSFLICENSE">Licensavgift</option>
@@ -23,7 +26,10 @@
         </div>
         <div class="flex flex-col gap-2">
           <label class="text-sm font-medium text-gray-700">Status</label>
-          <select v-model="filters.state" class="rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+          <select
+            v-model="filters.state"
+            class="rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+          >
             <option value="">Alla statusar</option>
             <option value="PAID">Betald</option>
             <option value="PENDING">Väntande</option>
@@ -32,7 +38,10 @@
         </div>
         <div class="flex flex-col gap-2">
           <label class="text-sm font-medium text-gray-700">År</label>
-          <select v-model="filters.year" class="rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600">
+          <select
+            v-model="filters.year"
+            class="rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+          >
             <option value="">Alla år</option>
             <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
           </select>
@@ -74,32 +83,46 @@
     <!-- Payments Table -->
     <div class="flex flex-col">
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div
+          class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200"
+        >
           <table class="min-w-full">
             <thead>
               <tr>
-                <th @click="sortBy('user_name')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th
+                  @click="sortBy('user_name')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   Medlem
                 </th>
-                <th @click="sortBy('type')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th
+                  @click="sortBy('type')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   Typ / Tävling
                 </th>
-                <th @click="sortBy('year')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th
+                  @click="sortBy('year')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   År
                 </th>
-                <th @click="sortBy('sek_amount')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th
+                  @click="sortBy('sek_amount')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   Belopp (SEK)
                 </th>
-                <th @click="sortBy('state')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th
+                  @click="sortBy('state')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   Status
                 </th>
-                <th @click="sortBy('created_at')"
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th
+                  @click="sortBy('created_at')"
+                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                >
                   Skapad
                 </th>
               </tr>
@@ -114,11 +137,16 @@
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-center">
                   <div class="flex flex-col items-center gap-1">
-                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                      :class="getTypeClass(payment.type)">
+                    <span
+                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                      :class="getTypeClass(payment.type)"
+                    >
                       {{ getTypeText(payment.type) }}
                     </span>
-                    <div v-if="payment.type === 'COMPETITION' && payment.competition" class="text-xs text-gray-600 text-center">
+                    <div
+                      v-if="payment.type === 'COMPETITION' && payment.competition"
+                      class="text-xs text-gray-600 text-center"
+                    >
                       {{ payment.competition.name }}
                       <div class="text-xs text-gray-500">{{ dateString(payment.competition.date) }}</div>
                     </div>
@@ -150,8 +178,10 @@
                     </button>
                   </div>
                   <div v-else class="flex flex-col items-center gap-1">
-                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                      :class="getStatusClass(payment.state)">
+                    <span
+                      class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                      :class="getStatusClass(payment.state)"
+                    >
                       {{ getStatusText(payment.state) }}
                     </span>
                     <button
@@ -189,43 +219,75 @@
     </div>
 
     <!-- Modal for marking as paid -->
-    <Modal ref="markAsPaidModal" :title="`Markera betalning som betald för ${selectedPayment && selectedPayment.user ? selectedPayment.user.first_name + ' ' + selectedPayment.user.last_name : ''}?`">
+    <Modal
+      ref="markAsPaidModal"
+      :title="`Markera betalning som betald för ${selectedPayment && selectedPayment.user ? selectedPayment.user.first_name + ' ' + selectedPayment.user.last_name : ''}?`"
+    >
       <div v-if="selectedPayment" class="p-4">
-        <p class="text-gray-700 mb-4">
-          Du är på väg att markera följande betalning som betald:
-        </p>
+        <p class="text-gray-700 mb-4">Du är på väg att markera följande betalning som betald:</p>
         <div class="bg-gray-50 p-3 rounded-sm">
           <p><strong>Typ:</strong> {{ getTypeText(selectedPayment.type) }}</p>
           <p><strong>År:</strong> {{ selectedPayment.year }}</p>
-          <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? netAmount(selectedPayment) + ' kr' : 'Ej angivet' }}<span v-if="selectedPayment.sek_discount"> ({{ selectedPayment.sek_amount }} kr − {{ selectedPayment.sek_discount }} kr rabatt)</span></p>
+          <p>
+            <strong>Belopp:</strong> {{ selectedPayment.sek_amount ? netAmount(selectedPayment) + ' kr' : 'Ej angivet'
+            }}<span v-if="selectedPayment.sek_discount">
+              ({{ selectedPayment.sek_amount }} kr − {{ selectedPayment.sek_discount }} kr rabatt)</span
+            >
+          </p>
           <p v-if="selectedPayment.competition"><strong>Tävling:</strong> {{ selectedPayment.competition.name }}</p>
         </div>
       </div>
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
-          <button @click="close" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded-sm transition-colors duration-200">Avbryt</button>
-          <button @click="markAsPaid" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-sm transition-colors duration-200">Markera som betald</button>
+          <button
+            @click="close"
+            class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded-sm transition-colors duration-200"
+          >
+            Avbryt
+          </button>
+          <button
+            @click="markAsPaid"
+            class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-sm transition-colors duration-200"
+          >
+            Markera som betald
+          </button>
         </div>
       </template>
     </Modal>
 
     <!-- Modal for marking as unpaid -->
-    <Modal ref="markAsUnpaidModal" :title="`Markera betalning som obetald för ${selectedPayment && selectedPayment.user ? selectedPayment.user.first_name + ' ' + selectedPayment.user.last_name : ''}?`">
+    <Modal
+      ref="markAsUnpaidModal"
+      :title="`Markera betalning som obetald för ${selectedPayment && selectedPayment.user ? selectedPayment.user.first_name + ' ' + selectedPayment.user.last_name : ''}?`"
+    >
       <div v-if="selectedPayment" class="p-4">
-        <p class="text-gray-700 mb-4">
-          Du är på väg att markera följande betalning som obetald:
-        </p>
+        <p class="text-gray-700 mb-4">Du är på väg att markera följande betalning som obetald:</p>
         <div class="bg-gray-50 p-3 rounded-sm">
           <p><strong>Typ:</strong> {{ getTypeText(selectedPayment.type) }}</p>
           <p><strong>År:</strong> {{ selectedPayment.year }}</p>
-          <p><strong>Belopp:</strong> {{ selectedPayment.sek_amount ? netAmount(selectedPayment) + ' kr' : 'Ej angivet' }}<span v-if="selectedPayment.sek_discount"> ({{ selectedPayment.sek_amount }} kr − {{ selectedPayment.sek_discount }} kr rabatt)</span></p>
+          <p>
+            <strong>Belopp:</strong> {{ selectedPayment.sek_amount ? netAmount(selectedPayment) + ' kr' : 'Ej angivet'
+            }}<span v-if="selectedPayment.sek_discount">
+              ({{ selectedPayment.sek_amount }} kr − {{ selectedPayment.sek_discount }} kr rabatt)</span
+            >
+          </p>
           <p v-if="selectedPayment.competition"><strong>Tävling:</strong> {{ selectedPayment.competition.name }}</p>
         </div>
       </div>
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
-          <button @click="close" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded-sm transition-colors duration-200">Avbryt</button>
-          <button @click="markAsUnpaid" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-sm transition-colors duration-200">Markera som obetald</button>
+          <button
+            @click="close"
+            class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm font-medium rounded-sm transition-colors duration-200"
+          >
+            Avbryt
+          </button>
+          <button
+            @click="markAsUnpaid"
+            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-sm transition-colors duration-200"
+          >
+            Markera som obetald
+          </button>
         </div>
       </template>
     </Modal>
@@ -267,7 +329,7 @@ export default {
   },
   computed: {
     availableYears() {
-      const years = [...new Set(this.payments.map(p => p.year))]
+      const years = [...new Set(this.payments.map((p) => p.year))]
       return years.sort((a, b) => b - a)
     },
     filteredSortedPayments() {
@@ -275,27 +337,27 @@ export default {
 
       // Apply type filter
       if (this.filters.type) {
-        filtered = filtered.filter(p => p.type === this.filters.type)
+        filtered = filtered.filter((p) => p.type === this.filters.type)
       }
 
       // Apply state filter
       if (this.filters.state !== '') {
         if (this.filters.state === '') {
-          filtered = filtered.filter(p => !p.state || p.state === null)
+          filtered = filtered.filter((p) => !p.state || p.state === null)
         } else {
-          filtered = filtered.filter(p => p.state === this.filters.state)
+          filtered = filtered.filter((p) => p.state === this.filters.state)
         }
       }
 
       // Apply year filter
       if (this.filters.year) {
-        filtered = filtered.filter(p => p.year == this.filters.year)
+        filtered = filtered.filter((p) => p.year == this.filters.year)
       }
 
       // Apply search
       if (this.search) {
         const searchLower = this.search.toLowerCase()
-        filtered = filtered.filter(p => {
+        filtered = filtered.filter((p) => {
           const fullName = `${p.user.first_name} ${p.user.last_name}`.toLowerCase()
           const email = p.user.email.toLowerCase()
           return fullName.includes(searchLower) || email.includes(searchLower)
@@ -326,11 +388,11 @@ export default {
       })
     },
     paidCount() {
-      return this.filteredSortedPayments.filter(p => p.state === 'PAID').length
+      return this.filteredSortedPayments.filter((p) => p.state === 'PAID').length
     },
     unpaidCount() {
-      return this.filteredSortedPayments.filter(p => p.state !== 'PAID').length
-    }
+      return this.filteredSortedPayments.filter((p) => p.state !== 'PAID').length
+    },
   },
   methods: {
     netAmount(payment) {
@@ -350,45 +412,61 @@ export default {
     },
     getStatusText(state) {
       switch (state) {
-        case 'PAID': return 'Betald'
-        case 'PENDING': return 'Väntande'
+        case 'PAID':
+          return 'Betald'
+        case 'PENDING':
+          return 'Väntande'
         case null:
         case undefined:
-        case '': return 'Obetald'
-        default: return state || 'Obetald'
+        case '':
+          return 'Obetald'
+        default:
+          return state || 'Obetald'
       }
     },
     getStatusClass(state) {
       switch (state) {
-        case 'PAID': return 'bg-green-100 text-green-800'
-        case 'PENDING': return 'bg-yellow-100 text-yellow-800'
+        case 'PAID':
+          return 'bg-green-100 text-green-800'
+        case 'PENDING':
+          return 'bg-yellow-100 text-yellow-800'
         case null:
         case undefined:
-        case '': return 'bg-red-100 text-red-800'
-        default: return 'bg-gray-100 text-gray-800'
+        case '':
+          return 'bg-red-100 text-red-800'
+        default:
+          return 'bg-gray-100 text-gray-800'
       }
     },
     getTypeText(type) {
       switch (type) {
-        case 'MEMBERSHIP': return 'Medlemsavgift'
-        case 'SSFLICENSE': return 'Licensavgift'
-        case 'COMPETITION': return 'Tävlingsavgift'
-        default: return type
+        case 'MEMBERSHIP':
+          return 'Medlemsavgift'
+        case 'SSFLICENSE':
+          return 'Licensavgift'
+        case 'COMPETITION':
+          return 'Tävlingsavgift'
+        default:
+          return type
       }
     },
     getTypeClass(type) {
       switch (type) {
-        case 'MEMBERSHIP': return 'bg-blue-100 text-blue-800'
-        case 'SSFLICENSE': return 'bg-green-100 text-green-800'
-        case 'COMPETITION': return 'bg-purple-100 text-purple-800'
-        default: return 'bg-gray-100 text-gray-800'
+        case 'MEMBERSHIP':
+          return 'bg-blue-100 text-blue-800'
+        case 'SSFLICENSE':
+          return 'bg-green-100 text-green-800'
+        case 'COMPETITION':
+          return 'bg-purple-100 text-purple-800'
+        default:
+          return 'bg-gray-100 text-gray-800'
       }
     },
     async loadPaidPayments() {
       this.loading = true
       try {
         const response = await axios.get('/admin/payments', {
-          params: { include_paid: true }
+          params: { include_paid: true },
         })
 
         const data = response.data
@@ -414,11 +492,11 @@ export default {
 
       try {
         await axios.patch(`/payments/${this.selectedPayment.id}`, {
-          state: 'PAID'
+          state: 'PAID',
         })
 
         // Update the payment in the local array
-        const index = this.payments.findIndex(p => p.id === this.selectedPayment.id)
+        const index = this.payments.findIndex((p) => p.id === this.selectedPayment.id)
         if (index !== -1) {
           this.payments[index].state = 'PAID'
         }
@@ -438,11 +516,11 @@ export default {
 
       try {
         await axios.patch(`/payments/${this.selectedPayment.id}`, {
-          state: null
+          state: null,
         })
 
         // Update the payment in the local array
-        const index = this.payments.findIndex(p => p.id === this.selectedPayment.id)
+        const index = this.payments.findIndex((p) => p.id === this.selectedPayment.id)
         if (index !== -1) {
           this.payments[index].state = null
         }
@@ -457,6 +535,6 @@ export default {
         this.$toast.error('Kunde inte uppdatera betalningsstatus. Försök igen.')
       }
     },
-  }
+  },
 }
 </script>

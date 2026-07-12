@@ -3,7 +3,10 @@
     <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
       <div>
         <h1 class="text-2xl font-semibold">
-          <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
+          <a
+            href="/insidan"
+            class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group"
+          >
             <i class="fa fa-angle-left"></i>
             <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
           </a>

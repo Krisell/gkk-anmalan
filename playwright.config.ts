@@ -1,7 +1,7 @@
-import { devices } from '@playwright/test';
-import { defineConfig } from '@playwright/test';
+import { devices } from '@playwright/test'
+import { defineConfig } from '@playwright/test'
 
-const SERVER_PORT = 65456;
+const SERVER_PORT = 65456
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -17,11 +17,11 @@ export default defineConfig({
       MAIL_MAILER: 'array',
       APP_ENV: 'testing',
       BCRYPT_ROUNDS: '4',
-    }
+    },
   },
   timeout: 30 * 1000,
   expect: {
-    timeout: 5000
+    timeout: 5000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -42,4 +42,4 @@ export default defineConfig({
     },
   ],
   outputDir: 'test-results/',
-});
+})

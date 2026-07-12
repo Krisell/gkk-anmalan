@@ -5,13 +5,11 @@ test('homepage has title and links to intro page', async ({ page }) => {
   await expect(page.locator('body')).toContainText('Göteborg Kraftsportklubb')
 
   await page.locator('[data-cy="navbar"] > a[href="/styrkelyft"]').click()
-  await expect(page.locator('body')).toContainText(
-    'I styrkelyft tävlar man i grenarna knäböj, bänkpress och marklyft'
-  )
+  await expect(page.locator('body')).toContainText('I styrkelyft tävlar man i grenarna knäböj, bänkpress och marklyft')
 
   await page.locator('[data-cy="navbar"] > a[href="/gkk"]').click()
   await expect(page.locator('body')).toContainText(
-    'Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar'
+    'Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar',
   )
 
   await page.locator('[data-cy="navbar"] > a[href="/medlem"]').click()

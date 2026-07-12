@@ -3,14 +3,16 @@
     <div v-if="done" class="bg-white shadow-sm sm:rounded-lg p-8 text-center max-w-lg mx-auto">
       <i class="fa fa-check-circle text-green-600 text-5xl mb-4"></i>
       <h1 class="text-2xl font-semibold mb-2">Tack, {{ signer.name }}!</h1>
-      <p class="text-gray-600">Din signatur av <strong>{{ documentName }}</strong> har sparats.</p>
+      <p class="text-gray-600">
+        Din signatur av <strong>{{ documentName }}</strong> har sparats.
+      </p>
     </div>
 
     <template v-else>
       <h1 class="text-2xl font-semibold mb-2 text-gkk">Signera: {{ documentName }}</h1>
       <p class="text-gray-600 mb-6">
-        Hej {{ signer.name }}! Läs igenom dokumentet nedan. Dina signaturfält är markerade.
-        Skapa din signatur längst ner på sidan och klicka sedan på Signera.
+        Hej {{ signer.name }}! Läs igenom dokumentet nedan. Dina signaturfält är markerade. Skapa din signatur längst
+        ner på sidan och klicka sedan på Signera.
       </p>
 
       <PdfViewer ref="viewer" :url="pdfUrl" @loaded="onViewerLoaded">

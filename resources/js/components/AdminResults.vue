@@ -108,24 +108,34 @@
           </div>
 
           <div class="divide-y divide-gray-100">
-            <div
-              v-for="event in events"
-              :key="event"
-              class="px-4 py-3 hover:bg-gray-50 transition-colors"
-            >
+            <div v-for="event in events" :key="event" class="px-4 py-3 hover:bg-gray-50 transition-colors">
               <div class="text-xs text-gray-400 uppercase tracking-wide font-medium">{{ event }}</div>
               <div v-if="getRecord(gender.value, weightClass, event)" class="mt-1">
                 <div class="flex items-end justify-between gap-2">
                   <div class="flex-1 min-w-0">
                     <div class="font-semibold text-gray-900 truncate">
-                      {{ getRecord(gender.value, weightClass, event).name || name(getRecord(gender.value, weightClass, event).user) }}
+                      {{
+                        getRecord(gender.value, weightClass, event).name ||
+                        name(getRecord(gender.value, weightClass, event).user)
+                      }}
                     </div>
                     <div class="flex items-baseline gap-2 mt-0.5">
-                      <span class="text-xl font-bold text-gray-600">{{ getRecord(gender.value, weightClass, event).result }}</span>
+                      <span class="text-xl font-bold text-gray-600">{{
+                        getRecord(gender.value, weightClass, event).result
+                      }}</span>
                       <span class="text-sm text-gray-400">kg</span>
                       <span
-                        :class="['text-xs ml-auto', withinAYear(getRecord(gender.value, weightClass, event).competition_date) ? 'text-green-600 font-medium' : 'text-gray-400']"
-                        v-tooltip.bottom="withinAYear(getRecord(gender.value, weightClass, event).competition_date) ? 'Nytt senaste året' : null"
+                        :class="[
+                          'text-xs ml-auto',
+                          withinAYear(getRecord(gender.value, weightClass, event).competition_date)
+                            ? 'text-green-600 font-medium'
+                            : 'text-gray-400',
+                        ]"
+                        v-tooltip.bottom="
+                          withinAYear(getRecord(gender.value, weightClass, event).competition_date)
+                            ? 'Nytt senaste året'
+                            : null
+                        "
                       >
                         {{ formatDate(getRecord(gender.value, weightClass, event).competition_date) }}
                       </span>
@@ -137,7 +147,12 @@
                     title="Ta bort"
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </button>
                 </div>
@@ -149,9 +164,7 @@
       </div>
     </div>
 
-    <div v-if="hasNoRecords" class="text-center py-12 text-gray-500">
-      Inga rekord registrerade ännu.
-    </div>
+    <div v-if="hasNoRecords" class="text-center py-12 text-gray-500">Inga rekord registrerade ännu.</div>
 
     <!-- Delete Confirmation Modal -->
     <div
@@ -162,7 +175,8 @@
       <div class="bg-white rounded-lg shadow-xl p-5 max-w-sm mx-4">
         <h3 class="text-lg font-semibold text-gray-900 mb-2">Ta bort rekord?</h3>
         <p class="text-gray-600 text-sm mb-4">
-          Ta bort rekordet för <strong>{{ deleteConfirm.name || name(deleteConfirm.user) }}</strong> i {{ deleteConfirm.event }} ({{ deleteConfirm.weight_class }} kg)?
+          Ta bort rekordet för <strong>{{ deleteConfirm.name || name(deleteConfirm.user) }}</strong> i
+          {{ deleteConfirm.event }} ({{ deleteConfirm.weight_class }} kg)?
         </p>
         <div class="flex justify-end gap-2">
           <button

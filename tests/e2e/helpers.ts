@@ -1,4 +1,4 @@
-import { Page, test as base } from '@playwright/test'
+import { BrowserContext, Page, test as base } from '@playwright/test'
 import * as fs from 'node:fs'
 import path from 'path'
 
@@ -9,10 +9,10 @@ export const test = base.extend({
     // the auto-printing feature (and instead let the test verify what is
     // about to be printed).
     await page.addInitScript(() => {
-      (window as any).Playwright = true
+      ;(window as any).Playwright = true
     })
 
-    await page.route('**/*', route => {
+    await page.route('**/*', (route) => {
       let blockedDomains = ['youtube', 'bugsnag', 'googletagmanager', 'google-analytics', 'bunny']
 
       // Blocking domains causes problems for the Vite dev server, so in the case where
@@ -32,38 +32,38 @@ export const test = base.extend({
       // figure out what requests are being made and what to mock.
       // console.log(route.request().url())
 
-      route.continue()
+      return route.continue()
     })
 
-    use(page)
+    await use(page)
   },
 })
 
-export const login = async (context, attributes: any = {}) => {
+export const login = async (context: Page | BrowserContext, attributes: any = {}) => {
   const response = await context.request.post('/__e2e__/login', { data: { attributes } })
 
   return await response.json()
 }
 
-export const create = async (context, model: string, attributes: any = {}, times = 1) => {
+export const create = async (context: Page | BrowserContext, model: string, attributes: any = {}, times = 1) => {
   const response = await context.request.post('/__e2e__/factory', { data: { model, attributes, times } })
 
   return await response.json()
 }
 
-export const first = async (context, model: string, attributes: any = {}) => {
+export const first = async (context: Page | BrowserContext, model: string, attributes: any = {}) => {
   const response = await context.request.post('/__e2e__/first', { data: { model, attributes } })
 
   return await response.json()
 }
 
-export const update = async (context, model: string, attributes: any = {}, values: any = {}) => {
+export const update = async (context: Page | BrowserContext, model: string, attributes: any = {}, values: any = {}) => {
   const response = await context.request.post('/__e2e__/update', { data: { model, attributes, values } })
 
   return await response.json()
 }
 
-export const php = async (context, command: string) => {
+export const php = async (context: Page | BrowserContext, command: string) => {
   const response = await context.request.post('/__e2e__/php', { data: { command } })
 
   return await response.json()
@@ -71,6 +71,6 @@ export const php = async (context, command: string) => {
 
 export const mockRoute = async (url: string, responsePayload: object, page: Page) => {
   return await page.route(`${url}`, (route) => {
-    route.fulfill({ json: responsePayload })
+    return route.fulfill({ json: responsePayload })
   })
 }

@@ -43,10 +43,7 @@
     </ToolCard>
 
     <!-- Create Competition Payments -->
-    <ToolCard
-      title="Skapa tävlingsavgifter"
-      description="Skapar betalningsposter för registrerade tävlingsdeltagare."
-    >
+    <ToolCard title="Skapa tävlingsavgifter" description="Skapar betalningsposter för registrerade tävlingsdeltagare.">
       <div class="flex flex-wrap gap-4 items-end mb-4">
         <div class="flex flex-col gap-1">
           <label class="text-sm font-medium text-gray-700">Tävling</label>
@@ -67,7 +64,12 @@
         </div>
         <button
           @click="preview('competitionPayments')"
-          :disabled="competitionPayments.loading || !competitionPayments.competition_id || !competitionPayments.senior_amount || !competitionPayments.junior_amount"
+          :disabled="
+            competitionPayments.loading ||
+            !competitionPayments.competition_id ||
+            !competitionPayments.senior_amount ||
+            !competitionPayments.junior_amount
+          "
           class="btn-secondary"
         >
           <i v-if="competitionPayments.loading" class="fa fa-spinner fa-spin mr-1"></i>
@@ -93,10 +95,7 @@
     </ToolCard>
 
     <!-- Create Fortnox Invoices -->
-    <ToolCard
-      title="Skapa Fortnox-fakturor"
-      description="Skapar fakturor i Fortnox från betalningsposter."
-    >
+    <ToolCard title="Skapa Fortnox-fakturor" description="Skapar fakturor i Fortnox från betalningsposter.">
       <div class="flex gap-4 items-end mb-4">
         <div class="flex flex-col gap-1">
           <label class="text-sm font-medium text-gray-700">Betalningstyp</label>
@@ -174,7 +173,10 @@
         </button>
       </div>
       <PreviewResult :tool="remindUnpaid" @execute="execute('remindUnpaid')" />
-      <div v-if="remindUnpaid.previewData && remindUnpaid.previewData.items && remindUnpaid.previewData.items.length > 0" class="mt-4">
+      <div
+        v-if="remindUnpaid.previewData && remindUnpaid.previewData.items && remindUnpaid.previewData.items.length > 0"
+        class="mt-4"
+      >
         <div class="max-h-64 overflow-y-auto">
           <table class="min-w-full text-sm">
             <thead>
@@ -345,7 +347,7 @@ export default {
       try {
         const response = await fetch(endpoints[name], {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': this.csrfToken, 'Accept': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': this.csrfToken, Accept: 'application/json' },
           body: JSON.stringify(params),
         })
         const data = await response.json()
@@ -380,7 +382,7 @@ export default {
       try {
         const response = await fetch(endpoints[name], {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': this.csrfToken, 'Accept': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': this.csrfToken, Accept: 'application/json' },
           body: JSON.stringify(params),
         })
         const data = await response.json()
@@ -421,7 +423,7 @@ export default {
         while (true) {
           const response = await fetch(endpoints[name], {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': this.csrfToken, 'Accept': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': this.csrfToken, Accept: 'application/json' },
             body: JSON.stringify(params),
           })
           const data = await response.json()
@@ -458,16 +460,22 @@ export default {
 
     getParams(name) {
       switch (name) {
-        case 'memberships': return { year: this.memberships.year }
-        case 'licenses': return { year: this.licenses.year }
-        case 'competitionPayments': return {
-          competition_id: this.competitionPayments.competition_id,
-          senior_amount: this.competitionPayments.senior_amount,
-          junior_amount: this.competitionPayments.junior_amount,
-        }
-        case 'createInvoices': return { type: this.createInvoices.type, year: this.createInvoices.year }
-        case 'remindUnpaid': return { type: this.remindUnpaid.type }
-        default: return {}
+        case 'memberships':
+          return { year: this.memberships.year }
+        case 'licenses':
+          return { year: this.licenses.year }
+        case 'competitionPayments':
+          return {
+            competition_id: this.competitionPayments.competition_id,
+            senior_amount: this.competitionPayments.senior_amount,
+            junior_amount: this.competitionPayments.junior_amount,
+          }
+        case 'createInvoices':
+          return { type: this.createInvoices.type, year: this.createInvoices.year }
+        case 'remindUnpaid':
+          return { type: this.remindUnpaid.type }
+        default:
+          return {}
       }
     },
   },

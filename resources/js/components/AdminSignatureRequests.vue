@@ -10,25 +10,31 @@
     </h1>
 
     <div class="py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-      <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
+      <div
+        class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200"
+      >
         <table class="min-w-full">
           <thead>
             <tr>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Dokument
               </th>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Status
               </th>
-              <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"></th>
+              <th
+                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+              ></th>
               <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
             </tr>
           </thead>
           <tbody class="bg-white">
             <tr v-if="requests.length === 0">
-              <td colspan="4" class="px-6 py-6 text-center text-sm text-gray-500">
-                Inga signaturförfrågningar ännu.
-              </td>
+              <td colspan="4" class="px-6 py-6 text-center text-sm text-gray-500">Inga signaturförfrågningar ännu.</td>
             </tr>
             <tr v-for="request in requests" :key="request.id">
               <td class="px-6 py-3 whitespace-no-wrap border-b border-gray-200">
@@ -43,7 +49,8 @@
                   <i class="fa fa-check-circle mr-1"></i>Alla har signerat
                 </span>
                 <span v-else class="text-amber-600">
-                  <i class="fa fa-clock-o mr-1"></i>{{ signedCount(request) }} av {{ request.signers.length }} har signerat
+                  <i class="fa fa-clock-o mr-1"></i>{{ signedCount(request) }} av {{ request.signers.length }} har
+                  signerat
                 </span>
               </td>
               <td class="px-6 py-3 whitespace-no-wrap border-b border-gray-200">

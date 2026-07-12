@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import * as Sentry from "@sentry/vue";
+import * as Sentry from '@sentry/vue'
 
 import ToastPlugin from 'vue-toast-notification'
 import FloatingVue from 'floating-vue'
@@ -62,10 +62,9 @@ if (typeof window.firebase.analytics === 'function') {
 
 const app = createApp({
   config: {
-    isCustomComponent: tag => tag.startsWith('trix-editor')
-  }
-});
-
+    isCustomComponent: (tag) => tag.startsWith('trix-editor'),
+  },
+})
 
 app.use(ToastPlugin)
 app.use(FloatingVue)
@@ -124,10 +123,10 @@ app.component('GkkPointsHighScore', PointsHighScore)
 if (!window.location.hostname.endsWith('.test')) {
   Sentry.init({
     app,
-    dsn: "https://8bc6e0c7e49295e24ee19574114b058c@o4509509926060032.ingest.de.sentry.io/4509509927174224",
+    dsn: 'https://8bc6e0c7e49295e24ee19574114b058c@o4509509926060032.ingest.de.sentry.io/4509509927174224',
     sendDefaultPii: true,
     integrations: [],
-  });
+  })
 }
 
 app.mount('#app')

@@ -75,8 +75,8 @@
 
         <div v-if="recipientsLoaded">
           <p class="text-xs text-gray-600 mb-3">
-            {{ selectedCount }} av {{ recipients.length }} aktiva medlemmar valda.
-            {{ alreadySentCount }} har redan fått detta mail.
+            {{ selectedCount }} av {{ recipients.length }} aktiva medlemmar valda. {{ alreadySentCount }} har redan fått
+            detta mail.
           </p>
 
           <div class="flex flex-wrap gap-3 mb-3 text-xs">
@@ -202,9 +202,7 @@ export default {
       return moment(date).locale('sv').format('YYYY-MM-DD HH:mm')
     },
     confirmAndSend() {
-      const sentAlready = this.recipients.filter(
-        (r) => r.sent_at && this.selectedIds.includes(r.id),
-      ).length
+      const sentAlready = this.recipients.filter((r) => r.sent_at && this.selectedIds.includes(r.id)).length
       let message = `Vill du skicka mailet till ${this.selectedCount} mottagare?`
       if (sentAlready > 0) {
         message += ` ${sentAlready} av dem har redan fått detta mail tidigare.`

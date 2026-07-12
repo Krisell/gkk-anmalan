@@ -15,7 +15,9 @@
         :key="folder.id"
         class="py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
       >
-        <div class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200">
+        <div
+          class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200"
+        >
           <table class="min-w-full">
             <thead>
               <tr>
@@ -160,9 +162,8 @@
           </table>
         </div>
         <div class="flex justify-center mt-6">
-          <Button
-            @click="addDocumentToFolder(folder)"
-          ><i class="fa fa-plus mr-2"></i>Nytt dokument i mappen {{ folder.name }}</Button
+          <Button @click="addDocumentToFolder(folder)"
+            ><i class="fa fa-plus mr-2"></i>Nytt dokument i mappen {{ folder.name }}</Button
           >
         </div>
       </div>
@@ -178,7 +179,10 @@
       </div>
     </div>
 
-    <Modal ref="deleteDocumentModal" :title="`Är du säker på att du vill radera ${selectedDocument && selectedDocument.name}?`">
+    <Modal
+      ref="deleteDocumentModal"
+      :title="`Är du säker på att du vill radera ${selectedDocument && selectedDocument.name}?`"
+    >
       <template #footer="{ close }">
         <div class="flex gap-2 items-center justify-center mt-4">
           <Button type="secondary" @click="close">Nej</Button>
@@ -207,53 +211,56 @@
     </Modal>
 
     <Modal ref="addDocumentModal" title="Lägg till dokument/länk">
-        <div class="flex mb-6 items-center justify-center bg-grey-lighter">
-          <h1 class="p-10 text-center">Ladda upp en fil, eller ange valfri URL till en fil eller webbsida.</h1>
-          <label
-            class="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer"
-          >
-            <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path
-                d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z"
-              />
-            </svg>
-            <div v-if="uploadStatus === 'pending'">Laddar upp ...</div>
-            <div v-else>
-              <span v-if="newDocument.url.length > 0" class="mt-2 text-base leading-normal">Välj annan fil</span>
-              <span v-else class="mt-2 text-base leading-normal">Ladda upp fil</span>
-            </div>
-            <input @change="upload" ref="fileUpload" type="file" class="hidden" />
-          </label>
-        </div>
-        <div class="mt-1 relative rounded-md shadow-xs">
-          <input
-            type="text"
-            v-model="newDocument.name"
-            placeholder="Namn"
-            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
-          />
-        </div>
-        <div class="mt-1 relative rounded-md shadow-xs">
-          <input
-            type="text"
-            v-model="newDocument.url"
-            placeholder="URL"
-            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
-          />
-        </div>
-
-        <template #footer="{ close }">
-          <div class="flex gap-2 items-center justify-center mt-4">
-            <Button type="secondary" @click="close">Stäng</Button>
-            <Button type="danger" @click="addDocument">Lägg till dokument</Button>
+      <div class="flex mb-6 items-center justify-center bg-grey-lighter">
+        <h1 class="p-10 text-center">Ladda upp en fil, eller ange valfri URL till en fil eller webbsida.</h1>
+        <label
+          class="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer"
+        >
+          <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <path
+              d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z"
+            />
+          </svg>
+          <div v-if="uploadStatus === 'pending'">Laddar upp ...</div>
+          <div v-else>
+            <span v-if="newDocument.url.length > 0" class="mt-2 text-base leading-normal">Välj annan fil</span>
+            <span v-else class="mt-2 text-base leading-normal">Ladda upp fil</span>
           </div>
-        </template>
+          <input @change="upload" ref="fileUpload" type="file" class="hidden" />
+        </label>
+      </div>
+      <div class="mt-1 relative rounded-md shadow-xs">
+        <input
+          type="text"
+          v-model="newDocument.name"
+          placeholder="Namn"
+          class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
+        />
+      </div>
+      <div class="mt-1 relative rounded-md shadow-xs">
+        <input
+          type="text"
+          v-model="newDocument.url"
+          placeholder="URL"
+          class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
+        />
+      </div>
+
+      <template #footer="{ close }">
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Button type="secondary" @click="close">Stäng</Button>
+          <Button type="danger" @click="addDocument">Lägg till dokument</Button>
+        </div>
+      </template>
     </Modal>
 
     <Modal ref="editFolderModal" title="Redigera mappens namn">
       <div v-if="selectedFolder">
         <div class="mt-1 relative rounded-md shadow-xs">
-          <input v-model="selectedFolder.name" class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border" />
+          <input
+            v-model="selectedFolder.name"
+            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
+          />
         </div>
       </div>
 
@@ -263,7 +270,7 @@
           <Button type="danger" @click="editFolderConfirm">Uppdatera namn</Button>
         </div>
       </template>
-    </modal>
+    </Modal>
   </div>
 </template>
 

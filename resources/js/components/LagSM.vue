@@ -7,7 +7,8 @@
             <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">Lag-SM 2024</h2>
           </div>
           <h3 class="text-xl font-extrabold tracking-tight sm:text-2xl">
-            GKK Tog medalj i alla 4 tävlingsklasser (Herrar och Damer i Klassisk Styrkelyft och Klassisk Bänkpress). Årets bedrift!
+            GKK Tog medalj i alla 4 tävlingsklasser (Herrar och Damer i Klassisk Styrkelyft och Klassisk Bänkpress).
+            Årets bedrift!
           </h3>
           <!-- <p>
             Kompletta serier hittar ni här:

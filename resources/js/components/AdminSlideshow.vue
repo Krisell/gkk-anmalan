@@ -28,9 +28,14 @@
             class="appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
           />
           <div v-if="uploadProgress > 0 && uploadProgress < 100" class="w-full bg-gray-200 rounded-sm">
-            <div class="bg-gkk text-xs leading-none py-1 text-center text-white rounded-sm" :style="{ width: uploadProgress + '%' }">{{ uploadProgress }}%</div>
+            <div
+              class="bg-gkk text-xs leading-none py-1 text-center text-white rounded-sm"
+              :style="{ width: uploadProgress + '%' }"
+            >
+              {{ uploadProgress }}%
+            </div>
           </div>
-          <img v-if="newSlide.image" :src="newSlide.image" alt="Preview" class="mt-2 rounded-sm w-64">
+          <img v-if="newSlide.image" :src="newSlide.image" alt="Preview" class="mt-2 rounded-sm w-64" />
         </div>
         <button
           @click="createSlide"
@@ -43,7 +48,11 @@
     </div>
 
     <!-- Edit slide modal -->
-    <div v-if="editingSlide" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="cancelEdit">
+    <div
+      v-if="editingSlide"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      @click.self="cancelEdit"
+    >
       <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
         <h2 class="text-xl font-semibold mb-4">Redigera slide</h2>
         <div class="flex flex-col gap-4">
@@ -69,28 +78,25 @@
               class="appearance-none rounded-sm relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
             />
             <div v-if="editUploadProgress > 0 && editUploadProgress < 100" class="w-full bg-gray-200 rounded-sm">
-              <div class="bg-gkk text-xs leading-none py-1 text-center text-white rounded-sm" :style="{ width: editUploadProgress + '%' }">{{ editUploadProgress }}%</div>
+              <div
+                class="bg-gkk text-xs leading-none py-1 text-center text-white rounded-sm"
+                :style="{ width: editUploadProgress + '%' }"
+              >
+                {{ editUploadProgress }}%
+              </div>
             </div>
             <div v-if="editingSlide.data.image" class="flex items-center gap-4">
-              <img :src="editingSlide.data.image" alt="Preview" class="mt-2 rounded-sm w-64">
+              <img :src="editingSlide.data.image" alt="Preview" class="mt-2 rounded-sm w-64" />
               <button @click="removeEditImage" class="px-3 py-1 bg-red-500 text-white rounded-sm hover:bg-red-600">
                 Ta bort bild
               </button>
             </div>
           </div>
           <div class="flex gap-2 justify-end">
-            <button
-              @click="cancelEdit"
-              class="px-4 py-2 bg-gray-300 text-gray-700 rounded-sm hover:bg-gray-400"
-            >
+            <button @click="cancelEdit" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-sm hover:bg-gray-400">
               Avbryt
             </button>
-            <button
-              @click="saveEdit"
-              class="px-4 py-2 bg-gkk text-white rounded-sm hover:bg-gkk-dark"
-            >
-              Spara
-            </button>
+            <button @click="saveEdit" class="px-4 py-2 bg-gkk text-white rounded-sm hover:bg-gkk-dark">Spara</button>
           </div>
         </div>
       </div>
@@ -99,7 +105,9 @@
     <div class="flex flex-col justify-center mx-auto gap-4 text-center">
       <TransitionGroup name="list" tag="div" class="flex flex-col gap-4">
         <div v-for="(slide, index) in slides" :key="slide.id" class="relative flex gap-6">
-          <div class="flex flex-col items-center justify-center gap-3 text-2xl text-gkk rounded-sm shadow-sm bg-white p-4">
+          <div
+            class="flex flex-col items-center justify-center gap-3 text-2xl text-gkk rounded-sm shadow-sm bg-white p-4"
+          >
             <i
               class="fa fa-arrow-up hover:scale-110 transition-all"
               :class="{ 'text-gray-400': index === 0, 'cursor-pointer': index !== 0 }"
@@ -118,17 +126,17 @@
               @click="startEdit(slide)"
             ></i>
             <i
-            class="cursor-pointer fa fa-eye-slash hover:scale-110 transition-all"
-            v-tooltip="'Visa'"
-            v-if="!slide.is_visible"
-            @click="setVisibility(slide.id, true)"
+              class="cursor-pointer fa fa-eye-slash hover:scale-110 transition-all"
+              v-tooltip="'Visa'"
+              v-if="!slide.is_visible"
+              @click="setVisibility(slide.id, true)"
             ></i>
             <i
               class="cursor-pointer fa fa-eye hover:scale-110 transition-all"
               v-tooltip="'Göm'"
               v-if="slide.is_visible"
               @click="setVisibility(slide.id, false)"
-              ></i>
+            ></i>
             <i
               class="cursor-pointer fa fa-trash hover:scale-110 transition-all text-red-500"
               v-tooltip="'Ta bort'"
@@ -149,9 +157,14 @@
           </div>
           <div class="rounded-sm shadow-sm bg-white p-4 flex flex-col items-center justify-center">
             <p v-if="slide.data.text">{{ slide.data.text }}</p>
-            <p v-if="slide.data.subText" class="text-sm text-gray-500">{{  slide.data.subText }}</p>
-            <a v-if="slide.data.image" :href="slide.data.image" target="_blank" class="block mt-2 text-blue-500 hover:underline">
-              <img :src="slide.data.image" alt="Slide Image" class="mt-2 rounded-sm w-64 mx-auto">
+            <p v-if="slide.data.subText" class="text-sm text-gray-500">{{ slide.data.subText }}</p>
+            <a
+              v-if="slide.data.image"
+              :href="slide.data.image"
+              target="_blank"
+              class="block mt-2 text-blue-500 hover:underline"
+            >
+              <img :src="slide.data.image" alt="Slide Image" class="mt-2 rounded-sm w-64 mx-auto" />
             </a>
           </div>
         </div>
@@ -170,16 +183,16 @@ import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
 const props = defineProps({
   jwt: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 })
 
-const $toast = useToast();
+const $toast = useToast()
 const slides = ref([])
 const newSlide = ref({
   text: '',
   subText: '',
-  image: ''
+  image: '',
 })
 const uploadProgress = ref(0)
 const editUploadProgress = ref(0)
@@ -218,14 +231,14 @@ async function handleImageUpload(event) {
 
     $toast.success('Bilden har laddats upp', {
       duration: 2000,
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     console.error('Error uploading image:', error)
     uploadProgress.value = 0
     $toast.error('Bilden kunde inte laddas upp', {
       duration: 2000,
-      type: 'error'
+      type: 'error',
     })
   }
 }
@@ -257,14 +270,14 @@ async function handleEditImageUpload(event) {
 
     $toast.success('Bilden har laddats upp', {
       duration: 2000,
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     console.error('Error uploading image:', error)
     editUploadProgress.value = 0
     $toast.error('Bilden kunde inte laddas upp', {
       duration: 2000,
-      type: 'error'
+      type: 'error',
     })
   }
 }
@@ -278,9 +291,9 @@ async function createSlide() {
       data: {
         text: newSlide.value.text || undefined,
         subText: newSlide.value.subText || undefined,
-        image: newSlide.value.image || undefined
+        image: newSlide.value.image || undefined,
       },
-      is_visible: true
+      is_visible: true,
     })
 
     // Add new slide to the beginning of the array
@@ -290,7 +303,7 @@ async function createSlide() {
     newSlide.value = {
       text: '',
       subText: '',
-      image: ''
+      image: '',
     }
     if (imageInput.value) {
       imageInput.value.value = ''
@@ -298,13 +311,13 @@ async function createSlide() {
 
     $toast.success('Sliden har skapats', {
       duration: 2000,
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     console.error('Error creating slide:', error)
     $toast.error('Sliden kunde inte skapas', {
       duration: 2000,
-      type: 'error'
+      type: 'error',
     })
   }
 }
@@ -336,11 +349,11 @@ async function saveEdit() {
       data: {
         text: editingSlide.value.data.text || undefined,
         subText: editingSlide.value.data.subText || undefined,
-        image: editingSlide.value.data.image || undefined
-      }
+        image: editingSlide.value.data.image || undefined,
+      },
     })
 
-    const index = slides.value.findIndex(s => s.id === editingSlide.value.id)
+    const index = slides.value.findIndex((s) => s.id === editingSlide.value.id)
     if (index !== -1) {
       slides.value[index] = editingSlide.value
     }
@@ -349,13 +362,13 @@ async function saveEdit() {
 
     $toast.success('Sliden har uppdaterats', {
       duration: 2000,
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     console.error('Error updating slide:', error)
     $toast.error('Sliden kunde inte uppdateras', {
       duration: 2000,
-      type: 'error'
+      type: 'error',
     })
   }
 }
@@ -366,20 +379,20 @@ async function deleteSlide(id) {
   try {
     await axios.delete(`/slideshow/slides/${id}`)
 
-    const index = slides.value.findIndex(s => s.id === id)
+    const index = slides.value.findIndex((s) => s.id === id)
     if (index !== -1) {
       slides.value.splice(index, 1)
     }
 
     $toast.success('Sliden har tagits bort', {
       duration: 2000,
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     console.error('Error deleting slide:', error)
     $toast.error('Sliden kunde inte tas bort', {
       duration: 2000,
-      type: 'error'
+      type: 'error',
     })
   }
 }
@@ -388,20 +401,20 @@ async function setVisibility(id, isVisible) {
   try {
     await axios.patch(`/slideshow/slides/${id}`, { is_visible: isVisible })
 
-    const slide = slides.value.find(slide => slide.id === id)
+    const slide = slides.value.find((slide) => slide.id === id)
     if (slide) {
       slide.is_visible = isVisible
     }
 
     $toast.success(`Sliden är nu ${isVisible ? 'synlig' : 'gömd'}`, {
       duration: 2000,
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     console.error('Error updating slide visibility:', error)
     $toast.error('Sliden kunde inte ändras', {
       duration: 2000,
-      type: 'error'
+      type: 'error',
     })
   }
 }
@@ -418,18 +431,18 @@ async function moveByIndex(index, direction) {
     await axios.post('/slideshow/order', {
       slides: slides.value.map((slide, index) => ({
         id: slide.id,
-        order: index
-      }))
+        order: index,
+      })),
     })
 
     $toast.success(`Flyttade slide ${index + 1} ${direction > 0 ? 'ner' : 'upp'}`, {
       duration: 2000,
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     $toast.error('Sliden kunde inte flyttas', {
       duration: 2000,
-      type: 'error'
+      type: 'error',
     })
     // Revert the changes if the request fails
     slides.value[newIndex] = slides.value[index]
@@ -448,18 +461,18 @@ async function moveToTop(index) {
     await axios.post('/slideshow/order', {
       slides: slides.value.map((slide, index) => ({
         id: slide.id,
-        order: index
-      }))
+        order: index,
+      })),
     })
 
     $toast.success('Sliden har skickats till toppen', {
       duration: 2000,
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     $toast.error('Sliden kunde inte flyttas', {
       duration: 2000,
-      type: 'error'
+      type: 'error',
     })
     // Revert the changes if the request fails
     slides.value.splice(0, 1)
@@ -478,18 +491,18 @@ async function moveToBottom(index) {
     await axios.post('/slideshow/order', {
       slides: slides.value.map((slide, index) => ({
         id: slide.id,
-        order: index
-      }))
+        order: index,
+      })),
     })
 
     $toast.success('Sliden har skickats till botten', {
       duration: 2000,
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     $toast.error('Sliden kunde inte flyttas', {
       duration: 2000,
-      type: 'error'
+      type: 'error',
     })
     // Revert the changes if the request fails
     slides.value.splice(slides.value.length - 1, 1)

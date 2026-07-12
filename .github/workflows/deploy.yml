@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -39,7 +39,7 @@ jobs:
           name: Build Assets ${{ github.sha }}
           body: |
             Automated build assets for commit ${{ github.sha }}
-            
+
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.sha }}
             Author: ${{ github.actor }}

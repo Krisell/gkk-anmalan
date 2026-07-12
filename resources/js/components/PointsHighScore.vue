@@ -8,7 +8,7 @@
 
     <div v-else-if="error" class="text-center mt-8">
       <p class="text-red-600">{{ error }}</p>
-      <button 
+      <button
         @click="fetchRanking"
         class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
       >
@@ -19,27 +19,18 @@
     <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
       <div v-for="category in categories" :key="category.title" class="bg-white shadow-lg rounded-lg p-6">
         <h2 class="font-thin text-2xl mb-4 text-center">{{ category.title }}</h2>
-        
+
         <div class="overflow-x-auto">
           <table class="min-w-full">
             <thead>
               <tr class="bg-gray-50">
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Plats
-                </th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Namn
-                </th>
-                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Poäng
-                </th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plats</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Namn</th>
+                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Poäng</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr 
-                v-for="(item, index) in ranking[category.gender][category.event]" 
-                :key="item.id || index"
-              >
+              <tr v-for="(item, index) in ranking[category.gender][category.event]" :key="item.id || index">
                 <td class="px-4 py-3 whitespace-nowrap">
                   <div class="flex items-center">
                     <span class="text-sm text-gray-900">{{ index + 1 }}</span>
@@ -50,7 +41,9 @@
                   <div v-if="item.club" class="text-sm text-gray-500">{{ item.club }}</div>
                 </td>
                 <td class="px-4 py-3 whitespace-nowrap text-right">
-                  <div v-if="category.event === 'kbp'" class="text-sm font-medium text-gray-900">{{ formatPoints(item.points.ipfglbp) }}</div>
+                  <div v-if="category.event === 'kbp'" class="text-sm font-medium text-gray-900">
+                    {{ formatPoints(item.points.ipfglbp) }}
+                  </div>
                   <div v-else class="text-sm font-medium text-gray-900">{{ formatPoints(item.points.ipfgl) }}</div>
                   <div class="text-xs text-gray-500 mt-1">{{ formatResultWithWeight(item, category.event) }}</div>
                 </td>
@@ -85,8 +78,8 @@ export default {
         { gender: 'men', event: 'ksl', title: 'Män KSL' },
         { gender: 'women', event: 'ksl', title: 'Kvinnor KSL' },
         { gender: 'men', event: 'kbp', title: 'Män KBP' },
-        { gender: 'women', event: 'kbp', title: 'Kvinnor KBP' }
-      ]
+        { gender: 'women', event: 'kbp', title: 'Kvinnor KBP' },
+      ],
     }
   },
   mounted() {
@@ -96,11 +89,11 @@ export default {
     async fetchRanking() {
       this.loading = true
       this.error = null
-      
+
       try {
         const response1 = await fetch(`/api/ranking/points?year=${this.currentYear}&competition_type=1`)
         const response2 = await fetch(`/api/ranking/points?year=${this.currentYear}&competition_type=2`)
-        
+
         const data1 = await response1.json()
         const data2 = await response2.json()
 
@@ -117,7 +110,6 @@ export default {
         this.ranking.women.ksl.sort((a, b) => b.points.ipfgl - a.points.ipfgl)
         this.ranking.men.kbp.sort((a, b) => b.points.ipfglbp - a.points.ipfglbp)
         this.ranking.women.kbp.sort((a, b) => b.points.ipfglbp - a.points.ipfglbp)
-
       } catch (error) {
         console.error('Error fetching ranking:', error)
         this.error = error.message || 'Ett fel uppstod vid hämtning av data'
@@ -130,18 +122,18 @@ export default {
     },
     formatResultWithWeight(item, eventType) {
       if (!item.body_weight) return ''
-      
+
       let result
       if (eventType === 'kbp') {
         result = item.benchpress || '-'
       } else {
         result = item.total || '-'
       }
-      
+
       if (result === '-') return ''
-      
+
       return `${result}kg, bw${item.body_weight}`
-    }
-  }
+    },
+  },
 }
 </script>

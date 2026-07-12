@@ -66,7 +66,9 @@
           </div>
         </div>
 
-        <i class="fa fa-angle-right text-gray-400 group-hover:text-gkk transition-colors text-2xl shrink-0 self-center"></i>
+        <i
+          class="fa fa-angle-right text-gray-400 group-hover:text-gkk transition-colors text-2xl shrink-0 self-center"
+        ></i>
       </div>
 
       <div v-if="competition.publish_count_value > 0" class="text-xs text-gray-400 text-right mt-auto">

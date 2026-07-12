@@ -11,7 +11,9 @@
       </h1>
       <!-- Medlem -->
       <div class="bg-white rounded-lg border border-gray-200 shadow-xs mb-6 px-5 py-4 flex items-center gap-4">
-        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gkk text-white font-semibold text-lg shrink-0">
+        <div
+          class="flex items-center justify-center w-10 h-10 rounded-full bg-gkk text-white font-semibold text-lg shrink-0"
+        >
           {{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}
         </div>
         <div>
@@ -28,20 +30,24 @@
         </div>
         <div class="mt-2 text-sm" :class="helperAlertTextClass">
           <template v-if="lastHelperDate">
-            Du hjälpte senast till som funktionär <strong>{{ renderDate(lastHelperDate) }}</strong>.
+            Du hjälpte senast till som funktionär <strong>{{ renderDate(lastHelperDate) }}</strong
+            >.
           </template>
-          <template v-else>
-            Vi har ingen registrerad funktionärsaktivitet för dig.
-          </template>
-          <br>Alla tävlingsaktiva medlemmar behöver ställa upp som funktionär minst en gång per år.
+          <template v-else> Vi har ingen registrerad funktionärsaktivitet för dig. </template>
+          <br />Alla tävlingsaktiva medlemmar behöver ställa upp som funktionär minst en gång per år.
           <template v-if="helperStatus === 'error'">
-            <br>Du kan för närvarande inte anmäla dig till tävlingar. Kontakta styrelsen om du har frågor.
+            <br />Du kan för närvarande inte anmäla dig till tävlingar. Kontakta styrelsen om du har frågor.
           </template>
           <template v-else-if="helperStatus === 'warning'">
-            <br>Det börjar bli dags att hjälpa till igen för att behålla din tävlingsrätt.
+            <br />Det börjar bli dags att hjälpa till igen för att behålla din tävlingsrätt.
           </template>
           <template v-if="helperStatus === 'error' || helperStatus === 'warning'">
-            <br><a href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2F9TitYSrq6xtm6KLWDoCU7Azz8nIXep.pdf?alt=media&token=5cb38219-19c2-469b-9301-785f9eea3c28" target="_blank" class="underline font-semibold">Läs mer om funktionärskraven</a>
+            <br /><a
+              href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2F9TitYSrq6xtm6KLWDoCU7Azz8nIXep.pdf?alt=media&token=5cb38219-19c2-469b-9301-785f9eea3c28"
+              target="_blank"
+              class="underline font-semibold"
+              >Läs mer om funktionärskraven</a
+            >
           </template>
         </div>
       </div>
@@ -52,7 +58,10 @@
           <h2 class="text-lg font-medium text-gray-900">Avtal</h2>
         </div>
         <div class="divide-y divide-gray-100">
-          <div class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors" @click="showMemberShipAgreement">
+          <div
+            class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+            @click="showMemberShipAgreement"
+          >
             <div>
               <div class="text-sm font-medium text-gray-900">Medlemsavtal</div>
               <div class="text-xs text-gray-500">Signerat {{ renderDate(user.membership_agreement_signed_at) }}</div>
@@ -62,7 +71,10 @@
               <span class="text-xs mt-0.5">Visa avtal</span>
             </div>
           </div>
-          <div class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors" @click="showAntiDopingAgreement">
+          <div
+            class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+            @click="showAntiDopingAgreement"
+          >
             <div>
               <div class="text-sm font-medium text-gray-900">Antidopingavtal</div>
               <div class="text-xs text-gray-500">Signerat {{ renderDate(user.anti_doping_agreement_signed_at) }}</div>
@@ -72,7 +84,10 @@
               <span class="text-xs mt-0.5">Visa avtal</span>
             </div>
           </div>
-          <div class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors" @click="showAntiDopingPlan">
+          <div
+            class="flex items-center justify-between px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors"
+            @click="showAntiDopingPlan"
+          >
             <div>
               <div class="text-sm font-medium text-gray-900">Antidopingplan</div>
             </div>
@@ -94,45 +109,96 @@
             <div
               class="transition-all duration-150"
               :class="payment.fortnox_invoice_document_number ? 'cursor-pointer hover:bg-gray-50 group' : ''"
-              @click="payment.state === 'PAID' ? downloadReceipt(payment) : payment.fortnox_invoice_document_number ? loadURL(`/invoices/${payment.id}`, true) : null"
+              @click="
+                payment.state === 'PAID'
+                  ? downloadReceipt(payment)
+                  : payment.fortnox_invoice_document_number
+                    ? loadURL(`/invoices/${payment.id}`, true)
+                    : null
+              "
             >
               <div class="flex items-center px-5 py-4">
                 <!-- Left color accent -->
-                <div class="w-1 self-stretch rounded-full shrink-0 mr-4" :class="payment.state === 'PAID' ? 'bg-green-500' : payment.fortnox_invoice_document_number ? 'bg-red-400' : 'bg-amber-400'"></div>
+                <div
+                  class="w-1 self-stretch rounded-full shrink-0 mr-4"
+                  :class="
+                    payment.state === 'PAID'
+                      ? 'bg-green-500'
+                      : payment.fortnox_invoice_document_number
+                        ? 'bg-red-400'
+                        : 'bg-amber-400'
+                  "
+                ></div>
 
                 <!-- Content -->
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2">
-                    <span class="font-medium text-gray-900">{{ paymentTypeText(payment.type) }} {{ payment.year }}</span>
-                    <span v-if="payment.state === 'PAID'" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">BETALD</span>
-                    <span v-else-if="!payment.fortnox_invoice_document_number" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">INVÄNTAR FAKTURERING</span>
-                    <span v-else class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">INVÄNTAR BETALNING</span>
+                    <span class="font-medium text-gray-900"
+                      >{{ paymentTypeText(payment.type) }} {{ payment.year }}</span
+                    >
+                    <span
+                      v-if="payment.state === 'PAID'"
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700"
+                      >BETALD</span
+                    >
+                    <span
+                      v-else-if="!payment.fortnox_invoice_document_number"
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700"
+                      >INVÄNTAR FAKTURERING</span
+                    >
+                    <span
+                      v-else
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700"
+                      >INVÄNTAR BETALNING</span
+                    >
                   </div>
-                  <div v-if="payment.type === 'COMPETITION' && payment.competition" class="text-sm text-gray-500 mt-0.5">
+                  <div
+                    v-if="payment.type === 'COMPETITION' && payment.competition"
+                    class="text-sm text-gray-500 mt-0.5"
+                  >
                     {{ payment.competition.name }}
                     <span v-if="payment.competition.date">({{ renderDate(payment.competition.date) }})</span>
                   </div>
-                  <div class="text-sm text-gray-500 mt-0.5">{{ Math.max(payment.sek_amount - payment.sek_discount, 0) }} SEK</div>
+                  <div class="text-sm text-gray-500 mt-0.5">
+                    {{ Math.max(payment.sek_amount - payment.sek_discount, 0) }} SEK
+                  </div>
                 </div>
 
                 <!-- Action hint -->
-                <div v-if="payment.fortnox_invoice_document_number" class="shrink-0 ml-4 flex flex-col items-center text-gray-500 group-hover:text-gkk transition-colors">
+                <div
+                  v-if="payment.fortnox_invoice_document_number"
+                  class="shrink-0 ml-4 flex flex-col items-center text-gray-500 group-hover:text-gkk transition-colors"
+                >
                   <i class="fa fa-external-link text-sm"></i>
                   <span class="text-xs mt-0.5">{{ payment.state === 'PAID' ? 'Visa kvitto' : 'Visa faktura' }}</span>
                 </div>
               </div>
 
               <!-- Info section for unpaid -->
-              <div v-if="!payment.fortnox_invoice_document_number" class="border-t border-gray-100 bg-gray-50 px-5 py-3 text-sm text-gray-500 space-y-1" @click.stop>
+              <div
+                v-if="!payment.fortnox_invoice_document_number"
+                class="border-t border-gray-100 bg-gray-50 px-5 py-3 text-sm text-gray-500 space-y-1"
+                @click.stop
+              >
                 <p>Faktura kommer skapas och skickas ut inom kort.</p>
                 <p>Faktura skickas till din epost och du kommer även kunna se den här.</p>
                 <p>Betalning sker via Swish eller Bankgiro.</p>
               </div>
-              <div v-else-if="payment.state !== 'PAID'" class="border-t border-gray-100 bg-gray-50 px-5 py-3 text-sm text-gray-500 space-y-1" @click.stop>
+              <div
+                v-else-if="payment.state !== 'PAID'"
+                class="border-t border-gray-100 bg-gray-50 px-5 py-3 text-sm text-gray-500 space-y-1"
+                @click.stop
+              >
                 <p>Faktura har även skickats till din epost.</p>
-                <p>Om fakturan är felaktig, exempelvis om du är student, skicka in studentbevis till <a class="underline text-nowrap" href="mailto:info@gkk-styrkelyft.se">info@gkk-styrkelyft.se</a> så korrigerar vi fakturan inom kort.</p>
+                <p>
+                  Om fakturan är felaktig, exempelvis om du är student, skicka in studentbevis till
+                  <a class="underline text-nowrap" href="mailto:info@gkk-styrkelyft.se">info@gkk-styrkelyft.se</a> så
+                  korrigerar vi fakturan inom kort.
+                </p>
                 <p>Betalning sker via Swish eller Bankgiro.</p>
-                <Button type="secondary" class="my-1 md:hidden" @click.stop="loadURL(swishUrl(payment))">Klicka här för att betala med Swish på denna enhet</Button>
+                <Button type="secondary" class="my-1 md:hidden" @click.stop="loadURL(swishUrl(payment))"
+                  >Klicka här för att betala med Swish på denna enhet</Button
+                >
                 <p>Efter betalning kan det ta några bankdagar innan status uppdateras här.</p>
               </div>
             </div>
@@ -328,12 +394,12 @@ export default {
     },
   },
   async created() {
-      for (const payment of this.payments) {
-        this.qrCodes = {
-          ...this.qrCodes,
-          [payment.id]: await this.paymentQRCode(payment),
-        }
+    for (const payment of this.payments) {
+      this.qrCodes = {
+        ...this.qrCodes,
+        [payment.id]: await this.paymentQRCode(payment),
       }
+    }
   },
   methods: {
     async downloadReceipt(payment) {
@@ -375,10 +441,12 @@ export default {
       window.location = url
     },
     swishUrl(payment) {
-      const swishNumber = 1235813456;
-      const msg = encodeURIComponent(`Fakturanummer ${payment.fortnox_invoice_document_number}, ${this.user.first_name} ${this.user.last_name}`)
+      const swishNumber = 1235813456
+      const msg = encodeURIComponent(
+        `Fakturanummer ${payment.fortnox_invoice_document_number}, ${this.user.first_name} ${this.user.last_name}`,
+      )
       const amount = payment.sek_amount - payment.sek_discount
-      
+
       return `https://app.swish.nu/1/p/sw/?sw=${swishNumber}&amt=${amount}&msg=${msg}`
     },
     paymentQRCode(payment) {
@@ -388,11 +456,13 @@ export default {
       })
     },
     paymentTypeText(paymentType) {
-      return {
-        MEMBERSHIP: 'Medlemsavgift',
-        SSFLICENSE: 'Tävlingslicens',
-        COMPETITION: 'Tävlingsavgift',
-      }[paymentType] || 'Okänd avgift'
+      return (
+        {
+          MEMBERSHIP: 'Medlemsavgift',
+          SSFLICENSE: 'Tävlingslicens',
+          COMPETITION: 'Tävlingsavgift',
+        }[paymentType] || 'Okänd avgift'
+      )
     },
     showMemberShipAgreement() {
       window.open(Documents.MEMBERSHIP_AGREEMENT)

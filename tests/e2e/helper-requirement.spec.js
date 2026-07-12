@@ -8,129 +8,145 @@ import { test, login, create } from './helpers.ts'
  */
 
 test('User without explicit approval cannot register for competition', async ({ page }) => {
-    // Create a user without explicit approval (and no helper activity)
-    const user = await login(page, {
-        role: 'member',
-        explicit_registration_approval: false
-    })
+  // Create a user without explicit approval (and no helper activity)
+  await login(page, {
+    role: 'member',
+    explicit_registration_approval: false,
+  })
 
-    const competition = await create(page, 'Competition', {
-        date: '2030-01-01',
-        last_registration_at: '2029-12-01'
-    })
+  const competition = await create(page, 'Competition', {
+    date: '2030-01-01',
+    last_registration_at: '2029-12-01',
+  })
 
-    await page.goto('/competitions')
-    await page.getByText(competition.name).click()
+  await page.goto('/competitions')
+  await page.getByText(competition.name).click()
 
-    // Fill out competition registration form
-    await page.locator('div').filter({ hasText: /^Herrar$/ }).getByRole('radio').check()
-    await page.getByRole('combobox').selectOption('74')
-    await page.locator('.w-11').first().click()
+  // Fill out competition registration form
+  await page
+    .locator('div')
+    .filter({ hasText: /^Herrar$/ })
+    .getByRole('radio')
+    .check()
+  await page.getByRole('combobox').selectOption('74')
+  await page.locator('.w-11').first().click()
 
-    // Try to register - this should be blocked
-    await page.getByRole('button', { name: 'Ja, jag vill tävla' }).click()
+  // Try to register - this should be blocked
+  await page.getByRole('button', { name: 'Ja, jag vill tävla' }).click()
 
-    // Should NOT show success (Sparat! button), indicating registration was blocked
-    await expect(page.getByRole('button', { name: 'Sparat!' })).not.toBeVisible()
+  // Should NOT show success (Sparat! button), indicating registration was blocked
+  await expect(page.getByRole('button', { name: 'Sparat!' })).not.toBeVisible()
 })
 
 test('User with explicit admin approval can register despite no helper activity', async ({ page }) => {
-    // Create a user WITH explicit approval (despite no helper activity)
-    const user = await login(page, {
-        role: 'member',
-        explicit_registration_approval: true
-    })
+  // Create a user WITH explicit approval (despite no helper activity)
+  await login(page, {
+    role: 'member',
+    explicit_registration_approval: true,
+  })
 
-    const competition = await create(page, 'Competition', {
-        date: '2030-01-01',
-        last_registration_at: '2029-12-01'
-    })
+  const competition = await create(page, 'Competition', {
+    date: '2030-01-01',
+    last_registration_at: '2029-12-01',
+  })
 
-    await page.goto('/competitions')
-    await page.getByText(competition.name).click()
+  await page.goto('/competitions')
+  await page.getByText(competition.name).click()
 
-    // Fill out competition registration form
-    await page.locator('div').filter({ hasText: /^Herrar$/ }).getByRole('radio').check()
-    await page.getByRole('combobox').selectOption('74')
-    await page.locator('.w-11').first().click()
+  // Fill out competition registration form
+  await page
+    .locator('div')
+    .filter({ hasText: /^Herrar$/ })
+    .getByRole('radio')
+    .check()
+  await page.getByRole('combobox').selectOption('74')
+  await page.locator('.w-11').first().click()
 
-    // Try to register - this should work due to explicit approval
-    await page.getByRole('button', { name: 'Ja, jag vill tävla' }).click()
+  // Try to register - this should work due to explicit approval
+  await page.getByRole('button', { name: 'Ja, jag vill tävla' }).click()
 
-    // Should show success indicators (competition registration information)
-    await expect(page.getByText('Information om tävlingsavgifter')).toBeVisible()
-    await expect(page.getByText('Information om funktionärskrav')).toBeVisible()
+  // Should show success indicators (competition registration information)
+  await expect(page.getByText('Information om tävlingsavgifter')).toBeVisible()
+  await expect(page.getByText('Information om funktionärskrav')).toBeVisible()
 })
 
 test('User with recent helper activity can register for competition', async ({ page }) => {
-    // Create a user without explicit approval but with recent helper activity
-    const user = await login(page, {
-        role: 'member',
-        explicit_registration_approval: false,
-        email: `test-${Date.now()}@example.com`
-    })
+  // Create a user without explicit approval but with recent helper activity
+  const user = await login(page, {
+    role: 'member',
+    explicit_registration_approval: false,
+    email: `test-${Date.now()}@example.com`,
+  })
 
-    // Create an event within the last year (recent enough to count as helper activity)
-    const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
-    const event = await create(page, '\\App\\Models\\Event', {
-        date: oneMonthAgo
-    })
+  // Create an event within the last year (recent enough to count as helper activity)
+  const oneMonthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+  const event = await create(page, '\\App\\Models\\Event', {
+    date: oneMonthAgo,
+  })
 
-    // Create an event registration showing the user helped and attended
-    await create(page, 'EventRegistration', {
-        user_id: user.id,
-        event_id: event.id,
-        status: true,
-        presence_confirmed: true
-    })
+  // Create an event registration showing the user helped and attended
+  await create(page, 'EventRegistration', {
+    user_id: user.id,
+    event_id: event.id,
+    status: true,
+    presence_confirmed: true,
+  })
 
-    const competition = await create(page, 'Competition', {
-        date: '2030-01-01',
-        last_registration_at: '2029-12-01'
-    })
+  const competition = await create(page, 'Competition', {
+    date: '2030-01-01',
+    last_registration_at: '2029-12-01',
+  })
 
-    await page.goto('/competitions')
-    await page.getByText(competition.name).click()
+  await page.goto('/competitions')
+  await page.getByText(competition.name).click()
 
-    // Fill out competition registration form
-    await page.locator('div').filter({ hasText: /^Herrar$/ }).getByRole('radio').check()
-    await page.getByRole('combobox').selectOption('74')
-    await page.locator('.w-11').first().click()
+  // Fill out competition registration form
+  await page
+    .locator('div')
+    .filter({ hasText: /^Herrar$/ })
+    .getByRole('radio')
+    .check()
+  await page.getByRole('combobox').selectOption('74')
+  await page.locator('.w-11').first().click()
 
-    // Try to register - this should work because user has recent helper activity
-    await page.getByRole('button', { name: 'Ja, jag vill tävla' }).click()
+  // Try to register - this should work because user has recent helper activity
+  await page.getByRole('button', { name: 'Ja, jag vill tävla' }).click()
 
-    // Should show success indicators (competition registration information)
-    await expect(page.getByText('Information om tävlingsavgifter')).toBeVisible()
-    await expect(page.getByText('Information om funktionärskrav')).toBeVisible()
+  // Should show success indicators (competition registration information)
+  await expect(page.getByText('Information om tävlingsavgifter')).toBeVisible()
+  await expect(page.getByText('Information om funktionärskrav')).toBeVisible()
 
-    // Verify that the "Sparat!" button appears, confirming successful registration
-    await expect(page.getByRole('button', { name: 'Sparat!' })).toBeVisible()
+  // Verify that the "Sparat!" button appears, confirming successful registration
+  await expect(page.getByRole('button', { name: 'Sparat!' })).toBeVisible()
 })
 
 test('Declining competition always works regardless of approval status', async ({ page }) => {
-    // Create a user without explicit approval
-    const user = await login(page, {
-        role: 'member',
-        explicit_registration_approval: false
-    })
+  // Create a user without explicit approval
+  await login(page, {
+    role: 'member',
+    explicit_registration_approval: false,
+  })
 
-    const competition = await create(page, 'Competition', {
-        date: '2030-01-01',
-        last_registration_at: '2029-12-01'
-    })
+  const competition = await create(page, 'Competition', {
+    date: '2030-01-01',
+    last_registration_at: '2029-12-01',
+  })
 
-    await page.goto('/competitions')
-    await page.getByText(competition.name).click()
+  await page.goto('/competitions')
+  await page.getByText(competition.name).click()
 
-    // Fill out form but decline to compete
-    await page.locator('div').filter({ hasText: /^Herrar$/ }).getByRole('radio').check()
-    await page.getByRole('combobox').selectOption('74')
-    await page.locator('.w-11').first().click()
+  // Fill out form but decline to compete
+  await page
+    .locator('div')
+    .filter({ hasText: /^Herrar$/ })
+    .getByRole('radio')
+    .check()
+  await page.getByRole('combobox').selectOption('74')
+  await page.locator('.w-11').first().click()
 
-    // Decline competition - this should always work
-    await page.getByRole('button', { name: 'Jag vill inte tävla' }).click()
+  // Decline competition - this should always work
+  await page.getByRole('button', { name: 'Jag vill inte tävla' }).click()
 
-    // Should show success (Sparat! button), indicating decline was accepted
-    await expect(page.getByRole('button', { name: 'Sparat!' })).toBeVisible()
+  // Should show success (Sparat! button), indicating decline was accepted
+  await expect(page.getByRole('button', { name: 'Sparat!' })).toBeVisible()
 })

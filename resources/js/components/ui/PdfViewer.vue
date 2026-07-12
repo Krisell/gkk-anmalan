@@ -22,10 +22,7 @@ import PdfCoordinates from '../../modules/PdfCoordinates.js'
 
 // pdfjs-dist is heavy — load it lazily so only pages that render PDFs pay for it.
 async function loadPdfjs() {
-  const [pdfjs, worker] = await Promise.all([
-    import('pdfjs-dist'),
-    import('pdfjs-dist/build/pdf.worker.min.mjs?url'),
-  ])
+  const [pdfjs, worker] = await Promise.all([import('pdfjs-dist'), import('pdfjs-dist/build/pdf.worker.min.mjs?url')])
   pdfjs.GlobalWorkerOptions.workerSrc = worker.default
   return pdfjs
 }
