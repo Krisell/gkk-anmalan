@@ -1,14 +1,24 @@
 <template>
   <div class="container mx-auto">
-    <h2 class="text-center text-xl font-thin mb-6">
-      Anmälningar till {{ event.name }}
+    <h1 class="text-2xl font-semibold mb-6 pl-4">
+      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
+        <i class="fa fa-angle-left"></i>
+        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
+      </a>
+      <span class="text-gray-300 mx-2">/</span>
+      <a
+        href="/admin/events"
+        class="text-gray-400 hover:text-gkk underline underline-offset-4 decoration-gray-300 hover:decoration-gkk transition-colors"
+        >Admin - Funktionärsanmälningar</a
+      >
+      <span class="text-gray-300 mx-2">/</span>
+      <span class="text-gkk">{{ event.name }}</span>
       <i
-        style="margin-left: 20px; cursor: pointer"
+        class="fa fa-clipboard ml-4 text-base text-gray-400 hover:text-gkk cursor-pointer transition-colors"
         v-tooltip="'Kopiera epostadresserna för alla anmälda'"
         @click="copyEmails"
-        class="fa fa-clipboard"
       ></i>
-    </h2>
+    </h1>
     <div class="bg-white shadow-sm sm:rounded-lg mb-6">
       <div class="px-4 py-5 sm:p-6">
         <div>
