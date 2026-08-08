@@ -1,19 +1,22 @@
 <template>
   <div class="max-w-6xl mx-auto px-4 pt-6">
-    <h1 class="text-2xl font-semibold mb-6 flex flex-wrap items-center">
-      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
-        <i class="fa fa-angle-left"></i>
-        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-      </a>
-      <span class="text-gray-300 mx-2">/</span>
-      <a
-        href="/events"
-        class="text-gray-400 hover:text-gkk underline underline-offset-4 decoration-gray-300 hover:decoration-gkk transition-colors"
-        >Funktionärsanmälan</a
-      >
-      <span class="text-gray-300 mx-2">/</span>
-      <span class="text-gkk">{{ event.name }}</span>
-    </h1>
+    <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
+      <h1 class="text-2xl font-semibold flex flex-wrap items-center">
+        <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
+          <i class="fa fa-angle-left"></i>
+          <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
+        </a>
+        <span class="text-gray-300 mx-2">/</span>
+        <a
+          href="/events"
+          class="text-gray-400 hover:text-gkk underline underline-offset-4 decoration-gray-300 hover:decoration-gkk transition-colors"
+          >Funktionärsanmälan</a
+        >
+        <span class="text-gray-300 mx-2">/</span>
+        <span class="text-gkk">{{ event.name }}</span>
+      </h1>
+      <AdministrateButton v-if="isAdmin" :path="`/admin/events/${event.id}`" />
+    </div>
 
     <div class="max-w-lg mx-auto">
       <div class="bg-white rounded-xl border border-gray-100 shadow-xs text-center mb-4">
@@ -128,9 +131,10 @@
 import Date from '../modules/Date.js'
 import Message from './Message.vue'
 import Button from './ui/Button.vue'
+import AdministrateButton from './AdministrateButton.vue'
 
 export default {
-  components: { Message, Button },
+  components: { Message, Button, AdministrateButton },
   props: ['event', 'user', '_registration'],
   data() {
     return {
@@ -142,6 +146,9 @@ export default {
     }
   },
   computed: {
+    isAdmin() {
+      return this.user && ['admin', 'superadmin'].includes(this.user.role)
+    },
     dateString() {
       if (this.event.end_date) {
         return `${Date.string(this.event.date)} – ${Date.string(this.event.end_date)}<br>(${this.event.date} – ${
