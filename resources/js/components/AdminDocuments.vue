@@ -25,6 +25,12 @@
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                 >
                   {{ folder.name }}
+                  <span
+                    v-if="folder.only_administrators"
+                    class="ml-2 inline-flex items-center rounded-full bg-gkk/10 px-2 py-0.5 text-[10px] font-semibold normal-case tracking-normal text-gkk"
+                  >
+                    Endast administratörer
+                  </span>
                 </th>
                 <th
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
@@ -168,14 +174,42 @@
         </div>
       </div>
 
-      <div class="text-center mt-4">
-        <div class="text-lg font-thin mt-2">Ny mapp</div>
-        <input
-          v-model="newFolderName"
-          class="my-2 m-auto appearance-none rounded-sm relative block w-64 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-          name="name"
-        />
-        <Button @click="newFolder"><i class="fa fa-plus mr-2"></i>Skapa ny mapp</Button>
+      <div class="mt-10 rounded-xl border border-gray-200 bg-gray-50 p-5 sm:p-6">
+        <div class="mb-5 text-center">
+          <h2 class="text-lg font-semibold text-gray-900">Ny mapp</h2>
+          <p class="mt-1 text-sm text-gray-500">Skapa en mapp för att samla relaterade dokument.</p>
+        </div>
+
+        <div class="mx-auto max-w-md space-y-4">
+          <div>
+            <label for="new-folder-name" class="mb-1 block text-sm font-medium text-gray-700">Mappnamn</label>
+            <input
+              id="new-folder-name"
+              v-model="newFolderName"
+              name="name"
+              placeholder="Till exempel styrelseprotokoll"
+              class="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-gkk focus:outline-hidden focus:ring-1 focus:ring-gkk sm:text-sm"
+            />
+          </div>
+
+          <label
+            class="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-white p-3 text-left transition-colors hover:border-gkk/40"
+          >
+            <input
+              v-model="newFolderOnlyAdministrators"
+              type="checkbox"
+              class="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-gkk focus:ring-gkk"
+            />
+            <span>
+              <span class="block text-sm font-medium text-gray-800">Endast administratörer</span>
+              <span class="block text-xs text-gray-500">Mappen och dess dokument visas inte för medlemmar.</span>
+            </span>
+          </label>
+
+          <div class="flex justify-center pt-1">
+            <Button @click="newFolder"><i class="fa fa-plus mr-2"></i>Skapa ny mapp</Button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -262,6 +296,19 @@
             class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
           />
         </div>
+        <label
+          class="mt-4 flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-700"
+        >
+          <input
+            v-model="selectedFolder.only_administrators"
+            type="checkbox"
+            class="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-gkk focus:ring-gkk"
+          />
+          <span>
+            <span class="block font-medium text-gray-800">Endast administratörer</span>
+            <span class="block text-xs text-gray-500">Mappen och dess dokument visas inte för medlemmar.</span>
+          </span>
+        </label>
       </div>
 
       <template #footer="{ close }">
@@ -285,6 +332,7 @@ export default {
   data() {
     return {
       newFolderName: '',
+      newFolderOnlyAdministrators: false,
       uploadStatus: '',
       newDocument: {
         name: '',
@@ -315,6 +363,7 @@ export default {
           axios.post(`/admin/document-folders/${folder.id}`, {
             name: folder.name,
             order: index + 1,
+            only_administrators: folder.only_administrators,
           }),
         ),
       )
@@ -334,6 +383,7 @@ export default {
           axios.post(`/admin/document-folders/${folder.id}`, {
             name: folder.name,
             order: index + 1,
+            only_administrators: folder.only_administrators,
           }),
         ),
       )
@@ -344,6 +394,7 @@ export default {
       await window.axios.post('/admin/document-folders', {
         name: this.newFolderName,
         order: +this.folders.sort((a, b) => b.order - a.order)[0].order + 1,
+        only_administrators: this.newFolderOnlyAdministrators,
       })
       window.location.reload()
     },
@@ -395,6 +446,7 @@ export default {
       await window.axios.post(`/admin/document-folders/${this.selectedFolder.id}`, {
         name: this.selectedFolder.name,
         order: this.selectedFolder.order,
+        only_administrators: this.selectedFolder.only_administrators,
       })
       window.location.reload()
     },

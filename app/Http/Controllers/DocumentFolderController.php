@@ -12,6 +12,7 @@ class DocumentFolderController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'order' => 'required',
+            'only_administrators' => 'sometimes|boolean',
         ]);
 
         return DocumentFolder::create($data);
@@ -22,6 +23,7 @@ class DocumentFolderController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'order' => 'required',
+            'only_administrators' => 'sometimes|boolean',
         ]);
 
         $folder->update($data);

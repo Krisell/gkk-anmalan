@@ -24,6 +24,21 @@ test('an admin can create a folder', function () {
     $this->assertCount(1, DocumentFolder::all());
 });
 
+test('an admin can create an administrators-only folder', function () {
+    loginAdmin();
+
+    $this->post('/admin/document-folders', [
+        'name' => 'Styrelsedokument',
+        'order' => 1,
+        'only_administrators' => true,
+    ])->assertCreated();
+
+    $this->assertDatabaseHas('document_folders', [
+        'name' => 'Styrelsedokument',
+        'only_administrators' => true,
+    ]);
+});
+
 test('an admin can update a folder', function () {
     loginAdmin();
 
@@ -37,6 +52,23 @@ test('an admin can update a folder', function () {
     $this->assertDatabaseHas('document_folders', [
         'name' => 'NEW NAME',
         'order' => 27,
+    ]);
+});
+
+test('an admin can make a folder administrators-only', function () {
+    loginAdmin();
+
+    $folder = DocumentFolder::factory()->create(['only_administrators' => false]);
+
+    $this->post("/admin/document-folders/{$folder->id}", [
+        'name' => $folder->name,
+        'order' => $folder->order,
+        'only_administrators' => true,
+    ])->assertOk();
+
+    $this->assertDatabaseHas('document_folders', [
+        'id' => $folder->id,
+        'only_administrators' => true,
     ]);
 });
 

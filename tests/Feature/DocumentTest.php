@@ -15,6 +15,28 @@ test('a signed in user can see documents', function () {
     ]);
 });
 
+test('a member cannot see administrators-only document folders', function () {
+    login();
+
+    $memberFolder = DocumentFolder::factory()->create(['only_administrators' => false]);
+    $adminFolder = DocumentFolder::factory()->create(['only_administrators' => true]);
+
+    $this->get('/member-documents')
+        ->assertViewHas('folders', function ($folders) use ($memberFolder, $adminFolder) {
+            return $folders->contains($memberFolder)
+                && ! $folders->contains($adminFolder);
+        });
+});
+
+test('an admin can see administrators-only document folders', function () {
+    loginAdmin();
+
+    $adminFolder = DocumentFolder::factory()->create(['only_administrators' => true]);
+
+    $this->get('/member-documents')
+        ->assertViewHas('folders', fn ($folders) => $folders->contains($adminFolder));
+});
+
 test('a non admin cant upload a document', function () {
     login();
 
