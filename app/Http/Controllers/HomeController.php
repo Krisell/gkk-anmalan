@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompetitionAdminTask;
 use App\Models\Event;
 use App\Models\NewsItem;
 use App\Models\User;
@@ -59,11 +60,19 @@ class HomeController extends Controller
 
         if (auth()->user() && \in_array(auth()->user()->role, ['admin', 'superadmin'])) {
             $unanswered['ungranted'] = User::whereGrantedBy(0)->count();
+            $adminTasks = CompetitionAdminTask::with('competition:id,name,date')
+                ->where('status', 'pending')
+                ->whereHas('competition')
+                ->orderBy('created_at')
+                ->get();
+        } else {
+            $adminTasks = [];
         }
 
         return view('inside', [
             'user' => auth()->user()?->load('eventRegistrations.event'),
             'unanswered' => $unanswered,
+            'adminTasks' => $adminTasks,
             'news' => $news,
             'view' => 'inside',
         ]);

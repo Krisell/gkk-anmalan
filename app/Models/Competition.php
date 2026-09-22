@@ -27,6 +27,11 @@ class Competition extends Model
         return $this->hasMany(CompetitionRegistration::class);
     }
 
+    public function adminTasks(): HasMany
+    {
+        return $this->hasMany(CompetitionAdminTask::class);
+    }
+
     public function getPublishCountValueAttribute()
     {
         return $this->registrations()->whereStatus(1)->count();

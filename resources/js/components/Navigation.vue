@@ -84,6 +84,51 @@
             </div>
           </a>
         </div>
+
+        <section
+          v-if="isAdmin && pendingTasks.length"
+          class="mt-6 bg-white rounded-xl border border-gray-100 shadow-xs"
+        >
+          <div class="px-4 py-4 border-b border-gray-100 flex items-center justify-between gap-3">
+            <div>
+              <h2 class="font-semibold text-gray-900">Att göra</h2>
+              <p class="text-sm text-gray-500">Tävlingsanmälningar som behöver följas upp</p>
+            </div>
+            <span
+              class="bg-gkk text-white text-xs font-medium rounded-full min-w-[22px] h-[22px] px-1.5 flex items-center justify-center"
+            >
+              {{ pendingTasks.length }}
+            </span>
+          </div>
+          <ul class="divide-y divide-gray-100">
+            <li
+              v-for="task in pendingTasks"
+              :key="task.id"
+              class="px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3"
+            >
+              <div class="flex-1 min-w-0">
+                <div class="font-medium text-gray-900">{{ taskLabel(task.type) }}</div>
+                <a :href="`/admin/competitions/${task.competition_id}`" class="text-sm text-gkk hover:underline">
+                  {{ task.competition.name }}
+                </a>
+              </div>
+              <div class="flex gap-2 shrink-0">
+                <button
+                  @click="completeTask(task, 'done')"
+                  class="px-3 py-1.5 rounded-sm bg-gkk text-white text-sm hover:bg-gkk/90"
+                >
+                  Klar
+                </button>
+                <button
+                  @click="completeTask(task, 'not_applicable')"
+                  class="px-3 py-1.5 rounded-sm border border-gray-300 text-gray-700 text-sm hover:bg-gray-50"
+                >
+                  Ej aktuellt
+                </button>
+              </div>
+            </li>
+          </ul>
+        </section>
       </div>
     </template>
 
@@ -109,10 +154,16 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
+import CompetitionAdminTasks from '../modules/CompetitionAdminTasks.js'
 import Date from '../modules/Date.js'
 
 export default {
-  props: ['user', 'unanswered', 'hasPendingPayments'],
+  props: ['user', 'unanswered', 'hasPendingPayments', 'adminTasks'],
+  data() {
+    return {
+      pendingTasks: [...(this.adminTasks || [])],
+    }
+  },
   computed: {
     isAdmin() {
       return this.user && ['admin', 'superadmin'].includes(this.user.role)
@@ -217,6 +268,20 @@ export default {
       axios.post('/logout').then(() => {
         window.location.reload()
       })
+    },
+    taskLabel(type) {
+      return CompetitionAdminTasks.typeLabel(type)
+    },
+    completeTask(task, status) {
+      axios
+        .patch(`/admin/competition-tasks/${task.id}`, { status })
+        .then(() => {
+          this.pendingTasks = this.pendingTasks.filter((item) => item.id !== task.id)
+          this.$toast.success(status === 'done' ? 'Uppgiften är klar.' : 'Uppgiften är markerad som ej aktuell.')
+        })
+        .catch(() => {
+          this.$toast.error('Det gick inte att uppdatera uppgiften. Försök igen.')
+        })
     },
   },
 }

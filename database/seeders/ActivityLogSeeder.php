@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ActivityLog;
+use App\Models\Competition;
 use Illuminate\Database\Seeder;
 
 class ActivityLogSeeder extends Seeder
@@ -34,6 +35,25 @@ class ActivityLogSeeder extends Seeder
 
         foreach ($actions as $action) {
             ActivityLog::create($action);
+        }
+
+        $dmCompetition = Competition::where('name', 'DM KSL')->firstOrFail();
+
+        $tasks = $dmCompetition->adminTasks()->orderBy('id')->get();
+
+        foreach ($tasks as $index => $task) {
+            ActivityLog::create([
+                'performed_by' => 0,
+                'action' => 'competition-admin-task-created',
+                'data' => \json_encode([
+                    'competition_id' => $dmCompetition->id,
+                    'task_id' => $task->id,
+                    'type' => $task->type,
+                    'status' => $task->status,
+                    'competition_name' => $dmCompetition->name,
+                ]),
+                'created_at' => now()->subHours(\count($tasks) - $index),
+            ]);
         }
     }
 }

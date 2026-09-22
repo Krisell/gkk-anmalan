@@ -102,7 +102,7 @@
                   <span v-else class="text-gray-400">-</span>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm text-gray-500">
-                  {{ log.data || '-' }}
+                  {{ taskDetails(log) }}
                 </td>
               </tr>
             </tbody>
@@ -114,6 +114,8 @@
 </template>
 
 <script>
+import CompetitionAdminTasks from '../modules/CompetitionAdminTasks.js'
+
 export default {
   props: {
     initialLogs: {
@@ -150,7 +152,12 @@ export default {
         filtered = filtered.filter((l) => {
           const performedBy = l.performer ? `${l.performer.first_name} ${l.performer.last_name}`.toLowerCase() : ''
           const affectedUser = l.user ? `${l.user.first_name} ${l.user.last_name}`.toLowerCase() : ''
-          return performedBy.includes(searchLower) || affectedUser.includes(searchLower)
+          const competitionName = (this.taskData(l)?.competition_name || '').toLowerCase()
+          return (
+            performedBy.includes(searchLower) ||
+            affectedUser.includes(searchLower) ||
+            competitionName.includes(searchLower)
+          )
         })
       }
 
@@ -175,6 +182,8 @@ export default {
         'payment-update': 'Betalningsuppdatering',
         'result-creation': 'Resultat skapat',
         'result-deletion': 'Resultat borttaget',
+        'competition-admin-task-created': 'Tävlingsuppgift skapad',
+        'competition-admin-task-updated': 'Tävlingsuppgift uppdaterad',
       }
       return labels[action] || action
     },
@@ -191,8 +200,28 @@ export default {
         'payment-update': 'bg-orange-100 text-orange-800',
         'result-creation': 'bg-teal-100 text-teal-800',
         'result-deletion': 'bg-red-100 text-red-800',
+        'competition-admin-task-created': 'bg-blue-100 text-blue-800',
+        'competition-admin-task-updated': 'bg-blue-100 text-blue-800',
       }
       return classes[action] || 'bg-gray-100 text-gray-800'
+    },
+    taskData(log) {
+      if (!log.action.startsWith('competition-admin-task-')) {
+        return null
+      }
+
+      return typeof log.data === 'string' ? JSON.parse(log.data) : log.data
+    },
+    taskDetails(log) {
+      const data = this.taskData(log)
+      if (!data) {
+        return log.data || '-'
+      }
+
+      const task = CompetitionAdminTasks.typeLabel(data.type)
+      const status = CompetitionAdminTasks.statusLabel(data.status)
+
+      return `${data.competition_name || `Tävling #${data.competition_id}`} – ${task}: ${status}`
     },
   },
 }

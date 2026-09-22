@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Mail\CompetitionDeadlineNotification;
+use App\Models\ActivityLog;
 use App\Models\Competition;
+use App\Models\CompetitionAdminTask;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,6 +32,8 @@ class NotifyCompetitionDeadlines extends Command
      */
     public function handle()
     {
+        $this->createMissingAdminTasks();
+
         $today = now()->startOfDay();
 
         // Get all competitions with registration deadlines
@@ -82,5 +86,51 @@ class NotifyCompetitionDeadlines extends Command
         }
 
         return 0;
+    }
+
+    /**
+     * Create follow-up tasks for competitions whose deadline has recently passed. Looking back a
+     * week (rather than only yesterday) means a missed daily run does not skip a competition.
+     */
+    private function createMissingAdminTasks(): void
+    {
+        $competitions = Competition::whereNotNull('last_registration_at')
+            ->where('last_registration_at', '<', now()->toDateString())
+            ->where('last_registration_at', '>=', now()->subDays(7)->toDateString())
+            ->get();
+
+        foreach ($competitions as $competition) {
+            $this->createAdminTasks($competition);
+        }
+    }
+
+    private function createAdminTasks(Competition $competition): void
+    {
+        $hasLifters = $competition->registrations()->where('status', 1)->exists();
+        $status = $hasLifters ? 'pending' : 'not_applicable';
+
+        foreach ([CompetitionAdminTask::SUBMIT_REGISTRATION, CompetitionAdminTask::PAY_REGISTRATION_FEE] as $type) {
+            $task = CompetitionAdminTask::firstOrCreate(
+                ['competition_id' => $competition->id, 'type' => $type],
+                [
+                    'status' => $status,
+                    'completed_at' => $hasLifters ? null : now(),
+                ],
+            );
+
+            if ($task->wasRecentlyCreated) {
+                ActivityLog::create([
+                    'performed_by' => 0,
+                    'action' => 'competition-admin-task-created',
+                    'data' => \json_encode([
+                        'competition_id' => $competition->id,
+                        'task_id' => $task->id,
+                        'type' => $type,
+                        'status' => $status,
+                        'competition_name' => $competition->name,
+                    ]),
+                ]);
+            }
+        }
     }
 }

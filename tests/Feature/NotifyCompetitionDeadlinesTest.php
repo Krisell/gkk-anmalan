@@ -2,6 +2,8 @@
 
 use App\Mail\CompetitionDeadlineNotification;
 use App\Models\Competition;
+use App\Models\CompetitionAdminTask;
+use App\Models\CompetitionRegistration;
 use Illuminate\Support\Facades\Mail;
 
 test('command shows info when no competitions with deadlines found', function () {
@@ -86,6 +88,88 @@ test('command sends notification day after deadline', function () {
                $mail->deadlineType === 'day_after' &&
                $mail->daysUntilDeadline === -1;
     });
+});
+
+test('command creates pending follow-up tasks after a deadline when lifters are registered', function () {
+    Mail::fake();
+
+    $competition = Competition::factory()->create([
+        'last_registration_at' => now()->subDay(),
+    ]);
+    CompetitionRegistration::factory()->for($competition)->create(['status' => 1]);
+
+    $this->artisan('gkk:notify-competition-deadlines')->assertSuccessful();
+
+    $this->assertDatabaseHas('competition_admin_tasks', [
+        'competition_id' => $competition->id,
+        'type' => CompetitionAdminTask::SUBMIT_REGISTRATION,
+        'status' => 'pending',
+    ]);
+    $this->assertDatabaseHas('competition_admin_tasks', [
+        'competition_id' => $competition->id,
+        'type' => CompetitionAdminTask::PAY_REGISTRATION_FEE,
+        'status' => 'pending',
+    ]);
+});
+
+test('command marks follow-up tasks not applicable when no lifters are registered', function () {
+    Mail::fake();
+
+    $competition = Competition::factory()->create([
+        'last_registration_at' => now()->subDay(),
+    ]);
+
+    $this->artisan('gkk:notify-competition-deadlines')->assertSuccessful();
+
+    $this->assertDatabaseHas('competition_admin_tasks', [
+        'competition_id' => $competition->id,
+        'type' => CompetitionAdminTask::SUBMIT_REGISTRATION,
+        'status' => 'not_applicable',
+    ]);
+    $this->assertDatabaseHas('competition_admin_tasks', [
+        'competition_id' => $competition->id,
+        'type' => CompetitionAdminTask::PAY_REGISTRATION_FEE,
+        'status' => 'not_applicable',
+    ]);
+});
+
+test('command catches up on follow-up tasks when a daily run was missed', function () {
+    Mail::fake();
+
+    $competition = Competition::factory()->create([
+        'last_registration_at' => now()->subDays(3),
+    ]);
+    CompetitionRegistration::factory()->for($competition)->create(['status' => 1]);
+
+    $this->artisan('gkk:notify-competition-deadlines')->assertSuccessful();
+
+    expect($competition->adminTasks()->where('status', 'pending')->count())->toBe(2);
+});
+
+test('command does not create follow-up tasks for old or upcoming deadlines', function () {
+    Mail::fake();
+
+    $old = Competition::factory()->create(['last_registration_at' => now()->subDays(8)]);
+    $today = Competition::factory()->create(['last_registration_at' => now()]);
+
+    $this->artisan('gkk:notify-competition-deadlines')->assertSuccessful();
+
+    expect($old->adminTasks()->count())->toBe(0);
+    expect($today->adminTasks()->count())->toBe(0);
+});
+
+test('command does not duplicate follow-up tasks on repeated runs', function () {
+    Mail::fake();
+
+    $competition = Competition::factory()->create([
+        'last_registration_at' => now()->subDay(),
+    ]);
+
+    $this->artisan('gkk:notify-competition-deadlines')->assertSuccessful();
+    $this->artisan('gkk:notify-competition-deadlines')->assertSuccessful();
+
+    expect($competition->adminTasks()->count())->toBe(2);
+    $this->assertDatabaseCount('activity_logs', 2);
 });
 
 test('command does not send notification for competitions not matching criteria', function () {

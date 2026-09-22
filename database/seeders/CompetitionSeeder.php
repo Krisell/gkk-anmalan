@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Competition;
+use App\Models\CompetitionAdminTask;
 use App\Models\CompetitionRegistration;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -34,6 +35,17 @@ class CompetitionSeeder extends Seeder
                 ->create();
         }
 
+        CompetitionAdminTask::create([
+            'competition_id' => $competition->id,
+            'type' => CompetitionAdminTask::SUBMIT_REGISTRATION,
+            'status' => 'pending',
+        ]);
+        CompetitionAdminTask::create([
+            'competition_id' => $competition->id,
+            'type' => CompetitionAdminTask::PAY_REGISTRATION_FEE,
+            'status' => 'pending',
+        ]);
+
         Competition::factory(3)->create([
             'name' => 'Some other competition',
             'date' => now()->addDays(30),
@@ -49,7 +61,7 @@ class CompetitionSeeder extends Seeder
             'link_url' => 'https://data.styrkelyft.se/',
         ]);
 
-        Competition::factory()->create([
+        $competitionWithoutLifters = Competition::factory()->create([
             'name' => 'Götalandsmästerskapen KSL och (K)BP',
             'date' => now()->addDays(15),
             'end_date' => now()->addDays(16),
@@ -58,5 +70,14 @@ class CompetitionSeeder extends Seeder
             'pdf_url' => 'https://www.africau.edu/images/default/sample.pdf',
             'link_url' => 'https://data.styrkelyft.se/',
         ]);
+
+        foreach ([CompetitionAdminTask::SUBMIT_REGISTRATION, CompetitionAdminTask::PAY_REGISTRATION_FEE] as $type) {
+            CompetitionAdminTask::create([
+                'competition_id' => $competitionWithoutLifters->id,
+                'type' => $type,
+                'status' => 'not_applicable',
+                'completed_at' => now()->subDay(),
+            ]);
+        }
     }
 }

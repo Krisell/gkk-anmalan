@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminPaymentsController;
 use App\Http\Controllers\AdminPaymentToolsController;
 use App\Http\Controllers\AdminSlideshowController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CompetitionAdminTaskController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionRegistrationController;
 use App\Http\Controllers\DevController;
@@ -131,6 +132,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(function () {
+    Route::patch('/competition-tasks/{task}', [CompetitionAdminTaskController::class, 'update']);
     Route::prefix('accounts')->group(function () {
         Route::post('/inactivate/{user}', [AccountController::class, 'inactivate']);
         Route::post('/reactivate/{user}', [AccountController::class, 'reactivate']);
