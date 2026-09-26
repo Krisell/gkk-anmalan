@@ -1,227 +1,171 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- Hero section with gradient overlay --}}
-<div class="relative">
-  <div style="background-image: url(https://goteborg-kraftsportklubb.web.app/img/kamratskap.jpeg);
-  height: 500px;
-  background-size: cover;
-  background-position-y: 30%; max-height: 50vh;" class="flex items-center">
-  </div>
-  <div class="absolute inset-0 bg-black/40"></div>
-  <div class="absolute inset-0 flex items-center justify-center px-4">
-    <div class="text-center">
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg tracking-tight">Medlemskap</h1>
-      <div class="mt-4 flex items-center justify-center gap-3">
-        <span class="h-px w-12 bg-white/50"></span>
-        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow-sm">Styrka bygger man tillsammans</p>
-        <span class="h-px w-12 bg-white/50"></span>
-      </div>
-    </div>
-  </div>
-</div>
+@php
+  $link = 'font-medium text-gkk underline decoration-gkk/30 underline-offset-4 transition-colors hover:decoration-gkk';
+  $friskis = 'https://www.friskissvettis.se/goteborg/tranahar/majorna';
+@endphp
 
-<div class="container mx-auto max-w-4xl px-4 py-10">
-  {{-- Intro section --}}
-  <div class="mb-10">
-    <p class="text-xl sm:text-2xl font-medium text-gkk leading-relaxed">
-      Som medlem i GKK får du möjlighet att träna i vår fina lokal, delta i våra gemensamma aktiviteter och representera föreningen vid tävling.
-    </p>
-    <p class="text-lg leading-relaxed text-gray-600 mt-4">
-      Man behöver också ställa upp vid några tillfällen varje år då vi själva arrangerar tävlingar, och som ny får man naturligtvis mycket hjälp.
-    </p>
-  </div>
+<x-page-hero image="https://goteborg-kraftsportklubb.web.app/img/kamratskap.jpeg" position="30%" eyebrow="Styrka bygger man tillsammans" title="Medlemskap">
+  Som medlem i GKK får du möjlighet att träna i vår fina lokal, delta i våra gemensamma aktiviteter och representera föreningen vid tävling. Man behöver också ställa upp vid några tillfällen varje år då vi själva arrangerar tävlingar, och som ny får man naturligtvis mycket hjälp.
+</x-page-hero>
 
-  {{-- Become a member card --}}
-  <div class="bg-gradient-to-br from-gkk to-gkk-light rounded-2xl p-6 sm:p-8 shadow-lg mb-10 text-white">
-    <h2 class="text-xl font-bold mb-4 flex items-center">
-      <i class="fa fa-user-plus mr-2"></i> Vill du bli medlem?
-    </h2>
-    <div class="space-y-4 text-white/90">
-      <p class="leading-relaxed">
-        Börja med att läsa den information som finns här på vår hemsida, och kom till oss och provträna (se info nedan). När du har bestämt dig återkommer du till <a href="mailto:info@gkk-styrkelyft.se" class="underline text-white hover:text-white/80 transition-colors">info@gkk-styrkelyft.se</a> och berättar att du vill bli medlem samt skickar med adress, namn, personnummer, telefon och mailadress. Om du är student så skickar du även med bevis på det (ex. bild från Mecenat-appen eller registreringsbevis).
+{{-- Så blir du medlem --}}
+<section class="mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">
+  <x-section-heading eyebrow="Kom igång" title="Vill du bli medlem?" />
+
+  <ol class="mt-12 grid gap-6 lg:grid-cols-3">
+    <li class="relative rounded-2xl bg-white p-8 shadow-lg shadow-gkk/5 ring-1 ring-gray-900/5">
+      <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gkk text-lg font-bold text-white">1</div>
+      <h3 class="mt-5 text-xl font-bold text-gray-900">Provträna</h3>
+      <p class="mt-3 leading-relaxed text-gray-600">
+        Innan du behöver bestämma dig om medlemskap är du välkommen att provträna hos oss några gånger för att titta på lokalen och träffa medlemmar. Om du känner någon i GKK kan du följa med den personen på ett pass. Annars kan du kontakta oss på <a href="mailto:info@gkk-styrkelyft.se" class="{{ $link }}">info@gkk-styrkelyft.se</a> och skriva att du vill provträna och när.
       </p>
-      <p class="leading-relaxed">
+      <div class="mt-5 flex gap-3 rounded-xl bg-gkk/5 p-4 text-sm text-gray-700">
+        <i class="fa fa-lightbulb-o mt-0.5 text-lg text-gkk"></i>
+        <span>Vill du chansa kan du dyka upp en vardag från kl 16 i vår lokal, då det nästan alltid finns medlemmar på plats.</span>
+      </div>
+    </li>
+    <li class="relative rounded-2xl bg-white p-8 shadow-lg shadow-gkk/5 ring-1 ring-gray-900/5">
+      <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gkk text-lg font-bold text-white">2</div>
+      <h3 class="mt-5 text-xl font-bold text-gray-900">Anmäl dig</h3>
+      <p class="mt-3 leading-relaxed text-gray-600">
+        Börja med att läsa den information som finns här på vår hemsida, och kom till oss och provträna. När du har bestämt dig återkommer du till <a href="mailto:info@gkk-styrkelyft.se" class="{{ $link }}">info@gkk-styrkelyft.se</a> och berättar att du vill bli medlem samt skickar med adress, namn, personnummer, telefon och mailadress. Om du är student så skickar du även med bevis på det (ex. bild från Mecenat-appen eller registreringsbevis).
+      </p>
+    </li>
+    <li class="relative rounded-2xl bg-white p-8 shadow-lg shadow-gkk/5 ring-1 ring-gray-900/5">
+      <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gkk text-lg font-bold text-white">3</div>
+      <h3 class="mt-5 text-xl font-bold text-gray-900">Betala och kom igång</h3>
+      <p class="mt-3 leading-relaxed text-gray-600">
         Efter detta kommer faktura för medlemskap skickas ut och när den är betald är du upptagen i föreningen.
       </p>
-      <p class="leading-relaxed">
-        Du kommer också bjudas in till vår medlemswebb där du bland annat behöver godkänna vårt <a class="underline text-white hover:text-white/80 transition-colors" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FAntidopingavtal.pdf?alt=media&token=f43b48b7-62e8-405e-8b3e-f75ac2c465c6">antidopingavtal</a> och <a class="underline text-white hover:text-white/80 transition-colors" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK%202022-09-20.pages.pdf?alt=media&token=52b3f7dd-e27c-49f2-a63d-0bdf2a0a0188">medlemsavtal</a>.
+      <p class="mt-3 leading-relaxed text-gray-600">
+        Du kommer också bjudas in till vår medlemswebb där du bland annat behöver godkänna vårt <a class="{{ $link }}" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FAntidopingavtal.pdf?alt=media&token=f43b48b7-62e8-405e-8b3e-f75ac2c465c6">antidopingavtal</a> och <a class="{{ $link }}" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/documents%2FMedlemsavtal%20GKK%202022-09-20.pages.pdf?alt=media&token=52b3f7dd-e27c-49f2-a63d-0bdf2a0a0188">medlemsavtal</a>.
       </p>
+    </li>
+  </ol>
+</section>
+
+{{-- Avgifter --}}
+<section class="mx-auto max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <x-section-heading eyebrow="Avgifter" title="Vad kostar det?" />
+    <div class="inline-flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-sm text-amber-800 ring-1 ring-amber-200">
+      <i class="fa fa-info-circle"></i> Notera att SSF har höjt licensavgiften för 2026
     </div>
   </div>
 
-  {{-- Fees card --}}
-  <div class="bg-white rounded-2xl p-6 sm:p-8 mb-10 border-2 border-gkk/20 shadow-md">
-    <h2 class="text-xl font-bold text-gkk mb-6 flex items-center">
-      <i class="fa fa-money mr-2"></i> Avgifter
-    </h2>
-    <div class="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-3 mb-6">
-      <p class="text-amber-800 text-sm">
-        <i class="fa fa-info-circle mr-1"></i>
-        Notera att SSF har höjt licensavgiften för 2026
-      </p>
-    </div>
-    <div class="space-y-6">
-      <div class="flex items-start">
-        <div class="shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
-          <i class="fa fa-id-card text-gkk"></i>
-        </div>
-        <div>
-          <h3 class="font-bold text-gray-900 mb-1">Medlemsavgift (inkl träningsavgift)</h3>
-          <p class="text-gray-600">
-            <span class="font-semibold text-gkk">1500 kr/år</span> för seniorer<br>
-            <span class="font-semibold text-gkk">700 kr/år</span> för studerande, ungdom/junior (upp till året man fyller 23) och pensionärer
-          </p>
-          <p class="text-gray-500 text-sm mt-1">
-            Inkluderar träningsavgift och ger tillgång till föreningens lokal och utrustning. Entré till Friskis krävs också.
-          </p>
-        </div>
+  <div class="mt-10 grid gap-6 lg:grid-cols-3">
+    <div class="flex flex-col rounded-3xl bg-gkk p-8 text-white shadow-xl shadow-gkk/20">
+      <div class="flex items-center gap-3">
+        <i class="fa fa-id-card text-gkk-lightest"></i>
+        <h3 class="font-semibold">Medlemsavgift (inkl träningsavgift)</h3>
       </div>
-      <div class="flex items-start">
-        <div class="shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
-          <i class="fa fa-trophy text-gkk"></i>
-        </div>
-        <div>
-          <h3 class="font-bold text-gray-900 mb-1">Tävlingslicens 2026</h3>
-          <p class="text-gray-600">
-            <span class="font-semibold text-gkk">300 kr</span> för ungdomar (året man fyller 18)<br>
-            <span class="font-semibold text-gkk">1050 kr/år</span> för övriga
-          </p>
-          <p class="text-gray-500 text-sm mt-1">
-            Betalas endast om man vill tävla. Faktura skickas ut i samband med årets första tävling.
-          </p>
-          <div class="mt-2 inline-block bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-sm">
-            GKK subventionerar licensen med 300 kr för alla upp till 25 år
-          </div>
-        </div>
+      <p class="mt-6"><span class="text-5xl font-extrabold tracking-tight">1500</span> <span class="text-white/70">kr/år</span></p>
+      <p class="text-white/70">för seniorer</p>
+      <p class="mt-4"><span class="text-3xl font-extrabold tracking-tight">700</span> <span class="text-white/70">kr/år</span></p>
+      <p class="text-white/70">för studerande, ungdom/junior (upp till året man fyller 23) och pensionärer</p>
+      <p class="mt-auto border-t border-white/15 pt-5 text-sm leading-relaxed text-white/70">
+        Inkluderar träningsavgift och ger tillgång till föreningens lokal och utrustning. Entré till Friskis krävs också.
+      </p>
+    </div>
+
+    <div class="flex flex-col rounded-3xl bg-white p-8 shadow-lg shadow-gkk/5 ring-1 ring-gray-900/5">
+      <div class="flex items-center gap-3">
+        <i class="fa fa-trophy text-gkk"></i>
+        <h3 class="font-semibold text-gray-900">Tävlingslicens 2026</h3>
       </div>
-      <div class="flex items-start">
-        <div class="shrink-0 w-10 h-10 bg-gkk/10 rounded-lg flex items-center justify-center mr-4">
-          <i class="fa fa-percent text-gkk"></i>
+      <p class="mt-6"><span class="text-5xl font-extrabold tracking-tight text-gkk">1050</span> <span class="text-gray-500">kr/år</span></p>
+      <p class="text-gray-500">för övriga</p>
+      <p class="mt-4"><span class="text-3xl font-extrabold tracking-tight text-gkk">300</span> <span class="text-gray-500">kr</span></p>
+      <p class="text-gray-500">för ungdomar (året man fyller 18)</p>
+      <div class="mt-5 rounded-xl bg-green-50 px-3 py-2 text-sm font-medium text-green-800 ring-1 ring-green-200">
+        GKK subventionerar licensen med 300 kr för alla upp till 25 år
+      </div>
+      <p class="mt-auto border-t border-gray-100 pt-5 text-sm leading-relaxed text-gray-500">
+        Betalas endast om man vill tävla. Faktura skickas ut i samband med årets första tävling.
+      </p>
+    </div>
+
+    <div class="flex flex-col rounded-3xl bg-white p-8 shadow-lg shadow-gkk/5 ring-1 ring-gray-900/5">
+      <div class="flex items-center gap-3">
+        <i class="fa fa-percent text-gkk"></i>
+        <h3 class="font-semibold text-gray-900">Träningskort hos Friskis</h3>
+      </div>
+      <p class="mt-6"><span class="text-5xl font-extrabold tracking-tight text-gkk">15%</span></p>
+      <p class="text-gray-500">rabatt för GKK-medlemmar</p>
+      <p class="mt-auto border-t border-gray-100 pt-5 text-sm leading-relaxed text-gray-500">
+        Se <a target="_blank" class="{{ $link }}" href="{{ $friskis }}">Friskis och Svettis i Majorna</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-start gap-4 rounded-2xl bg-white p-6 shadow-md shadow-gkk/5 ring-1 ring-gray-900/5">
+    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gkk/10 text-gkk">
+      <i class="fa fa-clock-o"></i>
+    </div>
+    <div>
+      <h3 class="font-semibold text-gray-900">Öppettider</h3>
+      <p class="mt-1 leading-relaxed text-gray-600">
+        Se <a target="_blank" class="{{ $link }}" href="{{ $friskis }}">Friskis och Svettis i Majornas</a> hemsida för bemannade öppetider. Som medlem kan man även komma in på obemannade tider.
+      </p>
+    </div>
+  </div>
+</section>
+
+{{-- Vill du tävla? --}}
+<section class="relative isolate mt-24 overflow-hidden bg-gkk py-24">
+  <div class="absolute -left-24 top-0 -z-10 h-96 w-96 rounded-full bg-white/5 blur-2xl"></div>
+  <div class="absolute -right-24 bottom-0 -z-10 h-96 w-96 rounded-full bg-gkk-light/60 blur-3xl"></div>
+  <div class="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+    <div>
+      <x-section-heading eyebrow="Tävling" title="Vill du tävla?" dark />
+      <div class="mt-6 space-y-4 text-lg leading-relaxed text-white/80">
+        <p>
+          Många av våra medlemmar tävlar i styrkelyft och bänkpress på olika nivåer, allt ifrån serietävlingar på hemmaplan till internationella mästerskap. Att tävla och utmana sig själv är ett fantastiskt sätt att utvecklas inom sporten, oavsett ambitionsnivå.
+        </p>
+        <p>
+          Före din första tävling behöver du vara med och hjälpa till när GKK arrangerar, både för att lära dig mer om hur en tävling går till och för att lära känna föreningen bättre. På våra interna medlemssidor sker anmälan till sådana funktionärsuppdrag. Som tävlingsaktiv förväntas du hjälpa till på våra arrangemang vid minst ett tillfälle per år.
+        </p>
+        <p>
+          Till förbundet betalas en tävlingslicens in varje år och denna betalar du till GKK i samband med första tävlingsanmälan (se ovan).
+        </p>
+        <p>
+          Anmälningsavgifter till större tävlingar står ibland föreningen för, om ekonomi finns. Ibland ges också visst bidrag för ex. resa och boende om tävlingen sker på annan ort.
+        </p>
+      </div>
+    </div>
+
+    <div class="lg:pt-16">
+      <div class="rounded-3xl bg-white p-8 shadow-2xl">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gkk text-white">
+          <i class="fa fa-graduation-cap text-xl"></i>
         </div>
-        <div>
-          <h3 class="font-bold text-gray-900 mb-1">Träningskort hos Friskis</h3>
-          <p class="text-gray-600">
-            <span class="font-semibold text-gkk">15% rabatt</span> för GKK-medlemmar
-          </p>
-          <p class="text-gray-500 text-sm mt-1">
-            Se <a target="_blank" class="underline hover:text-gkk transition-colors" href="https://www.friskissvettis.se/goteborg/tranahar/majorna">Friskis och Svettis i Majorna</a>.
-          </p>
+        <h3 class="mt-5 text-xl font-bold text-gray-900">Ren Vinnare-utbildning</h3>
+        <p class="mt-3 leading-relaxed text-gray-600">
+          Innan du gör din första tävling för GKK måste du genomföra utbildningen <strong class="text-gray-800">Ren Vinnare</strong> som du finner på <a class="{{ $link }}" target="_blank" href="https://www.renvinnare.se">www.renvinnare.se</a>. När utbildningen är genomförd får du ett diplom som du ska maila in till <a href="mailto:info@gkk-styrkelyft.se" class="{{ $link }}">info@gkk-styrkelyft.se</a>.
+        </p>
+        <div class="mt-5 flex gap-3 rounded-xl bg-yellow-50 p-4 text-sm text-yellow-800 ring-1 ring-yellow-200">
+          <i class="fa fa-exclamation-triangle mt-0.5"></i>
+          <span>Diplomet ska vara klubben tillhanda innan du gör din första tävling (obligatoriskt för att få tävla).</span>
         </div>
+        <p class="mt-5 leading-relaxed text-gray-600">
+          Även om du inte har för avsikt att tävla så rekommenderar vi denna utbildning då den är mycket informativ och bra för alla idrottare. I vår anmälningsportal kommer du också få läsa och godkänna vårt antidopingavtal.
+        </p>
       </div>
     </div>
   </div>
+</section>
 
-  {{-- Trial training --}}
-  <div class="mb-10">
-    <h2 class="text-xl font-bold text-gkk mb-4 flex items-center">
-      <i class="fa fa-handshake-o mr-2"></i> Provträning
-    </h2>
-    <p class="text-lg leading-relaxed text-gray-600">
-      Innan du behöver bestämma dig om medlemskap är du välkommen att provträna hos oss några gånger för att titta på lokalen och träffa medlemmar. Om du känner någon i GKK kan du följa med den personen på ett pass. Annars kan du kontakta oss på <a href="mailto:info@gkk-styrkelyft.se" class="underline hover:text-gkk transition-colors">info@gkk-styrkelyft.se</a> och skriva att du vill provträna och när.
-    </p>
-    <div class="bg-gkk/5 border-l-4 border-gkk rounded-r-lg p-4 mt-4">
-      <p class="text-gray-700">
-        <i class="fa fa-lightbulb-o text-gkk mr-2"></i>
-        Vill du chansa kan du dyka upp en vardag från kl 16 i vår lokal, då det nästan alltid finns medlemmar på plats.
-      </p>
-    </div>
-  </div>
-
-  {{-- Opening hours --}}
-  <div class="bg-white rounded-2xl p-6 sm:p-8 mb-10 border-2 border-gkk/20 shadow-md">
-    <h2 class="text-xl font-bold text-gkk mb-4 flex items-center">
-      <i class="fa fa-clock-o mr-2"></i> Öppettider
-    </h2>
-    <p class="text-gray-600 leading-relaxed">
-      Se <a target="_blank" class="underline hover:text-gkk transition-colors" href="https://www.friskissvettis.se/goteborg/tranahar/majorna">Friskis och Svettis i Majornas</a> hemsida för bemannade öppetider. Som medlem kan man även komma in på obemannade tider.
+{{-- Antidopingarbete --}}
+<section class="mx-auto max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
+  <div class="grid items-start gap-8 lg:grid-cols-3 lg:gap-16">
+    <x-section-heading eyebrow="Ren idrott" title="Antidopingarbete" />
+    <p class="text-lg leading-relaxed text-gray-600 lg:col-span-2">
+      Vi arbetar förebyggande för en ren idrott och har ett löpande antidopingarbete genom vår <a class="{{ $link }}" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FKdSJ2FmrTSijNpxOXVGx0aNtERwoe6.pdf?alt=media&token=9fe3519c-7f6a-473e-851f-897561086e31">antidopingplan</a> och med en utsett antidopingansvarig. Alla medlemmar får skriva på ett antidopingavtal, och före första tävlingen behöver alla genomföra onlineutbildningen <a class="{{ $link }}" target="_blank" href="https://www.renvinnare.se">Ren Vinnare</a> genom Antidoping Sverige. Det genomförs också kontinuerligt dopingkontroller både vid tävling och träning.
     </p>
   </div>
+</section>
 
-  {{-- Competition section --}}
-  <div class="bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl p-6 sm:p-8 shadow-lg mb-10 text-white">
-    <h2 class="text-xl font-bold mb-6 flex items-center">
-      <i class="fa fa-trophy mr-2"></i> Vill du tävla?
-    </h2>
-    <div class="space-y-4 text-white/90">
-      <p class="leading-relaxed">
-        Många av våra medlemmar tävlar i styrkelyft och bänkpress på olika nivåer, allt ifrån serietävlingar på hemmaplan till internationella mästerskap. Att tävla och utmana sig själv är ett fantastiskt sätt att utvecklas inom sporten, oavsett ambitionsnivå.
-      </p>
-      <p class="leading-relaxed">
-        Före din första tävling behöver du vara med och hjälpa till när GKK arrangerar, både för att lära dig mer om hur en tävling går till och för att lära känna föreningen bättre. På våra interna medlemssidor sker anmälan till sådana funktionärsuppdrag. Som tävlingsaktiv förväntas du hjälpa till på våra arrangemang vid minst ett tillfälle per år.
-      </p>
-      <p class="leading-relaxed">
-        Till förbundet betalas en tävlingslicens in varje år och denna betalar du till GKK i samband med första tävlingsanmälan (se ovan).
-      </p>
-      <p class="leading-relaxed">
-        Anmälningsavgifter till större tävlingar står ibland föreningen för, om ekonomi finns. Ibland ges också visst bidrag för ex. resa och boende om tävlingen sker på annan ort.
-      </p>
-    </div>
-  </div>
-
-  {{-- Ren Vinnare --}}
-  <div class="bg-white rounded-2xl p-6 sm:p-8 mb-10 border-2 border-gkk/20 shadow-md">
-    <h2 class="text-xl font-bold text-gkk mb-4 flex items-center">
-      <i class="fa fa-graduation-cap mr-2"></i> Ren Vinnare-utbildning
-    </h2>
-    <p class="text-gray-600 leading-relaxed mb-4">
-      Innan du gör din första tävling för GKK måste du genomföra utbildningen <strong class="text-gray-700">Ren Vinnare</strong> som du finner på <a class="underline hover:text-gkk transition-colors" target="_blank" href="https://www.renvinnare.se">www.renvinnare.se</a>. När utbildningen är genomförd får du ett diplom som du ska maila in till <a href="mailto:info@gkk-styrkelyft.se" class="underline hover:text-gkk transition-colors">info@gkk-styrkelyft.se</a>.
-    </p>
-    <div class="bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg p-3">
-      <p class="text-yellow-600 text-sm">
-        <i class="fa fa-exclamation-triangle mr-1"></i>
-        Diplomet ska vara klubben tillhanda innan du gör din första tävling (obligatoriskt för att få tävla).
-      </p>
-    </div>
-    <p class="text-gray-600 leading-relaxed mt-4">
-      Även om du inte har för avsikt att tävla så rekommenderar vi denna utbildning då den är mycket informativ och bra för alla idrottare. I vår anmälningsportal kommer du också få läsa och godkänna vårt antidopingavtal.
-    </p>
-  </div>
-
-  {{-- Anti-doping --}}
-  <div class="mb-10">
-    <h2 class="text-xl font-bold text-gkk mb-4 flex items-center">
-      <i class="fa fa-shield mr-2"></i> Antidopingarbete
-    </h2>
-    <p class="text-lg leading-relaxed text-gray-600">
-      Vi arbetar förebyggande för en ren idrott och har ett löpande antidopingarbete genom vår <a class="underline hover:text-gkk transition-colors" target="_blank" href="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/uploaded%2FKdSJ2FmrTSijNpxOXVGx0aNtERwoe6.pdf?alt=media&token=9fe3519c-7f6a-473e-851f-897561086e31">antidopingplan</a> och med en utsett antidopingansvarig. Alla medlemmar får skriva på ett antidopingavtal, och före första tävlingen behöver alla genomföra onlineutbildningen <a class="underline hover:text-gkk transition-colors" target="_blank" href="https://www.renvinnare.se">Ren Vinnare</a> genom Antidoping Sverige. Det genomförs också kontinuerligt dopingkontroller både vid tävling och träning.
-    </p>
-  </div>
-
-  {{-- Image gallery --}}
-  <div class="mb-8">
-    <ul role="list" class="space-y-6 sm:grid sm:grid-cols-2 sm:gap-6 sm:space-y-0 lg:grid-cols-3 lg:gap-8">
-      <li class="group">
-        <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
-          <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/bjorn_och_klas-min.jpeg" alt="">
-        </div>
-      </li>
-      <li class="group">
-        <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
-          <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/bjornlyftare-min.jpg" alt="">
-        </div>
-      </li>
-      <li class="group">
-        <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
-          <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/bankpress-min.jpg" alt="">
-        </div>
-      </li>
-      <li class="group">
-        <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
-          <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/tavling-min.jpg" alt="">
-        </div>
-      </li>
-      <li class="group">
-        <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
-          <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/mark-min.jpg" alt="">
-        </div>
-      </li>
-      <li class="group">
-        <div class="overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
-          <img class="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105" src="https://goteborg-kraftsportklubb.web.app/img/clara-min.jpg" alt="">
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
+<x-photo-gallery />
 @endsection

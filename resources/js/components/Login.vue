@@ -1,7 +1,11 @@
 <template>
-  <div>
-    <div @click="google" class="loginBtn google font-sans text-sm font-medium" style="text-align: center">
-      <div class="icon">
+  <div class="grid gap-3">
+    <button
+      type="button"
+      @click="google"
+      class="flex w-full items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-gray-300 transition hover:bg-gray-50 hover:ring-gray-400"
+    >
+      <span class="flex items-center">
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -30,12 +34,16 @@
             <path fill="none" d="M0 0h48v48H0z"></path>
           </g>
         </svg>
-      </div>
-      <div class="login-text">Logga in med Google</div>
-    </div>
+      </span>
+      Logga in med Google
+    </button>
 
-    <div style="margin-top: 10px" @click="microsoft" class="loginBtn microsoft font-sans text-sm font-medium">
-      <div class="icon">
+    <button
+      type="button"
+      @click="microsoft"
+      class="flex w-full items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-gray-300 transition hover:bg-gray-50 hover:ring-gray-400"
+    >
+      <span class="flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
           <title>MS-SymbolLockup</title>
           <rect x="1" y="1" width="9" height="9" fill="#f25022" />
@@ -43,9 +51,9 @@
           <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
           <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
         </svg>
-      </div>
-      <div class="login-text">Logga in med Microsoft</div>
-    </div>
+      </span>
+      Logga in med Microsoft
+    </button>
   </div>
 </template>
 
@@ -89,61 +97,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="less">
-.loginBtn {
-  cursor: pointer;
-  display: flex;
-  width: 240px;
-  margin: auto;
-  height: 41px;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.63);
-  justify-content: center;
-  align-items: center;
-  border-radius: 2px;
-
-  background: #4285f4;
-  border: 1px solid #4285f4;
-
-  .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .login-text {
-    flex: 1;
-    color: white;
-  }
-
-  &.microsoft {
-    box-shadow: none;
-    border: none;
-    border-radius: 0;
-    background: #2f2f2f;
-
-    .icon {
-      margin-left: 12px;
-    }
-
-    .login-text {
-      text-align: center;
-      // margin-left: 12px;
-    }
-  }
-
-  &.google {
-    .icon {
-      width: 43px;
-      height: 100%;
-      background: white;
-    }
-  }
-}
-
-.googleSpinner {
-  font-size: 16px;
-  margin-right: 10px;
-  color: white;
-}
-</style>

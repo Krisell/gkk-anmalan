@@ -6,13 +6,13 @@ test('A user can register', async ({ page }) => {
 
   const email = Math.random().toString(36).substring(7) + '@example.com'
 
-  await expect(page.getByPlaceholder('Förnamn')).toBeVisible()
-  await page.getByPlaceholder('Förnamn').fill('A User')
-  await page.getByPlaceholder('Efternamn').fill('Test Usersson')
-  await page.getByPlaceholder('Födelseår').fill('1990')
-  await page.getByPlaceholder('Epost').fill(email)
+  await expect(page.getByLabel('Förnamn')).toBeVisible()
+  await page.getByLabel('Förnamn').fill('A User')
+  await page.getByLabel('Efternamn').fill('Test Usersson')
+  await page.getByLabel('Födelseår').fill('1990')
+  await page.getByLabel('Epost').fill(email)
   await page.locator('input[name="password"]').fill('password')
-  await page.getByPlaceholder('Bekräfta lösenord').fill('password')
+  await page.getByLabel('Bekräfta lösenord').fill('password')
   await page.getByRole('button', { name: 'Skapa konto' }).click()
   await expect(page.getByText('Välkommen till GKK!')).toBeVisible()
   await expect(page.getByText('Tävlingsanmälan')).toBeVisible()
@@ -30,20 +30,20 @@ test('Missing data triggers validation errors and user error messages', async ({
 
   const email = Math.random().toString(36).substring(7) + '@example.com'
 
-  await page.getByPlaceholder('Förnamn').fill('A User')
+  await page.getByLabel('Förnamn').fill('A User')
 
   await page.getByRole('button', { name: 'Skapa konto' }).click()
   await expect(page.getByText('Välkommen till GKK!')).toBeHidden()
 
-  await page.getByPlaceholder('Efternamn').fill('Test Usersson')
-  await page.getByPlaceholder('Födelseår').fill('1990')
-  await page.getByPlaceholder('Epost').fill(email)
+  await page.getByLabel('Efternamn').fill('Test Usersson')
+  await page.getByLabel('Födelseår').fill('1990')
+  await page.getByLabel('Epost').fill(email)
   await page.locator('input[name="password"]').fill('password')
 
   await page.getByRole('button', { name: 'Skapa konto' }).click()
   await expect(page.getByText('Välkommen till GKK!')).toBeHidden()
 
-  await page.getByPlaceholder('Bekräfta lösenord').fill('password')
+  await page.getByLabel('Bekräfta lösenord').fill('password')
   await page.getByRole('button', { name: 'Skapa konto' }).click()
   await expect(page.getByText('Välkommen till GKK!')).toBeVisible()
 })

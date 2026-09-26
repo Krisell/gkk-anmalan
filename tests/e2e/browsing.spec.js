@@ -22,5 +22,5 @@ test('homepage has title and links to intro page', async ({ page }) => {
   await expect(page.locator('body')).toContainText('Inga rekord registrerade än')
 
   await page.locator('[data-cy="inside"] > a[href="/insidan"]').click()
-  await expect(page.locator('body')).toContainText('Skapa konto som medlem')
+  await expect(page.locator('body')).toContainText('Skapa konto')
 })

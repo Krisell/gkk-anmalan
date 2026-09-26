@@ -132,21 +132,61 @@
       </div>
     </template>
 
-    <div v-if="!user" class="flex flex-col sm:flex-row items-center justify-center gap-4 m-6">
-      <a
-        href="/register"
-        class="bg-white rounded-xl border border-gray-100 shadow-xs hover:shadow-md transition-all p-6 flex flex-col items-center justify-center w-64 text-center"
-      >
-        <i class="fa fa-user-circle text-3xl text-gkk mb-3"></i>
-        <div class="font-semibold text-gray-900">Skapa konto som medlem</div>
-      </a>
-      <a
-        href="/login"
-        class="bg-white rounded-xl border border-gray-100 shadow-xs hover:shadow-md transition-all p-6 flex flex-col items-center justify-center w-64 text-center"
-      >
-        <i class="fa fa-sign-in text-3xl text-gkk mb-3"></i>
-        <div class="font-semibold text-gray-900">Logga in som medlem</div>
-      </a>
+    <div v-if="!user" class="relative isolate flex min-h-[calc(100svh-14rem)] items-center justify-center px-4 py-10">
+      <div
+        class="absolute left-1/2 top-1/3 -z-10 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gkk/10 blur-3xl"
+      ></div>
+
+      <div class="w-full max-w-2xl text-center">
+        <img
+          src="https://goteborg-kraftsportklubb.web.app/img/appIconGKK.png"
+          alt="GKK"
+          class="mx-auto h-20 w-20 rounded-2xl shadow-lg shadow-gkk/20 ring-1 ring-gray-900/5"
+        />
+        <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">Insidan</h1>
+        <p class="mx-auto mt-4 max-w-lg text-lg leading-relaxed text-gray-600">
+          Medlemssidorna för GKK. Anmäl dig till tävlingar och funktionärsuppdrag, hitta dokument och håll din profil
+          uppdaterad.
+        </p>
+
+        <div class="mt-10 grid gap-4 text-left sm:grid-cols-2">
+          <a
+            href="/login"
+            class="group relative flex flex-col overflow-hidden rounded-2xl bg-gkk p-6 text-white shadow-xl shadow-gkk/25 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-gkk/30"
+          >
+            <div class="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-white/10"></div>
+            <div class="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white/15">
+              <i class="fa fa-sign-in text-xl"></i>
+            </div>
+            <div class="relative mt-6 text-xl font-bold">Logga in</div>
+            <div class="relative mt-1 text-sm text-white/75">Jag har redan ett konto</div>
+            <div class="relative mt-6 inline-flex items-center gap-2 text-sm font-semibold">
+              Fortsätt <i class="fa fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+            </div>
+          </a>
+
+          <a
+            href="/register"
+            class="group flex flex-col rounded-2xl bg-white p-6 shadow-lg shadow-gkk/5 ring-1 ring-gray-900/10 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-gkk/30"
+          >
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-xl bg-gkk/10 text-gkk transition-colors group-hover:bg-gkk group-hover:text-white"
+            >
+              <i class="fa fa-user-plus text-xl"></i>
+            </div>
+            <div class="mt-6 text-xl font-bold text-gray-900">Skapa konto</div>
+            <div class="mt-1 text-sm text-gray-500">Jag är medlem men har inget konto än</div>
+            <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gkk">
+              Kom igång <i class="fa fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+            </div>
+          </a>
+        </div>
+
+        <p class="mt-10 text-sm text-gray-500">
+          Inte medlem i GKK än?
+          <a href="/medlem" class="font-semibold text-gkk hover:underline">Läs om medlemskap</a>
+        </p>
+      </div>
     </div>
   </div>
 </template>

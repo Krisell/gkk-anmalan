@@ -8,6 +8,7 @@ import axios from 'axios'
 
 import News from './components/News.vue'
 import Login from './components/Login.vue'
+import AuthTabs from './components/AuthTabs.vue'
 import Event from './components/Event.vue'
 import Header from './components/Header.vue'
 import Events from './components/Events.vue'
@@ -87,6 +88,7 @@ app.mixin({
 
 app.component('GkkNews', News)
 app.component('GkkLogin', Login)
+app.component('GkkAuthTabs', AuthTabs)
 app.component('GkkEvent', Event)
 app.component('GkkHeader', Header)
 app.component('GkkEvents', Events)

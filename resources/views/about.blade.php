@@ -1,195 +1,121 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- Hero section with gradient overlay --}}
-<div class="relative">
-  <div style="background-image: url(https://goteborg-kraftsportklubb.web.app/img/mark-min.jpg);
-  height: 500px;
-  background-size: cover;
-  background-position-y: center; max-height: 50vh;" class="flex items-center">
-  </div>
-  <div class="absolute inset-0 bg-black/40"></div>
-  <div class="absolute inset-0 flex items-center justify-center px-4">
-    <div class="text-center">
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg tracking-tight">Göteborg Kraftsportklubb</h1>
-      <div class="mt-4 flex items-center justify-center gap-3">
-        <span class="h-px w-12 bg-white/50"></span>
-        <p class="text-white/80 uppercase tracking-[0.3em] text-sm drop-shadow-sm">Sedan 1933</p>
-        <span class="h-px w-12 bg-white/50"></span>
-      </div>
-    </div>
-  </div>
-</div>
+@php
+  $firebase = 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2F';
+  $board = [
+    ['Carl Öberg', 'Ordförande', 'https://goteborg-kraftsportklubb.web.app/img/stryrelsen_carl-1.jpeg'],
+    ['Jenny Karlsson', 'Kassör', $firebase.'jenny.png?alt=media&token=8c1c612e-75ca-4eac-849e-e5ef0b060f67'],
+    ['Martin Sandström Krisell', 'Sekreterare', 'https://avatars.githubusercontent.com/u/25909128?v=4'],
+    ['Albin Björkman', 'Ledamot', 'https://goteborg-kraftsportklubb.web.app/img/styrelsen_albin.jpg'],
+    ['Ida Anemyr', 'Ledamot', $firebase.'Ida.png?alt=media&token=371aa963-19a4-494a-9146-3fe63a0562ed'],
+    ['Maximus Sörnes Andersson', 'Ledamot', $firebase.'maximus2.png?alt=media&token=0e728e58-5db1-42b5-99c8-6ef86a53ff8e'],
+    ['Oscar Jörgensen', 'Ledamot', null],
+    ['Simon Böttcher', 'Suppleant', null],
+    ['Philip Waagiström', 'Suppleant', $firebase.'Philip.png?alt=media&token=5018ed03-a106-4999-95da-d5db596e4e8a'],
+  ];
+@endphp
 
-<div class="container mx-auto max-w-4xl px-4 py-10">
-  {{-- Intro section --}}
-  <div class="mb-10">
-    <p class="text-xl sm:text-2xl font-medium text-gkk leading-relaxed">
-      Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar.
-    </p>
-    <p class="text-lg leading-relaxed text-gray-600 mt-4">
-      Vi har vår egna klubb- och träningslokal hos <a class="underline hover:text-gkk transition-colors" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. I föreningen finns allt från motionärer till elitaktiva på högsta nivå.
-    </p>
-    <div class="bg-gkk/5 border-l-4 border-gkk rounded-r-lg p-4 mb-12 mt-4">
-      <p class="text-gray-700">
-        Varmt välkommen att hälsa på och träna ett pass med oss!
+<x-page-hero image="https://goteborg-kraftsportklubb.web.app/img/mark-min.jpg" eyebrow="Sedan 1933" title="Om GKK">
+  Göteborg Kraftsportklubb bildades 1933 och har idag omkring 100 medlemmar.
+</x-page-hero>
+
+{{-- Intro och kontakt --}}
+<section class="mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">
+  <div class="grid gap-12 lg:grid-cols-5 lg:gap-16">
+    <div class="lg:col-span-3">
+      <x-section-heading eyebrow="Välkommen" title="En klubb för alla som vill bli starkare" />
+      <p class="mt-6 text-lg leading-relaxed text-gray-600">
+        Vi har vår egna klubb- och träningslokal hos <a class="font-medium text-gkk underline decoration-gkk/30 underline-offset-4 transition-colors hover:decoration-gkk" href="https://www.friskissvettis.se/goteborg/harfinnsvi/majorna" target="_blank">Friskis & Svettis Majorna</a> i Göteborg. I föreningen finns allt från motionärer till elitaktiva på högsta nivå.
       </p>
+      <div class="mt-8 flex items-center gap-4 rounded-2xl bg-gkk/5 p-5 ring-1 ring-gkk/10">
+        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gkk text-white">
+          <i class="fa fa-hand-peace-o"></i>
+        </div>
+        <p class="text-lg font-medium text-gkk">Varmt välkommen att hälsa på och träna ett pass med oss!</p>
+      </div>
     </div>
-  </div>
 
-  {{-- Contact info card --}}
-  <div class="bg-gradient-to-br from-gkk to-gkk-light rounded-2xl p-6 sm:p-8 shadow-lg mb-10 text-white">
-    <h2 class="text-xl font-bold mb-6 flex items-center">
-      <i class="fa fa-address-card mr-2"></i> Kontaktuppgifter
-    </h2>
-    <div class="grid gap-4 sm:grid-cols-3">
-      <div class="bg-white/10 rounded-xl p-4">
-        <div class="flex items-start">
-          <i class="fa fa-map-marker text-lg mt-0.5 mr-3 text-white/70"></i>
-          <div>
-            <div class="font-semibold text-white/90 text-sm uppercase tracking-wide mb-1">Adress</div>
-            <div class="text-white">Karl Johansgatan 152</div>
-            <div class="text-white/80 text-sm">414 51 Göteborg</div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white/10 rounded-xl p-4">
-        <div class="flex items-start">
-          <i class="fa fa-envelope text-lg mt-0.5 mr-3 text-white/70"></i>
-          <div>
-            <div class="font-semibold text-white/90 text-sm uppercase tracking-wide mb-1">Kontakt</div>
-            <div class="text-white">info@gkk-styrkelyft.se</div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white/10 rounded-xl p-4">
-        <div class="flex items-start">
-          <i class="fa fa-building text-lg mt-0.5 mr-3 text-white/70"></i>
-          <div>
-            <div class="font-semibold text-white/90 text-sm uppercase tracking-wide mb-1">Organisationsnummer</div>
-            <div class="text-white">802456-7672</div>
-          </div>
-        </div>
+    <div class="lg:col-span-2">
+      <div class="rounded-3xl bg-gkk p-6 text-white shadow-xl shadow-gkk/20 sm:p-8">
+        <h2 class="text-lg font-bold">Kontaktuppgifter</h2>
+        <dl class="mt-6 space-y-5">
+          @foreach ([
+            ['fa-map-marker', 'Adress', 'Karl Johansgatan 152<br><span class="text-white/70">414 51 Göteborg</span>'],
+            ['fa-envelope', 'Kontakt', '<a href="mailto:info@gkk-styrkelyft.se" class="hover:underline">info@gkk-styrkelyft.se</a>'],
+            ['fa-building', 'Organisationsnummer', '802456-7672'],
+          ] as [$icon, $label, $value])
+            <div class="flex gap-4">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                <i class="fa {{ $icon }}"></i>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-wider text-white/60">{{ $label }}</dt>
+                <dd class="mt-0.5">{!! $value !!}</dd>
+              </div>
+            </div>
+          @endforeach
+        </dl>
       </div>
     </div>
   </div>
+</section>
 
-  {{-- Payment section --}}
-  <div class="bg-white rounded-2xl p-6 sm:p-8 mb-10 border-2 border-gkk/20 shadow-md">
-    <h2 class="text-xl font-bold text-gkk mb-6 flex items-center">
-      <i class="fa fa-credit-card mr-2"></i> Betalning
-    </h2>
-    <div class="grid gap-6 sm:grid-cols-2">
-      {{-- Swish --}}
-      <div class="bg-gray-50 rounded-xl p-5">
-        <div class="text-sm text-gray-500 uppercase tracking-wide mb-2 font-semibold">Swish</div>
-        <div class="flex items-center gap-4">
-          <img width="100" class="rounded-lg" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fqr.png?alt=media&token=1692752d-65b1-4723-b36e-2f9065ade3d5">
-          <div>
-            <p class="text-2xl font-bold text-gkk mb-2">123-581 34 56</p>
-            <a href="https://app.swish.nu/1/p/sw/?sw=1235813456" class="inline-flex items-center px-3 py-1.5 mr-4 bg-gkk text-white font-medium rounded-lg shadow-sm hover:bg-gkk-light transition-all duration-200">
-              <i class="fa fa-mobile mr-1.5"></i>
-              Öppna Swish
-            </a>
-          </div>
-        </div>
-      </div>
-      {{-- Bankgiro --}}
-      <div class="bg-gray-50 rounded-xl p-5 flex flex-col justify-center">
-        <div class="text-sm text-gray-500 uppercase tracking-wide mb-2 font-semibold">Bankgiro</div>
-        <p class="text-2xl font-bold text-gkk">846-0891</p>
+{{-- Betalning --}}
+<section class="mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">
+  <x-section-heading eyebrow="Betalning" title="Swish och bankgiro" />
+  <div class="mt-8 grid gap-6 md:grid-cols-2">
+    <div class="flex items-center gap-6 rounded-2xl bg-white p-6 shadow-lg shadow-gkk/5 ring-1 ring-gray-900/5 sm:p-8">
+      <img width="110" class="rounded-xl ring-1 ring-gray-900/5" alt="QR-kod för Swish" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fqr.png?alt=media&token=1692752d-65b1-4723-b36e-2f9065ade3d5">
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-gray-500">Swish</div>
+        <p class="mt-1 text-2xl font-extrabold tracking-tight text-gkk sm:text-3xl">123-581 34 56</p>
+        <a href="https://app.swish.nu/1/p/sw/?sw=1235813456" class="mt-4 inline-flex items-center gap-2 rounded-full bg-gkk px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gkk-light">
+          <i class="fa fa-mobile"></i> Öppna Swish
+        </a>
       </div>
     </div>
-  </div>
-
-  {{-- Board section --}}
-  <div class="mb-12">
-    <h2 class="text-2xl font-bold text-gkk mb-8 text-center">Förtroendevalda 2025</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-      <div class="group">
-        <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://goteborg-kraftsportklubb.web.app/img/stryrelsen_carl-1.jpeg" alt="">
-          <h3 class="text-gray-900 text-sm font-medium">Carl Öberg</h3>
-          <p class="text-gkk text-xs font-semibold mt-1">Ordförande</p>
-        </div>
-      </div>
-      <div class="group">
-        <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fjenny.png?alt=media&token=8c1c612e-75ca-4eac-849e-e5ef0b060f67" alt="">
-          <h3 class="text-gray-900 text-sm font-medium">Jenny Karlsson</h3>
-          <p class="text-gkk text-xs font-semibold mt-1">Kassör</p>
-        </div>
-      </div>
-      <div class="group">
-        <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://avatars.githubusercontent.com/u/25909128?v=4" alt="">
-          <h3 class="text-gray-900 text-sm font-medium">Martin Sandström Krisell</h3>
-          <p class="text-gkk text-xs font-semibold mt-1">Sekreterare</p>
-        </div>
-      </div>
-      <div class="group">
-        <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://goteborg-kraftsportklubb.web.app/img/styrelsen_albin.jpg" alt="">
-          <h3 class="text-gray-900 text-sm font-medium">Albin Björkman</h3>
-          <p class="text-gkk text-xs font-semibold mt-1">Ledamot</p>
-        </div>
-      </div>
-      <div class="group">
-        <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full overflow-hidden mb-3">
-            <img class="w-full h-full object-cover" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FPhilip.png?alt=media&token=5018ed03-a106-4999-95da-d5db596e4e8a" alt="">
-          </div>
-          <h3 class="text-gray-900 text-sm font-medium">Philip Larsson</h3>
-          <p class="text-gkk text-xs font-semibold mt-1">Ledamot</p>
-        </div>
-      </div>
-      <div class="group">
-        <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full overflow-hidden mb-3">
-            <img class="w-full h-full object-cover" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FIdaV.png?alt=media&token=a779389c-ccbc-4d4a-aece-14a8a9312431" alt="">
-          </div>
-          <h3 class="text-gray-900 text-sm font-medium">Ida Vingesand</h3>
-          <p class="text-gkk text-xs font-semibold mt-1">Ledamot</p>
-        </div>
-      </div>
-      <div class="group">
-        <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FIda.png?alt=media&token=371aa963-19a4-494a-9146-3fe63a0562ed" alt="">
-          <h3 class="text-gray-900 text-sm font-medium">Ida Anemyr</h3>
-          <p class="text-gkk text-xs font-semibold mt-1">Ledamot</p>
-        </div>
-      </div>
-      <div class="group">
-        <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full overflow-hidden mb-3">
-            <img class="w-full h-full object-cover" src="https://media.licdn.com/dms/image/v2/D4D03AQGkPTFT6yS5oA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1709116948089?e=2147483647&v=beta&t=PMk6RPkdleWR8xAFD9vYj2IdWNFPQF1CD6P1k-h_zjk" alt="">
-          </div>
-          <h3 class="text-gray-900 text-sm font-medium">Sebastian Bratland</h3>
-          <p class="text-gray-500 text-xs mt-1">Suppleant</p>
-        </div>
-      </div>
-      <div class="group">
-        <div class="bg-white rounded-xl shadow-md p-4 text-center transition-all duration-300 hover:shadow-lg">
-          <img class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 mx-auto rounded-full object-cover mb-3" src="https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2Fmaximus2.png?alt=media&token=0e728e58-5db1-42b5-99c8-6ef86a53ff8e" alt="">
-          <h3 class="text-gray-900 text-sm font-medium">Maximus Sörnes Andersson</h3>
-          <p class="text-gray-500 text-xs mt-1">Suppleant</p>
-        </div>
-      </div>
+    <div class="flex flex-col justify-center rounded-2xl bg-white p-6 shadow-lg shadow-gkk/5 ring-1 ring-gray-900/5 sm:p-8">
+      <div class="text-sm font-semibold uppercase tracking-wider text-gray-500">Bankgiro</div>
+      <p class="mt-1 text-2xl font-extrabold tracking-tight text-gkk sm:text-3xl">846-0891</p>
     </div>
   </div>
+</section>
 
-  {{-- History section --}}
-  <div class="mb-10">
-    <h2 class="text-2xl font-bold text-gkk mb-6 flex items-center">
-      <i class="fa fa-history mr-2"></i> Historia
-    </h2>
-    <div class="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-4 mb-6">
-      <p class="text-amber-800 text-sm">
+{{-- Förtroendevalda --}}
+<section class="mx-auto max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
+  <x-section-heading eyebrow="Styrelsen" title="Förtroendevalda 2026" />
+  <ul role="list" class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-5">
+    @foreach ($board as [$name, $role, $photo])
+      <li class="group rounded-2xl bg-white p-5 text-center shadow-md shadow-gkk/5 ring-1 ring-gray-900/5 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <div class="mx-auto h-20 w-20 overflow-hidden rounded-full ring-4 ring-gkk/10 transition group-hover:ring-gkk/25 sm:h-24 sm:w-24">
+          @if ($photo)
+            <img class="h-full w-full object-cover" src="{{ $photo }}" alt="{{ $name }}">
+          @else
+            <div class="flex h-full w-full items-center justify-center bg-gkk text-xl font-bold text-white sm:text-2xl" aria-hidden="true">
+              {{ mb_substr($name, 0, 1) . mb_substr(strrchr($name, ' '), 1, 1) }}
+            </div>
+          @endif
+        </div>
+        <h3 class="mt-4 text-sm font-semibold text-gray-900">{{ $name }}</h3>
+        <p class="mt-1 text-xs font-semibold {{ $role === 'Suppleant' ? 'text-gray-500' : 'text-gkk-light' }}">{{ $role }}</p>
+      </li>
+    @endforeach
+  </ul>
+</section>
+
+{{-- Historia --}}
+<section class="mx-auto max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
+  <div class="grid gap-10 lg:grid-cols-3 lg:gap-16">
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <x-section-heading eyebrow="Historia" title="Över 90 år av kraftsport" />
+      <div class="mt-6 rounded-2xl bg-amber-50 p-4 text-sm text-amber-800 ring-1 ring-amber-200">
         <i class="fa fa-info-circle mr-1"></i>
         Denna text är tagen i sin helhet från vår tidigare hemsida. Beslut om den ska ligga kvar och i vilken form är inte taget.
-      </p>
+      </div>
     </div>
-    <div class="prose prose-lg max-w-none text-gray-600 space-y-4">
+
+    <div class="prose prose-lg max-w-none text-gray-600 prose-headings:text-gkk lg:col-span-2">
       <p>Göteborgs Kraftsportklubb startade 1933 med tyngdlyftning på programmet d.v.s stöt, press och ryck. I slutet av 70-talet startade numera framlidne Åke Bohlin upp en styrkelyftssektion d.v.s Knäböjning, Bänkpress och Marklyft. Man höll till i Tuve och där fostrades under Åkes hårda drillning många fina lyftare. Stefan Nentis var den största stjärnan under 70 och 80-talen med många ädla medaljer på VM, EM, SM. Även numera framlidne Zlatko Radojkovic var med i yppersta eliten. Under den här perioden har det passerat många lyftare som har hållit god SM-klass. I slutet av 80-talet anslöt sig bl.a Dennis Andersson, Bertil Sundvall och de har under 90-talet hållit god SM-klass.Vi får inte glömma den starke dragkamparen Erik Johansson som även han hade en del internationella uppdrag med viss framgång.</p>
 
       <p>I början av 90-talet anslöt sig så Sveriges bäste lyftare genom tiderna( i skrivande stund )Kenneth Mattsson till klubben. Kenneth har tidigare tävlat för andra göteborgsklubbar och även gjort avstickare utanför stadsgränsen. Började redan under tidigt 70-tal slipa formen för framtida uppdrag. Började nå lite god SM-status i mitten på 70-talet och började lukta lite internationell krutrök under senare halvan av 70-talet.Även om Kenneth inte tillhörde klubben under 80-talet så lade han säkert lite av grunden till sina framgångar tillsammans med bl a Stefan Nentis där man peppade varandra och tränade hårt. Detta ledde till 2 guldmedaljer i Styrkelyft 82-83.Stefan fick guld 82. Även andra ädla medaljer har erövrats.</p>
@@ -248,8 +174,10 @@
           <li><strong>1966:</strong> 1:a</li>
         </ul>
       </div>
-      <p class="mt-4">Dessutom svenska rekordhållare I lag. Tyvärr slutade alla lagmedlemmar samtidigt och tyngdlyftningen i GKK dog sakta ut. Nytt liv fick GKK när styrkelyften tog fart på 70-talet. Lite historik: 1956-58 så fanns det 2st små gym I Göteborg, Jordhyttegatan Sandarna ( Stig Hasselgren) 6-8 st.Andra Långgatan ( Harry Hertzberg ) 6-8st. I GKK fick några byggare träna på nåder 10st. I Göteborg fanns det max 30st muskelbyggare, hur många idag? Första riktiga gymmet öppnades 1959 på Nya Ullevi (Samo Kalon Henry Bergsström). Sven Slobo öppnade som nr två ungefär 1960. Lite statistik:1958-59 så knäböjde ingen göteborgare 220kg, i marklyft så gjorde ingen 240, ingen bänkpressade 160."</p>
+      <p>Dessutom svenska rekordhållare I lag. Tyvärr slutade alla lagmedlemmar samtidigt och tyngdlyftningen i GKK dog sakta ut. Nytt liv fick GKK när styrkelyften tog fart på 70-talet. Lite historik: 1956-58 så fanns det 2st små gym I Göteborg, Jordhyttegatan Sandarna ( Stig Hasselgren) 6-8 st.Andra Långgatan ( Harry Hertzberg ) 6-8st. I GKK fick några byggare träna på nåder 10st. I Göteborg fanns det max 30st muskelbyggare, hur många idag? Första riktiga gymmet öppnades 1959 på Nya Ullevi (Samo Kalon Henry Bergsström). Sven Slobo öppnade som nr två ungefär 1960. Lite statistik:1958-59 så knäböjde ingen göteborgare 220kg, i marklyft så gjorde ingen 240, ingen bänkpressade 160."</p>
     </div>
   </div>
-</div>
+</section>
+
+<x-photo-gallery />
 @endsection

@@ -1,153 +1,90 @@
 <template>
   <div>
-    <nav
-      class="bg-white fixed flex h-screen p-5 shadow-xl top-16 transition-all duration-300 w-52 z-10"
-      :class="[navIsOpen ? 'left-0' : '-left-52']"
-    >
-      <ul class="flex flex-col uppercase text-sm tracking-wide w-full">
-        <li class="mb-6" @click="navIsOpen = false">
-          <div class="cursor-pointer text-gray-400 hover:text-gkk transition-colors text-xs">Stäng</div>
-        </li>
-        <li class="py-2 hover:text-gkk transition-colors">
-          <a
-            :class="site === 'landing' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
-            href="/"
-            >Start</a
-          >
-        </li>
-        <li class="py-2 hover:text-gkk transition-colors">
-          <a
-            :class="site === 'powerlifting' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
-            href="/styrkelyft"
-            >Styrkelyft</a
-          >
-        </li>
-        <li class="py-2 hover:text-gkk transition-colors">
-          <a
-            :class="site === 'about' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
-            href="/gkk"
-            >Om GKK</a
-          >
-        </li>
-        <li class="py-2 hover:text-gkk transition-colors">
-          <a
-            :class="site === 'member' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
-            href="/medlem"
-            >Medlemskap</a
-          >
-        </li>
-        <li class="py-2 hover:text-gkk transition-colors">
-          <a
-            :class="site === 'documents' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
-            href="/dokument"
-            >Länkar</a
-          >
-        </li>
-        <li class="py-2 hover:text-gkk transition-colors">
-          <a
-            :class="site === 'records' ? 'text-gkk font-medium border-l-2 border-gkk pl-2 -ml-2' : 'text-gray-700'"
-            href="/klubbrekord"
-            >Klubbrekord</a
-          >
-        </li>
-        <li class="py-2 mt-4 border-t pt-4">
-          <a
-            class="px-3 py-1.5 rounded-md transition-all"
-            :class="site === '' ? 'bg-gkk text-white' : 'text-gkk hover:bg-gkk/10'"
-            href="/insidan"
-            >Insidan</a
-          >
-        </li>
-      </ul>
-    </nav>
-    <nav class="bg-white shadow-md fixed top-0 w-full z-50">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex">
-            <div class="shrink-0 flex items-center">
-              <a href="/" class="flex items-center">
-                <img
-                  class="hidden lg:flex absolute left-3 top-3 w-24 h-24"
-                  src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"
-                  alt="GKK logo"
-                />
-                <img
-                  class="flex lg:hidden h-8 w-auto left-4 absolute"
-                  src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"
-                  alt="GKK logo"
-                />
-              </a>
+    <nav class="fixed inset-x-0 top-0 z-50 border-b border-gray-900/5 bg-white/90 shadow-sm backdrop-blur-md">
+      <div class="relative mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+        <a
+          href="/"
+          class="relative flex shrink-0 items-center gap-3 lg:w-[88px] 2xl:absolute 2xl:right-full 2xl:top-1/2"
+          aria-label="Göteborg Kraftsportklubb"
+        >
+          <img
+            class="h-10 w-10 rounded-full lg:absolute lg:left-0 lg:-top-7 lg:h-[88px] lg:w-[88px] lg:max-w-none 2xl:left-auto 2xl:right-0 lg:ring-4 lg:ring-white transition-transform duration-300 lg:hover:scale-105"
+            src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"
+            alt="GKK logo"
+          />
+          <span class="text-sm font-bold leading-tight text-gkk lg:hidden">Göteborg<br />Kraftsportklubb</span>
+        </a>
 
-              <div class="flex lg:hidden absolute left-16">
-                <i
-                  @click="navIsOpen = !navIsOpen"
-                  class="ml-2 fa fa-bars text-2xl cursor-pointer text-gray-600 hover:text-gkk transition-colors"
-                ></i>
-              </div>
-              <div data-cy="navbar" class="hidden lg:flex absolute left-0 lg:left-24 items-center">
-                <a
-                  class="ml-16 lg:ml-8 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
-                  :class="site === 'landing' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
-                  href="/"
-                  >Start</a
-                >
-                <a
-                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
-                  :class="site === 'powerlifting' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
-                  href="/styrkelyft"
-                  >Styrkelyft</a
-                >
-                <a
-                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
-                  :class="site === 'about' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
-                  href="/gkk"
-                  >Om GKK</a
-                >
-                <a
-                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
-                  :class="site === 'member' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
-                  href="/medlem"
-                  >Medlemskap</a
-                >
-                <a
-                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
-                  :class="site === 'documents' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
-                  href="/dokument"
-                  >Länkar</a
-                >
-                <a
-                  class="ml-5 lg:ml-6 uppercase text-sm tracking-wide transition-colors duration-200 hover:text-gkk pb-1"
-                  :class="site === 'records' ? 'border-b-2 border-gkk text-gkk font-medium' : 'text-gray-700'"
-                  href="/klubbrekord"
-                  >Klubbrekord</a
-                >
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <div class="shrink-0">
-              <div data-cy="inside">
-                <a
-                  class="uppercase text-sm tracking-wide px-3 py-1.5 rounded-md transition-all duration-200"
-                  :class="site === '' ? 'bg-gkk text-white' : 'text-gkk hover:bg-gkk/10'"
-                  href="/insidan"
-                >
-                  Insidan
-                </a>
-              </div>
-            </div>
+        <div data-cy="navbar" class="hidden items-center gap-1 lg:flex 2xl:-ml-3.5">
+          <a
+            v-for="link in publicLinks"
+            :key="link.href"
+            :href="link.href"
+            class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-200"
+            :class="site === link.site ? 'bg-gkk/10 text-gkk' : 'text-gray-600 hover:bg-gray-100 hover:text-gkk'"
+            >{{ link.name }}</a
+          >
+        </div>
 
-            <div v-if="user" class="shrink-0">
-              <div @click="logout">
-                <a class="uppercase text-xs text-gray-500 hover:text-gkk transition-colors duration-200 cursor-pointer">
-                  Logga ut
-                </a>
-              </div>
-            </div>
+        <div class="ml-auto flex items-center gap-2 sm:gap-3">
+          <button
+            v-if="user"
+            @click="logout"
+            class="hidden text-sm font-medium text-gray-500 transition-colors hover:text-gkk sm:block"
+          >
+            Logga ut
+          </button>
+          <div data-cy="inside" class="shrink-0">
+            <a
+              class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-sm transition duration-200"
+              :class="
+                site === ''
+                  ? 'bg-gkk text-white ring-2 ring-gkk/20 ring-offset-2'
+                  : 'bg-gkk text-white hover:-translate-y-0.5 hover:bg-gkk-light hover:shadow-md'
+              "
+              href="/insidan"
+            >
+              <i class="fa" :class="user ? 'fa-user-circle' : 'fa-lock'"></i>
+              Insidan
+            </a>
           </div>
+          <button
+            @click="navIsOpen = !navIsOpen"
+            class="flex h-10 w-10 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 hover:text-gkk lg:hidden"
+            :aria-expanded="navIsOpen"
+            aria-label="Meny"
+          >
+            <i class="fa text-xl" :class="navIsOpen ? 'fa-times' : 'fa-bars'"></i>
+          </button>
         </div>
       </div>
+
+      <transition name="dropdown">
+        <div v-if="navIsOpen" class="border-t border-gray-900/5 bg-white px-4 pb-6 pt-3 shadow-xl lg:hidden">
+          <a
+            v-for="link in publicLinks"
+            :key="link.href"
+            :href="link.href"
+            class="flex items-center justify-between rounded-xl px-4 py-3 text-base font-medium transition-colors"
+            :class="site === link.site ? 'bg-gkk/10 text-gkk' : 'text-gray-700 hover:bg-gray-50'"
+          >
+            {{ link.name }}
+            <i class="fa fa-angle-right text-lg" :class="site === link.site ? 'text-gkk' : 'text-gray-300'"></i>
+          </a>
+          <button
+            v-if="user"
+            @click="logout"
+            class="mt-2 w-full rounded-xl px-4 py-3 text-left text-base font-medium text-gray-500 hover:bg-gray-50"
+          >
+            Logga ut
+          </button>
+        </div>
+      </transition>
     </nav>
+
+    <transition name="fade">
+      <div v-if="navIsOpen" class="fixed inset-0 z-40 bg-gray-900/20 lg:hidden" @click="navIsOpen = false"></div>
+    </transition>
 
     <div v-if="user && site === ''" class="fixed top-[64px] z-10">
       <!-- Mobile menu button -->
@@ -327,6 +264,16 @@ export default {
     }
   },
   computed: {
+    publicLinks() {
+      return [
+        { name: 'Start', href: '/', site: 'landing' },
+        { name: 'Styrkelyft', href: '/styrkelyft', site: 'powerlifting' },
+        { name: 'Om GKK', href: '/gkk', site: 'about' },
+        { name: 'Medlemskap', href: '/medlem', site: 'member' },
+        { name: 'Länkar', href: '/dokument', site: 'documents' },
+        { name: 'Klubbrekord', href: '/klubbrekord', site: 'records' },
+      ]
+    },
     isAdmin() {
       return this.user && ['admin', 'superadmin'].includes(this.user.role)
     },
@@ -377,5 +324,16 @@ export default {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 </style>
