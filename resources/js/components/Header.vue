@@ -60,7 +60,52 @@
       </div>
 
       <transition name="dropdown">
-        <div v-if="navIsOpen" class="border-t border-gray-900/5 bg-white px-4 pb-6 pt-3 shadow-xl lg:hidden">
+        <div
+          v-if="navIsOpen"
+          class="max-h-[calc(100dvh-64px)] overflow-y-auto border-t border-gray-900/5 bg-white px-4 pb-6 pt-3 shadow-xl lg:hidden"
+        >
+          <template v-if="showInsideNav">
+            <div class="md:hidden">
+              <div class="mb-1 px-4 pt-1 text-[11px] font-semibold uppercase tracking-wider text-gray-400">Insidan</div>
+              <a
+                v-for="tab in memberTabs"
+                :key="tab.href"
+                :href="tab.href"
+                class="flex items-center gap-3 rounded-xl px-4 py-3 text-base font-medium transition-colors"
+                :class="tab.current ? 'bg-gkk/10 text-gkk' : 'text-gray-700 hover:bg-gray-50'"
+              >
+                <i
+                  class="fa w-5 text-center"
+                  :class="[`fa-${tab.icon}`, tab.current ? 'text-gkk' : 'text-gray-400']"
+                ></i>
+                {{ tab.name }}
+              </a>
+
+              <template v-if="isAdmin">
+                <div class="mb-1 mt-4 px-4 text-[11px] font-semibold uppercase tracking-wider text-gray-400">Admin</div>
+                <a
+                  v-for="tab in adminTabs"
+                  :key="tab.href"
+                  :href="tab.href"
+                  class="flex items-center gap-3 rounded-xl px-4 py-3 text-base font-medium transition-colors"
+                  :class="tab.current ? 'bg-gkk/10 text-gkk' : 'text-gray-700 hover:bg-gray-50'"
+                >
+                  <i
+                    class="fa w-5 text-center"
+                    :class="[`fa-${tab.icon}`, tab.current ? 'text-gkk' : 'text-gray-400']"
+                  ></i>
+                  {{ tab.name }}
+                </a>
+              </template>
+
+              <div
+                class="mb-1 mt-4 border-t border-gray-100 px-4 pt-4 text-[11px] font-semibold uppercase tracking-wider text-gray-400"
+              >
+                Hemsidan
+              </div>
+            </div>
+          </template>
+
           <a
             v-for="link in publicLinks"
             :key="link.href"
@@ -71,13 +116,13 @@
             {{ link.name }}
             <i class="fa fa-angle-right text-lg" :class="site === link.site ? 'text-gkk' : 'text-gray-300'"></i>
           </a>
-          <button
-            v-if="user"
-            @click="logout"
-            class="mt-2 w-full rounded-xl px-4 py-3 text-left text-base font-medium text-gray-500 hover:bg-gray-50"
-          >
-            Logga ut
-          </button>
+
+          <div v-if="user" class="mt-4 flex items-center justify-between gap-3 border-t border-gray-100 px-4 pt-4">
+            <span class="truncate text-sm text-gray-500">{{ user.email }}</span>
+            <button @click="logout" class="shrink-0 text-base font-medium text-gray-500 hover:text-gkk">
+              Logga ut
+            </button>
+          </div>
         </div>
       </transition>
     </nav>
@@ -86,29 +131,10 @@
       <div v-if="navIsOpen" class="fixed inset-0 z-40 bg-gray-900/20 lg:hidden" @click="navIsOpen = false"></div>
     </transition>
 
-    <div v-if="user && site === ''" class="fixed top-[64px] z-10">
-      <!-- Mobile menu button -->
-      <div
-        @click="showSubMenu = true"
-        class="md:hidden bg-white cursor-pointer text-gkk inline-flex items-center gap-2 px-4 py-2.5 shadow-md rounded-br-lg border-b border-r border-gray-200 text-sm font-medium"
-      >
-        <i class="fa fa-bars"></i>
-        <span>Meny</span>
-      </div>
-
-      <!-- Backdrop -->
-      <transition name="fade">
-        <div
-          v-if="showSubMenu"
-          class="md:hidden fixed inset-0 bg-black/30 -top-[64px]"
-          @click="showSubMenu = false"
-        ></div>
-      </transition>
-
+    <div v-if="showInsideNav" class="fixed top-[64px] z-10 hidden md:block">
       <!-- Sidebar -->
       <nav
-        class="fixed top-[64px] h-[calc(100vh-64px)] w-[240px] bg-white border-r border-gray-200 flex flex-col transition-transform duration-300 md:translate-x-0 overflow-y-auto"
-        :class="showSubMenu ? 'translate-x-0' : '-translate-x-full'"
+        class="fixed top-[64px] h-[calc(100vh-64px)] w-[240px] bg-white border-r border-gray-200 flex flex-col overflow-y-auto"
         aria-label="Tabs"
       >
         <div class="flex-1 pt-16 pb-4">
@@ -119,7 +145,6 @@
               v-for="tab in memberTabs"
               :key="tab.name"
               :href="tab.href"
-              @click="showSubMenu = false"
               class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-0.5"
               :class="tab.current ? 'bg-gkk/10 text-gkk' : 'text-gray-700 hover:bg-gray-100'"
             >
@@ -135,7 +160,6 @@
               v-for="tab in adminTabs"
               :key="tab.name"
               :href="tab.href"
-              @click="showSubMenu = false"
               class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-0.5"
               :class="tab.current ? 'bg-gkk/10 text-gkk' : 'text-gray-700 hover:bg-gray-100'"
             >
@@ -259,7 +283,6 @@ export default {
         },
       ],
       navIsOpen: false,
-      showSubMenu: false,
       impersonatedUser: '',
     }
   },
@@ -273,6 +296,9 @@ export default {
         { name: 'Länkar', href: '/dokument', site: 'documents' },
         { name: 'Klubbrekord', href: '/klubbrekord', site: 'records' },
       ]
+    },
+    showInsideNav() {
+      return this.user && this.site === ''
     },
     isAdmin() {
       return this.user && ['admin', 'superadmin'].includes(this.user.role)
