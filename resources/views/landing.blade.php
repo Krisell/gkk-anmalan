@@ -285,7 +285,7 @@
         ['02', 'Bänkpress', 'Liggandes på bänken sänker du stången till bröstet, håller still och pressar upp den på domarens signal.', true],
         ['03', 'Marklyft', 'Stången lyfts från golvet tills du står helt upprätt med raka knän och bakåtdragna axlar.', false],
       ] as [$number, $lift, $description, $standalone])
-        <div class="relative rounded-2xl p-8 backdrop-blur-sm transition duration-300 hover:-translate-y-1 {{ $standalone ? 'bg-white/10 ring-2 ring-white/40 hover:bg-white/15' : 'bg-white/5 ring-1 ring-white/10 hover:bg-white/10' }}">
+        <div class="relative rounded-2xl p-8 backdrop-blur-sm transition duration-300 hover:-translate-y-1 {{ $standalone ? 'bg-white/10 ring-1 ring-white/10 hover:bg-white/15' : 'bg-white/5 ring-1 ring-white/10 hover:bg-white/10' }}">
           @if ($standalone)
             <div class="absolute right-6 top-6 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-semibold text-gkk shadow-sm">
               <i class="fa fa-trophy"></i> Egen tävlingsform
