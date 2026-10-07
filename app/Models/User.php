@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -29,6 +31,14 @@ class User extends Authenticatable
         'ren_vinnare_education_completed_at' => 'datetime',
         'background_check_valid_from' => 'datetime:Y-m-d',
     ];
+
+    /** @return Attribute<string, string|null> */
+    protected function email(): Attribute
+    {
+        return Attribute::make(
+            set: fn (?string $value) => $value === null ? null : Str::lower(\trim($value)),
+        );
+    }
 
     public function eventRegistrations(): HasMany
     {

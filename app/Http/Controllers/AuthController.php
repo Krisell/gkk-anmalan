@@ -6,6 +6,7 @@ use App\Models\User;
 use Firebase\JWT\JWK;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -39,6 +40,9 @@ class AuthController extends Controller
 
     private function login($email)
     {
+        // Microsoft often returns mixed-case addresses; emails are stored lowercase.
+        $email = Str::lower(\trim((string) $email));
+
         $user = User::whereEmail($email)->first();
 
         if ($user) {

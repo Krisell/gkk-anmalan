@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class ImpersonationController extends Controller
 {
@@ -10,7 +11,7 @@ class ImpersonationController extends Controller
     {
         $user = \is_numeric($emailOrId)
             ? User::whereId($emailOrId)->firstOrFail()
-            : User::where(['email' => $emailOrId])->firstOrFail();
+            : User::where(['email' => Str::lower($emailOrId)])->firstOrFail();
 
         session(['original_impersonating_user' => auth()->user()->email]);
 

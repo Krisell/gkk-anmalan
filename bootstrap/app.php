@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureUserIsNotInactivatedMiddleware;
 use App\Http\Middleware\LogVisitsMiddleware;
+use App\Http\Middleware\LowercaseEmails;
 use App\Providers\AppServiceProvider;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Console\Scheduling\Schedule;
@@ -38,6 +39,7 @@ return Application::configure(basePath: \dirname(__DIR__))
         ]);
 
         $middleware->web([
+            LowercaseEmails::class,
             LogVisitsMiddleware::class,
             EnsureUserIsNotInactivatedMiddleware::class,
         ]);
