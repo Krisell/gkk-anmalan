@@ -35,3 +35,7 @@ frankenphp
 frankenphp-worker.php
 
 .playwright-mcp
+
+# MySQL -> Postgres migration output (contains member data)
+*.pgdump
+migrate.load
