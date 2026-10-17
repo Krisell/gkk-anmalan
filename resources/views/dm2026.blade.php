@@ -56,7 +56,7 @@
 <section class="mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">
   <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
     <div>
-      <x-section-heading eyebrow="Om tävlingen" title="Distriktets mästerskap – på hemmaplan" />
+      <x-section-heading eyebrow="Om tävlingen" title="Distriktsmästerskapen i Styrkelyft 2026" />
       <div class="mt-6 space-y-4 text-lg leading-relaxed text-gray-600">
         <p>
           Den 14–15 november avgörs distriktsmästerskapen i klassisk styrkelyft hos oss på Friskis & Svettis Majorna. Tävlingen arrangeras av Göteborg Kraftsportklubb tillsammans med Västra Götalands Styrkelyftförbund.
