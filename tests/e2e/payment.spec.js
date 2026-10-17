@@ -21,10 +21,10 @@ test('Payments only show status before being synced to Fortnox', async ({ page }
   await page.goto('/profile')
 
   await expect(page.getByText('Medlemsavgift 2025')).toBeVisible()
-  await expect(page.getByText('123 SEK')).toBeVisible()
+  await expect(page.getByText('123 kr')).toBeVisible()
   await expect(page.getByText('Tävlingslicens 2025')).toBeVisible()
-  await expect(page.getByText('456 SEK')).toBeVisible()
-  await expect(page.getByText(/INVÄNTAR\s*FAKTURERING/).first()).toBeVisible()
+  await expect(page.getByText('456 kr')).toBeVisible()
+  await expect(page.getByText(/Inväntar fakturering/i).first()).toBeVisible()
 })
 
 test('Payments show status and invoice link after being synced to Fortnox', async ({ page }) => {
@@ -49,10 +49,10 @@ test('Payments show status and invoice link after being synced to Fortnox', asyn
   await page.goto('/profile')
 
   await expect(page.getByText('Medlemsavgift 2025')).toBeVisible()
-  await expect(page.getByText('123 SEK')).toBeVisible()
+  await expect(page.getByText('123 kr')).toBeVisible()
   await expect(page.getByText('Tävlingslicens 2025')).toBeVisible()
-  await expect(page.getByText('456 SEK')).toBeVisible()
-  await expect(page.getByText(/INVÄNTAR\s*BETALNING/).first()).toBeVisible()
+  await expect(page.getByText('456 kr')).toBeVisible()
+  await expect(page.getByText(/Inväntar betalning/i).first()).toBeVisible()
   await expect(page.getByText('Visa faktura').first()).toBeVisible()
   await expect(page.getByText('Faktura har även skickats till din epost.').first()).toBeVisible()
   await expect(
