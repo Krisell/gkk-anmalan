@@ -1,13 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-2xl font-semibold mb-6 pl-4">
-      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
-        <i class="fa fa-angle-left"></i>
-        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-      </a>
-      <span class="text-gray-300 mx-2">/</span>
-      <span class="text-gkk">Konton</span>
-    </h1>
+    <Breadcrumbs class="mb-6 pl-4" title="Konton" />
     <div v-if="ungranted.length > 0" class="flex flex-col mb-8">
       <h2 class="text-2xl font-thin text-center m-4">Väntar på godkännande</h2>
       <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -617,13 +610,14 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 import ToggleButton from './ui/ToggleButton.vue'
 import Modal from './ui/Modal.vue'
 import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
 
 export default {
-  components: { Button, ToggleButton, Modal },
+  components: { Breadcrumbs, Button, ToggleButton, Modal },
   props: {
     initialAccounts: {
       type: Array,

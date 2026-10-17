@@ -1,14 +1,7 @@
 <template>
   <div class="container mx-auto max-w-3xl">
     <div class="flex items-start justify-between gap-4 flex-wrap mb-6 mt-8">
-      <h1 class="text-2xl font-semibold">
-        <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
-          <i class="fa fa-angle-left"></i>
-          <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-        </a>
-        <span class="text-gray-300 mx-2">/</span>
-        <span class="text-gkk">Dokument</span>
-      </h1>
+      <Breadcrumbs title="Dokument" />
       <a
         v-if="isAdmin"
         href="/admin/documents"
@@ -32,10 +25,11 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 import DocumentFolder from './DocumentFolder.vue'
 
 export default {
-  components: { DocumentFolder },
+  components: { Breadcrumbs, DocumentFolder },
   props: ['folders', 'user'],
   computed: {
     sortedFolders() {

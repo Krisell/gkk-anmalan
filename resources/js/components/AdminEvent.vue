@@ -1,24 +1,16 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-2xl font-semibold mb-6 pl-4">
-      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
-        <i class="fa fa-angle-left"></i>
-        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-      </a>
-      <span class="text-gray-300 mx-2">/</span>
-      <a
-        href="/admin/events"
-        class="text-gray-400 hover:text-gkk underline underline-offset-4 decoration-gray-300 hover:decoration-gkk transition-colors"
-        >Admin - Funktionärsanmälningar</a
-      >
-      <span class="text-gray-300 mx-2">/</span>
-      <span class="text-gkk">{{ event.name }}</span>
+    <Breadcrumbs
+      class="mb-6 pl-4"
+      :items="[{ name: 'Admin - Funktionärsanmälningar', href: '/admin/events' }]"
+      :title="event.name"
+    >
       <i
-        class="fa fa-clipboard ml-4 text-base text-gray-400 hover:text-gkk cursor-pointer transition-colors"
+        class="fa fa-clipboard text-lg text-gray-400 hover:text-gkk cursor-pointer transition-colors"
         v-tooltip="'Kopiera epostadresserna för alla anmälda'"
         @click="copyEmails"
       ></i>
-    </h1>
+    </Breadcrumbs>
     <div class="bg-white shadow-sm sm:rounded-lg mb-6">
       <div class="px-4 py-5 sm:p-6">
         <div>
@@ -209,13 +201,14 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 import ToggleButton from './ui/ToggleButton.vue'
 import Button from './ui/Button.vue'
 import Modal from './ui/Modal.vue'
 import Link from './ui/Link.vue'
 
 export default {
-  components: { ToggleButton, Button, Modal, Link },
+  components: { Breadcrumbs, ToggleButton, Button, Modal, Link },
   props: ['event', 'competingUsers', 'remainingUsers'],
   data() {
     return {

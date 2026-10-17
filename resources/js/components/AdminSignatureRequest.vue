@@ -1,16 +1,10 @@
 <template>
   <div class="container mx-auto max-w-4xl px-4">
-    <h1 class="text-2xl font-semibold mb-6">
-      <a
-        href="/admin/signature-requests"
-        class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group"
-      >
-        <i class="fa fa-angle-left"></i>
-        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Signering</span>
-      </a>
-      <span class="text-gray-300 mx-2">/</span>
-      <span class="text-gkk">{{ request.name }}</span>
-    </h1>
+    <Breadcrumbs
+      class="mb-6"
+      :items="[{ name: 'Signering', href: '/admin/signature-requests' }]"
+      :title="request.name"
+    />
 
     <!-- Signers -->
     <div class="bg-white shadow-sm sm:rounded-lg p-4 mb-6">
@@ -205,6 +199,7 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 import { PDFDocument } from 'pdf-lib'
 import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
 import Button from './ui/Button.vue'
@@ -214,7 +209,7 @@ import PdfViewer from './ui/PdfViewer.vue'
 const SIGNER_COLORS = ['#1d4ed8', '#b91c1c', '#047857', '#7c3aed', '#b45309', '#0e7490', '#be185d', '#4d7c0f']
 
 export default {
-  components: { Button, Modal, PdfViewer },
+  components: { Breadcrumbs, Button, Modal, PdfViewer },
   props: ['initialRequest', 'signUrls', 'users', 'folders', 'jwt'],
   data() {
     return {

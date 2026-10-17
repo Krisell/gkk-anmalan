@@ -2,17 +2,7 @@
   <div class="max-w-6xl mx-auto px-4 pt-6">
     <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
       <div>
-        <h1 class="text-2xl font-semibold">
-          <a
-            href="/insidan"
-            class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group"
-          >
-            <i class="fa fa-angle-left"></i>
-            <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-          </a>
-          <span class="text-gray-300 mx-2">/</span>
-          <span class="text-gkk">Funktionärsanmälan</span>
-        </h1>
+        <Breadcrumbs title="Funktionärsanmälan" />
         <p class="text-gray-500 mt-1 text-sm">Anmäl dig som funktionär till tävlingar och event.</p>
       </div>
       <a
@@ -42,7 +32,9 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 export default {
+  components: { Breadcrumbs },
   props: ['events', 'user-registrations', 'user'],
   computed: {
     orderedEvents() {

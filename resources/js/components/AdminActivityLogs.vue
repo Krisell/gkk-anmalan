@@ -1,13 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-2xl font-semibold mb-6 pl-4">
-      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
-        <i class="fa fa-angle-left"></i>
-        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-      </a>
-      <span class="text-gray-300 mx-2">/</span>
-      <span class="text-gkk">Aktivitetslogg</span>
-    </h1>
+    <Breadcrumbs class="mb-6 pl-4" title="Aktivitetslogg" />
 
     <!-- Filters -->
     <div class="flex flex-col items-center mb-6">
@@ -114,9 +107,11 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 import CompetitionAdminTasks from '../modules/CompetitionAdminTasks.js'
 
 export default {
+  components: { Breadcrumbs },
   props: {
     initialLogs: {
       type: Array,

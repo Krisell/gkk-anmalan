@@ -1,13 +1,6 @@
 <template>
   <div class="container mx-auto max-w-3xl">
-    <h1 class="text-2xl font-semibold mb-6">
-      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
-        <i class="fa fa-angle-left"></i>
-        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-      </a>
-      <span class="text-gray-300 mx-2">/</span>
-      <span class="text-gkk">Gör epostutskick</span>
-    </h1>
+    <Breadcrumbs class="mb-6" title="Gör epostutskick" />
 
     <div class="bg-blue-50 border border-blue-100 text-blue-900 text-sm rounded-md px-4 py-3 mb-6">
       <p class="font-medium mb-1">Skicka denna nyhet som epost</p>
@@ -112,12 +105,13 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 import moment from 'moment'
 import PostRedirect from '../modules/PostRedirect'
 import Button from './ui/Button.vue'
 
 export default {
-  components: { Button },
+  components: { Breadcrumbs, Button },
   props: ['item'],
   data() {
     return {

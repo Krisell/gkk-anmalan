@@ -1,20 +1,7 @@
 <template>
   <div class="max-w-6xl mx-auto px-4 pt-6">
     <div class="flex items-start justify-between gap-4 flex-wrap mb-6">
-      <h1 class="text-2xl font-semibold flex flex-wrap items-center">
-        <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
-          <i class="fa fa-angle-left"></i>
-          <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-        </a>
-        <span class="text-gray-300 mx-2">/</span>
-        <a
-          href="/competitions"
-          class="text-gray-400 hover:text-gkk underline underline-offset-4 decoration-gray-300 hover:decoration-gkk transition-colors"
-          >Tävlingsanmälan</a
-        >
-        <span class="text-gray-300 mx-2">/</span>
-        <span class="text-gkk">{{ competition.name }}</span>
-      </h1>
+      <Breadcrumbs :items="[{ name: 'Tävlingsanmälan', href: '/competitions' }]" :title="competition.name" />
       <AdministrateButton v-if="isAdmin" :path="`/admin/competitions/${competition.id}`" />
     </div>
 
@@ -310,6 +297,7 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 import Button from './ui/Button.vue'
 import Date from '../modules/Date.js'
 import Message from './Message.vue'
@@ -318,7 +306,7 @@ import DateBlock from './DateBlock.vue'
 import AdministrateButton from './AdministrateButton.vue'
 
 export default {
-  components: { Message, Button, ToggleButton, DateBlock, AdministrateButton },
+  components: { Breadcrumbs, Message, Button, ToggleButton, DateBlock, AdministrateButton },
   props: ['competition', 'user', '_registration'],
   data() {
     return {

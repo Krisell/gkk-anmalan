@@ -1,13 +1,6 @@
 <template>
   <div class="container mx-auto max-w-3xl">
-    <h1 class="text-2xl font-semibold mb-6">
-      <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
-        <i class="fa fa-angle-left"></i>
-        <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-      </a>
-      <span class="text-gray-300 mx-2">/</span>
-      <span class="text-gkk">Admin - Dokument</span>
-    </h1>
+    <Breadcrumbs class="mb-6" title="Admin - Dokument" />
 
     <div class="flex flex-col">
       <div
@@ -322,12 +315,13 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
 import Button from './ui/Button.vue'
 import Modal from './ui/Modal.vue'
 
 export default {
-  components: { Button, Modal },
+  components: { Breadcrumbs, Button, Modal },
   props: ['jwt', 'folders'],
   data() {
     return {

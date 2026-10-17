@@ -1,14 +1,7 @@
 <template>
   <div class="max-w-[95%] mx-auto pb-12">
     <div class="max-w-3xl mx-auto">
-      <h1 class="text-2xl font-semibold mb-6">
-        <a href="/insidan" class="inline-flex items-center gap-2 text-gray-400 hover:text-gkk transition-colors group">
-          <i class="fa fa-angle-left"></i>
-          <span class="underline underline-offset-4 decoration-gray-300 group-hover:decoration-gkk">Start</span>
-        </a>
-        <span class="text-gray-300 mx-2">/</span>
-        <span class="text-gkk">Profil</span>
-      </h1>
+      <Breadcrumbs class="mb-6" title="Profil" />
       <!-- Medlem -->
       <div class="bg-white rounded-lg border border-gray-200 shadow-xs mb-6 px-5 py-4 flex items-center gap-4">
         <div
@@ -292,6 +285,7 @@
 </template>
 
 <script>
+import Breadcrumbs from './ui/Breadcrumbs.vue'
 import Documents from '../modules/Documents.js'
 import Button from './ui/Button.vue'
 import Modal from './ui/Modal.vue'
@@ -299,7 +293,7 @@ import QRCode from 'qrcode'
 import { PDFDocument, rgb, degrees } from 'pdf-lib'
 
 export default {
-  components: { Button, Modal },
+  components: { Breadcrumbs, Button, Modal },
   props: ['user', 'payments', 'lastHelperDate'],
   data() {
     return {
