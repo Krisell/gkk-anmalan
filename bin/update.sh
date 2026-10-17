@@ -19,13 +19,13 @@ cd "${TEMP_DIR}"
 # Download the build assets
 if curl -L -f -o "build-assets.zip" "${ASSETS_URL}"; then
     echo "Build assets downloaded successfully"
-    
+
     # Extract to the web root
-    unzip -o "build-assets.zip" -d /customers/9/a/3/goteborgkk.se/httpd.www/
-    unzip -o "build-assets.zip" -d /customers/9/a/3/goteborgkk.se/httpd.private/web/public/
-    
+    # unzip -o "build-assets.zip" -d /customers/9/a/3/goteborgkk.se/httpd.www/
+    unzip -o "build-assets.zip" -d /home/cy44bvxmo_ssh/webroots/httpd-private/web/public/
+
     echo "Build assets deployed successfully"
-    
+
     # Cleanup
     rm -rf "${TEMP_DIR}"
 else
@@ -35,10 +35,10 @@ else
 fi
 
 # Return to project directory
-cd /customers/9/a/3/goteborgkk.se/httpd.private/web
+cd /home/cy44bvxmo_ssh/webroots/httpd-private/web
 
 # Cache Laravel configuration
-php /customers/9/a/3/goteborgkk.se/httpd.private/web/artisan config:cache
-php /customers/9/a/3/goteborgkk.se/httpd.private/web/artisan route:cache
+php /home/cy44bvxmo_ssh/webroots/httpd-private/web/artisan config:cache
+php /home/cy44bvxmo_ssh/webroots/httpd-private/web/artisan route:cache
 
 echo "Update complete!"
