@@ -13,6 +13,12 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    /**
+     * Invoices are due 30 days after creation. Allow a few extra days for
+     * bank payments to be registered before treating an invoice as overdue.
+     */
+    public const OVERDUE_INVOICE_DAYS = 35;
+
     protected $guarded = [];
 
     protected $hidden = [
@@ -57,8 +63,7 @@ class User extends Authenticatable
     {
         return $this->payments()
             ->whereNull('state')
-            ->where('year', now()->year)
-            ->where('created_at', '<=', now()->subDays(3))
+            ->where('fortnox_invoice_created_at', '<=', now()->subDays(self::OVERDUE_INVOICE_DAYS))
             ->exists();
     }
 }

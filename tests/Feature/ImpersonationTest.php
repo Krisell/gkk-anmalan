@@ -127,8 +127,7 @@ test('Pending payments are shown for the impersonated user, not the admin', func
     Payment::factory()->create([
         'user_id' => $member->id,
         'state' => null,
-        'year' => now()->year,
-        'created_at' => now()->subWeek(),
+        'fortnox_invoice_created_at' => now()->subDays(40),
     ]);
 
     $this->actingAs($admin)->get('/insidan')->assertViewHas('hasPendingPayment', false);
