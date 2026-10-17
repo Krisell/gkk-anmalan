@@ -173,6 +173,7 @@ export default {
       const labels = {
         'account-promotion': 'Befordran',
         'account-demotion': 'Degradering',
+        impersonation: 'Inloggning som medlem',
         'account-batch-creation': 'Kontoskapande',
         'explicit-registration-approval-update': 'Tävlingsundantag',
         'ren-vinnare-education-update': 'Ren Vinnare-utbildning',
@@ -191,6 +192,7 @@ export default {
       const classes = {
         'account-promotion': 'bg-green-100 text-green-800',
         'account-demotion': 'bg-red-100 text-red-800',
+        impersonation: 'bg-amber-100 text-amber-800',
         'account-batch-creation': 'bg-blue-100 text-blue-800',
         'explicit-registration-approval-update': 'bg-purple-100 text-purple-800',
         'ren-vinnare-education-update': 'bg-yellow-100 text-yellow-800',

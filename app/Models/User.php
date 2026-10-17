@@ -13,8 +13,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    public $wasLoggedInByAdmin = false;
-
     protected $guarded = [];
 
     protected $hidden = [
@@ -53,5 +51,14 @@ class User extends Authenticatable
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function hasPendingPayment(): bool
+    {
+        return $this->payments()
+            ->whereNull('state')
+            ->where('year', now()->year)
+            ->where('created_at', '<=', now()->subDays(3))
+            ->exists();
     }
 }

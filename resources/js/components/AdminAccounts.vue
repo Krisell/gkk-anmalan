@@ -594,6 +594,23 @@
           </div>
         </div>
 
+        <div v-if="canImpersonate(selectedAccount)" class="border-t border-gray-200 pt-6">
+          <div class="flex items-center justify-between flex-col gap-2">
+            <div>
+              <h3 class="text-lg font-medium text-gray-900">Logga in som medlemmen</h3>
+              <p class="text-sm text-gray-500">Se sidan som medlemmen ser den. Loggas i aktivitetsloggen.</p>
+            </div>
+            <Button
+              @click="impersonate(selectedAccount)"
+              type="warning"
+              size="sm"
+              :data-testid="`impersonate-${selectedAccount.id}`"
+            >
+              <i class="fa fa-user-secret mr-1"></i> Logga in som {{ selectedAccount.first_name }}
+            </Button>
+          </div>
+        </div>
+
         <div class="border-t border-gray-200 pt-6">
           <div class="flex items-center justify-between flex-col gap-2">
             <div>
@@ -837,6 +854,18 @@ export default {
       return registrations.filter(
         (registration) => registration.presence_confirmed && Date.withinAYear(registration.event.date),
       ).length
+    },
+    canImpersonate(account) {
+      if (!account || account.id === this.user.id) {
+        return false
+      }
+
+      return account.role !== 'superadmin' || this.user.role === 'superadmin'
+    },
+    async impersonate(account) {
+      await axios.post(`/admin/impersonate/${account.id}`)
+
+      window.location = '/insidan'
     },
     confirmDemotion(account) {
       this.selectedAccount = account
