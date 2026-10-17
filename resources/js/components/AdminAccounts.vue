@@ -134,6 +134,7 @@
           <table class="min-w-full">
             <thead>
               <tr>
+                <th class="w-12 border-b border-gray-200 bg-gray-50"></th>
                 <th
                   @click="sortBy('first_name')"
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
@@ -181,11 +182,6 @@
                   Medl.avg. {{ getCurrentYear() }}
                 </th>
                 <th v-show="!treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Inställningar
-                </th>
               </tr>
             </thead>
             <tbody class="bg-white">
@@ -194,6 +190,17 @@
                 :key="account.id"
                 :data-testid="`account-${account.id}`"
               >
+                <td class="w-12 border-b border-gray-200 pl-4">
+                  <button
+                    type="button"
+                    @click="openSettingsModal(account)"
+                    class="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gkk/10 hover:text-gkk focus:outline-none focus-visible:ring-2 focus-visible:ring-gkk/40"
+                    :aria-label="`Inställningar för ${account.first_name} ${account.last_name}`"
+                    :data-testid="`settings-${account.id}`"
+                  >
+                    <i class="fa fa-cog text-base"></i>
+                  </button>
+                </td>
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -350,16 +357,6 @@
                       <i v-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
                     </div>
                   </div>
-                </td>
-                <td
-                  class="px-6 py-2 whitespace-no-wrap text-center border-b border-gray-200 text-sm leading-5 font-medium"
-                >
-                  <i
-                    @click="openSettingsModal(account)"
-                    class="fa fa-ellipsis-v cursor-pointer text-gray-500 hover:text-gray-700"
-                    v-tooltip="'Ytterligare inställningar'"
-                    :data-testid="`settings-${account.id}`"
-                  ></i>
                 </td>
               </tr>
             </tbody>
