@@ -19,6 +19,11 @@ class HomeController extends Controller
         return view('dm2026', ['site' => 'dm']);
     }
 
+    public function dmInvitation()
+    {
+        return response()->file(resource_path('files/dm-2026-inbjudan.pdf'));
+    }
+
     public function dm2025()
     {
         return view('dm2025', ['site' => 'dm']);

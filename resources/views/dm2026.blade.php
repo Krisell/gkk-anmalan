@@ -8,7 +8,7 @@
     ['icon' => 'calendar', 'label' => 'Datum', 'value' => '14–15 november', 'note' => 'Lördag och söndag'],
     ['icon' => 'map-marker', 'label' => 'Plats', 'value' => 'Friskis & Svettis Majorna', 'note' => 'Karl Johansgatan 152, Göteborg'],
     ['icon' => 'users', 'label' => 'Klasser', 'value' => 'Senior, ungdom, junior', 'note' => 'Samtliga viktklasser, damer och herrar'],
-    ['icon' => 'file-pdf-o', 'label' => 'Inbjudan', 'value' => 'Läs inbjudan', 'note' => 'Anmälan, avgifter och tider', 'href' => '/files/dm-2026-inbjudan.pdf'],
+    ['icon' => 'file-pdf-o', 'label' => 'Inbjudan', 'value' => 'Läs inbjudan', 'note' => 'Anmälan, avgifter och tider', 'href' => '/dm2026/inbjudan.pdf'],
   ];
 
 @endphp
@@ -80,7 +80,7 @@
 
 {{-- Inbjudan --}}
 <section class="mx-auto max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
-  <a href="/files/dm-2026-inbjudan.pdf" target="_blank" class="group flex flex-col gap-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5 transition hover:-translate-y-0.5 hover:shadow-lg sm:flex-row sm:items-center sm:p-8">
+  <a href="/dm2026/inbjudan.pdf" target="_blank" class="group flex flex-col gap-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-900/5 transition hover:-translate-y-0.5 hover:shadow-lg sm:flex-row sm:items-center sm:p-8">
     <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gkk/10 text-2xl text-gkk">
       <i class="fa fa-file-pdf-o"></i>
     </div>
