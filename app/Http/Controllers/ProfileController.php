@@ -24,6 +24,7 @@ class ProfileController extends Controller
             'view' => 'profile',
             'payments' => $payments,
             'lastHelperDate' => $lastHelperDate,
+            'agreements' => $user->agreementStatuses(),
         ]);
     }
 

@@ -75,6 +75,7 @@ Route::prefix('api')->middleware(['auth', EnsureAgreementsAreSignedMiddleware::c
 });
 
 Route::get('/sign-agreements', [SignAgreementsController::class, 'index'])->middleware('auth');
+Route::post('/sign-agreements/postpone', [SignAgreementsController::class, 'postpone'])->middleware('auth');
 Route::post('/sign-agreements/{agreement}', [SignAgreementsController::class, 'store'])->middleware('auth');
 Route::view('/inactivated', 'inactivated')->name('inactivated');
 

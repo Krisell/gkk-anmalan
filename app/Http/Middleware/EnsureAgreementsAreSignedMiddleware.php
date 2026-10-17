@@ -2,13 +2,16 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
-use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 
 class EnsureAgreementsAreSignedMiddleware
 {
+    /**
+     * Session key set when the user chooses to handle expiring agreements later.
+     */
+    public const POSTPONED_SESSION_KEY = 'agreements_reminder_postponed';
+
     /**
      * Handle an incoming request.
      *
@@ -16,54 +19,32 @@ class EnsureAgreementsAreSignedMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! auth()->user() || $this->bothAgreementsAreSigned(auth()->user())) {
+        $user = $request->user();
+
+        if (! $user) {
             return $next($request);
         }
 
-        return redirect('/sign-agreements');
+        if ($user->mustSignAgreements()) {
+            return redirect('/sign-agreements');
+        }
+
+        if ($this->shouldRemindAboutExpiringAgreements($request)) {
+            return redirect()->guest('/sign-agreements');
+        }
+
+        return $next($request);
     }
 
     /**
-     * Determine if the user has signed both agreements.
+     * During the last month before the agreements expire the user is shown the signing page
+     * once per session, but may postpone it and continue.
      */
-    private function bothAgreementsAreSigned(User $user)
+    private function shouldRemindAboutExpiringAgreements(Request $request): bool
     {
-        $membership = $user->membership_agreement_signed_at;
-
-        if (! $membership) {
-            return false;
-        }
-
-        $membership = Carbon::parse($membership);
-
-        if ($membership->lessThan(now()->subYear())) {
-            return false;
-        }
-
-        $lastUpdatedMembershipAgreement = config('agreements.membership.last_updated_at');
-
-        if ($lastUpdatedMembershipAgreement && $membership->lessThan($lastUpdatedMembershipAgreement)) {
-            return false;
-        }
-
-        $antiDoping = $user->anti_doping_agreement_signed_at;
-
-        if (! $antiDoping) {
-            return false;
-        }
-
-        $antiDoping = Carbon::parse($antiDoping);
-
-        if ($antiDoping->lessThan(now()->subYear())) {
-            return false;
-        }
-
-        $lastUpdatedAntiDopingAgreement = config('agreements.anti_doping.last_updated_at');
-
-        if ($lastUpdatedAntiDopingAgreement && $antiDoping->lessThan($lastUpdatedAntiDopingAgreement)) {
-            return false;
-        }
-
-        return true;
+        return $request->isMethod('GET')
+            && ! $request->expectsJson()
+            && ! $request->session()->get(self::POSTPONED_SESSION_KEY)
+            && $request->user()->hasExpiringAgreements();
     }
 }

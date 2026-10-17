@@ -122,38 +122,79 @@ test('the_agreements_status_is_passed_to_the_view', function () {
 
     login($user);
 
-    $this->get('/sign-agreements')->assertViewHas([
-        'membershipAgreementStatus' => 'unsigned',
-        'antiDopingAgreementStatus' => 'unsigned',
-    ]);
+    $this->get('/sign-agreements')->assertViewHas('agreements', fn ($agreements) => $agreements['membership']['status'] === 'unsigned' && $agreements['anti_doping']['status'] === 'unsigned');
 
     $user->update(['membership_agreement_signed_at' => now()]);
-    $this->get('/sign-agreements')->assertViewHas([
-        'membershipAgreementStatus' => 'signed',
-        'antiDopingAgreementStatus' => 'unsigned',
-    ]);
+    $this->get('/sign-agreements')->assertViewHas('agreements', fn ($agreements) => $agreements['membership']['status'] === 'signed' && $agreements['anti_doping']['status'] === 'unsigned');
 
     $user->update(['anti_doping_agreement_signed_at' => now()]);
-    $this->get('/sign-agreements')->assertViewHas([
-        'membershipAgreementStatus' => 'signed',
-        'antiDopingAgreementStatus' => 'signed',
-    ]);
+    $this->get('/sign-agreements')->assertViewHas('agreements', fn ($agreements) => $agreements['membership']['status'] === 'signed' && $agreements['anti_doping']['status'] === 'signed');
 
     $user->update(['membership_agreement_signed_at' => '2022-09-28']); // Updated at 2022-09-29
-    $this->get('/sign-agreements')->assertViewHas([
-        'membershipAgreementStatus' => 'expired',
-        'antiDopingAgreementStatus' => 'signed',
-    ]);
+    $this->get('/sign-agreements')->assertViewHas('agreements', fn ($agreements) => $agreements['membership']['status'] === 'expired' && $agreements['anti_doping']['status'] === 'signed');
 
     $user->update(['anti_doping_agreement_signed_at' => now()->subMonths(12)->subDays(1)]);
-    $this->get('/sign-agreements')->assertViewHas([
-        'membershipAgreementStatus' => 'expired',
-        'antiDopingAgreementStatus' => 'old',
-    ]);
+    $this->get('/sign-agreements')->assertViewHas('agreements', fn ($agreements) => $agreements['membership']['status'] === 'expired' && $agreements['anti_doping']['status'] === 'old');
 
     $user->update(['membership_agreement_signed_at' => now()->subMonths(12)->subDays(1)]);
-    $this->get('/sign-agreements')->assertViewHas([
-        'membershipAgreementStatus' => 'old',
-        'antiDopingAgreementStatus' => 'old',
+    $this->get('/sign-agreements')->assertViewHas('agreements', fn ($agreements) => $agreements['membership']['status'] === 'old' && $agreements['anti_doping']['status'] === 'old');
+});
+
+test('agreements_expiring_within_a_month_show_a_reminder_once_per_session', function () {
+    $user = User::factory()->create([
+        'membership_agreement_signed_at' => now()->subYear()->addWeeks(2),
+        'anti_doping_agreement_signed_at' => now(),
     ]);
+
+    login($user);
+
+    $this->get('/sign-agreements')->assertViewHas('agreements', fn ($agreements) => $agreements['membership']['status'] === 'expiring');
+
+    $this->get('/events')->assertRedirect('/sign-agreements');
+    $this->getJson('/api/ranking/points')->assertOk();
+
+    $this->postJson('/sign-agreements/postpone')->assertOk()->assertJson(['redirect' => url('/events')]);
+
+    $this->get('/events')->assertOk();
+    $this->get('/insidan')->assertOk();
+    $this->get('/profile')->assertOk()->assertViewHas('agreements', fn ($agreements) => $agreements['membership']['status'] === 'expiring');
+});
+
+test('agreements_signed_more_than_a_month_before_expiry_show_no_reminder', function () {
+    $user = User::factory()->create([
+        'membership_agreement_signed_at' => now()->subYear()->addMonth()->addDay(),
+        'anti_doping_agreement_signed_at' => now()->subYear()->addMonth()->addDay(),
+    ]);
+
+    login($user);
+
+    $this->get('/events')->assertOk();
+});
+
+test('postponing_is_not_allowed_when_agreements_have_expired', function () {
+    $user = User::factory()->create([
+        'membership_agreement_signed_at' => now()->subYear()->subDay(),
+        'anti_doping_agreement_signed_at' => now(),
+    ]);
+
+    login($user);
+
+    $this->postJson('/sign-agreements/postpone')->assertForbidden();
+    $this->get('/events')->assertRedirect('/sign-agreements');
+});
+
+test('a_postponed_reminder_still_blocks_once_the_agreement_expires', function () {
+    $user = User::factory()->create([
+        'membership_agreement_signed_at' => now()->subYear()->addWeek(),
+        'anti_doping_agreement_signed_at' => now(),
+    ]);
+
+    login($user);
+
+    $this->postJson('/sign-agreements/postpone')->assertOk();
+    $this->get('/events')->assertOk();
+
+    $this->travel(8)->days();
+
+    $this->get('/events')->assertRedirect('/sign-agreements');
 });

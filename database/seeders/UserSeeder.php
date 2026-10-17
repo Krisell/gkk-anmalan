@@ -151,5 +151,24 @@ class UserSeeder extends Seeder
             'password' => $helperPassword,
             'created_at' => now()->subMonths(3),
         ]);
+
+        // Agreements expire after a year, with a reminder during the last month.
+        User::factory()->create([
+            'first_name' => 'AgreementsExpiring',
+            'last_name' => 'Member',
+            'email' => 'agreements.expiring@example.com',
+            'password' => $helperPassword,
+            'membership_agreement_signed_at' => now()->subYear()->addWeeks(2),
+            'anti_doping_agreement_signed_at' => now()->subYear()->addWeeks(3),
+        ]);
+
+        User::factory()->create([
+            'first_name' => 'AgreementsExpired',
+            'last_name' => 'Member',
+            'email' => 'agreements.expired@example.com',
+            'password' => $helperPassword,
+            'membership_agreement_signed_at' => now()->subYear()->subDays(3),
+            'anti_doping_agreement_signed_at' => now()->subYear()->subDays(3),
+        ]);
     }
 }

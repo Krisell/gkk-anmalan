@@ -79,6 +79,17 @@
                 <p class="text-sm text-gray-500">Dokument du har godkänt som medlem</p>
               </div>
             </header>
+            <div
+              v-if="earliestAgreementExpiry"
+              class="flex gap-3 border-b border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800 sm:px-6"
+            >
+              <i class="fa fa-exclamation-triangle mt-0.5 text-amber-600"></i>
+              <p>
+                Avtalen behöver godkännas varje år. Läs igenom och godkänn dem igen senast
+                <strong>{{ renderDate(earliestAgreementExpiry) }}</strong
+                >.
+              </p>
+            </div>
             <ul class="divide-y divide-gray-100">
               <li v-for="agreement in agreements" :key="agreement.name">
                 <button
@@ -93,9 +104,19 @@
                   </span>
                   <div class="min-w-0 flex-1">
                     <div class="text-sm font-medium text-gray-900">{{ agreement.name }}</div>
-                    <div v-if="agreement.signedAt" class="mt-0.5 flex items-center gap-1 text-xs text-green-700">
+                    <div
+                      v-if="agreement.status === 'expiring'"
+                      class="mt-0.5 flex items-center gap-1 text-xs text-amber-700"
+                    >
+                      <i class="fa fa-clock-o"></i>
+                      Löper ut {{ renderDate(agreement.expiresAt) }}
+                    </div>
+                    <div v-else-if="agreement.signedAt" class="mt-0.5 flex items-center gap-1 text-xs text-green-700">
                       <i class="fa fa-check-circle"></i>
                       Signerat {{ renderDate(agreement.signedAt) }}
+                      <span v-if="agreement.expiresAt" class="text-gray-500"
+                        >· giltigt till {{ renderDate(agreement.expiresAt) }}</span
+                      >
                     </div>
                   </div>
                   <span class="view-btn shrink-0">
@@ -103,6 +124,11 @@
                     Visa
                   </span>
                 </button>
+                <div v-if="agreement.status === 'expiring'" class="px-5 pb-4 sm:px-6 sm:pl-[4.75rem]">
+                  <Button class="w-full justify-center sm:w-auto" @click="signAgreement(agreement.key)"
+                    >Godkänn {{ agreement.name.toLowerCase() }}et</Button
+                  >
+                </div>
               </li>
             </ul>
           </section>
@@ -280,6 +306,18 @@
     </div>
   </div>
 
+  <Modal
+    ref="agreementConfirmationModal"
+    title="Är du säker på att du godkänner avtalet? Det är din skyldighet som medlem att känna till avtalets innehåll."
+  >
+    <template #footer="{ close }">
+      <div class="mt-4 flex items-center justify-center gap-2">
+        <Button type="secondary" @click="close">Nej</Button>
+        <Button @click="confirmSignAgreement">Ja, godkänn avtalet</Button>
+      </div>
+    </template>
+  </Modal>
+
   <!-- Full-screen loading overlay -->
   <div v-if="loadingReceipt" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
     <div class="flex flex-col items-center rounded-2xl bg-white p-8 shadow-xl">
@@ -331,7 +369,7 @@ import { PDFDocument, rgb, degrees } from 'pdf-lib'
 
 export default {
   components: { Breadcrumbs, Button, Modal },
-  props: ['user', 'payments', 'lastHelperDate'],
+  props: ['user', 'payments', 'lastHelperDate', 'agreementStatuses'],
   data() {
     return {
       isAdjusted: {
@@ -360,6 +398,7 @@ export default {
       qrCodes: {},
       paymentInProcess: null,
       loadingReceipt: false,
+      signingAgreementKind: '',
     }
   },
   computed: {
@@ -430,17 +469,29 @@ export default {
     agreements() {
       return [
         {
+          key: 'membership',
           name: 'Medlemsavtal',
           signedAt: this.user.membership_agreement_signed_at,
+          status: this.agreementStatuses.membership.status,
+          expiresAt: this.agreementStatuses.membership.expires_at,
           open: this.showMemberShipAgreement,
         },
         {
+          key: 'anti-doping',
           name: 'Antidopingavtal',
           signedAt: this.user.anti_doping_agreement_signed_at,
+          status: this.agreementStatuses.anti_doping.status,
+          expiresAt: this.agreementStatuses.anti_doping.expires_at,
           open: this.showAntiDopingAgreement,
         },
         { name: 'Antidopingplan', open: this.showAntiDopingPlan },
       ]
+    },
+    earliestAgreementExpiry() {
+      return this.agreements
+        .filter((agreement) => agreement.status === 'expiring')
+        .map((agreement) => agreement.expiresAt)
+        .sort()[0]
     },
     sortedPayments() {
       return [...this.payments].sort((a, b) => b.id - a.id)
@@ -552,6 +603,14 @@ export default {
     },
     showAntiDopingPlan() {
       window.open(Documents.ANTI_DOPING_PLAN)
+    },
+    signAgreement(kind) {
+      this.signingAgreementKind = kind
+      this.$refs.agreementConfirmationModal.show()
+    },
+    async confirmSignAgreement() {
+      await window.axios.post(`/sign-agreements/${this.signingAgreementKind}`)
+      window.location.reload()
     },
     renderDate(date) {
       return new Date(date).toLocaleDateString('sv-SE')
