@@ -176,6 +176,25 @@
       </nav>
     </div>
 
+    <div
+      v-if="impersonating"
+      data-testid="impersonation-banner"
+      class="fixed inset-x-0 bottom-4 z-50 flex justify-center px-4 pointer-events-none"
+    >
+      <div
+        class="pointer-events-auto flex items-center gap-3 rounded-full bg-amber-500 px-4 py-2 text-sm font-medium text-white shadow-lg"
+      >
+        <i class="fa fa-user-secret"></i>
+        <span class="truncate">Inloggad som {{ user && user.email }}</span>
+        <button
+          @click="stopImpersonating"
+          class="shrink-0 rounded-full bg-white/20 px-3 py-1 font-semibold transition-colors hover:bg-white/30"
+        >
+          Tillbaka till mitt konto
+        </button>
+      </div>
+    </div>
+
     <Modal ref="impersonationModal" title="Ange epost eller användarid">
       <div class="flex flex-col gap-2 items-center">
         <input
@@ -203,7 +222,7 @@ import axios from 'axios'
 
 export default {
   components: { Button, Modal },
-  props: ['user', 'site', 'view'],
+  props: ['user', 'site', 'view', 'impersonating'],
   data() {
     return {
       memberTabs: [
@@ -313,6 +332,11 @@ export default {
 
       window.location = '/profile'
     },
+    async stopImpersonating() {
+      await axios.delete('/impersonate')
+
+      window.location = '/admin/accounts'
+    },
   },
   mounted() {
     TypeTrigger.register('imp', () => {
@@ -320,7 +344,7 @@ export default {
         return
       }
 
-      if (!this.user || this.user.role !== 'superadmin') {
+      if (!this.isAdmin || this.impersonating) {
         return
       }
 
@@ -335,8 +359,11 @@ export default {
         return
       }
 
-      await axios.delete('/impersonate')
-      window.location = '/profile'
+      if (!this.impersonating) {
+        return
+      }
+
+      await this.stopImpersonating()
     })
   },
 }

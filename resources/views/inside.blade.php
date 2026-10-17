@@ -5,7 +5,7 @@
     :user='@json($user)'
     :unanswered='@json($unanswered)'
     :admin-tasks='@json($adminTasks)'
-    :has-pending-payments='@json(session('has_pending_payment'))'
+    :has-pending-payments='@json($hasPendingPayment)'
 ></gkk-navigation>
 
 @auth

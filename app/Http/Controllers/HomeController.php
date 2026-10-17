@@ -73,6 +73,7 @@ class HomeController extends Controller
             'user' => auth()->user()?->load('eventRegistrations.event'),
             'unanswered' => $unanswered,
             'adminTasks' => $adminTasks,
+            'hasPendingPayment' => auth()->user()?->hasPendingPayment() ?? false,
             'news' => $news,
             'view' => 'inside',
         ]);

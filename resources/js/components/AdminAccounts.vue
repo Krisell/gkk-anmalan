@@ -134,6 +134,7 @@
           <table class="min-w-full">
             <thead>
               <tr>
+                <th class="w-12 border-b border-gray-200 bg-gray-50"></th>
                 <th
                   @click="sortBy('first_name')"
                   class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
@@ -181,11 +182,6 @@
                   Medl.avg. {{ getCurrentYear() }}
                 </th>
                 <th v-show="!treasurerMode" class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Inställningar
-                </th>
               </tr>
             </thead>
             <tbody class="bg-white">
@@ -194,6 +190,17 @@
                 :key="account.id"
                 :data-testid="`account-${account.id}`"
               >
+                <td class="w-12 border-b border-gray-200 pl-4">
+                  <button
+                    type="button"
+                    @click="openSettingsModal(account)"
+                    class="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gkk/10 hover:text-gkk focus:outline-none focus-visible:ring-2 focus-visible:ring-gkk/40"
+                    :aria-label="`Inställningar för ${account.first_name} ${account.last_name}`"
+                    :data-testid="`settings-${account.id}`"
+                  >
+                    <i class="fa fa-cog text-base"></i>
+                  </button>
+                </td>
                 <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -350,16 +357,6 @@
                       <i v-if="account.role === 'superadmin'" class="fa fa-star" v-tooltip="'Superadministratör'"></i>
                     </div>
                   </div>
-                </td>
-                <td
-                  class="px-6 py-2 whitespace-no-wrap text-center border-b border-gray-200 text-sm leading-5 font-medium"
-                >
-                  <i
-                    @click="openSettingsModal(account)"
-                    class="fa fa-ellipsis-v cursor-pointer text-gray-500 hover:text-gray-700"
-                    v-tooltip="'Ytterligare inställningar'"
-                    :data-testid="`settings-${account.id}`"
-                  ></i>
                 </td>
               </tr>
             </tbody>
@@ -536,78 +533,83 @@
 
     <Modal
       ref="settingsModal"
+      size="lg"
       :title="`Inställningar för ${selectedAccount && selectedAccount.first_name} ${selectedAccount && selectedAccount.last_name}`"
     >
-      <div class="space-y-6 p-4">
-        <div class="flex items-center justify-between flex-col gap-2">
+      <div v-if="selectedAccount" class="divide-y divide-gray-200 text-left">
+        <div class="flex items-center justify-between gap-4 py-3">
           <div>
-            <h3 class="text-lg font-medium text-gray-900">Tävlingsundantag</h3>
+            <h4 class="text-sm font-medium text-gray-900">Tävlingsundantag</h4>
             <p class="text-sm text-gray-500">Tillåt tävlingsanmälan trots 0 funktionärstillfällen</p>
           </div>
           <ToggleButton
-            v-if="selectedAccount"
+            class="shrink-0"
             @update:modelValue="updateCompetitionRegistrationPermissionFromModal"
             :modelValue="selectedAccount.explicit_registration_approval"
           />
         </div>
 
-        <div class="border-t border-gray-200 pt-6">
-          <div class="flex items-center justify-between flex-col gap-2">
-            <div>
-              <h3 class="text-lg font-medium text-gray-900">Ren Vinnare Antidoping</h3>
-              <p class="text-sm text-gray-500">
-                Markera att medlemmen genomfört den obligatoriska online-utbildningen "Ren Vinnare"
-              </p>
-            </div>
-            <ToggleButton
-              data-testid="ren-vinnare-education-toggle"
-              v-if="selectedAccount"
-              @update:modelValue="updateRenVinnareEducationFromModal"
-              :modelValue="!!selectedAccount.ren_vinnare_education_completed_at"
+        <div class="flex items-center justify-between gap-4 py-3">
+          <div>
+            <h4 class="text-sm font-medium text-gray-900">Ren Vinnare Antidoping</h4>
+            <p class="text-sm text-gray-500">Har genomfört den obligatoriska online-utbildningen</p>
+          </div>
+          <ToggleButton
+            class="shrink-0"
+            data-testid="ren-vinnare-education-toggle"
+            @update:modelValue="updateRenVinnareEducationFromModal"
+            :modelValue="!!selectedAccount.ren_vinnare_education_completed_at"
+          />
+        </div>
+
+        <div class="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div>
+            <h4 class="text-sm font-medium text-gray-900">Utdrag från belastningsregister</h4>
+            <p class="text-sm text-gray-500">Datum som utdraget gäller från</p>
+          </div>
+          <div class="flex shrink-0 items-center gap-2">
+            <input
+              type="date"
+              data-testid="background-check-date"
+              class="block rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
+              :value="selectedAccount.background_check_valid_from"
+              @change="updateBackgroundCheckFromModal($event.target.value)"
             />
-          </div>
-        </div>
-
-        <div class="border-t border-gray-200 pt-6">
-          <div class="flex items-center justify-between flex-col gap-2">
-            <div>
-              <h3 class="text-lg font-medium text-gray-900">Utdrag från belastningsregister</h3>
-              <p class="text-sm text-gray-500">Ange datum som utdraget gäller från</p>
-            </div>
-            <div class="flex items-center gap-2" v-if="selectedAccount">
-              <input
-                type="date"
-                data-testid="background-check-date"
-                class="block rounded-md border-0 py-1.5 px-3 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
-                :value="selectedAccount.background_check_valid_from"
-                @change="updateBackgroundCheckFromModal($event.target.value)"
-              />
-              <button
-                v-if="selectedAccount.background_check_valid_from"
-                @click="updateBackgroundCheckFromModal(null)"
-                class="text-red-500 hover:text-red-700"
-                v-tooltip="'Ta bort datum'"
-              >
-                <i class="fa fa-times"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="border-t border-gray-200 pt-6">
-          <div class="flex items-center justify-between flex-col gap-2">
-            <div>
-              <h3 class="text-lg font-medium text-gray-900">Inaktivera konto</h3>
-              <p class="text-sm text-gray-500">Personen kommer inte kunna logga in förrän kontot återaktiveras</p>
-            </div>
-            <Button @click="confirmInactivationFromModal" type="danger" size="sm"> Inaktivera konto </Button>
+            <button
+              v-if="selectedAccount.background_check_valid_from"
+              @click="updateBackgroundCheckFromModal(null)"
+              class="text-red-500 hover:text-red-700"
+              v-tooltip="'Ta bort datum'"
+            >
+              <i class="fa fa-times"></i>
+            </button>
           </div>
         </div>
       </div>
 
       <template #footer="{ close }">
-        <div class="flex justify-center mt-4">
-          <Button @click="close" type="secondary">Stäng</Button>
+        <div class="mt-4 flex flex-col-reverse gap-2 border-t border-gray-200 pt-4 sm:flex-row sm:items-center">
+          <Button @click="close" type="secondary" class="justify-center">Stäng</Button>
+          <div v-if="selectedAccount" class="flex flex-col gap-2 sm:ml-auto sm:flex-row">
+            <Button
+              v-if="canImpersonate(selectedAccount)"
+              @click="impersonate(selectedAccount)"
+              type="warning"
+              class="justify-center"
+              :data-testid="`impersonate-${selectedAccount.id}`"
+              v-tooltip="'Se sidan som medlemmen ser den. Loggas i aktivitetsloggen.'"
+            >
+              <i class="fa fa-user-secret mr-1"></i> Logga in som {{ selectedAccount.first_name }}
+            </Button>
+            <Button
+              @click="confirmInactivationFromModal"
+              type="danger"
+              class="justify-center"
+              v-tooltip="'Personen kommer inte kunna logga in förrän kontot återaktiveras'"
+            >
+              Inaktivera konto
+            </Button>
+          </div>
         </div>
       </template>
     </Modal>
@@ -837,6 +839,18 @@ export default {
       return registrations.filter(
         (registration) => registration.presence_confirmed && Date.withinAYear(registration.event.date),
       ).length
+    },
+    canImpersonate(account) {
+      if (!account || account.id === this.user.id) {
+        return false
+      }
+
+      return account.role !== 'superadmin' || this.user.role === 'superadmin'
+    },
+    async impersonate(account) {
+      await axios.post(`/admin/impersonate/${account.id}`)
+
+      window.location = '/insidan'
     },
     confirmDemotion(account) {
       this.selectedAccount = account

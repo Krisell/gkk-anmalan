@@ -16,7 +16,7 @@ class LogVisitsMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()?->wasLoggedInByAdmin) {
+        if ($request->session()->has('original_impersonating_user')) {
             return $next($request);
         }
 

@@ -91,7 +91,6 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->middleware(SuperadminMiddleware::class)->group(function () {
         Route::post('/accounts/promote/{user}', [AccountController::class, 'promote']);
         Route::post('/accounts/demote/{user}', [AccountController::class, 'demote']);
-        Route::post('/impersonate/{userOrId}', [ImpersonationController::class, 'store']);
 
         Route::prefix('dev')->group(function () {
             Route::get('/phpinfo', [DevController::class, 'phpinfo']);
@@ -132,6 +131,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(function () {
+    Route::post('/impersonate/{userOrId}', [ImpersonationController::class, 'store']);
+
     Route::patch('/competition-tasks/{task}', [CompetitionAdminTaskController::class, 'update']);
     Route::prefix('accounts')->group(function () {
         Route::post('/inactivate/{user}', [AccountController::class, 'inactivate']);

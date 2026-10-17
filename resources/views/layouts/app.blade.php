@@ -37,6 +37,7 @@
     :user='@json(auth()->user())' 
     :site='@json($site ?? '')' 
     :view='@json($view ?? '')'
+    :impersonating='@json(session()->has('original_impersonating_user'))'
 ></gkk-header>
 
 <main class="mt-16 @yield('main-class', 'page-transition-subtle')">
