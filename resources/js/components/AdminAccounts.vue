@@ -233,7 +233,10 @@
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 64 64"
                       xml:space="preserve"
+                      class="inline-block"
                       style="
+                        width: 1.75em;
+                        height: 1.75em;
                         fill-rule: evenodd;
                         clip-rule: evenodd;
                         stroke-linecap: round;
@@ -243,15 +246,15 @@
                     >
                       <path
                         d="m37.278 14.519-21.203-2.45a4 4 0 0 0-4.433 3.514l-.763 6.606"
-                        style="fill: none; stroke: #222a33; stroke-width: 2px"
+                        style="fill: none; stroke: currentColor; stroke-width: 2px"
                       />
                       <path
                         d="m15.001 20.404.322-2.782a1.867 1.867 0 0 1 2.069-1.641l2.976.344M53.202 19.117a4.001 4.001 0 0 0-4.609-3.28l-38.149 6.425a4.001 4.001 0 0 0-3.28 4.609l3.634 21.575a4 4 0 0 0 4.609 3.28l38.149-6.425a4.003 4.003 0 0 0 3.28-4.609l-3.634-21.575z"
-                        style="fill: none; stroke: #222a33; stroke-width: 2px"
+                        style="fill: none; stroke: currentColor; stroke-width: 2px"
                       />
                       <path
                         d="m19.474 47.253-2.823.476a1.999 1.999 0 0 1-2.305-1.64l-.443-2.632m30.623-23.148 2.823-.475a1.998 1.998 0 0 1 2.305 1.64l.443 2.631m-38.365 6.462-.443-2.632a1.999 1.999 0 0 1 1.64-2.304l2.823-.476M52.268 36.996l.443 2.631a1.999 1.999 0 0 1-1.64 2.305l-2.823.475M33.221 29.788A2.334 2.334 0 1 0 32 33.781a2.336 2.336 0 0 1 2.69 1.914 2.336 2.336 0 0 1-3.911 2.079M31.225 29.177l-.311-1.841M33.086 40.226l-.311-1.841"
-                        style="fill: none; stroke: #222a33; stroke-width: 2px"
+                        style="fill: none; stroke: currentColor; stroke-width: 2px"
                       />
                     </svg>
                   </div>
