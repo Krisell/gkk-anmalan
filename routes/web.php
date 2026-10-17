@@ -50,6 +50,7 @@ Route::get('/dm', [HomeController::class, 'dm']);
 Route::redirect('/musik', '/musikhjalpen');
 Route::get('/dm2025', [HomeController::class, 'dm2025']);
 Route::get('/dm2026', [HomeController::class, 'dm']);
+Route::get('/dm2026/inbjudan.pdf', [HomeController::class, 'dmInvitation']);
 Route::get('/gm', [HomeController::class, 'gm']);
 Route::get('/GM', [HomeController::class, 'gm']);
 
