@@ -314,6 +314,7 @@ export default {
         { name: 'Medlemskap', href: '/medlem', site: 'member' },
         { name: 'Länkar', href: '/dokument', site: 'documents' },
         { name: 'Klubbrekord', href: '/klubbrekord', site: 'records' },
+        { name: 'DM 2026', href: '/dm', site: 'dm' },
       ]
     },
     showInsideNav() {

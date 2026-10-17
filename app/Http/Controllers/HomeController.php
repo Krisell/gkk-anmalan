@@ -16,6 +16,11 @@ class HomeController extends Controller
 
     public function dm()
     {
+        return view('dm2026', ['site' => 'dm']);
+    }
+
+    public function dm2025()
+    {
         return view('dm2025', ['site' => 'dm']);
     }
 
