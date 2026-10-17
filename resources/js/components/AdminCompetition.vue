@@ -178,12 +178,6 @@
     </div>
 
     <div class="w-full text-center mt-4">
-      <Button @click="liftingcast" type="secondary" class="mx-auto">
-        <div class="w-full text-center">Exportera lyftare till Liftingcast</div>
-      </Button>
-    </div>
-
-    <div class="w-full text-center mt-4">
       <Button @click="powerliftingLive" type="secondary" class="mx-auto">
         <div class="w-full text-center">Exportera lyftare till Powerlifting Live</div>
       </Button>
@@ -299,7 +293,6 @@
 import Link from './ui/Link.vue'
 import Modal from './ui/Modal.vue'
 import Button from './ui/Button.vue'
-import LiftingCast from '../modules/LiftingCast.js'
 import PowerliftingLive from '../modules/PowerliftingLive.js'
 import ToggleButton from './ui/ToggleButton.vue'
 
@@ -396,9 +389,6 @@ export default {
         method: 'post',
         data: this.registrationToEdit,
       }).then((_) => window.location.reload())
-    },
-    liftingcast() {
-      LiftingCast.download(this.competition.registrations)
     },
     powerliftingLive() {
       PowerliftingLive.download(this.competition.registrations)
