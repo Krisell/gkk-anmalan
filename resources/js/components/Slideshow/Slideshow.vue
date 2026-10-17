@@ -1,32 +1,67 @@
 <template>
-  <div v-if="state == 'loading'" :class="{ 'cursor-default': inIframe, 'cursor-none': !inIframe }" class="select-none">
-    <div class="flex flex-col items-center justify-center h-screen gap-4 max-h-screen">
-      <img
-        class="max-w-[97%] max-h-[97%] overflow-auto"
-        src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"
-      />
-    </div>
-  </div>
-  <div :class="{ 'cursor-default': inIframe, 'cursor-none': !inIframe }" class="select-none">
-    <div class="fixed bottom-3 left-0 p-2">
-      <div class="bg-white p-2 rounded-lg shadow-md text-2xl text-center text-gkk">
-        <div class="min-w-32">{{ day }} {{ month }}</div>
-        <div class="text-xl">vecka {{ weekNumber }}</div>
+  <div
+    class="fixed inset-0 flex flex-col overflow-hidden select-none bg-linear-to-br from-slate-50 via-white to-slate-100"
+    :class="{ 'cursor-default': inIframe, 'cursor-none': !inIframe }"
+  >
+    <main class="relative flex-1 min-h-0">
+      <Transition name="slideshow-fade">
+        <div v-if="state == 'loading'" class="absolute inset-0 flex items-center justify-center p-[8vh]">
+          <img
+            class="max-w-[60%] max-h-full object-contain animate-pulse"
+            src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"
+            alt=""
+          />
+        </div>
+      </Transition>
+
+      <template v-for="(slide, index) in slides" :key="index">
+        <Transition name="slideshow-fade">
+          <Component
+            :is="component(slide.type)"
+            v-bind="slide.data"
+            v-show="currentSlide == index"
+            class="absolute inset-0 w-full h-full"
+          />
+        </Transition>
+      </template>
+    </main>
+
+    <footer
+      class="relative shrink-0 h-[clamp(2.5rem,9vh,7rem)] bg-gkk text-white grid grid-cols-[1fr_auto_1fr] items-center gap-[2vw] px-[2.5vw]"
+    >
+      <div class="absolute top-0 inset-x-0 h-[0.5vh] min-h-[3px] bg-white/10">
+        <div
+          v-if="slides.length"
+          :key="slideCycle"
+          class="slideshow-progress h-full bg-white/70 origin-left"
+          :style="{ animationDuration: `${slideDuration}ms` }"
+        ></div>
       </div>
-    </div>
 
-    <div class="fixed bottom-3 right-0 p-2">
-      <div class="bg-white p-2 rounded-lg shadow-md text-2xl text-center text-gkk">
-        <div class="min-w-32">{{ time }}</div>
-        <div>{{ currentSlide + 1 }} / {{ slides.length }}</div>
+      <div class="flex items-baseline gap-[1vw] min-w-0 leading-none">
+        <span class="text-[min(2.2vw,3.8vh)] font-semibold capitalize whitespace-nowrap">{{ weekday }}</span>
+        <span class="text-[min(2.2vw,3.8vh)] font-light whitespace-nowrap">{{ day }} {{ month }}</span>
+        <span
+          class="rounded-full bg-white/15 px-[0.8vw] py-[0.5vh] text-[min(1.3vw,2.3vh)] font-medium uppercase tracking-wider whitespace-nowrap"
+        >
+          Vecka {{ weekNumber }}
+        </span>
       </div>
-    </div>
 
-    <template v-for="(slide, index) in slides" :key="index">
-      <Component :is="component(slide.type)" v-bind="slide.data" v-show="currentSlide == index" class="w-full h-full" />
-    </template>
+      <div class="flex items-center gap-[0.6vw]">
+        <span
+          v-for="(slide, index) in slides.length > 1 ? slides : []"
+          :key="index"
+          class="h-[1vh] min-h-1.5 rounded-full transition-all duration-500"
+          :class="currentSlide == index ? 'w-[2.5vw] bg-white' : 'w-[1vh] min-w-1.5 bg-white/35'"
+        ></span>
+      </div>
 
-    <div class="fixed bottom-0 left-0 h-3 bg-gkk opacity-60 transition-all" :style="{ width: `${progress}%` }"></div>
+      <div class="flex items-baseline justify-end leading-none tabular-nums whitespace-nowrap">
+        <span class="text-[min(3vw,5vh)] font-semibold">{{ time }}</span>
+        <span class="text-[min(1.6vw,2.8vh)] font-light text-white/60 ml-[0.3vw]">{{ seconds }}</span>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -41,6 +76,8 @@ let state = ref('loading')
 let slides = ref([])
 let slidesHash = ref('')
 let time = ref('')
+let seconds = ref('')
+let weekday = ref('')
 let day = ref('')
 let month = ref('')
 let weekNumber = ref('')
@@ -48,16 +85,17 @@ let inIframe = window.self !== window.top
 
 function updateDateTime() {
   const now = new Date()
-  // Format time explicitly as 24h format with hours, minutes, and seconds
+  // Format time explicitly as 24h format, with seconds shown separately
   const hours = String(now.getHours()).padStart(2, '0')
   const minutes = String(now.getMinutes()).padStart(2, '0')
-  const seconds = String(now.getSeconds()).padStart(2, '0')
 
+  weekday.value = now.toLocaleDateString('sv-SE', { weekday: 'long' })
   day.value = String(now.getDate())
   month.value = getSwedishMonthName(now.getMonth())
   weekNumber.value = getISOWeek(now)
 
-  time.value = `${hours}:${minutes}:${seconds}`
+  time.value = `${hours}:${minutes}`
+  seconds.value = String(now.getSeconds()).padStart(2, '0')
 }
 
 // Update time immediately and then every second
@@ -99,33 +137,26 @@ setInterval(() => {
 }, 60 * 1000)
 
 const currentSlide = ref(0)
-let startTime = Date.now()
+const slideDuration = 30 * 1000
+// Incremented on every slide change so the progress bar animation restarts
+const slideCycle = ref(0)
 let slideInterval = null
-let progressInterval = null
-let progress = ref(0)
 
 function nextSlide() {
   currentSlide.value = (currentSlide.value + 1) % slides.value.length
-  startTime = Date.now()
   restartInterval()
 }
 
 function previousSlide() {
   currentSlide.value = (currentSlide.value - 1 + slides.value.length) % slides.value.length
-  startTime = Date.now()
   restartInterval()
 }
 
 restartInterval()
 function restartInterval() {
   clearInterval(slideInterval)
-  clearInterval(progressInterval)
-  slideInterval = setInterval(nextSlide, 30 * 1000)
-
-  progress.value = 0
-  progressInterval = setInterval(() => {
-    progress.value += 1 / 6
-  }, 50)
+  slideInterval = setInterval(nextSlide, slideDuration)
+  slideCycle.value++
 }
 
 document.body.addEventListener('keydown', (e) => {
@@ -153,10 +184,43 @@ window.addEventListener('message', (event) => {
 setTimeout(
   () => {
     clearInterval(slideInterval)
-    clearInterval(progressInterval)
     clearInterval(timeInterval)
     window.location.reload()
   },
   10 * 60 * 1000,
 )
 </script>
+
+<style scoped>
+.slideshow-fade-enter-active,
+.slideshow-fade-leave-active {
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
+}
+
+.slideshow-fade-enter-from {
+  opacity: 0;
+  transform: scale(1.02);
+}
+
+.slideshow-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.slideshow-progress {
+  animation-name: slideshow-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideshow-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+</style>
