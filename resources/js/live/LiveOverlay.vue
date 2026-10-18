@@ -15,18 +15,31 @@
       />
       <img v-else-if="showBackdrop" :src="demoBackdrop" alt="" class="backdrop" />
 
-      <Transition name="intro" :duration="{ enter: 1900, leave: 0 }">
-        <LifterIntro v-if="intro && displayed" :key="intro.id" :attempt="intro" />
+      <Transition name="board">
+        <Scoreboard
+          v-if="showScoreboard"
+          :key="boardKey"
+          :scoreboard="feed.snapshot.value.scoreboard"
+          :discipline="feed.snapshot.value.discipline"
+          :group="feed.snapshot.value.group"
+          :current-lifter-id="feed.snapshot.value.current?.lifterId ?? null"
+        />
+      </Transition>
+
+      <Transition name="intro" :duration="{ enter: 2800, leave: 0 }">
+        <LifterIntro v-if="intro && displayed && !showScoreboard" :key="intro.id" :attempt="intro" />
       </Transition>
 
       <Transition :name="exiting ? '' : 'panel'">
         <LowerThird
-          v-if="displayed && (!intro || exiting)"
+          v-if="displayed && (!intro || exiting) && !showScoreboard"
           :class="{ 'is-hidden': exiting === 'card' }"
           :attempt="displayed"
           :upcoming="upcoming"
         />
       </Transition>
+
+      <PbStamp v-if="pb" :key="pb.key" :attempt="pb.attempt" />
 
       <DemoControls
         v-if="demoSource && showControls"
@@ -37,10 +50,19 @@
         @toggle="playing = !playing"
       />
 
+      <DemoEditor
+        v-if="editorState && showControls"
+        :state="editorState"
+        :busy="Boolean(exiting)"
+        @clear-result="clearEditorResult"
+      />
+
       <DebugStatus
         v-if="debug"
         :status="status"
-        :source="demoSource ? 'demo' : `tävling ${competition}${delayMs ? ` (+${delayMs / 1000} s)` : ''}`"
+        :source="
+          demoSource || editorState ? 'demo' : `tävling ${competition}${delayMs ? ` (+${delayMs / 1000} s)` : ''}`
+        "
         :age="age"
         :failures="feed.failures.value"
         :error="feed.error.value"
@@ -52,15 +74,19 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import Stage from './components/Stage.vue'
 import LowerThird from './components/LowerThird.vue'
 import LifterIntro from './components/LifterIntro.vue'
 import DebugStatus from './components/DebugStatus.vue'
 import DemoControls from './components/DemoControls.vue'
+import DemoEditor from './components/DemoEditor.vue'
+import Scoreboard from './components/Scoreboard.vue'
+import PbStamp from './components/PbStamp.vue'
 import { useLiveFeed } from './useLiveFeed.js'
 import { createHttpSource } from './sources/httpSource.js'
 import { createDemoSource } from './sources/demoSource.js'
+import { createEditorSource, defaultEditorState } from './sources/editorSource.js'
 import { createDelayedSource, youTubeId } from './sources/delayedSource.js'
 import { initialOverlayState, reduceOverlayState, RESULT_DURATION_MS } from './overlayState.js'
 import demoBackdrop from './assets/demo-backdrop.jpg'
@@ -76,21 +102,29 @@ const flag = (name, fallback = false) =>
   params.has(name) ? !['0', 'false', 'no'].includes(params.get(name)) : fallback
 
 const competition = params.get('competition')
-const demoSource = flag('demo') ? createDemoSource() : null
+// ?demo=true opens the demo editor (everything set by hand); ?demo=scenario steps through a simulated competition.
+const demoSource = flag('demo') && params.get('demo') === 'scenario' ? createDemoSource() : null
+const editorState = flag('demo') && !demoSource ? reactive(defaultEditorState()) : null
 // Testing against an external stream: ?video=<YouTube link> plays it behind the overlay, and ?delay=<seconds>
 // holds the HUD back by the stream's latency so that the two line up.
 const videoId = youTubeId(params.get('video'))
 const delayMs = Math.max(0, Number(params.get('delay')) || 0) * 1000
 const liveSource = /^\d+$/.test(competition ?? '') ? createHttpSource(competition) : null
-const source = demoSource ?? (liveSource && delayMs ? createDelayedSource(liveSource, delayMs) : liveSource)
+const source =
+  demoSource ??
+  (editorState ? createEditorSource(editorState) : null) ??
+  (liveSource && delayMs ? createDelayedSource(liveSource, delayMs) : liveSource)
 const debug = flag('debug')
 const showControls = flag('controls', true)
-const showIntros = flag('intro', true)
+// ?view=scoreboard shows only the results list of the current group: put it in its own OBS scene and switch to it.
+const scoreboardView = params.get('view') === 'scoreboard'
+// In the demo editor the lifter card is shown and hidden by hand instead.
+const showIntros = flag('intro', true) && !editorState && !scoreboardView
 // How long the lifter introduction stays up (?introSeconds=N); shorter in the demo so the flow is quick to watch.
-const INTRO_MS = (Number(params.get('introSeconds')) || (demoSource ? 2.5 : 5)) * 1000
+const INTRO_MS = (Number(params.get('introSeconds')) || (demoSource ? 3.5 : 5)) * 1000
 // A competition photo standing in for the camera, so the demo shows the complete picture in a browser.
 // Hidden inside OBS (which exposes window.obsstudio), where the real camera or a test video is underneath.
-const showBackdrop = demoSource !== null && flag('backdrop', !window.obsstudio)
+const showBackdrop = Boolean(demoSource || editorState) && flag('backdrop', !window.obsstudio)
 
 const feed = source ? useLiveFeed(source) : null
 
@@ -165,6 +199,24 @@ const displayed = computed(() => {
   return state.value.result ?? feed.snapshot.value?.current ?? null
 })
 
+// The results list replaces the lower third and the lifter card while it is shown.
+const showScoreboard = computed(
+  () =>
+    (scoreboardView || editorState?.mode === 'list') &&
+    Boolean(displayed.value || feed?.snapshot.value?.scoreboard?.lifters.length) &&
+    status.value !== 'loading' &&
+    status.value !== 'offline',
+)
+
+// Changing the key replays the list's entrance animation, e.g. each time its OBS scene goes live.
+const boardKey = ref(0)
+
+function onObsShown(event) {
+  if (event.detail?.active || event.detail?.visible) {
+    boardKey.value++
+  }
+}
+
 // Who lifts after the attempt being shown. While a result is still on screen the next lifter has
 // usually already been called, and is then the feed's current lifter.
 const upcoming = computed(() => {
@@ -200,6 +252,9 @@ watch(displayed, (attempt) => {
 })
 
 function cancelIntro() {
+  if (editorState?.mode === 'card') {
+    editorState.mode = 'bar'
+  }
   clearTimeout(introTimer)
   exitAnimations.forEach((animation) => animation.cancel())
   exitAnimations = []
@@ -318,9 +373,71 @@ function measureExit(card, stack) {
   }
 }
 
+// Demo editor: the mode buttons show the lifter card (flip in) or turn it into the lower third (flip over),
+// and while the card is up it follows the edits.
+if (editorState) {
+  watch(
+    () => editorState.mode,
+    async (mode) => {
+      if (mode === 'bar') {
+        endIntro()
+        return
+      }
+
+      if (mode === 'list') {
+        cancelIntro()
+        return
+      }
+
+      // Asking for the card while a result is shown cuts the result short.
+      if (state.value.result) {
+        state.value = { ...state.value, result: null }
+        await nextTick()
+      }
+
+      if (!exiting.value && displayed.value && !displayed.value.outcome) {
+        intro.value = displayed.value
+      } else {
+        editorState.mode = 'bar'
+      }
+    },
+  )
+
+  // While the card mode is chosen, the card shows the current attempt: it flips in once the first data has loaded
+  // (the card is the default when the page opens), and then follows the edits.
+  watch(displayed, (attempt) => {
+    if (editorState.mode === 'card' && !exiting.value && attempt && !attempt.outcome) {
+      intro.value = attempt
+    }
+  })
+
+  watch(editorState, () => feed.refresh(), { deep: true })
+}
+
+// Demo editor's "Rensa": remove the result from the attempt and take it off screen right away.
+function clearEditorResult() {
+  editorState.result = null
+  state.value = { ...state.value, result: null }
+}
+
+// "PB ALERT" stamp, triggered with P for now (shown for the stamp's 3.4 s animation). The lifter on screen is
+// shown below it.
+const PB_MS = 3400
+const pb = shallowRef(null)
+let pbTimer = null
+
+function showPb() {
+  clearTimeout(pbTimer)
+  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt: displayed.value }
+  pbTimer = setTimeout(() => (pb.value = null), PB_MS)
+}
+
 // Esc (via OBS "Interact") cuts short whatever is on screen: the introduction, or else a shown result.
 function skip() {
-  if (intro.value) {
+  if (pb.value) {
+    clearTimeout(pbTimer)
+    pb.value = null
+  } else if (intro.value) {
     endIntro()
   } else if (state.value.result) {
     state.value = { ...state.value, result: null }
@@ -347,6 +464,27 @@ function scheduleDemoStep() {
 }
 
 function onKeydown(event) {
+  // Typing in the demo editor's fields.
+  if (event.target instanceof Element && event.target.closest('input, select, textarea')) {
+    return
+  }
+
+  if (event.key.toLowerCase() === 'p' && !event.metaKey && !event.ctrlKey && !event.altKey) {
+    showPb()
+    event.preventDefault()
+    return
+  }
+
+  // Demo editor: S, N and R switch between the lifter card, the lower third and the results list (also while folded).
+  const editorModes = { s: 'card', n: 'bar', r: 'list' }
+  if (editorState && editorModes[event.key.toLowerCase()] && !event.metaKey && !event.ctrlKey && !event.altKey) {
+    if (!exiting.value) {
+      editorState.mode = editorModes[event.key.toLowerCase()]
+    }
+    event.preventDefault()
+    return
+  }
+
   if (event.key === 'Escape') {
     skip()
   } else if (!demoSource) {
@@ -370,6 +508,11 @@ onMounted(() => {
   clock = setInterval(() => (now.value = Date.now()), 1000)
 
   window.addEventListener('keydown', onKeydown)
+  if (scoreboardView) {
+    // OBS tells the page when its scene goes live or the source is shown.
+    window.addEventListener('obsSourceActiveChanged', onObsShown)
+    window.addEventListener('obsSourceVisibleChanged', onObsShown)
+  }
   if (demoSource) {
     scheduleDemoStep()
   }
@@ -379,8 +522,11 @@ onBeforeUnmount(() => {
   clearInterval(clock)
   clearTimeout(expiryTimer)
   clearTimeout(introTimer)
+  clearTimeout(pbTimer)
   clearTimeout(demoTimer)
   window.removeEventListener('keydown', onKeydown)
+  window.removeEventListener('obsSourceActiveChanged', onObsShown)
+  window.removeEventListener('obsSourceVisibleChanged', onObsShown)
 })
 </script>
 
@@ -409,6 +555,14 @@ onBeforeUnmount(() => {
 code {
   font-size: 0.9em;
   color: var(--overlay-silver);
+}
+
+.board-leave-active {
+  transition: opacity 300ms ease;
+}
+
+.board-leave-to {
+  opacity: 0;
 }
 
 .panel-enter-active,

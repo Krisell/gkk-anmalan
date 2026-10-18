@@ -36,7 +36,8 @@ class LiveOverlayController extends Controller
 
     private const LIFTER_FIELDS = [
         'id', 'name', 'team', 'weightclass', 'weightclass_short_alt', 'category', 'category_short', 'sex', 'raw', 'lot', 'lifts',
-        'total', 'place', 'prog_place',
+        // 'wilks' holds the IPF GL points (the field name is a leftover from the Wilks formula).
+        'total', 'place', 'prog_place', 'wilks',
     ];
 
     public function show()
@@ -127,6 +128,8 @@ class LiveOverlayController extends Controller
                 fn ($entry) => $this->trimEntry($entry),
                 \array_slice($topics['scoresheet']['last_lifts'] ?? [], 0, 3),
             ),
+            // The current group's lifters, in Powerlifting Live's order, for the results list (?view=scoreboard).
+            'lifters' => \array_map(fn ($lifter) => $this->trimLifter($lifter), $topics['scoresheet']['lifters'] ?? []),
         ];
 
         Cache::put($key, ['state' => $state, 'changed_at' => $changedAt, 'fetched_at' => $now, 'data' => $data], 60);
@@ -183,13 +186,25 @@ class LiveOverlayController extends Controller
         $trimmed = \array_filter($entry, fn ($value) => ! \is_array($value));
 
         if (\is_array($entry['lifter'] ?? null)) {
-            $lifter = Arr::only($entry['lifter'], self::LIFTER_FIELDS);
+            $trimmed['lifter'] = $this->trimLifter($entry['lifter']);
+        }
 
-            if (\is_array($lifter['lifts'] ?? null)) {
-                $lifter['lifts'] = \array_filter($lifter['lifts'], fn ($value) => ! \is_array($value));
-            }
+        return $trimmed;
+    }
 
-            $trimmed['lifter'] = $lifter;
+    /**
+     * The lifter fields the overlay uses, with the per-attempt record lists removed from the lifts.
+     */
+    private function trimLifter(mixed $lifter): array
+    {
+        if (! \is_array($lifter)) {
+            return [];
+        }
+
+        $trimmed = Arr::only($lifter, self::LIFTER_FIELDS);
+
+        if (\is_array($trimmed['lifts'] ?? null)) {
+            $trimmed['lifts'] = \array_filter($trimmed['lifts'], fn ($value) => ! \is_array($value));
         }
 
         return $trimmed;

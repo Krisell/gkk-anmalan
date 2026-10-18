@@ -89,6 +89,31 @@ describe('normalizeFeed', () => {
     expect(normalizeFeed(raw).next).toMatchObject({ name: 'Same Group', weight: 140 })
   })
 
+  it('builds the results list of the current group', () => {
+    const raw = feed()
+    raw.scoresheet.lifters = [
+      { ...lifter, place: '1', total: 120, wilks: 28.12345 },
+      { id: '2', name: 'Bo Berg', team: 'Malmö AK', weightclass: '57', place: '0', lifts: { BP1: '60.0' } },
+    ]
+
+    const { scoreboard } = normalizeFeed(raw)
+
+    expect(scoreboard.disciplines).toEqual(['SQ', 'BP'])
+    expect(scoreboard.lifters[0]).toMatchObject({
+      id: '110845',
+      name: 'Anna Andersson',
+      place: 1,
+      total: 120,
+      points: 28.12345,
+    })
+    expect(scoreboard.lifters[0].lifts.SQ).toEqual([
+      { weight: 120, outcome: 'good' },
+      { weight: 127.5, outcome: 'failed' },
+      { weight: 127.5, outcome: null },
+    ])
+    expect(scoreboard.lifters[1]).toMatchObject({ name: 'Bo Berg', place: null, total: null })
+  })
+
   it('normalizes the most recent judged lift', () => {
     expect(normalizeFeed(feed()).lastResult).toMatchObject({
       id: '110863:SQ2',
@@ -142,6 +167,7 @@ describe('normalizeFeed', () => {
       next: null,
       lastResult: null,
       decision: null,
+      scoreboard: expect.any(Object),
     })
   })
 
@@ -153,6 +179,7 @@ describe('normalizeFeed', () => {
       next: null,
       lastResult: null,
       decision: null,
+      scoreboard: expect.any(Object),
     })
     expect(normalizeFeed({ next_lifters: { lifters: [{}] } }).current).toMatchObject({ name: null, weight: null })
     expect(normalizeFeed({ decision: { updated: 1, left: 'w' } }).decision).toBeNull()

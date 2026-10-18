@@ -22,7 +22,7 @@
             <span v-if="attempt.attempt">Försök {{ attempt.attempt }}</span>
           </div>
           <div class="weight">
-            <span class="weight-value">{{ formatWeight(attempt.weight) }}</span>
+            <span class="weight-value" :class="weightSize">{{ weight }}</span>
             <span class="unit">kg</span>
           </div>
         </div>
@@ -69,6 +69,10 @@ const props = defineProps({
 })
 
 const discipline = computed(() => disciplineName(props.attempt.discipline))
+
+// The weight is the largest text on the card; longer weights ("97,5", "202,5") get a smaller size to fit the box.
+const weight = computed(() => formatWeight(props.attempt.weight))
+const weightSize = computed(() => (weight.value.length >= 5 ? 'long' : weight.value.length === 4 ? 'medium' : ''))
 
 const meta = computed(() => [props.attempt.team, formatWeightClass(props.attempt.weightClass)].filter(Boolean))
 
@@ -225,6 +229,14 @@ const rows = computed(() =>
   font-variant-numeric: tabular-nums;
 }
 
+.weight-value.medium {
+  font-size: 124px;
+}
+
+.weight-value.long {
+  font-size: 106px;
+}
+
 .unit {
   font-size: 48px;
 }
@@ -298,39 +310,39 @@ const rows = computed(() =>
 
 /* Enter: the card flips around into view, then its contents slide into place. */
 .intro-enter-active .card {
-  animation: card-flip-in 850ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: card-flip-in 1400ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .intro-enter-active .card::after {
-  animation: sheen 1100ms ease-in-out 800ms both;
+  animation: sheen 1500ms ease-in-out 1300ms both;
 }
 
 .intro-enter-active .logo {
-  animation: logo-in 600ms cubic-bezier(0.2, 0.8, 0.2, 1) 350ms both;
+  animation: logo-in 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 550ms both;
 }
 
 .intro-enter-active .who > * {
-  animation: slide-right 500ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: slide-right 800ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .intro-enter-active .who > :nth-child(1) {
-  animation-delay: 400ms;
+  animation-delay: 650ms;
 }
 
 .intro-enter-active .who > :nth-child(2) {
-  animation-delay: 480ms;
+  animation-delay: 780ms;
 }
 
 .intro-enter-active .who > :nth-child(3) {
-  animation-delay: 560ms;
+  animation-delay: 910ms;
 }
 
 .intro-enter-active .lift > * {
-  animation: slide-left 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 500ms both;
+  animation: slide-left 800ms cubic-bezier(0.2, 0.8, 0.2, 1) 800ms both;
 }
 
 .intro-enter-active .stats > * {
-  animation: rise 450ms cubic-bezier(0.2, 0.8, 0.2, 1) 650ms both;
+  animation: rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 1050ms both;
 }
 
 @keyframes card-flip-in {

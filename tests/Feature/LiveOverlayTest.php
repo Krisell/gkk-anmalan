@@ -69,7 +69,10 @@ test('the feed proxies and trims the Powerlifting Live topics', function () {
         ->assertJsonPath('next_lifters.lifters.0.lifter.lifts', ['SQ1' => '120.0', 'SQ1_status' => 'good'])
         ->assertJsonMissingPath('next_lifters.lifters.0.lifter.license')
         ->assertJsonMissingPath('next_lifters.lifters.0.lifter.records_sq')
-        ->assertJsonMissingPath('scoresheet.lifters')
+        ->assertJsonPath('scoresheet.lifters.0.name', 'Anna Andersson')
+        ->assertJsonPath('scoresheet.lifters.0.lifts', ['SQ1' => '120.0', 'SQ1_status' => 'good'])
+        ->assertJsonMissingPath('scoresheet.lifters.0.license')
+        ->assertJsonMissingPath('scoresheet.lifters.0.records_sq')
         ->assertJsonPath('scoresheet.info.current_discipline', 'SQ')
         ->assertJsonPath('scoresheet.last_lifts.0.lift', 'SQ1')
         ->assertJsonPath('decision.right', 'r');

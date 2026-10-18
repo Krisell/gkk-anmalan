@@ -44,7 +44,7 @@ When the referee lights arrive the result is shown immediately for the lifter on
 feed hasn't answered for 20 seconds the overlay hides itself rather than show outdated information, and it comes back
 automatically when the feed recovers.
 
-The next lifter (the second entry of `next_lifters`) is shown in a tab above the panel. While a result is still shown,
+The next lifter (the second entry of `next_lifters`) is shown in a tab labelled _Därefter_ above the panel. While a result is still shown,
 the lifter already called to the platform is shown as next.
 
 When a new lifter is called to the platform, a large **lifter card** flips in at the center of the screen (name, club,
@@ -52,15 +52,29 @@ weight class, attempt and requested weight, attempts so far, total, placing and 
 travels down and flips over into the lower third. It is not shown on a page reload, when the same lifter takes
 another attempt, or while a result is on screen (it waits until the result has been shown).
 
+### Results list
+
+`/live/overlay?competition=<id>&view=scoreboard` shows only a results list of the group on the platform: lifters per
+weight class and category (places within each), finished disciplines as the best lift, the current discipline attempt
+by attempt, disciplines still to come as empty columns, the total and IPF GL points (Powerlifting Live's `wilks`
+field holds the GL points, which matches the GL formula on sampled competitions). A full competition therefore always has five
+result columns. The lifter on the platform is highlighted.
+
+To use it during a broadcast, make a separate OBS scene with the camera and this page as a Browser Source, and switch
+to it with a hotkey whenever you want to show the standings. Each time the scene goes live the list animates in: the
+heading slides in from the left, and then the list folds down below it.
+In the demo editor, choose _Resultatlista_ under _Läge_ to preview it.
+
 ### Operator controls
 
 | URL parameter    | Default         | Meaning                           |
 | ---------------- | --------------- | --------------------------------- |
 | `intro=0`        | on              | Never show the large lifter card  |
-| `introSeconds=3` | 5 (2.5 in demo) | How long the lifter card stays up |
+| `introSeconds=3` | 5 (3.5 in demo) | How long the lifter card stays up |
 
 During a broadcast, right-click the browser source in OBS → _Interact_ and press **Esc** to cut short the lifter
-card or a result immediately. To take all graphics off air at once, give the browser source a show/hide hotkey in
+card, a result or the PB stamp immediately. **P** shows a "PB ALERT" stamp diagonally across the screen for about
+3 seconds, with the name and weight of the lifter on screen. To take all graphics off air at once, give the browser source a show/hide hotkey in
 OBS (_Settings → Hotkeys_); with _Shutdown source when not visible_ unchecked the overlay keeps its state while hidden.
 
 ## Running locally
@@ -73,22 +87,30 @@ Tests: `vp test` (normalizing, result detection, polling, demo scenario) and
 
 ## Demo mode
 
-`/live/overlay?demo=true` steps through a simulated competition: a lifter preparing, a changed requested weight,
-good and failed lifts with referee lights and reason cards, a result recorded without lights, discipline changes and
-the end of a group. It makes no network requests.
+Two demos, neither of which makes any network requests:
+
+- **`/live/overlay?demo=true`, the editor.** A toolbar at the top sets everything by hand: big lifter card, lower
+  third or results list (switching runs the real animations; keys **S**, **N** and **R** also work while the toolbar
+  is folded), name, club, weight class, discipline, attempt, requested weight, a result with referee lights (a
+  dropdown; _Inget_ clears it) and the lifter after the current one (_Därefter_). The results list shows a made-up
+  group of two weight classes with Senior and Junior lifters, ranked within each, with IPF GL points. Earlier attempts, earlier
+  disciplines, total and placing are made up at random; _Slumpa om tidigare lyft_ rolls them again. Clicking _Demo_ folds the toolbar away (remembered in the browser).
+- **`/live/overlay?demo=scenario`, a scripted competition.** Steps through a lifter preparing, a changed requested
+  weight, good and failed lifts with referee lights and reason cards, a result recorded without lights, discipline
+  changes and the end of a group.
 
 | Parameter    | Default | Meaning                                                   |
 | ------------ | ------- | --------------------------------------------------------- |
-| `autoplay=0` | on      | Don't advance automatically (every 6 s)                   |
-| `controls=0` | on      | Hide the demo control panel (for clean recordings)        |
+| `controls=0` | on      | Hide the editor/demo controls (for clean recordings)      |
+| `autoplay=0` | on      | Scenario only: don't advance automatically (every 6 s)    |
 | `debug=1`    | off     | Show feed status (also works with `competition=`)         |
 | `backdrop=0` | on\*    | Hide the demo photo behind the overlay (\*off inside OBS) |
 
-In a normal browser the demo shows a competition photo (`assets/demo-backdrop.jpg`, an optimized copy of `public/example-squat.JPG`) in
-place of the camera, so you can see the complete picture. Inside OBS it is hidden automatically, so the real camera or
-test video shows through.
+In a normal browser the demo shows a competition photo (`assets/demo-backdrop.jpg`) in place of the camera, so you can
+see the complete picture. Inside OBS it is hidden automatically, so the real camera or test video shows through.
 
-Keyboard: `←`/`→` previous/next step, space to play/pause, Esc to skip the lifter card or result. In OBS, right-click the source → _Interact_ to use them.
+Keyboard: Esc skips the lifter card or result. In the scenario, `←`/`→` change step and space plays/pauses. In OBS,
+right-click the source → _Interact_ to use the editor or the keys.
 
 ## Configuring the competition
 
@@ -160,6 +182,9 @@ encoded, so the stream's latency applies to both equally.
 - One platform/competition per overlay.
 - A hotkey in OBS can't reach the page directly (only via _Interact_); OBS WebSocket or a small control page would
   allow that, but was out of scope for this version.
+- PBs are only shown manually (P). Powerlifting Live's lifter data has PB fields (`pr_sq`, `pr_bp`, `pr_dl`,
+  `pr_total`), empty in all sampled competitions; if organizers fill them in, the stamp could be shown automatically
+  when a good lift beats the PB.
 - Ideas for later: information during breaks (e.g. "Paus – nästa grupp startar 14:30"), lifter photos and short
   lifter presentations, the attempt clock (`clock` topic). The feed also has record attempts and secretariat notices
   (`records`, `notice`), deliberately not shown on stream.

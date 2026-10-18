@@ -4,7 +4,7 @@
       <div class="tabs">
         <Transition name="tab" mode="out-in">
           <div v-if="upcoming" :key="upcoming.id" class="tab next">
-            <span class="eyebrow">Nästa</span>
+            <span class="eyebrow">Därefter</span>
             <span class="next-name">{{ upcoming.name ?? 'Okänd lyftare' }}</span>
             <span v-if="upcoming.weight" class="next-weight">{{ formatWeight(upcoming.weight) }} kg</span>
           </div>
