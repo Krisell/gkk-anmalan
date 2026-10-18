@@ -19,8 +19,15 @@ OBS Browser Source ── polls every 1 s ──▶ /live/feed/{id} (Laravel, ca
   credentials. We use `next_lifters` (lifter on the platform and requested weight), `scoresheet/current`
   (current discipline and the most recently judged lifts) and `referee/decision` (referee lights).
 - **Proxy.** `feed.php` sends no CORS headers, so the browser can't call it directly.
-  `LiveOverlayController@feed` fetches the three topics in parallel, trims them (the scoresheet is ~36 KB, the
-  response ~3 KB), and caches the result for one second so that several open overlays share one upstream request.
+  `LiveOverlayController@feed` fetches the topics, trims them (the scoresheet is ~36 KB, the response ~3 KB), and
+  caches the result for one second so that several open overlays share one upstream request.
+  - The small topics (lifter order, referee decision) are fetched every second. The large scoresheet only when one of
+    them changed (and for 3 seconds after), otherwise every 10 seconds: roughly one fetch per lift instead of one per
+    second.
+  - Requests carry the User-Agent `GKK live overlay (+<APP_URL>)` so that Powerlifting Live can see who is calling.
+  - Only our server talks to Powerlifting Live. If it were ever blocked, only the overlay stops working; the network at
+    the venue (and the competition administration) is unaffected.
+  - Entries marked `next_group` (lifters of the following group) are left out, as on Powerlifting Live's own screens.
 - **Client** (`resources/js/live/`), a separate Vite entry that doesn't load the regular site:
   - `sources/` – where data comes from: `httpSource.js` (the proxy) or `demoSource.js` (simulation).
   - `normalize.js` – converts the Powerlifting Live format to the internal model. Nothing else knows the external schema.
@@ -153,5 +160,8 @@ encoded, so the stream's latency applies to both equally.
 - One platform/competition per overlay.
 - A hotkey in OBS can't reach the page directly (only via _Interact_); OBS WebSocket or a small control page would
   allow that, but was out of scope for this version.
-- Possible additions: record attempts (the feed has record data), the attempt clock (`clock` topic),
-  and current/predicted placing.
+- Ideas for later: information during breaks (e.g. "Paus – nästa grupp startar 14:30"), lifter photos and short
+  lifter presentations, the attempt clock (`clock` topic). The feed also has record attempts and secretariat notices
+  (`records`, `notice`), deliberately not shown on stream.
+- Powerlifting Live's own screens get updates pushed via MQTT instead of polling. Doing the same on our server would
+  remove the last second of delay and most of the requests, but needs a long-running process on the server.

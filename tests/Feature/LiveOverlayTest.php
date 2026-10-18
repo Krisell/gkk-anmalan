@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
-function fakePowerliftingLive(array $overrides = []): void
+function powerliftingLiveTopics(): array
 {
     $lifter = [
         'id' => '110845',
@@ -16,9 +17,9 @@ function fakePowerliftingLive(array $overrides = []): void
         'records_sq' => [['weight' => '130.0']],
     ];
 
-    $topics = \array_merge([
+    return [
         'next_lifters' => [
-            'lifters' => [['weight' => '127.5', 'notice' => '', 'records' => [], 'lifter' => $lifter]],
+            'lifters' => [['weight' => '127.5', 'attempt' => '2', 'notice' => '', 'records' => [], 'lifter' => $lifter]],
             'info' => ['current_group' => 'Grupp 01', 'current_round' => 2],
         ],
         'scoresheet/current' => [
@@ -27,9 +28,13 @@ function fakePowerliftingLive(array $overrides = []): void
             'last_lifts' => [['lifter_id' => '110845', 'lift' => 'SQ1', 'status' => 'good', 'lifter' => $lifter]],
         ],
         'referee/decision' => ['updated' => 1791711790, 'left' => 'w', 'center' => 'w', 'right' => 'r'],
-    ], $overrides);
+    ];
+}
 
-    Http::fake(function ($request) use ($topics) {
+// Fakes Powerlifting Live's feed.php; changes to $topics after the call are picked up by later requests.
+function fakePowerliftingLive(array &$topics): void
+{
+    Http::fake(function (Request $request) use (&$topics) {
         \parse_str(\parse_url($request->url(), PHP_URL_QUERY), $query);
         $topic = \preg_replace('#^competition/\d+/#', '', $query['key']);
 
@@ -37,6 +42,11 @@ function fakePowerliftingLive(array $overrides = []): void
             ? Http::response(\json_encode($topics[$topic]), 200, ['Content-Type' => 'text/html'])
             : Http::response('{}');
     });
+}
+
+function scoresheetRequests(): int
+{
+    return Http::recorded(fn (Request $request) => \str_contains(\urldecode($request->url()), '/scoresheet/'))->count();
 }
 
 test('the overlay page is a bare page without the regular site layout', function () {
@@ -47,12 +57,14 @@ test('the overlay page is a bare page without the regular site layout', function
 });
 
 test('the feed proxies and trims the Powerlifting Live topics', function () {
-    fakePowerliftingLive();
+    $topics = powerliftingLiveTopics();
+    fakePowerliftingLive($topics);
 
     $response = $this->getJson('/live/feed/3001')->assertOk();
 
     $response->assertJsonPath('next_lifters.info.current_round', 2)
         ->assertJsonPath('next_lifters.lifters.0.weight', '127.5')
+        ->assertJsonPath('next_lifters.lifters.0.attempt', '2')
         ->assertJsonPath('next_lifters.lifters.0.lifter.name', 'Anna Andersson')
         ->assertJsonPath('next_lifters.lifters.0.lifter.lifts', ['SQ1' => '120.0', 'SQ1_status' => 'good'])
         ->assertJsonMissingPath('next_lifters.lifters.0.lifter.license')
@@ -62,17 +74,69 @@ test('the feed proxies and trims the Powerlifting Live topics', function () {
         ->assertJsonPath('scoresheet.last_lifts.0.lift', 'SQ1')
         ->assertJsonPath('decision.right', 'r');
 
-    Http::assertSent(fn ($request) => \str_starts_with($request->url(), 'https://se.powerliftinglive.com/feed.php')
-        && \str_contains(\urldecode($request->url()), 'key=competition/3001/next_lifters'));
+    Http::assertSent(fn (Request $request) => \str_starts_with($request->url(), 'https://se.powerliftinglive.com/feed.php')
+        && \str_contains(\urldecode($request->url()), 'key=competition/3001/next_lifters')
+        && \str_starts_with($request->header('User-Agent')[0] ?? '', 'GKK live overlay'));
+});
+
+test('lifters from the next group are left out', function () {
+    $topics = powerliftingLiveTopics();
+    $current = $topics['next_lifters']['lifters'][0];
+    $topics['next_lifters']['lifters'] = [
+        $current,
+        ['weight' => '200.0', 'next_group' => 'Grupp 02', 'lifter' => ['id' => '2', 'name' => 'Next Group']],
+        ['weight' => '135.0', 'lifter' => ['id' => '3', 'name' => 'Same Group']],
+    ];
+    fakePowerliftingLive($topics);
+
+    $this->getJson('/live/feed/3001')
+        ->assertOk()
+        ->assertJsonCount(2, 'next_lifters.lifters')
+        ->assertJsonPath('next_lifters.lifters.1.lifter.name', 'Same Group');
 });
 
 test('the feed is cached briefly so that several overlays share one upstream request', function () {
-    fakePowerliftingLive();
+    $topics = powerliftingLiveTopics();
+    fakePowerliftingLive($topics);
 
     $this->getJson('/live/feed/3001')->assertOk();
     $this->getJson('/live/feed/3001')->assertOk();
 
     Http::assertSentCount(3);
+});
+
+test('the scoresheet is only fetched again when a result may have changed', function () {
+    $topics = powerliftingLiveTopics();
+    fakePowerliftingLive($topics);
+
+    $this->getJson('/live/feed/3001')->assertOk();
+    expect(scoresheetRequests())->toBe(1);
+
+    // Nothing changed: the small topics are fetched again, the scoresheet is not.
+    $this->travel(4)->seconds();
+    $this->getJson('/live/feed/3001')->assertOk();
+    expect(scoresheetRequests())->toBe(1);
+    Http::assertSentCount(3 + 2);
+
+    // A new referee decision means a result may be recorded: fetch it, and keep doing so for a few seconds.
+    $topics['referee/decision'] = ['updated' => 1791711900, 'left' => 'r', 'center' => 'r', 'right' => 'r'];
+    $topics['scoresheet/current']['last_lifts'][0]['status'] = 'failed';
+    $this->travel(2)->seconds();
+    $this->getJson('/live/feed/3001')->assertOk()->assertJsonPath('scoresheet.last_lifts.0.status', 'failed');
+    expect(scoresheetRequests())->toBe(2);
+
+    $this->travel(2)->seconds();
+    $this->getJson('/live/feed/3001')->assertOk();
+    expect(scoresheetRequests())->toBe(3);
+
+    $this->travel(2)->seconds();
+    $this->getJson('/live/feed/3001')->assertOk();
+    expect(scoresheetRequests())->toBe(3);
+
+    // Without changes it is still refreshed every 10 seconds.
+    $this->travel(10)->seconds();
+    $this->getJson('/live/feed/3001')->assertOk();
+    expect(scoresheetRequests())->toBe(4);
 });
 
 test('the feed reports upstream failures without caching them', function () {

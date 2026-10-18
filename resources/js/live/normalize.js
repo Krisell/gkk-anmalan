@@ -35,7 +35,10 @@ export function normalizeFeed(raw) {
   const discipline = toDiscipline(scoresheet.info?.current_discipline)
   const round = toInt(nextLifters.info?.current_round)
 
-  const [currentEntry, nextEntry] = Array.isArray(nextLifters.lifters) ? nextLifters.lifters : []
+  // Entries marked next_group belong to the following group (the proxy removes them too).
+  const [currentEntry, nextEntry] = (Array.isArray(nextLifters.lifters) ? nextLifters.lifters : []).filter(
+    (entry) => entry && entry.next_group == null,
+  )
   const [lastEntry] = Array.isArray(scoresheet.last_lifts) ? scoresheet.last_lifts : []
 
   return {

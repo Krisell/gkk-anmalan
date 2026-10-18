@@ -79,6 +79,16 @@ describe('normalizeFeed', () => {
     expect(normalizeFeed(feed()).next).toBeNull()
   })
 
+  it('skips lifters from the next group', () => {
+    const raw = feed()
+    raw.next_lifters.lifters.push(
+      { weight: '200.0', next_group: 'Grupp 02', lifter: { id: '2', name: 'Next Group' } },
+      { weight: '140.0', lifter: { id: '3', name: 'Same Group', lifts: {} } },
+    )
+
+    expect(normalizeFeed(raw).next).toMatchObject({ name: 'Same Group', weight: 140 })
+  })
+
   it('normalizes the most recent judged lift', () => {
     expect(normalizeFeed(feed()).lastResult).toMatchObject({
       id: '110863:SQ2',
