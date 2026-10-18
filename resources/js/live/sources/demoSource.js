@@ -12,7 +12,6 @@ const LIFTERS = {
     weightclass: '63',
     category: 'Senior',
     place: 2,
-    prog_place: 1,
   },
   erik: {
     id: 'd2',
@@ -21,7 +20,6 @@ const LIFTERS = {
     weightclass: '93',
     category: 'Senior',
     place: 1,
-    prog_place: 1,
   },
   sara: {
     id: 'd3',
@@ -30,7 +28,6 @@ const LIFTERS = {
     weightclass: '76',
     category: 'Junior 19-23',
     place: 1,
-    prog_place: 2,
   },
   ahmed: {
     id: 'd4',
@@ -39,7 +36,6 @@ const LIFTERS = {
     weightclass: '120+',
     category: 'Master 1',
     place: 1,
-    prog_place: 1,
   },
 }
 

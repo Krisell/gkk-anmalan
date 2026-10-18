@@ -21,7 +21,7 @@
  *   attempts: [{ weight, outcome }] x 3      the lifter's attempts in this discipline
  *   lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 }   all of the lifter's attempts
  *   total: number | null,                    the lifter's current total
- *   place: number | null, predictedPlace: number | null
+ *   place: number | null
  * }
  *
  * Decision: { id: string, lights: [{ good: boolean, cards: ['red'|'yellow'|'blue'] }] x 3 (left, center, right) }
@@ -100,10 +100,7 @@ function normalizeCurrent(entry, competitionDiscipline, round) {
     toInt(entry.attempt) ?? fromLift?.attempt ?? firstUnjudgedAttempt(lifts, discipline) ?? validAttempt(round)
   const weight = toWeight(entry.weight) ?? (discipline && attempt ? toWeight(lifts[`${discipline}${attempt}`]) : null)
 
-  const current = buildAttempt(lifter, entry.lifter_id, discipline, attempt, weight, null)
-  const predictedPlace = toPlace(entry.predict_place ?? lifter.prog_place)
-
-  return { ...current, predictedPlace }
+  return buildAttempt(lifter, entry.lifter_id, discipline, attempt, weight, null)
 }
 
 function normalizeLastLift(entry) {
@@ -138,7 +135,6 @@ function buildAttempt(lifter, fallbackLifterId, discipline, attempt, weight, out
     lifts: Object.fromEntries(DISCIPLINES.map((d) => [d, disciplineAttempts(lifts, d)])),
     total: toWeight(lifter.total),
     place: toPlace(lifter.place),
-    predictedPlace: toPlace(lifter.prog_place),
   }
 }
 

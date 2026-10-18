@@ -28,12 +28,21 @@
         </div>
       </div>
 
-      <div class="stats" :class="{ dense: rows.length >= 3 }">
-        <div v-for="row in rows" :key="row.discipline" class="stat discipline">
-          <div class="eyebrow">{{ row.name }}</div>
-          <div class="slots">
-            <div v-for="(slot, index) in row.slots" :key="index" class="slot" :class="slot.state">
-              {{ slot.label }}
+      <div class="stats">
+        <!-- Three fixed places, filled from the right: the current discipline is always in the last one. -->
+        <div class="disciplines">
+          <div
+            v-for="(row, index) in rows"
+            :key="row.discipline"
+            class="stat discipline"
+            :data-discipline="row.discipline"
+            :style="{ gridColumn: 4 - (rows.length - index) }"
+          >
+            <div class="eyebrow">{{ row.name }}</div>
+            <div class="slots">
+              <div v-for="(slot, slotIndex) in row.slots" :key="slotIndex" class="slot" :class="slot.state">
+                {{ slot.label }}
+              </div>
             </div>
           </div>
         </div>
@@ -47,10 +56,6 @@
         <div v-if="attempt.place" class="stat">
           <div class="eyebrow">Placering</div>
           <div class="value">{{ attempt.place }}</div>
-        </div>
-        <div v-if="attempt.predictedPlace" class="stat">
-          <div class="eyebrow">Prognos</div>
-          <div class="value">{{ attempt.predictedPlace }}</div>
         </div>
       </div>
     </div>
@@ -252,7 +257,7 @@ const rows = computed(() =>
 .stats {
   display: flex;
   align-items: center;
-  gap: 48px;
+  gap: 28px;
   height: 116px;
   padding: 0 44px;
   background: var(--overlay-panel-deep);
@@ -271,29 +276,26 @@ const rows = computed(() =>
 
 .value {
   font-family: var(--overlay-font);
-  font-size: 44px;
+  font-size: 40px;
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
 }
 
-/* With all three disciplines (9 attempts) the band is tighter, so total and placings still fit. */
-.stats.dense {
-  gap: 28px;
+/*
+  The disciplines have three fixed places (room for all nine attempts), filled from the right, so the current
+  discipline is always in the same place, just before the total: the box that flies into the lower third when the
+  card leaves always starts from there.
+*/
+.disciplines {
+  display: grid;
+  grid-template-columns: repeat(3, 228px);
+  column-gap: 28px;
 }
 
-.stats.dense .eyebrow {
+.stat .eyebrow {
   font-size: 18px;
   letter-spacing: 0.14em;
-}
-
-.stats.dense .slot {
-  width: 72px;
-  font-size: 24px;
-}
-
-.stats.dense .value {
-  font-size: 40px;
 }
 
 .value small {
@@ -307,11 +309,11 @@ const rows = computed(() =>
 }
 
 .slot {
-  width: 92px;
+  width: 72px;
   height: 44px;
   border-radius: 5px;
   font-family: var(--overlay-font);
-  font-size: 27px;
+  font-size: 24px;
   font-weight: 600;
   line-height: 44px;
   text-align: center;

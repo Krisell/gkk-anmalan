@@ -48,7 +48,7 @@ The next lifter (the second entry of `next_lifters`) is shown in a tab labelled 
 the lifter already called to the platform is shown as next.
 
 When a new lifter is called to the platform, a large **lifter card** flips in at the center of the screen (name, club,
-weight class, attempt and requested weight, attempts so far, total, placing and projected placing). After 5 seconds it
+weight class, attempt and requested weight, attempts so far, total and placing). After 5 seconds it
 travels down and flips over into the lower third. It is not shown on a page reload, when the same lifter takes
 another attempt, or while a result is on screen (it waits until the result has been shown).
 
@@ -81,8 +81,8 @@ OBS (_Settings → Hotkeys_); with _Shutdown source when not visible_ unchecked 
 
 Modelled on how Swedish TV (SVT, TV4) presents individual sports:
 
-- **Corner graphic.** Our logo, top right, on every view (lower third, lifter card, results list, slates, replay and
-  commentator pages; not in the stinger). The competition's name, `&title=DM Klassisk styrkelyft`, is shown on the
+- **Corner graphic.** Our logo, top right, on every view (lower third, lifter card, slates, replay and commentator
+  pages) except the results list, which has our logo in its heading, and the stinger. The competition's name, `&title=DM Klassisk styrkelyft`, is shown on the
   slates.
 - **Club crests.** As on TV, the crest next to a lifter means _their_ club, so the lower third and the lifter card
   show the lifter's club crest, or none. Add crests in `clubs.js` (logo in `assets/clubs/`, club names as Powerlifting

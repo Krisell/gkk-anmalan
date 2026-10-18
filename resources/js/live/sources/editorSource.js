@@ -72,8 +72,8 @@ export function defaultEditorState(random = Math.random) {
   }
 }
 
-// The made-up parts: steps between attempts, which attempts were good, how the projected placing differs from
-// the current one, and the rest of the group (relative strength and their own attempts).
+// The made-up parts: steps between attempts, which attempts were good, the lifter's body weight within the class,
+// and the rest of the group (relative strength and their own attempts).
 export function randomHistory(random = Math.random) {
   const pick = (list) => list[Math.floor(random() * list.length)]
   const attempts = () => ({
@@ -83,7 +83,6 @@ export function randomHistory(random = Math.random) {
 
   return {
     ...attempts(),
-    predictedShift: pick([-1, -1, 0, 1]),
     bodyweight: random(),
     field: FIELD.map(([name, team, weightClass, category]) => ({
       name,
@@ -157,13 +156,9 @@ export function editorFeed(state, now = Date.now()) {
     wilks: ipfPoints(total(lifts), state.weightClass, state.history.bodyweight),
   }
   const ranked = rank([lifter, ...field])
-  const place = ranked.find((one) => one.id === 'editor').place
   Object.assign(
     lifter,
     ranked.find((one) => one.id === 'editor'),
-    {
-      prog_place: place ? Math.max(1, place + state.history.predictedShift) : 0,
-    },
   )
 
   const nextWeight = roundWeight(Number(state.nextWeight) || 0)

@@ -166,9 +166,11 @@ function cell(lifter, column) {
 </script>
 
 <style scoped>
+/* Like the slates, on the stinger's blue, slightly transparent, so the hall still shows through. */
 .scoreboard {
   position: absolute;
   inset: 0;
+  background: rgba(49, 66, 112, 0.85);
   display: flex;
   align-items: flex-start;
   justify-content: center;

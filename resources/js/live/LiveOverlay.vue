@@ -96,8 +96,9 @@
       />
     </template>
 
-    <!-- Our logo in the corner, on every view (but not in the stinger, which is a transition). -->
-    <CornerBug v-if="view !== 'stinger'" />
+    <!-- Our logo in the corner, on every view except the results list (it has our logo in its heading) and the
+         stinger (a transition). -->
+    <CornerBug v-if="view !== 'stinger' && view !== 'scoreboard' && !showScoreboard" />
 
     <!-- The stinger as an in-page transition when the results list or a slate comes or goes. -->
     <Stinger v-if="stinger" :key="stinger" class="in-page-stinger" />
@@ -389,6 +390,7 @@ function cancelIntro() {
   if (editorState?.mode === 'card') {
     editorState.mode = 'bar'
   }
+  endFlight()
   clearTimeout(introTimer)
   exitAnimations.forEach((animation) => animation.cancel())
   exitAnimations = []
@@ -416,6 +418,11 @@ async function endIntro() {
 
   const perspective = 'perspective(2200px)'
   const { dx, dy, scale, front, back, origin } = geometry
+
+  // The current discipline's attempts are carried over: they travel down with the card, and when the card flips
+  // they come loose and fly flat straight into the lower third's attempts while the card flips around them.
+  const carried = prepareFlight(card, stack, current.discipline)
+  let flight = null
   const run = (element, keyframes, options) => {
     const animation = element.animate(keyframes, { fill: 'forwards', ...options })
     exitAnimations.push(animation)
@@ -434,6 +441,7 @@ async function endIntro() {
     )
 
     // 2. Flip the card edge-on while its shape stretches towards the lower third's proportions.
+    flight = startFlight(carried)
     await run(
       card,
       [
@@ -447,6 +455,7 @@ async function endIntro() {
   }
 
   if (intro.value !== current) {
+    endFlight()
     return
   }
 
@@ -464,15 +473,153 @@ async function endIntro() {
   exiting.value = 'bar'
 
   try {
-    await flipIn
+    await Promise.all([flipIn, flight?.finished])
   } catch {
     return
   }
 
+  endFlight()
   exitAnimations.forEach((animation) => animation.cancel())
   exitAnimations = []
   stack.style.transformOrigin = ''
   exiting.value = null
+}
+
+// The flying copies of the card's current attempts (see endIntro), with the real elements hidden meanwhile.
+let flyer = null
+const FLIGHT_MS = 650 // the card's flip (300) plus the lower third flipping in (350)
+
+// The carried-over box flies as two parts, the discipline heading and the attempt boxes, each straight onto its
+// counterpart in the lower third, so that both land exactly even though the heading is styled differently there.
+const FLIGHT_PARTS = ['.eyebrow', '.slots']
+
+// Measures, in stage pixels, the card's current attempts at full size (before the card shrinks) and where they go
+// in the lower third.
+function prepareFlight(card, stack, discipline) {
+  const from = card.querySelector(`.stats .stat[data-discipline="${discipline}"]`)
+  const to = stack.querySelector('.attempts')
+  if (!from || !to) {
+    return null
+  }
+
+  return {
+    from,
+    to,
+    natural: FLIGHT_PARTS.map((part) => stageBox(from.querySelector(part))),
+    end: FLIGHT_PARTS.map((part) => stageBox(to.querySelector(part))),
+  }
+}
+
+// An element's box in stage pixels; for the heading, the box of its text (it is as wide as its container).
+function stageBox(element) {
+  const stage = document.querySelector('.stage').getBoundingClientRect()
+  const ratio = 1920 / stage.width
+  let box = element.getBoundingClientRect()
+  if (element.matches('.eyebrow')) {
+    const text = document.createRange()
+    text.selectNodeContents(element)
+    box = text.getBoundingClientRect()
+  }
+  return {
+    left: (box.left - stage.left) * ratio,
+    top: (box.top - stage.top) * ratio,
+    width: box.width * ratio,
+    height: box.height * ratio,
+  }
+}
+
+// Lifts the attempts out of the (now travelled and shrunk) card and flies them into the lower third.
+function startFlight(carried) {
+  const stage = document.querySelector('.stage')
+  if (!carried || !stage) {
+    return null
+  }
+
+  const { from, to, natural, end } = carried
+  const wrappers = []
+  const animations = FLIGHT_PARTS.map((part, index) => {
+    const start = stageBox(from.querySelector(part))
+
+    // Each copy sits in shallow clones of the card's row and its container, so that the card's (scoped) styles
+    // still apply to it.
+    const wrapper = from.parentElement.cloneNode(false)
+    const row = from.cloneNode(false)
+    row.removeAttribute('style') // its place in the card's grid of disciplines
+    wrapper.style.display = 'block'
+    const copy = from.querySelector(part).cloneNode(true)
+    copy.style.display = 'inline-flex' // as wide as its text, like the measured boxes
+    copy.style.margin = '0'
+    row.appendChild(copy)
+    wrapper.appendChild(row)
+    Object.assign(wrapper.style, {
+      position: 'absolute',
+      left: `${start.left}px`,
+      top: `${start.top}px`,
+      height: 'auto',
+      margin: '0',
+      padding: '0',
+      border: 'none',
+      background: 'none',
+      zIndex: '6',
+      pointerEvents: 'none',
+      transformOrigin: '0 0',
+    })
+    stage.appendChild(wrapper)
+    wrappers.push(wrapper)
+
+    // The copy only scales uniformly, from the card's shrunk size to full size, while its own sizes (box size,
+    // font size, letter spacing) change from the card's to the lower third's. Nothing is ever stretched, and at
+    // the end the copy is identical to the lower third's elements, so the swap can't be seen.
+    const target = end[index]
+    const options = { duration: FLIGHT_MS, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fill: 'forwards' }
+    const sizes = (element, properties) => {
+      const style = getComputedStyle(element)
+      return Object.fromEntries(properties.map((property) => [property, style[property]]))
+    }
+    const morphs =
+      part === '.slots'
+        ? [...copy.children].map((slot, n) => {
+            const properties = ['width', 'height', 'lineHeight', 'fontSize', 'borderRadius']
+            const cardSlot = from.querySelectorAll('.slot')[n]
+            const barSlot = to.querySelectorAll('.slot')[n] ?? to.querySelector('.slot')
+            return slot.animate([sizes(cardSlot, properties), sizes(barSlot, properties)], options)
+          })
+        : [
+            copy.animate(
+              [
+                sizes(from.querySelector(part), ['fontSize', 'letterSpacing']),
+                sizes(to.querySelector(part), ['fontSize', 'letterSpacing']),
+              ],
+              options,
+            ),
+          ]
+
+    return Promise.all([
+      wrapper.animate(
+        [
+          { transform: `translate(0, 0) scale(${start.width / natural[index].width})` },
+          { transform: `translate(${target.left - start.left}px, ${target.top - start.top}px) scale(1)` },
+        ],
+        options,
+      ).finished,
+      ...morphs.map((animation) => animation.finished),
+    ])
+  })
+
+  // Hide the card's box and only the contents of the lower third's (its divider line flips in with the panel).
+  const hidden = [from, ...FLIGHT_PARTS.map((part) => to.querySelector(part))]
+  hidden.forEach((element) => (element.style.visibility = 'hidden'))
+  flyer = { wrappers, hidden: hidden.slice(1) }
+
+  return { finished: Promise.all(animations) }
+}
+
+function endFlight() {
+  if (flyer) {
+    flyer.wrappers.forEach((wrapper) => wrapper.remove())
+    flyer.hidden.forEach((element) => (element.style.visibility = ''))
+    flyer = null
+  }
 }
 
 // Geometry (in 1920×1080 stage pixels) for moving the card onto the lower third's panel, and the
@@ -682,6 +829,7 @@ onBeforeUnmount(() => {
   clearTimeout(expiryTimer)
   clearTimeout(introTimer)
   clearTimeout(pbTimer)
+  endFlight()
   roundBoardTimers.forEach(clearTimeout)
   stingerTimers.forEach(clearTimeout)
   clearTimeout(demoTimer)
