@@ -11,4 +11,7 @@ return [
         'client_id' => env('FORTNOX_CLIENT_ID'),
         'client_secret' => env('FORTNOX_CLIENT_SECRET'),
     ],
+    'powerliftinglive' => [
+        'url' => env('POWERLIFTINGLIVE_URL', 'https://se.powerliftinglive.com'),
+    ],
 ];
