@@ -1,6 +1,7 @@
 const DISCIPLINE_NAMES = { SQ: 'Knäböj', BP: 'Bänkpress', DL: 'Marklyft' }
 
 const weightFormat = new Intl.NumberFormat('sv-SE', { maximumFractionDigits: 2 })
+const pointsFormat = new Intl.NumberFormat('sv-SE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
 export function disciplineName(discipline) {
   return DISCIPLINE_NAMES[discipline] ?? null
@@ -8,6 +9,10 @@ export function disciplineName(discipline) {
 
 export function formatWeight(weight) {
   return weight == null ? '–' : weightFormat.format(weight)
+}
+
+export function formatPoints(points) {
+  return points == null ? '–' : pointsFormat.format(points)
 }
 
 // Weight classes are named by their upper limit ('63' -> '-63 kg'); the open class keeps its plus ('120+').

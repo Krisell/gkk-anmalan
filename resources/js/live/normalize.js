@@ -9,6 +9,7 @@
  *   next: Attempt | null,                    lifter after that
  *   lastResult: Attempt | null,              most recently judged attempt, outcome set
  *   decision: Decision | null,               latest referee decision
+ *   scoreboard: Scoreboard,                  the current group's results (for ?view=scoreboard)
  * }
  *
  * Attempt: {
@@ -23,6 +24,12 @@
  * }
  *
  * Decision: { id: string, lights: [{ good: boolean, cards: ['red'|'yellow'|'blue'] }] x 3 (left, center, right) }
+ *
+ * Scoreboard: {
+ *   disciplines: ['SQ', 'BP', 'DL'],         the disciplines of the competition (a bench-only meet: ['BP'])
+ *   lifters: [{ id, name, team, weightClass, category, place, total, points, lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 } }]
+ *                                            points: IPF GL points (Powerlifting Live calls the field 'wilks')
+ * }
  */
 
 export const DISCIPLINES = ['SQ', 'BP', 'DL']
@@ -35,7 +42,10 @@ export function normalizeFeed(raw) {
   const discipline = toDiscipline(scoresheet.info?.current_discipline)
   const round = toInt(nextLifters.info?.current_round)
 
-  const [currentEntry, nextEntry] = Array.isArray(nextLifters.lifters) ? nextLifters.lifters : []
+  // Entries marked next_group belong to the following group (the proxy removes them too).
+  const [currentEntry, nextEntry] = (Array.isArray(nextLifters.lifters) ? nextLifters.lifters : []).filter(
+    (entry) => entry && entry.next_group == null,
+  )
   const [lastEntry] = Array.isArray(scoresheet.last_lifts) ? scoresheet.last_lifts : []
 
   return {
@@ -45,6 +55,29 @@ export function normalizeFeed(raw) {
     next: nextEntry ? normalizeCurrent(nextEntry, discipline, null) : null,
     lastResult: lastEntry ? normalizeLastLift(lastEntry) : null,
     decision: normalizeDecision(raw?.decision),
+    scoreboard: normalizeScoreboard(scoresheet.lifters, discipline),
+  }
+}
+
+function normalizeScoreboard(rawLifters, discipline) {
+  const lifters = (Array.isArray(rawLifters) ? rawLifters : []).filter((lifter) => lifter && typeof lifter === 'object')
+
+  return {
+    // A discipline belongs to the competition if it is the current one or anyone has declared a weight in it.
+    disciplines: DISCIPLINES.filter(
+      (d) => d === discipline || lifters.some((lifter) => [1, 2, 3].some((n) => toWeight(lifter.lifts?.[`${d}${n}`]))),
+    ),
+    lifters: lifters.map((lifter) => ({
+      id: toText(lifter.id),
+      name: toText(lifter.name),
+      team: toText(lifter.team),
+      weightClass: toText(lifter.weightclass_short_alt ?? lifter.weightclass),
+      category: toText(lifter.category),
+      place: toPlace(lifter.place),
+      total: toWeight(lifter.total),
+      points: toWeight(lifter.wilks),
+      lifts: Object.fromEntries(DISCIPLINES.map((d) => [d, disciplineAttempts(lifter.lifts ?? {}, d)])),
+    })),
   }
 }
 
