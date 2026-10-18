@@ -32,6 +32,7 @@ const statusLabel = computed(
 <style scoped>
 .debug {
   position: absolute;
+  z-index: 10;
   top: 24px;
   right: 24px;
   padding: 10px 14px;

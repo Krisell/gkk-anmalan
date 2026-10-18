@@ -1,6 +1,20 @@
 <template>
   <Stage>
-    <div v-if="!source" class="config-error">
+    <!-- Pages for their own OBS scene or transition, needing no competition data. -->
+    <template v-if="standaloneView">
+      <Stinger v-if="view === 'stinger'" />
+      <ReplayTag v-else-if="view === 'replay'" :key="activationKey" />
+      <CommentatorStrap v-else-if="view === 'commentators'" :key="activationKey" :names="commentatorNames" />
+      <Slate
+        v-else
+        :key="activationKey"
+        :kind="params.get('slate') ?? 'start'"
+        :title="title"
+        :time="params.get('time')"
+      />
+    </template>
+
+    <div v-else-if="!source" class="config-error">
       Ange tävling i adressen, t.ex. <code>/live/overlay?competition=3001</code>, eller testa med
       <code>/live/overlay?demo=true</code>.
     </div>
@@ -16,9 +30,19 @@
       <img v-else-if="showBackdrop" :src="demoBackdrop" alt="" class="backdrop" />
 
       <Transition name="board">
+        <Slate
+          v-if="showSlate"
+          :key="`slate-${editorState.slate}`"
+          :kind="editorState.slate"
+          :title="eventTitle"
+          :time="demoPauseTime"
+        />
+      </Transition>
+
+      <Transition name="board">
         <Scoreboard
           v-if="showScoreboard"
-          :key="boardKey"
+          :key="activationKey"
           :scoreboard="feed.snapshot.value.scoreboard"
           :discipline="feed.snapshot.value.discipline"
           :group="feed.snapshot.value.group"
@@ -27,15 +51,16 @@
       </Transition>
 
       <Transition name="intro" :duration="{ enter: 2800, leave: 0 }">
-        <LifterIntro v-if="intro && displayed && !showScoreboard" :key="intro.id" :attempt="intro" />
+        <LifterIntro v-if="intro && displayed && !fullScreen" :key="intro.id" :attempt="intro" />
       </Transition>
 
       <Transition :name="exiting ? '' : 'panel'">
         <LowerThird
-          v-if="displayed && (!intro || exiting) && !showScoreboard"
+          v-if="displayed && (!intro || exiting) && !fullScreen"
           :class="{ 'is-hidden': exiting === 'card' }"
           :attempt="displayed"
           :upcoming="upcoming"
+          :clock-ends-at="clockEndsAt"
         />
       </Transition>
 
@@ -70,6 +95,12 @@
         :result-id="state.result?.id ?? null"
       />
     </template>
+
+    <!-- Our logo in the corner, on every view (but not in the stinger, which is a transition). -->
+    <CornerBug v-if="view !== 'stinger'" />
+
+    <!-- The stinger as an in-page transition when the results list or a slate comes or goes. -->
+    <Stinger v-if="stinger" :key="stinger" class="in-page-stinger" />
   </Stage>
 </template>
 
@@ -83,6 +114,11 @@ import DemoControls from './components/DemoControls.vue'
 import DemoEditor from './components/DemoEditor.vue'
 import Scoreboard from './components/Scoreboard.vue'
 import PbStamp from './components/PbStamp.vue'
+import CornerBug from './components/CornerBug.vue'
+import Slate from './components/Slate.vue'
+import ReplayTag from './components/ReplayTag.vue'
+import CommentatorStrap from './components/CommentatorStrap.vue'
+import Stinger from './components/Stinger.vue'
 import { useLiveFeed } from './useLiveFeed.js'
 import { createHttpSource } from './sources/httpSource.js'
 import { createDemoSource } from './sources/demoSource.js'
@@ -105,6 +141,8 @@ const competition = params.get('competition')
 // ?demo=true opens the demo editor (everything set by hand); ?demo=scenario steps through a simulated competition.
 const demoSource = flag('demo') && params.get('demo') === 'scenario' ? createDemoSource() : null
 const editorState = flag('demo') && !demoSource ? reactive(defaultEditorState()) : null
+// The demo editor's view as shown: follows editorState.mode, but full-screen views switch under the stinger.
+const displayMode = ref(editorState?.mode ?? null)
 // Testing against an external stream: ?video=<YouTube link> plays it behind the overlay, and ?delay=<seconds>
 // holds the HUD back by the stream's latency so that the two line up.
 const videoId = youTubeId(params.get('video'))
@@ -116,10 +154,20 @@ const source =
   (liveSource && delayMs ? createDelayedSource(liveSource, delayMs) : liveSource)
 const debug = flag('debug')
 const showControls = flag('controls', true)
-// ?view=scoreboard shows only the results list of the current group: put it in its own OBS scene and switch to it.
-const scoreboardView = params.get('view') === 'scoreboard'
+// ?view=… makes the page a single graphic for its own OBS scene (or transition):
+// - scoreboard: the results list of the current group (needs ?competition=…),
+// - slate (&slate=start|pause|end&time=14:30), replay ("REPRIS"), commentators (&names=A,B), stinger.
+const view = params.get('view')
+const scoreboardView = view === 'scoreboard'
+const standaloneView = ['slate', 'replay', 'commentators', 'stinger'].includes(view)
+const commentatorNames = (params.get('names') ?? '')
+  .split(',')
+  .map((name) => name.trim())
+  .filter(Boolean)
+// The competition's name for the slates (?title=…); editable in the demo.
+const title = params.get('title')
 // In the demo editor the lifter card is shown and hidden by hand instead.
-const showIntros = flag('intro', true) && !editorState && !scoreboardView
+const showIntros = flag('intro', true) && !editorState && !scoreboardView && !standaloneView
 // How long the lifter introduction stays up (?introSeconds=N); shorter in the demo so the flow is quick to watch.
 const INTRO_MS = (Number(params.get('introSeconds')) || (demoSource ? 3.5 : 5)) * 1000
 // A competition photo standing in for the camera, so the demo shows the complete picture in a browser.
@@ -202,18 +250,42 @@ const displayed = computed(() => {
 // The results list replaces the lower third and the lifter card while it is shown.
 const showScoreboard = computed(
   () =>
-    (scoreboardView || editorState?.mode === 'list') &&
+    (scoreboardView || displayMode.value === 'list' || roundBoard.value) &&
     Boolean(displayed.value || feed?.snapshot.value?.scoreboard?.lifters.length) &&
     status.value !== 'loading' &&
     status.value !== 'offline',
 )
 
-// Changing the key replays the list's entrance animation, e.g. each time its OBS scene goes live.
-const boardKey = ref(0)
+// In the demo editor, a slate ("Skylt") can be previewed like the results list.
+const showSlate = computed(() => displayMode.value === 'slate')
+
+// Full-screen graphics replace the lower third, the lifter card and the corner graphic while shown.
+const fullScreen = computed(() => showScoreboard.value || showSlate.value)
+
+// The competition's name: from ?title=…, or the demo editor's field.
+const eventTitle = computed(() => editorState?.title?.trim() || title || null)
+
+// In the demo the break slate says the next group starts in about a quarter of an hour.
+const demoPauseTime = (() => {
+  const at = new Date(Date.now() + 15 * 60 * 1000)
+  at.setMinutes(Math.ceil(at.getMinutes() / 5) * 5)
+  return at.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })
+})()
+
+// Attempt clock: Powerlifting Live publishes the seconds left when it starts; the overlay counts down from there.
+// Only a changed value restarts it, so repeated polls of the same message don't.
+const clockEndsAt = ref(null)
+watch(
+  () => feed?.snapshot.value?.clock,
+  (seconds) => (clockEndsAt.value = seconds ? Date.now() + seconds * 1000 : null),
+)
+
+// Changing the key replays a graphic's entrance animation, e.g. each time its OBS scene goes live.
+const activationKey = ref(0)
 
 function onObsShown(event) {
   if (event.detail?.active || event.detail?.visible) {
-    boardKey.value++
+    activationKey.value++
   }
 }
 
@@ -233,15 +305,77 @@ const upcoming = computed(() => {
   return snapshot.next
 })
 
-watch(displayed, (attempt) => {
+// Between rounds: when the last lift of a round has been judged, the results list is shown automatically, 3 s after
+// the lights and for 10 s (unless ?roundBoard=0). In the demo, "Sista i omgången" makes a result end the round.
+const ROUND_BOARD_DELAY_MS = 3000
+const ROUND_BOARD_MS = 10000
+const showRoundBoards = flag('roundBoard', true) && !scoreboardView && !standaloneView
+const roundBoard = ref(false)
+let roundBoardFor = null
+let roundBoardTimers = []
+
+watch(
+  () => state.value.result,
+  (result) => {
+    const endsRound = result && (editorState ? editorState.lastInRound : result.confirmed && result.endsRound)
+    const key = result && `${result.id}:${result.shownAt}`
+    if (!showRoundBoards || !endsRound || key === roundBoardFor) {
+      return
+    }
+
+    roundBoardFor = key
+    stopRoundBoard()
+    const startIn = Math.max(0, result.shownAt + ROUND_BOARD_DELAY_MS - Date.now())
+    roundBoardTimers = [
+      setTimeout(
+        () =>
+          withStinger(() => {
+            roundBoard.value = true
+            activationKey.value++
+          }),
+        startIn,
+      ),
+      setTimeout(() => withStinger(stopRoundBoard), startIn + STINGER_COVERED_MS + ROUND_BOARD_MS),
+    ]
+  },
+)
+
+// The stinger as an in-page transition: bands sweep in, the change happens while the picture is fully covered
+// (0.6 s, like OBS's transition point), and the bands sweep out (1.2 s in all).
+const STINGER_COVERED_MS = 600
+const STINGER_MS = 1200
+const stinger = ref(0)
+let stingerTimers = []
+
+function withStinger(change) {
+  stingerTimers.forEach(clearTimeout)
+  stinger.value++
+  const key = stinger.value
+  stingerTimers = [
+    setTimeout(change, STINGER_COVERED_MS),
+    setTimeout(() => stinger.value === key && (stinger.value = 0), STINGER_MS),
+  ]
+}
+
+function stopRoundBoard() {
+  roundBoardTimers.forEach(clearTimeout)
+  roundBoardTimers = []
+  roundBoard.value = false
+}
+
+watch(displayed, considerIntro)
+// A lifter called while the results list was shown is introduced once it is gone.
+watch(roundBoard, (shown) => !shown && considerIntro(displayed.value))
+
+function considerIntro(attempt) {
   // Results take precedence; the introduction waits until the result has been shown.
   if (!attempt || attempt.outcome) {
     cancelIntro()
     return
   }
 
-  // Only a new lifter is introduced, not the same lifter taking another attempt.
-  if (!showIntros || introducedLifterId == null || attempt.lifterId === introducedLifterId) {
+  // Only a new lifter is introduced, not the same lifter taking another attempt, and not under the results list.
+  if (!showIntros || roundBoard.value || introducedLifterId == null || attempt.lifterId === introducedLifterId) {
     return
   }
 
@@ -249,7 +383,7 @@ watch(displayed, (attempt) => {
   intro.value = attempt
   clearTimeout(introTimer)
   introTimer = setTimeout(endIntro, INTRO_MS)
-})
+}
 
 function cancelIntro() {
   if (editorState?.mode === 'card') {
@@ -376,32 +510,54 @@ function measureExit(card, stack) {
 // Demo editor: the mode buttons show the lifter card (flip in) or turn it into the lower third (flip over),
 // and while the card is up it follows the edits.
 if (editorState) {
+  // The results list and the slates come and go under the stinger, like separate OBS scenes; the card and the lower
+  // third switch with their own animations.
   watch(
     () => editorState.mode,
-    async (mode) => {
-      if (mode === 'bar') {
-        endIntro()
-        return
-      }
-
-      if (mode === 'list') {
-        cancelIntro()
-        return
-      }
-
-      // Asking for the card while a result is shown cuts the result short.
-      if (state.value.result) {
-        state.value = { ...state.value, result: null }
-        await nextTick()
-      }
-
-      if (!exiting.value && displayed.value && !displayed.value.outcome) {
-        intro.value = displayed.value
+    (mode) => {
+      const fullScreenModes = ['list', 'slate']
+      if (fullScreenModes.includes(mode) || fullScreenModes.includes(displayMode.value)) {
+        withStinger(() => applyMode(mode))
       } else {
-        editorState.mode = 'bar'
+        applyMode(mode)
       }
     },
   )
+
+  async function applyMode(mode) {
+    if (editorState.mode !== mode) {
+      return // changed again meanwhile
+    }
+
+    displayMode.value = mode
+
+    // Choosing another full view ends the results list shown between rounds. (Switching to the lower third
+    // doesn't: that also happens on its own when a result arrives while the card is up.)
+    if (mode !== 'bar') {
+      stopRoundBoard()
+    }
+    if (mode === 'bar') {
+      endIntro()
+      return
+    }
+
+    if (mode === 'list' || mode === 'slate') {
+      cancelIntro()
+      return
+    }
+
+    // Asking for the card while a result is shown cuts the result short.
+    if (state.value.result) {
+      state.value = { ...state.value, result: null }
+      await nextTick()
+    }
+
+    if (!exiting.value && displayed.value && !displayed.value.outcome) {
+      intro.value = displayed.value
+    } else {
+      editorState.mode = 'bar'
+    }
+  }
 
   // While the card mode is chosen, the card shows the current attempt: it flips in once the first data has loaded
   // (the card is the default when the page opens), and then follows the edits.
@@ -437,6 +593,8 @@ function skip() {
   if (pb.value) {
     clearTimeout(pbTimer)
     pb.value = null
+  } else if (roundBoard.value) {
+    withStinger(stopRoundBoard)
   } else if (intro.value) {
     endIntro()
   } else if (state.value.result) {
@@ -475,8 +633,9 @@ function onKeydown(event) {
     return
   }
 
-  // Demo editor: S, N and R switch between the lifter card, the lower third and the results list (also while folded).
-  const editorModes = { s: 'card', n: 'bar', r: 'list' }
+  // Demo editor: S, N, R and K switch between the lifter card, the lower third, the results list and a slate
+  // ("skylt"), also while the toolbar is folded.
+  const editorModes = { s: 'card', n: 'bar', r: 'list', k: 'slate' }
   if (editorState && editorModes[event.key.toLowerCase()] && !event.metaKey && !event.ctrlKey && !event.altKey) {
     if (!exiting.value) {
       editorState.mode = editorModes[event.key.toLowerCase()]
@@ -508,7 +667,7 @@ onMounted(() => {
   clock = setInterval(() => (now.value = Date.now()), 1000)
 
   window.addEventListener('keydown', onKeydown)
-  if (scoreboardView) {
+  if (scoreboardView || standaloneView) {
     // OBS tells the page when its scene goes live or the source is shown.
     window.addEventListener('obsSourceActiveChanged', onObsShown)
     window.addEventListener('obsSourceVisibleChanged', onObsShown)
@@ -523,6 +682,8 @@ onBeforeUnmount(() => {
   clearTimeout(expiryTimer)
   clearTimeout(introTimer)
   clearTimeout(pbTimer)
+  roundBoardTimers.forEach(clearTimeout)
+  stingerTimers.forEach(clearTimeout)
   clearTimeout(demoTimer)
   window.removeEventListener('keydown', onKeydown)
   window.removeEventListener('obsSourceActiveChanged', onObsShown)
@@ -557,8 +718,12 @@ code {
   color: var(--overlay-silver);
 }
 
+.in-page-stinger {
+  z-index: 5;
+}
+
 .board-leave-active {
-  transition: opacity 300ms ease;
+  transition: opacity var(--motion-fast) var(--motion-move);
 }
 
 .board-leave-to {
@@ -568,8 +733,8 @@ code {
 .panel-enter-active,
 .panel-leave-active {
   transition:
-    opacity 350ms ease,
-    transform 350ms ease;
+    opacity var(--motion-base) var(--motion-move),
+    transform var(--motion-base) var(--motion-move);
 }
 
 .panel-enter-from,

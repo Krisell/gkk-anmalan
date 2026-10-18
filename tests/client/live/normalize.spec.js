@@ -89,6 +89,12 @@ describe('normalizeFeed', () => {
     expect(normalizeFeed(raw).next).toMatchObject({ name: 'Same Group', weight: 140 })
   })
 
+  it('reads the attempt clock as seconds left, and nothing when it is stopped', () => {
+    expect(normalizeFeed(feed({ clock: { clock: 42 } })).clock).toBe(42)
+    expect(normalizeFeed(feed({ clock: { clock: 0 } })).clock).toBeNull()
+    expect(normalizeFeed(feed({ clock: { clock: -5 } })).clock).toBeNull()
+  })
+
   it('builds the results list of the current group', () => {
     const raw = feed()
     raw.scoresheet.lifters = [
@@ -168,6 +174,7 @@ describe('normalizeFeed', () => {
       lastResult: null,
       decision: null,
       scoreboard: expect.any(Object),
+      clock: null,
     })
   })
 
@@ -180,6 +187,7 @@ describe('normalizeFeed', () => {
       lastResult: null,
       decision: null,
       scoreboard: expect.any(Object),
+      clock: null,
     })
     expect(normalizeFeed({ next_lifters: { lifters: [{}] } }).current).toMatchObject({ name: null, weight: null })
     expect(normalizeFeed({ decision: { updated: 1, left: 'w' } }).decision).toBeNull()

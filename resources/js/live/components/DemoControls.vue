@@ -24,6 +24,7 @@ const emit = defineEmits(['go', 'toggle'])
 <style scoped>
 .demo {
   position: absolute;
+  z-index: 10;
   top: 24px;
   left: 24px;
   width: 560px;

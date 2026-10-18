@@ -53,7 +53,11 @@ export const LIGHTS = {
 
 export function defaultEditorState(random = Math.random) {
   return {
-    mode: 'card', // 'card' (big lifter card, shown first), 'bar' (lower third) or 'list' (results list)
+    mode: 'card', // 'card' (big lifter card, shown first), 'bar' (lower third), 'list' (results list) or 'slate'
+    slate: 'start', // which slate: 'start', 'pause' or 'end'
+    title: 'Distriktsmästerskapen 2026', // the competition's name, for the slates
+    clockStartedAt: null, // when the demo's 60-second attempt clock was started (ms timestamp)
+    lastInRound: false, // a result ends the round, so the results list is shown (as between rounds live)
     name: 'Anders Andersson',
     team: 'Stark AK',
     weightClass: '93',
@@ -102,7 +106,9 @@ export function createEditorSource(state) {
   }
 }
 
-export function editorFeed(state) {
+export const CLOCK_SECONDS = 60
+
+export function editorFeed(state, now = Date.now()) {
   const discipline = ORDER.includes(state.discipline) ? state.discipline : 'SQ'
   const attempt = Math.min(3, Math.max(1, Number(state.attempt) || 1))
   const weight = roundWeight(Number(state.weight) || 0)
@@ -188,6 +194,9 @@ export function editorFeed(state) {
         : [],
     },
     decision: lights ? { updated: state.decisions, left: lights[0], center: lights[1], right: lights[2] } : {},
+    clock: {
+      clock: state.clockStartedAt ? Math.max(0, Math.ceil(CLOCK_SECONDS - (now - state.clockStartedAt) / 1000)) : 0,
+    },
   }
 }
 

@@ -2,8 +2,8 @@
   <div class="intro">
     <div class="card">
       <div class="main">
-        <div class="brand">
-          <img :src="logo" alt="Göteborg Kraftsportklubb" class="logo" />
+        <div v-if="crest" class="brand">
+          <img :src="crest" :alt="attempt.team ?? ''" class="logo" />
         </div>
 
         <div class="who">
@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <div class="stats">
+      <div class="stats" :class="{ dense: rows.length >= 3 }">
         <div v-for="row in rows" :key="row.discipline" class="stat discipline">
           <div class="eyebrow">{{ row.name }}</div>
           <div class="slots">
@@ -59,7 +59,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import logo from '../assets/gkk-logo.png'
+import { clubCrest } from '../clubs.js'
 import { DISCIPLINES } from '../normalize.js'
 import { disciplineName, formatWeight, formatWeightClass } from '../format.js'
 
@@ -67,6 +67,9 @@ const props = defineProps({
   // The normalized Attempt of the lifter just called to the platform.
   attempt: { type: Object, required: true },
 })
+
+// The lifter's club crest, if we have one; no crest rather than ours (see clubs.js).
+const crest = computed(() => clubCrest(props.attempt.team))
 
 const discipline = computed(() => disciplineName(props.attempt.discipline))
 
@@ -172,6 +175,11 @@ const rows = computed(() =>
   padding: 0 44px;
 }
 
+/* Without a club crest the name comes first on the card. */
+.who:first-child {
+  padding-left: 60px;
+}
+
 .name {
   margin-top: 6px;
   font-family: var(--overlay-font);
@@ -266,6 +274,26 @@ const rows = computed(() =>
   font-size: 44px;
   font-weight: 700;
   line-height: 1;
+  white-space: nowrap;
+}
+
+/* With all three disciplines (9 attempts) the band is tighter, so total and placings still fit. */
+.stats.dense {
+  gap: 28px;
+}
+
+.stats.dense .eyebrow {
+  font-size: 18px;
+  letter-spacing: 0.14em;
+}
+
+.stats.dense .slot {
+  width: 72px;
+  font-size: 24px;
+}
+
+.stats.dense .value {
+  font-size: 40px;
 }
 
 .value small {
@@ -310,7 +338,7 @@ const rows = computed(() =>
 
 /* Enter: the card flips around into view, then its contents slide into place. */
 .intro-enter-active .card {
-  animation: card-flip-in 1400ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: card-flip-in 1400ms var(--motion-enter) both;
 }
 
 .intro-enter-active .card::after {
@@ -318,11 +346,11 @@ const rows = computed(() =>
 }
 
 .intro-enter-active .logo {
-  animation: logo-in 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 550ms both;
+  animation: logo-in 900ms var(--motion-enter) 550ms both;
 }
 
 .intro-enter-active .who > * {
-  animation: slide-right 800ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: slide-right 800ms var(--motion-enter) both;
 }
 
 .intro-enter-active .who > :nth-child(1) {
@@ -338,11 +366,11 @@ const rows = computed(() =>
 }
 
 .intro-enter-active .lift > * {
-  animation: slide-left 800ms cubic-bezier(0.2, 0.8, 0.2, 1) 800ms both;
+  animation: slide-left 800ms var(--motion-enter) 800ms both;
 }
 
 .intro-enter-active .stats > * {
-  animation: rise 700ms cubic-bezier(0.2, 0.8, 0.2, 1) 1050ms both;
+  animation: rise 700ms var(--motion-enter) 1050ms both;
 }
 
 @keyframes card-flip-in {

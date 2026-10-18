@@ -25,6 +25,7 @@ class LiveOverlayController extends Controller
     private const TOPICS = [
         'next_lifters' => 'next_lifters',
         'decision' => 'referee/decision',
+        'clock' => 'clock',
     ];
 
     // The scoresheet is by far the largest topic (~36 KB). It's fetched again only when the lifter order or the
@@ -92,6 +93,7 @@ class LiveOverlayController extends Controller
             ],
             'scoresheet' => $scoresheet,
             'decision' => $data['decision'],
+            'clock' => $data['clock'],
             'fetched_at' => now()->getTimestampMs(),
         ];
     }

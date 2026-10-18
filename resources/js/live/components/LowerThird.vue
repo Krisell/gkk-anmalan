@@ -16,13 +16,18 @@
             <span class="verdict" :class="attempt.outcome">
               {{ attempt.outcome === 'good' ? 'Godkänt' : 'Underkänt' }}
             </span>
+            <span v-if="placeChange" class="place-change">{{ placeChange }}</span>
+          </div>
+          <div v-else-if="clockLeft != null" key="clock" class="tab clock" :class="{ urgent: clockLeft <= 10 }">
+            <span class="eyebrow">Tid</span>
+            <span class="clock-time">{{ clockText }}</span>
           </div>
         </Transition>
       </div>
 
       <div class="panel">
-        <div class="brand">
-          <img :src="logo" alt="Göteborg Kraftsportklubb" class="logo" />
+        <div v-if="crest" class="brand">
+          <img :src="crest" :alt="attempt.team ?? ''" class="logo" />
         </div>
 
         <div class="identity">
@@ -60,9 +65,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import RefereeLights from './RefereeLights.vue'
-import logo from '../assets/gkk-logo.png'
+import { clubCrest } from '../clubs.js'
 import { disciplineName, formatWeight, formatWeightClass } from '../format.js'
 
 const props = defineProps({
@@ -70,7 +75,56 @@ const props = defineProps({
   attempt: { type: Object, required: true },
   // The lifter after the one shown, if known.
   upcoming: { type: Object, default: null },
+  // When the attempt clock runs out (ms timestamp), or null when it isn't running.
+  clockEndsAt: { type: Number, default: null },
 })
+
+// Attempt clock: counted down locally, like Powerlifting Live's own screens do.
+const now = ref(Date.now())
+let ticker = null
+
+watch(
+  () => props.clockEndsAt,
+  (endsAt) => {
+    clearInterval(ticker)
+    now.value = Date.now()
+    if (endsAt) {
+      ticker = setInterval(() => (now.value = Date.now()), 200)
+    }
+  },
+  { immediate: true },
+)
+
+onBeforeUnmount(() => clearInterval(ticker))
+
+const clockLeft = computed(() => {
+  if (!props.clockEndsAt) {
+    return null
+  }
+  const left = Math.ceil((props.clockEndsAt - now.value) / 1000)
+  return left > 0 ? left : null
+})
+
+const clockText = computed(() => {
+  const left = clockLeft.value ?? 0
+  return `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`
+})
+
+// "Tar ledningen" or "↑ 2 placeringar" after a good lift that improved the lifter's place.
+const placeChange = computed(() => {
+  const change = props.attempt.placeChange
+  if (!change?.to || !change.from || change.to >= change.from) {
+    return null
+  }
+  if (change.to === 1) {
+    return 'Tar ledningen'
+  }
+  const places = change.from - change.to
+  return `↑ ${places} ${places === 1 ? 'placering' : 'placeringar'}`
+})
+
+// The lifter's club crest, if we have one; no crest rather than ours (see clubs.js).
+const crest = computed(() => clubCrest(props.attempt.team))
 
 const discipline = computed(() => disciplineName(props.attempt.discipline))
 
@@ -96,7 +150,7 @@ const slots = computed(() =>
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 44px;
+  bottom: var(--safe-y);
   display: flex;
   justify-content: center;
 }
@@ -188,6 +242,55 @@ const slots = computed(() =>
   background: var(--overlay-failed);
 }
 
+.place-change {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 20px;
+  font-family: var(--overlay-font);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: place-change-in var(--motion-base) var(--motion-enter) 600ms both;
+}
+
+.clock {
+  gap: 14px;
+  margin-left: auto;
+  padding: 0 22px;
+  transition: background-color var(--motion-fast) var(--motion-move);
+}
+
+.clock-time {
+  min-width: 64px;
+  font-family: var(--overlay-font);
+  font-size: 30px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.clock.urgent {
+  background: var(--overlay-failed);
+}
+
+.clock.urgent .eyebrow {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@keyframes place-change-in {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .panel {
   position: relative;
   display: flex;
@@ -223,6 +326,11 @@ const slots = computed(() =>
   min-width: 400px;
   max-width: 600px;
   padding: 0 36px 4px 30px;
+}
+
+/* Without a club crest the name comes first in the panel. */
+.identity:first-child {
+  padding-left: 40px;
 }
 
 .name {
@@ -278,8 +386,8 @@ const slots = computed(() =>
   text-align: center;
   background: rgba(255, 255, 255, 0.1);
   transition:
-    background-color 300ms ease,
-    box-shadow 300ms ease;
+    background-color var(--motion-fast) var(--motion-move),
+    box-shadow var(--motion-fast) var(--motion-move);
 }
 
 .slot.empty {
@@ -310,8 +418,8 @@ const slots = computed(() =>
   background: var(--overlay-weight-bg);
   color: var(--overlay-weight-text);
   transition:
-    background-color 300ms ease,
-    color 300ms ease;
+    background-color var(--motion-fast) var(--motion-move),
+    color var(--motion-fast) var(--motion-move);
 }
 
 .lift .eyebrow {
@@ -357,8 +465,8 @@ const slots = computed(() =>
 .swap-enter-active,
 .swap-leave-active {
   transition:
-    opacity 220ms ease,
-    transform 220ms ease;
+    opacity var(--motion-fast) var(--motion-move),
+    transform var(--motion-fast) var(--motion-move);
 }
 
 .swap-enter-from {
@@ -374,8 +482,8 @@ const slots = computed(() =>
 .tab-enter-active,
 .tab-leave-active {
   transition:
-    opacity 260ms ease,
-    transform 260ms ease;
+    opacity var(--motion-fast) var(--motion-move),
+    transform var(--motion-fast) var(--motion-move);
 }
 
 .tab-enter-from,

@@ -28,6 +28,20 @@
   --overlay-card-blue: #2f6fe0;
   --overlay-font: 'Barlow Condensed', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
   --overlay-font-body: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+
+  /*
+    One motion language for every graphic: things arrive decelerating (enter), move with an even in-out (move),
+    and use three durations. The JavaScript animations in LiveOverlay.vue use the same curves written out.
+  */
+  --motion-enter: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-move: cubic-bezier(0.65, 0, 0.35, 1);
+  --motion-fast: 250ms;
+  --motion-base: 350ms;
+  --motion-slow: 650ms;
+
+  /* Broadcast safe area (EBU: about 5% of the picture): graphics stay this far from the edges. */
+  --safe-x: 96px;
+  --safe-y: 56px;
 }
 
 html,

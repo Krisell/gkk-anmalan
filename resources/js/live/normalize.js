@@ -10,6 +10,7 @@
  *   lastResult: Attempt | null,              most recently judged attempt, outcome set
  *   decision: Decision | null,               latest referee decision
  *   scoreboard: Scoreboard,                  the current group's results (for ?view=scoreboard)
+ *   clock: number | null,                    attempt clock: seconds left when last published, null if not running
  * }
  *
  * Attempt: {
@@ -56,7 +57,15 @@ export function normalizeFeed(raw) {
     lastResult: lastEntry ? normalizeLastLift(lastEntry) : null,
     decision: normalizeDecision(raw?.decision),
     scoreboard: normalizeScoreboard(scoresheet.lifters, discipline),
+    clock: normalizeClock(raw?.clock),
   }
+}
+
+// Powerlifting Live publishes the seconds left when the clock is started (or changed); 0 or less means stopped.
+// Its screens count down locally from there, and so does the overlay.
+function normalizeClock(raw) {
+  const seconds = toInt(raw?.clock)
+  return seconds > 0 ? seconds : null
 }
 
 function normalizeScoreboard(rawLifters, discipline) {

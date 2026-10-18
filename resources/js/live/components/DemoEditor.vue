@@ -22,6 +22,9 @@
                 {{ option.label }}
               </button>
             </div>
+            <select v-model="state.slate" :disabled="state.mode !== 'slate'" class="slate-kind" title="Vilken skylt">
+              <option v-for="option in SLATES" :key="option.value" :value="option.value">{{ option.label }}</option>
+            </select>
           </div>
           <div class="group">
             <span class="label">Gren</span>
@@ -73,6 +76,10 @@
 
         <div class="row">
           <label class="group">
+            <span class="label">Tävling</span>
+            <input v-model="state.title" type="text" class="text" />
+          </label>
+          <label class="group">
             <span class="label">Namn</span>
             <input v-model="state.name" type="text" class="text" />
           </label>
@@ -89,7 +96,19 @@
             <input v-model="state.nextName" type="text" class="text" placeholder="(ingen)" />
             <input v-model="state.nextWeight" type="number" min="0" step="2.5" class="number" />
           </label>
-          <button type="button" class="secondary push" @click="reroll">Slumpa om tidigare lyft</button>
+          <button
+            type="button"
+            class="secondary push"
+            :class="{ active: state.lastInRound }"
+            title="Ett resultat avslutar omgången och visar resultatlistan"
+            @click="state.lastInRound = !state.lastInRound"
+          >
+            Sista i omgången
+          </button>
+          <button type="button" class="secondary" :class="{ active: clockRunning }" @click="toggleClock">
+            {{ clockRunning ? 'Stoppa klocka' : 'Starta klocka' }}
+          </button>
+          <button type="button" class="secondary" @click="reroll">Slumpa om</button>
         </div>
       </div>
     </div>
@@ -97,8 +116,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { randomHistory } from '../sources/editorSource.js'
+import { computed, onBeforeUnmount, ref } from 'vue'
+import { CLOCK_SECONDS, randomHistory } from '../sources/editorSource.js'
 
 const props = defineProps({
   // The reactive editor state (see defaultEditorState); edited in place.
@@ -134,6 +153,13 @@ const MODES = [
   { value: 'card', label: 'Stort kort' },
   { value: 'bar', label: 'Nederkant' },
   { value: 'list', label: 'Resultatlista' },
+  { value: 'slate', label: 'Skylt' },
+]
+
+const SLATES = [
+  { value: 'start', label: 'Startar snart' },
+  { value: 'pause', label: 'Paus' },
+  { value: 'end', label: 'Tack för idag' },
 ]
 
 const DISCIPLINES = [
@@ -154,7 +180,20 @@ function change(field, value) {
   if (props.state[field] !== value) {
     props.state[field] = value
     props.state.result = null
+    props.state.clockStartedAt = null
   }
+}
+
+// The demo's attempt clock runs for 60 seconds; a result or another attempt stops it.
+const now = ref(Date.now())
+const ticker = setInterval(() => (now.value = Date.now()), 500)
+onBeforeUnmount(() => clearInterval(ticker))
+const clockRunning = computed(
+  () => Boolean(props.state.clockStartedAt) && now.value - props.state.clockStartedAt < CLOCK_SECONDS * 1000,
+)
+
+function toggleClock() {
+  props.state.clockStartedAt = clockRunning.value ? null : Date.now()
 }
 
 // Each chosen result is a new referee decision (so it animates); "Inget" removes it.
@@ -166,6 +205,7 @@ function chooseResult(lights) {
 
   props.state.result = lights
   props.state.decisions++
+  props.state.clockStartedAt = null
 }
 
 function reroll() {
@@ -176,6 +216,8 @@ function reroll() {
 <style scoped>
 .editor {
   position: absolute;
+  /* Above the broadcast graphics, including the corner logo. */
+  z-index: 10;
   top: 20px;
   left: 20px;
   display: flex;
@@ -185,10 +227,10 @@ function reroll() {
   padding: 14px 18px;
   border-radius: 10px;
   background: rgba(10, 14, 28, 0.85);
-  font-size: 19px;
+  font-size: 17px;
   transition:
-    gap 300ms ease,
-    padding 300ms ease;
+    gap var(--motion-fast) var(--motion-move),
+    padding var(--motion-fast) var(--motion-move);
 }
 
 .editor.folded {
@@ -202,8 +244,8 @@ function reroll() {
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   transition:
-    grid-template-columns 300ms ease,
-    grid-template-rows 300ms ease,
+    grid-template-columns var(--motion-fast) var(--motion-move),
+    grid-template-rows var(--motion-fast) var(--motion-move),
     opacity 200ms ease;
 }
 
@@ -225,7 +267,7 @@ function reroll() {
 .row {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 20px;
   /*
     The full stage width minus the margins, padding and the Demo toggle, so the toolbar spans the screen. Set on
     the rows rather than their container, which must be able to shrink to nothing when folded.
@@ -253,7 +295,7 @@ function reroll() {
 
 .caret {
   display: inline-block;
-  transition: transform 300ms ease;
+  transition: transform var(--motion-fast) var(--motion-move);
 }
 
 .editor.folded .caret {
@@ -281,15 +323,19 @@ select {
 }
 
 input.text {
-  width: 260px;
+  width: 180px;
 }
 
 input.number {
-  width: 100px;
+  width: 80px;
 }
 
 select {
-  min-width: 230px;
+  min-width: 200px;
+}
+
+select.slate-kind {
+  min-width: 150px;
 }
 
 option {
@@ -307,7 +353,7 @@ select:focus {
 }
 
 button {
-  padding: 6px 14px;
+  padding: 5px 11px;
   border: 0;
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.12);

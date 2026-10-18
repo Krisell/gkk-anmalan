@@ -28,6 +28,7 @@ function powerliftingLiveTopics(): array
             'last_lifts' => [['lifter_id' => '110845', 'lift' => 'SQ1', 'status' => 'good', 'lifter' => $lifter]],
         ],
         'referee/decision' => ['updated' => 1791711790, 'left' => 'w', 'center' => 'w', 'right' => 'r'],
+        'clock' => ['clock' => 47],
     ];
 }
 
@@ -75,7 +76,8 @@ test('the feed proxies and trims the Powerlifting Live topics', function () {
         ->assertJsonMissingPath('scoresheet.lifters.0.records_sq')
         ->assertJsonPath('scoresheet.info.current_discipline', 'SQ')
         ->assertJsonPath('scoresheet.last_lifts.0.lift', 'SQ1')
-        ->assertJsonPath('decision.right', 'r');
+        ->assertJsonPath('decision.right', 'r')
+        ->assertJsonPath('clock.clock', 47);
 
     Http::assertSent(fn (Request $request) => \str_starts_with($request->url(), 'https://se.powerliftinglive.com/feed.php')
         && \str_contains(\urldecode($request->url()), 'key=competition/3001/next_lifters')
@@ -105,7 +107,8 @@ test('the feed is cached briefly so that several overlays share one upstream req
     $this->getJson('/live/feed/3001')->assertOk();
     $this->getJson('/live/feed/3001')->assertOk();
 
-    Http::assertSentCount(3);
+    // Lifter order, referee decision, clock and scoresheet, once.
+    Http::assertSentCount(4);
 });
 
 test('the scoresheet is only fetched again when a result may have changed', function () {
@@ -119,7 +122,7 @@ test('the scoresheet is only fetched again when a result may have changed', func
     $this->travel(4)->seconds();
     $this->getJson('/live/feed/3001')->assertOk();
     expect(scoresheetRequests())->toBe(1);
-    Http::assertSentCount(3 + 2);
+    Http::assertSentCount(4 + 3);
 
     // A new referee decision means a result may be recorded: fetch it, and keep doing so for a few seconds.
     $topics['referee/decision'] = ['updated' => 1791711900, 'left' => 'r', 'center' => 'r', 'right' => 'r'];

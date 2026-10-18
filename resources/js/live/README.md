@@ -77,6 +77,51 @@ card, a result or the PB stamp immediately. **P** shows a "PB ALERT" stamp diago
 3 seconds, with the name and weight of the lifter on screen. To take all graphics off air at once, give the browser source a show/hide hotkey in
 OBS (_Settings → Hotkeys_); with _Shutdown source when not visible_ unchecked the overlay keeps its state while hidden.
 
+## Broadcast graphics
+
+Modelled on how Swedish TV (SVT, TV4) presents individual sports:
+
+- **Corner graphic.** Our logo, top right, on every view (lower third, lifter card, results list, slates, replay and
+  commentator pages; not in the stinger). The competition's name, `&title=DM Klassisk styrkelyft`, is shown on the
+  slates.
+- **Club crests.** As on TV, the crest next to a lifter means _their_ club, so the lower third and the lifter card
+  show the lifter's club crest, or none. Add crests in `clubs.js` (logo in `assets/clubs/`, club names as Powerlifting
+  Live writes them). Our logo is in the corner graphic.
+- **Attempt clock.** Powerlifting Live's `clock` topic, shown above the weight while it runs, red for the last
+  10 seconds.
+- **Results list between rounds.** When the last lift of a round has been judged (the next lifter called is on
+  another attempt or discipline, or the group is done), the results list is shown automatically: 3 s after the
+  lights, for 10 s. It comes and goes with the stinger, as an in-page transition. Esc ends it early; `&roundBoard=0`
+  turns it off. In the demo, _Sista i omgången_ makes a result end the round.
+- **Standings changes.** After a good lift that improves the lifter's place: "Tar ledningen" or "↑ 2 placeringar".
+- **Safe area.** Everything stays within about 5% of the edges (`--safe-x`, `--safe-y` in `overlay.css`), as broadcast
+  graphics do, so nothing is cut off on TVs that crop the picture.
+- **One motion language.** Shared easing curves and durations (`--motion-*` in `overlay.css`).
+
+### Graphics for their own OBS scenes
+
+Each is the same page with `?view=…`, as its own Browser Source in its own scene. They animate in each time their scene
+goes live. None of them needs `?competition=`.
+
+| URL                                                             | Shows                                                                             |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `/live/overlay?view=slate&slate=start&title=…`                  | "Sändningen startar snart" with today's date                                      |
+| `/live/overlay?view=slate&slate=pause&time=14:30&title=…`       | "Paus – Nästa grupp startar 14:30" (without `time`: "Tävlingen fortsätter snart") |
+| `/live/overlay?view=slate&slate=end&title=…`                    | "Tack för idag!" with where to find the results                                   |
+| `/live/overlay?view=replay`                                     | A "REPRIS" label, for the scene that plays replays                                |
+| `/live/overlay?view=commentators&names=Anna Svensson,Erik Berg` | A name strap for the commentators, for about 9 seconds                            |
+
+In the demo editor, _Skylt_ (or the **K** key) previews the slates. Slates have the stinger's blue, slightly transparent,
+as a full-screen background; in the demo the results list and slates come and go with the stinger.
+
+### Scene transition (stinger)
+
+`obs/gkk-stinger.webm` is a 1.2-second transition in club colours: diagonal bands sweep across, cover the whole
+picture with our logo in the middle, and sweep out. In OBS: _Scene Transitions_ → **+** → _Stinger_, choose the file,
+set _Transition Point Type_ to _Time_ and the point to **600 ms** (when the picture is fully covered). It is a video
+with transparency, rendered from `?view=stinger` by
+`node resources/js/live/tools/render-stinger.mjs https://<site>/live/overlay?view=stinger` (needs ffmpeg).
+
 ## Running locally
 
 Run the site as usual (see the main README), build the frontend with `vp build` (or run `vp dev`), and open
@@ -129,7 +174,7 @@ server as for any other change. No new services, cron jobs or environment variab
 
 1. In the scene, add the camera source first.
 2. Add a **Browser** source _above_ the camera:
-   - URL: `https://<our site>/live/overlay?competition=<id>`
+   - URL: `https://<our site>/live/overlay?competition=<id>&title=<the competition's name>`
    - Width `1920`, height `1080`
    - Keep the default custom CSS (it already sets a transparent background).
    - Leave _Shutdown source when not visible_ unchecked, so polling keeps the state warm.
@@ -182,6 +227,9 @@ encoded, so the stream's latency applies to both equally.
 - One platform/competition per overlay.
 - A hotkey in OBS can't reach the page directly (only via _Interact_); OBS WebSocket or a small control page would
   allow that, but was out of scope for this version.
+- The attempt clock is counted from when its value changes. Powerlifting Live publishes the seconds left when the
+  clock starts; if the overlay is (re)loaded in the middle of a countdown it only sees that start value, so the clock
+  may run a few seconds long until the next attempt. Check at the next live competition.
 - PBs are only shown manually (P). Powerlifting Live's lifter data has PB fields (`pr_sq`, `pr_bp`, `pr_dl`,
   `pr_total`), empty in all sampled competitions; if organizers fill them in, the stamp could be shown automatically
   when a good lift beats the PB.

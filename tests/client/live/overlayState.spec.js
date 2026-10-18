@@ -83,6 +83,46 @@ describe('reduceOverlayState', () => {
     expect(states[1].result).toMatchObject({ id: '1:SQ1', outcome: 'good', decisions: decision.lights })
   })
 
+  it("records how a good lift changed the lifter's place", () => {
+    const states = run([
+      snapshot({ current: attempt('1:SQ2', { place: 3 }) }),
+      snapshot({ current: attempt('2:SQ2'), lastResult: attempt('1:SQ2', { outcome: 'good', place: 1 }) }),
+      snapshot({ current: attempt('3:SQ2'), lastResult: attempt('2:SQ2', { outcome: 'failed', place: 2 }) }),
+    ])
+
+    expect(states[1].result.placeChange).toEqual({ from: 3, to: 1 })
+    expect(states[2].result.placeChange).toBeNull()
+  })
+
+  it('marks the last lift of a round', () => {
+    const lift = (id, round, outcome = null) => attempt(id, { attempt: round, discipline: 'SQ', outcome })
+    const states = run([
+      snapshot({ current: lift('1:SQ1', 1) }),
+      // The next lifter is on the same attempt: the round goes on.
+      snapshot({ current: lift('2:SQ1', 1), lastResult: lift('1:SQ1', 1, 'good') }),
+      // The next lifter is on the second attempt: the first round is over.
+      snapshot({ current: lift('1:SQ2', 2), lastResult: lift('2:SQ1', 1, 'failed') }),
+      // Nobody is called any more: the group is done.
+      snapshot({ current: null, lastResult: lift('1:SQ2', 2, 'good') }),
+    ])
+
+    expect(states[1].result.endsRound).toBe(false)
+    expect(states[2].result.endsRound).toBe(true)
+    expect(states[3].result.endsRound).toBe(true)
+  })
+
+  it("does not end a round when the next lifter's attempt is unknown", () => {
+    const states = run([
+      snapshot({ current: attempt('1:SQ1', { attempt: 1, discipline: 'SQ' }) }),
+      snapshot({
+        current: attempt('2:SQ?', { attempt: null, discipline: 'SQ' }),
+        lastResult: attempt('1:SQ1', { attempt: 1, discipline: 'SQ', outcome: 'good' }),
+      }),
+    ])
+
+    expect(states[1].result.endsRound).toBe(false)
+  })
+
   it('lets a new result replace one that is still shown', () => {
     const states = run([
       snapshot({ current: attempt('1:SQ1') }),

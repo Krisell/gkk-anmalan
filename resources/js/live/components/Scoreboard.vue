@@ -58,7 +58,7 @@
 
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import logo from '../assets/gkk-logo.png'
+import { BROADCASTER_LOGO as logo } from '../clubs.js'
 import { disciplineName, formatPoints, formatWeight, formatWeightClass } from '../format.js'
 
 const props = defineProps({
@@ -181,7 +181,7 @@ function cell(lifter, column) {
 .board {
   width: 1560px;
   filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.45));
-  animation: board-slide-in 650ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: board-slide-in 650ms var(--motion-enter) both;
 }
 
 .heading {
@@ -201,7 +201,7 @@ function cell(lifter, column) {
   display: grid;
   border-radius: 0 0 14px 14px;
   background: var(--overlay-panel);
-  animation: body-fold-down 700ms cubic-bezier(0.65, 0, 0.35, 1) 650ms both;
+  animation: body-fold-down 700ms var(--motion-move) 650ms both;
 }
 
 .body-inner {
@@ -277,14 +277,14 @@ function cell(lifter, column) {
   line-height: calc(var(--row-height) * 0.85);
   text-transform: uppercase;
   color: #ffffff;
-  animation: row-in 450ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: row-in 450ms var(--motion-enter) both;
   animation-delay: calc(800ms + var(--index) * 35ms);
 }
 
 .lifter {
   border-top: 1px solid rgba(166, 172, 185, 0.12);
   font-size: calc(var(--row-height) * 0.44);
-  animation: row-in 450ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: row-in 450ms var(--motion-enter) both;
   animation-delay: calc(800ms + var(--index) * 35ms);
 }
 
