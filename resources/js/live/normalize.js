@@ -1,0 +1,187 @@
+/**
+ * Converts the Powerlifting Live feed (as returned by /live/feed/{competition}) into the
+ * internal model used by the overlay, so that components never depend on the external schema.
+ *
+ * Snapshot: {
+ *   discipline: 'SQ' | 'BP' | 'DL' | null,   competition's current discipline
+ *   group: string | null,
+ *   current: Attempt | null,                 lifter on the platform (next in line)
+ *   next: Attempt | null,                    lifter after that
+ *   lastResult: Attempt | null,              most recently judged attempt, outcome set
+ *   decision: Decision | null,               latest referee decision
+ * }
+ *
+ * Attempt: {
+ *   id: string,              stable identity of the attempt, e.g. '110845:BP2'
+ *   lifterId, name, team, weightClass, category,
+ *   discipline, attempt (1-3), weight (kg),
+ *   outcome: 'good' | 'failed' | null,
+ *   attempts: [{ weight, outcome }] x 3      the lifter's attempts in this discipline
+ *   lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 }   all of the lifter's attempts
+ *   total: number | null,                    the lifter's current total
+ *   place: number | null, predictedPlace: number | null
+ * }
+ *
+ * Decision: { id: string, lights: [{ good: boolean, cards: ['red'|'yellow'|'blue'] }] x 3 (left, center, right) }
+ */
+
+export const DISCIPLINES = ['SQ', 'BP', 'DL']
+
+const CARDS = { r: 'red', y: 'yellow', b: 'blue' }
+
+export function normalizeFeed(raw) {
+  const nextLifters = raw?.next_lifters ?? {}
+  const scoresheet = raw?.scoresheet ?? {}
+  const discipline = toDiscipline(scoresheet.info?.current_discipline)
+  const round = toInt(nextLifters.info?.current_round)
+
+  const [currentEntry, nextEntry] = Array.isArray(nextLifters.lifters) ? nextLifters.lifters : []
+  const [lastEntry] = Array.isArray(scoresheet.last_lifts) ? scoresheet.last_lifts : []
+
+  return {
+    discipline,
+    group: toText(nextLifters.info?.current_group ?? scoresheet.info?.current_group),
+    current: currentEntry ? normalizeCurrent(currentEntry, discipline, round) : null,
+    next: nextEntry ? normalizeCurrent(nextEntry, discipline, null) : null,
+    lastResult: lastEntry ? normalizeLastLift(lastEntry) : null,
+    decision: normalizeDecision(raw?.decision),
+  }
+}
+
+function normalizeCurrent(entry, competitionDiscipline, round) {
+  const lifter = entry.lifter ?? {}
+  const lifts = lifter.lifts ?? {}
+  const fromLift = parseLift(entry.lift)
+
+  const discipline = toDiscipline(entry.discipline) ?? fromLift?.discipline ?? competitionDiscipline
+  const attempt =
+    toInt(entry.attempt) ?? fromLift?.attempt ?? firstUnjudgedAttempt(lifts, discipline) ?? validAttempt(round)
+  const weight = toWeight(entry.weight) ?? (discipline && attempt ? toWeight(lifts[`${discipline}${attempt}`]) : null)
+
+  const current = buildAttempt(lifter, entry.lifter_id, discipline, attempt, weight, null)
+  const predictedPlace = toPlace(entry.predict_place ?? lifter.prog_place)
+
+  return { ...current, predictedPlace }
+}
+
+function normalizeLastLift(entry) {
+  const lift = parseLift(entry.lift)
+  const discipline = toDiscipline(entry.discipline) ?? lift?.discipline ?? null
+  const attempt = toInt(entry.attempt) ?? lift?.attempt ?? null
+  const outcome = toOutcome(entry.status)
+
+  if (!outcome) {
+    return null
+  }
+
+  return buildAttempt(entry.lifter ?? {}, entry.lifter_id, discipline, attempt, toWeight(entry.weight), outcome)
+}
+
+function buildAttempt(lifter, fallbackLifterId, discipline, attempt, weight, outcome) {
+  const lifterId = toText(lifter.id ?? fallbackLifterId)
+  const lifts = lifter.lifts ?? {}
+
+  return {
+    id: `${lifterId ?? lifter.name}:${discipline ?? '?'}${attempt ?? '?'}`,
+    lifterId,
+    name: toText(lifter.name),
+    team: toText(lifter.team),
+    weightClass: toText(lifter.weightclass_short_alt ?? lifter.weightclass),
+    category: toText(lifter.category),
+    discipline,
+    attempt,
+    weight,
+    outcome,
+    attempts: discipline ? disciplineAttempts(lifts, discipline) : disciplineAttempts({}, null),
+    lifts: Object.fromEntries(DISCIPLINES.map((d) => [d, disciplineAttempts(lifts, d)])),
+    total: toWeight(lifter.total),
+    place: toPlace(lifter.place),
+    predictedPlace: toPlace(lifter.prog_place),
+  }
+}
+
+function disciplineAttempts(lifts, discipline) {
+  return [1, 2, 3].map((n) => ({
+    weight: toWeight(lifts[`${discipline}${n}`]),
+    outcome: toOutcome(lifts[`${discipline}${n}_status`]),
+  }))
+}
+
+// Places are 1-based; Powerlifting Live uses 0 for "no place yet".
+function toPlace(value) {
+  const place = toInt(value)
+  return place > 0 ? place : null
+}
+
+function normalizeDecision(raw) {
+  if (!raw || raw.updated == null) {
+    return null
+  }
+
+  const positions = [raw.left, raw.center, raw.right]
+  if (positions.some((value) => typeof value !== 'string')) {
+    return null
+  }
+
+  return {
+    id: `${raw.updated}:${positions.join(',')}`,
+    lights: positions.map((value) => ({
+      good: value.includes('w'),
+      cards: value.includes('w') ? [] : [...value].map((code) => CARDS[code]).filter(Boolean),
+    })),
+  }
+}
+
+/**
+ * The first attempt in the discipline that has a weight but no result is the one being lifted.
+ */
+function firstUnjudgedAttempt(lifts, discipline) {
+  if (!discipline) {
+    return null
+  }
+
+  for (const n of [1, 2, 3]) {
+    if (!toOutcome(lifts[`${discipline}${n}_status`])) {
+      return toWeight(lifts[`${discipline}${n}`]) ? n : null
+    }
+  }
+
+  return null
+}
+
+function parseLift(lift) {
+  const match = typeof lift === 'string' ? lift.match(/^(SQ|BP|DL)([123])$/i) : null
+  return match ? { discipline: match[1].toUpperCase(), attempt: Number(match[2]) } : null
+}
+
+function toDiscipline(value) {
+  const upper = typeof value === 'string' ? value.toUpperCase() : null
+  return DISCIPLINES.includes(upper) ? upper : null
+}
+
+function toOutcome(status) {
+  return status === 'good' || status === 'failed' ? status : null
+}
+
+function toWeight(value) {
+  const number = Number.parseFloat(value)
+  return Number.isFinite(number) && number > 0 ? number : null
+}
+
+function toInt(value) {
+  const number = Number.parseInt(value, 10)
+  return Number.isFinite(number) ? number : null
+}
+
+function validAttempt(value) {
+  return value >= 1 && value <= 3 ? value : null
+}
+
+function toText(value) {
+  if (value == null) {
+    return null
+  }
+
+  const text = String(value).trim()
+  return text === '' ? null : text
+}

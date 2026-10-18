@@ -1,0 +1,58 @@
+/*
+  Global styles for the OBS overlay. The page must stay fully transparent: OBS composites it over the
+  camera, so only the panels themselves may paint anything.
+*/
+:root {
+  /* GKK brand colors (same as --color-gkk* in resources/css/main.css) */
+  --overlay-navy: #314270;
+  --overlay-navy-light: #45557e;
+  --overlay-navy-deep: #222f57;
+  --overlay-silver: #a6acb9;
+
+  --overlay-panel: linear-gradient(
+    180deg,
+    rgba(58, 77, 128, 0.96) 0%,
+    rgba(49, 66, 112, 0.96) 55%,
+    rgba(39, 53, 94, 0.96) 100%
+  );
+  --overlay-panel-deep: rgba(34, 47, 87, 0.97);
+  --overlay-divider: rgba(166, 172, 185, 0.28);
+  --overlay-text: #ffffff;
+  --overlay-text-muted: var(--overlay-silver);
+  --overlay-weight-bg: #ffffff;
+  --overlay-weight-text: var(--overlay-navy);
+  --overlay-good: #2f9a5c;
+  --overlay-failed: #c7453d;
+  --overlay-card-red: #e03131;
+  --overlay-card-yellow: #f2c230;
+  --overlay-card-blue: #2f6fe0;
+  --overlay-font: 'Barlow Condensed', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+  --overlay-font-body: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+body {
+  font-family: var(--overlay-font-body);
+  color: var(--overlay-text);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:focus {
+  outline: none;
+}

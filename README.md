@@ -11,6 +11,7 @@ Detta projekt hanterar både hemida och den interna "anmälningssidan" för Göt
 - Dokumenthantering (ex. protokoll eller länkar som publiceras för medlemmarna, eller interna dokument för styrelsen)
 - Klubbrekord
 - Medlemshantering med register, avtal, bokföring av funkionärshjälp mm
+- Grafik (overlay) för livesändningar av tävlingar i OBS, se [resources/js/live/README.md](resources/js/live/README.md)
 
 Systemet uppdateras löpande med nya funktioner efter behov.
 
