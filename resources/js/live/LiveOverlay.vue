@@ -42,7 +42,7 @@
       <Transition name="board">
         <Scoreboard
           v-if="showScoreboard"
-          :key="`${activationKey}-${board.group}`"
+          :key="activationKey"
           :scoreboard="board.scoreboard"
           :discipline="board.discipline"
           :group="board.group"

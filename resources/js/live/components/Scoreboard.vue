@@ -3,17 +3,22 @@
     <div
       ref="board"
       class="board"
-      :style="{ '--row-height': `${rowHeight}px`, '--columns': gridColumns, marginTop: `${top}px` }"
+      :style="{
+        '--row-height': `${rowHeight}px`,
+        '--columns': gridColumns,
+        '--row-delay': `${rowDelay}ms`,
+        marginTop: `${top}px`,
+      }"
     >
       <div class="heading">
         <div class="brand"><img :src="logo" alt="" class="logo" /></div>
         <div class="titles">
-          <div class="eyebrow">{{ [group, disciplineTitle].filter(Boolean).join(' · ') }}</div>
+          <div class="eyebrow">{{ [view.group, disciplineTitle].filter(Boolean).join(' · ') }}</div>
           <div class="title">{{ title }}</div>
         </div>
       </div>
 
-      <div class="body">
+      <div ref="body" class="body">
         <div class="body-inner">
           <div class="row columns">
             <div class="place">Plac.</div>
@@ -35,7 +40,7 @@
             <div
               v-else
               class="row lifter"
-              :class="{ active: row.lifter.id === currentLifterId }"
+              :class="{ active: row.lifter.id === view.currentLifterId }"
               :style="{ '--index': index }"
             >
               <div class="place">{{ row.lifter.place ?? '–' }}</div>
@@ -57,7 +62,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
 import { disciplineName, formatPoints, formatWeight, formatWeightClass } from '../format.js'
 
@@ -71,9 +76,20 @@ const props = defineProps({
   final: { type: Boolean, default: false },
 })
 
+// What is shown. Normally the props, but when another group is chosen while the list is up, the list folds up, and
+// only then switches to the new group and folds down again (instead of the whole list sliding in anew).
+const snapshot = () => ({
+  scoreboard: props.scoreboard,
+  discipline: props.discipline,
+  group: props.group,
+  currentLifterId: props.currentLifterId,
+  final: props.final,
+})
+const view = shallowRef(snapshot())
+
 // Before anything has been judged the list is the start list (with the declared openers).
 const started = computed(() =>
-  props.scoreboard.lifters.some((lifter) =>
+  view.value.scoreboard.lifters.some((lifter) =>
     Object.values(lifter.lifts).some((attempts) => attempts.some((attempt) => attempt.outcome)),
   ),
 )
@@ -81,18 +97,18 @@ const title = computed(() => {
   if (!started.value) {
     return 'Startlista'
   }
-  return props.final ? 'Resultat' : 'Resultatlista – Pågående tävling'
+  return view.value.final ? 'Resultat' : 'Resultatlista – Pågående tävling'
 })
 
 const SHORT_NAMES = { SQ: 'Knäböj', BP: 'Bänk', DL: 'Mark' }
 
-const disciplineTitle = computed(() => disciplineName(props.discipline))
+const disciplineTitle = computed(() => disciplineName(view.value.discipline))
 
 // Finished disciplines get one column (the best lift), the current discipline one column per attempt, and
 // disciplines still to come an empty column, so a full competition always has five result columns.
 const columns = computed(() => {
-  const order = props.scoreboard.disciplines
-  const currentIndex = order.indexOf(props.discipline)
+  const order = view.value.scoreboard.disciplines
+  const currentIndex = order.indexOf(view.value.discipline)
 
   return order.flatMap((d, index) =>
     index === currentIndex
@@ -121,7 +137,7 @@ const rows = computed(() => {
   const result = []
   let previous = null
 
-  for (const lifter of props.scoreboard.lifters) {
+  for (const lifter of view.value.scoreboard.lifters) {
     const groupKey = `${lifter.weightClass}|${lifter.category}`
     if (groupKey !== previous) {
       const header = [formatWeightClass(lifter.weightClass), lifter.category].filter(Boolean).join(' · ')
@@ -155,6 +171,73 @@ function placeBoard() {
 
 onMounted(placeBoard)
 watch(rows, () => nextTick(placeBoard))
+
+const FOLD_UP_MS = 450
+const FOLD_DOWN_MS = 650
+const body = ref(null)
+// Rows that appear after a switch don't wait for the slide-in.
+const rowDelay = ref(800)
+let switching = false
+let pending = null
+let unmounted = false
+
+watch(
+  () => [props.scoreboard, props.discipline, props.group, props.currentLifterId, props.final],
+  () => {
+    const next = snapshot()
+    if (switching) {
+      pending = next
+    } else if (next.group !== view.value.group && body.value) {
+      void switchTo(next)
+    } else {
+      view.value = next
+    }
+  },
+)
+
+async function switchTo(next) {
+  switching = true
+  const fold = (from, to, duration, easing) =>
+    body.value.animate([{ gridTemplateRows: from }, { gridTemplateRows: to }], { duration, easing, fill: 'forwards' })
+
+  try {
+    const up = fold('1fr', '0fr', FOLD_UP_MS, 'cubic-bezier(0.55, 0, 0.45, 1)')
+    await up.finished
+    if (unmounted) {
+      return
+    }
+    rowDelay.value = 150
+    view.value = pending ?? next
+    pending = null
+    await nextTick()
+    board.value.style.transition = `margin-top ${FOLD_UP_MS}ms var(--motion-move)`
+    placeBoard()
+    const down = fold('0fr', '1fr', FOLD_DOWN_MS, 'cubic-bezier(0.22, 1, 0.36, 1)')
+    await down.finished
+    // Back to the list's own (finished) entrance animation, which leaves it folded down.
+    up.cancel()
+    down.cancel()
+  } catch {
+    // Cancelled (unmounted).
+  } finally {
+    switching = false
+    if (board.value) {
+      board.value.style.transition = ''
+    }
+    // A change that came in meanwhile (e.g. new results) is applied now.
+    if (pending && !unmounted) {
+      const latest = pending
+      pending = null
+      if (latest.group !== view.value.group) {
+        void switchTo(latest)
+      } else {
+        view.value = latest
+      }
+    }
+  }
+}
+
+onBeforeUnmount(() => (unmounted = true))
 
 function cell(lifter, column) {
   const attempts = lifter.lifts[column.discipline]
@@ -295,14 +378,14 @@ function cell(lifter, column) {
   text-transform: uppercase;
   color: #ffffff;
   animation: row-in 450ms var(--motion-enter) both;
-  animation-delay: calc(800ms + var(--index) * 35ms);
+  animation-delay: calc(var(--row-delay) + var(--index) * 35ms);
 }
 
 .lifter {
   border-top: 1px solid rgba(166, 172, 185, 0.12);
   font-size: calc(var(--row-height) * 0.44);
   animation: row-in 450ms var(--motion-enter) both;
-  animation-delay: calc(800ms + var(--index) * 35ms);
+  animation-delay: calc(var(--row-delay) + var(--index) * 35ms);
 }
 
 .lifter.active {
