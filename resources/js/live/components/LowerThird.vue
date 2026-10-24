@@ -12,7 +12,6 @@
 
         <Transition name="tab">
           <div v-if="attempt.outcome" :key="`${attempt.id}:${attempt.shownAt}`" class="tab result">
-            <RefereeLights v-if="attempt.decisions" class="lights" :lights="attempt.decisions" />
             <span class="verdict" :class="attempt.outcome">
               {{ attempt.outcome === 'good' ? 'Godkänt' : 'Underkänt' }}
             </span>
@@ -65,7 +64,6 @@
 
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import RefereeLights from './RefereeLights.vue'
 import { clubCrest } from '../clubs.js'
 import { disciplineName, formatWeight, formatWeightClass } from '../format.js'
 
@@ -206,10 +204,6 @@ const slots = computed(() =>
 
 .result {
   margin-left: auto;
-}
-
-.lights {
-  padding: 0 18px;
 }
 
 .verdict {

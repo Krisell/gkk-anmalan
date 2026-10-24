@@ -30,6 +30,7 @@
     "@krisell/type-trigger": "^1.0.8",
     "@sentry/vue": "^10.47.0",
     "@tailwindcss/typography": "^0.5.0",
+    "firebase": "^13.1.0",
     "floating-vue": "^5.2.2",
     "font-awesome": "^4.7.0",
     "moment": "^2.29.1",

@@ -39,8 +39,12 @@ OBS Browser Source ── polls every 1 s ──▶ /live/feed/{id} (Laravel, ca
     using the club colors from `resources/css/main.css` (navy `#314270`, `#45557e`, silver `#a6acb9`).
   - `assets/` – the GKK logo shown in the panel and the demo backdrop photo.
 
+The referee lights are shown large in the bottom right corner (`RefereePanel.vue`, beside the lower third): each lamp
+lights up as soon as its referee decides, before the other two (Powerlifting Live's own screens only reveal them
+together), with reason cards under red lamps, and they stay with the result. The lower third shows the verdict.
+
 When the referee lights arrive the result is shown immediately for the lifter on the platform. The result stays up for
-7 seconds even if the next lifter has already been called, and then the overlay switches to the next lifter. If the
+10 seconds even if the next lifter has already been called, and then the overlay switches to the next lifter. If the
 feed hasn't answered for 20 seconds the overlay hides itself rather than show outdated information, and it comes back
 automatically when the feed recovers.
 
@@ -58,7 +62,13 @@ another attempt, or while a result is on screen (it waits until the result has b
 weight class and category (places within each), finished disciplines as the best lift, the current discipline attempt
 by attempt, disciplines still to come as empty columns, the total and IPF GL points (Powerlifting Live's `wilks`
 field holds the GL points, which matches the GL formula on sampled competitions). A full competition therefore always has five
-result columns. The lifter on the platform is highlighted.
+result columns. The lifter on the platform is highlighted. Until anything in the group has been judged, the list is
+titled _Startlista_ (with the declared openers) instead of _Resultatlista – Pågående tävling_.
+
+From the remote control, the results of any other group can be shown too (e.g. an earlier, finished one), titled
+_Resultat_ with the best lift per discipline. They come from Powerlifting Live's `scoresheet` topic (the whole
+competition, ~220 KB), which the proxy fetches only when asked (`/live/results/{id}`), trims (~75 KB) and caches for
+30 s.
 
 To use it during a broadcast, make a separate OBS scene with the camera and this page as a Browser Source, and switch
 to it with a hotkey whenever you want to show the standings. Each time the scene goes live the list animates in: the
@@ -121,6 +131,40 @@ picture with our logo in the middle, and sweep out. In OBS: _Scene Transitions_ 
 set _Transition Point Type_ to _Time_ and the point to **600 ms** (when the picture is fully covered). It is a video
 with transparency, rendered from `?view=stinger` by
 `node resources/js/live/tools/render-stinger.mjs https://<site>/live/overlay?view=stinger` (needs ffmpeg).
+
+## Remote control
+
+The overlay can be controlled from another device, typically an iPad at the venue, through **Firebase's Realtime
+Database** (the club's existing Firebase project). How to use it is described in [OBS-SETUP.md](OBS-SETUP.md).
+
+```
+iPad /live/control ──writes──▶ Realtime Database live/… ──pushes──▶ overlay in OBS
+       ▲  PIN → POST /live/control/token → Firebase custom token   ◀── presence (online, competition, what is shown)
+```
+
+- **Data** (`remote/controlState.js` normalizes all of it):
+  - `control`: what is shown (`mode`: `auto`, `list` with `listGroup` for another group than the one on the platform,
+    `slate` with `slate` start/pause/end and `pauseTime`, or `hidden`), the competition's name, a message, and whether
+    the lifter card and the results list between rounds are on. (Commentator names are supported by the overlay but
+    not offered on the control page for now.)
+  - `commands`: one-off actions `{ type, at }` (`pb`, `list`, `commentators`, `skip`). The overlay runs only those given
+    while it runs (never on a reload) and only within 15 s.
+  - `presence/{session}`: each overlay in OBS reports `{ at, competition, showing, feed }`, removed when its
+    connection closes. The control page previews the competition the latest overlay reports.
+  - There is one broadcast at a time, so there is one set of control data, not one per competition.
+- **Access** (`database.rules.json`): anyone may read `live/` (it is what the broadcast shows). Writing `control` and
+  `commands` needs a Firebase sign-in with the `liveControl` claim, which `LiveControlController@token` hands out for
+  the **PIN**. The PIN is `LIVE_CONTROL_PIN` in the server's environment, so it is neither in the (public) repository
+  nor in the built JavaScript; without it remote control is off. Attempts are limited to 10 per minute per IP. The
+  overlay itself never signs in; it may only write its own presence entry, in a fixed format.
+- **Deploying the rules**: `database.rules.json` must be published to the project once (and after each change), either
+  in the Firebase console (Realtime Database → Rules) or with `firebase deploy --only database --project
+goteborg-kraftsportklubb`. Until then the database refuses everything and the overlay simply runs on its own.
+- **Robustness**: without a connection the overlay keeps the last control state and the automation carries on. The
+  control page's preview is the overlay itself (`&preview=1`, which doesn't report presence).
+- **Testing locally** with the Firebase emulators (Java needed): `firebase emulators:start --only auth,database
+--project goteborg-kraftsportklubb` in the project root, then add `firebaseEmulator=127.0.0.1` to the overlay's and
+  the control page's URLs on the local site.
 
 ## Running locally
 
@@ -227,15 +271,16 @@ encoded, so the stream's latency applies to both equally.
   result is shown without lights, when the secretariat records it.
 - **Referee decisions come over MQTT, not through the proxy.** `feed.php` never holds `referee/decision` (it stays
   `{}`): the decision only exists as a live message, sent about 0.3–0.5 s before the new lifter order and followed by
-  `referee/clear` 1.5 s later. The overlay therefore subscribes to that one topic itself over
+  `referee/clear` 1.5 s later. The overlay therefore subscribes to the referee topics itself over
   `wss://se.powerliftinglive.com/ws` (`sources/refereeFeed.js`), like a screen in the hall, and adds the latest
-  decision to each proxy response. Their broker accepts connections from our site. `&lights=0` turns this off;
+  decision to each proxy response, along with each referee's light so far (`referee/signal`, sent as each referee
+  decides; at SM 2026 up to 4 s apart). Their broker accepts connections from our site. `&lights=0` turns this off;
   decisions published while the connection is down are lost, and the result is then shown without lights.
 - Latency is up to ~2 seconds (1 s polling + 1 s cache). Powerlifting Live also offers MQTT over WebSocket
   (`wss://se.powerliftinglive.com/ws`), which could give instant updates if needed.
 - Fonts load from Google Fonts. Without internet access they fall back to system fonts, but then there would be no
   data either.
-- One platform/competition per overlay.
+- One platform/competition per overlay, and one broadcast (remote control) at a time.
 - A hotkey in OBS can't reach the page directly (only via _Interact_); OBS WebSocket or a small control page would
   allow that, but was out of scope for this version.
 - The attempt clock is counted from when its value changes. Powerlifting Live publishes the seconds left when the

@@ -20,4 +20,23 @@ class Firebase
             ],
         ], config('firebase.private_key'), 'RS256');
     }
+
+    /**
+     * A custom token for controlling the live overlay. The Realtime Database rules (database.rules.json) only let
+     * it write the overlay's control data, under live/.
+     */
+    public static function makeLiveControlJwt()
+    {
+        return JWT::encode([
+            'iss' => config('firebase.service_account_email'),
+            'sub' => config('firebase.service_account_email'),
+            'aud' => 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit',
+            'iat' => \time(),
+            'exp' => \time() + (60 * 60),
+            'uid' => 'live-control',
+            'claims' => [
+                'liveControl' => true,
+            ],
+        ], config('firebase.private_key'), 'RS256');
+    }
 }

@@ -37,7 +37,12 @@ export default defineConfig({
       ? null
       : laravel({
           valetTls: 'gkk.test',
-          input: ['resources/css/main.css', 'resources/js/app.js', 'resources/js/live/live-overlay.js'],
+          input: [
+            'resources/css/main.css',
+            'resources/js/app.js',
+            'resources/js/live/live-overlay.js',
+            'resources/js/live/control/live-control.js',
+          ],
           refresh: true,
         }),
     createVuePlugin({

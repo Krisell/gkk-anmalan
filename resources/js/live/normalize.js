@@ -56,6 +56,7 @@ export function normalizeFeed(raw) {
     next: nextEntry ? normalizeCurrent(nextEntry, discipline, null) : null,
     lastResult: lastEntry ? normalizeLastLift(lastEntry) : null,
     decision: normalizeDecision(raw?.decision),
+    signals: normalizeSignals(raw?.referee_signals),
     scoreboard: normalizeScoreboard(scoresheet.lifters, discipline),
     clock: normalizeClock(raw?.clock),
   }
@@ -66,6 +67,60 @@ export function normalizeFeed(raw) {
 function normalizeClock(raw) {
   const seconds = toInt(raw?.clock)
   return seconds > 0 ? seconds : null
+}
+
+/**
+ * The whole competition's results (/live/results/{id}, every group), per group in name order ("Grupp 01", …), for
+ * showing another group than the one on the platform. Within a group the lifters are listed by weight class and
+ * category (in Powerlifting Live's order), then by place.
+ *
+ * status: 'upcoming' (nothing judged yet), 'done' (every lifter has finished the deadlift) or 'ongoing'.
+ */
+export function normalizeResults(raw) {
+  const lifters = (Array.isArray(raw?.lifters) ? raw.lifters : []).filter(
+    (lifter) => lifter && typeof lifter === 'object',
+  )
+  const groups = new Map()
+  for (const lifter of lifters) {
+    const name = toText(lifter.group) ?? 'Okänd grupp'
+    groups.set(name, [...(groups.get(name) ?? []), lifter])
+  }
+
+  return [...groups.entries()]
+    .sort(([a], [b]) => a.localeCompare(b, 'sv', { numeric: true }))
+    .map(([name, members]) => {
+      const scoreboard = normalizeScoreboard(sortForResults(members), null)
+      return { name, status: groupStatus(scoreboard.lifters), scoreboard }
+    })
+}
+
+function sortForResults(lifters) {
+  const order = (key) => {
+    const seen = [...new Set(lifters.map(key))]
+    return (lifter) => seen.indexOf(key(lifter))
+  }
+  const classIndex = order((lifter) => toText(lifter.weightclass_short_alt ?? lifter.weightclass))
+  const categoryIndex = order((lifter) => toText(lifter.category))
+
+  return [...lifters].sort(
+    (a, b) =>
+      classIndex(a) - classIndex(b) ||
+      categoryIndex(a) - categoryIndex(b) ||
+      (toPlace(a.place) ?? Infinity) - (toPlace(b.place) ?? Infinity),
+  )
+}
+
+function groupStatus(lifters) {
+  const judged = (lifter) => DISCIPLINES.some((d) => lifter.lifts[d].some((attempt) => attempt.outcome))
+  // Finished: a deadlift has been judged and no declared deadlift attempt is left.
+  const finished = (lifter) =>
+    lifter.lifts.DL.some((attempt) => attempt.outcome) &&
+    lifter.lifts.DL.every((attempt) => attempt.outcome || attempt.weight == null)
+
+  if (!lifters.some(judged)) {
+    return 'upcoming'
+  }
+  return lifters.every(finished) ? 'done' : 'ongoing'
 }
 
 function normalizeScoreboard(rawLifters, discipline) {
@@ -151,6 +206,23 @@ function toPlace(value) {
   return place > 0 ? place : null
 }
 
+// The lights of the referees who have decided so far, before the decision: [left, center, right], each a light
+// ({ good, cards }) or null for a referee who hasn't decided yet. Null when none has.
+function normalizeSignals(raw) {
+  if (!raw || typeof raw !== 'object') {
+    return null
+  }
+  const lights = [raw.left, raw.center, raw.right].map((value) => (typeof value === 'string' ? toLight(value) : null))
+  return lights.some(Boolean) ? lights : null
+}
+
+function toLight(value) {
+  return {
+    good: value.includes('w'),
+    cards: value.includes('w') ? [] : [...value].map((code) => CARDS[code]).filter(Boolean),
+  }
+}
+
 function normalizeDecision(raw) {
   if (!raw || raw.updated == null) {
     return null
@@ -163,10 +235,7 @@ function normalizeDecision(raw) {
 
   return {
     id: `${raw.updated}:${positions.join(',')}`,
-    lights: positions.map((value) => ({
-      good: value.includes('w'),
-      cards: value.includes('w') ? [] : [...value].map((code) => CARDS[code]).filter(Boolean),
-    })),
+    lights: positions.map(toLight),
   }
 }
 

@@ -81,16 +81,16 @@ Content → Live; delete them when done.
 
 ## Scenes
 
-`<site>` is `https://goteborgkk.se`, `<id>` the Powerlifting Live competition id and `<title>` the competition's
-name with spaces as `%20`, e.g. `DM%20Klassisk%20Styrkelyft%202026`.
+The broadcast runs in **one scene**: the overlay follows the competition by itself, and everything else (start, pause
+and end slates, messages, PB stamps, results of earlier groups, hiding all graphics) is done from the control page on an iPad
+(see [Remote control](#remote-control-ipad)). OBS only needs touching to start and stop the stream.
 
-| Hotkey | Scene   | Sources (top to bottom)                                                                        |
-| ------ | ------- | ---------------------------------------------------------------------------------------------- |
-| F1     | Start   | Browser `<site>/live/overlay?view=slate&slate=start&title=<title>`                             |
-| F2     | Tävling | Browser `<site>/live/overlay?competition=<id>&title=<title>`, camera, microphone               |
-| F3     | Paus    | Browser `<site>/live/overlay?view=slate&slate=pause&title=<title>` (add `&time=14:30`), camera |
-| F4     | Slut    | Browser `<site>/live/overlay?view=slate&slate=end&title=<title>`                               |
-| F5     | Demo    | Browser `<site>/live/overlay?demo=true&title=<title>`, camera (for testing and rehearsals)     |
+`<site>` is `https://goteborgkk.se` and `<id>` the Powerlifting Live competition id.
+
+| Hotkey | Scene   | Sources (top to bottom)                                                                      |
+| ------ | ------- | -------------------------------------------------------------------------------------------- |
+| F1     | Tävling | Browser `<site>/live/overlay?competition=<id>`, camera, microphone                           |
+| F2     | Demo    | Browser `<site>/live/overlay?demo=true`, camera (for testing and rehearsals, no iPad needed) |
 
 Every Browser source: width **1920**, height **1080**, _Shutdown source when not visible_ **off**, default custom CSS.
 
@@ -102,6 +102,28 @@ Every Browser source: width **1920**, height **1080**, _Shutdown source when not
   through Iriun is not reliable on Windows (see README); test before relying on it, or use a USB webcam for the second
   angle.
 - In the Demo scene, right-click the overlay → _Interact_ to use the demo toolbar and keys (S/N/R/K, P, Esc).
+- Separate slate scenes (`?view=slate&slate=start|pause|end`) still work, e.g. without an iPad.
+
+## Remote control (iPad)
+
+1. Open `<site>/live/control` on the iPad (Safari → Share → _Add to Home Screen_ makes it full screen) and sign in
+   with the PIN (ask Martin; it is set on the server as `LIVE_CONTROL_PIN`). The iPad stays signed in.
+2. There is one broadcast at a time: the control page controls whichever overlay is running, and its preview shows the
+   same competition as the overlay in OBS.
+3. The top of the page shows what OBS is showing right now, and the status in the corner says whether the overlay in
+   OBS is online.
+
+| Section                 | What it does                                                                                                    |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Visas nu                | Automatik (follows the competition), Resultatlista, Startar snart / Paus / Tack för idag (slates), Ingen grafik |
+| Resultat per grupp      | The results list of any group, e.g. an earlier finished one (each group marked Klar, Pågår or Ej startad)       |
+| Snabbknappar            | PB stamp for the lifter on screen, the results list for 10 s, skip what is shown                                |
+| Meddelande              | A message top left (e.g. "Rekordförsök!"), shown until taken down                                               |
+| Inställningar           | The competition's name on the slates, the big lifter card and the results list between rounds on/off            |
+| Testa mot en videoström | Only for testing, only on that device: another broadcast (e.g. SM) behind the preview, with a delay             |
+
+The pause slate shows _Nästa grupp startar_ with the time set under _Visas nu_. Several iPads or phones can be signed in
+at once; they all see the same state.
 
 ### Scene transition
 
@@ -123,8 +145,10 @@ and choose the camera.
 ## Per competition
 
 1. Find the competition id: the `id` in Powerlifting Live URLs, or on <https://se.powerliftinglive.com/xml.php>.
-2. Update `competition=` in the Tävling scene and `title=` in all Browser sources.
-3. At the venue: test upload speed, connect the camera, check View → Stats (no dropped frames).
-4. Manage Broadcast: check title, visibility and thumbnail, then _Create broadcast and start streaming_ on the Start
-   scene.
-5. Switch to Tävling when the first lifter is called.
+2. Update `competition=` in the Tävling scene's overlay.
+3. On the iPad (signed in), set the competition's name under _Inställningar_.
+4. At the venue: test upload speed, connect the camera, check View → Stats (no dropped frames), and check that the
+   iPad says the overlay in OBS is online.
+5. On the iPad choose _Startar snart_. Manage Broadcast: check title, visibility and thumbnail, then _Create broadcast
+   and start streaming_.
+6. Choose _Automatik_ when the first lifter is called; _Paus_ between groups, _Tack för idag_ at the end.

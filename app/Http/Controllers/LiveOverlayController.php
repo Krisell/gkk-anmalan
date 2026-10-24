@@ -35,8 +35,11 @@ class LiveOverlayController extends Controller
 
     private const SCORESHEET_MAX_AGE_SECONDS = 10;
 
+    // The whole competition's scoresheet (every group, ~220 KB) is only fetched when a group's results are shown.
+    private const RESULTS_CACHE_SECONDS = 30;
+
     private const LIFTER_FIELDS = [
-        'id', 'name', 'team', 'weightclass', 'weightclass_short_alt', 'category', 'category_short', 'sex', 'raw', 'lot', 'lifts',
+        'id', 'name', 'team', 'group', 'weightclass', 'weightclass_short_alt', 'category', 'category_short', 'sex', 'raw', 'lot', 'lifts',
         // 'wilks' holds the IPF GL points (the field name is a leftover from the Wilks formula).
         'total', 'place', 'wilks',
     ];
@@ -64,6 +67,29 @@ class LiveOverlayController extends Controller
         }
 
         return response()->json($feed)->header('Cache-Control', 'no-store');
+    }
+
+    /**
+     * Every lifter of the competition, with their group, for showing the results of another group than the one on
+     * the platform (e.g. an earlier, finished one).
+     */
+    public function results(int $competition)
+    {
+        $results = Cache::remember("powerliftinglive.results.{$competition}", self::RESULTS_CACHE_SECONDS, function () use ($competition) {
+            $topics = $this->fetchTopics($competition, ['scoresheet' => 'scoresheet']);
+
+            return $topics === null ? null : [
+                'lifters' => \array_map(fn ($lifter) => $this->trimResult($lifter), $topics['scoresheet']['lifters'] ?? []),
+            ];
+        });
+
+        if ($results === null) {
+            Cache::forget("powerliftinglive.results.{$competition}");
+
+            return response()->json(['error' => 'Powerlifting Live is unavailable'], 502)->header('Cache-Control', 'no-store');
+        }
+
+        return response()->json($results)->header('Cache-Control', 'no-store');
     }
 
     private function fetch(int $competition): ?array
@@ -190,6 +216,21 @@ class LiveOverlayController extends Controller
         if (\is_array($entry['lifter'] ?? null)) {
             $trimmed['lifter'] = $this->trimLifter($entry['lifter']);
         }
+
+        return $trimmed;
+    }
+
+    /**
+     * A lifter for a results list: like trimLifter, but of the lifts only the weights and results.
+     */
+    private function trimResult(mixed $lifter): array
+    {
+        $trimmed = $this->trimLifter($lifter);
+        $trimmed['lifts'] = \array_filter(
+            $trimmed['lifts'] ?? [],
+            fn ($key) => (bool) \preg_match('/^(SQ|BP|DL)[123](_status)?$/', $key),
+            ARRAY_FILTER_USE_KEY,
+        );
 
         return $trimmed;
     }

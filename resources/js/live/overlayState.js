@@ -21,7 +21,7 @@
  * attempt or discipline, or nobody is called (the group is done). The overlay then shows the results list.
  */
 
-export const RESULT_DURATION_MS = 7000
+export const RESULT_DURATION_MS = 10000
 
 export const RESULT_WAIT_MS = 5000
 

@@ -155,3 +155,21 @@ test('the feed reports upstream failures without caching them', function () {
 test('the feed only accepts numeric competition ids', function () {
     $this->getJson('/live/feed/abc')->assertNotFound();
 });
+
+it('serves the whole competition per lifter, trimmed, and only fetches it once in a while', function () {
+    Http::fake(['*' => Http::response(['lifters' => [[
+        'id' => '1', 'name' => 'Anna Andersson', 'group' => 'Grupp 03', 'license' => '010101ab1', 'place' => '1',
+        'lifts' => ['SQ1' => '120.0', 'SQ1_status' => 'good', 'SQ1_done' => '1792827427', 'SQ1_records' => [['weight' => '130.0']]],
+    ]]])]);
+
+    $this->getJson('/live/results/2939')
+        ->assertOk()
+        ->assertExactJson(['lifters' => [[
+            'id' => '1', 'name' => 'Anna Andersson', 'group' => 'Grupp 03', 'place' => '1',
+            'lifts' => ['SQ1' => '120.0', 'SQ1_status' => 'good'],
+        ]]]);
+    $this->getJson('/live/results/2939')->assertOk();
+
+    Http::assertSentCount(1);
+    Http::assertSent(fn (Request $request) => \str_contains(\urldecode($request->url()), 'key=competition/2939/scoresheet'));
+});

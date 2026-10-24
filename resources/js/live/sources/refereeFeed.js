@@ -13,35 +13,67 @@ import mqtt from 'mqtt'
  * The referee system sometimes publishes the same decision several times within a second (each with a new
  * `updated`). A repeat of the same lights within REPEAT_WINDOW_MS is ignored, so that a late repeat can't be taken
  * as a new decision for the next lifter.
+ *
+ * It also follows referee/signal, sent as each referee decides ({ referee: 'left', decision: 'w' }), so that the
+ * overlay can light each lamp as soon as that referee has decided (Powerlifting Live's own screens only show *that*
+ * a referee has decided, and reveal the lights together). Signals are cleared by referee/clear or the decision, and
+ * dropped after SIGNAL_MAX_AGE_MS in case those were missed.
  */
 const REPEAT_WINDOW_MS = 5000
+const SIGNAL_MAX_AGE_MS = 20000
+const REFEREES = ['left', 'center', 'right']
 
-export function createRefereeFeed(url, competition) {
-  let latest = null
+export function createRefereeFeed(url, competition, now = () => Date.now()) {
+  let state = initialRefereeState()
 
   const client = mqtt.connect(url, { keepalive: 5, reconnectPeriod: 2000, connectTimeout: 10000 })
-  const topic = `competition/${competition}/referee/decision`
+  const prefix = `competition/${competition}/referee/`
 
-  client.on('connect', () => client.subscribe(topic))
-  client.on('message', (_, payload) => {
-    try {
-      const decision = JSON.parse(payload.toString())
-      if (decision?.updated == null) {
-        return
-      }
-      if (!isRepeat(latest, decision)) {
-        latest = decision
-      }
-    } catch {
-      // Not a decision; keep the last one.
-    }
+  client.on('connect', () => client.subscribe(['decision', 'signal', 'clear'].map((topic) => prefix + topic)))
+  client.on('message', (topic, payload) => {
+    state = reduceRefereeMessage(state, topic.slice(prefix.length), payload.toString(), now())
   })
 
   return {
     // The raw decision ({ updated, left, center, right }), in the format feed.php uses for the other topics.
-    latest: () => latest,
+    latest: () => state.decision,
+    // The referees' decisions so far ({ left, center, right }: 'w', 'r', 'ry', … or null), or null when none has.
+    signals: () => currentSignals(state, now()),
     stop: () => client.end(true),
   }
+}
+
+export function initialRefereeState() {
+  return { decision: null, signals: {}, signalledAt: null }
+}
+
+// The referee feed's state after a message on referee/decision, referee/signal or referee/clear.
+export function reduceRefereeMessage(state, topic, text, now) {
+  let message
+  try {
+    message = JSON.parse(text)
+  } catch {
+    return state
+  }
+
+  if (topic === 'decision' && message?.updated != null) {
+    // A decision clears the signals: the lights are on now.
+    return { decision: isRepeat(state.decision, message) ? state.decision : message, signals: {}, signalledAt: null }
+  }
+  if (topic === 'signal' && REFEREES.includes(message?.referee) && typeof message.decision === 'string') {
+    return { ...state, signals: { ...state.signals, [message.referee]: message.decision }, signalledAt: now }
+  }
+  if (topic === 'clear') {
+    return { ...state, signals: {}, signalledAt: null }
+  }
+  return state
+}
+
+export function currentSignals(state, now) {
+  if (!state.signalledAt || now - state.signalledAt > SIGNAL_MAX_AGE_MS) {
+    return null
+  }
+  return Object.fromEntries(REFEREES.map((referee) => [referee, state.signals[referee] ?? null]))
 }
 
 // Whether a decision repeats the previous one: the same lights, published within REPEAT_WINDOW_MS.

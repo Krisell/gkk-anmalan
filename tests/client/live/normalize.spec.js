@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { normalizeFeed } from '../../../resources/js/live/normalize.js'
+import { normalizeFeed, normalizeResults } from '../../../resources/js/live/normalize.js'
 
 // Shapes follow Powerlifting Live's feed.php topics (as trimmed by LiveOverlayController); names are fictional.
 const lifter = {
@@ -173,6 +173,7 @@ describe('normalizeFeed', () => {
       next: null,
       lastResult: null,
       decision: null,
+      signals: null,
       scoreboard: expect.any(Object),
       clock: null,
     })
@@ -186,10 +187,57 @@ describe('normalizeFeed', () => {
       next: null,
       lastResult: null,
       decision: null,
+      signals: null,
       scoreboard: expect.any(Object),
       clock: null,
     })
     expect(normalizeFeed({ next_lifters: { lifters: [{}] } }).current).toMatchObject({ name: null, weight: null })
     expect(normalizeFeed({ decision: { updated: 1, left: 'w' } }).decision).toBeNull()
+  })
+})
+
+describe('normalizeResults', () => {
+  const lifter = (id, group, weightclass, place, lifts) => ({
+    id,
+    name: `Lyftare ${id}`,
+    group,
+    weightclass,
+    category: 'Senior',
+    place,
+    lifts,
+  })
+  const finished = { SQ1: '100', SQ1_status: 'good', BP1: '60', BP1_status: 'good', DL1: '150', DL1_status: 'good' }
+
+  it('groups the lifters, in group order, with each group status', () => {
+    const groups = normalizeResults({
+      lifters: [
+        lifter('3', 'Grupp 10', '63', 0, { SQ1: '90' }),
+        lifter('1', 'Grupp 02', '57', 2, finished),
+        lifter('2', 'Grupp 02', '57', 1, { ...finished, DL2: '160', DL2_status: 'failed' }),
+        lifter('4', 'Grupp 03', '63', 1, { ...finished, DL2: '170' }),
+      ],
+    })
+
+    expect(groups.map(({ name, status }) => ({ name, status }))).toEqual([
+      { name: 'Grupp 02', status: 'done' },
+      { name: 'Grupp 03', status: 'ongoing' },
+      { name: 'Grupp 10', status: 'upcoming' },
+    ])
+    // Within a group: by place.
+    expect(groups[0].scoreboard.lifters.map((l) => l.id)).toEqual(['2', '1'])
+    expect(groups[0].scoreboard.disciplines).toEqual(['SQ', 'BP', 'DL'])
+  })
+
+  it('copes with missing data', () => {
+    expect(normalizeResults(null)).toEqual([])
+  })
+})
+
+describe('referee signals', () => {
+  it('turns the referees decided so far into lights, before the decision', () => {
+    const snapshot = normalizeFeed({ referee_signals: { left: 'w', center: null, right: 'ry' } })
+    expect(snapshot.signals).toEqual([{ good: true, cards: [] }, null, { good: false, cards: ['red', 'yellow'] }])
+    expect(normalizeFeed({ referee_signals: { left: null, center: null, right: null } }).signals).toBeNull()
+    expect(normalizeFeed({}).signals).toBeNull()
   })
 })

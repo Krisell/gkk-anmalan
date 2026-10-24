@@ -22,6 +22,7 @@ use App\Http\Controllers\ImpersonationController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LagSMController;
 use App\Http\Controllers\LicenseAdminController;
+use App\Http\Controllers\LiveControlController;
 use App\Http\Controllers\LiveOverlayController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsEmailController;
@@ -281,6 +282,12 @@ Route::view('/slides-for-screen', 'slides')->name('slides');
 Route::prefix('live')->controller(LiveOverlayController::class)->group(function () {
     Route::get('overlay', 'show')->name('live.overlay');
     Route::get('feed/{competition}', 'feed')->whereNumber('competition')->middleware('throttle:300,1')->name('live.feed');
+    Route::get('results/{competition}', 'results')->whereNumber('competition')->middleware('throttle:300,1');
+});
+
+Route::prefix('live/control')->controller(LiveControlController::class)->group(function () {
+    Route::get('/', 'show')->name('live.control');
+    Route::post('token', 'token')->middleware('throttle:live-control-pin');
 });
 
 Route::prefix('slideshow')->controller(SlideshowController::class)->group(function () {

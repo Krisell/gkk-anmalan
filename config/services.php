@@ -14,4 +14,9 @@ return [
     'powerliftinglive' => [
         'url' => env('POWERLIFTINGLIVE_URL', 'https://se.powerliftinglive.com'),
     ],
+
+    // The PIN for controlling the live overlay (/live/control), e.g. from an iPad. Without one, remote control is off.
+    'live_control' => [
+        'pin' => env('LIVE_CONTROL_PIN'),
+    ],
 ];

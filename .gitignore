@@ -39,3 +39,7 @@ frankenphp-worker.php
 # MySQL -> Postgres migration output (contains member data)
 *.pgdump
 migrate.load
+
+# Firebase emulator logs
+firebase-debug.log
+database-debug.log

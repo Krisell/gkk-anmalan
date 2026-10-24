@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import * as Sentry from '@sentry/vue'
+import { firebaseConfig } from './firebaseConfig.js'
 
 import ToastPlugin from 'vue-toast-notification'
 import FloatingVue from 'floating-vue'
@@ -46,16 +47,7 @@ window.axios = axios
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
-window.firebase.initializeApp({
-  apiKey: 'AIzaSyCe-FSgSLultZJpVCVJwXOKDGrY31IFZ4E', // firebaseConfig apiKey is not a secret: https://stackoverflow.com/questions/37482366/is-it-safe-to-expose-firebase-apikey-to-the-public, https://firebase.google.com/docs/web/setup
-  authDomain: 'goteborg-kraftsportklubb.firebaseapp.com',
-  databaseURL: 'https://goteborg-kraftsportklubb.firebaseio.com',
-  projectId: 'goteborg-kraftsportklubb',
-  storageBucket: 'goteborg-kraftsportklubb.appspot.com',
-  messagingSenderId: '52915573324',
-  appId: '1:52915573324:web:2d7620cec6430501c35ae9',
-  measurementId: 'G-B8J19RFZ1R',
-})
+window.firebase.initializeApp(firebaseConfig)
 
 if (typeof window.firebase.analytics === 'function') {
   window.firebase.analytics()

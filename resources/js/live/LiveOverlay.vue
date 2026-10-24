@@ -19,7 +19,7 @@
       <code>/live/overlay?demo=true</code>.
     </div>
 
-    <template v-else>
+    <div v-else class="graphics" :class="{ off: hideAll }">
       <iframe
         v-if="videoId"
         :src="`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1`"
@@ -32,37 +32,51 @@
       <Transition name="board">
         <Slate
           v-if="showSlate"
-          :key="`slate-${editorState.slate}`"
-          :kind="editorState.slate"
+          :key="`slate-${slateKind}-${slateTime}`"
+          :kind="slateKind"
           :title="eventTitle"
-          :time="demoPauseTime"
+          :time="slateTime"
         />
       </Transition>
 
       <Transition name="board">
         <Scoreboard
           v-if="showScoreboard"
-          :key="activationKey"
-          :scoreboard="feed.snapshot.value.scoreboard"
-          :discipline="feed.snapshot.value.discipline"
-          :group="feed.snapshot.value.group"
-          :current-lifter-id="feed.snapshot.value.current?.lifterId ?? null"
+          :key="`${activationKey}-${board.group}`"
+          :scoreboard="board.scoreboard"
+          :discipline="board.discipline"
+          :group="board.group"
+          :current-lifter-id="board.currentLifterId"
+          :final="board.final"
         />
       </Transition>
 
       <Transition name="intro" :duration="{ enter: 2800, leave: 0 }">
-        <LifterIntro v-if="intro && displayed && !fullScreen" :key="intro.id" :attempt="intro" />
+        <LifterIntro v-if="intro && displayed && !fullScreen && !commentators" :key="intro.id" :attempt="intro" />
       </Transition>
 
       <Transition :name="exiting ? '' : 'panel'">
         <LowerThird
-          v-if="displayed && (!intro || exiting) && !fullScreen"
+          v-if="displayed && (!intro || exiting) && !fullScreen && !commentators"
           :class="{ 'is-hidden': exiting === 'card' }"
           :attempt="displayed"
           :upcoming="upcoming"
           :clock-ends-at="clockEndsAt"
         />
       </Transition>
+
+      <Transition name="panel">
+        <RefereePanel v-if="refereeLights" :key="displayed.id" :lights="refereeLights" />
+      </Transition>
+
+      <CommentatorStrap
+        v-if="commentators && !fullScreen"
+        :key="commentators.key"
+        class="commentators"
+        :names="commentators.names"
+      />
+
+      <InfoStrap v-if="control.message" :key="control.message.id" :text="control.message.text" />
 
       <PbStamp v-if="pb" :key="pb.key" :attempt="pb.attempt" />
 
@@ -94,11 +108,11 @@
         :current-id="feed.snapshot.value?.current?.id ?? null"
         :result-id="state.result?.id ?? null"
       />
-    </template>
+    </div>
 
     <!-- Our logo in the corner, on every view except the results list (it has our logo in its heading) and the
          stinger (a transition). -->
-    <CornerBug v-if="view !== 'stinger' && view !== 'scoreboard' && !showScoreboard" />
+    <CornerBug v-if="view !== 'stinger' && view !== 'scoreboard' && !showScoreboard && !hideAll" />
 
     <!-- The stinger as an in-page transition when the results list or a slate comes or goes. -->
     <Stinger v-if="stinger" :key="stinger" class="in-page-stinger" />
@@ -120,13 +134,18 @@ import Slate from './components/Slate.vue'
 import ReplayTag from './components/ReplayTag.vue'
 import CommentatorStrap from './components/CommentatorStrap.vue'
 import Stinger from './components/Stinger.vue'
+import InfoStrap from './components/InfoStrap.vue'
+import RefereePanel from './components/RefereePanel.vue'
 import { useLiveFeed } from './useLiveFeed.js'
+import { useGroupResults } from './useGroupResults.js'
 import { createHttpSource } from './sources/httpSource.js'
 import { createRefereeFeed, refereeFeedUrl } from './sources/refereeFeed.js'
 import { createDemoSource } from './sources/demoSource.js'
 import { createEditorSource, defaultEditorState } from './sources/editorSource.js'
 import { createDelayedSource, youTubeId } from './sources/delayedSource.js'
 import { initialOverlayState, reduceOverlayState, RESULT_DURATION_MS } from './overlayState.js'
+import { useRemoteControl } from './remote/useRemoteControl.js'
+import { DEFAULT_CONTROL } from './remote/controlState.js'
 import demoBackdrop from './assets/demo-backdrop.jpg'
 
 // Data older than this is flagged in debug mode, and hidden entirely after OFFLINE_AFTER_MS so the
@@ -183,6 +202,14 @@ const INTRO_MS = (Number(params.get('introSeconds')) || (demoSource ? 3.5 : 5)) 
 const showBackdrop = Boolean(demoSource || editorState) && flag('backdrop', !window.obsstudio)
 
 const feed = source ? useLiveFeed(source) : null
+
+// Remote control (e.g. from an iPad, /live/control): pause slates, messages, PB stamps and more, through Firebase.
+// The control page's preview (?preview=1) follows it too, but doesn't report itself as the overlay on air.
+const remote =
+  liveCompetition && !editorState && !demoSource && !standaloneView && !scoreboardView && flag('remote', true)
+    ? useRemoteControl(liveCompetition, { onCommand: runCommand, presence: !flag('preview') })
+    : null
+const control = computed(() => remote?.control.value ?? DEFAULT_CONTROL)
 
 // Result/transition state, advanced only when the normalized snapshot changes.
 const state = shallowRef(initialOverlayState())
@@ -277,20 +304,22 @@ const displayed = computed(() => {
 // The results list replaces the lower third and the lifter card while it is shown.
 const showScoreboard = computed(
   () =>
-    (scoreboardView || displayMode.value === 'list' || roundBoard.value) &&
-    Boolean(displayed.value || feed?.snapshot.value?.scoreboard?.lifters.length) &&
+    (scoreboardView || displayMode.value === 'list' || remoteMode.value === 'list' || roundBoard.value) &&
+    Boolean(displayed.value || board.value.scoreboard?.lifters.length) &&
     status.value !== 'loading' &&
     status.value !== 'offline',
 )
 
-// In the demo editor, a slate ("Skylt") can be previewed like the results list.
-const showSlate = computed(() => displayMode.value === 'slate')
+// A slate ("Skylt"): chosen in the demo editor, or from the remote control.
+const showSlate = computed(() => displayMode.value === 'slate' || remoteMode.value === 'slate')
+const slateKind = computed(() => (editorState ? editorState.slate : control.value.slate))
+const slateTime = computed(() => (editorState ? demoPauseTime : control.value.pauseTime))
 
 // Full-screen graphics replace the lower third, the lifter card and the corner graphic while shown.
 const fullScreen = computed(() => showScoreboard.value || showSlate.value)
 
-// The competition's name: from ?title=…, or the demo editor's field.
-const eventTitle = computed(() => editorState?.title?.trim() || title || null)
+// The competition's name: the demo editor's field, the remote control's, or ?title=….
+const eventTitle = computed(() => editorState?.title?.trim() || control.value.title || title || null)
 
 // In the demo the break slate says the next group starts in about a quarter of an hour.
 const demoPauseTime = (() => {
@@ -334,8 +363,8 @@ const upcoming = computed(() => {
 
 // Between rounds: when the last lift of a round has been judged, the results list is shown automatically and for 10 s
 // (unless ?roundBoard=0). The stinger starts 6 s after the lights, so that the lifter's reaction is seen first, and the
-// list takes over 0.6 s later, just before the result would end (RESULT_DURATION_MS) and the next lifter would be
-// introduced. In the demo, "Sista i omgången" makes a result end the round.
+// list takes over 0.6 s later, while the result is still up (RESULT_DURATION_MS), so that the next lifter isn't
+// introduced first. In the demo, "Sista i omgången" makes a result end the round.
 const ROUND_BOARD_DELAY_MS = 6000
 const ROUND_BOARD_MS = 10000
 const showRoundBoards = flag('roundBoard', true) && !scoreboardView && !standaloneView
@@ -348,26 +377,30 @@ watch(
   (result) => {
     const endsRound = result && (editorState ? editorState.lastInRound : result.confirmed && result.endsRound)
     const key = result && `${result.id}:${result.shownAt}`
-    if (!showRoundBoards || !endsRound || key === roundBoardFor) {
+    if (!showRoundBoards || !control.value.roundBoards || !endsRound || key === roundBoardFor) {
       return
     }
 
     roundBoardFor = key
-    stopRoundBoard()
-    const startIn = Math.max(0, result.shownAt + ROUND_BOARD_DELAY_MS - Date.now())
-    roundBoardTimers = [
-      setTimeout(
-        () =>
-          withStinger(() => {
-            roundBoard.value = true
-            activationKey.value++
-          }),
-        startIn,
-      ),
-      setTimeout(() => withStinger(stopRoundBoard), startIn + STINGER_COVERED_MS + ROUND_BOARD_MS),
-    ]
+    startRoundBoard(Math.max(0, result.shownAt + ROUND_BOARD_DELAY_MS - Date.now()))
   },
 )
+
+// Shows the results list for ROUND_BOARD_MS, coming and going with the stinger, after `startIn` ms.
+function startRoundBoard(startIn = 0) {
+  stopRoundBoard()
+  roundBoardTimers = [
+    setTimeout(
+      () =>
+        withStinger(() => {
+          roundBoard.value = true
+          activationKey.value++
+        }),
+      startIn,
+    ),
+    setTimeout(() => withStinger(stopRoundBoard), startIn + STINGER_COVERED_MS + ROUND_BOARD_MS),
+  ]
+}
 
 // The stinger as an in-page transition: bands sweep in, the change happens while the picture is fully covered
 // (0.6 s, like OBS's transition point), and the bands sweep out (1.2 s in all).
@@ -404,7 +437,13 @@ function considerIntro(attempt) {
   }
 
   // Only a new lifter is introduced, not the same lifter taking another attempt, and not under the results list.
-  if (!showIntros || roundBoard.value || introducedLifterId == null || attempt.lifterId === introducedLifterId) {
+  if (
+    !showIntros ||
+    !control.value.intros ||
+    roundBoard.value ||
+    introducedLifterId == null ||
+    attempt.lifterId === introducedLifterId
+  ) {
     return
   }
 
@@ -777,6 +816,105 @@ function skip() {
   }
 }
 
+// Remote control: what it asks the overlay to show. The results list and the slates come and go under the stinger,
+// like separate OBS scenes; hiding all graphics fades them out.
+const remoteMode = ref(control.value.mode)
+const hideAll = computed(() => remoteMode.value === 'hidden')
+watch(
+  () => control.value.mode,
+  (mode) => {
+    const fullScreenModes = ['list', 'slate']
+    if (fullScreenModes.includes(mode) || fullScreenModes.includes(remoteMode.value)) {
+      withStinger(() => {
+        remoteMode.value = mode
+        if (mode !== 'auto') {
+          stopRoundBoard()
+          cancelIntro()
+        }
+      })
+    } else {
+      remoteMode.value = mode
+    }
+  },
+)
+
+// The results list: of the group on the platform, or (from the remote control) of another group, e.g. an earlier one.
+// A group that hasn't started is shown as a start list with the declared openers.
+const listGroup = computed(() => (remote && remoteMode.value === 'list' ? control.value.listGroup : null))
+const groupResults = remote ? useGroupResults(liveCompetition, listGroup) : null
+const board = computed(() => {
+  const snapshot = feed?.snapshot.value
+  const other = groupResults?.value
+  if (listGroup.value && other && other.name !== snapshot?.group) {
+    const upcoming = other.status === 'upcoming'
+    return {
+      scoreboard: other.scoreboard,
+      discipline: upcoming ? (other.scoreboard.disciplines[0] ?? null) : null,
+      group: other.name,
+      currentLifterId: null,
+      final: !upcoming,
+    }
+  }
+  return {
+    scoreboard: snapshot?.scoreboard ?? { disciplines: [], lifters: [] },
+    discipline: snapshot?.discipline ?? null,
+    group: snapshot?.group ?? null,
+    currentLifterId: snapshot?.current?.lifterId ?? null,
+    final: false,
+  }
+})
+
+// The referee lights, large in the bottom right corner: each lamp as its referee decides (from referee/signal), then
+// the decision, which stays with the result.
+const refereeLights = computed(() => {
+  const attempt = displayed.value
+  if (!attempt || fullScreen.value) {
+    return null
+  }
+  return attempt.outcome ? (attempt.decisions ?? null) : (feed?.snapshot.value?.signals ?? null)
+})
+
+// The commentator strap, shown on command for its 9 s animation, in the lower third's place.
+const COMMENTATORS_MS = 9800
+const commentators = shallowRef(null)
+let commentatorTimer = null
+
+function runCommand(command) {
+  if (command.type === 'pb') {
+    showPb()
+  } else if (command.type === 'skip') {
+    skip()
+  } else if (command.type === 'list') {
+    startRoundBoard()
+  } else if (command.type === 'commentators' && control.value.commentators.length) {
+    clearTimeout(commentatorTimer)
+    commentators.value = { key: (commentators.value?.key ?? 0) + 1, names: control.value.commentators }
+    commentatorTimer = setTimeout(() => (commentators.value = null), COMMENTATORS_MS)
+  }
+}
+
+// What is on air, for the control page.
+const onAir = computed(() => {
+  const name = displayed.value?.name ?? ''
+  if (hideAll.value) {
+    return 'Ingen grafik'
+  }
+  if (showSlate.value) {
+    return `Skylt: ${{ start: 'Startar snart', pause: 'Paus', end: 'Tack för idag' }[slateKind.value] ?? slateKind.value}`
+  }
+  if (showScoreboard.value) {
+    return board.value.final ? `Resultat: ${board.value.group}` : 'Resultatlista'
+  }
+  if (intro.value) {
+    return `Lyftarkort: ${intro.value.name ?? ''}`
+  }
+  if (displayed.value?.outcome) {
+    return `Resultat: ${name} (${displayed.value.outcome === 'good' ? 'godkänt' : 'underkänt'})`
+  }
+  return displayed.value ? `Nederkant: ${name}` : 'Väntar på tävlingsdata'
+})
+watch([onAir, status], ([showing, feedStatus]) => remote?.report({ showing, feed: feedStatus }), { immediate: true })
+
 // Demo mode: step through the simulated competition automatically or with the keyboard.
 const demoIndex = ref(0)
 const playing = ref(flag('autoplay', true))
@@ -859,6 +997,7 @@ onBeforeUnmount(() => {
   clearTimeout(awaitTimer)
   clearTimeout(introTimer)
   clearTimeout(pbTimer)
+  clearTimeout(commentatorTimer)
   endFlight()
   roundBoardTimers.forEach(clearTimeout)
   stingerTimers.forEach(clearTimeout)
@@ -898,6 +1037,17 @@ code {
 
 .in-page-stinger {
   z-index: 5;
+}
+
+/* All graphics, faded out together when the remote control hides them ("Ingen grafik"). */
+.graphics {
+  position: absolute;
+  inset: 0;
+  transition: opacity var(--motion-slow) var(--motion-move);
+}
+
+.graphics.off {
+  opacity: 0;
 }
 
 .board-leave-active {

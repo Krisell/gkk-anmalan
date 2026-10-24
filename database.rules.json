@@ -1,0 +1,26 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "live": {
+      ".read": true,
+      "control": {
+        ".write": "auth != null && auth.token.liveControl === true"
+      },
+      "commands": {
+        ".write": "auth != null && auth.token.liveControl === true"
+      },
+      "presence": {
+        "$session": {
+          ".write": "$session.matches(/^[A-Za-z0-9_-]{8,40}$/)",
+          ".validate": "newData.hasChildren(['at']) && newData.child('at').isNumber()",
+          "at": { ".validate": true },
+          "competition": { ".validate": "newData.isString() && newData.val().matches(/^[0-9]{1,9}$/)" },
+          "showing": { ".validate": "newData.isString() && newData.val().length <= 200" },
+          "feed": { ".validate": "newData.isString() && newData.val().length <= 20" },
+          "$other": { ".validate": false }
+        }
+      }
+    }
+  }
+}

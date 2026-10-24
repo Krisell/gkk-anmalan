@@ -9,7 +9,7 @@
         <div class="brand"><img :src="logo" alt="" class="logo" /></div>
         <div class="titles">
           <div class="eyebrow">{{ [group, disciplineTitle].filter(Boolean).join(' · ') }}</div>
-          <div class="title">Resultatlista – Pågående tävling</div>
+          <div class="title">{{ title }}</div>
         </div>
       </div>
 
@@ -67,6 +67,21 @@ const props = defineProps({
   discipline: { type: String, default: null },
   group: { type: String, default: null },
   currentLifterId: { type: String, default: null },
+  // The results of a group that isn't on the platform (e.g. an earlier one): the best lift per discipline.
+  final: { type: Boolean, default: false },
+})
+
+// Before anything has been judged the list is the start list (with the declared openers).
+const started = computed(() =>
+  props.scoreboard.lifters.some((lifter) =>
+    Object.values(lifter.lifts).some((attempts) => attempts.some((attempt) => attempt.outcome)),
+  ),
+)
+const title = computed(() => {
+  if (!started.value) {
+    return 'Startlista'
+  }
+  return props.final ? 'Resultat' : 'Resultatlista – Pågående tävling'
 })
 
 const SHORT_NAMES = { SQ: 'Knäböj', BP: 'Bänk', DL: 'Mark' }
