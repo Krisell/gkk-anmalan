@@ -3,8 +3,9 @@
  *
  * Meant for lining the HUD up with an external video stream, which runs several seconds behind reality
  * (e.g. YouTube live). Every poll still fetches fresh data, so staleness detection keeps working; the
- * responses are buffered and handed out once they are old enough. During the first `delayMs` after start the
- * oldest response is used, so that the state the overlay starts from is real (and old results never replay).
+ * responses are buffered and handed out once they are old enough. During the first `delayMs` after start there is
+ * nothing old enough yet, and load() returns null (nothing to show): the live state would be ahead of the stream, e.g.
+ * the next lifter while the video still shows the previous one.
  */
 export function createDelayedSource(source, delayMs, now = () => Date.now()) {
   let buffer = []
@@ -16,7 +17,7 @@ export function createDelayedSource(source, delayMs, now = () => Date.now()) {
       const cutoff = now() - delayMs
       const ready = buffer.filter((entry) => entry.at <= cutoff)
       if (!ready.length) {
-        return buffer[0].data
+        return null
       }
 
       // Keep the newest ready entry (it is what is shown) and everything that is not ready yet.

@@ -16,9 +16,8 @@
             <span class="verdict" :class="attempt.outcome">
               {{ attempt.outcome === 'good' ? 'Godkänt' : 'Underkänt' }}
             </span>
-            <span v-if="placeChange" class="place-change">{{ placeChange }}</span>
           </div>
-          <div v-else-if="clockLeft != null" key="clock" class="tab clock" :class="{ urgent: clockLeft <= 10 }">
+          <div v-else-if="clockLeft != null" key="clock" class="tab clock">
             <span class="eyebrow">Tid</span>
             <span class="clock-time">{{ clockText }}</span>
           </div>
@@ -97,30 +96,21 @@ watch(
 
 onBeforeUnmount(() => clearInterval(ticker))
 
+// The clock is hidden for its last seconds: it practically never runs out, and when it seems to, the secretariat has
+// usually just forgotten to stop it. A countdown to zero would only worry viewers.
+const CLOCK_HIDDEN_FROM_SECONDS = 10
+
 const clockLeft = computed(() => {
   if (!props.clockEndsAt) {
     return null
   }
   const left = Math.ceil((props.clockEndsAt - now.value) / 1000)
-  return left > 0 ? left : null
+  return left > CLOCK_HIDDEN_FROM_SECONDS ? left : null
 })
 
 const clockText = computed(() => {
   const left = clockLeft.value ?? 0
   return `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`
-})
-
-// "Tar ledningen" or "↑ 2 placeringar" after a good lift that improved the lifter's place.
-const placeChange = computed(() => {
-  const change = props.attempt.placeChange
-  if (!change?.to || !change.from || change.to >= change.from) {
-    return null
-  }
-  if (change.to === 1) {
-    return 'Tar ledningen'
-  }
-  const places = change.from - change.to
-  return `↑ ${places} ${places === 1 ? 'placering' : 'placeringar'}`
 })
 
 // The lifter's club crest, if we have one; no crest rather than ours (see clubs.js).
@@ -242,25 +232,10 @@ const slots = computed(() =>
   background: var(--overlay-failed);
 }
 
-.place-change {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  padding: 0 20px;
-  font-family: var(--overlay-font);
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  animation: place-change-in var(--motion-base) var(--motion-enter) 600ms both;
-}
-
 .clock {
   gap: 14px;
   margin-left: auto;
   padding: 0 22px;
-  transition: background-color var(--motion-fast) var(--motion-move);
 }
 
 .clock-time {
@@ -270,25 +245,6 @@ const slots = computed(() =>
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
-}
-
-.clock.urgent {
-  background: var(--overlay-failed);
-}
-
-.clock.urgent .eyebrow {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-@keyframes place-change-in {
-  from {
-    opacity: 0;
-    transform: translateX(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 
 .panel {

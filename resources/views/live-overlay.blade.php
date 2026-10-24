@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@500;600&display=swap" rel="stylesheet">
     @vite(['resources/js/live/live-overlay.js'])
 </head>
-<body>
+<body data-powerlifting-live="{{ config('services.powerliftinglive.url') }}">
 <div id="live-overlay"></div>
 </body>
 </html>

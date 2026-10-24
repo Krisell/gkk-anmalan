@@ -122,6 +122,7 @@ import CommentatorStrap from './components/CommentatorStrap.vue'
 import Stinger from './components/Stinger.vue'
 import { useLiveFeed } from './useLiveFeed.js'
 import { createHttpSource } from './sources/httpSource.js'
+import { createRefereeFeed, refereeFeedUrl } from './sources/refereeFeed.js'
 import { createDemoSource } from './sources/demoSource.js'
 import { createEditorSource, defaultEditorState } from './sources/editorSource.js'
 import { createDelayedSource, youTubeId } from './sources/delayedSource.js'
@@ -148,7 +149,13 @@ const displayMode = ref(editorState?.mode ?? null)
 // holds the HUD back by the stream's latency so that the two line up.
 const videoId = youTubeId(params.get('video'))
 const delayMs = Math.max(0, Number(params.get('delay')) || 0) * 1000
-const liveSource = /^\d+$/.test(competition ?? '') ? createHttpSource(competition) : null
+const liveCompetition = /^\d+$/.test(competition ?? '') ? competition : null
+// Referee decisions come straight from Powerlifting Live (the proxy can't see them); ?lights=0 turns this off.
+const referee =
+  liveCompetition && flag('lights', true)
+    ? createRefereeFeed(refereeFeedUrl(document.body.dataset.powerliftingLive), liveCompetition)
+    : null
+const liveSource = liveCompetition ? createHttpSource(liveCompetition, referee) : null
 const source =
   demoSource ??
   (editorState ? createEditorSource(editorState) : null) ??
@@ -221,6 +228,25 @@ watch(
   },
 )
 
+// A lifter replaced on the platform before their result arrived is shown until it does, or until the wait is over.
+let awaitTimer = null
+watch(
+  () => state.value.awaiting,
+  (awaiting) => {
+    clearTimeout(awaitTimer)
+    if (awaiting) {
+      awaitTimer = setTimeout(
+        () => {
+          if (state.value.awaiting === awaiting) {
+            state.value = { ...state.value, awaiting: null }
+          }
+        },
+        Math.max(0, awaiting.until - Date.now()),
+      )
+    }
+  },
+)
+
 // A coarse clock for staleness; computed values only trigger re-renders when they change.
 const now = ref(Date.now())
 let clock = null
@@ -245,7 +271,7 @@ const displayed = computed(() => {
     return null
   }
 
-  return state.value.result ?? feed.snapshot.value?.current ?? null
+  return state.value.result ?? state.value.awaiting?.attempt ?? feed.snapshot.value?.current ?? null
 })
 
 // The results list replaces the lower third and the lifter card while it is shown.
@@ -290,11 +316,11 @@ function onObsShown(event) {
   }
 }
 
-// Who lifts after the attempt being shown. While a result is still on screen the next lifter has
+// Who lifts after the attempt being shown. While a result is still on screen (or awaited) the next lifter has
 // usually already been called, and is then the feed's current lifter.
 const upcoming = computed(() => {
   const snapshot = feed?.snapshot.value
-  const result = state.value.result
+  const result = state.value.result ?? state.value.awaiting?.attempt
   if (!displayed.value || !snapshot) {
     return null
   }
@@ -306,9 +332,11 @@ const upcoming = computed(() => {
   return snapshot.next
 })
 
-// Between rounds: when the last lift of a round has been judged, the results list is shown automatically, 3 s after
-// the lights and for 10 s (unless ?roundBoard=0). In the demo, "Sista i omgången" makes a result end the round.
-const ROUND_BOARD_DELAY_MS = 3000
+// Between rounds: when the last lift of a round has been judged, the results list is shown automatically and for 10 s
+// (unless ?roundBoard=0). The stinger starts 6 s after the lights, so that the lifter's reaction is seen first, and the
+// list takes over 0.6 s later, just before the result would end (RESULT_DURATION_MS) and the next lifter would be
+// introduced. In the demo, "Sista i omgången" makes a result end the round.
+const ROUND_BOARD_DELAY_MS = 6000
 const ROUND_BOARD_MS = 10000
 const showRoundBoards = flag('roundBoard', true) && !scoreboardView && !standaloneView
 const roundBoard = ref(false)
@@ -825,8 +853,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  referee?.stop()
   clearInterval(clock)
   clearTimeout(expiryTimer)
+  clearTimeout(awaitTimer)
   clearTimeout(introTimer)
   clearTimeout(pbTimer)
   endFlight()

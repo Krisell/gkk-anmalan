@@ -2,15 +2,15 @@ import { describe, expect, it } from 'vite-plus/test'
 import { createDelayedSource, youTubeId } from '../../../resources/js/live/sources/delayedSource.js'
 
 describe('createDelayedSource', () => {
-  it('hands out data once it is older than the delay, and the oldest data while warming up', async () => {
+  it('hands out data once it is older than the delay, and nothing while warming up', async () => {
     let time = 0
     let value = 'a'
     const source = createDelayedSource({ load: async () => value }, 3000, () => time)
 
-    expect(await source.load()).toBe('a')
+    expect(await source.load()).toBeNull()
     time = 1000
     value = 'b'
-    expect(await source.load()).toBe('a')
+    expect(await source.load()).toBeNull()
     time = 3000
     value = 'c'
     expect(await source.load()).toBe('a')

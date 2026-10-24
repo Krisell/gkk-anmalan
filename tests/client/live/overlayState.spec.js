@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { initialOverlayState, reduceOverlayState } from '../../../resources/js/live/overlayState.js'
+import { initialOverlayState, reduceOverlayState, RESULT_WAIT_MS } from '../../../resources/js/live/overlayState.js'
 
 function attempt(id, extra = {}) {
   const [lifterId] = id.split(':')
   return { id, lifterId, name: `Lifter ${lifterId}`, attempts: [], outcome: null, ...extra }
 }
 
-function snapshot({ current = null, lastResult = null, decision = null } = {}) {
-  return { discipline: 'SQ', group: null, current, lastResult, decision }
+function snapshot({ current = null, next = null, lastResult = null, decision = null } = {}) {
+  return { discipline: 'SQ', group: null, current, next, lastResult, decision }
 }
 
 const lights = (...values) => values.map((good) => ({ good, cards: [] }))
@@ -83,17 +83,6 @@ describe('reduceOverlayState', () => {
     expect(states[1].result).toMatchObject({ id: '1:SQ1', outcome: 'good', decisions: decision.lights })
   })
 
-  it("records how a good lift changed the lifter's place", () => {
-    const states = run([
-      snapshot({ current: attempt('1:SQ2', { place: 3 }) }),
-      snapshot({ current: attempt('2:SQ2'), lastResult: attempt('1:SQ2', { outcome: 'good', place: 1 }) }),
-      snapshot({ current: attempt('3:SQ2'), lastResult: attempt('2:SQ2', { outcome: 'failed', place: 2 }) }),
-    ])
-
-    expect(states[1].result.placeChange).toEqual({ from: 3, to: 1 })
-    expect(states[2].result.placeChange).toBeNull()
-  })
-
   it('marks the last lift of a round', () => {
     const lift = (id, round, outcome = null) => attempt(id, { attempt: round, discipline: 'SQ', outcome })
     const states = run([
@@ -153,5 +142,57 @@ describe('reduceOverlayState', () => {
     ])
 
     expect(states[2].result).toMatchObject({ id: '2:SQ1', decisions: decision.lights })
+  })
+
+  describe('when the next lifter is called before the result is recorded', () => {
+    it('keeps the lifter on the platform until their result arrives', () => {
+      const states = run([
+        snapshot({ current: attempt('1:SQ1') }),
+        snapshot({ current: attempt('2:SQ1') }),
+        snapshot({ current: attempt('2:SQ1'), lastResult: attempt('1:SQ1', { outcome: 'failed' }) }),
+      ])
+
+      expect(states[1].awaiting).toMatchObject({ attempt: { id: '1:SQ1' }, until: 2000 + RESULT_WAIT_MS })
+      expect(states[1].result).toBeNull()
+      expect(states[2].awaiting).toBeNull()
+      expect(states[2].result).toMatchObject({ id: '1:SQ1', outcome: 'failed' })
+    })
+
+    it('keeps waiting across unrelated updates, but not beyond the wait', () => {
+      let state = initialOverlayState()
+      state = reduceOverlayState(state, snapshot({ current: attempt('1:SQ1') }), 0)
+      state = reduceOverlayState(state, snapshot({ current: attempt('2:SQ1') }), 1000)
+      state = reduceOverlayState(state, snapshot({ current: attempt('2:SQ1', { weight: 100 }) }), 2000)
+      expect(state.awaiting?.attempt.id).toBe('1:SQ1')
+
+      state = reduceOverlayState(state, snapshot({ current: attempt('2:SQ1', { weight: 105 }) }), 1000 + RESULT_WAIT_MS)
+      expect(state.awaiting).toBeNull()
+    })
+
+    it('does not wait for a lifter who was only moved back in line', () => {
+      const states = run([
+        snapshot({ current: attempt('1:SQ1'), next: attempt('2:SQ1') }),
+        snapshot({ current: attempt('2:SQ1'), next: attempt('1:SQ1') }),
+      ])
+
+      expect(states[1].awaiting).toBeNull()
+    })
+
+    it('does not wait when the same lifter changes attempt', () => {
+      const states = run([snapshot({ current: attempt('1:SQ1') }), snapshot({ current: attempt('1:SQ2') })])
+
+      expect(states[1].awaiting).toBeNull()
+    })
+
+    it('shows referee lights for the awaited lifter', () => {
+      const states = run([
+        snapshot({ current: attempt('1:SQ1') }),
+        snapshot({ current: attempt('2:SQ1') }),
+        snapshot({ current: attempt('2:SQ1'), decision: { id: 'd1', lights: lights(true, true, false) } }),
+      ])
+
+      expect(states[2].result).toMatchObject({ id: '1:SQ1', outcome: 'good', confirmed: false })
+      expect(states[2].awaiting).toBeNull()
+    })
   })
 })

@@ -101,8 +101,9 @@ export const DEMO_STEPS = [
     },
   },
   {
-    label: 'Byte till marklyft, Erik försök 3',
+    label: 'Sara godkänd (manuellt), byte till marklyft, Erik försök 3',
     apply: (sim) => {
+      record(sim, 'sara', 'BP2', 'good')
       sim.discipline = 'DL'
       sim.round = 3
       Object.assign(sim.lifts.erik, {

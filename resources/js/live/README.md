@@ -87,13 +87,13 @@ Modelled on how Swedish TV (SVT, TV4) presents individual sports:
 - **Club crests.** As on TV, the crest next to a lifter means _their_ club, so the lower third and the lifter card
   show the lifter's club crest, or none. Add crests in `clubs.js` (logo in `assets/clubs/`, club names as Powerlifting
   Live writes them). Our logo is in the corner graphic.
-- **Attempt clock.** Powerlifting Live's `clock` topic, shown above the weight while it runs, red for the last
-  10 seconds.
+- **Attempt clock.** Powerlifting Live's `clock` topic, shown above the weight while it runs. It disappears 10 seconds
+  before the end, without turning red: it practically never runs out, and when it seems to, the secretariat has
+  usually forgotten to stop it.
 - **Results list between rounds.** When the last lift of a round has been judged (the next lifter called is on
-  another attempt or discipline, or the group is done), the results list is shown automatically: 3 s after the
-  lights, for 10 s. It comes and goes with the stinger, as an in-page transition. Esc ends it early; `&roundBoard=0`
+  another attempt or discipline, or the group is done), the results list is shown automatically: the stinger starts 6 s after
+  the lights, so that the lifter's reaction is seen first, and the list stays for 10 s. It comes and goes with the stinger, as an in-page transition. Esc ends it early; `&roundBoard=0`
   turns it off. In the demo, _Sista i omgången_ makes a result end the round.
-- **Standings changes.** After a good lift that improves the lifter's place: "Tar ledningen" or "↑ 2 placeringar".
 - **Safe area.** Everything stays within about 5% of the edges (`--safe-x`, `--safe-y` in `overlay.css`), as broadcast
   graphics do, so nothing is cut off on TVs that crop the picture.
 - **One motion language.** Shared easing curves and durations (`--motion-*` in `overlay.css`).
@@ -172,6 +172,9 @@ server as for any other change. No new services, cron jobs or environment variab
 
 ## Adding the overlay in OBS
 
+The club laptop's complete OBS configuration (settings, scenes, YouTube defaults, backup) is in
+[OBS-SETUP.md](OBS-SETUP.md).
+
 1. In the scene, add the camera source first.
 2. Add a **Browser** source _above_ the camera:
    - URL: `https://<our site>/live/overlay?competition=<id>&title=<the competition's name>`
@@ -205,7 +208,9 @@ is needed:
 - `video` plays the YouTube stream (muted) behind the overlay.
 - `delay` holds the HUD back by that many seconds. A live stream runs behind reality (YouTube: roughly 5–30 s
   depending on the stream's latency setting), while the feed is only ~1–2 s behind. Adjust the delay until the result
-  appears when the referee lights come on in the video. What remains is the HUD's own lag.
+  appears when the referee lights come on in the video. What remains is the HUD's own lag. After a (re)load the HUD
+  stays empty for `delay` seconds, until it has data that old; showing the live state instead would put it ahead of
+  the video.
 
 When we stream ourselves this offset does not exist: OBS combines the HUD with the camera before the stream is
 encoded, so the stream's latency applies to both equally.
@@ -214,12 +219,18 @@ encoded, so the stream's latency applies to both equally.
 
 - **`feed.php` is not a documented API.** The format was taken from Powerlifting Live's own screen pages and may
   change without notice. Everything that depends on it is in `normalize.js` and `LiveOverlayController`.
-- **Not yet verified during a live competition.** When this was built no competition was running, so the
-  `next_lifters` entry was seen in an empty state only. The attempt number is derived from the lifter's lifts
-  (first attempt with a weight but no result), falling back to `current_round`. Check with `&debug=1` at the next
-  competition.
-- Referee lights only appear when the competition uses Powerlifting Live's integrated referee system. Otherwise
-  the result is shown without lights.
+- **Seen live at SM Klassisk styrkelyft 2026** (competition 2939). `next_lifters` carries the attempt and lift
+  directly. Without referee lights, Powerlifting Live publishes the new lifter order about 0.6 s before the scoresheet
+  with the result, so the overlay keeps the lifter on the platform for up to 5 s while it waits for the result
+  (`RESULT_WAIT_MS` in `overlayState.js`) instead of introducing the next lifter first.
+- Referee lights only appear when the competition uses Powerlifting Live's integrated referee system. Otherwise the
+  result is shown without lights, when the secretariat records it.
+- **Referee decisions come over MQTT, not through the proxy.** `feed.php` never holds `referee/decision` (it stays
+  `{}`): the decision only exists as a live message, sent about 0.3–0.5 s before the new lifter order and followed by
+  `referee/clear` 1.5 s later. The overlay therefore subscribes to that one topic itself over
+  `wss://se.powerliftinglive.com/ws` (`sources/refereeFeed.js`), like a screen in the hall, and adds the latest
+  decision to each proxy response. Their broker accepts connections from our site. `&lights=0` turns this off;
+  decisions published while the connection is down are lost, and the result is then shown without lights.
 - Latency is up to ~2 seconds (1 s polling + 1 s cache). Powerlifting Live also offers MQTT over WebSocket
   (`wss://se.powerliftinglive.com/ws`), which could give instant updates if needed.
 - Fonts load from Google Fonts. Without internet access they fall back to system fonts, but then there would be no

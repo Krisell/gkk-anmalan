@@ -78,6 +78,22 @@ describe('useLiveFeed', () => {
     unmount()
   })
 
+  it('shows nothing while the source has nothing yet, without treating it as an outage', async () => {
+    let data = null
+    const source = { load: async () => data }
+
+    const { feed, unmount } = mount(source)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(feed.snapshot.value).toBeNull()
+    expect(feed.lastSuccessAt.value).not.toBeNull()
+    expect(feed.failures.value).toBe(0)
+
+    data = raw('A')
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(feed.snapshot.value.current.name).toBe('A')
+    unmount()
+  })
+
   it('stops polling when unmounted', async () => {
     const source = { load: vi.fn(async () => raw('A')) }
 

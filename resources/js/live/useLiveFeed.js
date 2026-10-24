@@ -29,7 +29,9 @@ export function useLiveFeed(source, { interval = 1000 } = {}) {
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
 
     try {
-      const next = normalizeFeed(await source.load(controller.signal))
+      // A source may have nothing to show yet (null), e.g. the delayed source while it fills its buffer.
+      const raw = await source.load(controller.signal)
+      const next = raw === null ? null : normalizeFeed(raw)
       const json = JSON.stringify(next)
 
       if (json !== lastJson) {

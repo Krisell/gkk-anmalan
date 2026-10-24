@@ -10,8 +10,12 @@
  * - a new decision alone shows the lights right away for the lifter on the platform,
  * - a new recorded result confirms it (or, without referee lights, is shown on its own).
  *
- * A recorded good lift also gets placeChange { from, to }: the lifter's place before (the last place seen in
- * earlier snapshots) and after the lift, for "Tar ledningen" / "↑ 2 placeringar".
+ * Without referee lights in the feed (Powerlifting Live publishes them only when the referees judge through it), the
+ * secretariat's entry records the result, and Powerlifting Live publishes the new lifter order a second or two before
+ * the scoresheet with the result. When the lifter on the platform is replaced before their attempt has a result, the
+ * overlay therefore keeps showing them (awaiting) for up to RESULT_WAIT_MS, so that the next lifter isn't introduced
+ * just before the result. Only a different lifter on the platform counts (the demo editor changes attempts in place),
+ * and a lifter who is only moved back (a changed weight) isn't waited for: they are still in line.
  *
  * A recorded result gets endsRound when it was the last lift of a round: the lifter called next is on another
  * attempt or discipline, or nobody is called (the group is done). The overlay then shows the results list.
@@ -19,14 +23,16 @@
 
 export const RESULT_DURATION_MS = 7000
 
+export const RESULT_WAIT_MS = 5000
+
 export function initialOverlayState() {
   return {
     initialized: false,
     seenResultId: null,
     seenDecisionId: null,
     platform: null,
+    awaiting: null,
     result: null,
-    places: {},
   }
 }
 
@@ -40,8 +46,8 @@ export function reduceOverlayState(state, snapshot, now) {
       seenResultId: lastResult?.id ?? null,
       seenDecisionId: decision?.id ?? null,
       platform: snapshot.current,
+      awaiting: null,
       result: null,
-      places: knownPlaces({}, snapshot),
     }
   }
 
@@ -56,19 +62,16 @@ export function reduceOverlayState(state, snapshot, now) {
     // If the lights were already shown for this very attempt, keep shownAt so nothing replays.
     const shownAt = pending?.id === newResult.id ? pending.shownAt : now
 
-    const placeChange =
-      newResult.outcome === 'good' ? { from: state.places[newResult.lifterId] ?? null, to: newResult.place } : null
-
     // An unknown attempt number of the next lifter says nothing about the round.
     const next = snapshot.current
     const endsRound =
       !next ||
       (next.attempt != null && (next.attempt !== newResult.attempt || next.discipline !== newResult.discipline))
 
-    result = { ...newResult, decisions, confirmed: true, shownAt, placeChange, endsRound }
+    result = { ...newResult, decisions, confirmed: true, shownAt, endsRound }
   } else if (newDecision) {
     // The lifter we were showing (the previous snapshot's current lifter) is the one being judged.
-    const judged = state.platform ?? snapshot.current
+    const judged = state.awaiting?.attempt ?? state.platform ?? snapshot.current
     if (judged) {
       const outcome = majority(newDecision.lights)
       result = { ...judged, outcome, decisions: newDecision.lights, confirmed: false, shownAt: now }
@@ -80,21 +83,26 @@ export function reduceOverlayState(state, snapshot, now) {
     seenResultId: lastResult?.id ?? state.seenResultId,
     seenDecisionId: decision?.id ?? state.seenDecisionId,
     platform: snapshot.current,
+    awaiting: newResult || newDecision ? null : awaitedAttempt(state, snapshot, now),
     result,
-    places: knownPlaces(state.places, snapshot),
   }
 }
 
-// The latest known place of each lifter, from the results list and the lifters in the snapshot.
-function knownPlaces(places, snapshot) {
-  const next = { ...places }
-  for (const lifter of [...(snapshot.scoreboard?.lifters ?? []), snapshot.current, snapshot.lastResult]) {
-    const id = lifter?.lifterId ?? lifter?.id
-    if (id && lifter.place != null) {
-      next[id] = lifter.place
-    }
+// The attempt still waiting for its result, if the lifter on the platform was replaced before it was recorded.
+function awaitedAttempt(state, snapshot, now) {
+  if (state.awaiting && now < state.awaiting.until) {
+    return state.awaiting
   }
-  return next
+
+  const previous = state.platform
+  const replaced =
+    previous &&
+    previous.lifterId !== snapshot.current?.lifterId &&
+    previous.id !== snapshot.next?.id &&
+    previous.id !== state.seenResultId &&
+    previous.id !== state.result?.id
+
+  return replaced ? { attempt: previous, until: now + RESULT_WAIT_MS } : null
 }
 
 function majority(lights) {

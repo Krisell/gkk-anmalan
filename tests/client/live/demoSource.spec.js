@@ -27,6 +27,7 @@ describe('demo source', () => {
     expect(timeline[8].snapshot.current).toMatchObject({ id: 'd1:BP2', discipline: 'BP', attempt: 2 })
     expect(timeline[9].result).toMatchObject({ id: 'd1:BP2', outcome: 'good' })
     expect(timeline[10].snapshot.current).toMatchObject({ id: 'd2:DL3', discipline: 'DL', weight: 265 })
+    expect(timeline[10].result).toMatchObject({ id: 'd3:BP2', outcome: 'good', decisions: null })
     expect(timeline[11].result).toMatchObject({ id: 'd2:DL3', outcome: 'failed' })
     expect(timeline.at(-1).snapshot.current).toBeNull()
   })
