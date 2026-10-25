@@ -21,6 +21,9 @@ Applikationen är helt webbaserad och bygger på ramverken Vue.js och Laravel (P
 
 ## Uppdatera live-versionen
 
+> Sajten flyttas från One.com till Laravel Cloud. Plan och körschema finns i
+> [docs/laravel-cloud-migration.md](docs/laravel-cloud-migration.md). Beskrivningen nedan gäller One.com.
+
 Efter att önskade ändringar är utvecklade, mergade till rätt branch och pushade hit används följande steg för att publicera en ny version:
 
 - Logga in på servern

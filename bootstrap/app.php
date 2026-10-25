@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Middleware\DatabaseMaintenanceMiddleware;
 use App\Http\Middleware\EnsureUserIsNotInactivatedMiddleware;
 use App\Http\Middleware\LogVisitsMiddleware;
 use App\Http\Middleware\LowercaseEmails;
+use App\Http\Middleware\RedirectToMainDomainMiddleware;
 use App\Providers\AppServiceProvider;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Console\Scheduling\Schedule;
@@ -36,6 +38,13 @@ return Application::configure(basePath: \dirname(__DIR__))
             '/auth/*',
             '/admin/news/email/preview',
             '*__e2e__*',
+        ]);
+
+        // Before everything else: the other domains are redirected even during maintenance, and the maintenance mode
+        // also covers route model binding and requests outside the web group
+        $middleware->prepend([
+            RedirectToMainDomainMiddleware::class,
+            DatabaseMaintenanceMiddleware::class,
         ]);
 
         $middleware->web([
