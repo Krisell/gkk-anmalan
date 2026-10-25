@@ -65,7 +65,7 @@ test('an admin can update an event registration', function () {
         'event_id' => $event->id,
         'user_id' => $user->id,
         'status' => true,
-        'status' => 'Another comment',
+        'comment' => 'Another comment',
     ];
 
     login($user);
@@ -89,7 +89,7 @@ test('a non admin cant update a registration', function () {
         'event_id' => $event->id,
         'user_id' => $user->id,
         'status' => true,
-        'status' => 'Another comment',
+        'comment' => 'Another comment',
     ];
 
     $this->post("/events/{$event->id}/registrations/{$registration->id}", $data)->assertStatus(302);

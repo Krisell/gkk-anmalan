@@ -57,9 +57,9 @@ test('every request is logged during maintenance', function () {
     config(['gkk.served-by' => 'onecom']);
 
     Log::shouldReceive('build')->once()->andReturnSelf();
-    Log::shouldReceive('info')->once()->withArgs(fn ($line) => \str_starts_with($line, 'onecom gkk.test GET /gkk 200'));
+    Log::shouldReceive('info')->once()->withArgs(fn ($line) => \str_starts_with($line, 'onecom goteborgkk.se GET /gkk 200'));
 
-    $this->get('/gkk');
+    $this->get('https://goteborgkk.se/gkk');
 });
 
 test('the X-Served-By header names the server', function () {

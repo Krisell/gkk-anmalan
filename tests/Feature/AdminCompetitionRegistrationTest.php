@@ -19,7 +19,7 @@ test('an admin can update an Competition registration', function () {
         'competition_id' => $competition->id,
         'user_id' => $user->id,
         'status' => true,
-        'status' => 'Another comment',
+        'comment' => 'Another comment',
     ];
 
     login($user);
@@ -43,7 +43,7 @@ test('a non admin cant update a registration', function () {
         'competition_id' => $competition->id,
         'user_id' => $user->id,
         'status' => true,
-        'status' => 'Another comment',
+        'comment' => 'Another comment',
     ];
 
     $this->post("/competitions/{$competition->id}/registrations/{$registration->id}", $data)->assertStatus(302);
