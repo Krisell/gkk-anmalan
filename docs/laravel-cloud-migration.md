@@ -126,6 +126,8 @@ show the status code and `X-Served-By`. `--watch 60` repeats every minute.
    test on the `laravel.cloud` URL (log in with password, Google and Microsoft, sign up for a competition, outgoing
    mail, Fortnox, the PDF routes). Note how long the copy takes.
 6. Pick the time: an early weekday morning, maintenance mode on at about 05:00 Swedish time, done before 07:00.
+   Target: Tuesday 3 or Wednesday 4 November 2026, after the 1 November sign-up deadline for DM officials and well
+   before the DM on 14–15 November. Fallback: Tuesday 17 November or later; never the DM week.
    `bin/db-write-activity.sql` (run against production in October 2026) showed about 5 writes a day, almost all
    between 07:00 and 22:00, and in 90 days only 5 writes between 04:00 and 06:00 (winter time, UTC+1). Avoid days
    near a sign-up deadline or registration opening; the busiest hours were a burst of sign-ups on a Sunday evening.
