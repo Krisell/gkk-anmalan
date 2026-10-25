@@ -88,6 +88,20 @@
                     <div class="ml-4">
                       <div class="text-sm leading-5 font-medium text-gray-900">
                         {{ registration.user.first_name }} {{ registration.user.last_name }}
+                        <span
+                          v-if="ageCategoryOf(registration)"
+                          class="ml-1 px-2 rounded-full text-xs font-semibold bg-blue-100 text-blue-800"
+                          :title="`Född ${registration.user.birth_year}, kan tävla som ${ageCategoryOf(registration).label}`"
+                        >
+                          {{ ageCategoryOf(registration).short }}
+                        </span>
+                      </div>
+                      <div
+                        v-for="warning in ageWarnings(registration)"
+                        :key="warning"
+                        class="text-xs leading-5 text-red-700"
+                      >
+                        <i class="fa fa-exclamation-triangle"></i> {{ warning }}
                       </div>
                     </div>
                   </div>
@@ -300,6 +314,7 @@ import Button from './ui/Button.vue'
 import PowerliftingLive from '../modules/PowerliftingLive.js'
 import ToggleButton from './ui/ToggleButton.vue'
 import { formatWeightClass } from '../live/format.js'
+import { ageCategory, ageCategoryWarnings } from '../utils/ageCategories.js'
 
 // Same options as the member signup form in Competition.vue.
 const MALE_WEIGHT_CLASSES = ['¯\\_(ツ)_/¯', '53', '59', '66', '74', '83', '93', '105', '120', '120+']
@@ -386,6 +401,23 @@ export default {
     weightClassString(weightClass) {
       // Only numeric classes get a sign and unit; the "don't know" option is shown as is.
       return /^\d/.test(weightClass ?? '') ? formatWeightClass(weightClass) : weightClass
+    },
+    competitionYear() {
+      return Number((this.competition.date ?? '').slice(0, 4)) || new Date().getFullYear()
+    },
+    ageCategoryOf(registration) {
+      return ageCategory(registration.user.birth_year, this.competitionYear())
+    },
+    ageWarnings(registration) {
+      if (registration.status != 1) {
+        return []
+      }
+
+      return ageCategoryWarnings({
+        birthYear: registration.user.birth_year,
+        year: this.competitionYear(),
+        comment: registration.comment,
+      })
     },
     hasEvent(event) {
       return JSON.parse(this.competition.events)[event]
