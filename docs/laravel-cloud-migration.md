@@ -62,7 +62,7 @@ AAAA records):
 
 - App connected to `Krisell/gkk-anmalan`, deploying from `master`, EU region.
 - Build: `composer install --no-dev`, `npm ci`, `npm run build`. Deploy: `php artisan migrate --force`.
-- Postgres 17 (matches `PG_IMAGE` in `bin/mysql-to-pg.sh`), attached to the environment.
+- Postgres 18 (matches `PG_IMAGE` in `bin/mysql-to-pg.sh` and the CI tests), attached to the environment.
 - Environment variables copied from the One.com `.env`: the same `APP_KEY`, Mailgun, Sentry, Fortnox, the
   Google/Microsoft OAuth keys. `DB_PREFIX` empty (the conversion script strips the `gkk_` prefix). Also
   `SERVED_BY=cloud`.

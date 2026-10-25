@@ -1,0 +1,73 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php-postgres:
+    name: PHP tests (Postgres 18)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        # Same major version as the Laravel Cloud database
+        image: postgres:18
+        env:
+          POSTGRES_USER: gkk
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: gkk_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    # Overrides the SQLite settings in phpunit.xml. The parallel runner creates one database per process.
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: gkk_test
+      DB_USERNAME: gkk
+      DB_PASSWORD: secret
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_pgsql, pgsql
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      # The views use @vite, which needs the build manifest
+      - name: Build assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run tests
+        run: vendor/bin/pest --parallel
