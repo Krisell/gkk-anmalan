@@ -54,3 +54,18 @@ test('a non admin cant update a registration', function () {
 
     $this->assertDatabaseMissing('competition_registrations', $data);
 });
+
+test('an admin can change the weight class of a registration', function () {
+    $competition = Competition::factory()->create();
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $registration = CompetitionRegistration::factory()->create([
+        'competition_id' => $competition->id,
+        'weight_class' => '105',
+    ]);
+
+    login($admin);
+    $this->post("/competitions/{$competition->id}/registrations/{$registration->id}", ['weight_class' => '120'])->assertStatus(200);
+
+    expect($registration->fresh()->weight_class)->toBe('120');
+});

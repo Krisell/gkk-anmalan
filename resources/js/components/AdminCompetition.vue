@@ -112,7 +112,7 @@
 
                 <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200">
                   <div class="text-sm leading-5 text-gray-500">
-                    {{ registration.status == 1 ? registration.weight_class : '' }}
+                    {{ registration.status == 1 ? weightClassString(registration.weight_class) : '' }}
                   </div>
                 </td>
 
@@ -211,6 +211,17 @@
           </div>
         </div>
 
+        <label for="weight-class" class="block text-sm leading-5 font-medium text-gray-700">Viktklass</label>
+        <select
+          v-model="registrationToEdit.weight_class"
+          id="weight-class"
+          class="mt-1 mb-4 form-select block w-full pl-3 pr-10 py-2 text-base leading-6 border-gray-300 focus:outline-hidden focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5 border rounded-sm"
+        >
+          <option v-for="weightClass in weightClassOptions" :key="weightClass" :value="weightClass">
+            {{ weightClassString(weightClass) }}
+          </option>
+        </select>
+
         <label for="location" class="block text-sm leading-5 font-medium text-gray-700">Anmäld</label>
         <select
           v-model="registrationToEdit.status"
@@ -288,6 +299,11 @@ import Modal from './ui/Modal.vue'
 import Button from './ui/Button.vue'
 import PowerliftingLive from '../modules/PowerliftingLive.js'
 import ToggleButton from './ui/ToggleButton.vue'
+import { formatWeightClass } from '../live/format.js'
+
+// Same options as the member signup form in Competition.vue.
+const MALE_WEIGHT_CLASSES = ['¯\\_(ツ)_/¯', '53', '59', '66', '74', '83', '93', '105', '120', '120+']
+const FEMALE_WEIGHT_CLASSES = ['¯\\_(ツ)_/¯', '43', '47', '52', '57', '63', '69', '76', '84', '84+']
 
 export default {
   components: { Breadcrumbs, Button, Modal, Link, ToggleButton },
@@ -334,6 +350,12 @@ export default {
 
       return this.competition.registrations.filter((registration) => registration.status == this.showFilter)
     },
+    weightClassOptions() {
+      const classes = this.registrationToEdit.gender === 'Kvinnor' ? FEMALE_WEIGHT_CLASSES : MALE_WEIGHT_CLASSES
+      const current = this.registrationToEdit.weight_class
+      // Keep a stored value that isn't in the list (e.g. from the other gender) selectable.
+      return current && !classes.includes(current) ? [current, ...classes] : classes
+    },
     countYes() {
       return this.competition.registrations.filter((registration) => registration.status == 1).length
     },
@@ -360,6 +382,10 @@ export default {
         .filter(([event, status]) => status)
         .map(([event]) => event.toUpperCase())
         .join(', ')
+    },
+    weightClassString(weightClass) {
+      // Only numeric classes get a sign and unit; the "don't know" option is shown as is.
+      return /^\d/.test(weightClass ?? '') ? formatWeightClass(weightClass) : weightClass
     },
     hasEvent(event) {
       return JSON.parse(this.competition.events)[event]
@@ -410,7 +436,7 @@ export default {
                   { value: registration.status == 1 ? 'Ja' : 'Nej', type: 'string' },
                   { value: registration.gender, type: 'string' },
                   { value: this.eventsString(registration.events), type: 'string' },
-                  { value: registration.weight_class, type: 'string' },
+                  { value: this.weightClassString(registration.weight_class), type: 'string' },
                   { value: registration.comment, type: 'string' },
                 ]
               }),
