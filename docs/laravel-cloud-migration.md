@@ -124,7 +124,10 @@ show the status code and `X-Served-By`. `--watch 60` repeats every minute.
    keeping the path) is deployed on Cloud. It must be live there before their DNS changes.
 5. Rehearse the data copy: a fresh dump from One.com, `bin/mysql-to-pg.sh` with `CLOUD_DATABASE_URL` set, and a smoke
    test on the `laravel.cloud` URL (log in with password, Google and Microsoft, sign up for a competition, outgoing
-   mail, Fortnox, the PDF routes). Note how long the copy takes.
+   mail, Fortnox, the PDF routes). Note how long the copy takes. Cloud is kept in maintenance mode
+   (`DATABASE_MAINTENANCE=true`) until the cutover, so nobody who finds the `laravel.cloud` URL saves data there:
+   turn it off for the smoke test and back on afterwards (each change is a redeploy of about 1.5 minutes, and the old
+   instances keep answering for a few seconds after the deploy reports success).
 6. Pick the time: an early weekday morning, maintenance mode on at about 05:00 Swedish time, done before 07:00.
    Target: Tuesday 3 or Wednesday 4 November 2026, after the 1 November sign-up deadline for DM officials and well
    before the DM on 14–15 November. Fallback: Tuesday 17 November or later; never the DM week.
@@ -139,7 +142,8 @@ show the status code and `X-Served-By`. `--watch 60` repeats every minute.
    shows the maintenance page and that the landing page still works.
 2. Take a fresh MySQL dump. Keep a copy: it is the rollback point.
 3. Run `bin/mysql-to-pg.sh` with `CLOUD_DATABASE_URL` set and compare the row counts it prints.
-4. Smoke-test quickly on the `laravel.cloud` URL (login and one sign-up).
+4. On Cloud, set `DATABASE_MAINTENANCE=false` and redeploy (about 1.5 minutes). Then smoke-test quickly on the
+   `laravel.cloud` URL (login and one sign-up).
 5. For each domain at One.com: under _Egna DNS-inställningar_, create A records for `@` (host name empty) and `www`
    with the address Cloud shows and TTL 600. Then, straight away, turn off the default A records for the domain and
    `www`. Create first and turn off second: while both exist for a few seconds, visitors are only split between the
