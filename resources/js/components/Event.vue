@@ -80,7 +80,12 @@
             <Button v-else type="secondary" style="margin-bottom: 10px" @click.prevent="save">Spara</Button>
           </div>
           <div v-if="registrationStatus === 'error'">
-            <Message danger style="margin-top: 20px"> Kunde inte skicka, kontrollera inmatning och anlutning. </Message>
+            <Message danger style="margin-top: 20px" v-if="registrationErrorReason === 'server_error'">
+              Kunde inte skicka på grund av ett serverfel. Försök igen om en stund eller kontakta föreningen.
+            </Message>
+            <Message danger style="margin-top: 20px" v-else>
+              Kunde inte skicka, kontrollera inmatning och anslutning.
+            </Message>
           </div>
           <div v-if="registrationStatus === 'completed'">
             <Message v-if="!canHelp" info style="margin-top: 20px">Synd, men tack för informationen!</Message>
@@ -128,6 +133,7 @@ export default {
     return {
       justSaved: false,
       registrationStatus: '',
+      registrationErrorReason: '',
       registration: this._registration,
       comment: this._registration ? this._registration.comment : '',
       canHelp: this._registration ? this._registration.status == 1 : null,
@@ -160,6 +166,7 @@ export default {
     },
     register(canHelp) {
       this.registrationStatus = ''
+      this.registrationErrorReason = ''
 
       window
         .axios({
@@ -182,6 +189,9 @@ export default {
         })
         .catch((err) => {
           this.registrationStatus = 'error'
+          if (err.response && err.response.status >= 500) {
+            this.registrationErrorReason = 'server_error'
+          }
         })
     },
   },

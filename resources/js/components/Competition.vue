@@ -248,8 +248,11 @@
               Du kan inte anmäla dig till tävlingar eftersom du inte har hjälpt till som funktionär det senaste året.
               Kontakta styrelsen för mer information.
             </Message>
+            <Message danger style="margin-top: 20px" v-else-if="registrationErrorReason === 'server_error'">
+              Kunde inte skicka på grund av ett serverfel. Försök igen om en stund eller kontakta föreningen.
+            </Message>
             <Message danger style="margin-top: 20px" v-else>
-              Kunde inte skicka, kontrollera inmatning och anlutning.
+              Kunde inte skicka, kontrollera inmatning och anslutning.
             </Message>
           </div>
         </form>
@@ -436,6 +439,8 @@ export default {
           this.registrationStatus = 'error'
           if (err.response && err.response.status === 403) {
             this.registrationErrorReason = 'no_helper_status'
+          } else if (err.response && err.response.status >= 500) {
+            this.registrationErrorReason = 'server_error'
           }
         })
     },

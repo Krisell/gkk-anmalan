@@ -315,7 +315,7 @@
             </div>
             <div class="ml-3">
               <p class="text-sm leading-5 text-yellow-700">
-                Kunde inte skapa tävling, kontrollera inmatning och anlutning.
+                Kunde inte skapa tävling, kontrollera inmatning och anslutning.
               </p>
             </div>
           </div>

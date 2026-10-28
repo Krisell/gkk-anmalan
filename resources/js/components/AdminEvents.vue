@@ -249,7 +249,7 @@
             </div>
             <div class="ml-3">
               <p class="text-sm leading-5 text-yellow-700">
-                Kunde inte skapa event, kontrollera inmatning och anlutning.
+                Kunde inte skapa event, kontrollera inmatning och anslutning.
               </p>
             </div>
           </div>
