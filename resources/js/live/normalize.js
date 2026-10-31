@@ -30,10 +30,13 @@
  * Scoreboard: {
  *   disciplines: ['SQ', 'BP', 'DL'],         the disciplines of the competition (a bench-only meet: ['BP'])
  *   lifters: [{ id, name, team, weightClass, category, bodyWeight, place, total, points, lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 } }]
- *                                            points: IPF GL points (Powerlifting Live calls the field 'wilks')
+ *                                            points: IPF GL points (Powerlifting Live calls the field 'wilks'; for
+ *                                            bench press only, computed with the bench formula, see ipfPoints.js)
  *                                            bodyWeight: kg, from Powerlifting Live's 'weight'
  * }
  */
+
+import { ipfGlPoints } from './ipfPoints.js'
 
 export const DISCIPLINES = ['SQ', 'BP', 'DL']
 
@@ -172,12 +175,15 @@ function groupStatus(lifters) {
 
 function normalizeScoreboard(rawLifters, discipline) {
   const lifters = (Array.isArray(rawLifters) ? rawLifters : []).filter((lifter) => lifter && typeof lifter === 'object')
+  // A discipline belongs to the competition if it is the current one or anyone has declared a weight in it.
+  const disciplines = DISCIPLINES.filter(
+    (d) => d === discipline || lifters.some((lifter) => [1, 2, 3].some((n) => toWeight(lifter.lifts?.[`${d}${n}`]))),
+  )
+  // Powerlifting Live's points ('wilks') always use the powerlifting formula; for bench press they are computed here.
+  const benchOnly = disciplines.length === 1 && disciplines[0] === 'BP'
 
   return {
-    // A discipline belongs to the competition if it is the current one or anyone has declared a weight in it.
-    disciplines: DISCIPLINES.filter(
-      (d) => d === discipline || lifters.some((lifter) => [1, 2, 3].some((n) => toWeight(lifter.lifts?.[`${d}${n}`]))),
-    ),
+    disciplines,
     lifters: lifters.map((lifter) => ({
       id: toText(lifter.id),
       name: toText(lifter.name),
@@ -187,7 +193,16 @@ function normalizeScoreboard(rawLifters, discipline) {
       bodyWeight: toWeight(lifter.weight),
       place: toPlace(lifter.place),
       total: toWeight(lifter.total),
-      points: toWeight(lifter.wilks),
+      points: benchOnly
+        ? ipfGlPoints({
+            total: toWeight(lifter.total),
+            bodyWeight: toWeight(lifter.weight),
+            sex: lifter.sex === 'm' || lifter.sex === 'f' ? lifter.sex : null,
+            // Powerlifting Live's 'raw' is '1' for classic, '0' for equipped.
+            classic: String(lifter.raw ?? '1') !== '0',
+            event: 'bench',
+          })
+        : toWeight(lifter.wilks),
       lifts: Object.fromEntries(DISCIPLINES.map((d) => [d, disciplineAttempts(lifter.lifts ?? {}, d)])),
     })),
   }

@@ -61,7 +61,9 @@ another attempt, or while a result is on screen (it waits until the result has b
 `/live/overlay?competition=<id>&view=scoreboard` shows only a results list of the group on the platform: lifters per
 weight class and category (places within each), finished disciplines as the best lift, the current discipline attempt
 by attempt, disciplines still to come as empty columns, the total and IPF GL points (Powerlifting Live's `wilks`
-field holds the GL points, which matches the GL formula on sampled competitions). A full competition therefore always has five
+field holds the GL points, which matches the GL formula on sampled competitions; but it always uses the powerlifting
+formula, also in bench press competitions, so for a group that only benches the points are computed with the bench
+press formula instead, see `ipfPoints.js`). A full competition therefore always has five
 result columns. The lifter on the platform is highlighted. Until anything in the group has been judged, the list is
 titled _Startlista_ (with the declared openers) instead of _Resultatlista – Pågående tävling_.
 
