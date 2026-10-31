@@ -118,7 +118,7 @@ describe('normalizeFeed', () => {
   it('builds the results list of the current group', () => {
     const raw = feed()
     raw.scoresheet.lifters = [
-      { ...lifter, place: '1', total: 120, wilks: 28.12345 },
+      { ...lifter, weight: '56.35', place: '1', total: 120, wilks: 28.12345 },
       { id: '2', name: 'Bo Berg', team: 'Malmö AK', weightclass: '57', place: '0', lifts: { BP1: '60.0' } },
     ]
 
@@ -128,6 +128,7 @@ describe('normalizeFeed', () => {
     expect(scoreboard.lifters[0]).toMatchObject({
       id: '110845',
       name: 'Anna Andersson',
+      bodyWeight: 56.35,
       place: 1,
       total: 120,
       points: 28.12345,
@@ -137,7 +138,7 @@ describe('normalizeFeed', () => {
       { weight: 127.5, outcome: 'failed' },
       { weight: 127.5, outcome: null },
     ])
-    expect(scoreboard.lifters[1]).toMatchObject({ name: 'Bo Berg', place: null, total: null })
+    expect(scoreboard.lifters[1]).toMatchObject({ name: 'Bo Berg', bodyWeight: null, place: null, total: null })
   })
 
   it('normalizes the most recent judged lift', () => {

@@ -40,6 +40,7 @@
             fit
             :width="1800"
             strong-highlight
+            show-body-weight
           />
         </div>
 

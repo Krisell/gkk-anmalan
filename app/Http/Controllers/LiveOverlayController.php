@@ -46,7 +46,8 @@ class LiveOverlayController extends Controller
     private const NEXT_GROUP_CACHE_SECONDS = 5;
 
     private const LIFTER_FIELDS = [
-        'id', 'name', 'team', 'group', 'weightclass', 'weightclass_short_alt', 'category', 'category_short', 'sex', 'raw', 'lot', 'lifts',
+        // 'weight' is the lifter's bodyweight.
+        'id', 'name', 'weight', 'team', 'group', 'weightclass', 'weightclass_short_alt', 'category', 'category_short', 'sex', 'raw', 'lot', 'lifts',
         // 'wilks' holds the IPF GL points (the field name is a leftover from the Wilks formula).
         'total', 'place', 'wilks',
     ];

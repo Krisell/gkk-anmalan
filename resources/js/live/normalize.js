@@ -29,8 +29,9 @@
  *
  * Scoreboard: {
  *   disciplines: ['SQ', 'BP', 'DL'],         the disciplines of the competition (a bench-only meet: ['BP'])
- *   lifters: [{ id, name, team, weightClass, category, place, total, points, lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 } }]
+ *   lifters: [{ id, name, team, weightClass, category, bodyWeight, place, total, points, lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 } }]
  *                                            points: IPF GL points (Powerlifting Live calls the field 'wilks')
+ *                                            bodyWeight: kg, from Powerlifting Live's 'weight'
  * }
  */
 
@@ -183,6 +184,7 @@ function normalizeScoreboard(rawLifters, discipline) {
       team: toText(lifter.team),
       weightClass: toText(lifter.weightclass_short_alt ?? lifter.weightclass),
       category: toText(lifter.category),
+      bodyWeight: toWeight(lifter.weight),
       place: toPlace(lifter.place),
       total: toWeight(lifter.total),
       points: toWeight(lifter.wilks),

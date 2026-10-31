@@ -98,7 +98,7 @@ The referee lights are shown very large in the middle of the screen, as on Power
 live referee feed as the broadcast: each lamp lights as its referee decides, and the decision stays up for 10 s.
 Under the lights is the large lifter card of the lifter being judged (as on the broadcast, a decision belongs to the
 lifter who was on the platform, even if the next lifter is already called). The lifter on the platform is marked in the
-list with an amber frame.
+list with an amber frame. The list also shows each lifter's bodyweight before the club (Powerlifting Live's `weight`).
 `&lights=0` turns them off.
 
 When a new lifter is called to the platform, the broadcast's large lifter card flips in, and after 6 s it simply fades

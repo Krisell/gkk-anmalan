@@ -11,6 +11,11 @@ export function formatWeight(weight) {
   return weight == null ? '–' : weightFormat.format(weight)
 }
 
+// Bodyweights are weighed to the hundredth and written so ('88,90 kg').
+export function formatBodyWeight(weight) {
+  return weight == null ? '–' : `${pointsFormat.format(weight)} kg`
+}
+
 export function formatPoints(points) {
   return points == null ? '–' : pointsFormat.format(points)
 }

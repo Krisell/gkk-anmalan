@@ -49,7 +49,7 @@
               <div class="place">{{ row.lifter.place ?? '–' }}</div>
               <div class="who">
                 <span class="name">{{ row.lifter.name ?? 'Okänd lyftare' }}</span>
-                <span v-if="row.lifter.team" class="team">{{ row.lifter.team }}</span>
+                <span v-if="details(row.lifter)" class="team">{{ details(row.lifter) }}</span>
               </div>
               <div v-if="compact" class="class-label">{{ row.classLabel }}</div>
               <div v-for="column in columns" :key="column.key" class="cell" :class="cell(row.lifter, column).state">
@@ -68,7 +68,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
-import { disciplineName, formatPoints, formatWeight, formatWeightClass } from '../format.js'
+import { disciplineName, formatBodyWeight, formatPoints, formatWeight, formatWeightClass } from '../format.js'
 
 const props = defineProps({
   // The normalized Scoreboard (see normalize.js).
@@ -90,6 +90,8 @@ const props = defineProps({
   // rows may get smaller, and when the weight class headers don't fit, the heading gets smaller and the class is
   // shown in a column of its own instead.
   fit: { type: Boolean, default: false },
+  // The lifter's bodyweight before the club (the warm-up hall screen).
+  showBodyWeight: { type: Boolean, default: false },
 })
 
 // What is shown. Normally the props, but when another group is chosen while the list is up, the list folds up, and
@@ -290,6 +292,12 @@ async function switchTo(next) {
 }
 
 onBeforeUnmount(() => (unmounted = true))
+
+// After the name: the club, and with showBodyWeight the bodyweight before it ('64,35 kg · Stockholms AK').
+function details(lifter) {
+  const bodyWeight = props.showBodyWeight && lifter.bodyWeight ? formatBodyWeight(lifter.bodyWeight) : null
+  return [bodyWeight, lifter.team].filter(Boolean).join(' · ') || null
+}
 
 function cell(lifter, column) {
   const attempts = lifter.lifts[column.discipline]

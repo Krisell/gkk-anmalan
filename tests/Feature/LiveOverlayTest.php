@@ -9,6 +9,7 @@ function powerliftingLiveTopics(): array
     $lifter = [
         'id' => '110845',
         'name' => 'Anna Andersson',
+        'weight' => '56.35',
         'team' => 'Göteborg KK',
         'weightclass' => '57',
         'category' => 'Senior',
@@ -77,6 +78,7 @@ test('the feed proxies and trims the Powerlifting Live topics', function () {
         ->assertJsonMissingPath('next_lifters.lifters.0.lifter.license')
         ->assertJsonMissingPath('next_lifters.lifters.0.lifter.records_sq')
         ->assertJsonPath('scoresheet.lifters.0.name', 'Anna Andersson')
+        ->assertJsonPath('scoresheet.lifters.0.weight', '56.35')
         ->assertJsonPath('scoresheet.lifters.0.lifts', ['SQ1' => '120.0', 'SQ1_status' => 'good'])
         ->assertJsonMissingPath('scoresheet.lifters.0.license')
         ->assertJsonMissingPath('scoresheet.lifters.0.records_sq')
