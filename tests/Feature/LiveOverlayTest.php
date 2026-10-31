@@ -57,6 +57,12 @@ test('the overlay page is a bare page without the regular site layout', function
         ->assertDontSee('firebase');
 });
 
+test('the overlay page can be framed by our own pages, such as the slideshow', function () {
+    $this->get('/live/overlay?view=hall&competition=3001')
+        ->assertOk()
+        ->assertHeader('Content-Security-Policy', "frame-ancestors 'self'");
+});
+
 test('the feed proxies and trims the Powerlifting Live topics', function () {
     $topics = powerliftingLiveTopics();
     fakePowerliftingLive($topics);

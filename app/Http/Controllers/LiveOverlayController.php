@@ -49,7 +49,10 @@ class LiveOverlayController extends Controller
 
     public function show()
     {
-        return view('live-overlay');
+        // The warm-up hall screen (?view=hall) is shown inside our own slideshow (/slides-for-screen, "Visa en
+        // webbsida"). Laravel Cloud's edge adds "X-Frame-Options: deny" to every response; browsers ignore that header
+        // when frame-ancestors is set, so this lets our own pages (and only them) frame the overlay.
+        return response()->view('live-overlay')->header('Content-Security-Policy', "frame-ancestors 'self'");
     }
 
     public function feed(int $competition)
