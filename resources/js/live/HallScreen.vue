@@ -82,10 +82,14 @@
         <Transition
           :name="lights ? 'fade' : 'intro'"
           mode="out-in"
-          :duration="{ enter: lights ? FADE_MS : 2800, leave: FADE_MS }"
+          :duration="{ enter: lights ? FADE_MS : 2800, leave: lights ? FADE_MS : FLIP_OUT_MS }"
+          @after-enter="(el) => el.classList.contains('verdict') && (lampsShown = true)"
         >
           <div v-if="lights" key="lights" class="verdict">
-            <RefereePanel :lights="lights" large />
+            <!-- The lamps come once the card is in, so it is always clear whose lift it was; their place is kept. -->
+            <div class="lamps-slot">
+              <RefereePanel v-if="lampsShown" :lights="lights" large />
+            </div>
             <LifterIntro v-if="judged" :key="judged.lifterId" :attempt="judged" class="verdict-card" />
           </div>
           <LifterIntro v-else-if="intro" :key="intro.lifterId" :attempt="intro" class="hall-intro" />
@@ -109,7 +113,7 @@ import { createHttpSource } from './sources/httpSource.js'
 import { createRefereeFeed, refereeFeedUrl } from './sources/refereeFeed.js'
 import { useLiveFeed } from './useLiveFeed.js'
 import { useNextGroup } from './useNextGroup.js'
-import { initialOverlayState, reduceOverlayState } from './overlayState.js'
+import { initialHallState, readyToIntroduce, reduceHallState } from './hallState.js'
 
 /**
  * The warm-up hall screen (/live/overlay?view=hall&competition=…): the results list of the group on the platform, as
@@ -181,21 +185,21 @@ const boardHeight = computed(() => canvasHeight.value - orderHeight.value - next
 // The lights: a decision stays up for DECISION_MS from when it arrives; before it, each lamp lights as its referee
 // decides. Only decisions arriving while the page is open are shown (the referee feed has none on load).
 const DECISION_MS = 10000
-// The lights (with their card) fade in and out, and the new lifter's card fades out; only its entrance is a flip.
-// The transition's name follows the lights: 'fade' while they are (or are coming) up, so the lifter card leaving for
-// them fades too, and 'intro' otherwise, whose leave is also a fade.
+// One lift on the screen: the called lifter's card flips in, fades out during the lift (to show the list), fades in
+// again when the lift is done (the lights are the only sign of that), with the lamps coming just after the card, and
+// finally card and lamps flip out together. The transition's name follows the lights: 'fade' while they are up (the
+// card leaving for them and the card coming with them fade), 'intro' otherwise (the called lifter's card flips in and
+// fades out; the card with the lamps flips out, see the styles).
 const FADE_MS = 400
+const FLIP_OUT_MS = 700
+// Whether the lamps are shown: only once the card with them has faded in.
+const lampsShown = ref(false)
+watch(
+  () => Boolean(lights.value),
+  (lit) => !lit && (lampsShown.value = false),
+)
 const shownDecision = ref(null)
 let decisionTimer = null
-
-// Who is being judged: as on the broadcast (see overlayState.js), a decision belongs to the lifter who was on the
-// platform, even if the next lifter has already been called when it arrives. Updated before the decision is shown.
-const overlayState = shallowRef(initialOverlayState())
-watch(snapshot, (next) => {
-  if (next) {
-    overlayState.value = reduceOverlayState(overlayState.value, next, Date.now())
-  }
-})
 
 watch(
   () => snapshot.value?.decision ?? null,
@@ -211,44 +215,43 @@ onBeforeUnmount(() => clearTimeout(decisionTimer))
 
 // Each lamp animates on by itself as its light changes (see RefereePanel.vue).
 const lights = computed(() => shownDecision.value?.lights ?? snapshot.value?.signals ?? null)
-// The card shown with the lights: the judged lifter once there is a decision, before it the lifter on the platform.
-const judged = computed(() =>
-  shownDecision.value ? (overlayState.value.result ?? null) : (snapshot.value?.current ?? null),
-)
 
-// The lifter card: shown when a new lifter is called to the platform, not for the lifter already there when the page
-// opens, nor when the same lifter takes another attempt. The lights take precedence: a lifter called while they are
-// up is introduced once they are gone.
-//
-// Powerlifting Live sometimes calls the next lifter a moment before the referee decision for the previous one reaches
-// us. So a newly called lifter is introduced only after INTRO_DELAY_MS, and not while the previous lifter's attempt
-// is still waiting for its result (overlayState's awaiting); lights arriving meanwhile take over instead, with the
-// card of the lifter being judged, and the new lifter is introduced after them.
+// Whose lift the lights belong to, and when the next lifter may be introduced (see hallState.js): it must never look
+// as if a lifter has already lifted. Updated before each render, so the lights never show without their lifter.
+const hallState = shallowRef(initialHallState())
+watch([snapshot, lights], ([next, lit]) => {
+  if (next) {
+    hallState.value = reduceHallState(hallState.value, {
+      current: next.current,
+      lit: Boolean(lit),
+      lastResult: next.lastResult,
+      now: Date.now(),
+    })
+  }
+})
+
+// The card shown with the lights: the attempt being judged, fixed when the lights come on.
+const judged = computed(() => (lights.value ? hallState.value.judged : null))
+
+// The lifter card: shown when a new lifter is called to the platform (when hallState says so), not for the lifter
+// already there when the page opens, nor when the same lifter takes another attempt. The lights take precedence.
 const INTRO_MS = (Number(params.get('introSeconds')) || 6) * 1000
-const INTRO_DELAY_MS = 3000
-const AWAITING_RECHECK_MS = 500
+const INTRO_CHECK_MS = 250
 const showIntros = flag('intro')
 const intro = shallowRef(null)
 let introducedLifterId = null
 let introTimer = null
-let pendingLifterId = null
-let pendingTimer = null
 
-watch([() => snapshot.value?.current ?? null, lights], ([current, lit]) => {
-  if (!snapshot.value) {
+function checkIntro() {
+  const state = hallState.value
+  const current = state.platform
+  if (!state.initialized) {
     return
   }
   if (introducedLifterId == null) {
     introducedLifterId = current?.lifterId ?? ''
-    return
-  }
-  if (lit) {
-    cancelPendingIntro()
-    hideIntro()
-    return
   }
   if (!current?.lifterId) {
-    cancelPendingIntro()
     return
   }
   if (intro.value?.lifterId === current.lifterId) {
@@ -256,40 +259,18 @@ watch([() => snapshot.value?.current ?? null, lights], ([current, lit]) => {
     intro.value = current
     return
   }
-  if (showIntros && current.lifterId !== introducedLifterId) {
-    if (pendingLifterId !== current.lifterId) {
-      cancelPendingIntro()
-      pendingLifterId = current.lifterId
-      pendingTimer = setTimeout(introducePending, INTRO_DELAY_MS)
-    }
-  } else {
-    cancelPendingIntro()
-  }
-})
-
-function introducePending() {
-  const current = snapshot.value?.current
-  if (lights.value || !current?.lifterId || current.lifterId !== pendingLifterId) {
-    cancelPendingIntro()
+  if (!showIntros || current.lifterId === introducedLifterId || !readyToIntroduce(state, Date.now())) {
     return
   }
-  // The previous lifter's result hasn't come yet: wait for it (the reducer gives up waiting after a few seconds).
-  const awaiting = overlayState.value.awaiting
-  if (awaiting && Date.now() < awaiting.until) {
-    pendingTimer = setTimeout(introducePending, AWAITING_RECHECK_MS)
-    return
-  }
-  pendingLifterId = null
   introducedLifterId = current.lifterId
   intro.value = current
   clearTimeout(introTimer)
   introTimer = setTimeout(hideIntro, INTRO_MS)
 }
 
-function cancelPendingIntro() {
-  clearTimeout(pendingTimer)
-  pendingLifterId = null
-}
+const introChecker = setInterval(checkIntro, INTRO_CHECK_MS)
+watch(hallState, checkIntro)
+watch(lights, (lit) => lit && hideIntro())
 
 function hideIntro() {
   clearTimeout(introTimer)
@@ -297,7 +278,7 @@ function hideIntro() {
 }
 onBeforeUnmount(() => {
   clearTimeout(introTimer)
-  clearTimeout(pendingTimer)
+  clearInterval(introChecker)
 })
 
 const now = ref(Date.now())
@@ -550,9 +531,9 @@ code {
   transition: opacity var(--motion-base) var(--motion-move);
 }
 
-/* Fading only once the last card has faded out. */
+/* Fading only once the last card has left. */
 .scrim-leave-active {
-  transition-delay: 300ms;
+  transition-delay: 500ms;
 }
 
 .scrim-enter-from,
@@ -581,20 +562,47 @@ code {
   inset: auto;
 }
 
+/* Room for the lamps (RefereePanel's large size) before they come, so the card doesn't move when they do. */
+.lamps-slot {
+  display: flex;
+  justify-content: center;
+  height: 308px;
+}
+
 /*
-  The new lifter's card flips in (LifterIntro.vue's entrance); everything else simply fades, instead of the
-  broadcast's flight down into the lower third.
+  The called lifter's card flips in (LifterIntro.vue's entrance) and fades out during the lift; the card coming back
+  with the lights fades in; when it's over, card and lamps flip out, the card's entrance reversed (instead of the
+  broadcast's flight down into the lower third).
 */
 .fade-enter-active,
 .fade-leave-active,
-.intro-leave-active {
+.hall-intro.intro-leave-active {
   transition: opacity 400ms var(--motion-move);
 }
 
 .fade-enter-from,
 .fade-leave-to,
-.intro-leave-to {
+.hall-intro.intro-leave-to {
   opacity: 0;
+}
+
+.verdict.intro-leave-active :deep(.card),
+.verdict.intro-leave-active :deep(.referees) {
+  animation: flip-out 700ms var(--motion-move) both;
+}
+
+@keyframes flip-out {
+  from {
+    opacity: 1;
+    transform: perspective(2200px) rotateY(0) scale(1);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: perspective(2200px) rotateY(100deg) scale(0.85);
+  }
 }
 
 .stale {

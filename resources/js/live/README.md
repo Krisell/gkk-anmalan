@@ -96,17 +96,21 @@ is more than 30 s old the page keeps showing it, with a red "Ej uppdaterat sedan
 
 The referee lights are shown very large in the middle of the screen, as on Powerlifting Live's own screens, from the same
 live referee feed as the broadcast: each lamp lights as its referee decides, and the decision stays up for 10 s.
-Under the lights is the large lifter card of the lifter being judged (as on the broadcast, a decision belongs to the
-lifter who was on the platform, even if the next lifter is already called). The lifter on the platform is marked in the
+Under the lights is the large lifter card of the lifter being judged. It must never look as if the next lifter has
+already lifted, so `hallState.js` decides whose lift the lights belong to when they come on: the attempt on the
+platform, unless it was replaced less than 5 s before (then the next lifter was called just before the lights reached
+us). While the lights are up, only a newly recorded result can change it, never a change on the platform. The lifter on the platform is marked in the
 list with an amber frame. The list also shows each lifter's bodyweight before the club (Powerlifting Live's `weight`).
 `&lights=0` turns them off.
 
 When a new lifter is called to the platform, the broadcast's large lifter card flips in, and after 6 s it fades out to
-show the list again (no flight down into a lower third). The lights and their card simply fade in and out. As on the
+show the list during the lift (no flight down into a lower third). When the lift is done (the lights are the only sign
+of that), the card fades in again, the lamps come just after it (so it's always clear whose lift it was), and when the
+decision has been up for 10 s, card and lamps flip out together. As on the
 broadcast, the card isn't shown for the lifter on the platform when the page opens, nor when the same lifter takes
-another attempt. A newly called lifter is introduced after about 3 s, and not while the previous lifter's attempt is
-still waiting for its result (Powerlifting Live sometimes calls the next lifter just before the decision reaches us); a
-lifter called while the lights are up is introduced once they are gone. `&intro=0` turns it off, `&introSeconds=N` sets how long it stays.
+another attempt. A newly called lifter is introduced 3 s after the call at the earliest, and (in a competition with
+referee lights) only once the attempt before has had its lights, or after 8 s if they never reach us (Powerlifting Live
+sometimes calls the next lifter just before the decision reaches us). `&intro=0` turns it off, `&introSeconds=N` sets how long it stays.
 
 ### Operator controls
 
