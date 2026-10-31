@@ -72,14 +72,18 @@
           </ol>
         </section>
 
-        <!-- Over the list, one at a time (the one leaving flips out before the next flips in):
+        <!-- Over the list, one at a time (the one leaving fades out before the next comes in):
              - the referee lights, very large in the middle, with the card of the lifter being judged: each lamp as its
                referee decides, then the decision,
              - the large lifter card when a new lifter is called to the platform, as on the broadcast. -->
         <Transition name="scrim">
           <div v-if="intro || lights" class="scrim" />
         </Transition>
-        <Transition name="intro" mode="out-in" :duration="{ enter: 2800, leave: FLIP_OUT_MS }">
+        <Transition
+          :name="lights ? 'fade' : 'intro'"
+          mode="out-in"
+          :duration="{ enter: lights ? FADE_MS : 2800, leave: FADE_MS }"
+        >
           <div v-if="lights" key="lights" class="verdict">
             <RefereePanel :lights="lights" large />
             <LifterIntro v-if="judged" :key="judged.lifterId" :attempt="judged" class="verdict-card" />
@@ -177,8 +181,10 @@ const boardHeight = computed(() => canvasHeight.value - orderHeight.value - next
 // The lights: a decision stays up for DECISION_MS from when it arrives; before it, each lamp lights as its referee
 // decides. Only decisions arriving while the page is open are shown (the referee feed has none on load).
 const DECISION_MS = 10000
-// How long the card (and the lights) take to flip out; the same flip as the card's entrance, reversed.
-const FLIP_OUT_MS = 700
+// The lights (with their card) fade in and out, and the new lifter's card fades out; only its entrance is a flip.
+// The transition's name follows the lights: 'fade' while they are (or are coming) up, so the lifter card leaving for
+// them fades too, and 'intro' otherwise, whose leave is also a fade.
+const FADE_MS = 400
 const shownDecision = ref(null)
 let decisionTimer = null
 
@@ -544,9 +550,9 @@ code {
   transition: opacity var(--motion-base) var(--motion-move);
 }
 
-/* Fading only once the last card has flipped out. */
+/* Fading only once the last card has faded out. */
 .scrim-leave-active {
-  transition-delay: 500ms;
+  transition-delay: 300ms;
 }
 
 .scrim-enter-from,
@@ -576,26 +582,19 @@ code {
 }
 
 /*
-  The card's entrance (from LifterIntro.vue, also for the card under the lights) is a flip; leaving, the card and the
-  lights flip out the same way, reversed, instead of the broadcast's flight down into the lower third.
+  The new lifter's card flips in (LifterIntro.vue's entrance); everything else simply fades, instead of the
+  broadcast's flight down into the lower third.
 */
-.intro-leave-active :deep(.card),
-.intro-leave-active :deep(.referees) {
-  animation: flip-out 700ms var(--motion-move) both;
+.fade-enter-active,
+.fade-leave-active,
+.intro-leave-active {
+  transition: opacity 400ms var(--motion-move);
 }
 
-@keyframes flip-out {
-  from {
-    opacity: 1;
-    transform: perspective(2200px) rotateY(0) scale(1);
-  }
-  60% {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-    transform: perspective(2200px) rotateY(100deg) scale(0.85);
-  }
+.fade-enter-from,
+.fade-leave-to,
+.intro-leave-to {
+  opacity: 0;
 }
 
 .stale {

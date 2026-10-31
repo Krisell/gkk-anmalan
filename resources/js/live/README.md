@@ -101,10 +101,12 @@ lifter who was on the platform, even if the next lifter is already called). The 
 list with an amber frame. The list also shows each lifter's bodyweight before the club (Powerlifting Live's `weight`).
 `&lights=0` turns them off.
 
-When a new lifter is called to the platform, the broadcast's large lifter card flips in, and after 6 s it simply fades
-flips out again to show the list (no flight down into a lower third); the lights and their card flip out the same way. As on the broadcast, it isn't shown for the lifter on
-the platform when the page opens, nor when the same lifter takes another attempt; a lifter called while the lights are
-up is introduced once they are gone. `&intro=0` turns it off, `&introSeconds=N` sets how long it stays.
+When a new lifter is called to the platform, the broadcast's large lifter card flips in, and after 6 s it fades out to
+show the list again (no flight down into a lower third). The lights and their card simply fade in and out. As on the
+broadcast, the card isn't shown for the lifter on the platform when the page opens, nor when the same lifter takes
+another attempt. A newly called lifter is introduced after about 3 s, and not while the previous lifter's attempt is
+still waiting for its result (Powerlifting Live sometimes calls the next lifter just before the decision reaches us); a
+lifter called while the lights are up is introduced once they are gone. `&intro=0` turns it off, `&introSeconds=N` sets how long it stays.
 
 ### Operator controls
 
