@@ -7,6 +7,7 @@
         '--row-height': `${rowHeight}px`,
         '--columns': gridColumns,
         '--row-delay': `${rowDelay}ms`,
+        width: `${width}px`,
         marginTop: `${top}px`,
       }"
     >
@@ -74,6 +75,11 @@ const props = defineProps({
   currentLifterId: { type: String, default: null },
   // The results of a group that isn't on the platform (e.g. an earlier one): the best lift per discipline.
   final: { type: Boolean, default: false },
+  // The area the list is centered in, and the height its rows share (on the broadcast, the space between the demo
+  // toolbar and the bottom). The warm-up hall screen (HallScreen.vue) makes room below for the next group.
+  height: { type: Number, default: 1080 },
+  listHeight: { type: Number, default: 620 },
+  width: { type: Number, default: 1560 },
 })
 
 // What is shown. Normally the props, but when another group is chosen while the list is up, the list folds up, and
@@ -153,7 +159,9 @@ const rows = computed(() => {
 })
 
 // Rows shrink when the group is large, so that the whole list always fits between the demo toolbar and the bottom.
-const rowHeight = computed(() => Math.max(26, Math.min(54, Math.floor(620 / Math.max(rows.value.length, 1)))))
+const rowHeight = computed(() =>
+  Math.max(26, Math.min(54, Math.floor(props.listHeight / Math.max(rows.value.length, 1)))),
+)
 
 // The list is placed where it ends up once fully folded down (centered on the stage), so that the heading slides
 // in at its final position and only the list grows below it. Measured from the content, which is laid out even
@@ -165,12 +173,12 @@ function placeBoard() {
   const heading = board.value?.querySelector('.heading')
   const list = board.value?.querySelector('.body-inner')
   if (heading && list) {
-    top.value = Math.max(40, Math.round((1080 - heading.offsetHeight - list.scrollHeight) / 2))
+    top.value = Math.max(40, Math.round((props.height - heading.offsetHeight - list.scrollHeight) / 2))
   }
 }
 
 onMounted(placeBoard)
-watch(rows, () => nextTick(placeBoard))
+watch([rows, () => props.height, () => props.listHeight], () => nextTick(placeBoard))
 
 const FOLD_UP_MS = 450
 const FOLD_DOWN_MS = 650
@@ -279,7 +287,6 @@ function cell(lifter, column) {
   nothing itself, so only the revealed parts (and their shadow) show.
 */
 .board {
-  width: 1560px;
   filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.45));
   animation: board-slide-in 650ms var(--motion-enter) both;
 }

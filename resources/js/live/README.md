@@ -75,6 +75,18 @@ to it with a hotkey whenever you want to show the standings. Each time the scene
 heading slides in from the left, and then the list folds down below it.
 In the demo editor, choose _Resultatlista_ under _Läge_ to preview it.
 
+### Warm-up hall screen
+
+`/live/overlay?view=hall&competition=<id>` is a page for a TV in the warm-up hall, not for OBS: an opaque full screen
+with the results list of the group on the platform (as above) and, below it in smaller text, the start order of the
+group that lifts next. Show it on the club's screen from the slideshow's live control (_Visa en webbsida_).
+
+The start order is Powerlifting Live's own "Nästa grupp" list (the `next_lifters_next_group` topic), served by
+`/live/next-group/{id}` (cached 5 s, polled every 10 s). It knows the schedule: when groups lift in turns (Grupp 01
+squat, Grupp 02 squat, Grupp 01 bench, …) the next group can be the other group of the session, or the next discipline
+of the same group, and the list says which group and discipline. It is hidden during the last block. When the data
+is more than 30 s old the page keeps showing it, with a red "Ej uppdaterat sedan …" note, rather than going blank.
+
 ### Operator controls
 
 | URL parameter    | Default         | Meaning                           |

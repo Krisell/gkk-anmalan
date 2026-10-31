@@ -94,6 +94,39 @@ export function normalizeResults(raw) {
     })
 }
 
+/**
+ * The start order of the group that lifts next (/live/next-group/{id}), for the warm-up hall: Powerlifting Live's own
+ * "Nästa grupp" list, in its order. With groups lifting in turns the next block can be the same group in the next
+ * discipline, so the discipline (and attempt) is part of it.
+ *
+ * NextGroup: { group, discipline, attempt, lifters: [{ id, name, team, weightClass, category, weight }] } or null
+ * when there is no next group (during the last block).
+ */
+export function normalizeNextGroup(raw) {
+  const entries = (Array.isArray(raw?.lifters) ? raw.lifters : []).filter(
+    (entry) => entry && typeof entry === 'object' && entry.lifter && typeof entry.lifter === 'object',
+  )
+  if (!entries.length) {
+    return null
+  }
+
+  const [first] = entries
+  const lift = parseLift(first.lift)
+  return {
+    group: toText(first.next_group) ?? toText(first.lifter.group),
+    discipline: toDiscipline(first.discipline) ?? lift?.discipline ?? null,
+    attempt: validAttempt(toInt(first.attempt) ?? lift?.attempt),
+    lifters: entries.map((entry) => ({
+      id: toText(entry.lifter.id ?? entry.lifter_id),
+      name: toText(entry.lifter.name),
+      team: toText(entry.lifter.team),
+      weightClass: toText(entry.lifter.weightclass_short_alt ?? entry.lifter.weightclass),
+      category: toText(entry.lifter.category),
+      weight: toWeight(entry.weight),
+    })),
+  }
+}
+
 function sortForResults(lifters) {
   const order = (key) => {
     const seen = [...new Set(lifters.map(key))]

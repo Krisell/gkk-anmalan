@@ -38,6 +38,9 @@ class LiveOverlayController extends Controller
     // The whole competition's scoresheet (every group, ~220 KB) is only fetched when a group's results are shown.
     private const RESULTS_CACHE_SECONDS = 30;
 
+    // The start order of the next group changes only when an opener is changed, so a short cache is enough.
+    private const NEXT_GROUP_CACHE_SECONDS = 5;
+
     private const LIFTER_FIELDS = [
         'id', 'name', 'team', 'group', 'weightclass', 'weightclass_short_alt', 'category', 'category_short', 'sex', 'raw', 'lot', 'lifts',
         // 'wilks' holds the IPF GL points (the field name is a leftover from the Wilks formula).
@@ -90,6 +93,34 @@ class LiveOverlayController extends Controller
         }
 
         return response()->json($results)->header('Cache-Control', 'no-store');
+    }
+
+    /**
+     * The start order of the group that lifts next, for the warm-up hall screen (?view=hall). This is Powerlifting
+     * Live's own "Nästa grupp" list: the next block on the platform, which with groups lifting in turns can be the same
+     * session's other group, or the next discipline of the group on the platform (e.g. Grupp 01 deadlift after Grupp 02
+     * bench). Empty during the last block.
+     */
+    public function nextGroup(int $competition)
+    {
+        $nextGroup = Cache::remember("powerliftinglive.next-group.{$competition}", self::NEXT_GROUP_CACHE_SECONDS, function () use ($competition) {
+            $topics = $this->fetchTopics($competition, ['next_group' => 'next_lifters_next_group']);
+
+            return $topics === null ? null : [
+                'lifters' => \array_map(
+                    fn ($entry) => $this->trimEntry($entry),
+                    \array_values(\array_filter($topics['next_group']['lifters'] ?? [], 'is_array')),
+                ),
+            ];
+        });
+
+        if ($nextGroup === null) {
+            Cache::forget("powerliftinglive.next-group.{$competition}");
+
+            return response()->json(['error' => 'Powerlifting Live is unavailable'], 502)->header('Cache-Control', 'no-store');
+        }
+
+        return response()->json($nextGroup)->header('Cache-Control', 'no-store');
     }
 
     private function fetch(int $competition): ?array

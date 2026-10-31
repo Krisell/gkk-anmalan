@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { normalizeFeed, normalizeResults } from '../../../resources/js/live/normalize.js'
+import { normalizeFeed, normalizeNextGroup, normalizeResults } from '../../../resources/js/live/normalize.js'
 
 // Shapes follow Powerlifting Live's feed.php topics (as trimmed by LiveOverlayController); names are fictional.
 const lifter = {
@@ -239,5 +239,36 @@ describe('referee signals', () => {
     expect(snapshot.signals).toEqual([{ good: true, cards: [] }, null, { good: false, cards: ['red', 'yellow'] }])
     expect(normalizeFeed({ referee_signals: { left: null, center: null, right: null } }).signals).toBeNull()
     expect(normalizeFeed({}).signals).toBeNull()
+  })
+})
+
+describe('normalizeNextGroup', () => {
+  it("reads Powerlifting Live's start order of the next group, in its order", () => {
+    const entry = (id, name, weight) => ({
+      lifter_id: id,
+      attempt: '1',
+      discipline: 'DL',
+      lift: 'DL1',
+      weight,
+      lifter: { id, name, team: 'Göteborg KK', group: 'Grupp 01', weightclass: '84', category: 'Senior' },
+    })
+
+    expect(
+      normalizeNextGroup({ lifters: [entry('1', 'Anna Andersson', '120.0'), 'junk', entry('2', 'Bea Berg', '122.5')] }),
+    ).toEqual({
+      group: 'Grupp 01',
+      discipline: 'DL',
+      attempt: 1,
+      lifters: [
+        { id: '1', name: 'Anna Andersson', team: 'Göteborg KK', weightClass: '84', category: 'Senior', weight: 120 },
+        { id: '2', name: 'Bea Berg', team: 'Göteborg KK', weightClass: '84', category: 'Senior', weight: 122.5 },
+      ],
+    })
+  })
+
+  it('is empty during the last block', () => {
+    expect(normalizeNextGroup({})).toBeNull()
+    expect(normalizeNextGroup({ lifters: [] })).toBeNull()
+    expect(normalizeNextGroup(null)).toBeNull()
   })
 })

@@ -281,6 +281,7 @@ Route::prefix('live')->controller(LiveOverlayController::class)->group(function 
     Route::get('overlay', 'show')->name('live.overlay');
     Route::get('feed/{competition}', 'feed')->whereNumber('competition')->middleware('throttle:300,1')->name('live.feed');
     Route::get('results/{competition}', 'results')->whereNumber('competition')->middleware('throttle:300,1');
+    Route::get('next-group/{competition}', 'nextGroup')->whereNumber('competition')->middleware('throttle:300,1');
 });
 
 Route::prefix('live/control')->controller(LiveControlController::class)->group(function () {

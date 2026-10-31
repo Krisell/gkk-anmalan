@@ -173,3 +173,31 @@ it('serves the whole competition per lifter, trimmed, and only fetches it once i
     Http::assertSentCount(1);
     Http::assertSent(fn (Request $request) => \str_contains(\urldecode($request->url()), 'key=competition/2939/scoresheet'));
 });
+
+it('serves the start order of the next group, trimmed, and caches it briefly', function () {
+    Http::fake(['*' => Http::response(['lifters' => [
+        [
+            'lifter_id' => '2', 'attempt' => '1', 'discipline' => 'DL', 'lift' => 'DL1', 'weight' => '120.0', 'records' => [],
+            'lifter' => ['id' => '2', 'name' => 'Bea Berg', 'group' => 'Grupp 01', 'license' => '020202ab2', 'records_dl' => [['weight' => '200.0']]],
+        ],
+        'junk',
+    ]])]);
+
+    $this->getJson('/live/next-group/3137')
+        ->assertOk()
+        ->assertExactJson(['lifters' => [[
+            'lifter_id' => '2', 'attempt' => '1', 'discipline' => 'DL', 'lift' => 'DL1', 'weight' => '120.0',
+            'lifter' => ['id' => '2', 'name' => 'Bea Berg', 'group' => 'Grupp 01'],
+        ]]]);
+    $this->getJson('/live/next-group/3137')->assertOk();
+
+    Http::assertSentCount(1);
+    Http::assertSent(fn (Request $request) => \str_contains(\urldecode($request->url()), 'key=competition/3137/next_lifters_next_group'));
+});
+
+it('reports when the next group cannot be fetched, without caching the failure', function () {
+    Http::fake(['*' => Http::response('', 500)]);
+
+    $this->getJson('/live/next-group/3137')->assertStatus(502);
+    expect(Cache::has('powerliftinglive.next-group.3137'))->toBeFalse();
+});
