@@ -3,6 +3,7 @@
     <div
       ref="board"
       class="board"
+      :class="{ 'strong-highlight': strongHighlight }"
       :style="{
         '--row-height': `${rowHeight}px`,
         '--columns': gridColumns,
@@ -80,6 +81,9 @@ const props = defineProps({
   height: { type: Number, default: 1080 },
   listHeight: { type: Number, default: 620 },
   width: { type: Number, default: 1560 },
+  // Mark the lifter on the platform clearly (the warm-up hall screen, seen from across the room), instead of the
+  // broadcast's subtle highlight.
+  strongHighlight: { type: Boolean, default: false },
 })
 
 // What is shown. Normally the props, but when another group is chosen while the list is up, the list folds up, and
@@ -398,6 +402,30 @@ function cell(lifter, column) {
 .lifter.active {
   background: rgba(255, 255, 255, 0.1);
   box-shadow: inset 6px 0 0 #ffffff;
+}
+
+/* An amber frame and tint, the same yellow as the slideshow's messages, softly pulsing. */
+.strong-highlight .lifter.active {
+  position: relative;
+  z-index: 1;
+  background: rgba(246, 201, 69, 0.22);
+  box-shadow:
+    inset 0 0 0 3px #f6c945,
+    inset 14px 0 0 #f6c945;
+  animation:
+    row-in 450ms var(--motion-enter) both,
+    active-pulse 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--row-delay) + var(--index) * 35ms), 0s;
+}
+
+.strong-highlight .lifter.active .name {
+  color: #f6c945;
+}
+
+@keyframes active-pulse {
+  50% {
+    background: rgba(246, 201, 69, 0.34);
+  }
 }
 
 .place {

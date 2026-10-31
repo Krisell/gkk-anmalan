@@ -17,6 +17,7 @@
             :height="boardHeight"
             :list-height="boardHeight - 260"
             :width="1800"
+            strong-highlight
           />
         </div>
 
@@ -41,20 +42,19 @@
           </ol>
         </section>
 
-        <!-- The large lifter card when a new lifter is called to the platform, as on the broadcast. It flips in, and
-             after a few seconds simply fades away to show the list again. -->
+        <!-- Over the list, one at a time (the one leaving flips out before the next flips in):
+             - the referee lights, very large in the middle, with the card of the lifter being judged: each lamp as its
+               referee decides, then the decision,
+             - the large lifter card when a new lifter is called to the platform, as on the broadcast. -->
         <Transition name="scrim">
-          <div v-if="intro" class="scrim" />
+          <div v-if="intro || lights" class="scrim" />
         </Transition>
-        <Transition name="intro" :duration="{ enter: 2800, leave: 400 }">
-          <LifterIntro v-if="intro" :key="intro.lifterId" :attempt="intro" class="hall-intro" />
-        </Transition>
-
-        <!-- The referee lights, very large in the middle of the screen: each lamp as its referee decides, then the decision. -->
-        <Transition name="lights">
-          <div v-if="lights" class="lights">
+        <Transition name="intro" mode="out-in" :duration="{ enter: 2800, leave: FLIP_OUT_MS }">
+          <div v-if="lights" key="lights" class="verdict">
             <RefereePanel :lights="lights" large />
+            <LifterIntro v-if="judged" :key="judged.lifterId" :attempt="judged" class="verdict-card" />
           </div>
+          <LifterIntro v-else-if="intro" :key="intro.lifterId" :attempt="intro" class="hall-intro" />
         </Transition>
 
         <!-- Old data stays up (better than an empty screen in the warm-up hall), but says how old it is. -->
@@ -75,6 +75,7 @@ import { createHttpSource } from './sources/httpSource.js'
 import { createRefereeFeed, refereeFeedUrl } from './sources/refereeFeed.js'
 import { useLiveFeed } from './useLiveFeed.js'
 import { useNextGroup } from './useNextGroup.js'
+import { initialOverlayState, reduceOverlayState } from './overlayState.js'
 
 /**
  * The warm-up hall screen (/live/overlay?view=hall&competition=…): the results list of the group on the platform, as
@@ -115,8 +116,19 @@ const boardHeight = computed(() => 1080 - nextHeight.value)
 // The lights: a decision stays up for DECISION_MS from when it arrives; before it, each lamp lights as its referee
 // decides. Only decisions arriving while the page is open are shown (the referee feed has none on load).
 const DECISION_MS = 10000
+// How long the card (and the lights) take to flip out; the same flip as the card's entrance, reversed.
+const FLIP_OUT_MS = 700
 const shownDecision = ref(null)
 let decisionTimer = null
+
+// Who is being judged: as on the broadcast (see overlayState.js), a decision belongs to the lifter who was on the
+// platform, even if the next lifter has already been called when it arrives. Updated before the decision is shown.
+const overlayState = shallowRef(initialOverlayState())
+watch(snapshot, (next) => {
+  if (next) {
+    overlayState.value = reduceOverlayState(overlayState.value, next, Date.now())
+  }
+})
 
 watch(
   () => snapshot.value?.decision ?? null,
@@ -132,6 +144,10 @@ onBeforeUnmount(() => clearTimeout(decisionTimer))
 
 // Each lamp animates on by itself as its light changes (see RefereePanel.vue).
 const lights = computed(() => shownDecision.value?.lights ?? snapshot.value?.signals ?? null)
+// The card shown with the lights: the judged lifter once there is a decision, before it the lifter on the platform.
+const judged = computed(() =>
+  shownDecision.value ? (overlayState.value.result ?? null) : (snapshot.value?.current ?? null),
+)
 
 // The lifter card: shown when a new lifter is called to the platform, not for the lifter already there when the page
 // opens, nor when the same lifter takes another attempt. The lights take precedence: a lifter called while they are
@@ -332,42 +348,58 @@ code {
   transition: opacity var(--motion-base) var(--motion-move);
 }
 
+/* Fading only once the last card has flipped out. */
+.scrim-leave-active {
+  transition-delay: 500ms;
+}
+
 .scrim-enter-from,
 .scrim-leave-to {
   opacity: 0;
 }
 
 .hall-intro {
-  z-index: 1;
+  z-index: 2;
 }
 
-/* Instead of the broadcast's flight down into the lower third, the card just fades away. */
-.intro-leave-active {
-  transition: opacity 400ms var(--motion-move);
-}
-
-.intro-leave-to {
-  opacity: 0;
-}
-
-.lights {
+.verdict {
   position: absolute;
   inset: 0;
   z-index: 2;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  background: rgba(15, 22, 44, 0.45);
+  justify-content: center;
+  gap: 56px;
 }
 
-.lights-enter-active,
-.lights-leave-active {
-  transition: opacity var(--motion-base) var(--motion-move);
+/* The card under the lights, in the flow instead of centered on its own. */
+.verdict .verdict-card {
+  position: relative;
+  inset: auto;
 }
 
-.lights-enter-from,
-.lights-leave-to {
-  opacity: 0;
+/*
+  The card's entrance (from LifterIntro.vue, also for the card under the lights) is a flip; leaving, the card and the
+  lights flip out the same way, reversed, instead of the broadcast's flight down into the lower third.
+*/
+.intro-leave-active :deep(.card),
+.intro-leave-active :deep(.referees) {
+  animation: flip-out 700ms var(--motion-move) both;
+}
+
+@keyframes flip-out {
+  from {
+    opacity: 1;
+    transform: perspective(2200px) rotateY(0) scale(1);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: perspective(2200px) rotateY(100deg) scale(0.85);
+  }
 }
 
 .stale {
