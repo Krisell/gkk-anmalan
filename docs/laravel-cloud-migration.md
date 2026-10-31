@@ -1,7 +1,6 @@
 # Moving from One.com to Laravel Cloud
 
-How the site moves from One.com shared hosting to Laravel Cloud with Postgres. The status of each step is tracked
-at https://claude.ai/artifact/UNKLboV6A9Jj4qXaCBM1cC; this document is the runbook.
+How the site moves from One.com shared hosting to Laravel Cloud with Postgres.
 
 ## Decisions
 
@@ -30,8 +29,7 @@ All domains have their DNS at One.com (`ns01.one.com`, `ns02.one.com`).
 
 Only the A and AAAA records for `@` and `www` change. Everything else stays exactly as it is:
 
-- `goteborgkk.se`: MX → Google Workspace (`aspmx.l.google.com` etc., used by e.g. `maximus@goteborgkk.se`) and the
-  `google-site-verification` TXT record
+- `goteborgkk.se`: MX → Google Workspace (`aspmx.l.google.com` etc.) and the `google-site-verification` TXT record
 - `gkk-styrkelyft.se`:
   - MX → Google Workspace, the club's email (`info@gkk-styrkelyft.se`)
   - `mg.gkk-styrkelyft.se` TXT (SPF) and `pic._domainkey.mg.gkk-styrkelyft.se` TXT (DKIM), which Mailgun uses for
