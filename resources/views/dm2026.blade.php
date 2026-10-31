@@ -3,12 +3,12 @@
 @section('content')
 @php
   $img = 'https://goteborg-kraftsportklubb.web.app/img/';
+  $startlistsUrl = 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor%20DM%20SL%202026.pdf?alt=media&token=c9306e6a-fb85-4df6-8c85-7854b716fb0b';
 
   $facts = [
-    ['icon' => 'calendar', 'label' => 'Datum', 'value' => '14–15 november', 'note' => 'Lördag och söndag'],
+    ['icon' => 'calendar', 'label' => 'Datum', 'value' => '14 november', 'note' => 'Lördag, första start 09:30'],
     ['icon' => 'map-marker', 'label' => 'Plats', 'value' => 'Friskis & Svettis Majorna', 'note' => 'Karl Johansgatan 152, Göteborg'],
     ['icon' => 'users', 'label' => 'Klasser', 'value' => 'Senior, ungdom, junior', 'note' => 'Samtliga viktklasser, damer och herrar'],
-    ['icon' => 'file-pdf-o', 'label' => 'Inbjudan', 'value' => 'Läs inbjudan', 'note' => 'Anmälan, avgifter och tider', 'href' => '/dm2026/inbjudan.pdf'],
   ];
 
 @endphp
@@ -23,7 +23,7 @@
     <div class="landing-rise max-w-3xl">
       <div class="mb-6 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-white shadow-sm ring-1 ring-white/40 backdrop-blur-md sm:text-xs sm:tracking-[0.25em]">
         <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
-        14–15 november 2026 · Göteborg
+        Lördag 14 november 2026 · Göteborg
       </div>
       <h1 class="text-[2.5rem] font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
         DM i klassisk<br>
@@ -38,7 +38,7 @@
 
 {{-- Snabbfakta --}}
 <section class="relative mx-auto -mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
-  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="grid gap-4 md:grid-cols-3">
     @foreach ($facts as $fact)
       <{{ isset($fact['href']) ? 'a' : 'div' }} @isset($fact['href']) href="{{ $fact['href'] }}" target="_blank" @endisset class="block rounded-2xl bg-white p-6 shadow-lg shadow-gray-900/5 ring-1 ring-gray-900/5 {{ isset($fact['href']) ? 'transition hover:-translate-y-0.5 hover:shadow-xl' : '' }}">
         <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gkk/10 text-gkk">
@@ -56,16 +56,31 @@
 <section class="mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">
   <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
     <div>
+      {{-- Startlistor --}}
+      <a href="{{ $startlistsUrl }}" target="_blank" class="group mb-10 flex items-center gap-5 rounded-3xl bg-gkk p-6 text-white shadow-xl shadow-gkk/20 transition hover:-translate-y-0.5 hover:shadow-2xl sm:p-7">
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-2xl ring-1 ring-white/30">
+          <i class="fa fa-list-ol"></i>
+        </div>
+        <div class="flex-1">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">Lördag 14 november</p>
+          <p class="mt-1 text-2xl font-extrabold tracking-tight">Startlistor</p>
+          <p class="mt-1 text-sm text-white/80">Grupper, invägning och starttider</p>
+        </div>
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-gkk transition group-hover:translate-x-0.5">
+          <i class="fa fa-arrow-right"></i>
+        </span>
+      </a>
+
       <x-section-heading eyebrow="Om tävlingen" title="Distriktsmästerskapen i Styrkelyft 2026" />
       <div class="mt-6 space-y-4 text-lg leading-relaxed text-gray-600">
         <p>
-          Den 14–15 november avgörs distriktsmästerskapen i klassisk styrkelyft hos oss på Friskis & Svettis Majorna. Tävlingen arrangeras av Göteborg Kraftsportklubb tillsammans med Västra Götalands Styrkelyftförbund.
+          Lördagen den 14 november avgörs distriktsmästerskapen i klassisk styrkelyft hos oss på Friskis & Svettis Majorna. Tävlingen arrangeras av Göteborg Kraftsportklubb tillsammans med Västra Götalands Styrkelyftförbund.
         </p>
         <p>
           Det tävlas i senior-, ungdoms- och juniorklasserna i samtliga viktklasser för damer och herrar. Lyftare som är få i sin viktklass tävlar mot varandra i en koefficientklass.
         </p>
         <p>
-          Publik är varmt välkommen båda dagarna – kom och heja fram distriktets nya mästare!
+          Publik är varmt välkommen hela dagen – kom och heja fram distriktets nya mästare!
         </p>
       </div>
     </div>
