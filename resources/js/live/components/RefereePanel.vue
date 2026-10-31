@@ -1,5 +1,5 @@
 <template>
-  <div class="referees">
+  <div class="referees" :class="{ large }">
     <div v-for="(light, index) in lights" :key="index" class="lamp" :class="state(light)">
       <!-- Keyed by the light, so each lamp animates on when its referee decides. -->
       <span v-if="light" :key="state(light)" class="glow" />
@@ -14,6 +14,8 @@
 defineProps({
   // [left, center, right]: a light ({ good, cards }) per referee who has decided, null for one who hasn't yet.
   lights: { type: Array, required: true },
+  // Very large, placed by the parent (the warm-up hall screen shows them at the top), instead of in the corner.
+  large: { type: Boolean, default: false },
 })
 
 const state = (light) => (light ? (light.good ? 'good' : 'failed') : 'off')
@@ -25,6 +27,7 @@ const state = (light) => (light ? (light.good ? 'good' : 'failed') : 'off')
   centered). Each lamp lights up as its referee decides, and stays with the result.
 */
 .referees {
+  --lamp: 54px;
   position: absolute;
   right: var(--safe-x);
   bottom: var(--safe-y);
@@ -37,10 +40,20 @@ const state = (light) => (light ? (light.good ? 'good' : 'failed') : 'off')
   animation: panel-in var(--motion-base) var(--motion-enter) both;
 }
 
+.referees.large {
+  --lamp: 200px;
+  position: relative;
+  right: auto;
+  bottom: auto;
+  gap: 40px;
+  padding: 36px 44px 72px;
+  border-radius: 28px;
+}
+
 .lamp {
   position: relative;
-  width: 54px;
-  height: 54px;
+  width: var(--lamp);
+  height: var(--lamp);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.06);
   box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.22);
@@ -55,28 +68,28 @@ const state = (light) => (light ? (light.good ? 'good' : 'failed') : 'off')
 
 .good .glow {
   background: #ffffff;
-  box-shadow: 0 0 22px rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 calc(var(--lamp) * 0.4) rgba(255, 255, 255, 0.7);
 }
 
 .failed .glow {
   background: var(--overlay-failed);
-  box-shadow: 0 0 22px rgba(199, 69, 61, 0.8);
+  box-shadow: 0 0 calc(var(--lamp) * 0.4) rgba(199, 69, 61, 0.8);
 }
 
 /* Reason cards (red/yellow/blue) under a red lamp. */
 .cards {
   position: absolute;
-  bottom: -14px;
+  bottom: calc(var(--lamp) * -0.26);
   left: 50%;
   display: flex;
-  gap: 3px;
+  gap: calc(var(--lamp) * 0.055);
   transform: translateX(-50%);
 }
 
 .card {
-  width: 13px;
-  height: 17px;
-  border-radius: 2px;
+  width: calc(var(--lamp) * 0.24);
+  height: calc(var(--lamp) * 0.315);
+  border-radius: calc(var(--lamp) * 0.04);
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
   animation: lamp-on 280ms ease-out both;
 }

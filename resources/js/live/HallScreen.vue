@@ -41,6 +41,13 @@
           </ol>
         </section>
 
+        <!-- The referee lights, very large at the top: each lamp as its referee decides, then the decision. -->
+        <Transition name="lights">
+          <div v-if="lights" class="lights">
+            <RefereePanel :lights="lights" large />
+          </div>
+        </Transition>
+
         <!-- Old data stays up (better than an empty screen in the warm-up hall), but says how old it is. -->
         <div v-if="staleSince" class="stale">Ej uppdaterat sedan {{ staleSince }}</div>
       </template>
@@ -49,27 +56,38 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import Stage from './components/Stage.vue'
+import RefereePanel from './components/RefereePanel.vue'
 import Scoreboard from './components/Scoreboard.vue'
 import { disciplineName, formatWeight } from './format.js'
 import { createHttpSource } from './sources/httpSource.js'
+import { createRefereeFeed, refereeFeedUrl } from './sources/refereeFeed.js'
 import { useLiveFeed } from './useLiveFeed.js'
 import { useNextGroup } from './useNextGroup.js'
 
 /**
  * The warm-up hall screen (/live/overlay?view=hall&competition=…): the results list of the group on the platform, as
  * on the broadcast, with the start order of the group after it below. Meant for a TV, e.g. shown from the slideshow's
- * live control (/admin/slideshow/live → Visa en webbsida).
+ * live control (/admin/slideshow/live → Visa en webbsida). The referee lights are shown very large at the top, as on
+ * Powerlifting Live's own screens (?lights=0 turns them off).
  */
 
-// Shown as out of date when the data is older than this (the feed is polled every 2 s, the next group every 10 s).
+// Shown as out of date when the data is older than this (the feed is polled every second, the next group every 10 s).
 const STALE_AFTER_MS = 30000
 
 const params = new URLSearchParams(window.location.search)
 const competition = /^\d+$/.test(params.get('competition') ?? '') ? params.get('competition') : null
 
-const feed = competition ? useLiveFeed(createHttpSource(competition), { interval: 2000 }) : null
+// Referee decisions come straight from Powerlifting Live, as on the broadcast (see refereeFeed.js), and reach the page
+// through the feed's polling.
+const referee =
+  competition && !['0', 'false', 'no'].includes(params.get('lights'))
+    ? createRefereeFeed(refereeFeedUrl(document.body.dataset.powerliftingLive), competition)
+    : null
+onBeforeUnmount(() => referee?.stop())
+
+const feed = competition ? useLiveFeed(createHttpSource(competition, referee)) : null
 const nextGroupFeed = competition ? useNextGroup(competition) : null
 
 const snapshot = computed(() => feed?.snapshot.value ?? null)
@@ -81,6 +99,27 @@ const ROW_HEIGHT = 44
 const nextRows = computed(() => (next.value ? Math.min(5, Math.ceil(next.value.lifters.length / COLUMNS)) : 0))
 const nextHeight = computed(() => (next.value ? 96 + nextRows.value * ROW_HEIGHT : 0))
 const boardHeight = computed(() => 1080 - nextHeight.value)
+
+// The lights: a decision stays up for DECISION_MS from when it arrives; before it, each lamp lights as its referee
+// decides. Only decisions arriving while the page is open are shown (the referee feed has none on load).
+const DECISION_MS = 10000
+const shownDecision = ref(null)
+let decisionTimer = null
+
+watch(
+  () => snapshot.value?.decision ?? null,
+  (decision, previous) => {
+    if (decision && decision.id !== previous?.id) {
+      shownDecision.value = decision
+      clearTimeout(decisionTimer)
+      decisionTimer = setTimeout(() => (shownDecision.value = null), DECISION_MS)
+    }
+  },
+)
+onBeforeUnmount(() => clearTimeout(decisionTimer))
+
+// Each lamp animates on by itself as its light changes (see RefereePanel.vue).
+const lights = computed(() => shownDecision.value?.lights ?? snapshot.value?.signals ?? null)
 
 const now = ref(Date.now())
 const ticker = setInterval(() => (now.value = Date.now()), 5000)
@@ -224,6 +263,27 @@ code {
   font-size: 1.2em;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+.lights {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 60px;
+  background: rgba(15, 22, 44, 0.45);
+}
+
+.lights-enter-active,
+.lights-leave-active {
+  transition: opacity var(--motion-base) var(--motion-move);
+}
+
+.lights-enter-from,
+.lights-leave-to {
+  opacity: 0;
 }
 
 .stale {
