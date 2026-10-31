@@ -123,4 +123,11 @@ if (!window.location.hostname.endsWith('.test')) {
   })
 }
 
+// Mounting re-renders the server HTML inside #app, which restarts CSS entrance
+// animations. If the page has already been painted (slow load, dev server),
+// skip them so the content doesn't fade in a second time.
+if (performance.getEntriesByName('first-contentful-paint').length > 0) {
+  document.documentElement.classList.add('skip-intro')
+}
+
 app.mount('#app')

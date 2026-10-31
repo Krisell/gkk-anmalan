@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('main-class', '')
 
 @section('content')
 @php

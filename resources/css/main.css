@@ -232,3 +232,10 @@
     animation: none;
   }
 }
+
+.skip-intro .page-transition,
+.skip-intro .page-transition-subtle,
+.skip-intro .landing-hero-image,
+.skip-intro .landing-rise {
+  animation: none;
+}
