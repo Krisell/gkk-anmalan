@@ -209,3 +209,46 @@ it('reports when the next group cannot be fetched, without caching the failure',
     $this->getJson('/live/next-group/3137')->assertStatus(502);
     expect(Cache::has('powerliftinglive.next-group.3137'))->toBeFalse();
 });
+
+test('the warm-up hall screen is also at /live/hall, framable by our own pages', function () {
+    $this->get('/live/hall?competition=3029')
+        ->assertOk()
+        ->assertSee('id="live-overlay"', false)
+        ->assertHeader('Content-Security-Policy', "frame-ancestors 'self'");
+    $this->get('/live/hall')->assertOk();
+});
+
+it("lists the competitions live on Powerlifting Live's front page, and caches them", function () {
+    // The structure of the "Följ tävlingar live" table on se.powerliftinglive.com/index.php.
+    $html = '<h3>Följ tävlingar live</h3><table style="border-collapse: collapse;"><tr><th></th><th></th><th></th></tr>'
+        .'<tr><td style="padding: 5px"><strong>2026 - Serie 4 - TK Trossö</strong></td><td style="padding: 5px">31.10</td>'
+        .'<td><a href="screen_scoresheet.php?id=3017&show_records=1&referee_lights=1" target="_blank">Resultat</a> | '
+        .'<a href="screen_scoresheet.php?id=3017&all=1">Resultat (samtliga klasser)</a></td></tr>'
+        .'<tr><td><strong>2026 - J&auml;rnv&auml;gspressen</strong></td><td>31.10</td>'
+        .'<td><a href="screen_team_results.php?id=3029&show_records=1">Resultat</a></td></tr></table>'
+        .'<br/><h3>Senaste ändringarna</h3><table><tr><td><strong>Not a competition</strong></td><td><a href="x.php?id=1">x</a></td></tr></table>';
+    Http::fake(['*' => Http::response($html)]);
+
+    $this->getJson('/live/competitions')
+        ->assertOk()
+        ->assertExactJson(['competitions' => [
+            ['id' => 3017, 'name' => '2026 - Serie 4 - TK Trossö', 'date' => '31.10'],
+            ['id' => 3029, 'name' => '2026 - Järnvägspressen', 'date' => '31.10'],
+        ]]);
+    $this->getJson('/live/competitions')->assertOk();
+
+    Http::assertSentCount(1);
+});
+
+it('reports when the competitions cannot be fetched, without caching the failure', function () {
+    Http::fake(['*' => Http::response('', 500)]);
+
+    $this->getJson('/live/competitions')->assertStatus(502);
+    expect(Cache::has('powerliftinglive.competitions'))->toBeFalse();
+});
+
+it('has an empty list when the front page has no live competitions', function () {
+    Http::fake(['*' => Http::response('<h1>Powerlifting Live</h1>')]);
+
+    $this->getJson('/live/competitions')->assertOk()->assertExactJson(['competitions' => []]);
+});

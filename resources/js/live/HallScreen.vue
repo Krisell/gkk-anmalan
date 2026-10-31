@@ -1,9 +1,7 @@
 <template>
   <div class="hall">
     <Stage :height="canvasHeight">
-      <div v-if="!competition" class="notice">
-        Ange tävling i adressen, t.ex. <code>/live/overlay?view=hall&amp;competition=3001</code>.
-      </div>
+      <CompetitionPicker v-if="!competition" />
 
       <div v-else-if="!snapshot" class="notice">Ansluter till Powerlifting Live…</div>
 
@@ -105,6 +103,7 @@
 <script setup>
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import Stage from './components/Stage.vue'
+import CompetitionPicker from './components/CompetitionPicker.vue'
 import LifterIntro from './components/LifterIntro.vue'
 import RefereePanel from './components/RefereePanel.vue'
 import Scoreboard from './components/Scoreboard.vue'
@@ -116,7 +115,8 @@ import { useNextGroup } from './useNextGroup.js'
 import { initialHallState, readyToIntroduce, reduceHallState } from './hallState.js'
 
 /**
- * The warm-up hall screen (/live/overlay?view=hall&competition=…): the results list of the group on the platform, as
+ * The warm-up hall screen (/live/hall?competition=…, also /live/overlay?view=hall&competition=…; without a
+ * competition, a list of the competitions live now to pick from): the results list of the group on the platform, as
  * on the broadcast, with the start order of the group after it below. Meant for a TV, e.g. shown from the slideshow's
  * live control (/admin/slideshow/live → Visa en webbsida). The referee lights are shown very large in the middle, as on
  * Powerlifting Live's own screens (?lights=0 turns them off), and a new lifter on the platform gets the broadcast's
@@ -310,11 +310,6 @@ const staleSince = computed(() => {
   justify-content: center;
   font-size: 36px;
   color: var(--overlay-silver);
-}
-
-code {
-  margin-left: 0.4em;
-  color: #ffffff;
 }
 
 .order {

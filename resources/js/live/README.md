@@ -79,7 +79,10 @@ In the demo editor, choose _Resultatlista_ under _Läge_ to preview it.
 
 ### Warm-up hall screen
 
-`/live/overlay?view=hall&competition=<id>` is a page for a TV in the warm-up hall, not for OBS: an opaque full screen
+`/live/hall?competition=<id>` (also `/live/overlay?view=hall&competition=<id>`) is a page for a TV in the warm-up
+hall, not for OBS. Without a competition, `/live/hall` lists the competitions live on Powerlifting Live now, read from
+the "Följ tävlingar live" table on its front page (`/live/competitions`, cached 60 s; Powerlifting Live has no feed of
+them), each with its address to paste into the slideshow's live control. With a competition it is an opaque full screen
 with the whole lifting order at the top (_Nästa lyftare_, from `next_lifters`: the lifter on the platform first, five
 per line), the results list of the group on the platform (as above) and, below it in smaller text, the start order of
 the group that lifts next.

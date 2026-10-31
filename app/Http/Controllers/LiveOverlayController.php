@@ -45,6 +45,9 @@ class LiveOverlayController extends Controller
     // The start order of the next group changes only when an opener is changed, so a short cache is enough.
     private const NEXT_GROUP_CACHE_SECONDS = 5;
 
+    // The competitions on Powerlifting Live's front page change a few times a day.
+    private const COMPETITIONS_CACHE_SECONDS = 60;
+
     private const LIFTER_FIELDS = [
         // 'weight' is the lifter's bodyweight.
         'id', 'name', 'weight', 'team', 'group', 'weightclass', 'weightclass_short_alt', 'category', 'category_short', 'sex', 'raw', 'lot', 'lifts',
@@ -129,6 +132,72 @@ class LiveOverlayController extends Controller
         }
 
         return response()->json($nextGroup)->header('Cache-Control', 'no-store');
+    }
+
+    /**
+     * The competitions Powerlifting Live lists as live now ("Följ tävlingar live" on its front page), for picking one
+     * on the warm-up hall screen (/live/hall). Powerlifting Live has no feed of them, so the list is read from the
+     * page; if it can't be read, the list is empty (the competition can still be given in the address).
+     */
+    public function competitions()
+    {
+        $competitions = Cache::remember('powerliftinglive.competitions', self::COMPETITIONS_CACHE_SECONDS, function () {
+            try {
+                $response = Http::withUserAgent('GKK live overlay (+'.config('app.url').')')
+                    ->timeout(4)
+                    ->get(\rtrim(config('services.powerliftinglive.url'), '/').'/index.php');
+            } catch (\Throwable $e) {
+                return null;
+            }
+
+            return $response->successful() ? self::parseCompetitions($response->body()) : null;
+        });
+
+        if ($competitions === null) {
+            Cache::forget('powerliftinglive.competitions');
+
+            return response()->json(['error' => 'Powerlifting Live is unavailable'], 502)->header('Cache-Control', 'no-store');
+        }
+
+        return response()->json(['competitions' => $competitions])->header('Cache-Control', 'no-store');
+    }
+
+    /**
+     * The rows of the table under "Följ tävlingar live": the name (in <strong>), the date and a link with the
+     * competition's id.
+     *
+     * @return list<array{id: int, name: string, date: ?string}>
+     */
+    public static function parseCompetitions(string $html): array
+    {
+        $start = \mb_stripos($html, 'Följ tävlingar live');
+
+        if ($start === false) {
+            return [];
+        }
+        $section = \mb_substr($html, $start);
+        $end = \mb_stripos($section, '</table>');
+        $section = $end === false ? $section : \mb_substr($section, 0, $end);
+
+        \preg_match_all('#<tr\b.*?</tr>#si', $section, $rows);
+
+        $competitions = [];
+
+        foreach ($rows[0] as $row) {
+            if (! \preg_match('#<strong>(.*?)</strong>#si', $row, $name) || ! \preg_match('#[?&]id=(\d+)#', $row, $id)) {
+                continue;
+            }
+            \preg_match_all('#<td\b[^>]*>(.*?)</td>#si', $row, $cells);
+            $date = \trim(\html_entity_decode(\strip_tags($cells[1][1] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+
+            $competitions[] = [
+                'id' => (int) $id[1],
+                'name' => \trim(\html_entity_decode(\strip_tags($name[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
+                'date' => $date === '' ? null : $date,
+            ];
+        }
+
+        return $competitions;
     }
 
     private function fetch(int $competition): ?array

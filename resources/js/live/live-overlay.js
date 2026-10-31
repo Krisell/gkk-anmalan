@@ -3,8 +3,10 @@ import LiveOverlay from './LiveOverlay.vue'
 import HallScreen from './HallScreen.vue'
 import './overlay.css'
 
-// ?view=hall is the warm-up hall's TV screen, not a broadcast graphic.
-const hall = new URLSearchParams(window.location.search).get('view') === 'hall'
+// The warm-up hall's TV screen (/live/hall, or ?view=hall), not a broadcast graphic.
+const hall =
+  /\/live\/hall\/?$/.test(window.location.pathname) ||
+  new URLSearchParams(window.location.search).get('view') === 'hall'
 const app = createApp(hall ? HallScreen : LiveOverlay)
 
 // The overlay runs unattended in OBS for hours; log errors instead of letting them break the page.

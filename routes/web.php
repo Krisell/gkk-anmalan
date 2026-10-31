@@ -279,6 +279,9 @@ Route::view('/slides-for-screen', 'slides')->name('slides');
 
 Route::prefix('live')->controller(LiveOverlayController::class)->group(function () {
     Route::get('overlay', 'show')->name('live.overlay');
+    // The warm-up hall screen (the overlay page's ?view=hall), with a list of competitions to pick from.
+    Route::get('hall', 'show')->name('live.hall');
+    Route::get('competitions', 'competitions')->middleware('throttle:60,1');
     Route::get('feed/{competition}', 'feed')->whereNumber('competition')->middleware('throttle:300,1')->name('live.feed');
     Route::get('results/{competition}', 'results')->whereNumber('competition')->middleware('throttle:300,1');
     Route::get('next-group/{competition}', 'nextGroup')->whereNumber('competition')->middleware('throttle:300,1');
