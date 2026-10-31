@@ -161,6 +161,21 @@ if [ -z "${CLOUD_DATABASE_URL:-}" ]; then
 fi
 
 step "Restoring to Cloud"
+
+# The URL copied from Laravel Cloud carries parameters libpq rejects (e.g. "name"), so keep only the ones it knows.
+base="${CLOUD_DATABASE_URL%%\?*}"
+query=""
+if [[ "$CLOUD_DATABASE_URL" == *\?* ]]; then
+    IFS='&' read -r -a params <<< "${CLOUD_DATABASE_URL#*\?}"
+    for param in "${params[@]}"; do
+        case "${param%%=*}" in
+            sslmode | sslrootcert | channel_binding | options | connect_timeout | application_name) query="$query&$param" ;;
+            *) echo "Ignoring URL parameter: ${param%%=*}" ;;
+        esac
+    done
+fi
+CLOUD_DATABASE_URL="$base${query:+?${query#&}}"
+
 read -r -p "This replaces ALL data in the Cloud database. Type 'yes' to continue: " CONFIRM
 [ "$CONFIRM" = "yes" ] || { echo "Aborted."; exit 1; }
 
@@ -173,4 +188,4 @@ for table in users competitions payments; do
         "$(docker exec "$PG_CONTAINER" psql -At "$CLOUD_DATABASE_URL" -c "SELECT count(*) FROM \"$table\"")"
 done
 
-printf '\nDone. Remember to turn off public access on the Cloud database.\n'
+printf '\nDone.\n'
