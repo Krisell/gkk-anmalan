@@ -128,13 +128,26 @@ function updateDateTime() {
 updateDateTime()
 const timeInterval = setInterval(updateDateTime, 1000)
 
-onMounted(async () => {
-  const response = await axios.get('/slideshow/snapshot')
+// The screen only fetches its data once per page load, so a failed first request (no network yet when the screen
+// boots, or the app slow to wake up) must be retried, or the screen would show the logo until the next publish.
+const retryDelays = [5, 10, 30, 60].map((s) => s * 1000)
+
+async function loadSlides(attempt = 0) {
+  let response
+  try {
+    response = await axios.get('/slideshow/snapshot')
+  } catch {
+    setTimeout(() => loadSlides(attempt + 1), retryDelays[Math.min(attempt, retryDelays.length - 1)])
+    return
+  }
+
   slides.value = response.data.slides.filter((slide) => slide.is_visible)
   // The latest club records are always shown as the first slide in the rotation.
   slides.value.unshift({ type: 'Klubbrekord', data: { records: response.data.records } })
   state.value = 'loaded'
-})
+}
+
+onMounted(() => loadSlides())
 
 // Reload when the slides, the club records or the slideshow's code change. The app publishes a version to Firebase's
 // Realtime Database on every such change and deploy (see App\Services\SlideshowSnapshot), so the screen gets it pushed
