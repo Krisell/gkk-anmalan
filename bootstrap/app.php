@@ -23,6 +23,11 @@ return Application::configure(basePath: \dirname(__DIR__))
     ->withProviders()
     ->withRouting(
         using: function () {
+            // Health check for Laravel Cloud's startup and readiness checks, so a new release only gets traffic once
+            // the app has booted. Outside the web group and without database access, so it also passes during
+            // database maintenance. (The `health:` argument is ignored when `using:` is given.)
+            Route::get('/up', fn () => response('OK'));
+
             Route::middleware('web')->group(base_path('routes/web.php'));
 
             if (app()->environment() === 'testing') {

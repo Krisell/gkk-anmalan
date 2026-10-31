@@ -50,7 +50,10 @@ class DatabaseMaintenanceMiddleware
             ? $next($request)
             : (new DatabaseMaintenanceException)->render($request);
 
-        $this->log($request, $response);
+        // Laravel Cloud's health checks would otherwise drown out the visitors in the log
+        if (! $request->is('up')) {
+            $this->log($request, $response);
+        }
 
         return $this->withServedBy($response);
     }
