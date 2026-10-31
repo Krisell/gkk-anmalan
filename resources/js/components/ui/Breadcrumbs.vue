@@ -46,6 +46,7 @@ const icons = {
   '/admin/competitions': 'th-list',
   '/admin/events': 'users',
   '/admin/signature-requests': 'pencil',
+  '/admin/slideshow': 'desktop',
 }
 
 const crumbs = computed(() => [

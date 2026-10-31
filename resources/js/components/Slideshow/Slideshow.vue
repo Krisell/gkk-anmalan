@@ -25,12 +25,23 @@
       </template>
     </main>
 
+    <!-- A message from the live control (/admin/slideshow/live), shown until it is taken down. -->
+    <Transition name="slideshow-message">
+      <div
+        v-if="control.message"
+        :key="control.message.id"
+        class="shrink-0 bg-amber-300 text-gkk px-[4vw] py-[2vh] text-center font-semibold leading-tight text-balance text-[min(3.4vw,5.8vh)]"
+      >
+        {{ control.message.text }}
+      </div>
+    </Transition>
+
     <footer
       class="relative shrink-0 h-[clamp(2.5rem,9vh,7rem)] bg-gkk text-white grid grid-cols-[1fr_auto_1fr] items-center gap-[2vw] px-[2.5vw]"
     >
       <div class="absolute top-0 inset-x-0 h-[0.5vh] min-h-[3px] bg-white/10">
         <div
-          v-if="slides.length"
+          v-if="slides.length && !held"
           :key="slideCycle"
           class="slideshow-progress h-full bg-white/70 origin-left"
           :style="{ animationDuration: `${slideDuration}ms` }"
@@ -65,13 +76,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import Slide from './Slide.vue'
 import KlubbrekordSlide from './KlubbrekordSlide.vue'
 import { getISOWeek, getSwedishMonthName } from '../../utils/date'
 import { onValue, ref as databaseRef } from 'firebase/database'
 import { liveDatabase } from '../../live/remote/firebase.js'
 import axios from 'axios'
+import { slideKey, slideLabel, useSlideshowRemote } from './remote.js'
 
 let state = ref('loading')
 let slides = ref([])
@@ -122,7 +134,7 @@ const deployGrace = 2 * 60 * 1000
 let published
 let reloadTimer = null
 
-onValue(databaseRef(liveDatabase(), 'slideshow'), (snapshot) => {
+onValue(databaseRef(liveDatabase(), 'slideshow/published'), (snapshot) => {
   const next = snapshot.val() ?? {}
 
   if (published !== undefined && next.version !== published.version && !reloadTimer) {
@@ -157,12 +169,51 @@ const slideDuration = 30 * 1000
 const slideCycle = ref(0)
 let slideInterval = null
 
+// The live control (/admin/slideshow/live): pause the rotation, hold a slide, show a message, step or reload.
+const { control, report } = useSlideshowRemote({
+  onCommand: ({ type }) => {
+    if (type === 'next') {
+      nextSlide()
+    } else if (type === 'previous') {
+      previousSlide()
+    } else if (type === 'reload') {
+      window.location.reload()
+    }
+  },
+})
+
+const heldIndex = computed(() =>
+  control.value.slide ? slides.value.findIndex((slide) => slideKey(slide) === control.value.slide) : -1,
+)
+// The rotation stops while paused, or while a slide is held (as long as that slide is still in the slideshow).
+const held = computed(() => control.value.paused || heldIndex.value >= 0)
+
+watch([heldIndex, held], () => {
+  if (heldIndex.value >= 0) {
+    currentSlide.value = heldIndex.value
+  }
+  restartInterval()
+})
+
+watch([currentSlide, slides, held], () => {
+  const slide = slides.value[currentSlide.value]
+  if (slide) {
+    report({ slide: slideKey(slide), showing: slideLabel(slide), held: held.value })
+  }
+})
+
 function nextSlide() {
+  if (!slides.value.length) {
+    return
+  }
   currentSlide.value = (currentSlide.value + 1) % slides.value.length
   restartInterval()
 }
 
 function previousSlide() {
+  if (!slides.value.length) {
+    return
+  }
   currentSlide.value = (currentSlide.value - 1 + slides.value.length) % slides.value.length
   restartInterval()
 }
@@ -170,7 +221,9 @@ function previousSlide() {
 restartInterval()
 function restartInterval() {
   clearInterval(slideInterval)
-  slideInterval = setInterval(nextSlide, slideDuration)
+  if (!held.value) {
+    slideInterval = setInterval(nextSlide, slideDuration)
+  }
   slideCycle.value++
 }
 
@@ -205,6 +258,19 @@ document.body.addEventListener('keydown', (e) => {
   animation-name: slideshow-progress;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
+}
+
+.slideshow-message-enter-active,
+.slideshow-message-leave-active {
+  transition:
+    opacity 400ms ease,
+    transform 400ms ease;
+}
+
+.slideshow-message-enter-from,
+.slideshow-message-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
 }
 
 @keyframes slideshow-progress {

@@ -31,8 +31,8 @@ function enableSlideshowPublishing(bool $succeed = true)
 
 function publishedVersions(): array
 {
-    return Http::recorded(fn (Request $request) => $request->method() === 'PUT')
-        ->map(fn ($pair) => $pair[0]['version'])
+    return Http::recorded(fn (Request $request) => $request->method() === 'PATCH')
+        ->map(fn ($pair) => $pair[0]['published']['version'])
         ->values()
         ->all();
 }
@@ -72,9 +72,10 @@ test('changing slides publishes the version once, with the service account', fun
 
     expect(publishedVersions())->toBe([SlideshowSnapshot::build()['version']]);
 
-    Http::assertSent(fn (Request $request) => $request->method() === 'PUT'
+    Http::assertSent(fn (Request $request) => $request->method() === 'PATCH'
         && $request->url() === 'https://example-db.firebaseio.com/slideshow.json'
-        && \array_key_exists('build', $request->data())
+        && \array_key_exists('build', $request->data()['published'])
+        && $request->data()['version'] === $request->data()['published']['version']
         && $request->hasHeader('Authorization', 'Bearer test-token'));
 });
 

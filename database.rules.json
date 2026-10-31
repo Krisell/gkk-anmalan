@@ -3,7 +3,24 @@
     ".read": false,
     ".write": false,
     "slideshow": {
-      ".read": true
+      ".read": true,
+      "control": {
+        ".write": "auth != null && auth.token.type === 'admin'"
+      },
+      "commands": {
+        ".write": "auth != null && auth.token.type === 'admin'"
+      },
+      "presence": {
+        "$session": {
+          ".write": "$session.matches(/^[A-Za-z0-9_-]{8,40}$/)",
+          ".validate": "newData.hasChildren(['at']) && newData.child('at').isNumber()",
+          "at": { ".validate": true },
+          "slide": { ".validate": "newData.isString() && newData.val().length <= 40" },
+          "showing": { ".validate": "newData.isString() && newData.val().length <= 200" },
+          "held": { ".validate": "newData.isBoolean()" },
+          "$other": { ".validate": false }
+        }
+      }
     },
     "live": {
       ".read": true,

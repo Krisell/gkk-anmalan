@@ -169,8 +169,8 @@ After that, the data written on Cloud would have to be copied back by hand, so i
 ### Afterwards
 
 - Raise the TTL on the new A records (for example to 3600) once everything is stable.
-- Remove the legacy deploy setup (`bin/update.sh`, the _Build and Release Assets_ workflow, the One.com part of
-  README.md) and the `build-*` GitHub pre-releases.
+- ~~Remove the legacy deploy setup (`bin/update.sh`, the _Build and Release Assets_ workflow, the One.com part of
+  README.md)~~ (done). Delete the `build-*` GitHub pre-releases.
 - Set up scale to zero, see below.
 - Cancel One.com hosting only after Cloud has run fine for a while, and keep the domains and their DNS active (or move
   DNS elsewhere first). The Google mail and Mailgun records live there.

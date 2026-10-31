@@ -211,8 +211,7 @@ right-click the source → _Interact_ to use the editor or the keys.
 
 ## Deploying
 
-Nothing special: merge to `master`, wait for the _Build and Release Assets_ action, then run `bin/update.sh` on the
-server as for any other change. No new services, cron jobs or environment variables are required.
+Nothing special: merge to `master` and Laravel Cloud deploys it, as for any other change. No new services, cron jobs or environment variables are required.
 
 ## Adding the overlay in OBS
 

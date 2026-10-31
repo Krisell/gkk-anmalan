@@ -13,8 +13,9 @@ use Throwable;
  *
  * The open screen must update when the data or the slideshow's code changes, without asking the app (on Laravel Cloud
  * every request keeps the app from scaling to zero). So the app publishes a version of the data and the frontend build
- * to Firebase's Realtime Database (at slideshow/version) whenever slides or results change and on every deploy, and the
- * screen subscribes to it and reloads when it changes.
+ * to Firebase's Realtime Database (at slideshow/published) whenever slides or results change and on every deploy, and
+ * the screen subscribes to it and reloads when it changes. The rest of slideshow/ is the live control (see
+ * resources/js/components/Slideshow/remote.js).
  */
 class SlideshowSnapshot
 {
@@ -76,12 +77,20 @@ class SlideshowSnapshot
             return false;
         }
 
+        $published = [
+            'version' => self::build()['version'],
+            'build' => self::frontendBuild(),
+            'publishedAt' => now()->toIso8601String(),
+        ];
+
         try {
+            // PATCH, not PUT, so that the live control's data next to it stays. The top-level version and build are
+            // for screens still running the code from before slideshow/published; remove them once those have reloaded.
             Http::withToken(self::accessToken())
-                ->put(\rtrim(config('firebase.database_url'), '/').'/slideshow.json', [
-                    'version' => self::build()['version'],
-                    'build' => self::frontendBuild(),
-                    'publishedAt' => now()->toIso8601String(),
+                ->patch(\rtrim(config('firebase.database_url'), '/').'/slideshow.json', [
+                    'published' => $published,
+                    'version' => $published['version'],
+                    'build' => $published['build'],
                 ])
                 ->throw();
 

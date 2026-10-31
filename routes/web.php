@@ -185,6 +185,7 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
 
     Route::prefix('slideshow')->controller(AdminSlideshowController::class)->group(function () {
         Route::get('/', 'index');
+        Route::get('live', 'live');
     });
 
     Route::prefix('news')->group(function () {
