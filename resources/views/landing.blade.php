@@ -11,7 +11,7 @@
   <div class="absolute inset-0 -z-10 bg-gradient-to-t from-gkk via-gkk/70 to-black/40"></div>
   <div class="absolute inset-0 -z-10 bg-gradient-to-r from-black/50 to-transparent"></div>
 
-  <div class="mx-auto flex max-w-7xl flex-col justify-end px-4 pt-14 pb-14 sm:h-[64svh] sm:min-h-[480px] sm:max-h-[680px] sm:px-6 sm:pt-20 sm:pb-24 lg:px-8">
+  <div class="mx-auto flex max-w-7xl flex-col justify-end px-4 pt-14 pb-14 sm:min-h-[clamp(480px,64svh,680px)] sm:px-6 sm:pt-20 sm:pb-24 lg:px-8">
     <div class="landing-rise max-w-3xl">
       <div class="mb-6 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] sm:text-xs sm:tracking-[0.25em] text-white shadow-sm ring-1 ring-white/40 backdrop-blur-md">
         <span class="h-1.5 w-1.5 rounded-full bg-white"></span>

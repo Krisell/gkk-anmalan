@@ -8,7 +8,7 @@
           aria-label="Göteborg Kraftsportklubb"
         >
           <img
-            class="h-10 w-10 rounded-full lg:absolute lg:left-0 lg:-top-7 lg:h-[88px] lg:w-[88px] lg:max-w-none 2xl:left-auto 2xl:right-0 lg:ring-4 lg:ring-white transition-transform duration-300 lg:hover:scale-105"
+            class="h-10 w-10 rounded-full lg:absolute lg:left-0 lg:-top-[22px] lg:h-[88px] lg:w-[88px] lg:max-w-none 2xl:left-auto 2xl:right-0 lg:ring-4 lg:ring-white transition-transform duration-300 lg:hover:scale-105"
             src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"
             alt="GKK logo"
           />
