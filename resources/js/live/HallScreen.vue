@@ -41,6 +41,15 @@
           </ol>
         </section>
 
+        <!-- The large lifter card when a new lifter is called to the platform, as on the broadcast. It flips in, and
+             after a few seconds simply fades away to show the list again. -->
+        <Transition name="scrim">
+          <div v-if="intro" class="scrim" />
+        </Transition>
+        <Transition name="intro" :duration="{ enter: 2800, leave: 400 }">
+          <LifterIntro v-if="intro" :key="intro.lifterId" :attempt="intro" class="hall-intro" />
+        </Transition>
+
         <!-- The referee lights, very large at the top: each lamp as its referee decides, then the decision. -->
         <Transition name="lights">
           <div v-if="lights" class="lights">
@@ -56,8 +65,9 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import Stage from './components/Stage.vue'
+import LifterIntro from './components/LifterIntro.vue'
 import RefereePanel from './components/RefereePanel.vue'
 import Scoreboard from './components/Scoreboard.vue'
 import { disciplineName, formatWeight } from './format.js'
@@ -70,19 +80,21 @@ import { useNextGroup } from './useNextGroup.js'
  * The warm-up hall screen (/live/overlay?view=hall&competition=…): the results list of the group on the platform, as
  * on the broadcast, with the start order of the group after it below. Meant for a TV, e.g. shown from the slideshow's
  * live control (/admin/slideshow/live → Visa en webbsida). The referee lights are shown very large at the top, as on
- * Powerlifting Live's own screens (?lights=0 turns them off).
+ * Powerlifting Live's own screens (?lights=0 turns them off), and a new lifter on the platform gets the broadcast's
+ * large lifter card for a few seconds (?intro=0 turns it off, ?introSeconds=N sets how long).
  */
 
 // Shown as out of date when the data is older than this (the feed is polled every second, the next group every 10 s).
 const STALE_AFTER_MS = 30000
 
 const params = new URLSearchParams(window.location.search)
+const flag = (name) => !['0', 'false', 'no'].includes(params.get(name))
 const competition = /^\d+$/.test(params.get('competition') ?? '') ? params.get('competition') : null
 
 // Referee decisions come straight from Powerlifting Live, as on the broadcast (see refereeFeed.js), and reach the page
 // through the feed's polling.
 const referee =
-  competition && !['0', 'false', 'no'].includes(params.get('lights'))
+  competition && flag('lights')
     ? createRefereeFeed(refereeFeedUrl(document.body.dataset.powerliftingLive), competition)
     : null
 onBeforeUnmount(() => referee?.stop())
@@ -120,6 +132,49 @@ onBeforeUnmount(() => clearTimeout(decisionTimer))
 
 // Each lamp animates on by itself as its light changes (see RefereePanel.vue).
 const lights = computed(() => shownDecision.value?.lights ?? snapshot.value?.signals ?? null)
+
+// The lifter card: shown when a new lifter is called to the platform, not for the lifter already there when the page
+// opens, nor when the same lifter takes another attempt. The lights take precedence: a lifter called while they are
+// up is introduced once they are gone.
+const INTRO_MS = (Number(params.get('introSeconds')) || 6) * 1000
+const showIntros = flag('intro')
+const intro = shallowRef(null)
+let introducedLifterId = null
+let introTimer = null
+
+watch([() => snapshot.value?.current ?? null, lights], ([current, lit]) => {
+  if (!snapshot.value) {
+    return
+  }
+  if (introducedLifterId == null) {
+    introducedLifterId = current?.lifterId ?? ''
+    return
+  }
+  if (lit) {
+    hideIntro()
+    return
+  }
+  if (!current?.lifterId) {
+    return
+  }
+  if (intro.value?.lifterId === current.lifterId) {
+    // E.g. a changed weight while the card is up.
+    intro.value = current
+    return
+  }
+  if (showIntros && current.lifterId !== introducedLifterId) {
+    introducedLifterId = current.lifterId
+    intro.value = current
+    clearTimeout(introTimer)
+    introTimer = setTimeout(hideIntro, INTRO_MS)
+  }
+})
+
+function hideIntro() {
+  clearTimeout(introTimer)
+  intro.value = null
+}
+onBeforeUnmount(() => clearTimeout(introTimer))
 
 const now = ref(Date.now())
 const ticker = setInterval(() => (now.value = Date.now()), 5000)
@@ -263,6 +318,36 @@ code {
   font-size: 1.2em;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(15, 22, 44, 0.55);
+}
+
+.scrim-enter-active,
+.scrim-leave-active {
+  transition: opacity var(--motion-base) var(--motion-move);
+}
+
+.scrim-enter-from,
+.scrim-leave-to {
+  opacity: 0;
+}
+
+.hall-intro {
+  z-index: 1;
+}
+
+/* Instead of the broadcast's flight down into the lower third, the card just fades away. */
+.intro-leave-active {
+  transition: opacity 400ms var(--motion-move);
+}
+
+.intro-leave-to {
+  opacity: 0;
 }
 
 .lights {

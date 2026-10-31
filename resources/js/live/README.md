@@ -91,6 +91,11 @@ The referee lights are shown very large at the top of the screen, as on Powerlif
 live referee feed as the broadcast: each lamp lights as its referee decides, and the decision stays up for 10 s.
 `&lights=0` turns them off.
 
+When a new lifter is called to the platform, the broadcast's large lifter card flips in, and after 6 s it simply fades
+away to show the list again (no flight down into a lower third). As on the broadcast, it isn't shown for the lifter on
+the platform when the page opens, nor when the same lifter takes another attempt; a lifter called while the lights are
+up is introduced once they are gone. `&intro=0` turns it off, `&introSeconds=N` sets how long it stays.
+
 ### Operator controls
 
 | URL parameter    | Default         | Meaning                           |
