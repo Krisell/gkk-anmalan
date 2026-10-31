@@ -69,12 +69,13 @@
 import { ref, onMounted } from 'vue'
 import Slide from './Slide.vue'
 import KlubbrekordSlide from './KlubbrekordSlide.vue'
-import axios from 'axios'
 import { getISOWeek, getSwedishMonthName } from '../../utils/date'
+import { onValue, ref as databaseRef } from 'firebase/database'
+import { liveDatabase } from '../../live/remote/firebase.js'
+import axios from 'axios'
 
 let state = ref('loading')
 let slides = ref([])
-let slidesHash = ref('')
 let time = ref('')
 let seconds = ref('')
 let weekday = ref('')
@@ -103,22 +104,42 @@ updateDateTime()
 const timeInterval = setInterval(updateDateTime, 1000)
 
 onMounted(async () => {
-  const response = await axios.get('/slideshow/slides')
+  const response = await axios.get('/slideshow/snapshot')
   slides.value = response.data.slides.filter((slide) => slide.is_visible)
   // The latest club records are always shown as the first slide in the rotation.
-  slides.value.unshift({ type: 'Klubbrekord', data: {} })
-  slidesHash.value = response.data.hash
+  slides.value.unshift({ type: 'Klubbrekord', data: { records: response.data.records } })
   state.value = 'loaded'
 })
 
-setInterval(async () => {
-  const response = await axios.get('/slideshow/slides')
+// Reload when the slides, the club records or the slideshow's code change. The app publishes a version to Firebase's
+// Realtime Database on every such change and deploy (see App\Services\SlideshowSnapshot), so the screen gets it pushed
+// instead of polling the app, which would keep it from scaling to zero on Laravel Cloud.
+//
+// The first value is only remembered, not compared with the loaded data, so that a version that failed to publish can
+// never make the screen reload over and over. After a lost connection, Firebase sends the value again if it changed.
+//
+// A new build is published by a deploy command, which may run before the new code serves traffic, so the screen waits
+// a while before reloading for one. Otherwise it could reload into the old code and then not hear of the new one.
+const deployGrace = 2 * 60 * 1000
+let published
+let reloadTimer = null
 
-  // If Slideshow has changed, reload to get recent version
-  if (response.data.hash !== slidesHash.value) {
-    location.reload()
+onValue(databaseRef(liveDatabase(), 'slideshow'), (snapshot) => {
+  const next = snapshot.val() ?? {}
+
+  if (published !== undefined && next.version !== published.version && !reloadTimer) {
+    reloadTimer = setTimeout(
+      () => {
+        clearInterval(slideInterval)
+        clearInterval(timeInterval)
+        window.location.reload()
+      },
+      next.build !== published.build ? deployGrace : 0,
+    )
   }
-}, 10 * 1000)
+
+  published = next
+})
 
 function component(type) {
   if (type === 'Slide') {
@@ -131,10 +152,6 @@ function component(type) {
 
   return null
 }
-
-setInterval(() => {
-  axios.post('/slideshow/log', { id: localStorage.getItem('id') })
-}, 60 * 1000)
 
 const currentSlide = ref(0)
 const slideDuration = 30 * 1000
@@ -177,18 +194,6 @@ window.addEventListener('message', (event) => {
     }
   }
 })
-
-// Reload page after 10 minutes. This might break the slideshow if the device is currently
-// offline. That will be solved by adding a service worker for offline loading. It also looks
-// like Chrome automatically tries to reloads the page while in the offline state.
-setTimeout(
-  () => {
-    clearInterval(slideInterval)
-    clearInterval(timeInterval)
-    window.location.reload()
-  },
-  10 * 60 * 1000,
-)
 </script>
 
 <style scoped>

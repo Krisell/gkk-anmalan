@@ -156,7 +156,7 @@ show the status code and `X-Served-By`. `--watch 60` repeats every minute.
    `tail -f storage/logs/maintenance-requests.log`. Visitors should start showing up with `served-by=cloud`, and the
    One.com log should go quiet within about an hour (the old TTL), apart from bots and the odd resolver that ignores
    the TTL.
-7. Check the OAuth callbacks (Google, Microsoft, Fortnox) and the incoming webhooks (`WebhookController`).
+7. Check the OAuth callbacks (Google, Microsoft, Fortnox).
 
 Leave the old site in maintenance mode. It costs nothing, and anyone who still reaches it gets the maintenance page
 instead of writing to the old database.
@@ -171,10 +171,32 @@ After that, the data written on Cloud would have to be copied back by hand, so i
 - Raise the TTL on the new A records (for example to 3600) once everything is stable.
 - Remove the legacy deploy setup (`bin/update.sh`, the _Build and Release Assets_ workflow, the One.com part of
   README.md) and the `build-*` GitHub pre-releases.
-- Optionally bring back the Fortnox payment check schedule in `bootstrap/app.php`. Cloud can run the scheduler.
+- Set up scale to zero, see below.
 - Cancel One.com hosting only after Cloud has run fine for a while, and keep the domains and their DNS active (or move
   DNS elsewhere first). The Google mail and Mailgun records live there.
 - Remove `DatabaseMaintenanceMiddleware` and this document, if they are no longer useful.
+
+### Scale to zero
+
+Cloud stops billing for compute while the app sleeps. The app sleeps once it has had no request for the sleep timeout,
+and any request wakes it. To let it sleep:
+
+1. **Scheduler instead of the external webhook.** The scheduled tasks are in `bootstrap/app.php` (in UTC; the comment
+   there explains why). Turn on the **Scheduler** toggle on the App cluster and deploy. Cloud reads `schedule:list` at
+   deploy time and wakes the app when a task is due. Then turn off the external service that called
+   `/webhooks/scheduleRun` every minute (the route is gone and returns 404). Check the next morning in the logs that
+   the 06:20 and 06:30 UTC tasks ran.
+2. **Slideshow updates through Firebase.** The screen (`/slides-for-screen`) loads its data from the app once and then
+   subscribes to `slideshow/version` in Firebase's Realtime Database, and reloads when it changes. The app publishes
+   that version whenever slides or results change, daily at 06:20 UTC, and on deploy. Set it up:
+   - Set `FIREBASE_DATABASE_URL=https://goteborg-kraftsportklubb.firebaseio.com` on Cloud (production only: a local
+     `.env` with the production service account would otherwise write to the production database).
+   - Add `php artisan gkk:publish-slideshow` to the environment's deploy commands, so that a deploy reloads the open
+     screens with the new code.
+   - Deploy the database rules (`firebase deploy --only database`), which let the screen read `slideshow`.
+3. **Turn on Scale to Zero** on the App cluster (and on the database, if it has a hibernation setting), choose a sleep
+   timeout, and deploy. The scheduler needs the app to be awake for a few minutes after it wakes at 06:20 (the 06:30
+   task), so a timeout of 10 minutes or more lets those share one wake.
 
 ### Later (optional): DNS to Cloudflare
 

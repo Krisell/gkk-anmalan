@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Result;
+use App\Models\Slide;
+use App\Services\SlideshowSnapshot;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Request;
@@ -40,5 +43,12 @@ class AppServiceProvider extends ServiceProvider
         // PIN attempts for the live overlay's remote control, counted on their own: the overlay polls the feed from
         // the same network (the venue's), which must not use up the attempts.
         RateLimiter::for('live-control-pin', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
+
+        // The screen slideshow polls a published snapshot of the slides and club records (see SlideshowSnapshot).
+        Slide::saved(fn () => SlideshowSnapshot::publishSoon());
+        Slide::deleted(fn () => SlideshowSnapshot::publishSoon());
+        Result::saved(fn () => SlideshowSnapshot::publishSoon());
+        Result::deleted(fn () => SlideshowSnapshot::publishSoon());
+        Result::restored(fn () => SlideshowSnapshot::publishSoon());
     }
 }

@@ -63,16 +63,21 @@ return Application::configure(basePath: \dirname(__DIR__))
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {
-        // Due to php setting disable_functions, we cannot use the schedule:work command.
+        // Laravel Cloud wakes the app (scaled to zero) when a task is due, and the app then stays awake for the sleep
+        // timeout. Keep the tasks few and grouped, and avoid withoutOverlapping/onOneServer, whose cache lookups would
+        // also wake the database. Cloud reads the schedule at deploy time, so changes here need a deploy.
+        //
+        // The times are in UTC on purpose. Cloud stores `schedule:list` as it looks on deploy, which converts a
+        // Europe/Stockholm time with that day's offset. After the next daylight saving switch it would wake the app an
+        // hour off and the task would not run. In Swedish time these run an hour later in summer.
+        $schedule->command('gkk:notify-competition-deadlines')->dailyAt('06:20')->timezone('UTC');
 
-        // [2025-06-13 11:30:11] production.ERROR: The Process class relies on proc_open, which is not available
-        // on your PHP installation. {"exception":"[object] (Symfony\\Component\\Process\\Exception\\LogicException(code: 0):
-        // The Process class relies on proc_open, which is not available on your PHP installation. at
-        // /customers/9/a/3/goteborgkk.se/httpd.private/web/vendor/symfony/process/Process.php:149)
-        // $schedule->command('fortnox:verify-payment --all')->dailyAt('07:30')->timezone('Europe/Stockholm');
-        // $schedule->command('fortnox:verify-payment --all')->dailyAt('13:30')->timezone('Europe/Stockholm');
+        // Safety net in case a publish after a change failed. Runs in the same wake as the task above. (Cloud also runs
+        // it as a deploy command, so that a deploy reloads the open screens.)
+        $schedule->command('gkk:publish-slideshow')->dailyAt('06:20')->timezone('UTC');
 
-        // The current workaround is to run artisan commands directly in a webhook request cycle.
+        $schedule->command('fortnox:verify-payment --all')->dailyAt('06:30')->timezone('UTC');
+        $schedule->command('fortnox:verify-payment --all')->dailyAt('12:30')->timezone('UTC');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         Integration::handles($exceptions);

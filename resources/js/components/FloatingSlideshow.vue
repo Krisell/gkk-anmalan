@@ -41,7 +41,8 @@
       </div>
     </div>
 
-    <div v-show="viewState !== 'titlebar'" class="w-full grow overflow-hidden">
+    <!-- v-if, not v-show: a hidden iframe would still load and poll the slideshow for every member on /insidan -->
+    <div v-if="viewState !== 'titlebar'" class="w-full grow overflow-hidden">
       <iframe
         ref="slideshowFrame"
         src="/slides-for-screen"
@@ -107,9 +108,11 @@ export default {
     },
     minimize() {
       this.viewState = 'titlebar'
+      this.iframeLoaded = false
     },
     close() {
       this.viewState = 'titlebar'
+      this.iframeLoaded = false
     },
     nextSlide() {
       if (this.iframeLoaded) {

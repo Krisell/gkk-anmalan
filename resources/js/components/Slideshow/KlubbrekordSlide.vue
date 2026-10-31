@@ -53,22 +53,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
-
-const { title } = defineProps({
+const { title, records } = defineProps({
   title: {
     type: String,
     required: false,
     default: 'Senaste klubbrekorden',
   },
-})
-
-const records = ref([])
-
-onMounted(async () => {
-  const response = await axios.get('/slideshow/records')
-  records.value = response.data
+  // Part of the slideshow snapshot (see Slideshow.vue).
+  records: {
+    type: Array,
+    required: false,
+    default: () => [],
+  },
 })
 
 function genderLabel(gender) {

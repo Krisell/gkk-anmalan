@@ -35,7 +35,6 @@ use App\Http\Controllers\SignAgreementsController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\SignatureRequestAdminController;
 use App\Http\Controllers\SlideshowController;
-use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\EnsureAgreementsAreSignedMiddleware;
 use App\Http\Middleware\GrantedUserMiddleware;
@@ -270,8 +269,6 @@ Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(fu
     Route::get('disconnect', [FortnoxIntegrationController::class, 'disconnect'])->name('fortnox.disconnect');
 });
 
-Route::get('/webhooks/{action}', WebhookController::class)->name('webhook');
-
 Route::prefix('sign')->controller(SignatureController::class)->middleware('signed')->group(function () {
     Route::get('/{signer:token}', 'show')->name('sign.show');
     Route::post('/{signer:token}', 'store')->name('sign.store');
@@ -291,9 +288,8 @@ Route::prefix('live/control')->controller(LiveControlController::class)->group(f
 });
 
 Route::prefix('slideshow')->controller(SlideshowController::class)->group(function () {
-    Route::post('log', 'log');
     Route::get('slides', 'index');
-    Route::get('records', 'records');
+    Route::get('snapshot', 'snapshot')->name('slideshow.snapshot');
     Route::post('order', 'updateOrder')->middleware(['auth', AdminMiddleware::class]);
     Route::patch('slides/{slide}', 'update')->middleware(['auth', AdminMiddleware::class]);
     Route::post('slides', 'store')->middleware(['auth', AdminMiddleware::class]);

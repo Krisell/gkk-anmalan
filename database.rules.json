@@ -2,6 +2,9 @@
   "rules": {
     ".read": false,
     ".write": false,
+    "slideshow": {
+      ".read": true
+    },
     "live": {
       ".read": true,
       "control": {
