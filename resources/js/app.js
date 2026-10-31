@@ -40,7 +40,6 @@ import SignDocument from './components/SignDocument.vue'
 import AdminSignatureRequest from './components/AdminSignatureRequest.vue'
 import AdminSignatureRequests from './components/AdminSignatureRequests.vue'
 import LagSM from './components/LagSM.vue'
-import FloatingSlideshow from './components/FloatingSlideshow.vue'
 import PointsHighScore from './components/PointsHighScore.vue'
 
 window.axios = axios
@@ -107,7 +106,6 @@ app.component('GkkAdminCompetition', AdminCompetition)
 app.component('GkkAdminCompetitions', AdminCompetitions)
 app.component('GkkAdminPaymentTools', AdminPaymentTools)
 app.component('GkkAdminActivityLogs', AdminActivityLogs)
-app.component('GkkFloatingSlideshow', FloatingSlideshow)
 app.component('GkkSignDocument', SignDocument)
 app.component('GkkAdminSignatureRequest', AdminSignatureRequest)
 app.component('GkkAdminSignatureRequests', AdminSignatureRequests)

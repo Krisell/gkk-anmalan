@@ -14,5 +14,4 @@
     @endif
 @endauth
 
-<gkk-floating-slideshow :user='@json($user)'></gkk-floating-slideshow>
 @endsection

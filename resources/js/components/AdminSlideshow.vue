@@ -1,6 +1,12 @@
 <template>
   <div class="container mx-auto pl-6 -mt-12">
-    <p class="text-left -mt-6 text-3xl mb-4">Administrera Slideshow</p>
+    <div class="-mt-6 mb-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+      <p class="text-left text-3xl">Administrera Slideshow</p>
+      <a href="/slides-for-screen" target="_blank" class="text-gkk hover:underline">
+        <i class="fa fa-external-link mr-1"></i>
+        Öppna bildspelet i en ny flik
+      </a>
+    </div>
 
     <!-- Create new slide section -->
     <div class="rounded-sm shadow-sm bg-white p-6 mb-6">

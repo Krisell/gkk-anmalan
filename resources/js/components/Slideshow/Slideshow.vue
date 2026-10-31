@@ -1,7 +1,6 @@
 <template>
   <div
-    class="fixed inset-0 flex flex-col overflow-hidden select-none bg-linear-to-br from-slate-50 via-white to-slate-100"
-    :class="{ 'cursor-default': inIframe, 'cursor-none': !inIframe }"
+    class="fixed inset-0 flex flex-col overflow-hidden select-none cursor-none bg-linear-to-br from-slate-50 via-white to-slate-100"
   >
     <main class="relative flex-1 min-h-0">
       <Transition name="slideshow-fade">
@@ -82,7 +81,6 @@ let weekday = ref('')
 let day = ref('')
 let month = ref('')
 let weekNumber = ref('')
-let inIframe = window.self !== window.top
 
 function updateDateTime() {
   const now = new Date()
@@ -181,17 +179,6 @@ document.body.addEventListener('keydown', (e) => {
     nextSlide()
   } else if (e.key === 'ArrowLeft') {
     previousSlide()
-  }
-})
-
-// Listen for postMessage navigation from parent frame
-window.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'slideshow-control') {
-    if (event.data.action === 'next') {
-      nextSlide()
-    } else if (event.data.action === 'previous') {
-      previousSlide()
-    }
   }
 })
 </script>
