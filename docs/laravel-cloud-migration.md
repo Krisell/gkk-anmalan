@@ -63,6 +63,10 @@ AAAA records):
 - App connected to `Krisell/gkk-anmalan`, deploying from `master`, EU region.
 - Build: `composer install --no-dev`, `npm ci`, `npm run build`. Deploy: `php artisan migrate --force`.
 - Postgres 18 (matches `PG_IMAGE` in `bin/mysql-to-pg.sh` and the CI tests), attached to the environment.
+- The database is Laravel Serverless Postgres, which has no public access setting (unlike Laravel MySQL and RDS): it
+  is always reachable from the internet, protected by its long random password and TLS. There is no VPN or IP
+  allowlist either. Connect from TablePlus with _View credentials_ → _Open in database client_ on the database under
+  Resources, keep the credentials only there, and rotate the password in Cloud if it may have leaked.
 - Environment variables copied from the One.com `.env`: the same `APP_KEY`, Mailgun, Sentry, Fortnox, the
   Google/Microsoft OAuth keys. `DB_PREFIX` empty (the conversion script strips the `gkk_` prefix). Also
   `SERVED_BY=cloud`.
@@ -154,8 +158,7 @@ show the status code and `X-Served-By`. `--watch 60` repeats every minute.
    `tail -f storage/logs/maintenance-requests.log`. Visitors should start showing up with `served-by=cloud`, and the
    One.com log should go quiet within about an hour (the old TTL), apart from bots and the odd resolver that ignores
    the TTL.
-7. Turn off public access on the Cloud database.
-8. Check the OAuth callbacks (Google, Microsoft, Fortnox) and the incoming webhooks (`WebhookController`).
+7. Check the OAuth callbacks (Google, Microsoft, Fortnox) and the incoming webhooks (`WebhookController`).
 
 Leave the old site in maintenance mode. It costs nothing, and anyone who still reaches it gets the maintenance page
 instead of writing to the old database.
