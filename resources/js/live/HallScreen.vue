@@ -212,11 +212,20 @@ const judged = computed(() =>
 // The lifter card: shown when a new lifter is called to the platform, not for the lifter already there when the page
 // opens, nor when the same lifter takes another attempt. The lights take precedence: a lifter called while they are
 // up is introduced once they are gone.
+//
+// Powerlifting Live sometimes calls the next lifter a moment before the referee decision for the previous one reaches
+// us. So a newly called lifter is introduced only after INTRO_DELAY_MS, and not while the previous lifter's attempt
+// is still waiting for its result (overlayState's awaiting); lights arriving meanwhile take over instead, with the
+// card of the lifter being judged, and the new lifter is introduced after them.
 const INTRO_MS = (Number(params.get('introSeconds')) || 6) * 1000
+const INTRO_DELAY_MS = 3000
+const AWAITING_RECHECK_MS = 500
 const showIntros = flag('intro')
 const intro = shallowRef(null)
 let introducedLifterId = null
 let introTimer = null
+let pendingLifterId = null
+let pendingTimer = null
 
 watch([() => snapshot.value?.current ?? null, lights], ([current, lit]) => {
   if (!snapshot.value) {
@@ -227,10 +236,12 @@ watch([() => snapshot.value?.current ?? null, lights], ([current, lit]) => {
     return
   }
   if (lit) {
+    cancelPendingIntro()
     hideIntro()
     return
   }
   if (!current?.lifterId) {
+    cancelPendingIntro()
     return
   }
   if (intro.value?.lifterId === current.lifterId) {
@@ -239,18 +250,48 @@ watch([() => snapshot.value?.current ?? null, lights], ([current, lit]) => {
     return
   }
   if (showIntros && current.lifterId !== introducedLifterId) {
-    introducedLifterId = current.lifterId
-    intro.value = current
-    clearTimeout(introTimer)
-    introTimer = setTimeout(hideIntro, INTRO_MS)
+    if (pendingLifterId !== current.lifterId) {
+      cancelPendingIntro()
+      pendingLifterId = current.lifterId
+      pendingTimer = setTimeout(introducePending, INTRO_DELAY_MS)
+    }
+  } else {
+    cancelPendingIntro()
   }
 })
+
+function introducePending() {
+  const current = snapshot.value?.current
+  if (lights.value || !current?.lifterId || current.lifterId !== pendingLifterId) {
+    cancelPendingIntro()
+    return
+  }
+  // The previous lifter's result hasn't come yet: wait for it (the reducer gives up waiting after a few seconds).
+  const awaiting = overlayState.value.awaiting
+  if (awaiting && Date.now() < awaiting.until) {
+    pendingTimer = setTimeout(introducePending, AWAITING_RECHECK_MS)
+    return
+  }
+  pendingLifterId = null
+  introducedLifterId = current.lifterId
+  intro.value = current
+  clearTimeout(introTimer)
+  introTimer = setTimeout(hideIntro, INTRO_MS)
+}
+
+function cancelPendingIntro() {
+  clearTimeout(pendingTimer)
+  pendingLifterId = null
+}
 
 function hideIntro() {
   clearTimeout(introTimer)
   intro.value = null
 }
-onBeforeUnmount(() => clearTimeout(introTimer))
+onBeforeUnmount(() => {
+  clearTimeout(introTimer)
+  clearTimeout(pendingTimer)
+})
 
 const now = ref(Date.now())
 const ticker = setInterval(() => (now.value = Date.now()), 5000)
