@@ -35,6 +35,10 @@ class LiveOverlayController extends Controller
 
     private const SCORESHEET_MAX_AGE_SECONDS = 10;
 
+    // How much of the lifting order is passed on: the overlay uses the first two, the warm-up hall screen all of it
+    // (a group has at most about 20 lifters; the limit only guards against odd data).
+    private const UPCOMING_LIFTERS = 40;
+
     // The whole competition's scoresheet (every group, ~220 KB) is only fetched when a group's results are shown.
     private const RESULTS_CACHE_SECONDS = 30;
 
@@ -149,7 +153,7 @@ class LiveOverlayController extends Controller
         return [
             'next_lifters' => [
                 'info' => $data['next_lifters']['info'] ?? null,
-                'lifters' => \array_map(fn ($entry) => $this->trimEntry($entry), \array_slice($upcoming, 0, 3)),
+                'lifters' => \array_map(fn ($entry) => $this->trimEntry($entry), \array_slice($upcoming, 0, self::UPCOMING_LIFTERS)),
             ],
             'scoresheet' => $scoresheet,
             'decision' => $data['decision'],

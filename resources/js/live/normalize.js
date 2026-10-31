@@ -7,6 +7,7 @@
  *   group: string | null,
  *   current: Attempt | null,                 lifter on the platform (next in line)
  *   next: Attempt | null,                    lifter after that
+ *   order: [{ lifterId, name, team, discipline, attempt, weight }]   the lifting order, starting with current
  *   lastResult: Attempt | null,              most recently judged attempt, outcome set
  *   decision: Decision | null,               latest referee decision
  *   scoreboard: Scoreboard,                  the current group's results (for ?view=scoreboard)
@@ -44,9 +45,10 @@ export function normalizeFeed(raw) {
   const round = toInt(nextLifters.info?.current_round)
 
   // Entries marked next_group belong to the following group (the proxy removes them too).
-  const [currentEntry, nextEntry] = (Array.isArray(nextLifters.lifters) ? nextLifters.lifters : []).filter(
-    (entry) => entry && entry.next_group == null,
+  const entries = (Array.isArray(nextLifters.lifters) ? nextLifters.lifters : []).filter(
+    (entry) => entry && typeof entry === 'object' && entry.next_group == null,
   )
+  const [currentEntry, nextEntry] = entries
   const [lastEntry] = Array.isArray(scoresheet.last_lifts) ? scoresheet.last_lifts : []
 
   return {
@@ -54,6 +56,17 @@ export function normalizeFeed(raw) {
     group: toText(nextLifters.info?.current_group ?? scoresheet.info?.current_group),
     current: currentEntry ? normalizeCurrent(currentEntry, discipline, round) : null,
     next: nextEntry ? normalizeCurrent(nextEntry, discipline, null) : null,
+    order: entries.map((entry, index) => {
+      const {
+        lifterId,
+        name,
+        team,
+        discipline: d,
+        attempt,
+        weight,
+      } = normalizeCurrent(entry, discipline, index === 0 ? round : null)
+      return { lifterId, name, team, discipline: d, attempt, weight }
+    }),
     lastResult: lastEntry ? normalizeLastLift(lastEntry) : null,
     decision: normalizeDecision(raw?.decision),
     signals: normalizeSignals(raw?.referee_signals),

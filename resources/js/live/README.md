@@ -78,8 +78,15 @@ In the demo editor, choose _Resultatlista_ under _Läge_ to preview it.
 ### Warm-up hall screen
 
 `/live/overlay?view=hall&competition=<id>` is a page for a TV in the warm-up hall, not for OBS: an opaque full screen
-with the results list of the group on the platform (as above) and, below it in smaller text, the start order of the
-group that lifts next. Show it on the club's screen from the slideshow's live control (_Visa en webbsida_).
+with the whole lifting order at the top (_Nästa lyftare_, from `next_lifters`: the lifter on the platform first, five
+per line), the results list of the group on the platform (as above) and, below it in smaller text, the start order of
+the group that lifts next.
+
+Everything is always shown, also for groups of 20 lifters: the page is as high as its frame's shape allows (on the
+club's TV the slideshow's bar takes some of the height), the lines of the lifting order and the next group get lower
+as there are more of them, and when the results list's weight class headers don't fit, its heading gets smaller and
+the class moves to a column of its own (`fit` in `Scoreboard.vue`). With 20 lifters everywhere the rows of the
+results list get small (about 20 px on a 1080p TV); that is the price of showing everyone. Show it on the club's screen from the slideshow's live control (_Visa en webbsida_).
 
 The start order is Powerlifting Live's own "Nästa grupp" list (the `next_lifters_next_group` topic), served by
 `/live/next-group/{id}` (cached 5 s, polled every 10 s). It knows the schedule: when groups lift in turns (Grupp 01

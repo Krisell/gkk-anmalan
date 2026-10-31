@@ -3,7 +3,7 @@
     <div
       ref="board"
       class="board"
-      :class="{ 'strong-highlight': strongHighlight }"
+      :class="{ 'strong-highlight': strongHighlight, compact }"
       :style="{
         '--row-height': `${rowHeight}px`,
         '--columns': gridColumns,
@@ -25,6 +25,7 @@
           <div class="row columns">
             <div class="place">Plac.</div>
             <div>Lyftare</div>
+            <div v-if="compact">Klass</div>
             <div
               v-for="column in columns"
               :key="column.key"
@@ -50,6 +51,7 @@
                 <span class="name">{{ row.lifter.name ?? 'Okänd lyftare' }}</span>
                 <span v-if="row.lifter.team" class="team">{{ row.lifter.team }}</span>
               </div>
+              <div v-if="compact" class="class-label">{{ row.classLabel }}</div>
               <div v-for="column in columns" :key="column.key" class="cell" :class="cell(row.lifter, column).state">
                 {{ cell(row.lifter, column).label }}
               </div>
@@ -84,6 +86,10 @@ const props = defineProps({
   // Mark the lifter on the platform clearly (the warm-up hall screen, seen from across the room), instead of the
   // broadcast's subtle highlight.
   strongHighlight: { type: Boolean, default: false },
+  // Always fit the whole group in height (the warm-up hall screen; a group can have 20 lifters), ignoring listHeight:
+  // rows may get smaller, and when the weight class headers don't fit, the heading gets smaller and the class is
+  // shown in a column of its own instead.
+  fit: { type: Boolean, default: false },
 })
 
 // What is shown. Normally the props, but when another group is chosen while the list is up, the list folds up, and
@@ -140,17 +146,22 @@ const columns = computed(() => {
   )
 })
 
-const gridColumns = computed(() => `64px minmax(0, 1fr) repeat(${columns.value.length}, 112px) 116px 136px`)
+const gridColumns = computed(
+  () => `64px minmax(0, 1fr) ${compact.value ? '260px ' : ''}repeat(${columns.value.length}, 112px) 116px 136px`,
+)
+
+const classLabel = (lifter) =>
+  [formatWeightClass(lifter.weightClass), lifter.category].filter(Boolean).join(' · ') || null
 
 // Lifters in Powerlifting Live's order, with a header whenever the weight class or category changes.
-const rows = computed(() => {
+const rowsWithHeaders = computed(() => {
   const result = []
   let previous = null
 
   for (const lifter of view.value.scoreboard.lifters) {
     const groupKey = `${lifter.weightClass}|${lifter.category}`
     if (groupKey !== previous) {
-      const header = [formatWeightClass(lifter.weightClass), lifter.category].filter(Boolean).join(' · ')
+      const header = classLabel(lifter)
       if (header) {
         result.push({ key: `header-${groupKey}-${result.length}`, header })
       }
@@ -162,10 +173,38 @@ const rows = computed(() => {
   return result
 })
 
-// Rows shrink when the group is large, so that the whole list always fits between the demo toolbar and the bottom.
-const rowHeight = computed(() =>
-  Math.max(26, Math.min(54, Math.floor(props.listHeight / Math.max(rows.value.length, 1)))),
+// With fit, the class headers are dropped (and the class shown in a column) when the rows would get smaller than this.
+const COMFORTABLE_ROW_HEIGHT = 32
+// With fit, the space for the rows: the height less the heading and column titles (smaller when compact), the
+// margins above and below (12 px each) and the spacing below the last row.
+const HEADING_HEIGHT = 108 + 46
+const COMPACT_HEADING_HEIGHT = 60 + 34
+const fitSpace = (heading) => props.height - heading - 2 * 12 - 10
+const compact = computed(
+  () => props.fit && rowsWithHeaders.value.length * COMFORTABLE_ROW_HEIGHT > fitSpace(HEADING_HEIGHT),
 )
+
+const rows = computed(() =>
+  compact.value
+    ? view.value.scoreboard.lifters.map((lifter, index) => ({
+        key: lifter.id ?? `lifter-${index}`,
+        lifter,
+        classLabel: classLabel(lifter),
+      }))
+    : rowsWithHeaders.value,
+)
+
+// Rows shrink when the group is large, so that the whole list always fits between the demo toolbar and the bottom.
+// With fit, the exact space is shared: each row also has a 1 px border, and each class header a 6 px margin.
+const rowHeight = computed(() => {
+  const count = Math.max(rows.value.length, 1)
+  if (!props.fit) {
+    return Math.max(26, Math.min(54, Math.floor(props.listHeight / count)))
+  }
+  const headers = rows.value.filter((row) => row.header).length
+  const space = fitSpace(compact.value ? COMPACT_HEADING_HEIGHT : HEADING_HEIGHT)
+  return Math.max(14, Math.min(54, Math.floor((space - headers * 6) / count) - 1))
+})
 
 // The list is placed where it ends up once fully folded down (centered on the stage), so that the heading slides
 // in at its final position and only the list grows below it. Measured from the content, which is laid out even
@@ -177,7 +216,8 @@ function placeBoard() {
   const heading = board.value?.querySelector('.heading')
   const list = board.value?.querySelector('.body-inner')
   if (heading && list) {
-    top.value = Math.max(40, Math.round((props.height - heading.offsetHeight - list.scrollHeight) / 2))
+    const margin = props.fit ? 12 : 40
+    top.value = Math.max(margin, Math.round((props.height - heading.offsetHeight - list.scrollHeight) / 2))
   }
 }
 
@@ -361,6 +401,34 @@ function cell(lifter, column) {
   padding: 0 32px;
 }
 
+.compact .brand {
+  padding: 6px 24px;
+}
+
+.compact .logo {
+  width: 48px;
+  height: 48px;
+  padding: 2px;
+}
+
+.compact .eyebrow {
+  font-size: 15px;
+}
+
+.compact .title {
+  font-size: 32px;
+}
+
+.compact .columns {
+  min-height: 34px;
+  font-size: 15px;
+}
+
+/* In the compact list the rows are small; the text takes more of their height. */
+.compact .lifter {
+  font-size: calc(var(--row-height) * 0.5);
+}
+
 .columns {
   min-height: 46px;
   font-family: var(--overlay-font);
@@ -453,6 +521,18 @@ function cell(lifter, column) {
 
 .team {
   color: var(--overlay-silver);
+}
+
+.class-label {
+  overflow: hidden;
+  color: var(--overlay-silver);
+  font-family: var(--overlay-font);
+  font-size: 1.05em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .cell {

@@ -1,6 +1,6 @@
 <template>
   <div class="hall">
-    <Stage>
+    <Stage :height="canvasHeight">
       <div v-if="!competition" class="notice">
         Ange tävling i adressen, t.ex. <code>/live/overlay?view=hall&amp;competition=3001</code>.
       </div>
@@ -8,21 +8,43 @@
       <div v-else-if="!snapshot" class="notice">Ansluter till Powerlifting Live…</div>
 
       <template v-else>
-        <div class="board-area" :style="{ height: `${boardHeight}px` }">
+        <!-- The whole lifting order of the group on the platform, in reading order over as many lines as it needs;
+             the lifter on the platform first, marked as in the list. -->
+        <section
+          v-if="order.length"
+          class="order"
+          :style="{ height: `${orderHeight}px`, '--row': `${orderLayout.rowHeight}px` }"
+        >
+          <span class="order-label">Nästa lyftare</span>
+          <ol class="order-list">
+            <li
+              v-for="(entry, index) in order"
+              :key="`${entry.lifterId}-${index}`"
+              class="order-entry"
+              :class="{ current: index === 0 }"
+            >
+              <span class="order-number">{{ index + 1 }}</span>
+              <span class="order-name">{{ entry.name ?? 'Okänd lyftare' }}</span>
+              <span class="order-weight">{{ formatWeight(entry.weight) }}</span>
+            </li>
+          </ol>
+        </section>
+
+        <div class="board-area" :style="{ top: `${orderHeight}px`, height: `${boardHeight}px` }">
           <Scoreboard
             :scoreboard="snapshot.scoreboard"
             :discipline="snapshot.discipline"
             :group="snapshot.group"
             :current-lifter-id="snapshot.current?.lifterId ?? null"
             :height="boardHeight"
-            :list-height="boardHeight - 260"
+            fit
             :width="1800"
             strong-highlight
           />
         </div>
 
         <!-- The start order of the group after, so that its lifters know when to start warming up. -->
-        <section v-if="next" class="next" :style="{ height: `${nextHeight}px` }">
+        <section v-if="next" class="next" :class="{ tight: nextLayout.tight }" :style="{ height: `${nextHeight}px` }">
           <header class="next-heading">
             <span class="next-label">Nästa grupp</span>
             <span class="next-title">{{
@@ -30,7 +52,14 @@
             }}</span>
             <span class="next-subtitle">Startordning{{ next.attempt > 1 ? ` – försök ${next.attempt}` : '' }}</span>
           </header>
-          <ol class="next-list" :style="{ '--rows': nextRows }">
+          <ol
+            class="next-list"
+            :style="{
+              '--rows': nextLayout.rows,
+              '--columns': nextLayout.columns,
+              '--row': `${nextLayout.rowHeight}px`,
+            }"
+          >
             <li v-for="(lifter, index) in next.lifters" :key="lifter.id ?? index" class="next-lifter">
               <span class="next-order">{{ index + 1 }}</span>
               <span class="next-who">
@@ -107,11 +136,42 @@ const snapshot = computed(() => feed?.snapshot.value ?? null)
 const next = computed(() => nextGroupFeed?.nextGroup.value ?? null)
 
 // The next group's lifters are listed in columns of up to 4 (5 for a large group), top to bottom, then left to right.
-const COLUMNS = 4
-const ROW_HEIGHT = 44
-const nextRows = computed(() => (next.value ? Math.min(5, Math.ceil(next.value.lifters.length / COLUMNS)) : 0))
-const nextHeight = computed(() => (next.value ? 96 + nextRows.value * ROW_HEIGHT : 0))
-const boardHeight = computed(() => 1080 - nextHeight.value)
+// A large group (up to 20 lifters, or more) gets more columns and tighter rows, so that everyone is always shown.
+const nextLayout = computed(() => {
+  const count = next.value?.lifters.length ?? 0
+  const columns = count <= 16 ? 4 : Math.min(6, Math.ceil(count / 4))
+  const rows = Math.ceil(count / columns)
+  const tight = rows > 3
+  return { columns, rows, tight, rowHeight: tight ? 30 : 36, chrome: tight ? 60 : 80 }
+})
+const nextHeight = computed(() =>
+  next.value ? nextLayout.value.chrome + nextLayout.value.rows * nextLayout.value.rowHeight : 0,
+)
+
+// The lifting order at the top: everyone in it (a group can have 20 lifters), five per line, lines getting lower as
+// they get more.
+const ORDER_COLUMNS = 5
+const order = computed(() => snapshot.value?.order ?? [])
+const orderLayout = computed(() => {
+  const rows = Math.ceil(order.value.length / ORDER_COLUMNS)
+  return { rows, rowHeight: rows <= 1 ? 44 : rows === 2 ? 38 : 32 }
+})
+// Each line, the spacing between them (6 px), the padding (12 px above and below) and the border.
+const orderHeight = computed(() =>
+  order.value.length ? orderLayout.value.rows * (orderLayout.value.rowHeight + 6) - 6 + 24 + 4 : 0,
+)
+
+// The canvas is 1920 px wide and as high as the frame's shape allows (on the club's TV, the slideshow's bar takes some
+// of the height), so that no space is lost to bands at the sides or top.
+const viewport = ref({ width: window.innerWidth, height: window.innerHeight })
+const onResize = () => (viewport.value = { width: window.innerWidth, height: window.innerHeight })
+window.addEventListener('resize', onResize)
+onBeforeUnmount(() => window.removeEventListener('resize', onResize))
+const canvasHeight = computed(() =>
+  Math.min(1600, Math.max(760, Math.round((1920 * viewport.value.height) / Math.max(viewport.value.width, 1)))),
+)
+
+const boardHeight = computed(() => canvasHeight.value - orderHeight.value - nextHeight.value)
 
 // The lights: a decision stays up for DECISION_MS from when it arrives; before it, each lamp lights as its referee
 // decides. Only decisions arriving while the page is open are shown (the referee feed has none on load).
@@ -228,9 +288,94 @@ code {
   color: #ffffff;
 }
 
-.board-area {
+.order {
   position: absolute;
   top: 0;
+  left: 0;
+  width: 1920px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 12px 60px;
+  background: var(--overlay-panel-deep);
+  border-bottom: 4px solid var(--overlay-silver);
+}
+
+.order-label {
+  flex: none;
+  /* Centered on the first line. */
+  margin-top: calc((var(--row) - 32px) / 2);
+  padding: 2px 14px;
+  border-radius: 4px;
+  background: #ffffff;
+  color: var(--overlay-navy);
+  font-family: var(--overlay-font);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.order-list {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-auto-rows: var(--row);
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.order-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 0 14px;
+  border-radius: 6px;
+  font-family: var(--overlay-font);
+}
+
+/* The lifter on the platform: the same amber as their row in the list. */
+.order-entry.current {
+  background: rgba(246, 201, 69, 0.22);
+  box-shadow: inset 0 0 0 3px #f6c945;
+  color: #f6c945;
+}
+
+.order-number {
+  flex: none;
+  font-size: calc(var(--row) * 0.46);
+  font-weight: 600;
+  color: var(--overlay-silver);
+}
+
+.order-entry.current .order-number {
+  color: inherit;
+}
+
+.order-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: calc(var(--row) * 0.54);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.order-weight {
+  flex: none;
+  font-size: calc(var(--row) * 0.58);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.board-area {
+  position: absolute;
   left: 0;
   width: 1920px;
 }
@@ -241,7 +386,7 @@ code {
   bottom: 0;
   width: 1920px;
   box-sizing: border-box;
-  padding: 16px 60px 24px;
+  padding: 12px 60px 16px;
   background: var(--overlay-panel-deep);
   border-top: 4px solid var(--overlay-silver);
 }
@@ -250,9 +395,18 @@ code {
   display: flex;
   align-items: baseline;
   gap: 20px;
-  height: 52px;
+  height: 48px;
   font-family: var(--overlay-font);
   text-transform: uppercase;
+}
+
+/* A large next group: less space around its heading, for more rows. */
+.next.tight {
+  padding: 6px 60px 10px;
+}
+
+.next.tight .next-heading {
+  height: 40px;
 }
 
 .next-label {
@@ -260,18 +414,18 @@ code {
   border-radius: 4px;
   background: #ffffff;
   color: var(--overlay-navy);
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.12em;
 }
 
 .next-title {
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 700;
 }
 
 .next-subtitle {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: 0.14em;
   color: var(--overlay-silver);
@@ -280,8 +434,8 @@ code {
 .next-list {
   display: grid;
   grid-auto-flow: column;
-  grid-template-rows: repeat(var(--rows), 44px);
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows), var(--row));
+  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
   column-gap: 40px;
   margin: 0;
   padding: 0;
@@ -294,8 +448,8 @@ code {
   gap: 12px;
   min-width: 0;
   border-bottom: 1px solid rgba(166, 172, 185, 0.14);
-  line-height: 43px;
-  font-size: 24px;
+  line-height: calc(var(--row) - 1px);
+  font-size: calc(var(--row) * 0.55);
 }
 
 .next-order {

@@ -89,6 +89,26 @@ describe('normalizeFeed', () => {
     expect(normalizeFeed(raw).next).toMatchObject({ name: 'Same Group', weight: 140 })
   })
 
+  it('reads the lifting order, starting with the lifter on the platform', () => {
+    const raw = feed()
+    raw.next_lifters.lifters.push(
+      { weight: '200.0', next_group: 'Grupp 02', lifter: { id: '2', name: 'Next Group' } },
+      { weight: '140.0', attempt: '2', lift: 'SQ2', lifter: { id: '3', name: 'Same Group', team: 'Täby AK' } },
+    )
+
+    const { order, current } = normalizeFeed(raw)
+    expect(order).toHaveLength(2)
+    expect(order[0]).toMatchObject({ lifterId: current.lifterId, name: current.name, weight: current.weight })
+    expect(order[1]).toEqual({
+      lifterId: '3',
+      name: 'Same Group',
+      team: 'Täby AK',
+      discipline: 'SQ',
+      attempt: 2,
+      weight: 140,
+    })
+  })
+
   it('reads the attempt clock as seconds left, and nothing when it is stopped', () => {
     expect(normalizeFeed(feed({ clock: { clock: 42 } })).clock).toBe(42)
     expect(normalizeFeed(feed({ clock: { clock: 0 } })).clock).toBeNull()
@@ -171,6 +191,7 @@ describe('normalizeFeed', () => {
       group: 'Grupp 06',
       current: null,
       next: null,
+      order: [],
       lastResult: null,
       decision: null,
       signals: null,
@@ -185,6 +206,7 @@ describe('normalizeFeed', () => {
       group: null,
       current: null,
       next: null,
+      order: [],
       lastResult: null,
       decision: null,
       signals: null,

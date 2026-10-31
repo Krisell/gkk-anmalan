@@ -1,23 +1,29 @@
 <template>
   <div class="viewport">
-    <div class="stage" :style="{ transform: `translate(-50%, -50%) scale(${scale})` }">
+    <div class="stage" :style="{ height: `${height}px`, transform: `translate(-50%, -50%) scale(${scale})` }">
       <slot />
     </div>
   </div>
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-// Everything is laid out on a fixed 1920×1080 canvas and scaled to fit the browser source.
+// Everything is laid out on a 1920 px wide canvas (1080 px high unless the page asks for another height, as the
+// warm-up hall screen does to fill its frame) and scaled to fit the browser source.
 const WIDTH = 1920
-const HEIGHT = 1080
+
+const props = defineProps({
+  height: { type: Number, default: 1080 },
+})
 
 const scale = ref(1)
 
 function resize() {
-  scale.value = Math.min(window.innerWidth / WIDTH, window.innerHeight / HEIGHT)
+  scale.value = Math.min(window.innerWidth / WIDTH, window.innerHeight / props.height)
 }
+
+watch(() => props.height, resize)
 
 onMounted(() => {
   resize()
