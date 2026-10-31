@@ -186,7 +186,12 @@ const rows = computed(() =>
 }
 
 .name {
-  margin-top: 6px;
+  /*
+    Room above the capitals for the dots and rings of Å, Ä and Ö, which the tight line height and the clipping (for
+    the ellipsis of long names) would otherwise cut off; the negative margin keeps the card's layout unchanged.
+  */
+  margin-top: calc(6px - 0.14em);
+  padding-top: 0.14em;
   font-family: var(--overlay-font);
   font-size: 92px;
   font-weight: 700;
