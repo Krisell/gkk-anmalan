@@ -23,6 +23,20 @@
           />
         </Transition>
       </template>
+
+      <!-- A web page shown instead of the slideshow, from the live control, until it is taken down. -->
+      <Transition name="slideshow-fade">
+        <iframe
+          v-if="control.page"
+          :key="control.page.id"
+          :src="control.page.url"
+          class="absolute inset-0 z-10 w-full h-full border-0 bg-white"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+          allow="autoplay; fullscreen"
+          referrerpolicy="no-referrer"
+          title="Webbsida"
+        ></iframe>
+      </Transition>
     </main>
 
     <!-- A message from the live control (/admin/slideshow/live), shown until it is taken down. -->
@@ -37,6 +51,7 @@
     </Transition>
 
     <footer
+      v-show="!control.page"
       class="relative shrink-0 h-[clamp(2.5rem,9vh,7rem)] bg-gkk text-white grid grid-cols-[1fr_auto_1fr] items-center gap-[2vw] px-[2.5vw]"
     >
       <div class="absolute top-0 inset-x-0 h-[0.5vh] min-h-[3px] bg-white/10">
@@ -83,7 +98,7 @@ import { getISOWeek, getSwedishMonthName } from '../../utils/date'
 import { onValue, ref as databaseRef } from 'firebase/database'
 import { liveDatabase } from '../../live/remote/firebase.js'
 import axios from 'axios'
-import { slideKey, slideLabel, useSlideshowRemote } from './remote.js'
+import { PAGE_KEY, pageLabel, slideKey, slideLabel, useSlideshowRemote } from './remote.js'
 
 let state = ref('loading')
 let slides = ref([])
@@ -169,7 +184,8 @@ const slideDuration = 30 * 1000
 const slideCycle = ref(0)
 let slideInterval = null
 
-// The live control (/admin/slideshow/live): pause the rotation, hold a slide, show a message, step or reload.
+// The live control (/admin/slideshow/live): pause the rotation, hold a slide, show a message or a web page, step or
+// reload.
 const { control, report } = useSlideshowRemote({
   onCommand: ({ type }) => {
     if (type === 'next') {
@@ -185,8 +201,9 @@ const { control, report } = useSlideshowRemote({
 const heldIndex = computed(() =>
   control.value.slide ? slides.value.findIndex((slide) => slideKey(slide) === control.value.slide) : -1,
 )
-// The rotation stops while paused, or while a slide is held (as long as that slide is still in the slideshow).
-const held = computed(() => control.value.paused || heldIndex.value >= 0)
+// The rotation stops while paused, while a slide is held (as long as that slide is still in the slideshow), or while a
+// web page is shown instead.
+const held = computed(() => control.value.paused || heldIndex.value >= 0 || !!control.value.page)
 
 watch([heldIndex, held], () => {
   if (heldIndex.value >= 0) {
@@ -195,9 +212,11 @@ watch([heldIndex, held], () => {
   restartInterval()
 })
 
-watch([currentSlide, slides, held], () => {
+watch([currentSlide, slides, held, () => control.value.page], () => {
   const slide = slides.value[currentSlide.value]
-  if (slide) {
+  if (control.value.page) {
+    report({ slide: PAGE_KEY, showing: pageLabel(control.value.page.url), held: true })
+  } else if (slide) {
     report({ slide: slideKey(slide), showing: slideLabel(slide), held: held.value })
   }
 })

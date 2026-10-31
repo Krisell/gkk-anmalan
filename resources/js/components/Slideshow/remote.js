@@ -16,7 +16,8 @@ import { liveDatabase } from '../../live/remote/firebase.js'
  * Live control of the screen slideshow (/slides-for-screen) from /admin/slideshow/live, through Firebase's Realtime
  * Database under slideshow/ (see database.rules.json), in the same way as the live overlay's remote control:
  *
- * - control: settings that persist until changed (paused, a slide held on screen, a message),
+ * - control: settings that persist until changed (paused, a slide held on screen, a message, a web page shown instead
+ *   of the slideshow),
  * - commands: one-off actions ({ type, at } with the server time it was given),
  * - presence/{session}: written by each open screen ({ at, slide, showing, held }), so the admin page can show which
  *   screens are on and what they show,
@@ -37,6 +38,36 @@ const HEARTBEAT_MS = 30000
 
 export const RECORDS_KEY = 'records'
 
+// What a screen reports as its slide while it shows a web page instead of the slideshow.
+export const PAGE_KEY = 'page'
+export const PAGE_URL_MAX_LENGTH = 2000
+
+/**
+ * A web page address that can be shown on the screen, or null. Only https: the screen's own page is served over https,
+ * and the browser blocks http pages inside it. Anything else (javascript:, data:, …) is never shown.
+ */
+export function pageUrl(value) {
+  const input = typeof value === 'string' ? value.trim() : ''
+  if (!input || input.length > PAGE_URL_MAX_LENGTH) {
+    return null
+  }
+  try {
+    const url = new URL(/^[a-z][a-z0-9+.-]*:/i.test(input) ? input : `https://${input}`)
+    return url.protocol === 'https:' && url.hostname ? url.href : null
+  } catch {
+    return null
+  }
+}
+
+export function pageLabel(url) {
+  try {
+    const { hostname, pathname } = new URL(url)
+    return `Webbsida: ${hostname}${pathname === '/' ? '' : pathname}`.slice(0, 200)
+  } catch {
+    return 'Webbsida'
+  }
+}
+
 // A stable key for a slide in the rotation: the club records slide has no id of its own.
 export function slideKey(slide) {
   return slide?.type === 'Klubbrekord' ? RECORDS_KEY : `slide-${slide?.id}`
@@ -54,11 +85,13 @@ const text = (value, max) => (typeof value === 'string' && value.trim() ? value.
 export function normalizeControl(raw) {
   const control = raw && typeof raw === 'object' ? raw : {}
   const message = text(control.message?.text, MESSAGE_MAX_LENGTH)
+  const url = pageUrl(control.page?.url)
 
   return {
     paused: control.paused === true,
     slide: typeof control.slide === 'string' && /^(records|slide-\d{1,9})$/.test(control.slide) ? control.slide : null,
     message: message ? { id: String(control.message.id ?? message), text: message } : null,
+    page: url ? { id: String(control.page.id ?? url), url } : null,
   }
 }
 

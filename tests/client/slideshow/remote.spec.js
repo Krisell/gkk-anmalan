@@ -5,15 +5,24 @@ import {
   isFreshCommand,
   normalizeControl,
   onlineScreens,
+  pageLabel,
+  pageUrl,
   slideKey,
   slideLabel,
 } from '../../../resources/js/components/Slideshow/remote.js'
 
 describe('normalizeControl', () => {
   it('rotates as usual when nothing has been set', () => {
-    const rotating = { paused: false, slide: null, message: null }
+    const rotating = { paused: false, slide: null, message: null, page: null }
     expect(normalizeControl(null)).toEqual(rotating)
-    expect(normalizeControl({ paused: 'yes', slide: 'slide-x', message: { text: '   ' } })).toEqual(rotating)
+    expect(
+      normalizeControl({
+        paused: 'yes',
+        slide: 'slide-x',
+        message: { text: '   ' },
+        page: { url: 'javascript:alert(1)' },
+      }),
+    ).toEqual(rotating)
   })
 
   it('reads what the live control saved', () => {
@@ -22,6 +31,7 @@ describe('normalizeControl', () => {
         paused: true,
         slide: 'slide-12',
         message: { id: 'm1', text: 'Stänger 21!' },
+        page: null,
       },
     )
     expect(normalizeControl({ slide: 'records' }).slide).toBe('records')
@@ -29,6 +39,33 @@ describe('normalizeControl', () => {
 
   it('cuts long messages', () => {
     expect(normalizeControl({ message: { text: 'x'.repeat(500) } }).message.text).toHaveLength(120)
+  })
+})
+
+describe('web pages', () => {
+  it('shows only https pages', () => {
+    expect(pageUrl(' https://se.powerliftinglive.com/screen?id=3001 ')).toBe(
+      'https://se.powerliftinglive.com/screen?id=3001',
+    )
+    expect(pageUrl('se.powerliftinglive.com')).toBe('https://se.powerliftinglive.com/')
+    expect(pageUrl('http://example.com')).toBeNull()
+    expect(pageUrl('javascript:alert(1)')).toBeNull()
+    expect(pageUrl('data:text/html,<p>hi</p>')).toBeNull()
+    expect(pageUrl('https://')).toBeNull()
+    expect(pageUrl(`https://example.com/${'x'.repeat(2000)}`)).toBeNull()
+    expect(pageUrl(42)).toBeNull()
+  })
+
+  it('reads the page the live control saved', () => {
+    expect(normalizeControl({ page: { id: 'p1', url: 'https://example.com/a' } }).page).toEqual({
+      id: 'p1',
+      url: 'https://example.com/a',
+    })
+  })
+
+  it('names a page by its address', () => {
+    expect(pageLabel('https://example.com/')).toBe('Webbsida: example.com')
+    expect(pageLabel('https://example.com/live/3001?x=1')).toBe('Webbsida: example.com/live/3001')
   })
 })
 

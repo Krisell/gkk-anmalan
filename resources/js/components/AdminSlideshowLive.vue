@@ -25,7 +25,7 @@
         <ul v-if="screens.length" class="mt-3 space-y-1 text-gray-700">
           <li v-for="(screen, index) in screens" :key="index">
             Visar <span class="font-medium">{{ screen.showing || '…' }}</span>
-            <span v-if="screen.held" class="text-gray-500"> · står still</span>
+            <span v-if="screen.held && screen.slide !== PAGE_KEY" class="text-gray-500"> · står still</span>
           </li>
         </ul>
         <p v-else class="mt-2 text-gray-600">Öppna bildspelet på skärmen för att styra det härifrån.</p>
@@ -45,7 +45,7 @@
           </button>
           <button
             :class="current.paused ? activeButtonClass : buttonClass"
-            :disabled="!!current.slide"
+            :disabled="!!current.slide || !!current.page"
             @click="save({ paused: !current.paused })"
           >
             <i class="fa mr-2" :class="current.paused ? 'fa-play' : 'fa-pause'"></i>
@@ -64,7 +64,10 @@
       <!-- Hold a slide. -->
       <div class="rounded-sm shadow-sm bg-white p-6 mb-6">
         <h2 class="text-xl font-semibold mb-1">Visa en slide</h2>
-        <p class="mb-4 text-sm text-gray-600">Skärmen stannar på sliden tills du släpper den.</p>
+        <p class="mb-4 text-sm text-gray-600">
+          Skärmen stannar på sliden tills du släpper den.
+          <span v-if="current.page">Just nu visas en webbsida i stället, se nedan.</span>
+        </p>
         <p v-if="!slides.length" class="text-gray-600">Laddar slides…</p>
         <ul class="divide-y divide-gray-200">
           <li v-for="slide in slides" :key="slideKey(slide)" class="flex items-center gap-4 py-3">
@@ -122,6 +125,42 @@
         </form>
         <p v-if="current.message" class="mt-3 text-gray-700">På skärmen: ”{{ current.message.text }}”</p>
       </div>
+
+      <!-- A web page instead of the slideshow. -->
+      <div class="rounded-sm shadow-sm bg-white p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-1">Visa en webbsida</h2>
+        <p class="mb-4 text-sm text-gray-600">
+          Visas på hela skärmen i stället för bildspelet tills du går tillbaka. Ett meddelande visas fortfarande längst
+          ner. Vissa webbplatser tillåter inte att visas inuti en annan sida och blir då tomma – prova sidan innan den
+          behövs.
+        </p>
+        <form class="flex flex-wrap gap-3" @submit.prevent="showPage">
+          <input
+            v-model="pageDraft"
+            type="url"
+            inputmode="url"
+            :maxlength="PAGE_URL_MAX_LENGTH"
+            placeholder="https://se.powerliftinglive.com/…"
+            class="min-w-0 flex-1 basis-64 appearance-none rounded-sm px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:border-blue-300"
+          />
+          <button :class="buttonClass" :disabled="!pageUrl(pageDraft)">Visa</button>
+        </form>
+        <p v-if="pageDraft.trim() && !pageUrl(pageDraft)" class="mt-2 text-sm text-red-700">
+          Ange en adress som börjar med https://
+        </p>
+        <div v-if="current.page" class="mt-4 flex flex-wrap items-center gap-3">
+          <p class="min-w-0 flex-1 basis-64 text-gray-700">
+            På skärmen:
+            <a :href="current.page.url" target="_blank" rel="noopener" class="text-gkk break-all hover:underline">
+              {{ current.page.url }}
+            </a>
+          </p>
+          <button :class="activeButtonClass" class="shrink-0" @click="save({ page: null })">
+            <i class="fa fa-undo mr-2"></i>
+            Tillbaka till bildspelet
+          </button>
+        </div>
+      </div>
     </template>
 
     <p v-if="error" class="mb-6 rounded-sm bg-red-50 p-4 text-red-700">{{ error }}</p>
@@ -136,7 +175,16 @@ import { signInWithCustomToken } from 'firebase/auth'
 import { onValue, push, ref as databaseRef, serverTimestamp, update } from 'firebase/database'
 import { liveAuth } from '../live/remote/auth.js'
 import { liveDatabase } from '../live/remote/firebase.js'
-import { MESSAGE_MAX_LENGTH, normalizeControl, onlineScreens, slideKey, slideLabel } from './Slideshow/remote.js'
+import {
+  MESSAGE_MAX_LENGTH,
+  PAGE_KEY,
+  PAGE_URL_MAX_LENGTH,
+  normalizeControl,
+  onlineScreens,
+  pageUrl,
+  slideKey,
+  slideLabel,
+} from './Slideshow/remote.js'
 
 const { jwt } = defineProps({
   // The admin's Firebase sign-in (App\Firebase::makeAdminJwt), which database.rules.json lets control the slideshow.
@@ -161,6 +209,7 @@ const presence = ref({})
 const now = ref(Date.now())
 const slides = ref([])
 const draft = ref('')
+const pageDraft = ref('')
 
 let unsubscribes = []
 let ticker = null
@@ -229,6 +278,14 @@ function showMessage() {
   if (text) {
     void save({ message: { id: Date.now().toString(36), text } })
     draft.value = ''
+  }
+}
+
+function showPage() {
+  const url = pageUrl(pageDraft.value)
+  if (url) {
+    void save({ page: { id: Date.now().toString(36), url } })
+    pageDraft.value = ''
   }
 }
 </script>
