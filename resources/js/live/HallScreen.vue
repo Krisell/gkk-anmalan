@@ -50,7 +50,7 @@
           <LifterIntro v-if="intro" :key="intro.lifterId" :attempt="intro" class="hall-intro" />
         </Transition>
 
-        <!-- The referee lights, very large at the top: each lamp as its referee decides, then the decision. -->
+        <!-- The referee lights, very large in the middle of the screen: each lamp as its referee decides, then the decision. -->
         <Transition name="lights">
           <div v-if="lights" class="lights">
             <RefereePanel :lights="lights" large />
@@ -79,7 +79,7 @@ import { useNextGroup } from './useNextGroup.js'
 /**
  * The warm-up hall screen (/live/overlay?view=hall&competition=…): the results list of the group on the platform, as
  * on the broadcast, with the start order of the group after it below. Meant for a TV, e.g. shown from the slideshow's
- * live control (/admin/slideshow/live → Visa en webbsida). The referee lights are shown very large at the top, as on
+ * live control (/admin/slideshow/live → Visa en webbsida). The referee lights are shown very large in the middle, as on
  * Powerlifting Live's own screens (?lights=0 turns them off), and a new lifter on the platform gets the broadcast's
  * large lifter card for a few seconds (?intro=0 turns it off, ?introSeconds=N sets how long).
  */
@@ -356,8 +356,7 @@ code {
   z-index: 2;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 60px;
+  align-items: center;
   background: rgba(15, 22, 44, 0.45);
 }
 

@@ -14,7 +14,7 @@
 defineProps({
   // [left, center, right]: a light ({ good, cards }) per referee who has decided, null for one who hasn't yet.
   lights: { type: Array, required: true },
-  // Very large, placed by the parent (the warm-up hall screen shows them at the top), instead of in the corner.
+  // Very large, placed by the parent (the warm-up hall screen shows them in the middle), instead of in the corner.
   large: { type: Boolean, default: false },
 })
 

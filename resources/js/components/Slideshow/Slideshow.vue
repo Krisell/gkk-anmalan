@@ -50,8 +50,8 @@
       </div>
     </Transition>
 
+    <!-- Kept while a web page is shown, so the screen still has the date and time. -->
     <footer
-      v-show="!control.page"
       class="relative shrink-0 h-[clamp(2.5rem,9vh,7rem)] bg-gkk text-white grid grid-cols-[1fr_auto_1fr] items-center gap-[2vw] px-[2.5vw]"
     >
       <div class="absolute top-0 inset-x-0 h-[0.5vh] min-h-[3px] bg-white/10">
@@ -75,7 +75,7 @@
 
       <div class="flex items-center gap-[0.6vw]">
         <span
-          v-for="(slide, index) in slides.length > 1 ? slides : []"
+          v-for="(slide, index) in slides.length > 1 && !control.page ? slides : []"
           :key="index"
           class="h-[1vh] min-h-1.5 rounded-full transition-all duration-500"
           :class="currentSlide == index ? 'w-[2.5vw] bg-white' : 'w-[1vh] min-w-1.5 bg-white/35'"

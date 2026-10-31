@@ -87,7 +87,7 @@ squat, Grupp 02 squat, Grupp 01 bench, …) the next group can be the other grou
 of the same group, and the list says which group and discipline. It is hidden during the last block. When the data
 is more than 30 s old the page keeps showing it, with a red "Ej uppdaterat sedan …" note, rather than going blank.
 
-The referee lights are shown very large at the top of the screen, as on Powerlifting Live's own screens, from the same
+The referee lights are shown very large in the middle of the screen, as on Powerlifting Live's own screens, from the same
 live referee feed as the broadcast: each lamp lights as its referee decides, and the decision stays up for 10 s.
 `&lights=0` turns them off.
 

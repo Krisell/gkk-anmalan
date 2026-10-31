@@ -130,9 +130,9 @@
       <div class="rounded-sm shadow-sm bg-white p-6 mb-6">
         <h2 class="text-xl font-semibold mb-1">Visa en webbsida</h2>
         <p class="mb-4 text-sm text-gray-600">
-          Visas på hela skärmen i stället för bildspelet tills du går tillbaka. Ett meddelande visas fortfarande längst
-          ner. Vissa webbplatser tillåter inte att visas inuti en annan sida och blir då tomma – prova sidan innan den
-          behövs.
+          Visas i stället för bildspelet tills du går tillbaka. Datum, klocka och ett ev. meddelande visas fortfarande
+          längst ner. Vissa webbplatser tillåter inte att visas inuti en annan sida och blir då tomma – prova sidan
+          innan den behövs.
         </p>
         <form class="flex flex-wrap gap-3" @submit.prevent="showPage">
           <input
