@@ -14,10 +14,10 @@ beforeEach(function () {
     ]);
 });
 
-test('an administrator can open the live control with an admin sign-in', function () {
+test('an administrator can open the slideshow page with an admin sign-in', function () {
     $admin = loginAdmin();
 
-    $response = $this->get('/admin/slideshow/live')->assertOk()->assertSee('gkk-admin-slideshow-live', false);
+    $response = $this->get('/admin/slideshow')->assertOk()->assertSee('gkk-admin-slideshow', false);
 
     \preg_match("/:jwt='\"([^\"]+)\"'/", $response->getContent(), $match);
     $claims = JWT::decode($match[1], new Key($this->publicKey, 'RS256'));
@@ -27,9 +27,17 @@ test('an administrator can open the live control with an admin sign-in', functio
         ->and($claims->uid)->toBe($admin->id);
 });
 
-test('members and guests cannot open the live control', function () {
+test('the old live control address leads to the slideshow page', function () {
+    loginAdmin();
+
+    $this->get('/admin/slideshow/live')->assertRedirect('/admin/slideshow');
+});
+
+test('members and guests cannot open the slideshow page', function () {
+    $this->get('/admin/slideshow')->assertRedirect();
     $this->get('/admin/slideshow/live')->assertRedirect();
 
     login();
+    $this->get('/admin/slideshow')->assertUnauthorized();
     $this->get('/admin/slideshow/live')->assertUnauthorized();
 });

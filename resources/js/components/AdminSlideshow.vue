@@ -1,418 +1,472 @@
 <template>
   <div class="mx-auto max-w-[1600px] px-4 pb-12 lg:px-8">
-    <Breadcrumbs class="mb-4" title="Bildspelet" />
-
-    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
-      <p class="max-w-2xl text-gray-600">
-        Slides som visas på skärmen i lokalen, i den här ordningen, 30 sekunder var. Dra i handtaget till vänster för
-        att ändra ordningen.
-      </p>
-      <div class="flex flex-wrap gap-3">
-        <a
-          href="/admin/slideshow/live"
-          class="inline-flex items-center gap-2 rounded-lg bg-gkk px-4 py-2.5 font-medium text-white shadow-sm transition hover:bg-gkk-light"
-        >
-          <SlidersHorizontal class="size-4" />
-          Styr bildspelet
-        </a>
-        <a
-          href="/slides-for-screen"
-          target="_blank"
-          class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 font-medium text-gkk shadow-sm ring-1 ring-gray-200 transition hover:bg-gray-50"
-        >
-          <ExternalLink class="size-4" />
-          Öppna bildspelet
-        </a>
-      </div>
-    </div>
-
-    <div class="grid items-start gap-8 xl:grid-cols-[minmax(0,1fr)_26rem]">
-      <!-- The slides, in the screen's order. -->
-      <section class="min-w-0">
-        <div class="mb-3 flex items-baseline justify-between">
-          <h2 class="text-lg font-semibold text-gkk">Slides</h2>
-          <span class="text-sm text-gray-500">{{ visibleCount }} av {{ slides.length + 1 }} visas</span>
-        </div>
-
-        <!-- The club records are always first, and automatic. -->
-        <div class="mb-3 flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm sm:gap-4 ring-1 ring-gray-200/70">
-          <div class="flex w-8 shrink-0 justify-center text-gray-300" title="Kan inte flyttas">
-            <GripVertical class="size-5 opacity-0" />
-          </div>
-          <span class="hidden w-5 shrink-0 sm:block text-center text-sm font-semibold text-gray-400">1</span>
-          <SlidePreview records class="w-28 shrink-0 rounded-lg ring-1 ring-gray-200 sm:w-56" />
-          <div class="min-w-0 flex-1">
-            <p class="font-medium text-gray-900">Senaste klubbrekorden</p>
-            <p class="text-sm text-gray-500">Visas alltid först och uppdateras av sig själv från klubbrekorden.</p>
-          </div>
-          <span
-            class="hidden shrink-0 items-center gap-1.5 rounded-full bg-gkk/10 px-2.5 py-1 text-xs font-medium text-gkk sm:inline-flex"
-          >
-            <Sparkles class="size-3.5" />
-            Automatisk
-          </span>
-        </div>
-
-        <p v-if="loading" class="rounded-xl bg-white p-6 text-center text-gray-500 shadow-sm ring-1 ring-gray-200/70">
-          Laddar slides…
-        </p>
-        <p
-          v-else-if="!slides.length"
-          class="rounded-xl border-2 border-dashed border-gray-300 p-8 text-center text-gray-500"
-        >
-          Inga egna slides än. Skapa den första med formuläret.
-        </p>
-
-        <ol ref="list" class="space-y-3">
-          <li
-            v-for="slide in slides"
-            :key="slide.id"
-            class="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm sm:gap-4 ring-1 ring-gray-200/70"
-            :class="{ 'bg-gray-50/80': !slide.is_visible }"
-          >
-            <button
-              type="button"
-              class="drag-handle flex h-16 w-8 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-gray-400 transition hover:bg-gray-100 hover:text-gkk active:cursor-grabbing"
-              aria-label="Dra för att flytta"
-              title="Dra för att flytta"
-            >
-              <GripVertical class="size-5" />
-            </button>
-
-            <span class="hidden w-5 shrink-0 sm:block text-center text-sm font-semibold text-gray-400">
-              {{ slide.is_visible ? positionOf(slide) : '–' }}
-            </span>
-
-            <button
-              type="button"
-              class="w-28 shrink-0 overflow-hidden rounded-lg ring-1 ring-gray-200 transition hover:ring-2 hover:ring-gkk sm:w-56"
-              :class="{ 'opacity-40 grayscale': !slide.is_visible }"
-              title="Redigera"
-              @click="startEdit(slide)"
-            >
-              <SlidePreview v-bind="slide.data" />
-            </button>
-
-            <div class="flex min-w-0 flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
-              <div class="min-w-0 flex-1">
-                <p class="line-clamp-2 font-medium text-gray-900" :class="{ 'text-gray-500': !slide.is_visible }">
-                  {{ slide.data.text || slide.data.subText || (slide.data.image ? 'Bild' : 'Tom slide') }}
-                </p>
-                <p v-if="slide.data.text && slide.data.subText" class="truncate text-sm text-gray-500">
-                  {{ slide.data.subText }}
-                </p>
-                <span
-                  v-if="!slide.is_visible"
-                  class="mt-1.5 inline-flex items-center gap-1 rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600"
-                >
-                  <EyeOff class="size-3" />
-                  Dold
-                </span>
-              </div>
-
-              <div class="-ml-2 flex shrink-0 items-center gap-1 sm:ml-0">
-                <button :class="iconButton" v-tooltip="'Redigera'" aria-label="Redigera" @click="startEdit(slide)">
-                  <Pencil class="size-4.5" />
-                </button>
-                <button
-                  :class="iconButton"
-                  v-tooltip="slide.is_visible ? 'Dölj' : 'Visa'"
-                  :aria-label="slide.is_visible ? 'Dölj' : 'Visa'"
-                  @click="setVisibility(slide, !slide.is_visible)"
-                >
-                  <Eye v-if="slide.is_visible" class="size-4.5" />
-                  <EyeOff v-else class="size-4.5" />
-                </button>
-                <button
-                  :class="[iconButton, 'hover:bg-red-50 hover:text-red-600']"
-                  v-tooltip="'Ta bort'"
-                  aria-label="Ta bort"
-                  @click="deleteSlide(slide)"
-                >
-                  <Trash2 class="size-4.5" />
-                </button>
-              </div>
-            </div>
-          </li>
-        </ol>
-      </section>
-
-      <!-- A new slide. -->
-      <aside class="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-200/70 xl:sticky xl:top-24">
-        <h2 class="mb-4 text-lg font-semibold text-gkk">Ny slide</h2>
-        <SlidePreview v-bind="newSlide" class="mb-5 rounded-lg ring-1 ring-gray-200" />
-        <SlideFields v-model="newSlide" :uploading="uploading === 'new'" @upload="upload($event, newSlide)" />
-        <button
-          class="mt-5 w-full rounded-lg bg-gkk px-4 py-2.5 font-medium text-white shadow-sm transition hover:bg-gkk-light disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
-          :disabled="!hasContent(newSlide) || uploading === 'new'"
-          @click="createSlide"
-        >
-          Skapa slide
-        </button>
-        <p class="mt-2 text-center text-xs text-gray-500">Nya slides hamnar först, efter klubbrekorden.</p>
-      </aside>
-    </div>
-
-    <!-- Edit a slide. -->
-    <Transition name="modal">
-      <div
-        v-if="editing"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
-        @click.self="editing = null"
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+      <Breadcrumbs title="Bildspelet" />
+      <a
+        href="/slideshow"
+        target="_blank"
+        class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 font-medium text-gkk shadow-sm ring-1 ring-gray-200 transition hover:bg-gray-50"
       >
-        <div class="max-h-full w-full max-w-4xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
-          <div class="mb-5 flex items-center justify-between">
-            <h2 class="text-xl font-semibold text-gkk">Redigera slide</h2>
-            <button :class="iconButton" aria-label="Stäng" @click="editing = null">
-              <X class="size-5" />
-            </button>
-          </div>
-          <div class="grid gap-6 md:grid-cols-[3fr_2fr]">
-            <SlidePreview v-bind="editing.data" class="self-start rounded-lg ring-1 ring-gray-200" />
-            <SlideFields
-              v-model="editing.data"
-              :uploading="uploading === 'edit'"
-              @upload="upload($event, editing.data, 'edit')"
-            />
-          </div>
-          <div class="mt-6 flex justify-end gap-3">
-            <button
-              class="rounded-lg px-4 py-2.5 font-medium text-gray-700 ring-1 ring-gray-200 transition hover:bg-gray-50"
-              @click="editing = null"
-            >
-              Avbryt
-            </button>
-            <button
-              class="rounded-lg bg-gkk px-5 py-2.5 font-medium text-white shadow-sm transition hover:bg-gkk-light disabled:cursor-not-allowed disabled:bg-gray-300"
-              :disabled="!hasContent(editing.data) || uploading === 'edit'"
-              @click="saveEdit"
-            >
-              Spara
-            </button>
-          </div>
-        </div>
+        <ExternalLink class="size-4" />
+        Öppna bildspelet
+      </a>
+    </div>
+
+    <p v-if="error" class="mb-6 rounded-sm bg-red-50 p-4 text-red-700">{{ error }}</p>
+    <p v-if="!signedIn && !error" class="mb-6 text-gray-600">Ansluter till skärmarna…</p>
+
+    <!-- The open screens, and everything that is on them now, each with a way to take it down. -->
+    <section v-if="signedIn" class="mb-6 rounded-sm bg-white p-4 shadow-sm sm:p-6">
+      <div class="flex items-center gap-3">
+        <span
+          class="inline-block size-3 shrink-0 rounded-full"
+          :class="screens.length ? 'bg-green-500' : 'bg-red-500'"
+        ></span>
+        <h2 class="text-xl font-semibold">
+          {{
+            screens.length === 0
+              ? 'Ingen skärm visar bildspelet'
+              : screens.length === 1
+                ? 'En skärm visar bildspelet'
+                : `${screens.length} skärmar visar bildspelet`
+          }}
+        </h2>
       </div>
-    </Transition>
+      <ul v-if="screens.length" class="mt-2 space-y-1 text-gray-700">
+        <li v-for="(screen, index) in screens" :key="index">
+          Visar <span class="font-medium">{{ screen.showing || '…' }}</span>
+          <span v-if="screen.held && screen.slide !== PAGE_KEY" class="text-gray-500"> · står still</span>
+        </li>
+      </ul>
+      <p v-else class="mt-2 text-gray-600">Öppna bildspelet på skärmen för att styra det härifrån.</p>
+
+      <div v-if="onScreen.length" class="mt-4">
+        <h3 class="mb-2 text-sm font-semibold uppercase tracking-wider text-gray-500">På skärmen nu</h3>
+        <ul class="grid gap-3 md:grid-cols-2 2xl:grid-cols-3">
+          <li
+            v-for="item in onScreen"
+            :key="item.key"
+            class="flex items-center gap-3 rounded-sm bg-amber-50 p-3 ring-1 ring-amber-200"
+          >
+            <component :is="item.icon" class="size-5 shrink-0 text-amber-700" />
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-semibold uppercase tracking-wider text-amber-800">{{ item.label }}</p>
+              <p class="font-medium break-words text-gray-900">{{ item.text }}</p>
+            </div>
+            <button :class="activeButtonClass" class="shrink-0 py-2!" @click="item.clear">{{ item.action }}</button>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!--
+      Wide screens: the slides on the left, the controls on the right. Phones: one column, in the order the page is used
+      on the day (the columns are `contents` there, so their cards are ordered together).
+    -->
+    <div class="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-start">
+      <div class="contents lg:flex lg:flex-col lg:gap-6">
+        <SlideList
+          class="order-4 lg:order-none"
+          :current="current"
+          :showing-now="showingNow"
+          :can-hold="signedIn"
+          :jwt="jwt"
+          @hold="(key) => save({ slide: key })"
+        />
+      </div>
+
+      <div v-if="signedIn" class="contents lg:flex lg:flex-col lg:gap-6">
+        <!-- Step, pause and reload. -->
+        <section :class="card" class="order-1 lg:order-none">
+          <h2 class="text-xl font-semibold mb-4">Bläddra</h2>
+          <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 2xl:grid-cols-4">
+            <button :class="buttonClass" @click="command('previous')">
+              <i class="fa fa-arrow-left mr-2"></i>
+              Föregående
+            </button>
+            <button :class="buttonClass" @click="command('next')">
+              Nästa
+              <i class="fa fa-arrow-right ml-2"></i>
+            </button>
+            <button
+              :class="current.paused ? activeButtonClass : buttonClass"
+              :disabled="!!current.slide || !!current.page"
+              @click="save({ paused: !current.paused })"
+            >
+              <i class="fa mr-2" :class="current.paused ? 'fa-play' : 'fa-pause'"></i>
+              {{ current.paused ? 'Fortsätt' : 'Pausa' }}
+            </button>
+            <button :class="secondaryButtonClass" @click="reloadScreens">
+              <i class="fa fa-refresh mr-2"></i>
+              Ladda om
+            </button>
+          </div>
+          <p class="mt-3 text-sm text-gray-600">
+            Bildspelet byter slide var 30:e sekund. Pausa för att stanna på den slide som visas.
+          </p>
+        </section>
+
+        <!-- A flash: over the whole screen, then in the message bar for 30 s, then gone. -->
+        <section :class="card" class="order-2 lg:order-none">
+          <h2 class="text-xl font-semibold mb-1">Kort meddelande</h2>
+          <p class="mb-4 text-sm text-gray-600">
+            Visas först över hela skärmen – även över en webbsida – och glider sedan ner längst ner i 30 sekunder innan
+            det försvinner.
+          </p>
+          <form class="flex flex-wrap gap-3" @submit.prevent="showFlash">
+            <input
+              v-model="flashDraft"
+              :maxlength="MESSAGE_MAX_LENGTH"
+              placeholder="T.ex. Grupp 3 – invägningen börjar nu!"
+              :class="inputClass"
+            />
+            <button :class="buttonClass" :disabled="!flashDraft.trim()">
+              <i class="fa fa-bolt mr-2"></i>
+              Visa
+            </button>
+          </form>
+        </section>
+
+        <!-- A message on the screens. -->
+        <section :class="card" class="order-3 lg:order-none">
+          <h2 class="text-xl font-semibold mb-1">Meddelande</h2>
+          <p class="mb-4 text-sm text-gray-600">Visas längst ner på skärmen tills du tar bort det.</p>
+          <form class="flex flex-wrap gap-3" @submit.prevent="showMessage">
+            <input
+              v-model="draft"
+              :maxlength="MESSAGE_MAX_LENGTH"
+              placeholder="T.ex. Gymmet stänger kl. 21 i kväll"
+              :class="inputClass"
+            />
+            <button :class="buttonClass" :disabled="!draft.trim()">Visa</button>
+          </form>
+        </section>
+
+        <!-- A web page instead of the slideshow. -->
+        <section :class="card" class="order-5 lg:order-none">
+          <h2 class="text-xl font-semibold mb-1">Visa en webbsida</h2>
+          <p class="mb-4 text-sm text-gray-600">
+            Visas i stället för bildspelet tills du går tillbaka. Datum, klocka och ett ev. meddelande visas fortfarande
+            längst ner. Vissa webbplatser tillåter inte att visas inuti en annan sida och blir då tomma – prova sidan
+            innan den behövs.
+          </p>
+          <form class="flex flex-wrap gap-3" @submit.prevent="showPage">
+            <input
+              v-model="pageDraft"
+              type="text"
+              inputmode="url"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+              :maxlength="PAGE_URL_MAX_LENGTH"
+              placeholder="se.powerliftinglive.com/…"
+              :class="inputClass"
+            />
+            <button :class="buttonClass" :disabled="!pageUrl(pageDraft)">Visa</button>
+          </form>
+          <p v-if="pageDraft.trim() && !pageUrl(pageDraft)" class="mt-2 text-sm text-red-700">
+            Det ser inte ut som en webbadress. Skriv t.ex. se.powerliftinglive.com
+          </p>
+
+          <!-- The warm-up hall screen (/live/hall) for a competition that is live on Powerlifting Live. -->
+          <div class="mt-6 border-t border-gray-200 pt-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="min-w-0 flex-1 basis-56">
+                <h3 class="font-semibold">Uppvärmningsskärm</h3>
+                <p class="text-sm text-gray-600">
+                  Lyftordning, resultat och nästa grupp för en tävling som är live på Powerlifting Live.
+                </p>
+              </div>
+              <button
+                :class="secondaryButtonClass"
+                class="shrink-0"
+                :disabled="hall.state === 'loading'"
+                @click="loadCompetitions"
+              >
+                <i class="fa fa-refresh mr-2" :class="{ 'fa-spin': hall.state === 'loading' }"></i>
+                {{ hall.state === 'idle' ? 'Hämta tävlingar' : 'Uppdatera' }}
+              </button>
+            </div>
+            <p v-if="hall.state === 'error'" class="mt-3 text-sm text-red-700">
+              Kunde inte hämta tävlingarna från Powerlifting Live. Försök igen om en stund.
+            </p>
+            <p v-else-if="hall.state === 'loaded' && !hall.competitions.length" class="mt-3 text-sm text-gray-600">
+              Inga tävlingar live just nu.
+            </p>
+            <ul v-if="hall.competitions.length" class="mt-3 divide-y divide-gray-200">
+              <li v-for="competition in hall.competitions" :key="competition.id" class="flex items-center gap-4 py-3">
+                <div class="min-w-0 flex-1">
+                  <p class="truncate font-medium">{{ competition.name }}</p>
+                  <p v-if="competition.date" class="text-sm text-gray-600">{{ competition.date }}</p>
+                </div>
+                <span v-if="current.page?.url === hallUrl(competition.id)" class="shrink-0 text-sm text-green-700">
+                  Visas nu
+                </span>
+                <button
+                  v-else
+                  :class="secondaryButtonClass"
+                  class="shrink-0"
+                  @click="save({ page: { id: Date.now().toString(36), url: hallUrl(competition.id) } })"
+                >
+                  Visa
+                </button>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- The bottom bar, or just the clock. -->
+        <section :class="card" class="order-6 lg:order-none">
+          <h2 class="text-xl font-semibold mb-4">Nederkant</h2>
+          <div class="space-y-4">
+            <label class="flex cursor-pointer items-center justify-between gap-4">
+              <span>
+                <span class="block font-medium">Visa nederkanten</span>
+                <span class="block text-sm text-gray-600">Datum, vecka, klocka och vilken slide som visas.</span>
+              </span>
+              <input
+                type="checkbox"
+                class="size-6 shrink-0 rounded-sm text-gkk focus:ring-gkk"
+                :checked="current.footer"
+                @change="save({ footer: $event.target.checked })"
+              />
+            </label>
+            <label
+              class="flex items-center justify-between gap-4"
+              :class="current.footer ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'"
+            >
+              <span>
+                <span class="block font-medium">Visa klockan nere till höger</span>
+                <span class="block text-sm text-gray-600">När nederkanten är dold. Visas över allt annat.</span>
+              </span>
+              <input
+                type="checkbox"
+                class="size-6 shrink-0 rounded-sm text-gkk focus:ring-gkk disabled:cursor-not-allowed"
+                :checked="current.clock"
+                :disabled="current.footer"
+                @change="save({ clock: $event.target.checked })"
+              />
+            </label>
+          </div>
+        </section>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { useToast } from 'vue-toast-notification'
-import 'vue-toast-notification/dist/theme-sugar.css'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import axios from 'axios'
-import Sortable from 'sortablejs'
-import {
-  ExternalLink,
-  Eye,
-  EyeOff,
-  GripVertical,
-  Pencil,
-  SlidersHorizontal,
-  Sparkles,
-  Trash2,
-  X,
-} from 'lucide-vue-next'
-import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
+import { signInWithCustomToken } from 'firebase/auth'
+import { onValue, push, ref as databaseRef, serverTimestamp, update } from 'firebase/database'
+import { ExternalLink, Globe, MessageSquare, Pause, Pin, Zap } from 'lucide-vue-next'
 import Breadcrumbs from './ui/Breadcrumbs.vue'
-import SlidePreview from './Slideshow/SlidePreview.vue'
-import SlideFields from './Slideshow/SlideFields.vue'
+import SlideList from './Slideshow/SlideList.vue'
+import { liveAuth } from '../live/remote/auth.js'
+import { liveDatabase } from '../live/remote/firebase.js'
+import {
+  FLASH_BAR_MS,
+  FLASH_FULL_MS,
+  MESSAGE_MAX_LENGTH,
+  PAGE_KEY,
+  PAGE_URL_MAX_LENGTH,
+  normalizeControl,
+  onlineScreens,
+  pageUrl,
+} from './Slideshow/remote.js'
+import { activeButtonClass, buttonClass, secondaryButtonClass } from './Slideshow/controlStyles.js'
 
-const props = defineProps({
+/**
+ * The screen slideshow's admin page: what the open screens show and live control of them (through Firebase's Realtime
+ * Database, slideshow/), and the slides themselves (SlideList.vue, with an edit mode for ordering and editing them).
+ */
+const { jwt } = defineProps({
+  // The admin's Firebase sign-in (App\Firebase::makeAdminJwt): database.rules.json lets it control the slideshow, and
+  // it uploads the slides' images.
   jwt: {
     type: String,
     required: true,
   },
 })
 
-const iconButton =
-  'inline-flex size-9 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 hover:text-gkk'
+const card = 'rounded-sm bg-white p-4 shadow-sm sm:p-6'
+const inputClass =
+  'min-w-0 flex-1 basis-56 appearance-none rounded-sm px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:border-blue-300'
 
-const $toast = useToast()
-const loading = ref(true)
-const slides = ref([])
-const newSlide = ref(emptySlide())
-const editing = ref(null)
-const uploading = ref(null)
-const list = ref(null)
+const database = liveDatabase()
+const signedIn = ref(false)
+const error = ref(null)
+const current = ref(normalizeControl(null))
+const presence = ref({})
+const now = ref(Date.now())
+const draft = ref('')
+const pageDraft = ref('')
+const flashDraft = ref('')
+// The flash sent from here, while the screens show it.
+const flashShown = ref(null)
+let flashTimer = null
+const hall = ref({ state: 'idle', competitions: [] })
 
-// The club records slide is always shown, so it counts.
-const visibleCount = computed(() => slides.value.filter((slide) => slide.is_visible).length + 1)
-
-function emptySlide() {
-  return { text: '', subText: '', image: '' }
-}
-
-function hasContent(data) {
-  return Boolean(data.text || data.subText || data.image)
-}
-
-// The position on the screen: after the club records, counting only the visible slides.
-function positionOf(slide) {
-  return slides.value.filter((other) => other.is_visible).indexOf(slide) + 2
-}
-
-function toast(type, message) {
-  $toast[type](message, { duration: 2000 })
-}
-
-function payload(data) {
-  return {
-    text: data.text || undefined,
-    subText: data.subText || undefined,
-    image: data.image || undefined,
-  }
-}
-
-async function upload(file, target, which = 'new') {
-  uploading.value = which
-  try {
-    target.image = await FirebaseFileUpload.upload(props.jwt, file, file.name.split('.').pop())
-  } catch (error) {
-    console.error('Error uploading image:', error)
-    toast('error', 'Bilden kunde inte laddas upp')
-  } finally {
-    uploading.value = null
-  }
-}
-
-async function createSlide() {
-  try {
-    const response = await axios.post('/slideshow/slides', {
-      type: 'Slide',
-      data: payload(newSlide.value),
-      is_visible: true,
-    })
-    slides.value.unshift(response.data)
-    newSlide.value = emptySlide()
-    toast('success', 'Sliden har skapats')
-  } catch (error) {
-    console.error('Error creating slide:', error)
-    toast('error', 'Sliden kunde inte skapas')
-  }
-}
-
-function startEdit(slide) {
-  editing.value = { id: slide.id, type: slide.type, data: { ...emptySlide(), ...slide.data } }
-}
-
-async function saveEdit() {
-  const { id, type, data } = editing.value
-  try {
-    await axios.put(`/slideshow/slides/${id}`, { type, data: payload(data) })
-    const slide = slides.value.find((slide) => slide.id === id)
-    if (slide) {
-      slide.data = payload(data)
-    }
-    editing.value = null
-    toast('success', 'Sliden har uppdaterats')
-  } catch (error) {
-    console.error('Error updating slide:', error)
-    toast('error', 'Sliden kunde inte uppdateras')
-  }
-}
-
-async function deleteSlide(slide) {
-  if (!confirm('Är du säker på att du vill ta bort denna slide?')) return
-
-  try {
-    await axios.delete(`/slideshow/slides/${slide.id}`)
-    slides.value = slides.value.filter((other) => other.id !== slide.id)
-    toast('success', 'Sliden har tagits bort')
-  } catch (error) {
-    console.error('Error deleting slide:', error)
-    toast('error', 'Sliden kunde inte tas bort')
-  }
-}
-
-async function setVisibility(slide, isVisible) {
-  try {
-    await axios.patch(`/slideshow/slides/${slide.id}`, { is_visible: isVisible })
-    slide.is_visible = isVisible
-    toast('success', isVisible ? 'Sliden visas nu' : 'Sliden är dold')
-  } catch (error) {
-    console.error('Error updating slide visibility:', error)
-    toast('error', 'Sliden kunde inte ändras')
-  }
-}
-
-// Moves a slide to another position and saves the new order, or puts it back if saving fails.
-async function move(from, to) {
-  if (to < 0 || to >= slides.value.length || to === from) return
-
-  const previous = [...slides.value]
-  const reordered = [...slides.value]
-  reordered.splice(to, 0, reordered.splice(from, 1)[0])
-  slides.value = reordered
-
-  try {
-    await axios.post('/slideshow/order', {
-      slides: reordered.map((slide, order) => ({ id: slide.id, order })),
-    })
-  } catch {
-    slides.value = previous
-    toast('error', 'Ordningen kunde inte sparas')
-  }
-}
-
-// Drag and drop (mouse and touch) by the handle. Sortable moves the row in the DOM; it is put back right away and the
-// slides array is reordered instead, so that Vue stays in charge of the DOM.
-let sortable = null
-
-function closeOnEscape(event) {
-  if (event.key === 'Escape') {
-    editing.value = null
-  }
-}
+let unsubscribes = []
+let ticker = null
 
 onMounted(async () => {
-  window.addEventListener('keydown', closeOnEscape)
-
-  sortable = Sortable.create(list.value, {
-    handle: '.drag-handle',
-    animation: 150,
-    ghostClass: 'slide-ghost',
-    chosenClass: 'slide-chosen',
-    onEnd({ item, from, oldIndex, newIndex }) {
-      item.remove()
-      from.insertBefore(item, from.children[oldIndex] ?? null)
-      void move(oldIndex, newIndex)
-    },
-  })
+  ticker = setInterval(() => (now.value = Date.now()), 5000)
 
   try {
-    const response = await axios.get('/slideshow/slides')
-    slides.value = response.data.slides
-  } finally {
-    loading.value = false
+    await signInWithCustomToken(liveAuth(), jwt)
+  } catch {
+    error.value = 'Kunde inte ansluta till skärmarna. Ladda om sidan och försök igen.'
+    return
   }
+
+  signedIn.value = true
+  unsubscribes = [
+    onValue(databaseRef(database, 'slideshow/control'), (snapshot) => {
+      current.value = normalizeControl(snapshot.val())
+    }),
+    onValue(databaseRef(database, 'slideshow/presence'), (snapshot) => (presence.value = snapshot.val() ?? {})),
+  ]
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', closeOnEscape)
-  sortable?.destroy()
+  clearInterval(ticker)
+  clearTimeout(flashTimer)
+  unsubscribes.forEach((unsubscribe) => unsubscribe())
 })
+
+const screens = computed(() => onlineScreens(presence.value, now.value))
+const showingNow = computed(() => new Set(screens.value.map((screen) => screen.slide)))
+
+// Everything put on the screens from here that is still there, at the top of the page.
+const onScreen = computed(() => {
+  const items = []
+  const control = current.value
+  if (flashShown.value) {
+    items.push({
+      key: 'flash',
+      icon: Zap,
+      label: 'Kort meddelande',
+      text: flashShown.value,
+      action: 'Ta bort',
+      clear: clearFlash,
+    })
+  }
+  if (control.message) {
+    const clear = () => save({ message: null })
+    items.push({
+      key: 'message',
+      icon: MessageSquare,
+      label: 'Meddelande',
+      text: control.message.text,
+      action: 'Ta bort',
+      clear,
+    })
+  }
+  if (control.slide) {
+    const name = screens.value.find((screen) => screen.slide === control.slide)?.showing ?? 'En slide'
+    items.push({
+      key: 'slide',
+      icon: Pin,
+      label: 'Slide',
+      text: name,
+      action: 'Släpp',
+      clear: () => save({ slide: null }),
+    })
+  }
+  if (control.page) {
+    const clear = () => save({ page: null })
+    items.push({ key: 'page', icon: Globe, label: 'Webbsida', text: control.page.url, action: 'Tillbaka', clear })
+  }
+  if (control.paused && !control.slide && !control.page) {
+    const clear = () => save({ paused: false })
+    items.push({
+      key: 'paused',
+      icon: Pause,
+      label: 'Pausat',
+      text: 'Bildspelet står still',
+      action: 'Fortsätt',
+      clear,
+    })
+  }
+  return items
+})
+
+async function save(patch) {
+  error.value = null
+  try {
+    await update(databaseRef(database, 'slideshow/control'), patch)
+  } catch {
+    error.value = 'Kunde inte spara. Kontrollera uppkopplingen, eller ladda om sidan.'
+  }
+}
+
+// Whether the command was sent.
+async function command(type, data = {}) {
+  error.value = null
+  try {
+    await push(databaseRef(database, 'slideshow/commands'), { ...data, type, at: serverTimestamp() })
+    return true
+  } catch {
+    error.value = 'Kunde inte skicka. Kontrollera uppkopplingen, eller ladda om sidan.'
+    return false
+  }
+}
+
+function reloadScreens() {
+  if (window.confirm('Ladda om bildspelet på alla skärmar?')) {
+    void command('reload')
+  }
+}
+
+async function showFlash() {
+  const text = flashDraft.value.trim().slice(0, MESSAGE_MAX_LENGTH)
+  if (!text) {
+    return
+  }
+  flashDraft.value = ''
+  if (await command('flash', { text })) {
+    flashShown.value = text
+    clearTimeout(flashTimer)
+    flashTimer = setTimeout(() => (flashShown.value = null), FLASH_FULL_MS + FLASH_BAR_MS)
+  }
+}
+
+async function clearFlash() {
+  if (await command('clearFlash')) {
+    clearTimeout(flashTimer)
+    flashShown.value = null
+  }
+}
+
+function showMessage() {
+  const text = draft.value.trim().slice(0, MESSAGE_MAX_LENGTH)
+  if (text) {
+    void save({ message: { id: Date.now().toString(36), text } })
+    draft.value = ''
+  }
+}
+
+// The competitions live on Powerlifting Live now (LiveOverlayController@competitions), for the hall screen.
+async function loadCompetitions() {
+  hall.value = { ...hall.value, state: 'loading' }
+  try {
+    const { data } = await axios.get('/live/competitions')
+    hall.value = { state: 'loaded', competitions: Array.isArray(data.competitions) ? data.competitions : [] }
+  } catch {
+    hall.value = { state: 'error', competitions: [] }
+  }
+}
+
+function hallUrl(id) {
+  return pageUrl(`${window.location.origin}/live/hall?competition=${encodeURIComponent(id)}`)
+}
+
+function showPage() {
+  const url = pageUrl(pageDraft.value)
+  if (url) {
+    void save({ page: { id: Date.now().toString(36), url } })
+    pageDraft.value = ''
+  }
+}
 </script>
-
-<style scoped>
-/* The row's place while it is dragged, and the row being dragged. */
-.slide-ghost {
-  opacity: 0.4;
-  outline: 2px dashed var(--color-gkk);
-  outline-offset: 2px;
-}
-
-.slide-chosen {
-  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.15);
-}
-
-.modal-enter-active,
-.modal-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.modal-enter-from,
-.modal-leave-to {
-  opacity: 0;
-}
-</style>

@@ -185,7 +185,8 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
 
     Route::prefix('slideshow')->controller(AdminSlideshowController::class)->group(function () {
         Route::get('/', 'index');
-        Route::get('live', 'live');
+        // The live control was a page of its own before it joined the slideshow's page.
+        Route::redirect('live', '/admin/slideshow');
     });
 
     Route::prefix('news')->group(function () {

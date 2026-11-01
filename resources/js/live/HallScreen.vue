@@ -118,7 +118,7 @@ import { initialHallState, readyToIntroduce, reduceHallState } from './hallState
  * The warm-up hall screen (/live/hall?competition=…, also /live/overlay?view=hall&competition=…; without a
  * competition, a list of the competitions live now to pick from): the results list of the group on the platform, as
  * on the broadcast, with the start order of the group after it below. Meant for a TV, e.g. shown from the slideshow's
- * live control (/admin/slideshow/live → Visa en webbsida). The referee lights are shown very large in the middle, as on
+ * live control (/admin/slideshow → Visa en webbsida). The referee lights are shown very large in the middle, as on
  * Powerlifting Live's own screens (?lights=0 turns them off), and a new lifter on the platform gets the broadcast's
  * large lifter card for a few seconds (?intro=0 turns it off, ?introSeconds=N sets how long).
  */
