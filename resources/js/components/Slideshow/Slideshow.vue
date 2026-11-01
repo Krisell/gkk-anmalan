@@ -38,15 +38,6 @@
           title="Webbsida"
         ></iframe>
       </Transition>
-
-      <!-- The clock on its own, when the bottom bar is hidden from the live control. -->
-      <div
-        v-if="!control.footer && control.clock"
-        class="absolute bottom-[2.5vh] right-[2vw] z-20 flex items-baseline rounded-[1.4vh] bg-gkk/90 px-[1.4vw] py-[1.1vh] text-white leading-none tabular-nums whitespace-nowrap shadow-xl shadow-black/20"
-      >
-        <span class="text-[min(3vw,5vh)] font-semibold">{{ time }}</span>
-        <span class="text-[min(1.6vw,2.8vh)] font-light text-white/60 ml-[0.3vw]">{{ seconds }}</span>
-      </div>
     </main>
 
     <!-- A message from the live control (/admin/slideshow/live), shown until it is taken down. -->
@@ -54,7 +45,8 @@
       <div
         v-if="control.message && !hidesMessage"
         :key="control.message.id"
-        class="shrink-0 bg-amber-300 text-gkk px-[4vw] py-[2vh] text-center font-semibold leading-tight text-balance text-[min(3.4vw,5.8vh)]"
+        class="shrink-0 bg-amber-300 text-gkk py-[2vh] text-center font-semibold leading-tight text-balance text-[min(3.4vw,5.8vh)]"
+        :class="floatingClock ? 'px-[15vw]' : 'px-[4vw]'"
       >
         {{ control.message.text }}
       </div>
@@ -106,12 +98,25 @@
       <div
         v-if="flash"
         :key="flash.id"
-        class="slideshow-flash absolute inset-x-0 z-50 flex items-center justify-center overflow-hidden bg-amber-300 px-[5vw] text-center text-gkk shadow-[0_-1vh_4vh_rgba(0,0,0,0.15)]"
-        :class="{ 'slideshow-flash-bar': flash.phase === 'bar' }"
+        class="slideshow-flash absolute inset-x-0 z-50 flex items-center justify-center overflow-hidden bg-amber-300 text-center text-gkk shadow-[0_-1vh_4vh_rgba(0,0,0,0.15)]"
+        :class="[
+          { 'slideshow-flash-bar': flash.phase === 'bar' },
+          floatingClock && flash.phase === 'bar' ? 'px-[15vw]' : 'px-[5vw]',
+        ]"
       >
         <span class="slideshow-flash-text font-bold leading-tight text-balance">{{ flash.text }}</span>
       </div>
     </Transition>
+
+    <!-- The clock on its own, when the bottom bar is hidden from the live control: bottom right, over everything
+         (a web page, the message bar and a flash). -->
+    <div
+      v-if="floatingClock"
+      class="absolute bottom-[2vh] right-[2vw] z-[60] flex items-baseline rounded-[1.4vh] bg-gkk px-[1.4vw] py-[1.1vh] text-white leading-none tabular-nums whitespace-nowrap shadow-xl shadow-black/20"
+    >
+      <span class="text-[min(3vw,5vh)] font-semibold">{{ time }}</span>
+      <span class="text-[min(1.6vw,2.8vh)] font-light text-white/60 ml-[0.3vw]">{{ seconds }}</span>
+    </div>
   </div>
 </template>
 
@@ -250,6 +255,8 @@ const { control, report } = useSlideshowRemote({
     const { type } = command
     if (type === 'flash') {
       showFlash(flashText(command))
+    } else if (type === 'clearFlash') {
+      clearFlash()
     } else if (type === 'next') {
       nextSlide()
     } else if (type === 'previous') {
@@ -266,6 +273,8 @@ const heldIndex = computed(() =>
 // The rotation stops while paused, while a slide is held (as long as that slide is still in the slideshow), or while a
 // web page is shown instead.
 const held = computed(() => control.value.paused || heldIndex.value >= 0 || !!control.value.page)
+// The clock on its own, bottom right, when the bottom bar is hidden.
+const floatingClock = computed(() => !control.value.footer && control.value.clock)
 // Some slides (the DM welcome) use the whole screen, without the message bar.
 const hidesMessage = computed(() => !control.value.page && !!slides.value[currentSlide.value]?.hidesMessage)
 
@@ -317,6 +326,12 @@ function restartInterval() {
 // A flash: over the whole screen first, then down in the message bar for a while, then gone. A new one replaces it.
 const flash = ref(null)
 let flashTimers = []
+
+function clearFlash() {
+  flashTimers.forEach(clearTimeout)
+  flashTimers = []
+  flash.value = null
+}
 
 function showFlash(text) {
   if (!text) {

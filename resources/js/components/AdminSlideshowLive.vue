@@ -156,7 +156,11 @@
             <i class="fa fa-bolt mr-2"></i>
             Visa
           </button>
+          <button type="button" :class="secondaryButtonClass" :disabled="!flashShown" @click="clearFlash">
+            Ta bort
+          </button>
         </form>
+        <p v-if="flashShown" class="mt-3 text-gray-700">På skärmen: ”{{ flashShown }}”</p>
       </div>
 
       <!-- A message on the screens. -->
@@ -282,6 +286,8 @@ import { onValue, push, ref as databaseRef, serverTimestamp, update } from 'fire
 import { liveAuth } from '../live/remote/auth.js'
 import { liveDatabase } from '../live/remote/firebase.js'
 import {
+  FLASH_BAR_MS,
+  FLASH_FULL_MS,
   MESSAGE_MAX_LENGTH,
   PAGE_KEY,
   PAGE_URL_MAX_LENGTH,
@@ -318,6 +324,9 @@ const slides = ref([])
 const draft = ref('')
 const pageDraft = ref('')
 const flashDraft = ref('')
+// The flash sent from here, while the screens show it.
+const flashShown = ref(null)
+let flashTimer = null
 
 const SLIDE_ICONS = { Klubbrekord: 'fa-trophy', Dm2026: 'fa-flag-checkered', Swish: 'fa-qrcode' }
 const hall = ref({ state: 'idle', competitions: [] })
@@ -355,6 +364,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   clearInterval(ticker)
+  clearTimeout(flashTimer)
   unsubscribes.forEach((unsubscribe) => unsubscribe())
 })
 
@@ -370,12 +380,15 @@ async function save(patch) {
   }
 }
 
+// Whether the command was sent.
 async function command(type, data = {}) {
   error.value = null
   try {
     await push(databaseRef(database, 'slideshow/commands'), { ...data, type, at: serverTimestamp() })
+    return true
   } catch {
     error.value = 'Kunde inte skicka. Kontrollera uppkopplingen, eller ladda om sidan.'
+    return false
   }
 }
 
@@ -385,11 +398,23 @@ function reloadScreens() {
   }
 }
 
-function showFlash() {
+async function showFlash() {
   const text = flashDraft.value.trim().slice(0, MESSAGE_MAX_LENGTH)
-  if (text) {
-    void command('flash', { text })
-    flashDraft.value = ''
+  if (!text) {
+    return
+  }
+  flashDraft.value = ''
+  if (await command('flash', { text })) {
+    flashShown.value = text
+    clearTimeout(flashTimer)
+    flashTimer = setTimeout(() => (flashShown.value = null), FLASH_FULL_MS + FLASH_BAR_MS)
+  }
+}
+
+async function clearFlash() {
+  if (await command('clearFlash')) {
+    clearTimeout(flashTimer)
+    flashShown.value = null
   }
 }
 

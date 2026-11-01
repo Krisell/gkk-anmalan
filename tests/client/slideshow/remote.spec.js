@@ -127,6 +127,7 @@ describe('isFreshCommand', () => {
     expect(isFreshCommand({ type: 'explode', at: 1000 }, 1000)).toBe(false)
     expect(isFreshCommand({ type: 'next' }, 1000)).toBe(false)
     expect(isFreshCommand({ type: 'flash', text: 'Hej', at: 1000 }, 1000)).toBe(true)
+    expect(isFreshCommand({ type: 'clearFlash', at: 1000 }, 1000)).toBe(true)
   })
 
   it('reads the text of a flash', () => {

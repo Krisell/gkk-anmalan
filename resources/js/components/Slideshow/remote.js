@@ -27,7 +27,7 @@ import { watchServerClock } from '../../live/remote/serverClock.js'
  * Everything coming from the database is normalized here, so a missing or odd value never breaks the screen.
  */
 
-export const COMMANDS = ['next', 'previous', 'reload', 'flash']
+export const COMMANDS = ['next', 'previous', 'reload', 'flash', 'clearFlash']
 export const MESSAGE_MAX_LENGTH = 120
 
 // A flash: the text over the whole screen, then down in the message bar, then gone.
