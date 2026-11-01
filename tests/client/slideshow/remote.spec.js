@@ -2,18 +2,21 @@ import { describe, expect, it } from 'vite-plus/test'
 import {
   COMMAND_MAX_AGE_MS,
   PRESENCE_TIMEOUT_MS,
+  flashText,
   isFreshCommand,
+  nextInRotation,
   normalizeControl,
   onlineScreens,
   pageLabel,
   pageUrl,
+  rotation,
   slideKey,
   slideLabel,
 } from '../../../resources/js/components/Slideshow/remote.js'
 
 describe('normalizeControl', () => {
   it('rotates as usual when nothing has been set', () => {
-    const rotating = { paused: false, slide: null, message: null, page: null }
+    const rotating = { paused: false, slide: null, message: null, page: null, footer: true, clock: false }
     expect(normalizeControl(null)).toEqual(rotating)
     expect(
       normalizeControl({
@@ -32,9 +35,19 @@ describe('normalizeControl', () => {
         slide: 'slide-12',
         message: { id: 'm1', text: 'Stänger 21!' },
         page: null,
+        footer: true,
+        clock: false,
       },
     )
     expect(normalizeControl({ slide: 'records' }).slide).toBe('records')
+    expect(normalizeControl({ slide: 'dm2026' }).slide).toBe('dm2026')
+    expect(normalizeControl({ slide: 'swish' }).slide).toBe('swish')
+    expect(normalizeControl({ slide: 'swishx' }).slide).toBeNull()
+  })
+
+  it('hides the bottom bar only when asked, and shows the clock on its own only when asked', () => {
+    expect(normalizeControl({ footer: false, clock: true })).toMatchObject({ footer: false, clock: true })
+    expect(normalizeControl({ footer: 0, clock: 'yes' })).toMatchObject({ footer: true, clock: false })
   })
 
   it('cuts long messages', () => {
@@ -75,6 +88,27 @@ describe('slides', () => {
   it('has a stable key for each slide, including the club records', () => {
     expect(slideKey({ type: 'Klubbrekord', data: {} })).toBe('records')
     expect(slideKey({ id: 7, type: 'Slide', data: {} })).toBe('slide-7')
+    expect(slideKey({ type: 'Dm2026', data: {} })).toBe('dm2026')
+    expect(slideKey({ type: 'Swish', data: {} })).toBe('swish')
+  })
+
+  it('rotates the club records, the visible slides and the Swish slide, with the DM welcome only held by hand', () => {
+    const slides = [
+      { id: 1, type: 'Slide', data: {}, is_visible: true },
+      { id: 2, type: 'Slide', data: {}, is_visible: false },
+    ]
+    const all = rotation(slides)
+    expect(all.map(slideKey)).toEqual(['records', 'slide-1', 'swish', 'dm2026'])
+    expect(all.filter((slide) => slide.manual).map(slideKey)).toEqual(['dm2026'])
+    expect(rotation(null)).toHaveLength(3)
+  })
+
+  it('steps past the manual slides', () => {
+    const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
+    expect(nextInRotation(all, 0)).toBe(1)
+    expect(nextInRotation(all, 2)).toBe(0) // from Swish, past the DM welcome, back to the club records
+    expect(nextInRotation(all, 3)).toBe(0) // from the DM welcome when let go
+    expect(nextInRotation(all, 0, -1)).toBe(2)
   })
 
   it('names a slide by its text, or what it shows', () => {
@@ -92,6 +126,14 @@ describe('isFreshCommand', () => {
     expect(isFreshCommand({ type: 'reload', at: 1000 }, 1000 + COMMAND_MAX_AGE_MS + 1)).toBe(false)
     expect(isFreshCommand({ type: 'explode', at: 1000 }, 1000)).toBe(false)
     expect(isFreshCommand({ type: 'next' }, 1000)).toBe(false)
+    expect(isFreshCommand({ type: 'flash', text: 'Hej', at: 1000 }, 1000)).toBe(true)
+  })
+
+  it('reads the text of a flash', () => {
+    expect(flashText({ type: 'flash', text: ' Invägning nu! ' })).toBe('Invägning nu!')
+    expect(flashText({ type: 'flash', text: 'x'.repeat(500) })).toHaveLength(120)
+    expect(flashText({ type: 'flash', text: '  ' })).toBeNull()
+    expect(flashText({ type: 'next', text: 'Hej' })).toBeNull()
   })
 })
 

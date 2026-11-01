@@ -61,6 +61,41 @@
         </p>
       </div>
 
+      <!-- The bottom bar, or just the clock. -->
+      <div class="rounded-sm shadow-sm bg-white p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Nederkant</h2>
+        <div class="space-y-4">
+          <label class="flex items-center justify-between gap-4 cursor-pointer">
+            <span>
+              <span class="block font-medium">Visa nederkanten</span>
+              <span class="block text-sm text-gray-600">Datum, vecka, klocka och vilken slide som visas.</span>
+            </span>
+            <input
+              type="checkbox"
+              class="h-6 w-6 shrink-0 rounded-sm text-gkk focus:ring-gkk"
+              :checked="current.footer"
+              @change="save({ footer: $event.target.checked })"
+            />
+          </label>
+          <label
+            class="flex items-center justify-between gap-4"
+            :class="current.footer ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'"
+          >
+            <span>
+              <span class="block font-medium">Visa klockan nere till höger</span>
+              <span class="block text-sm text-gray-600">När nederkanten är dold. Visas även över en webbsida.</span>
+            </span>
+            <input
+              type="checkbox"
+              class="h-6 w-6 shrink-0 rounded-sm text-gkk focus:ring-gkk disabled:cursor-not-allowed"
+              :checked="current.clock"
+              :disabled="current.footer"
+              @change="save({ clock: $event.target.checked })"
+            />
+          </label>
+        </div>
+      </div>
+
       <!-- Hold a slide. -->
       <div class="rounded-sm shadow-sm bg-white p-6 mb-6">
         <h2 class="text-xl font-semibold mb-1">Visa en slide</h2>
@@ -81,11 +116,12 @@
               v-else
               class="h-12 w-20 shrink-0 rounded-sm bg-gray-100 flex items-center justify-center text-gray-400"
             >
-              <i class="fa" :class="slide.type === 'Klubbrekord' ? 'fa-trophy' : 'fa-font'"></i>
+              <i class="fa" :class="SLIDE_ICONS[slide.type] ?? 'fa-font'"></i>
             </div>
             <div class="min-w-0 flex-1">
               <p class="truncate font-medium">{{ slideLabel(slide) }}</p>
               <p v-if="showingNow.has(slideKey(slide))" class="text-sm text-green-700">Visas nu</p>
+              <p v-else-if="slide.manual" class="text-sm text-gray-500">Ingår inte i bildspelet – visas bara här</p>
             </div>
             <button
               v-if="current.slide === slideKey(slide)"
@@ -100,6 +136,27 @@
             </button>
           </li>
         </ul>
+      </div>
+
+      <!-- A flash: over the whole screen, then in the message bar for 30 s, then gone. -->
+      <div class="rounded-sm shadow-sm bg-white p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-1">Kort meddelande</h2>
+        <p class="mb-4 text-sm text-gray-600">
+          Visas först över hela skärmen – även över en webbsida – och glider sedan ner längst ner i 30 sekunder innan
+          det försvinner.
+        </p>
+        <form class="flex flex-wrap gap-3" @submit.prevent="showFlash">
+          <input
+            v-model="flashDraft"
+            :maxlength="MESSAGE_MAX_LENGTH"
+            placeholder="T.ex. Grupp 3 – invägningen börjar nu!"
+            class="min-w-0 flex-1 basis-64 appearance-none rounded-sm px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:border-blue-300"
+          />
+          <button :class="buttonClass" :disabled="!flashDraft.trim()">
+            <i class="fa fa-bolt mr-2"></i>
+            Visa
+          </button>
+        </form>
       </div>
 
       <!-- A message on the screens. -->
@@ -231,6 +288,7 @@ import {
   normalizeControl,
   onlineScreens,
   pageUrl,
+  rotation,
   slideKey,
   slideLabel,
 } from './Slideshow/remote.js'
@@ -259,6 +317,9 @@ const now = ref(Date.now())
 const slides = ref([])
 const draft = ref('')
 const pageDraft = ref('')
+const flashDraft = ref('')
+
+const SLIDE_ICONS = { Klubbrekord: 'fa-trophy', Dm2026: 'fa-flag-checkered', Swish: 'fa-qrcode' }
 const hall = ref({ state: 'idle', competitions: [] })
 
 let unsubscribes = []
@@ -270,8 +331,9 @@ onMounted(async () => {
   axios
     .get('/slideshow/snapshot')
     .then(({ data }) => {
-      // In the screen's order: the club records first, then the visible slides.
-      slides.value = [{ type: 'Klubbrekord', data: {} }, ...data.slides.filter((slide) => slide.is_visible)]
+      // The screen's slides, with the manual ones (only shown from here) first.
+      const all = rotation(data.slides)
+      slides.value = [...all.filter((slide) => slide.manual), ...all.filter((slide) => !slide.manual)]
     })
     .catch(() => (error.value = 'Kunde inte hämta bildspelets slides.'))
 
@@ -308,10 +370,10 @@ async function save(patch) {
   }
 }
 
-async function command(type) {
+async function command(type, data = {}) {
   error.value = null
   try {
-    await push(databaseRef(database, 'slideshow/commands'), { type, at: serverTimestamp() })
+    await push(databaseRef(database, 'slideshow/commands'), { ...data, type, at: serverTimestamp() })
   } catch {
     error.value = 'Kunde inte skicka. Kontrollera uppkopplingen, eller ladda om sidan.'
   }
@@ -320,6 +382,14 @@ async function command(type) {
 function reloadScreens() {
   if (window.confirm('Ladda om bildspelet på alla skärmar?')) {
     void command('reload')
+  }
+}
+
+function showFlash() {
+  const text = flashDraft.value.trim().slice(0, MESSAGE_MAX_LENGTH)
+  if (text) {
+    void command('flash', { text })
+    flashDraft.value = ''
   }
 }
 

@@ -18,8 +18,8 @@ import { watchServerClock } from '../../live/remote/serverClock.js'
  * Database under slideshow/ (see database.rules.json), in the same way as the live overlay's remote control:
  *
  * - control: settings that persist until changed (paused, a slide held on screen, a message, a web page shown instead
- *   of the slideshow),
- * - commands: one-off actions ({ type, at } with the server time it was given),
+ *   of the slideshow, the bottom bar hidden with or without a clock),
+ * - commands: one-off actions ({ type, at } with the server time it was given; a flash also has its text),
  * - presence/{session}: written by each open screen ({ at, slide, showing, held }), so the admin page can show which
  *   screens are on and what they show,
  * - published: written by the app when the slides or the code change (see App\Services\SlideshowSnapshot).
@@ -27,8 +27,12 @@ import { watchServerClock } from '../../live/remote/serverClock.js'
  * Everything coming from the database is normalized here, so a missing or odd value never breaks the screen.
  */
 
-export const COMMANDS = ['next', 'previous', 'reload']
+export const COMMANDS = ['next', 'previous', 'reload', 'flash']
 export const MESSAGE_MAX_LENGTH = 120
+
+// A flash: the text over the whole screen, then down in the message bar, then gone.
+export const FLASH_FULL_MS = 6000
+export const FLASH_BAR_MS = 30000
 
 // Commands older than this are not run, e.g. when a screen is (re)loaded after they were given.
 export const COMMAND_MAX_AGE_MS = 15000
@@ -70,14 +74,52 @@ export function pageLabel(url) {
   }
 }
 
-// A stable key for a slide in the rotation: the club records slide has no id of its own.
+// The slides built into the screen (not in the database), with their keys for the live control.
+const BUILT_IN_KEYS = { Klubbrekord: RECORDS_KEY, Dm2026: 'dm2026', Swish: 'swish' }
+const BUILT_IN_LABELS = {
+  Klubbrekord: 'Senaste klubbrekorden',
+  Dm2026: 'Välkommen till DM 2026',
+  Swish: 'Swisha en gåva till GKK',
+}
+const SLIDE_KEY = new RegExp(`^(${Object.values(BUILT_IN_KEYS).join('|')}|slide-\\d{1,9})$`)
+
+/**
+ * The screen's slides: the latest club records, the visible slides from the admin and the Swish slide, in the order
+ * they rotate, and then the manual ones (the DM welcome), which are left out of the rotation and only shown when held
+ * from the live control.
+ */
+export function rotation(slides, records = []) {
+  const visible = Array.isArray(slides) ? slides.filter((slide) => slide?.is_visible) : []
+  return [
+    { type: 'Klubbrekord', data: { records } },
+    ...visible,
+    { type: 'Swish', data: {} },
+    // Full screen: the message bar is hidden while it is shown.
+    { type: 'Dm2026', data: {}, manual: true, hidesMessage: true },
+  ]
+}
+
+// The slide after (or before, with -1) the given one in the rotation, skipping the manual slides.
+export function nextInRotation(slides, index, direction = 1) {
+  const count = slides.length
+  let next = index
+  for (let step = 0; step < count; step++) {
+    next = (next + direction + count) % count
+    if (!slides[next]?.manual) {
+      return next
+    }
+  }
+  return index
+}
+
+// A stable key for a slide in the rotation: the built-in slides have no id of their own.
 export function slideKey(slide) {
-  return slide?.type === 'Klubbrekord' ? RECORDS_KEY : `slide-${slide?.id}`
+  return BUILT_IN_KEYS[slide?.type] ?? `slide-${slide?.id}`
 }
 
 export function slideLabel(slide) {
-  if (slide?.type === 'Klubbrekord') {
-    return 'Senaste klubbrekorden'
+  if (BUILT_IN_LABELS[slide?.type]) {
+    return BUILT_IN_LABELS[slide.type]
   }
   return text(slide?.data?.text, 80) ?? text(slide?.data?.subText, 80) ?? (slide?.data?.image ? 'Bild' : 'Tom slide')
 }
@@ -91,10 +133,19 @@ export function normalizeControl(raw) {
 
   return {
     paused: control.paused === true,
-    slide: typeof control.slide === 'string' && /^(records|slide-\d{1,9})$/.test(control.slide) ? control.slide : null,
+    slide: typeof control.slide === 'string' && SLIDE_KEY.test(control.slide) ? control.slide : null,
     message: message ? { id: String(control.message.id ?? message), text: message } : null,
     page: url ? { id: String(control.page.id ?? url), url } : null,
+    // The bottom bar (date, week, slide dots and clock) is shown unless hidden; when hidden, the clock can still be
+    // shown on its own.
+    footer: control.footer !== false,
+    clock: control.clock === true,
   }
+}
+
+// The text of a flash command, or null.
+export function flashText(command) {
+  return command?.type === 'flash' ? text(command.text, MESSAGE_MAX_LENGTH) : null
 }
 
 // Whether a command should still be run, given the server's current time.

@@ -1,6 +1,7 @@
 <template>
   <div
     class="fixed inset-0 flex flex-col overflow-hidden select-none cursor-none bg-linear-to-br from-slate-50 via-white to-slate-100"
+    :style="{ '--footer-h': control.footer ? FOOTER_HEIGHT : '0px' }"
   >
     <main class="relative flex-1 min-h-0">
       <Transition name="slideshow-fade">
@@ -37,12 +38,21 @@
           title="Webbsida"
         ></iframe>
       </Transition>
+
+      <!-- The clock on its own, when the bottom bar is hidden from the live control. -->
+      <div
+        v-if="!control.footer && control.clock"
+        class="absolute bottom-[2.5vh] right-[2vw] z-20 flex items-baseline rounded-[1.4vh] bg-gkk/90 px-[1.4vw] py-[1.1vh] text-white leading-none tabular-nums whitespace-nowrap shadow-xl shadow-black/20"
+      >
+        <span class="text-[min(3vw,5vh)] font-semibold">{{ time }}</span>
+        <span class="text-[min(1.6vw,2.8vh)] font-light text-white/60 ml-[0.3vw]">{{ seconds }}</span>
+      </div>
     </main>
 
     <!-- A message from the live control (/admin/slideshow/live), shown until it is taken down. -->
     <Transition name="slideshow-message">
       <div
-        v-if="control.message"
+        v-if="control.message && !hidesMessage"
         :key="control.message.id"
         class="shrink-0 bg-amber-300 text-gkk px-[4vw] py-[2vh] text-center font-semibold leading-tight text-balance text-[min(3.4vw,5.8vh)]"
       >
@@ -52,7 +62,8 @@
 
     <!-- Kept while a web page is shown, so the screen still has the date and time. -->
     <footer
-      class="relative shrink-0 h-[clamp(2.5rem,9vh,7rem)] bg-gkk text-white grid grid-cols-[1fr_auto_1fr] items-center gap-[2vw] px-[2.5vw]"
+      v-if="control.footer"
+      class="relative shrink-0 h-(--footer-h) bg-gkk text-white grid grid-cols-[1fr_auto_1fr] items-center gap-[2vw] px-[2.5vw]"
     >
       <div class="absolute top-0 inset-x-0 h-[0.5vh] min-h-[3px] bg-white/10">
         <div
@@ -74,12 +85,13 @@
       </div>
 
       <div class="flex items-center gap-[0.6vw]">
-        <span
-          v-for="(slide, index) in slides.length > 1 && !control.page ? slides : []"
-          :key="index"
-          class="h-[1vh] min-h-1.5 rounded-full transition-all duration-500"
-          :class="currentSlide == index ? 'w-[2.5vw] bg-white' : 'w-[1vh] min-w-1.5 bg-white/35'"
-        ></span>
+        <template v-for="(slide, index) in slides.length > 1 && !control.page ? slides : []" :key="index">
+          <span
+            v-if="!slide.manual"
+            class="h-[1vh] min-h-1.5 rounded-full transition-all duration-500"
+            :class="currentSlide == index ? 'w-[2.5vw] bg-white' : 'w-[1vh] min-w-1.5 bg-white/35'"
+          ></span>
+        </template>
       </div>
 
       <div class="flex items-baseline justify-end leading-none tabular-nums whitespace-nowrap">
@@ -87,6 +99,19 @@
         <span class="text-[min(1.6vw,2.8vh)] font-light text-white/60 ml-[0.3vw]">{{ seconds }}</span>
       </div>
     </footer>
+
+    <!-- A flash from the live control, over everything (also a web page): first the whole screen, then down where the
+         message bar is, then gone. -->
+    <Transition name="slideshow-flash">
+      <div
+        v-if="flash"
+        :key="flash.id"
+        class="slideshow-flash absolute inset-x-0 z-50 flex items-center justify-center overflow-hidden bg-amber-300 px-[5vw] text-center text-gkk shadow-[0_-1vh_4vh_rgba(0,0,0,0.15)]"
+        :class="{ 'slideshow-flash-bar': flash.phase === 'bar' }"
+      >
+        <span class="slideshow-flash-text font-bold leading-tight text-balance">{{ flash.text }}</span>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -94,11 +119,26 @@
 import { computed, ref, onMounted, watch } from 'vue'
 import Slide from './Slide.vue'
 import KlubbrekordSlide from './KlubbrekordSlide.vue'
+import Dm2026Slide from './Dm2026Slide.vue'
+import SwishSlide from './SwishSlide.vue'
 import { getISOWeek, getSwedishMonthName } from '../../utils/date'
 import { onValue, ref as databaseRef } from 'firebase/database'
 import { liveDatabase } from '../../live/remote/firebase.js'
 import axios from 'axios'
-import { PAGE_KEY, pageLabel, slideKey, slideLabel, useSlideshowRemote } from './remote.js'
+import {
+  FLASH_BAR_MS,
+  FLASH_FULL_MS,
+  PAGE_KEY,
+  flashText,
+  nextInRotation,
+  pageLabel,
+  rotation,
+  slideKey,
+  slideLabel,
+  useSlideshowRemote,
+} from './remote.js'
+
+const FOOTER_HEIGHT = 'clamp(2.5rem,9vh,7rem)'
 
 let state = ref('loading')
 let slides = ref([])
@@ -141,9 +181,7 @@ async function loadSlides(attempt = 0) {
     return
   }
 
-  slides.value = response.data.slides.filter((slide) => slide.is_visible)
-  // The latest club records are always shown as the first slide in the rotation.
-  slides.value.unshift({ type: 'Klubbrekord', data: { records: response.data.records } })
+  slides.value = rotation(response.data.slides, response.data.records)
   state.value = 'loaded'
 }
 
@@ -188,6 +226,14 @@ function component(type) {
     return KlubbrekordSlide
   }
 
+  if (type === 'Dm2026') {
+    return Dm2026Slide
+  }
+
+  if (type === 'Swish') {
+    return SwishSlide
+  }
+
   return null
 }
 
@@ -200,8 +246,11 @@ let slideInterval = null
 // The live control (/admin/slideshow/live): pause the rotation, hold a slide, show a message or a web page, step or
 // reload.
 const { control, report } = useSlideshowRemote({
-  onCommand: ({ type }) => {
-    if (type === 'next') {
+  onCommand: (command) => {
+    const { type } = command
+    if (type === 'flash') {
+      showFlash(flashText(command))
+    } else if (type === 'next') {
       nextSlide()
     } else if (type === 'previous') {
       previousSlide()
@@ -217,10 +266,15 @@ const heldIndex = computed(() =>
 // The rotation stops while paused, while a slide is held (as long as that slide is still in the slideshow), or while a
 // web page is shown instead.
 const held = computed(() => control.value.paused || heldIndex.value >= 0 || !!control.value.page)
+// Some slides (the DM welcome) use the whole screen, without the message bar.
+const hidesMessage = computed(() => !control.value.page && !!slides.value[currentSlide.value]?.hidesMessage)
 
 watch([heldIndex, held], () => {
   if (heldIndex.value >= 0) {
     currentSlide.value = heldIndex.value
+  } else if (slides.value[currentSlide.value]?.manual) {
+    // A manual slide was let go: on with the rotation right away.
+    currentSlide.value = nextInRotation(slides.value, currentSlide.value)
   }
   restartInterval()
 })
@@ -235,18 +289,19 @@ watch([currentSlide, slides, held, () => control.value.page], () => {
 })
 
 function nextSlide() {
-  if (!slides.value.length) {
-    return
-  }
-  currentSlide.value = (currentSlide.value + 1) % slides.value.length
-  restartInterval()
+  step(1)
 }
 
 function previousSlide() {
+  step(-1)
+}
+
+// Steps through the rotation; a manual slide (shown only while held) is skipped.
+function step(direction) {
   if (!slides.value.length) {
     return
   }
-  currentSlide.value = (currentSlide.value - 1 + slides.value.length) % slides.value.length
+  currentSlide.value = nextInRotation(slides.value, currentSlide.value, direction)
   restartInterval()
 }
 
@@ -257,6 +312,23 @@ function restartInterval() {
     slideInterval = setInterval(nextSlide, slideDuration)
   }
   slideCycle.value++
+}
+
+// A flash: over the whole screen first, then down in the message bar for a while, then gone. A new one replaces it.
+const flash = ref(null)
+let flashTimers = []
+
+function showFlash(text) {
+  if (!text) {
+    return
+  }
+  flashTimers.forEach(clearTimeout)
+  const id = `${Date.now()}`
+  flash.value = { id, text, phase: 'full' }
+  flashTimers = [
+    setTimeout(() => (flash.value = { id, text, phase: 'bar' }), FLASH_FULL_MS),
+    setTimeout(() => (flash.value = null), FLASH_FULL_MS + FLASH_BAR_MS),
+  ]
 }
 
 document.body.addEventListener('keydown', (e) => {
@@ -301,6 +373,54 @@ document.body.addEventListener('keydown', (e) => {
 
 .slideshow-message-enter-from,
 .slideshow-message-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+/* The flash fills the screen above the bottom bar, then shrinks down to a bar where the message bar is. */
+.slideshow-flash {
+  --flash-bar-h: 12vh;
+  top: 0;
+  bottom: var(--footer-h);
+  transition: top 1200ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.slideshow-flash-bar {
+  top: calc(100% - var(--footer-h) - var(--flash-bar-h));
+}
+
+.slideshow-flash-text {
+  font-size: min(7vw, 13vh);
+  transition: font-size 1200ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.slideshow-flash-bar .slideshow-flash-text {
+  font-size: min(3.2vw, 5.4vh);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.slideshow-flash-enter-active {
+  transition:
+    opacity 500ms ease,
+    transform 500ms ease;
+}
+
+.slideshow-flash-leave-active {
+  transition:
+    opacity 600ms ease,
+    transform 600ms ease;
+}
+
+.slideshow-flash-enter-from {
+  opacity: 0;
+  transform: scale(1.04);
+}
+
+.slideshow-flash-leave-to {
   opacity: 0;
   transform: translateY(100%);
 }
