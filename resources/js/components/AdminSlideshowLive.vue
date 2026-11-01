@@ -137,17 +137,66 @@
         <form class="flex flex-wrap gap-3" @submit.prevent="showPage">
           <input
             v-model="pageDraft"
-            type="url"
+            type="text"
             inputmode="url"
+            autocomplete="off"
+            autocapitalize="none"
+            spellcheck="false"
             :maxlength="PAGE_URL_MAX_LENGTH"
-            placeholder="https://se.powerliftinglive.com/…"
+            placeholder="se.powerliftinglive.com/…"
             class="min-w-0 flex-1 basis-64 appearance-none rounded-sm px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:border-blue-300"
           />
           <button :class="buttonClass" :disabled="!pageUrl(pageDraft)">Visa</button>
         </form>
         <p v-if="pageDraft.trim() && !pageUrl(pageDraft)" class="mt-2 text-sm text-red-700">
-          Ange en adress som börjar med https://
+          Det ser inte ut som en webbadress. Skriv t.ex. se.powerliftinglive.com
         </p>
+
+        <!-- The warm-up hall screen (/live/hall) for a competition that is live on Powerlifting Live. -->
+        <div class="mt-6 border-t border-gray-200 pt-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="min-w-0 flex-1 basis-64">
+              <h3 class="font-semibold">Uppvärmningsskärm</h3>
+              <p class="text-sm text-gray-600">
+                Lyftordning, resultat och nästa grupp för en tävling som är live på Powerlifting Live.
+              </p>
+            </div>
+            <button
+              :class="secondaryButtonClass"
+              class="shrink-0"
+              :disabled="hall.state === 'loading'"
+              @click="loadCompetitions"
+            >
+              <i class="fa fa-refresh mr-2" :class="{ 'fa-spin': hall.state === 'loading' }"></i>
+              {{ hall.state === 'idle' ? 'Hämta tävlingar' : 'Uppdatera' }}
+            </button>
+          </div>
+          <p v-if="hall.state === 'error'" class="mt-3 text-sm text-red-700">
+            Kunde inte hämta tävlingarna från Powerlifting Live. Försök igen om en stund.
+          </p>
+          <p v-else-if="hall.state === 'loaded' && !hall.competitions.length" class="mt-3 text-sm text-gray-600">
+            Inga tävlingar live just nu.
+          </p>
+          <ul v-if="hall.competitions.length" class="mt-3 divide-y divide-gray-200">
+            <li v-for="competition in hall.competitions" :key="competition.id" class="flex items-center gap-4 py-3">
+              <div class="min-w-0 flex-1">
+                <p class="truncate font-medium">{{ competition.name }}</p>
+                <p v-if="competition.date" class="text-sm text-gray-600">{{ competition.date }}</p>
+              </div>
+              <span v-if="current.page?.url === hallUrl(competition.id)" class="shrink-0 text-sm text-green-700">
+                Visas nu
+              </span>
+              <button
+                v-else
+                :class="secondaryButtonClass"
+                class="shrink-0"
+                @click="save({ page: { id: Date.now().toString(36), url: hallUrl(competition.id) } })"
+              >
+                Visa
+              </button>
+            </li>
+          </ul>
+        </div>
         <div v-if="current.page" class="mt-4 flex flex-wrap items-center gap-3">
           <p class="min-w-0 flex-1 basis-64 text-gray-700">
             På skärmen:
@@ -210,6 +259,7 @@ const now = ref(Date.now())
 const slides = ref([])
 const draft = ref('')
 const pageDraft = ref('')
+const hall = ref({ state: 'idle', competitions: [] })
 
 let unsubscribes = []
 let ticker = null
@@ -279,6 +329,21 @@ function showMessage() {
     void save({ message: { id: Date.now().toString(36), text } })
     draft.value = ''
   }
+}
+
+// The competitions live on Powerlifting Live now (LiveOverlayController@competitions), for the hall screen.
+async function loadCompetitions() {
+  hall.value = { ...hall.value, state: 'loading' }
+  try {
+    const { data } = await axios.get('/live/competitions')
+    hall.value = { state: 'loaded', competitions: Array.isArray(data.competitions) ? data.competitions : [] }
+  } catch {
+    hall.value = { state: 'error', competitions: [] }
+  }
+}
+
+function hallUrl(id) {
+  return pageUrl(`${window.location.origin}/live/hall?competition=${encodeURIComponent(id)}`)
 }
 
 function showPage() {

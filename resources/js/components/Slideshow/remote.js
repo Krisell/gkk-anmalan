@@ -45,7 +45,8 @@ export const PAGE_URL_MAX_LENGTH = 2000
 
 /**
  * A web page address that can be shown on the screen, or null. Only https: the screen's own page is served over https,
- * and the browser blocks http pages inside it. Anything else (javascript:, data:, …) is never shown.
+ * and the browser blocks http pages inside it. So an address without a scheme gets https://, and http:// is changed
+ * to https:// (most sites serve both). Anything else (javascript:, data:, …) is never shown.
  */
 export function pageUrl(value) {
   const input = typeof value === 'string' ? value.trim() : ''
@@ -53,7 +54,7 @@ export function pageUrl(value) {
     return null
   }
   try {
-    const url = new URL(/^[a-z][a-z0-9+.-]*:/i.test(input) ? input : `https://${input}`)
+    const url = new URL(/^[a-z][a-z0-9+.-]*:/i.test(input) ? input.replace(/^http:/i, 'https:') : `https://${input}`)
     return url.protocol === 'https:' && url.hostname ? url.href : null
   } catch {
     return null

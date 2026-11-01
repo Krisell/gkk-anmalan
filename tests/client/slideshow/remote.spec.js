@@ -48,7 +48,9 @@ describe('web pages', () => {
       'https://se.powerliftinglive.com/screen?id=3001',
     )
     expect(pageUrl('se.powerliftinglive.com')).toBe('https://se.powerliftinglive.com/')
-    expect(pageUrl('http://example.com')).toBeNull()
+    expect(pageUrl('www.example.com/a?b=1')).toBe('https://www.example.com/a?b=1')
+    expect(pageUrl('HTTP://example.com/page')).toBe('https://example.com/page')
+    expect(pageUrl('ftp://example.com')).toBeNull()
     expect(pageUrl('javascript:alert(1)')).toBeNull()
     expect(pageUrl('data:text/html,<p>hi</p>')).toBeNull()
     expect(pageUrl('https://')).toBeNull()
