@@ -88,13 +88,10 @@ class SlideshowSnapshot
         ];
 
         try {
-            // PATCH, not PUT, so that the live control's data next to it stays. The top-level version and build are
-            // for screens still running the code from before slideshow/published; remove them once those have reloaded.
+            // PATCH, not PUT, so that the live control's data next to it stays
             Http::withToken(self::accessToken())
                 ->patch(\rtrim(config('firebase.database_url'), '/').'/slideshow.json', [
                     'published' => $published,
-                    'version' => $published['version'],
-                    'build' => $published['build'],
                 ])
                 ->throw();
 

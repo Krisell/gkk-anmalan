@@ -82,7 +82,7 @@ test('changing slides publishes the version once, with the service account', fun
     Http::assertSent(fn (Request $request) => $request->method() === 'PATCH'
         && $request->url() === 'https://example-db.firebaseio.com/slideshow.json'
         && \array_key_exists('build', $request->data()['published'])
-        && $request->data()['version'] === $request->data()['published']['version']
+        && \array_keys($request->data()) === ['published']
         && $request->hasHeader('Authorization', 'Bearer test-token'));
 });
 

@@ -36,9 +36,6 @@ frankenphp-worker.php
 
 .playwright-mcp
 
-# MySQL -> Postgres migration output (contains member data)
-*.pgdump
-migrate.load
 
 # Firebase emulator logs
 firebase-debug.log

@@ -46,8 +46,6 @@ Cloud and redeploy. While it is on:
   page directly.
 - Logged-in members are treated as guests on the public pages. Their session cookie is left as it is, so they are
   logged in again once maintenance is off.
-- Every request (except `/up`) is logged to `storage/logs/maintenance-requests.log`, as one line with host, method,
-  path, status, IP and user agent.
 
 The code is in `app/Http/Middleware/DatabaseMaintenanceMiddleware.php`, the page in
 `resources/views/maintenance.blade.php`.

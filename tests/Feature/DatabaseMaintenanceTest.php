@@ -2,7 +2,6 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 function enableDatabaseMaintenance()
 {
@@ -50,13 +49,4 @@ test('logged-in members see the public pages as guests', function () {
         ->get('/')
         ->assertOk()
         ->assertSessionHas($sessionKey, $user->id);
-});
-
-test('every request is logged during maintenance', function () {
-    enableDatabaseMaintenance();
-
-    Log::shouldReceive('build')->once()->andReturnSelf();
-    Log::shouldReceive('info')->once()->withArgs(fn ($line) => \str_starts_with($line, 'goteborgkk.se GET /gkk 200'));
-
-    $this->get('https://goteborgkk.se/gkk');
 });
