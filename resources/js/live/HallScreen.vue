@@ -192,12 +192,8 @@ const DECISION_MS = 10000
 // fades out; the card with the lamps flips out, see the styles).
 const FADE_MS = 400
 const FLIP_OUT_MS = 700
-// Whether the lamps are shown: only once the card with them has faded in.
+// Whether the lamps are shown: only once the card with them has faded in (reset when the lights go out, below).
 const lampsShown = ref(false)
-watch(
-  () => Boolean(lights.value),
-  (lit) => !lit && (lampsShown.value = false),
-)
 const shownDecision = ref(null)
 let decisionTimer = null
 
@@ -215,6 +211,10 @@ onBeforeUnmount(() => clearTimeout(decisionTimer))
 
 // Each lamp animates on by itself as its light changes (see RefereePanel.vue).
 const lights = computed(() => shownDecision.value?.lights ?? snapshot.value?.signals ?? null)
+watch(
+  () => Boolean(lights.value),
+  (lit) => !lit && (lampsShown.value = false),
+)
 
 // Whose lift the lights belong to, and when the next lifter may be introduced (see hallState.js): it must never look
 // as if a lifter has already lifted. Updated before each render, so the lights never show without their lifter.
