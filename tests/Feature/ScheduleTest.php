@@ -15,6 +15,7 @@ test('the scheduled tasks run at fixed UTC times', function () {
         ->all();
 
     expect($lines)->toBe([
+        '20 6 * * * php artisan gkk:import-club-records',
         '20 6 * * * php artisan gkk:notify-competition-deadlines',
         '20 6 * * * php artisan gkk:publish-slideshow',
         '30 12 * * * php artisan fortnox:verify-payment --all',

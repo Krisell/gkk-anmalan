@@ -3,17 +3,20 @@
 namespace App\Services;
 
 use App\Models\Result;
-use Illuminate\Support\Collection;
+use Carbon\CarbonImmutable;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
 /**
- * GKK's competition results from the last 30 days, from the Swedish Powerlifting Federation's results database
- * (data.styrkelyft.se, whose API is data-api.styrkelyft.se), for the screen slideshow.
+ * GKK's competition results from the Swedish Powerlifting Federation's results database (data.styrkelyft.se, whose API
+ * is data-api.styrkelyft.se): the last 30 days for the screen slideshow, and further back for importing the club records
+ * (gkk:import-club-records).
  *
- * Each lift is marked when it is a club record: a classic lift (CPL, or the bench press in CBP) at or above the best
- * result in the club's records (App\Models\Result) for the same gender, weight class and event.
+ * Each lift is marked when it is a club record: a classic lift (CPL, or the bench press in CBP) above the best result in
+ * the club's records (App\Models\Result) for the same gender, weight class and event, or that record itself. Equalling
+ * someone else's record is not a record.
  */
 class StyrkelyftResults
 {
@@ -22,6 +25,11 @@ class StyrkelyftResults
     public const CLUB_ID = 7; // Göteborg KK
 
     public const DAYS = 30;
+
+    // The API gives at most 1 000 results a page; a month in Sweden is usually fewer (see fetch).
+    private const PAGE_SIZE = 1000;
+
+    private const WINDOW_DAYS = 31;
 
     // The most shown on the slide, newest first: 30–40 after a large competition, and more than three rows scroll.
     public const MAX = 60;
@@ -35,12 +43,12 @@ class StyrkelyftResults
     private const CACHE_SECONDS = 60 * 60;
 
     // The club records' weight classes (see Records.vue); results in other classes are never marked.
-    private const CLASSES = [
+    public const CLASSES = [
         'M' => ['52', '59', '66', '74', '83', '93', '105', '120', '120+'],
         'F' => ['43', '47', '52', '57', '63', '69', '76', '84', '84+'],
     ];
 
-    private const LIFTS = ['squat' => 'Knäböj', 'bench' => 'Bänkpress', 'deadlift' => 'Marklyft', 'total' => 'Total'];
+    public const LIFTS = ['squat' => 'Knäböj', 'bench' => 'Bänkpress', 'deadlift' => 'Marklyft', 'total' => 'Total'];
 
     /**
      * @return list<array<string, mixed>>
@@ -61,35 +69,76 @@ class StyrkelyftResults
         }
 
         // The club records are applied on every build, so that registering a record shows on the slide right away.
-        return self::withRecords(self::within($fetched, self::DAYS));
+        return \array_slice(self::withRecords(self::within($fetched, self::DAYS)), 0, self::MAX);
     }
 
     /**
-     * GKK's results from the API, normalized, newest first.
+     * GKK's results from the API since the given date (the last 30 days by default), normalized, newest first.
      *
      * @return list<array<string, mixed>>
      */
-    public static function fetch(): array
+    public static function fetch(?string $since = null): array
     {
+        $from = CarbonImmutable::parse($since ?? now()->subDays(self::DAYS)->toDateString())->startOfDay();
+        $today = CarbonImmutable::today();
         $results = [];
-        $url = self::API;
-        $query = ['start_date' => now()->subDays(self::DAYS)->toDateString(), 'page_size' => 1000];
 
-        // Only a few hundred results a month in the whole country, so one page; the rest are followed just in case.
-        for ($page = 0; $url && $page < 10; $page++) {
-            $response = Http::acceptJson()->timeout(15)->get($url, $query)->throw();
-            $results = [...$results, ...($response->json('results') ?? [])];
-            $url = $response->json('next');
-            $query = [];
+        // The API has no club filter, so every result in Sweden is fetched: a few hundred a month, and about 60 000
+        // since 2015. Its pages have no stable order (results repeat and go missing between pages), so it is asked for
+        // at most a month at a time, small enough for one page.
+        for ($start = $from; $start <= $today; $start = $start->addDays(self::WINDOW_DAYS)) {
+            $end = $start->addDays(self::WINDOW_DAYS - 1)->min($today);
+            $results = [...$results, ...self::fetchWindow($start, $end)];
         }
 
         return collect($results)
+            ->unique('id')
             ->filter(fn ($result) => ($result['club']['id'] ?? null) === self::CLUB_ID && ! ($result['disqualified'] ?? false))
             ->map(fn ($result) => self::normalize($result))
             ->filter()
             ->sortByDesc(fn ($result) => $result['date'].' '.$result['id'])
             ->values()
             ->all();
+    }
+
+    /**
+     * Every result in Sweden between two dates (inclusive), in one page: a window with more results than fit on a page
+     * is split in two. A single day with more (never seen) is paged through.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private static function fetchWindow(CarbonImmutable $start, CarbonImmutable $end): array
+    {
+        $response = self::get(self::API, [
+            'start_date' => $start->toDateString(),
+            'end_date' => $end->toDateString(),
+            'page_size' => self::PAGE_SIZE,
+        ]);
+        $results = $response->json('results') ?? [];
+
+        if ($response->json('next') && $start < $end) {
+            $middle = $start->addDays(\intdiv((int) $start->diffInDays($end), 2));
+
+            return [...self::fetchWindow($start, $middle), ...self::fetchWindow($middle->addDay(), $end)];
+        }
+
+        // The next page's address has the filters in it, so it is fetched as it is.
+        for ($url = $response->json('next'), $page = 0; $url && $page < 50; $page++) {
+            $response = self::get($url);
+            $results = [...$results, ...($response->json('results') ?? [])];
+            $url = $response->json('next');
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param  array<string, mixed>|null  $query  null for an address that has its query already (an empty array would
+     *                                            remove it)
+     */
+    private static function get(string $url, ?array $query = null): Response
+    {
+        return Http::acceptJson()->timeout(30)->retry(2, 1000)->get($url, $query)->throw();
     }
 
     /**
@@ -114,6 +163,8 @@ class StyrkelyftResults
             'date' => \substr($start, 0, 10),
             'competition' => \trim($result['group']['competition']['name'] ?? ''),
             'name' => \trim(($person['first_name'] ?? '').' '.($person['last_name'] ?? '')),
+            'first_name' => \trim($person['first_name'] ?? ''),
+            'last_name' => \trim($person['last_name'] ?? ''),
             'gender' => ($person['is_male'] ?? $result['weight_class']['is_male'] ?? true) ? 'M' : 'F',
             'type' => $type,
             'type_label' => $result['competition_type']['description'] ?? $type,
@@ -151,9 +202,8 @@ class StyrkelyftResults
     }
 
     /**
-     * Marks the club records: each lift that beats the club's record, or is the record once it has been registered (the
-     * same weight, by the same lifter or within a few days). A record beaten more than once in the period is marked on
-     * each result that improved it.
+     * Marks the club records: each lift that beats the club's record, or is that record (see sameLift). A record beaten
+     * more than once in the period is marked on each result that improved it.
      *
      * @param  list<array<string, mixed>>  $results
      * @return list<array<string, mixed>>
@@ -178,8 +228,8 @@ class StyrkelyftResults
                     continue;
                 }
 
-                $key = $result['gender'].'|'.$result['weight_class'].'|'.$event;
-                $record = $records->get($key);
+                $key = self::key($result['gender'], $result['weight_class'], $event);
+                $record = $records[$key] ?? null;
                 $isRecord = match (true) {
                     $record === null => true,
                     $value > $record['value'] => true,
@@ -196,39 +246,70 @@ class StyrkelyftResults
             return $result;
         });
 
-        return $marked->reverse()->take(self::MAX)->values()->all();
+        return $marked->reverse()->values()->all();
     }
 
     /**
-     * Whether a registered record of the same weight is this result.
+     * Whether a registered record of the same weight is this result: imported from it, or entered by hand for the same
+     * lifter within a few days (a multi-day competition may be registered with another of its days). The same weight
+     * by someone else, or by the same lifter at another competition, only equals the record.
      *
-     * @param  array{name: string, date: string}  $record
+     * @param  array{name: string, date: string, styrkelyft_result_id: int|null}  $record
      * @param  array<string, mixed>  $result
      */
-    private static function sameLift(array $record, array $result): bool
+    public static function sameLift(array $record, array $result): bool
     {
+        if ($record['styrkelyft_result_id'] !== null) {
+            return $record['styrkelyft_result_id'] === $result['id'];
+        }
+
         $days = \abs(\strtotime($record['date']) - \strtotime($result['date'])) / 86400;
 
-        return $days <= 3 || \mb_strtolower($record['name']) === \mb_strtolower($result['name']);
+        return $days <= 3 && self::samePerson($record['name'], $result['name']);
+    }
+
+    public static function samePerson(string $a, string $b): bool
+    {
+        $normalize = fn (string $name) => \preg_replace('/\s+/u', ' ', \mb_strtolower(\trim($name)));
+
+        return $a !== '' && $normalize($a) === $normalize($b);
     }
 
     /**
-     * The club's best result for each gender, weight class and event.
-     *
-     * @return Collection<string, array{value: float, date: string, name: string}>
+     * The value of a club record, which is stored as text ("152.5", or sometimes "152,5").
      */
-    private static function clubRecords(): Collection
+    public static function value(Result $record): float
     {
-        /** @var Collection<string, array{value: float, date: string, name: string}> */
-        return Result::with('user:id,first_name,last_name')
-            ->get(['id', 'user_id', 'name', 'gender', 'weight_class', 'event', 'result', 'competition_date'])
+        return (float) \str_replace(',', '.', (string) $record->result);
+    }
+
+    /**
+     * The club's best result for each gender, weight class and event ("M|74|Knäböj").
+     *
+     * @return array<string, array{id: int, value: float, date: string, name: string, styrkelyft_result_id: int|null}>
+     */
+    public static function clubRecords(): array
+    {
+        /** @var array<string, array{id: int, value: float, date: string, name: string, styrkelyft_result_id: int|null}> $records */
+        $records = Result::with('user:id,first_name,last_name')
+            ->get(['id', 'user_id', 'name', 'gender', 'weight_class', 'event', 'result', 'competition_date', 'styrkelyft_result_id'])
             ->map(fn (Result $result) => [
-                'key' => $result->gender.'|'.$result->weight_class.'|'.$result->event,
-                'value' => (float) \str_replace(',', '.', $result->result),
+                'key' => self::key($result->gender, $result->weight_class, $result->event),
+                'id' => $result->id,
+                'value' => self::value($result),
                 'date' => \substr((string) $result->competition_date, 0, 10),
                 'name' => \trim($result->name ?: data_get($result, 'user.first_name', '').' '.data_get($result, 'user.last_name', '')),
+                'styrkelyft_result_id' => $result->styrkelyft_result_id === null ? null : (int) $result->styrkelyft_result_id,
             ])
             ->groupBy('key')
-            ->map(fn ($group) => $group->sortByDesc('value')->first());
+            ->map(fn ($group) => $group->sortByDesc('value')->first())
+            ->all();
+
+        return $records;
+    }
+
+    public static function key(string $gender, string $weightClass, string $event): string
+    {
+        return $gender.'|'.$weightClass.'|'.$event;
     }
 }

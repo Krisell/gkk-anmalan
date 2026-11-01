@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Result;
 use App\Models\User;
+use App\Services\StyrkelyftResults;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 /*
@@ -68,4 +71,41 @@ function loginSuperadmin()
     Auth::login($user);
 
     return $user;
+}
+
+/**
+ * A result as data-api.styrkelyft.se returns it.
+ */
+function styrkelyftResult(array $overrides = []): array
+{
+    return \array_replace_recursive([
+        'id' => 1,
+        'group' => ['competition' => ['id' => 1881, 'name' => '2026 SM Klassisk styrkelyft'], 'start' => '2026-10-24T13:00:00+02:00'],
+        'person' => ['first_name' => 'Stella', 'last_name' => 'Larsdotter', 'is_male' => false],
+        'club' => ['id' => StyrkelyftResults::CLUB_ID, 'name' => 'Göteborg KK'],
+        'competition_type' => ['id' => 1, 'name' => 'CPL', 'description' => 'Klassisk Styrkelyft'],
+        'age_category' => ['label' => 'Senior'],
+        'weight_class' => ['name' => '-63', 'is_male' => false],
+        'body_weight' => 60.75,
+        'squat' => 150.0,
+        'benchpress' => 107.5,
+        'deadlift' => 170.0,
+        'total' => 427.5,
+        'points' => ['ipfgl' => 95.81, 'ipfglbp' => 91.64],
+        'disqualified' => false,
+        'rank' => 1,
+    ], $overrides);
+}
+
+function fakeStyrkelyft(array $results): void
+{
+    Http::fake(['data-api.styrkelyft.se/*' => Http::response(['count' => \count($results), 'next' => null, 'results' => $results])]);
+}
+
+function clubRecord(string $event, string $result, array $attributes = []): Result
+{
+    return Result::factory()->create([
+        'gender' => 'F', 'weight_class' => '63', 'event' => $event, 'result' => $result,
+        'competition_date' => '2022-03-28', 'user_id' => null, 'name' => 'Anna Björk', ...$attributes,
+    ]);
 }

@@ -12,43 +12,6 @@ beforeEach(function () {
     $this->travelTo('2026-11-01 12:00:00');
 });
 
-/**
- * A result as data-api.styrkelyft.se returns it.
- */
-function styrkelyftResult(array $overrides = []): array
-{
-    return \array_replace_recursive([
-        'id' => 1,
-        'group' => ['competition' => ['id' => 1881, 'name' => '2026 SM Klassisk styrkelyft'], 'start' => '2026-10-24T13:00:00+02:00'],
-        'person' => ['first_name' => 'Stella', 'last_name' => 'Larsdotter', 'is_male' => false],
-        'club' => ['id' => StyrkelyftResults::CLUB_ID, 'name' => 'Göteborg KK'],
-        'competition_type' => ['id' => 1, 'name' => 'CPL', 'description' => 'Klassisk Styrkelyft'],
-        'age_category' => ['label' => 'Senior'],
-        'weight_class' => ['name' => '-63', 'is_male' => false],
-        'body_weight' => 60.75,
-        'squat' => 150.0,
-        'benchpress' => 107.5,
-        'deadlift' => 170.0,
-        'total' => 427.5,
-        'points' => ['ipfgl' => 95.81, 'ipfglbp' => 91.64],
-        'disqualified' => false,
-        'rank' => 1,
-    ], $overrides);
-}
-
-function fakeStyrkelyft(array $results): void
-{
-    Http::fake(['data-api.styrkelyft.se/*' => Http::response(['count' => \count($results), 'next' => null, 'results' => $results])]);
-}
-
-function record(string $event, string $result, array $attributes = []): Result
-{
-    return Result::factory()->create([
-        'gender' => 'F', 'weight_class' => '63', 'event' => $event, 'result' => $result,
-        'competition_date' => '2022-03-28', 'user_id' => null, 'name' => 'Anna Björk', ...$attributes,
-    ]);
-}
-
 test('only GKK results from the last 30 days are fetched, newest first', function () {
     fakeStyrkelyft([
         styrkelyftResult(['id' => 1]),
@@ -75,9 +38,9 @@ test('only GKK results from the last 30 days are fetched, newest first', functio
 });
 
 test('a lift above the club record, or in a class without one, is a club record', function () {
-    record('Knäböj', '140');
-    record('Bänkpress', '110');
-    record('Marklyft', '160');
+    clubRecord('Knäböj', '140');
+    clubRecord('Bänkpress', '110');
+    clubRecord('Marklyft', '160');
     // No total registered.
     fakeStyrkelyft([styrkelyftResult()]);
 
@@ -85,17 +48,17 @@ test('a lift above the club record, or in a class without one, is a club record'
 });
 
 test('the registered record is still marked, but not an equal lift by someone else long after', function () {
-    record('Knäböj', '150', ['name' => 'Stella Larsdotter', 'competition_date' => '2026-10-25']);
-    record('Bänkpress', '107,5', ['name' => 'Anna Björk']);
-    record('Marklyft', '200');
-    record('Total', '500');
+    clubRecord('Knäböj', '150', ['name' => 'Stella Larsdotter', 'competition_date' => '2026-10-25']);
+    clubRecord('Bänkpress', '107,5', ['name' => 'Anna Björk']);
+    clubRecord('Marklyft', '200');
+    clubRecord('Total', '500');
     fakeStyrkelyft([styrkelyftResult()]);
 
     expect(StyrkelyftResults::recent()[0]['records'])->toBe(['squat']);
 });
 
 test('a bench press competition only counts for the bench record, and equipped results never', function () {
-    record('Bänkpress', '100');
+    clubRecord('Bänkpress', '100');
     fakeStyrkelyft([
         styrkelyftResult(['id' => 1, 'competition_type' => ['name' => 'CBP', 'description' => 'Klassisk Bänkpress'], 'squat' => 0, 'deadlift' => 0, 'total' => 107.5]),
         styrkelyftResult(['id' => 2, 'competition_type' => ['name' => 'EPL', 'description' => 'Utrustad Styrkelyft'], 'group' => ['start' => '2026-10-20T10:00:00+02:00']]),
@@ -108,7 +71,7 @@ test('a bench press competition only counts for the bench record, and equipped r
 });
 
 test('a record beaten twice in the period is marked on both, but a lift below an earlier one is not', function () {
-    record('Total', '400');
+    clubRecord('Total', '400');
     fakeStyrkelyft([
         styrkelyftResult(['id' => 3, 'total' => 420.0, 'group' => ['start' => '2026-10-30T10:00:00+01:00']]),
         styrkelyftResult(['id' => 2, 'total' => 427.5]),
@@ -135,4 +98,59 @@ test('nothing is shown when the API has never answered', function () {
     Http::fake(['data-api.styrkelyft.se/*' => Http::response('Bad gateway', 502)]);
 
     expect(StyrkelyftResults::recent())->toBe([]);
+});
+
+test('equalling the record is not a record, unless it is the registered lift itself', function () {
+    // Someone else, the same week: equals the record.
+    clubRecord('Knäböj', '150', ['name' => 'Anna Björk', 'competition_date' => '2026-10-24']);
+    // The same lifter, at an earlier competition: equals her own record.
+    clubRecord('Bänkpress', '107.5', ['name' => 'Stella Larsdotter', 'competition_date' => '2026-06-01']);
+    // Imported from this very result.
+    clubRecord('Marklyft', '170', ['styrkelyft_result_id' => 1, 'competition_date' => '2026-10-25']);
+    // Imported from another result.
+    clubRecord('Total', '427.5', ['styrkelyft_result_id' => 999, 'competition_date' => '2026-10-24']);
+    fakeStyrkelyft([styrkelyftResult()]);
+
+    expect(StyrkelyftResults::recent()[0]['records'])->toBe(['deadlift']);
+});
+
+test('the results are fetched a month at a time, and a month too large for a page is split', function () {
+    Http::fake(function (Request $request) {
+        \parse_str(\parse_url($request->url(), PHP_URL_QUERY) ?? '', $query);
+        $days = (\strtotime($query['end_date']) - \strtotime($query['start_date'])) / 86400;
+
+        // More than fits on a page, unless at most a week.
+        return $days > 6
+            ? Http::response(['results' => [], 'next' => StyrkelyftResults::API.'?page=2'])
+            : Http::response(['next' => null, 'results' => [styrkelyftResult([
+                'id' => \crc32($query['start_date']),
+                'group' => ['start' => $query['start_date'].'T10:00:00+01:00'],
+            ])]]);
+    });
+
+    $results = StyrkelyftResults::fetch('2026-09-01');
+
+    $windows = Http::recorded()->map(function ($pair) {
+        \parse_str(\parse_url($pair[0]->url(), PHP_URL_QUERY) ?? '', $query);
+
+        return [$query['start_date'], $query['end_date']];
+    });
+    // Every day from the start to today in exactly one window of at most a week.
+    $leaves = $windows->filter(fn ($w) => (\strtotime($w[1]) - \strtotime($w[0])) / 86400 <= 6)->sortBy(0)->values();
+    expect($leaves->first()[0])->toBe('2026-09-01');
+    expect($leaves->last()[1])->toBe('2026-11-01');
+    $leaves->sliding(2)->each(fn ($pair) => expect(\date('Y-m-d', \strtotime($pair->first()[1].' +1 day')))->toBe($pair->last()[0]));
+    expect($results)->toHaveCount($leaves->count());
+});
+
+test('a page after the first keeps its filters, and a result on two pages is kept once', function () {
+    $next = StyrkelyftResults::API.'?end_date=2026-10-24&page=2&page_size=1000&start_date=2026-10-24';
+    Http::fake(function (Request $request) use ($next) {
+        return \str_contains($request->url(), 'page=2')
+            ? Http::response(['next' => null, 'results' => [styrkelyftResult(['id' => 1]), styrkelyftResult(['id' => 2])]])
+            : Http::response(['next' => $next, 'results' => [styrkelyftResult(['id' => 1])]]);
+    });
+
+    expect(collect(StyrkelyftResults::fetch('2026-10-24'))->pluck('id')->sort()->values()->all())->toBe([1, 2]);
+    Http::assertSent(fn (Request $request) => $request->url() === $next);
 });

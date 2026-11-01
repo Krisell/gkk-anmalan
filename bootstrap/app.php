@@ -77,6 +77,9 @@ return Application::configure(basePath: \dirname(__DIR__))
         // hour off and the task would not run. In Swedish time these run an hour later in summer.
         $schedule->command('gkk:notify-competition-deadlines')->dailyAt('06:20')->timezone('UTC');
 
+        // New club records from data.styrkelyft.se, before the publish below (adding one also publishes the slideshow).
+        $schedule->command('gkk:import-club-records')->dailyAt('06:20')->timezone('UTC');
+
         // Safety net in case a publish after a change failed. Runs in the same wake as the task above. (Cloud also runs
         // it as a deploy command, so that a deploy reloads the open screens.)
         $schedule->command('gkk:publish-slideshow')->dailyAt('06:20')->timezone('UTC');
