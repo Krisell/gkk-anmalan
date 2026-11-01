@@ -11,6 +11,7 @@ import {
   set,
 } from 'firebase/database'
 import { liveDatabase } from '../../live/remote/firebase.js'
+import { watchServerClock } from '../../live/remote/serverClock.js'
 
 /**
  * Live control of the screen slideshow (/slides-for-screen) from /admin/slideshow/live, through Firebase's Realtime
@@ -120,12 +121,12 @@ export function useSlideshowRemote({ onCommand = () => {} } = {}) {
   const database = liveDatabase()
   const control = shallowRef(normalizeControl(null))
   let connected = false
-  let serverOffset = 0
   let stopped = false
   const seen = new Set()
 
+  const serverClock = watchServerClock(database)
   const unsubscribes = [
-    onValue(databaseRef(database, '.info/serverTimeOffset'), (snapshot) => (serverOffset = snapshot.val() ?? 0)),
+    serverClock.stop,
     onValue(
       databaseRef(database, 'slideshow/control'),
       (snapshot) => (control.value = normalizeControl(snapshot.val())),
@@ -149,7 +150,7 @@ export function useSlideshowRemote({ onCommand = () => {} } = {}) {
           }
           seen.add(snapshot.key)
           const command = snapshot.val()
-          if (isFreshCommand(command, Date.now() + serverOffset)) {
+          if (isFreshCommand(command, serverClock.now())) {
             onCommand(command)
           }
         }),

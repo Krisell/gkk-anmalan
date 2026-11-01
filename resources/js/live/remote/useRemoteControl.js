@@ -11,6 +11,7 @@ import {
   set,
 } from 'firebase/database'
 import { liveDatabase } from './firebase.js'
+import { watchServerClock } from './serverClock.js'
 import { DEFAULT_CONTROL, isFreshCommand, normalizeControl } from './controlState.js'
 
 const HEARTBEAT_MS = 30000
@@ -28,11 +29,11 @@ export function useRemoteControl(competition, { onCommand = () => {}, presence =
   const control = shallowRef(normalizeControl(DEFAULT_CONTROL))
   const connected = ref(false)
 
-  let serverOffset = 0
   let stopped = false
   const seen = new Set()
+  const serverClock = watchServerClock(database)
   const unsubscribes = [
-    onValue(databaseRef(database, '.info/serverTimeOffset'), (snapshot) => (serverOffset = snapshot.val() ?? 0)),
+    serverClock.stop,
     onValue(databaseRef(database, `${path}/control`), (snapshot) => (control.value = normalizeControl(snapshot.val()))),
   ]
 
@@ -54,7 +55,7 @@ export function useRemoteControl(competition, { onCommand = () => {}, presence =
           }
           seen.add(snapshot.key)
           const command = snapshot.val()
-          if (isFreshCommand(command, Date.now() + serverOffset)) {
+          if (isFreshCommand(command, serverClock.now())) {
             onCommand(command)
           }
         }),
