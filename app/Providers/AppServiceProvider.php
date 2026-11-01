@@ -6,8 +6,13 @@ use App\Models\Result;
 use App\Models\Slide;
 use App\Services\SlideshowSnapshot;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Console\Events\ScheduledTaskFailed;
+use Illuminate\Console\Events\ScheduledTaskFinished;
+use Illuminate\Console\Scheduling\Event as ScheduledTask;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -50,5 +55,27 @@ class AppServiceProvider extends ServiceProvider
         Result::saved(fn () => SlideshowSnapshot::publishSoon());
         Result::deleted(fn () => SlideshowSnapshot::publishSoon());
         Result::restored(fn () => SlideshowSnapshot::publishSoon());
+
+        // The scheduled tasks print nothing themselves, so without this nothing in Laravel Cloud's logs shows that
+        // they ran. Find them with: cloud env:logs <app> <environment> --query="Scheduled task"
+        Event::listen(function (ScheduledTaskFinished $event) {
+            $line = \sprintf('Scheduled task %s finished in %.1f s', self::taskName($event->task), $event->runtime);
+
+            $event->task->exitCode
+                ? Log::warning("{$line} with exit code {$event->task->exitCode}")
+                : Log::info($line);
+        });
+
+        Event::listen(fn (ScheduledTaskFailed $event) => Log::error(
+            \sprintf('Scheduled task %s failed: %s', self::taskName($event->task), $event->exception->getMessage()),
+        ));
+    }
+
+    /**
+     * The artisan command without the PHP and artisan paths, for example "gkk:publish-slideshow".
+     */
+    private static function taskName(ScheduledTask $task): string
+    {
+        return $task->description ?? \trim(\str_replace(['php artisan', 'artisan'], '', ScheduledTask::normalizeCommand($task->command ?? '')));
     }
 }
