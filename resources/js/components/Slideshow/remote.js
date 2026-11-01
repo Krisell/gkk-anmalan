@@ -75,27 +75,29 @@ export function pageLabel(url) {
 }
 
 // The slides built into the screen (not in the database), with their keys for the live control.
-const BUILT_IN_KEYS = { Klubbrekord: RECORDS_KEY, Dm2026: 'dm2026', Swish: 'swish' }
+const BUILT_IN_KEYS = { Klubbrekord: RECORDS_KEY, Dm2026: 'dm2026', Gm2027: 'gm2027', Swish: 'swish' }
 const BUILT_IN_LABELS = {
   Klubbrekord: 'Senaste klubbrekorden',
   Dm2026: 'Välkommen till DM 2026',
+  Gm2027: 'Götalandsmästerskapen 2027',
   Swish: 'Swisha en gåva till GKK',
 }
 const SLIDE_KEY = new RegExp(`^(${Object.values(BUILT_IN_KEYS).join('|')}|slide-\\d{1,9})$`)
 
 /**
- * The screen's slides: the latest club records, the visible slides from the admin and the Swish slide, in the order
- * they rotate, and then the manual ones (the DM welcome), which are left out of the rotation and only shown when held
- * from the live control.
+ * The screen's slides: the latest club records and the visible slides from the admin, in the order they rotate, and
+ * then the manual ones (the DM welcome, the Swish slide and the invitation to the Götaland championships 2027), which
+ * are left out of the rotation and only shown when held from the live control.
  */
 export function rotation(slides, records = []) {
   const visible = Array.isArray(slides) ? slides.filter((slide) => slide?.is_visible) : []
   return [
     { type: 'Klubbrekord', data: { records } },
     ...visible,
-    { type: 'Swish', data: {} },
-    // Full screen: the message bar is hidden while it is shown.
+    // These use the whole screen: the message bar is hidden while they are shown.
     { type: 'Dm2026', data: {}, manual: true, hidesMessage: true },
+    { type: 'Swish', data: {}, manual: true, hidesMessage: true },
+    { type: 'Gm2027', data: {}, manual: true, hidesMessage: true },
   ]
 }
 
@@ -110,6 +112,14 @@ export function nextInRotation(slides, index, direction = 1) {
     }
   }
   return index
+}
+
+// The live control lists these first, in this order, before the rest of the slides.
+const PINNED = ['Dm2026', 'Swish', 'Gm2027']
+
+export function controlOrder(slides) {
+  const pinned = PINNED.flatMap((type) => slides.filter((slide) => slide.type === type))
+  return [...pinned, ...slides.filter((slide) => !PINNED.includes(slide.type))]
 }
 
 // A stable key for a slide in the rotation: the built-in slides have no id of their own.

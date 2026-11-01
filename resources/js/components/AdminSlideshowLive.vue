@@ -101,7 +101,10 @@
         <h2 class="text-xl font-semibold mb-1">Visa en slide</h2>
         <p class="mb-4 text-sm text-gray-600">
           Skärmen stannar på sliden tills du släpper den.
-          <span v-if="current.page">Just nu visas en webbsida i stället, se nedan.</span>
+          <span v-if="current.page">
+            Just nu visas en webbsida. En slide du visar hamnar ovanpå den, och webbsidan fortsätter som förut när du
+            släpper sliden.
+          </span>
         </p>
         <p v-if="!slides.length" class="text-gray-600">Laddar slides…</p>
         <ul class="divide-y divide-gray-200">
@@ -291,6 +294,7 @@ import {
   MESSAGE_MAX_LENGTH,
   PAGE_KEY,
   PAGE_URL_MAX_LENGTH,
+  controlOrder,
   normalizeControl,
   onlineScreens,
   pageUrl,
@@ -328,7 +332,7 @@ const flashDraft = ref('')
 const flashShown = ref(null)
 let flashTimer = null
 
-const SLIDE_ICONS = { Klubbrekord: 'fa-trophy', Dm2026: 'fa-flag-checkered', Swish: 'fa-qrcode' }
+const SLIDE_ICONS = { Klubbrekord: 'fa-trophy', Dm2026: 'fa-flag-checkered', Gm2027: 'fa-calendar', Swish: 'fa-qrcode' }
 const hall = ref({ state: 'idle', competitions: [] })
 
 let unsubscribes = []
@@ -340,9 +344,8 @@ onMounted(async () => {
   axios
     .get('/slideshow/snapshot')
     .then(({ data }) => {
-      // The screen's slides, with the manual ones (only shown from here) first.
-      const all = rotation(data.slides)
-      slides.value = [...all.filter((slide) => slide.manual), ...all.filter((slide) => !slide.manual)]
+      // The screen's slides, with the DM, GM and Swish slides first.
+      slides.value = controlOrder(rotation(data.slides))
     })
     .catch(() => (error.value = 'Kunde inte hämta bildspelets slides.'))
 

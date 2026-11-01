@@ -16,11 +16,16 @@
 
       <template v-for="(slide, index) in slides" :key="index">
         <Transition name="slideshow-fade">
+          <!-- A slide held while a web page is shown goes over the page (with the screen's background), so the page
+               keeps running underneath and is where it was when the slide is let go. -->
           <Component
             :is="component(slide.type)"
             v-bind="slide.data"
             v-show="currentSlide == index"
             class="absolute inset-0 w-full h-full"
+            :class="
+              slideOverPage && currentSlide == index ? 'z-20 bg-linear-to-br from-slate-50 via-white to-slate-100' : ''
+            "
           />
         </Transition>
       </template>
@@ -125,6 +130,7 @@ import { computed, ref, onMounted, watch } from 'vue'
 import Slide from './Slide.vue'
 import KlubbrekordSlide from './KlubbrekordSlide.vue'
 import Dm2026Slide from './Dm2026Slide.vue'
+import Gm2027Slide from './Gm2027Slide.vue'
 import SwishSlide from './SwishSlide.vue'
 import { getISOWeek, getSwedishMonthName } from '../../utils/date'
 import { onValue, ref as databaseRef } from 'firebase/database'
@@ -235,6 +241,10 @@ function component(type) {
     return Dm2026Slide
   }
 
+  if (type === 'Gm2027') {
+    return Gm2027Slide
+  }
+
   if (type === 'Swish') {
     return SwishSlide
   }
@@ -276,7 +286,11 @@ const held = computed(() => control.value.paused || heldIndex.value >= 0 || !!co
 // The clock on its own, bottom right, when the bottom bar is hidden.
 const floatingClock = computed(() => !control.value.footer && control.value.clock)
 // Some slides (the DM welcome) use the whole screen, without the message bar.
-const hidesMessage = computed(() => !control.value.page && !!slides.value[currentSlide.value]?.hidesMessage)
+// A slide held from the live control is shown over a web page.
+const slideOverPage = computed(() => !!control.value.page && heldIndex.value >= 0)
+const hidesMessage = computed(
+  () => (!control.value.page || slideOverPage.value) && !!slides.value[currentSlide.value]?.hidesMessage,
+)
 
 watch([heldIndex, held], () => {
   if (heldIndex.value >= 0) {
@@ -288,9 +302,9 @@ watch([heldIndex, held], () => {
   restartInterval()
 })
 
-watch([currentSlide, slides, held, () => control.value.page], () => {
+watch([currentSlide, slides, held, () => control.value.page, slideOverPage], () => {
   const slide = slides.value[currentSlide.value]
-  if (control.value.page) {
+  if (control.value.page && !slideOverPage.value) {
     report({ slide: PAGE_KEY, showing: pageLabel(control.value.page.url), held: true })
   } else if (slide) {
     report({ slide: slideKey(slide), showing: slideLabel(slide), held: held.value })

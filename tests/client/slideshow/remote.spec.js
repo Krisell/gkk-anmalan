@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vite-plus/test'
 import {
   COMMAND_MAX_AGE_MS,
   PRESENCE_TIMEOUT_MS,
+  controlOrder,
   flashText,
   isFreshCommand,
   nextInRotation,
@@ -42,6 +43,7 @@ describe('normalizeControl', () => {
     expect(normalizeControl({ slide: 'records' }).slide).toBe('records')
     expect(normalizeControl({ slide: 'dm2026' }).slide).toBe('dm2026')
     expect(normalizeControl({ slide: 'swish' }).slide).toBe('swish')
+    expect(normalizeControl({ slide: 'gm2027' }).slide).toBe('gm2027')
     expect(normalizeControl({ slide: 'swishx' }).slide).toBeNull()
   })
 
@@ -92,23 +94,31 @@ describe('slides', () => {
     expect(slideKey({ type: 'Swish', data: {} })).toBe('swish')
   })
 
-  it('rotates the club records, the visible slides and the Swish slide, with the DM welcome only held by hand', () => {
+  it('rotates the club records and the visible slides, with the DM, Swish and GM slides only held by hand', () => {
     const slides = [
       { id: 1, type: 'Slide', data: {}, is_visible: true },
       { id: 2, type: 'Slide', data: {}, is_visible: false },
     ]
     const all = rotation(slides)
-    expect(all.map(slideKey)).toEqual(['records', 'slide-1', 'swish', 'dm2026'])
-    expect(all.filter((slide) => slide.manual).map(slideKey)).toEqual(['dm2026'])
-    expect(rotation(null)).toHaveLength(3)
+    expect(all.map(slideKey)).toEqual(['records', 'slide-1', 'dm2026', 'swish', 'gm2027'])
+    expect(all.filter((slide) => slide.manual).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027'])
+    expect(rotation(null)).toHaveLength(4)
+  })
+
+  it('lists the DM, Swish and GM slides first in the live control', () => {
+    const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
+    expect(controlOrder(all).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'records', 'slide-1'])
+    expect(all.filter((slide) => slide.hidesMessage).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027'])
   })
 
   it('steps past the manual slides', () => {
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
     expect(nextInRotation(all, 0)).toBe(1)
-    expect(nextInRotation(all, 2)).toBe(0) // from Swish, past the DM welcome, back to the club records
-    expect(nextInRotation(all, 3)).toBe(0) // from the DM welcome when let go
-    expect(nextInRotation(all, 0, -1)).toBe(2)
+    expect(nextInRotation(all, 1)).toBe(0) // past the manual slides, back to the club records
+    expect(nextInRotation(all, 2)).toBe(0) // from the DM welcome when let go
+    expect(nextInRotation(all, 3)).toBe(0) // from the Swish slide when let go
+    expect(nextInRotation(all, 4)).toBe(0) // from the 2027 invitation when let go
+    expect(nextInRotation(all, 0, -1)).toBe(1)
   })
 
   it('names a slide by its text, or what it shows', () => {
