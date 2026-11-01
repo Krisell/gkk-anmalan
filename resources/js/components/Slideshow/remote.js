@@ -12,9 +12,10 @@ import {
 } from 'firebase/database'
 import { liveDatabase } from '../../live/remote/firebase.js'
 import { watchServerClock } from '../../live/remote/serverClock.js'
+import { resultsLayout } from './results.js'
 
 /**
- * Live control of the screen slideshow (/slides-for-screen) from /admin/slideshow/live, through Firebase's Realtime
+ * Live control of the screen slideshow (/slides-for-screen) from /admin/slideshow, through Firebase's Realtime
  * Database under slideshow/ (see database.rules.json), in the same way as the live overlay's remote control:
  *
  * - control: settings that persist until changed (paused, a slide held on screen, a message, a web page shown instead
@@ -42,6 +43,7 @@ export const PRESENCE_TIMEOUT_MS = 75000
 const HEARTBEAT_MS = 30000
 
 export const RECORDS_KEY = 'records'
+export const RESULTS_KEY = 'results'
 
 // What a screen reports as its slide while it shows a web page instead of the slideshow.
 export const PAGE_KEY = 'page'
@@ -75,9 +77,16 @@ export function pageLabel(url) {
 }
 
 // The slides built into the screen (not in the database), with their keys for the live control.
-const BUILT_IN_KEYS = { Klubbrekord: RECORDS_KEY, Dm2026: 'dm2026', Gm2027: 'gm2027', Swish: 'swish' }
+const BUILT_IN_KEYS = {
+  Klubbrekord: RECORDS_KEY,
+  Resultat: RESULTS_KEY,
+  Dm2026: 'dm2026',
+  Gm2027: 'gm2027',
+  Swish: 'swish',
+}
 const BUILT_IN_LABELS = {
   Klubbrekord: 'Senaste klubbrekorden',
+  Resultat: 'Senaste tävlingsresultaten',
   Dm2026: 'Välkommen till DM 2026',
   Gm2027: 'Götalandsmästerskapen 2027',
   Swish: 'Swisha en gåva till GKK',
@@ -85,14 +94,19 @@ const BUILT_IN_LABELS = {
 const SLIDE_KEY = new RegExp(`^(${Object.values(BUILT_IN_KEYS).join('|')}|slide-\\d{1,9})$`)
 
 /**
- * The screen's slides: the latest club records and the visible slides from the admin, in the order they rotate, and
+ * The screen's slides: the latest club records, GKK's competition results from the last 30 days (when there are any)
+ * and the visible slides from the admin, in the order they rotate, and
  * then the manual ones (the DM welcome, the Swish slide and the invitation to the Götaland championships 2027), which
  * are left out of the rotation and only shown when held from the live control.
  */
-export function rotation(slides, records = []) {
+export function rotation(slides, records = [], results = []) {
   const visible = Array.isArray(slides) ? slides.filter((slide) => slide?.is_visible) : []
   return [
     { type: 'Klubbrekord', data: { records } },
+    // Shown for longer when there are so many results that they scroll.
+    ...(Array.isArray(results) && results.length
+      ? [{ type: 'Resultat', data: { results }, duration: resultsLayout(results.length).durationMs }]
+      : []),
     ...visible,
     // These use the whole screen: the message bar is hidden while they are shown.
     { type: 'Dm2026', data: {}, manual: true, hidesMessage: true },

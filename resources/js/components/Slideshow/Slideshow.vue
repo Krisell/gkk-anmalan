@@ -45,7 +45,7 @@
       </Transition>
     </main>
 
-    <!-- A message from the live control (/admin/slideshow/live), shown until it is taken down. -->
+    <!-- A message from the live control (/admin/slideshow), shown until it is taken down. -->
     <Transition name="slideshow-message">
       <div
         v-if="control.message && !hidesMessage"
@@ -129,6 +129,7 @@
 import { computed, ref, onMounted, watch } from 'vue'
 import Slide from './Slide.vue'
 import KlubbrekordSlide from './KlubbrekordSlide.vue'
+import ResultatSlide from './ResultatSlide.vue'
 import Dm2026Slide from './Dm2026Slide.vue'
 import Gm2027Slide from './Gm2027Slide.vue'
 import SwishSlide from './SwishSlide.vue'
@@ -192,7 +193,7 @@ async function loadSlides(attempt = 0) {
     return
   }
 
-  slides.value = rotation(response.data.slides, response.data.records)
+  slides.value = rotation(response.data.slides, response.data.records, response.data.results)
   state.value = 'loaded'
 }
 
@@ -217,7 +218,7 @@ onValue(databaseRef(liveDatabase(), 'slideshow/published'), (snapshot) => {
   if (published !== undefined && next.version !== published.version && !reloadTimer) {
     reloadTimer = setTimeout(
       () => {
-        clearInterval(slideInterval)
+        clearTimeout(slideInterval)
         clearInterval(timeInterval)
         window.location.reload()
       },
@@ -237,6 +238,10 @@ function component(type) {
     return KlubbrekordSlide
   }
 
+  if (type === 'Resultat') {
+    return ResultatSlide
+  }
+
   if (type === 'Dm2026') {
     return Dm2026Slide
   }
@@ -253,12 +258,13 @@ function component(type) {
 }
 
 const currentSlide = ref(0)
-const slideDuration = 30 * 1000
+// Each slide is shown for 30 seconds, or its own time (the competition results when they scroll).
+const slideDuration = computed(() => slides.value[currentSlide.value]?.duration ?? 30 * 1000)
 // Incremented on every slide change so the progress bar animation restarts
 const slideCycle = ref(0)
 let slideInterval = null
 
-// The live control (/admin/slideshow/live): pause the rotation, hold a slide, show a message or a web page, step or
+// The live control (/admin/slideshow): pause the rotation, hold a slide, show a message or a web page, step or
 // reload.
 const { control, report } = useSlideshowRemote({
   onCommand: (command) => {
@@ -321,18 +327,18 @@ function previousSlide() {
 
 // Steps through the rotation; a manual slide (shown only while held) is skipped.
 function step(direction) {
-  if (!slides.value.length) {
-    return
+  if (slides.value.length) {
+    currentSlide.value = nextInRotation(slides.value, currentSlide.value, direction)
   }
-  currentSlide.value = nextInRotation(slides.value, currentSlide.value, direction)
   restartInterval()
 }
 
 restartInterval()
 function restartInterval() {
-  clearInterval(slideInterval)
+  clearTimeout(slideInterval)
   if (!held.value) {
-    slideInterval = setInterval(nextSlide, slideDuration)
+    // Every slide change restarts this, so a timeout of the current slide's time.
+    slideInterval = setTimeout(nextSlide, slideDuration.value)
   }
   slideCycle.value++
 }

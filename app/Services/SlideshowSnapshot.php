@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Http;
 use Throwable;
 
 /**
- * The data the screen slideshow (/slides-for-screen) shows: the slides and the latest club records.
+ * The data the screen slideshow (/slides-for-screen) shows: the slides, the latest club records and GKK's competition
+ * results from the last 30 days (see StyrkelyftResults).
  *
  * The open screen must update when the data or the slideshow's code changes, without asking the app (on Laravel Cloud
  * every request keeps the app from scaling to zero). So the app publishes a version of the data and the frontend build
@@ -20,17 +21,20 @@ use Throwable;
 class SlideshowSnapshot
 {
     /**
-     * @return array{slides: mixed, records: mixed, version: string}
+     * @return array{slides: mixed, records: mixed, results: mixed, version: string}
      */
     public static function build(): array
     {
         $slides = Slide::select(['id', 'type', 'data', 'order', 'is_visible'])->orderBy('order')->get();
         $records = self::records();
+        // New results reach the screens with the daily publish (see bootstrap/app.php), when the version changes.
+        $results = StyrkelyftResults::recent();
 
         return [
             'slides' => $slides,
             'records' => $records,
-            'version' => \hash('sha256', \json_encode([$slides, $records, self::frontendBuild()])),
+            'results' => $results,
+            'version' => \hash('sha256', \json_encode([$slides, $records, $results, self::frontendBuild()])),
         ];
     }
 

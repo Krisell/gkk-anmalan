@@ -105,6 +105,15 @@ describe('slides', () => {
     expect(rotation(null)).toHaveLength(4)
   })
 
+  it('rotates the competition results after the club records, only when there are any', () => {
+    const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }], [], [{ id: 5 }])
+    expect(all.map(slideKey)).toEqual(['records', 'results', 'slide-1', 'dm2026', 'swish', 'gm2027'])
+    expect(all[1].data.results).toEqual([{ id: 5 }])
+    expect(slideLabel(all[1])).toBe('Senaste tävlingsresultaten')
+    expect(rotation([], [], []).map(slideKey)).not.toContain('results')
+    expect(rotation([], [], null).map(slideKey)).not.toContain('results')
+  })
+
   it('lists the DM, Swish and GM slides first in the live control', () => {
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
     expect(controlOrder(all).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'records', 'slide-1'])

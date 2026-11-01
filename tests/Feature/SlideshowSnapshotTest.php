@@ -4,10 +4,13 @@ use App\Models\Result;
 use App\Models\Slide;
 use App\Services\SlideshowSnapshot;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     Http::preventStrayRequests();
+    // No competition results unless a test says otherwise (see StyrkelyftResultsTest).
+    Cache::put('styrkelyft.results', [], 3600);
 });
 
 function enableSlideshowPublishing(bool $succeed = true)
