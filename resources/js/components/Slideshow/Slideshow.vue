@@ -73,14 +73,26 @@
         ></div>
       </div>
 
-      <div class="flex items-baseline gap-[1vw] min-w-0 leading-none">
-        <span class="text-[min(2.2vw,3.8vh)] font-semibold capitalize whitespace-nowrap">{{ weekday }}</span>
-        <span class="text-[min(2.2vw,3.8vh)] font-light whitespace-nowrap">{{ day }} {{ month }}</span>
+      <div class="flex items-center gap-[1vw] min-w-0">
+        <!-- The club's logo, on white so that the dark logo shows on the bar. -->
         <span
-          class="rounded-full bg-white/15 px-[0.8vw] py-[0.5vh] text-[min(1.3vw,2.3vh)] font-medium uppercase tracking-wider whitespace-nowrap"
+          class="flex size-[calc(var(--footer-h)*0.72)] shrink-0 items-center justify-center rounded-full bg-white p-[calc(var(--footer-h)*0.05)]"
         >
-          Vecka {{ weekNumber }}
+          <img
+            class="size-full object-contain"
+            src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"
+            alt=""
+          />
         </span>
+        <div class="flex items-baseline gap-[1vw] min-w-0 leading-none">
+          <span class="text-[min(2.2vw,3.8vh)] font-semibold capitalize whitespace-nowrap">{{ weekday }}</span>
+          <span class="text-[min(2.2vw,3.8vh)] font-light whitespace-nowrap">{{ day }} {{ month }}</span>
+          <span
+            class="rounded-full bg-white/15 px-[0.8vw] py-[0.5vh] text-[min(1.3vw,2.3vh)] font-medium uppercase tracking-wider whitespace-nowrap"
+          >
+            Vecka {{ weekNumber }}
+          </span>
+        </div>
       </div>
 
       <div class="flex items-center gap-[0.6vw]">
