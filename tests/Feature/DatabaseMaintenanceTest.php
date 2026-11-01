@@ -54,18 +54,9 @@ test('logged-in members see the public pages as guests', function () {
 
 test('every request is logged during maintenance', function () {
     enableDatabaseMaintenance();
-    config(['gkk.served-by' => 'onecom']);
 
     Log::shouldReceive('build')->once()->andReturnSelf();
-    Log::shouldReceive('info')->once()->withArgs(fn ($line) => \str_starts_with($line, 'onecom goteborgkk.se GET /gkk 200'));
+    Log::shouldReceive('info')->once()->withArgs(fn ($line) => \str_starts_with($line, 'goteborgkk.se GET /gkk 200'));
 
     $this->get('https://goteborgkk.se/gkk');
-});
-
-test('the X-Served-By header names the server', function () {
-    $this->get('/gkk')->assertHeaderMissing('X-Served-By');
-
-    config(['gkk.served-by' => 'cloud']);
-
-    $this->get('/gkk')->assertHeader('X-Served-By', 'cloud');
 });

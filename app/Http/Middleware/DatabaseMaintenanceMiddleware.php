@@ -14,8 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * While DATABASE_MAINTENANCE is on, every database query throws and is shown as the maintenance page, so pages that
- * don't need the database keep working. Every request is also logged to storage/logs/maintenance-requests.log, to see
- * when DNS has stopped sending visitors to the old server.
+ * don't need the database keep working. Every request is also logged to storage/logs/maintenance-requests.log.
  */
 class DatabaseMaintenanceMiddleware
 {
@@ -35,7 +34,7 @@ class DatabaseMaintenanceMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (! config('gkk.database-maintenance')) {
-            return $this->withServedBy($next($request));
+            return $next($request);
         }
 
         DB::connection()->beforeExecuting(fn () => throw new DatabaseMaintenanceException);
@@ -55,7 +54,7 @@ class DatabaseMaintenanceMiddleware
             $this->log($request, $response);
         }
 
-        return $this->withServedBy($response);
+        return $response;
     }
 
     private function log(Request $request, Response $response): void
@@ -64,8 +63,7 @@ class DatabaseMaintenanceMiddleware
             'driver' => 'single',
             'path' => storage_path('logs/maintenance-requests.log'),
         ])->info(\sprintf(
-            '%s %s %s %s %d %s "%s"',
-            config('gkk.served-by') ?? '-',
+            '%s %s %s %d %s "%s"',
             $request->getHost(),
             $request->method(),
             $request->getRequestUri(),
@@ -73,14 +71,5 @@ class DatabaseMaintenanceMiddleware
             $request->ip(),
             $request->userAgent(),
         ));
-    }
-
-    private function withServedBy(Response $response): Response
-    {
-        if (config('gkk.served-by')) {
-            $response->headers->set('X-Served-By', config('gkk.served-by'));
-        }
-
-        return $response;
     }
 }

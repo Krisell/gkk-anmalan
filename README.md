@@ -17,12 +17,12 @@ Systemet uppdateras löpande med nya funktioner efter behov.
 
 ## Teknisk översikt
 
-Applikationen är helt webbaserad och bygger på ramverken Vue.js och Laravel (PHP). Data sparas i en klassisk MySQL-databas som också ligger under daglig backup.
+Applikationen är helt webbaserad och bygger på ramverken Vue.js och Laravel (PHP). Data sparas i en Postgres-databas på Laravel Cloud.
 
 ## Uppdatera live-versionen
 
-Sajten körs på Laravel Cloud, som bygger och deployar automatiskt vid push till `master`. Mer om upplägget finns i
-[docs/laravel-cloud-migration.md](docs/laravel-cloud-migration.md).
+Sajten körs på Laravel Cloud, som bygger och deployar automatiskt vid push till `master`. Mer om upplägget (domäner, DNS, scale to
+zero) finns i [docs/hosting.md](docs/hosting.md).
 
 ## Utveckla lokalt
 
