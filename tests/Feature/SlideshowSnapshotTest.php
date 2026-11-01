@@ -37,6 +37,10 @@ function publishedVersions(): array
         ->all();
 }
 
+test('the screen is served at /slides-for-screen and /slideshow', function (string $path) {
+    $this->get($path)->assertOk()->assertSee('<gkk-slideshow>', false);
+})->with(['/slides-for-screen', '/slideshow']);
+
 test('the app serves the slides and club records', function () {
     $slide = Slide::factory()->create();
     Result::factory()->create();

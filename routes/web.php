@@ -276,6 +276,8 @@ Route::prefix('sign')->controller(SignatureController::class)->middleware('signe
 });
 
 Route::view('/slides-for-screen', 'slides')->name('slides');
+// A shorter address for the same screen, e.g. for typing it on the screen's own device.
+Route::view('/slideshow', 'slides');
 
 Route::prefix('live')->controller(LiveOverlayController::class)->group(function () {
     Route::get('overlay', 'show')->name('live.overlay');
