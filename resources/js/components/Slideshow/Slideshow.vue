@@ -132,6 +132,7 @@ import KlubbrekordSlide from './KlubbrekordSlide.vue'
 import ResultatSlide from './ResultatSlide.vue'
 import Dm2026Slide from './Dm2026Slide.vue'
 import Gm2027Slide from './Gm2027Slide.vue'
+import LokalreglerSlide from './LokalreglerSlide.vue'
 import SwishSlide from './SwishSlide.vue'
 import { getISOWeek, getSwedishMonthName } from '../../utils/date'
 import { onValue, ref as databaseRef } from 'firebase/database'
@@ -252,6 +253,10 @@ function component(type) {
 
   if (type === 'Swish') {
     return SwishSlide
+  }
+
+  if (type === 'Lokalregler') {
+    return LokalreglerSlide
   }
 
   return null

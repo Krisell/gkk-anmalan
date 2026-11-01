@@ -83,6 +83,7 @@ const BUILT_IN_KEYS = {
   Dm2026: 'dm2026',
   Gm2027: 'gm2027',
   Swish: 'swish',
+  Lokalregler: 'lokalregler',
 }
 const BUILT_IN_LABELS = {
   Klubbrekord: 'Senaste klubbrekorden',
@@ -90,13 +91,14 @@ const BUILT_IN_LABELS = {
   Dm2026: 'Välkommen till DM 2026',
   Gm2027: 'Götalandsmästerskapen 2027',
   Swish: 'Swisha en gåva till GKK',
+  Lokalregler: 'Lokalregler',
 }
 const SLIDE_KEY = new RegExp(`^(${Object.values(BUILT_IN_KEYS).join('|')}|slide-\\d{1,9})$`)
 
 /**
  * The screen's slides: the latest club records, GKK's competition results from the last 30 days (when there are any)
  * and the visible slides from the admin, in the order they rotate, and
- * then the manual ones (the DM welcome, the Swish slide and the invitation to the Götaland championships 2027), which
+ * then the manual ones (the DM welcome, the Swish slide and the invitation to the Götaland championships 2027 and the house rules), which
  * are left out of the rotation and only shown when held from the live control.
  */
 export function rotation(slides, records = [], results = []) {
@@ -112,6 +114,7 @@ export function rotation(slides, records = [], results = []) {
     { type: 'Dm2026', data: {}, manual: true, hidesMessage: true },
     { type: 'Swish', data: {}, manual: true, hidesMessage: true },
     { type: 'Gm2027', data: {}, manual: true, hidesMessage: true },
+    { type: 'Lokalregler', data: {}, manual: true, hidesMessage: true },
   ]
 }
 
@@ -129,7 +132,7 @@ export function nextInRotation(slides, index, direction = 1) {
 }
 
 // The live control lists these first, in this order, before the rest of the slides.
-const PINNED = ['Dm2026', 'Swish', 'Gm2027']
+const PINNED = ['Dm2026', 'Swish', 'Gm2027', 'Lokalregler']
 
 export function controlOrder(slides) {
   const pinned = PINNED.flatMap((type) => slides.filter((slide) => slide.type === type))

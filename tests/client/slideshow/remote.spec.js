@@ -100,14 +100,14 @@ describe('slides', () => {
       { id: 2, type: 'Slide', data: {}, is_visible: false },
     ]
     const all = rotation(slides)
-    expect(all.map(slideKey)).toEqual(['records', 'slide-1', 'dm2026', 'swish', 'gm2027'])
-    expect(all.filter((slide) => slide.manual).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027'])
-    expect(rotation(null)).toHaveLength(4)
+    expect(all.map(slideKey)).toEqual(['records', 'slide-1', 'dm2026', 'swish', 'gm2027', 'lokalregler'])
+    expect(all.filter((slide) => slide.manual).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'lokalregler'])
+    expect(rotation(null)).toHaveLength(5)
   })
 
   it('rotates the competition results after the club records, only when there are any', () => {
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }], [], [{ id: 5 }])
-    expect(all.map(slideKey)).toEqual(['records', 'results', 'slide-1', 'dm2026', 'swish', 'gm2027'])
+    expect(all.map(slideKey)).toEqual(['records', 'results', 'slide-1', 'dm2026', 'swish', 'gm2027', 'lokalregler'])
     expect(all[1].data.results).toEqual([{ id: 5 }])
     expect(slideLabel(all[1])).toBe('Senaste tävlingsresultaten')
     expect(rotation([], [], []).map(slideKey)).not.toContain('results')
@@ -116,8 +116,13 @@ describe('slides', () => {
 
   it('lists the DM, Swish and GM slides first in the live control', () => {
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
-    expect(controlOrder(all).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'records', 'slide-1'])
-    expect(all.filter((slide) => slide.hidesMessage).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027'])
+    expect(controlOrder(all).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'lokalregler', 'records', 'slide-1'])
+    expect(all.filter((slide) => slide.hidesMessage).map(slideKey)).toEqual([
+      'dm2026',
+      'swish',
+      'gm2027',
+      'lokalregler',
+    ])
   })
 
   it('steps past the manual slides', () => {
@@ -127,6 +132,7 @@ describe('slides', () => {
     expect(nextInRotation(all, 2)).toBe(0) // from the DM welcome when let go
     expect(nextInRotation(all, 3)).toBe(0) // from the Swish slide when let go
     expect(nextInRotation(all, 4)).toBe(0) // from the 2027 invitation when let go
+    expect(nextInRotation(all, 5)).toBe(0) // from the house rules when let go
     expect(nextInRotation(all, 0, -1)).toBe(1)
   })
 
