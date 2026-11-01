@@ -96,43 +96,51 @@ const BUILT_IN_LABELS = {
 const SLIDE_KEY = new RegExp(`^(${Object.values(BUILT_IN_KEYS).join('|')}|slide-\\d{1,9})$`)
 
 /**
- * The screen's slides: the latest club records, GKK's competition results from the last 30 days (when there are any)
- * and the visible slides from the admin, in the order they rotate, and
- * then the manual ones (the DM welcome, the Swish slide and the invitation to the Götaland championships 2027 and the house rules), which
- * are left out of the rotation and only shown when held from the live control.
+ * All the screen's slides, in the order they rotate: the latest club records, GKK's competition results from the last
+ * 30 days (when there are any), the club's own slides, the house rules, the DM welcome, the Swish slide and the
+ * invitation to the Götaland championships 2027.
+ *
+ * Which of them rotate is chosen in the live control (see inRotation); `rotates` is the default for a slide that has
+ * not been chosen there: the club's own slides as they are set to visible or hidden, and the built-in ones as below.
  */
 export function rotation(slides, records = [], results = []) {
-  const visible = Array.isArray(slides) ? slides.filter((slide) => slide?.is_visible) : []
+  const own = Array.isArray(slides) ? slides.filter((slide) => slide && typeof slide === 'object') : []
   return [
-    { type: 'Klubbrekord', data: { records } },
+    { type: 'Klubbrekord', data: { records }, rotates: true },
     // Shown for longer when there are so many results that they scroll.
     ...(Array.isArray(results) && results.length
-      ? [{ type: 'Resultat', data: { results }, duration: resultsLayout(results.length).durationMs }]
+      ? [{ type: 'Resultat', data: { results }, rotates: true, duration: resultsLayout(results.length).durationMs }]
       : []),
-    ...visible,
+    ...own.map((slide) => ({ ...slide, rotates: slide.is_visible === true })),
     // These use the whole screen: the message bar is hidden while they are shown.
-    { type: 'Dm2026', data: {}, manual: true, hidesMessage: true },
-    { type: 'Swish', data: {}, manual: true, hidesMessage: true },
-    { type: 'Gm2027', data: {}, manual: true, hidesMessage: true },
-    { type: 'Lokalregler', data: {}, manual: true, hidesMessage: true },
+    { type: 'Lokalregler', data: {}, rotates: true, hidesMessage: true },
+    { type: 'Dm2026', data: {}, rotates: false, hidesMessage: true },
+    { type: 'Swish', data: {}, rotates: false, hidesMessage: true },
+    { type: 'Gm2027', data: {}, rotates: false, hidesMessage: true },
   ]
 }
 
-// The slide after (or before, with -1) the given one in the rotation, skipping the manual slides.
-export function nextInRotation(slides, index, direction = 1) {
+// Whether a slide is in the rotation: as chosen in the live control, or else by default.
+export function inRotation(slide, control) {
+  const chosen = control?.rotation?.[slideKey(slide)]
+  return typeof chosen === 'boolean' ? chosen : slide?.rotates === true
+}
+
+// The slide after (or before, with -1) the given one in the rotation, or -1 when no slide is in the rotation.
+export function nextInRotation(slides, index, direction = 1, control = null) {
   const count = slides.length
   let next = index
   for (let step = 0; step < count; step++) {
-    next = (next + direction + count) % count
-    if (!slides[next]?.manual) {
+    next = (((next + direction) % count) + count) % count
+    if (inRotation(slides[next], control)) {
       return next
     }
   }
-  return index
+  return -1
 }
 
-// The live control lists these first, in this order, before the rest of the slides.
-const PINNED = ['Dm2026', 'Swish', 'Gm2027', 'Lokalregler']
+// The live control lists these first, in this order, before the rest of the slides (in the order they rotate).
+const PINNED = ['Dm2026', 'Swish', 'Gm2027']
 
 export function controlOrder(slides) {
   const pinned = PINNED.flatMap((type) => slides.filter((slide) => slide.type === type))
@@ -167,6 +175,12 @@ export function normalizeControl(raw) {
     // shown on its own.
     footer: control.footer !== false,
     clock: control.clock === true,
+    // The slides chosen in or out of the rotation, by key (see inRotation).
+    rotation: Object.fromEntries(
+      Object.entries(control.rotation && typeof control.rotation === 'object' ? control.rotation : {}).filter(
+        ([key, value]) => SLIDE_KEY.test(key) && typeof value === 'boolean',
+      ),
+    ),
   }
 }
 

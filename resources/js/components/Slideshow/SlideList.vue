@@ -4,15 +4,17 @@
       <div class="min-w-0 flex-1 basis-64">
         <h2 class="text-xl font-semibold mb-1">Slides</h2>
         <p v-if="!editMode" class="text-sm text-gray-600">
-          Visa en slide så stannar skärmen på den tills du släpper den.
+          Välj vilka slides som ingår i bildspelet – de visas i tur och ordning, 30 sekunder var. Med
+          <span class="font-medium">Visa</span> stannar skärmen på en slide tills du släpper den, även om den inte
+          ingår.
           <span v-if="current.page">
             Just nu visas en webbsida. En slide du visar hamnar ovanpå den, och webbsidan fortsätter som förut när du
             släpper sliden.
           </span>
         </p>
         <p v-else class="text-sm text-gray-600">
-          Bildspelet visar klubbrekorden och sedan de synliga slidesen i den här ordningen, 30 sekunder var. Dra i
-          handtaget för att ändra ordningen. Ändringar syns på skärmen direkt.
+          Dra i handtaget för att ändra ordningen på klubbens egna slides. Vilka som ingår i bildspelet väljer du när du
+          är klar. Ändringar syns på skärmen direkt.
         </p>
       </div>
       <div class="flex shrink-0 gap-2">
@@ -36,37 +38,89 @@
     <p v-if="loading" class="text-gray-600">Laddar slides…</p>
     <p v-else-if="loadFailed" class="text-red-700">Kunde inte hämta slidesen. Ladda om sidan och försök igen.</p>
 
-    <!-- Showing: the screen's slides, the DM, Swish and GM slides first. -->
-    <ul v-else-if="!editMode" class="divide-y divide-gray-200">
-      <li v-for="slide in shown" :key="slideKey(slide)" class="flex items-center gap-4 py-3">
-        <SlideThumb :slide="slide" class="w-16 sm:w-28" />
-        <div class="min-w-0 flex-1">
-          <p class="line-clamp-2 font-medium">{{ slideLabel(slide) }}</p>
-          <p v-if="showingNow.has(slideKey(slide))" class="text-sm text-green-700">Visas nu</p>
-          <p v-else-if="slide.manual" class="text-sm text-gray-500">Ingår inte i bildspelet – visas bara här</p>
+    <!-- Showing: the screen's slides, the DM, Swish and GM slides first, each in or out of the rotation. -->
+    <template v-else-if="!editMode">
+      <div class="mb-1 flex flex-wrap items-center justify-between gap-3 rounded-sm bg-gray-50 px-3 py-2">
+        <span class="text-sm text-gray-700">
+          <span class="font-semibold">{{ rotatingCount }}</span> av {{ shown.length }} ingår i bildspelet
+        </span>
+        <div class="flex gap-2">
+          <button
+            type="button"
+            class="rounded-sm px-3 py-1.5 text-sm font-medium text-gkk ring-1 ring-gray-300 transition hover:bg-white disabled:opacity-50"
+            :disabled="!canHold"
+            @click="setAll(true)"
+          >
+            Alla
+          </button>
+          <button
+            type="button"
+            class="rounded-sm px-3 py-1.5 text-sm font-medium text-gkk ring-1 ring-gray-300 transition hover:bg-white disabled:opacity-50"
+            :disabled="!canHold"
+            @click="setAll(false)"
+          >
+            Inga
+          </button>
         </div>
-        <button
-          v-if="current.slide === slideKey(slide)"
-          :class="activeButtonClass"
-          class="shrink-0"
-          :disabled="!canHold"
-          @click="emit('hold', null)"
-        >
-          Släpp
-        </button>
-        <button
-          v-else
-          :class="secondaryButtonClass"
-          class="shrink-0"
-          :disabled="!canHold"
-          @click="emit('hold', slideKey(slide))"
-        >
-          Visa
-        </button>
-      </li>
-    </ul>
+      </div>
+      <p v-if="!rotatingCount" class="mt-2 text-sm text-amber-800">
+        Ingen slide ingår – skärmen visar klubbens logga när du inte visar en slide.
+      </p>
+      <ul class="divide-y divide-gray-200">
+        <li v-for="slide in shown" :key="slideKey(slide)" class="flex items-center gap-3 py-3 sm:gap-4">
+          <SlideThumb
+            :slide="slide"
+            class="w-16 transition sm:w-28"
+            :class="{ 'opacity-40 grayscale': !inRotation(slide, current) }"
+          />
+          <div class="min-w-0 flex-1">
+            <p class="line-clamp-2 font-medium break-words">{{ slideLabel(slide) }}</p>
+            <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <button
+                type="button"
+                role="switch"
+                :aria-checked="inRotation(slide, current)"
+                class="inline-flex items-center gap-2 text-sm text-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
+                :disabled="!canHold"
+                @click="emit('rotation', { [slideKey(slide)]: !inRotation(slide, current) })"
+              >
+                <span
+                  class="relative inline-flex h-5 w-9 shrink-0 rounded-full transition"
+                  :class="inRotation(slide, current) ? 'bg-gkk' : 'bg-gray-300'"
+                >
+                  <span
+                    class="absolute top-0.5 left-0.5 size-4 rounded-full bg-white shadow transition-transform"
+                    :class="{ 'translate-x-4': inRotation(slide, current) }"
+                  ></span>
+                </span>
+                I bildspelet
+              </button>
+              <span v-if="showingNow.has(slideKey(slide))" class="text-sm text-green-700">Visas nu</span>
+            </div>
+          </div>
+          <button
+            v-if="current.slide === slideKey(slide)"
+            :class="activeButtonClass"
+            class="shrink-0"
+            :disabled="!canHold"
+            @click="emit('hold', null)"
+          >
+            Släpp
+          </button>
+          <button
+            v-else
+            :class="secondaryButtonClass"
+            class="shrink-0"
+            :disabled="!canHold"
+            @click="emit('hold', slideKey(slide))"
+          >
+            Visa
+          </button>
+        </li>
+      </ul>
+    </template>
 
-    <!-- Editing: the built-in slides as they are, then the club's own slides to order, hide, edit and remove. -->
+    <!-- Editing: the built-in slides as they are, then the club's own slides to order, edit and remove. -->
     <template v-else>
       <ul class="divide-y divide-gray-200">
         <li v-for="slide in builtIn" :key="slideKey(slide)" class="flex items-center gap-3 py-3 sm:gap-4">
@@ -74,11 +128,7 @@
           <SlideThumb :slide="slide" class="w-16 sm:w-28" />
           <div class="min-w-0 flex-1">
             <p class="truncate font-medium">{{ slideLabel(slide) }}</p>
-            <p class="text-sm text-gray-500">
-              {{
-                slide.manual ? 'Visas bara när du väljer den' : 'Visas först i bildspelet och uppdateras av sig själv'
-              }}
-            </p>
+            <p class="text-sm text-gray-500">Kan inte ändras här</p>
           </div>
           <span
             class="hidden shrink-0 items-center gap-1.5 rounded-full bg-gkk/10 px-2.5 py-1 text-xs font-medium text-gkk sm:inline-flex"
@@ -97,12 +147,7 @@
       </p>
 
       <ol ref="list" class="divide-y divide-gray-200 border-t border-gray-200">
-        <li
-          v-for="slide in own"
-          :key="slide.id"
-          class="flex items-center gap-3 py-3 sm:gap-4"
-          :class="{ 'bg-gray-50/80': !slide.is_visible }"
-        >
+        <li v-for="slide in own" :key="slide.id" class="flex items-center gap-3 py-3 sm:gap-4">
           <button
             type="button"
             class="drag-handle flex h-12 w-8 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-gray-400 transition hover:bg-gray-100 hover:text-gkk active:cursor-grabbing"
@@ -114,39 +159,20 @@
           <button
             type="button"
             class="shrink-0 rounded-sm transition hover:ring-2 hover:ring-gkk"
-            :class="{ 'opacity-40 grayscale': !slide.is_visible }"
             title="Redigera"
             @click="startEdit(slide)"
           >
             <SlideThumb :slide="slide" class="w-16 sm:w-28" />
           </button>
           <div class="min-w-0 flex-1">
-            <p class="line-clamp-2 font-medium" :class="slide.is_visible ? 'text-gray-900' : 'text-gray-500'">
-              {{ slideLabel(slide) }}
-            </p>
+            <p class="line-clamp-2 font-medium text-gray-900">{{ slideLabel(slide) }}</p>
             <p v-if="slide.data.text && slide.data.subText" class="truncate text-sm text-gray-500">
               {{ slide.data.subText }}
             </p>
-            <span
-              v-if="!slide.is_visible"
-              class="mt-1 inline-flex items-center gap-1 rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600"
-            >
-              <EyeOff class="size-3" />
-              Dold
-            </span>
           </div>
           <div class="flex shrink-0 items-center gap-1">
             <button :class="iconButtonClass" v-tooltip="'Redigera'" aria-label="Redigera" @click="startEdit(slide)">
               <Pencil class="size-4.5" />
-            </button>
-            <button
-              :class="iconButtonClass"
-              v-tooltip="slide.is_visible ? 'Dölj' : 'Visa i bildspelet'"
-              :aria-label="slide.is_visible ? 'Dölj' : 'Visa i bildspelet'"
-              @click="setVisibility(slide, !slide.is_visible)"
-            >
-              <Eye v-if="slide.is_visible" class="size-4.5" />
-              <EyeOff v-else class="size-4.5" />
             </button>
             <button
               :class="[iconButtonClass, 'hover:bg-red-50 hover:text-red-600']"
@@ -198,18 +224,19 @@ import axios from 'axios'
 import Sortable from 'sortablejs'
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
-import { Check, Eye, EyeOff, GripVertical, Pencil, Plus, Sparkles, Trash2, X } from 'lucide-vue-next'
+import { Check, GripVertical, Pencil, Plus, Sparkles, Trash2, X } from 'lucide-vue-next'
 import FirebaseFileUpload from '../../modules/FirebaseFileUpload.js'
 import SlideFields from './SlideFields.vue'
 import SlidePreview from './SlidePreview.vue'
 import SlideThumb from './SlideThumb.vue'
-import { controlOrder, rotation, slideKey, slideLabel } from './remote.js'
+import { controlOrder, inRotation, rotation, slideKey, slideLabel } from './remote.js'
 import { activeButtonClass, buttonClass, iconButtonClass, secondaryButtonClass } from './controlStyles.js'
 
 /**
- * The slides of the screen slideshow, on the admin page (AdminSlideshow.vue): shown, each can be held on the screen
- * from the live control; in edit mode, the club's own slides can be ordered, hidden, edited, removed and added.
- * Saving a slide publishes a new version (App\Services\SlideshowSnapshot), so the screens reload with it.
+ * The slides of the screen slideshow, on the admin page (AdminSlideshow.vue): each can be put in or out of the
+ * rotation and held on the screen, through the live control (`rotation` and `hold` events, saved by the page); in edit
+ * mode, the club's own slides can be ordered, edited, removed and added. Saving a slide publishes a new version
+ * (App\Services\SlideshowSnapshot), so the screens reload with it.
  */
 const props = defineProps({
   // The live control's settings (normalizeControl), and which slides the screens show.
@@ -220,7 +247,7 @@ const props = defineProps({
   // The admin's Firebase sign-in, for uploading images.
   jwt: { type: String, required: true },
 })
-const emit = defineEmits(['hold'])
+const emit = defineEmits(['hold', 'rotation'])
 
 const $toast = useToast()
 const loading = ref(true)
@@ -236,6 +263,12 @@ const list = ref(null)
 // The slides as the screen has them, in the live control's order; and, for editing, the built-in ones.
 const shown = computed(() => controlOrder(rotation(own.value, [], results.value)))
 const builtIn = computed(() => controlOrder(rotation([], [], results.value)))
+const rotatingCount = computed(() => shown.value.filter((slide) => inRotation(slide, props.current)).length)
+
+// Every slide in the rotation, or none.
+function setAll(on) {
+  emit('rotation', Object.fromEntries(shown.value.map((slide) => [slideKey(slide), on])))
+}
 
 function emptySlide() {
   return { text: '', subText: '', image: '' }
@@ -310,17 +343,6 @@ async function deleteSlide(slide) {
   } catch (error) {
     console.error('Error deleting slide:', error)
     toast('error', 'Sliden kunde inte tas bort')
-  }
-}
-
-async function setVisibility(slide, isVisible) {
-  try {
-    await axios.patch(`/slideshow/slides/${slide.id}`, { is_visible: isVisible })
-    slide.is_visible = isVisible
-    toast('success', isVisible ? 'Sliden visas i bildspelet' : 'Sliden är dold')
-  } catch (error) {
-    console.error('Error updating slide visibility:', error)
-    toast('error', 'Sliden kunde inte ändras')
   }
 }
 

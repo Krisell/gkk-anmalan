@@ -5,9 +5,11 @@
   >
     <main class="relative flex-1 min-h-0">
       <Transition name="slideshow-fade">
-        <div v-if="state == 'loading'" class="absolute inset-0 flex items-center justify-center p-[8vh]">
+        <!-- The club's logo while loading, and when no slide is in the rotation (and none is held). -->
+        <div v-if="state == 'loading' || showLogo" class="absolute inset-0 flex items-center justify-center p-[8vh]">
           <img
-            class="max-w-[60%] max-h-full object-contain animate-pulse"
+            class="max-w-[60%] max-h-full object-contain"
+            :class="{ 'animate-pulse': state == 'loading' }"
             src="https://goteborg-kraftsportklubb.web.app/img/logo-min.png"
             alt=""
           />
@@ -64,7 +66,7 @@
     >
       <div class="absolute top-0 inset-x-0 h-[0.5vh] min-h-[3px] bg-white/10">
         <div
-          v-if="slides.length && !held"
+          v-if="slides.length && !held && currentSlide >= 0"
           :key="slideCycle"
           class="slideshow-progress h-full bg-white/70 origin-left"
           :style="{ animationDuration: `${slideDuration}ms` }"
@@ -84,7 +86,7 @@
       <div class="flex items-center gap-[0.6vw]">
         <template v-for="(slide, index) in slides.length > 1 && !control.page ? slides : []" :key="index">
           <span
-            v-if="!slide.manual"
+            v-if="inRotation(slide, control)"
             class="h-[1vh] min-h-1.5 rounded-full transition-all duration-500"
             :class="currentSlide == index ? 'w-[2.5vw] bg-white' : 'w-[1vh] min-w-1.5 bg-white/35'"
           ></span>
@@ -143,6 +145,7 @@ import {
   FLASH_FULL_MS,
   PAGE_KEY,
   flashText,
+  inRotation,
   nextInRotation,
   pageLabel,
   rotation,
@@ -196,6 +199,10 @@ async function loadSlides(attempt = 0) {
 
   slides.value = rotation(response.data.slides, response.data.records, response.data.results)
   state.value = 'loaded'
+  // Start on a slide in the rotation (or the logo, when none is).
+  if (keepInRotation()) {
+    restartInterval()
+  }
 }
 
 onMounted(() => loadSlides())
@@ -269,8 +276,8 @@ const slideDuration = computed(() => slides.value[currentSlide.value]?.duration 
 const slideCycle = ref(0)
 let slideInterval = null
 
-// The live control (/admin/slideshow): pause the rotation, hold a slide, show a message or a web page, step or
-// reload.
+// The live control (/admin/slideshow): choose the slides in the rotation, hold a slide, show a message or a web page,
+// step or reload.
 const { control, report } = useSlideshowRemote({
   onCommand: (command) => {
     const { type } = command
@@ -296,8 +303,10 @@ const heldIndex = computed(() =>
 const held = computed(() => control.value.paused || heldIndex.value >= 0 || !!control.value.page)
 // The clock on its own, bottom right, when the bottom bar is hidden.
 const floatingClock = computed(() => !control.value.footer && control.value.clock)
-// Some slides (the DM welcome) use the whole screen, without the message bar.
-// A slide held from the live control is shown over a web page.
+// No slide in the rotation and none held: the club's logo is shown.
+const showLogo = computed(() => state.value === 'loaded' && currentSlide.value < 0 && !control.value.page)
+// A slide held from the live control is shown over a web page. Some slides (the DM welcome) use the whole screen,
+// without the message bar.
 const slideOverPage = computed(() => !!control.value.page && heldIndex.value >= 0)
 const hidesMessage = computed(
   () => (!control.value.page || slideOverPage.value) && !!slides.value[currentSlide.value]?.hidesMessage,
@@ -306,12 +315,43 @@ const hidesMessage = computed(
 watch([heldIndex, held], () => {
   if (heldIndex.value >= 0) {
     currentSlide.value = heldIndex.value
-  } else if (slides.value[currentSlide.value]?.manual) {
-    // A manual slide was let go: on with the rotation right away.
-    currentSlide.value = nextInRotation(slides.value, currentSlide.value)
+  } else {
+    // A slide outside the rotation was let go: on with the rotation right away.
+    keepInRotation()
   }
   restartInterval()
 })
+
+// When the rotation is changed from the live control, a slide taken out of it gives way at once (unless it is held).
+watch(
+  () => control.value.rotation,
+  () => {
+    if (keepInRotation()) {
+      restartInterval()
+    }
+  },
+)
+
+// Moves on from a slide that is not in the rotation (or from the logo); whether it moved.
+function keepInRotation() {
+  if (held.value || !slides.value.length) {
+    return false
+  }
+  const slide = slides.value[currentSlide.value]
+  if (slide && inRotation(slide, control.value)) {
+    return false
+  }
+  currentSlide.value = nextInRotation(slides.value, startOf(1), 1, control.value)
+  return true
+}
+
+// Where stepping starts from: the current slide, or (on the logo) just before the first or after the last one.
+function startOf(direction) {
+  if (currentSlide.value >= 0) {
+    return currentSlide.value
+  }
+  return direction > 0 ? slides.value.length - 1 : 0
+}
 
 watch([currentSlide, slides, held, () => control.value.page, slideOverPage], () => {
   const slide = slides.value[currentSlide.value]
@@ -319,6 +359,8 @@ watch([currentSlide, slides, held, () => control.value.page, slideOverPage], () 
     report({ slide: PAGE_KEY, showing: pageLabel(control.value.page.url), held: true })
   } else if (slide) {
     report({ slide: slideKey(slide), showing: slideLabel(slide), held: held.value })
+  } else if (state.value === 'loaded') {
+    report({ slide: '', showing: 'Klubbens logga (inga slides i bildspelet)', held: false })
   }
 })
 
@@ -330,10 +372,10 @@ function previousSlide() {
   step(-1)
 }
 
-// Steps through the rotation; a manual slide (shown only while held) is skipped.
+// Steps through the rotation, skipping the slides that are not in it.
 function step(direction) {
   if (slides.value.length) {
-    currentSlide.value = nextInRotation(slides.value, currentSlide.value, direction)
+    currentSlide.value = nextInRotation(slides.value, startOf(direction), direction, control.value)
   }
   restartInterval()
 }

@@ -4,6 +4,7 @@ import {
   PRESENCE_TIMEOUT_MS,
   controlOrder,
   flashText,
+  inRotation,
   isFreshCommand,
   nextInRotation,
   normalizeControl,
@@ -17,7 +18,15 @@ import {
 
 describe('normalizeControl', () => {
   it('rotates as usual when nothing has been set', () => {
-    const rotating = { paused: false, slide: null, message: null, page: null, footer: true, clock: false }
+    const rotating = {
+      paused: false,
+      slide: null,
+      message: null,
+      page: null,
+      footer: true,
+      clock: false,
+      rotation: {},
+    }
     expect(normalizeControl(null)).toEqual(rotating)
     expect(
       normalizeControl({
@@ -38,6 +47,7 @@ describe('normalizeControl', () => {
         page: null,
         footer: true,
         clock: false,
+        rotation: {},
       },
     )
     expect(normalizeControl({ slide: 'records' }).slide).toBe('records')
@@ -94,20 +104,36 @@ describe('slides', () => {
     expect(slideKey({ type: 'Swish', data: {} })).toBe('swish')
   })
 
-  it('rotates the club records and the visible slides, with the DM, Swish and GM slides only held by hand', () => {
+  it('has all the slides, with the club records, visible slides and house rules in the rotation by default', () => {
     const slides = [
       { id: 1, type: 'Slide', data: {}, is_visible: true },
       { id: 2, type: 'Slide', data: {}, is_visible: false },
     ]
     const all = rotation(slides)
-    expect(all.map(slideKey)).toEqual(['records', 'slide-1', 'dm2026', 'swish', 'gm2027', 'lokalregler'])
-    expect(all.filter((slide) => slide.manual).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'lokalregler'])
+    expect(all.map(slideKey)).toEqual(['records', 'slide-1', 'slide-2', 'lokalregler', 'dm2026', 'swish', 'gm2027'])
+    expect(all.filter((slide) => inRotation(slide, null)).map(slideKey)).toEqual(['records', 'slide-1', 'lokalregler'])
     expect(rotation(null)).toHaveLength(5)
+  })
+
+  it('follows the rotation chosen in the live control, and the defaults for the rest', () => {
+    const all = rotation([
+      { id: 1, type: 'Slide', data: {}, is_visible: true },
+      { id: 2, type: 'Slide', data: {}, is_visible: false },
+    ])
+    const control = normalizeControl({ rotation: { records: false, 'slide-2': true, dm2026: true, 'bad key': true } })
+    expect(control.rotation).toEqual({ records: false, 'slide-2': true, dm2026: true })
+    expect(all.filter((slide) => inRotation(slide, control)).map(slideKey)).toEqual([
+      'slide-1',
+      'slide-2',
+      'lokalregler',
+      'dm2026',
+    ])
   })
 
   it('rotates the competition results after the club records, only when there are any', () => {
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }], [], [{ id: 5 }])
-    expect(all.map(slideKey)).toEqual(['records', 'results', 'slide-1', 'dm2026', 'swish', 'gm2027', 'lokalregler'])
+    expect(all.map(slideKey)).toEqual(['records', 'results', 'slide-1', 'lokalregler', 'dm2026', 'swish', 'gm2027'])
+    expect(inRotation(all[1], null)).toBe(true)
     expect(all[1].data.results).toEqual([{ id: 5 }])
     expect(slideLabel(all[1])).toBe('Senaste tävlingsresultaten')
     expect(rotation([], [], []).map(slideKey)).not.toContain('results')
@@ -116,24 +142,34 @@ describe('slides', () => {
 
   it('lists the DM, Swish and GM slides first in the live control', () => {
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
-    expect(controlOrder(all).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'lokalregler', 'records', 'slide-1'])
+    expect(controlOrder(all).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'records', 'slide-1', 'lokalregler'])
     expect(all.filter((slide) => slide.hidesMessage).map(slideKey)).toEqual([
+      'lokalregler',
       'dm2026',
       'swish',
       'gm2027',
-      'lokalregler',
     ])
   })
 
-  it('steps past the manual slides', () => {
+  it('steps past the slides that are not in the rotation', () => {
+    // records, slide-1, lokalregler, dm2026, swish, gm2027
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
     expect(nextInRotation(all, 0)).toBe(1)
-    expect(nextInRotation(all, 1)).toBe(0) // past the manual slides, back to the club records
-    expect(nextInRotation(all, 2)).toBe(0) // from the DM welcome when let go
-    expect(nextInRotation(all, 3)).toBe(0) // from the Swish slide when let go
-    expect(nextInRotation(all, 4)).toBe(0) // from the 2027 invitation when let go
-    expect(nextInRotation(all, 5)).toBe(0) // from the house rules when let go
-    expect(nextInRotation(all, 0, -1)).toBe(1)
+    expect(nextInRotation(all, 1)).toBe(2) // on to the house rules
+    expect(nextInRotation(all, 2)).toBe(0) // past the DM, Swish and GM slides, back to the club records
+    expect(nextInRotation(all, 3)).toBe(0) // from the DM welcome when let go
+    expect(nextInRotation(all, 0, -1)).toBe(2)
+
+    // A competition day: only the DM welcome and the Swish slide.
+    const off = { records: false, 'slide-1': false, lokalregler: false, dm2026: true, swish: true }
+    const competition = normalizeControl({ rotation: off })
+    expect(nextInRotation(all, 0, 1, competition)).toBe(3)
+    expect(nextInRotation(all, 3, 1, competition)).toBe(4)
+    expect(nextInRotation(all, 4, 1, competition)).toBe(3)
+
+    // Nothing in the rotation.
+    const none = normalizeControl({ rotation: Object.fromEntries(all.map((slide) => [slideKey(slide), false])) })
+    expect(nextInRotation(all, 0, 1, none)).toBe(-1)
   })
 
   it('names a slide by its text, or what it shows', () => {

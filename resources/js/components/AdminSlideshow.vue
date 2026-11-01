@@ -17,12 +17,12 @@
 
     <!-- The open screens, and everything that is on them now, each with a way to take it down. -->
     <section v-if="signedIn" class="mb-6 rounded-sm bg-white p-4 shadow-sm sm:p-6">
-      <div class="flex items-center gap-3">
+      <div class="flex flex-wrap items-center gap-3">
         <span
           class="inline-block size-3 shrink-0 rounded-full"
           :class="screens.length ? 'bg-green-500' : 'bg-red-500'"
         ></span>
-        <h2 class="text-xl font-semibold">
+        <h2 class="min-w-0 flex-1 basis-56 text-xl font-semibold">
           {{
             screens.length === 0
               ? 'Ingen skärm visar bildspelet'
@@ -31,6 +31,10 @@
                 : `${screens.length} skärmar visar bildspelet`
           }}
         </h2>
+        <button :class="secondaryButtonClass" class="shrink-0 py-2!" @click="reloadScreens">
+          <i class="fa fa-refresh mr-2"></i>
+          Ladda om skärmarna
+        </button>
       </div>
       <ul v-if="screens.length" class="mt-2 space-y-1 text-gray-700">
         <li v-for="(screen, index) in screens" :key="index">
@@ -72,6 +76,7 @@
           :can-hold="signedIn"
           :jwt="jwt"
           @hold="(key) => save({ slide: key })"
+          @rotation="saveRotation"
         />
       </div>
 
@@ -79,7 +84,7 @@
         <!-- Step, pause and reload. -->
         <section :class="card" class="order-1 lg:order-none">
           <h2 class="text-xl font-semibold mb-4">Bläddra</h2>
-          <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 2xl:grid-cols-4">
+          <div class="grid grid-cols-2 gap-3">
             <button :class="buttonClass" @click="command('previous')">
               <i class="fa fa-arrow-left mr-2"></i>
               Föregående
@@ -88,21 +93,9 @@
               Nästa
               <i class="fa fa-arrow-right ml-2"></i>
             </button>
-            <button
-              :class="current.paused ? activeButtonClass : buttonClass"
-              :disabled="!!current.slide || !!current.page"
-              @click="save({ paused: !current.paused })"
-            >
-              <i class="fa mr-2" :class="current.paused ? 'fa-play' : 'fa-pause'"></i>
-              {{ current.paused ? 'Fortsätt' : 'Pausa' }}
-            </button>
-            <button :class="secondaryButtonClass" @click="reloadScreens">
-              <i class="fa fa-refresh mr-2"></i>
-              Ladda om
-            </button>
           </div>
           <p class="mt-3 text-sm text-gray-600">
-            Bildspelet byter slide var 30:e sekund. Pausa för att stanna på den slide som visas.
+            Bildspelet byter slide var 30:e sekund. Stega fram eller tillbaka bland de slides som ingår.
           </p>
         </section>
 
@@ -391,6 +384,11 @@ const onScreen = computed(() => {
   }
   return items
 })
+
+// Slides put in or out of the rotation, by key.
+function saveRotation(choice) {
+  void save(Object.fromEntries(Object.entries(choice).map(([key, on]) => [`rotation/${key}`, on])))
+}
 
 async function save(patch) {
   error.value = null
