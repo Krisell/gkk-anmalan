@@ -141,6 +141,23 @@ describe('normalizeFeed', () => {
     expect(scoreboard.lifters[1]).toMatchObject({ name: 'Bo Berg', bodyWeight: null, place: null, total: null })
   })
 
+  it('keeps a coefficient class together across weight classes, by place', () => {
+    const raw = feed()
+    const entry = (name, weightclass, category, place) => ({ id: name, name, weightclass, category, place, lifts: {} })
+    // As Powerlifting Live lists them: by weight class within the category.
+    raw.scoresheet.lifters = [
+      entry('A', '63', 'Senior koefficient', '1'),
+      entry('B', '63', 'Senior koefficient', '3'),
+      entry('C', '84', 'Senior koefficient', '2'),
+      entry('D', '84+', 'Senior', '1'),
+      entry('E', '52', 'Senior koefficient', '4'),
+    ]
+
+    const { scoreboard } = normalizeFeed(raw)
+
+    expect(scoreboard.lifters.map((l) => l.name)).toEqual(['A', 'C', 'B', 'E', 'D'])
+  })
+
   it('normalizes the most recent judged lift', () => {
     expect(normalizeFeed(feed()).lastResult).toMatchObject({
       id: '110863:SQ2',

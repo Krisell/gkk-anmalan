@@ -29,3 +29,21 @@ export function formatWeightClass(weightClass) {
   const value = weightClass.replace(/\s*kg$/i, '')
   return value.includes('+') || value.startsWith('-') ? `${value} kg` : `-${value} kg`
 }
+
+// A coefficient class ('Junior koefficient', for lifters too few in their weight class) ranks lifters of all weight
+// classes together. Powerlifting Live has no flag for it, only the category's name.
+export function isCoefficientClass(category) {
+  return /koefficient|coefficient/i.test(category ?? '')
+}
+
+// The class a lifter competes (and is placed) in: the weight class and category, or for a coefficient class only the
+// category (and sex, should men and women lift in the same group). label: e.g. '-63 kg · Senior', 'Junior koefficient'.
+export function competitionClass({ weightClass, category, sex }) {
+  if (isCoefficientClass(category)) {
+    return { key: `${sex ?? ''}|${category}`, label: category }
+  }
+  return {
+    key: `${weightClass}|${category}`,
+    label: [formatWeightClass(weightClass), category].filter(Boolean).join(' · ') || null,
+  }
+}

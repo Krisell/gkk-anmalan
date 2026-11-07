@@ -68,7 +68,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
-import { disciplineName, formatBodyWeight, formatPoints, formatWeight, formatWeightClass } from '../format.js'
+import { competitionClass, disciplineName, formatBodyWeight, formatPoints, formatWeight } from '../format.js'
 
 const props = defineProps({
   // The normalized Scoreboard (see normalize.js).
@@ -152,18 +152,17 @@ const gridColumns = computed(
   () => `64px minmax(0, 1fr) ${compact.value ? '260px ' : ''}repeat(${columns.value.length}, 112px) 116px 136px`,
 )
 
-const classLabel = (lifter) =>
-  [formatWeightClass(lifter.weightClass), lifter.category].filter(Boolean).join(' · ') || null
+const classLabel = (lifter) => competitionClass(lifter).label
 
-// Lifters in Powerlifting Live's order, with a header whenever the weight class or category changes.
+// Lifters by competition class (see normalize.js), with a header for each class: weight class and category, or only
+// the category for a coefficient class, which ranks lifters of all weight classes together.
 const rowsWithHeaders = computed(() => {
   const result = []
   let previous = null
 
   for (const lifter of view.value.scoreboard.lifters) {
-    const groupKey = `${lifter.weightClass}|${lifter.category}`
+    const { key: groupKey, label: header } = competitionClass(lifter)
     if (groupKey !== previous) {
-      const header = classLabel(lifter)
       if (header) {
         result.push({ key: `header-${groupKey}-${result.length}`, header })
       }

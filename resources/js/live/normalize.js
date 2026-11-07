@@ -29,13 +29,16 @@
  *
  * Scoreboard: {
  *   disciplines: ['SQ', 'BP', 'DL'],         the disciplines of the competition (a bench-only meet: ['BP'])
- *   lifters: [{ id, name, team, weightClass, category, bodyWeight, place, total, points, lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 } }]
+ *   lifters: [{ id, name, team, weightClass, category, sex, bodyWeight, place, total, points, lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 } }]
+ *                                            ordered by competition class (see competitionClass in format.js; the
+ *                                            first lifter of a class decides where it comes), then by place
  *                                            points: IPF GL points (Powerlifting Live calls the field 'wilks'; for
  *                                            bench press only, computed with the bench formula, see ipfPoints.js)
  *                                            bodyWeight: kg, from Powerlifting Live's 'weight'
  * }
  */
 
+import { competitionClass } from './format.js'
 import { ipfGlPoints } from './ipfPoints.js'
 
 export const DISCIPLINES = ['SQ', 'BP', 'DL']
@@ -184,28 +187,45 @@ function normalizeScoreboard(rawLifters, discipline) {
 
   return {
     disciplines,
-    lifters: lifters.map((lifter) => ({
-      id: toText(lifter.id),
-      name: toText(lifter.name),
-      team: toText(lifter.team),
-      weightClass: toText(lifter.weightclass_short_alt ?? lifter.weightclass),
-      category: toText(lifter.category),
-      bodyWeight: toWeight(lifter.weight),
-      place: toPlace(lifter.place),
-      total: toWeight(lifter.total),
-      points: benchOnly
-        ? ipfGlPoints({
-            total: toWeight(lifter.total),
-            bodyWeight: toWeight(lifter.weight),
-            sex: lifter.sex === 'm' || lifter.sex === 'f' ? lifter.sex : null,
-            // Powerlifting Live's 'raw' is '1' for classic, '0' for equipped.
-            classic: String(lifter.raw ?? '1') !== '0',
-            event: 'bench',
-          })
-        : toWeight(lifter.wilks),
-      lifts: Object.fromEntries(DISCIPLINES.map((d) => [d, disciplineAttempts(lifter.lifts ?? {}, d)])),
-    })),
+    lifters: byCompetitionClass(
+      lifters.map((lifter) => ({
+        id: toText(lifter.id),
+        name: toText(lifter.name),
+        team: toText(lifter.team),
+        weightClass: toText(lifter.weightclass_short_alt ?? lifter.weightclass),
+        category: toText(lifter.category),
+        sex: lifter.sex === 'm' || lifter.sex === 'f' ? lifter.sex : null,
+        bodyWeight: toWeight(lifter.weight),
+        place: toPlace(lifter.place),
+        total: toWeight(lifter.total),
+        points: benchOnly
+          ? ipfGlPoints({
+              total: toWeight(lifter.total),
+              bodyWeight: toWeight(lifter.weight),
+              sex: lifter.sex === 'm' || lifter.sex === 'f' ? lifter.sex : null,
+              // Powerlifting Live's 'raw' is '1' for classic, '0' for equipped.
+              classic: String(lifter.raw ?? '1') !== '0',
+              event: 'bench',
+            })
+          : toWeight(lifter.wilks),
+        lifts: Object.fromEntries(DISCIPLINES.map((d) => [d, disciplineAttempts(lifter.lifts ?? {}, d)])),
+      })),
+    ),
   }
+}
+
+// Lifters of a coefficient class can be spread over several weight classes in Powerlifting Live's order; they are
+// brought together, each class where its first lifter is, and listed by place within it (the sort is stable, so
+// lifters without a place keep their order).
+function byCompetitionClass(lifters) {
+  const classes = new Map()
+  for (const lifter of lifters) {
+    const { key } = competitionClass(lifter)
+    classes.set(key, [...(classes.get(key) ?? []), lifter])
+  }
+  return [...classes.values()].flatMap((members) =>
+    members.sort((a, b) => (a.place ?? Infinity) - (b.place ?? Infinity)),
+  )
 }
 
 function normalizeCurrent(entry, competitionDiscipline, round) {
