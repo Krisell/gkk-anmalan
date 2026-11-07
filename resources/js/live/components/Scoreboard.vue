@@ -25,7 +25,7 @@
           <div class="row columns">
             <div class="place">Plac.</div>
             <div>Lyftare</div>
-            <div v-if="compact">Klass</div>
+            <div v-if="classColumn">Klass</div>
             <div
               v-for="column in columns"
               :key="column.key"
@@ -51,7 +51,7 @@
                 <span class="name">{{ row.lifter.name ?? 'Okänd lyftare' }}</span>
                 <span v-if="details(row.lifter)" class="team">{{ details(row.lifter) }}</span>
               </div>
-              <div v-if="compact" class="class-label">{{ row.classLabel }}</div>
+              <div v-if="classColumn" class="class-label">{{ row.classLabel }}</div>
               <div v-for="column in columns" :key="column.key" class="cell" :class="cell(row.lifter, column).state">
                 {{ cell(row.lifter, column).label }}
               </div>
@@ -147,7 +147,7 @@ const columns = computed(() => {
 })
 
 const gridColumns = computed(
-  () => `64px minmax(0, 1fr) ${compact.value ? '260px ' : ''}repeat(${columns.value.length}, 112px) 116px 136px`,
+  () => `64px minmax(0, 1fr) ${classColumn.value ? '260px ' : ''}repeat(${columns.value.length}, 112px) 116px 136px`,
 )
 
 const classLabel = (lifter) => competitionClass(lifter).label
@@ -172,19 +172,25 @@ const rowsWithHeaders = computed(() => {
   return result
 })
 
-// With fit, the class headers are dropped (and the class shown in a column) when the rows would get smaller than this.
+// With fit, the heading gets smaller when the rows would get smaller than this.
 const COMFORTABLE_ROW_HEIGHT = 32
+// With fit and the smaller heading, the class headers are dropped (and the class shown in a column) only when the
+// rows would get smaller than this.
+const MIN_ROW_HEIGHT_WITH_HEADERS = 22
 // With fit, the space for the rows: the height less the heading and column titles (smaller when compact), the
 // margins above and below (12 px each) and the spacing below the last row.
 const HEADING_HEIGHT = 108 + 46
 const COMPACT_HEADING_HEIGHT = 60 + 34
 const fitSpace = (heading) => props.height - heading - 2 * 12 - 10
-const compact = computed(
-  () => props.fit && rowsWithHeaders.value.length * COMFORTABLE_ROW_HEIGHT > fitSpace(HEADING_HEIGHT),
-)
+const fits = (heading, rowHeight) => {
+  const headers = rowsWithHeaders.value.length - view.value.scoreboard.lifters.length
+  return rowsWithHeaders.value.length * (rowHeight + 1) + headers * 6 <= fitSpace(heading)
+}
+const compact = computed(() => props.fit && !fits(HEADING_HEIGHT, COMFORTABLE_ROW_HEIGHT))
+const classColumn = computed(() => compact.value && !fits(COMPACT_HEADING_HEIGHT, MIN_ROW_HEIGHT_WITH_HEADERS))
 
 const rows = computed(() =>
-  compact.value
+  classColumn.value
     ? view.value.scoreboard.lifters.map((lifter, index) => ({
         key: lifter.id ?? `lifter-${index}`,
         lifter,
@@ -432,6 +438,10 @@ function cell(lifter, column) {
 /* In the compact list the rows are small; the text takes more of their height. */
 .compact .lifter {
   font-size: calc(var(--row-height) * 0.5);
+}
+
+.compact .group {
+  font-size: min(22px, calc(var(--row-height) * 0.6));
 }
 
 .columns {
