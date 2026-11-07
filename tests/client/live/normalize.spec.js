@@ -268,6 +268,17 @@ describe('normalizeResults', () => {
     expect(groups[0].scoreboard.disciplines).toEqual(['SQ', 'BP', 'DL'])
   })
 
+  it('marks a bench press group done once the bench press is finished', () => {
+    const groups = normalizeResults({
+      lifters: [
+        lifter('1', 'Grupp 01', '63', 1, { BP1: '60', BP1_status: 'good', BP2: '65', BP2_status: 'failed' }),
+        lifter('2', 'Grupp 02', '63', 1, { BP1: '60', BP1_status: 'good', BP2: '65' }),
+      ],
+    })
+
+    expect(groups.map(({ status }) => status)).toEqual(['done', 'ongoing'])
+  })
+
   it('copes with missing data', () => {
     expect(normalizeResults(null)).toEqual([])
   })

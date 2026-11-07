@@ -65,7 +65,8 @@ field holds the GL points, which matches the GL formula on sampled competitions;
 formula, also in bench press competitions, so for a group that only benches the points are computed with the bench
 press formula instead, see `ipfPoints.js`). A full competition therefore always has five
 result columns. The lifter on the platform is highlighted. Until anything in the group has been judged, the list is
-titled _Startlista_ (with the declared openers) instead of _Resultatlista – Pågående tävling_.
+titled _Startlista_ (with the declared openers) instead of _Resultatlista – Pågående tävling_, and once every lifter
+has finished the last discipline (e.g. the bench press in a bench press competition), _Resultat_.
 
 From the remote control, the results of any other group can be shown too (e.g. an earlier, finished one), titled
 _Resultat_ with the best lift per discipline. They come from Powerlifting Live's `scoresheet` topic (the whole

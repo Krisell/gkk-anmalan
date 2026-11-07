@@ -94,7 +94,7 @@ function normalizeClock(raw) {
  * showing another group than the one on the platform. Within a group the lifters are listed by weight class and
  * category (in Powerlifting Live's order), then by place.
  *
- * status: 'upcoming' (nothing judged yet), 'done' (every lifter has finished the deadlift) or 'ongoing'.
+ * status: 'upcoming', 'ongoing' or 'done', see groupStatus.
  */
 export function normalizeResults(raw) {
   const lifters = (Array.isArray(raw?.lifters) ? raw.lifters : []).filter(
@@ -110,7 +110,7 @@ export function normalizeResults(raw) {
     .sort(([a], [b]) => a.localeCompare(b, 'sv', { numeric: true }))
     .map(([name, members]) => {
       const scoreboard = normalizeScoreboard(sortForResults(members), null)
-      return { name, status: groupStatus(scoreboard.lifters), scoreboard }
+      return { name, status: groupStatus(scoreboard), scoreboard }
     })
 }
 
@@ -163,12 +163,17 @@ function sortForResults(lifters) {
   )
 }
 
-function groupStatus(lifters) {
+/**
+ * 'upcoming' (nothing judged yet), 'done' (every lifter has finished the competition's last discipline, e.g. the
+ * bench press in a bench press competition) or 'ongoing'.
+ */
+export function groupStatus({ lifters, disciplines }) {
   const judged = (lifter) => DISCIPLINES.some((d) => lifter.lifts[d].some((attempt) => attempt.outcome))
-  // Finished: a deadlift has been judged and no declared deadlift attempt is left.
+  const last = disciplines.at(-1) ?? 'DL'
+  // Finished: an attempt in the last discipline has been judged and no declared attempt in it is left.
   const finished = (lifter) =>
-    lifter.lifts.DL.some((attempt) => attempt.outcome) &&
-    lifter.lifts.DL.every((attempt) => attempt.outcome || attempt.weight == null)
+    lifter.lifts[last].some((attempt) => attempt.outcome) &&
+    lifter.lifts[last].every((attempt) => attempt.outcome || attempt.weight == null)
 
   if (!lifters.some(judged)) {
     return 'upcoming'

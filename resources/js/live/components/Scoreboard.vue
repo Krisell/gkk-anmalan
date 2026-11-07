@@ -69,6 +69,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
 import { competitionClass, disciplineName, formatBodyWeight, formatPoints, formatWeight } from '../format.js'
+import { groupStatus } from '../normalize.js'
 
 const props = defineProps({
   // The normalized Scoreboard (see normalize.js).
@@ -105,17 +106,14 @@ const snapshot = () => ({
 })
 const view = shallowRef(snapshot())
 
-// Before anything has been judged the list is the start list (with the declared openers).
-const started = computed(() =>
-  view.value.scoreboard.lifters.some((lifter) =>
-    Object.values(lifter.lifts).some((attempts) => attempts.some((attempt) => attempt.outcome)),
-  ),
-)
+// Before anything has been judged the list is the start list (with the declared openers); once every lifter has
+// finished, the results.
 const title = computed(() => {
-  if (!started.value) {
+  const status = groupStatus(view.value.scoreboard)
+  if (status === 'upcoming') {
     return 'Startlista'
   }
-  return view.value.final ? 'Resultat' : 'Resultatlista – Pågående tävling'
+  return view.value.final || status === 'done' ? 'Resultat' : 'Resultatlista – Pågående tävling'
 })
 
 const SHORT_NAMES = { SQ: 'Knäböj', BP: 'Bänk', DL: 'Mark' }
