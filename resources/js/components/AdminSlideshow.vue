@@ -99,31 +99,12 @@
           </p>
         </section>
 
-        <!-- A flash: over the whole screen, then in the message bar for 30 s, then gone. -->
-        <section :class="card" class="order-2 lg:order-none">
-          <h2 class="text-xl font-semibold mb-1">Kort meddelande</h2>
-          <p class="mb-4 text-sm text-gray-600">
-            Visas först över hela skärmen – även över en webbsida – och glider sedan ner längst ner i 30 sekunder innan
-            det försvinner.
-          </p>
-          <form class="flex flex-wrap gap-3" @submit.prevent="showFlash">
-            <input
-              v-model="flashDraft"
-              :maxlength="MESSAGE_MAX_LENGTH"
-              placeholder="T.ex. Grupp 3 – invägningen börjar nu!"
-              :class="inputClass"
-            />
-            <button :class="buttonClass" :disabled="!flashDraft.trim()">
-              <i class="fa fa-bolt mr-2"></i>
-              Visa
-            </button>
-          </form>
-        </section>
-
         <!-- A message on the screens. -->
         <section :class="card" class="order-3 lg:order-none">
           <h2 class="text-xl font-semibold mb-1">Meddelande</h2>
-          <p class="mb-4 text-sm text-gray-600">Visas längst ner på skärmen tills du tar bort det.</p>
+          <p class="mb-4 text-sm text-gray-600">
+            Visas längst ner på skärmen tills du tar bort det, eller efter 30 sekunder om du väljer det.
+          </p>
           <form class="flex flex-wrap gap-3" @submit.prevent="showMessage">
             <input
               v-model="draft"
@@ -133,6 +114,10 @@
             />
             <button :class="buttonClass" :disabled="!draft.trim()">Visa</button>
           </form>
+          <label class="mt-3 flex cursor-pointer items-center gap-3">
+            <input v-model="autoClear" type="checkbox" class="size-5 shrink-0 rounded-sm text-gkk focus:ring-gkk" />
+            <span>Ta bort automatiskt efter 30 sekunder</span>
+          </label>
         </section>
 
         <!-- A web page instead of the slideshow. -->
@@ -248,21 +233,22 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import { signInWithCustomToken } from 'firebase/auth'
 import { onValue, push, ref as databaseRef, serverTimestamp, update } from 'firebase/database'
-import { ExternalLink, Globe, MessageSquare, Pause, Pin, Zap } from 'lucide-vue-next'
+import { ExternalLink, Globe, MessageSquare, Pause, Pin } from 'lucide-vue-next'
 import Breadcrumbs from './ui/Breadcrumbs.vue'
 import SlideList from './Slideshow/SlideList.vue'
 import { liveAuth } from '../live/remote/auth.js'
 import { liveDatabase } from '../live/remote/firebase.js'
+import { watchServerClock } from '../live/remote/serverClock.js'
 import {
-  FLASH_BAR_MS,
-  FLASH_FULL_MS,
+  MESSAGE_AUTO_CLEAR_MS,
   MESSAGE_MAX_LENGTH,
   PAGE_KEY,
   PAGE_URL_MAX_LENGTH,
+  messageShown,
   normalizeControl,
   onlineScreens,
   pageUrl,
@@ -287,24 +273,24 @@ const inputClass =
   'min-w-0 flex-1 basis-56 appearance-none rounded-sm px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:border-blue-300'
 
 const database = liveDatabase()
+// The server's time, for when a message that clears by itself is taken down.
+const serverClock = watchServerClock(database)
 const signedIn = ref(false)
 const error = ref(null)
 const current = ref(normalizeControl(null))
 const presence = ref({})
-const now = ref(Date.now())
+const now = ref(serverClock.now())
 const draft = ref('')
+const autoClear = ref(false)
 const pageDraft = ref('')
-const flashDraft = ref('')
-// The flash sent from here, while the screens show it.
-const flashShown = ref(null)
-let flashTimer = null
 const hall = ref({ state: 'idle', competitions: [] })
 
 let unsubscribes = []
 let ticker = null
+let messageTimer = null
 
 onMounted(async () => {
-  ticker = setInterval(() => (now.value = Date.now()), 5000)
+  ticker = setInterval(() => (now.value = serverClock.now()), 5000)
 
   try {
     await signInWithCustomToken(liveAuth(), jwt)
@@ -324,9 +310,30 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   clearInterval(ticker)
-  clearTimeout(flashTimer)
+  clearTimeout(messageTimer)
+  serverClock.stop()
   unsubscribes.forEach((unsubscribe) => unsubscribe())
 })
+
+// A message that clears by itself is taken down from the database when its time is up (the screens hide it then on
+// their own, also when this page is closed), and off the list below at once.
+watch(
+  () => current.value.message,
+  (message) => {
+    clearTimeout(messageTimer)
+    if (message?.until) {
+      messageTimer = setTimeout(
+        () => {
+          now.value = serverClock.now()
+          if (current.value.message?.id === message.id) {
+            void save({ message: null })
+          }
+        },
+        Math.max(0, message.until - serverClock.now()),
+      )
+    }
+  },
+)
 
 const screens = computed(() => onlineScreens(presence.value, now.value))
 const showingNow = computed(() => new Set(screens.value.map((screen) => screen.slide)))
@@ -335,22 +342,12 @@ const showingNow = computed(() => new Set(screens.value.map((screen) => screen.s
 const onScreen = computed(() => {
   const items = []
   const control = current.value
-  if (flashShown.value) {
-    items.push({
-      key: 'flash',
-      icon: Zap,
-      label: 'Kort meddelande',
-      text: flashShown.value,
-      action: 'Ta bort',
-      clear: clearFlash,
-    })
-  }
-  if (control.message) {
+  if (messageShown(control.message, now.value)) {
     const clear = () => save({ message: null })
     items.push({
       key: 'message',
       icon: MessageSquare,
-      label: 'Meddelande',
+      label: control.message.until ? 'Meddelande · tas bort efter 30 s' : 'Meddelande',
       text: control.message.text,
       action: 'Ta bort',
       clear,
@@ -417,30 +414,13 @@ function reloadScreens() {
   }
 }
 
-async function showFlash() {
-  const text = flashDraft.value.trim().slice(0, MESSAGE_MAX_LENGTH)
-  if (!text) {
-    return
-  }
-  flashDraft.value = ''
-  if (await command('flash', { text })) {
-    flashShown.value = text
-    clearTimeout(flashTimer)
-    flashTimer = setTimeout(() => (flashShown.value = null), FLASH_FULL_MS + FLASH_BAR_MS)
-  }
-}
-
-async function clearFlash() {
-  if (await command('clearFlash')) {
-    clearTimeout(flashTimer)
-    flashShown.value = null
-  }
-}
-
 function showMessage() {
   const text = draft.value.trim().slice(0, MESSAGE_MAX_LENGTH)
   if (text) {
-    void save({ message: { id: Date.now().toString(36), text } })
+    const message = { id: Date.now().toString(36), text }
+    void save({
+      message: autoClear.value ? { ...message, at: serverTimestamp(), duration: MESSAGE_AUTO_CLEAR_MS } : message,
+    })
     draft.value = ''
   }
 }

@@ -3,9 +3,9 @@ import {
   COMMAND_MAX_AGE_MS,
   PRESENCE_TIMEOUT_MS,
   controlOrder,
-  flashText,
   inRotation,
   isFreshCommand,
+  messageShown,
   nextInRotation,
   normalizeControl,
   onlineScreens,
@@ -43,7 +43,7 @@ describe('normalizeControl', () => {
       {
         paused: true,
         slide: 'slide-12',
-        message: { id: 'm1', text: 'Stänger 21!' },
+        message: { id: 'm1', text: 'Stänger 21!', until: null },
         page: null,
         footer: true,
         clock: false,
@@ -64,6 +64,24 @@ describe('normalizeControl', () => {
 
   it('cuts long messages', () => {
     expect(normalizeControl({ message: { text: 'x'.repeat(500) } }).message.text).toHaveLength(120)
+  })
+
+  it('reads when a message clears by itself', () => {
+    const message = (fields) => normalizeControl({ message: { id: 'm1', text: 'Hej', ...fields } }).message
+    expect(message({ at: 1000, duration: 30000 }).until).toBe(31000)
+    expect(message({ at: 1000 }).until).toBeNull()
+    expect(message({ at: '1000', duration: 30000 }).until).toBeNull()
+    expect(message({ at: 1000, duration: -1 }).until).toBeNull()
+    expect(message({ at: 1000, duration: 10 * 3600000 }).until).toBeNull()
+  })
+})
+
+describe('messageShown', () => {
+  it('shows a message until it is taken down, or until its time is up', () => {
+    expect(messageShown(null, 0)).toBe(false)
+    expect(messageShown({ text: 'Hej', until: null }, 10 ** 13)).toBe(true)
+    expect(messageShown({ text: 'Hej', until: 31000 }, 30999)).toBe(true)
+    expect(messageShown({ text: 'Hej', until: 31000 }, 31000)).toBe(false)
   })
 })
 
@@ -187,15 +205,7 @@ describe('isFreshCommand', () => {
     expect(isFreshCommand({ type: 'reload', at: 1000 }, 1000 + COMMAND_MAX_AGE_MS + 1)).toBe(false)
     expect(isFreshCommand({ type: 'explode', at: 1000 }, 1000)).toBe(false)
     expect(isFreshCommand({ type: 'next' }, 1000)).toBe(false)
-    expect(isFreshCommand({ type: 'flash', text: 'Hej', at: 1000 }, 1000)).toBe(true)
-    expect(isFreshCommand({ type: 'clearFlash', at: 1000 }, 1000)).toBe(true)
-  })
-
-  it('reads the text of a flash', () => {
-    expect(flashText({ type: 'flash', text: ' Invägning nu! ' })).toBe('Invägning nu!')
-    expect(flashText({ type: 'flash', text: 'x'.repeat(500) })).toHaveLength(120)
-    expect(flashText({ type: 'flash', text: '  ' })).toBeNull()
-    expect(flashText({ type: 'next', text: 'Hej' })).toBeNull()
+    expect(isFreshCommand({ type: 'flash', text: 'Hej', at: 1000 }, 1000)).toBe(false)
   })
 })
 

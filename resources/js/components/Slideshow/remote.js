@@ -18,9 +18,10 @@ import { resultsLayout } from './results.js'
  * Live control of the screen slideshow (/slides-for-screen) from /admin/slideshow, through Firebase's Realtime
  * Database under slideshow/ (see database.rules.json), in the same way as the live overlay's remote control:
  *
- * - control: settings that persist until changed (paused, a slide held on screen, a message, a web page shown instead
- *   of the slideshow, the bottom bar hidden with or without a clock),
- * - commands: one-off actions ({ type, at } with the server time it was given; a flash also has its text),
+ * - control: settings that persist until changed (paused, a slide held on screen, a message (optionally taken down
+ *   by itself after a while), a web page shown instead of the slideshow, the bottom bar hidden with or without a
+ *   clock),
+ * - commands: one-off actions ({ type, at } with the server time it was given),
  * - presence/{session}: written by each open screen ({ at, slide, showing, held }), so the admin page can show which
  *   screens are on and what they show,
  * - published: written by the app when the slides or the code change (see App\Services\SlideshowSnapshot).
@@ -28,12 +29,11 @@ import { resultsLayout } from './results.js'
  * Everything coming from the database is normalized here, so a missing or odd value never breaks the screen.
  */
 
-export const COMMANDS = ['next', 'previous', 'reload', 'flash', 'clearFlash']
+export const COMMANDS = ['next', 'previous', 'reload']
 export const MESSAGE_MAX_LENGTH = 120
 
-// A flash: the text over the whole screen, then down in the message bar, then gone.
-export const FLASH_FULL_MS = 6000
-export const FLASH_BAR_MS = 30000
+// A message set to clear by itself is taken down this long after it was put up.
+export const MESSAGE_AUTO_CLEAR_MS = 30000
 
 // Commands older than this are not run, e.g. when a screen is (re)loaded after they were given.
 export const COMMAND_MAX_AGE_MS = 15000
@@ -169,7 +169,9 @@ export function normalizeControl(raw) {
   return {
     paused: control.paused === true,
     slide: typeof control.slide === 'string' && SLIDE_KEY.test(control.slide) ? control.slide : null,
-    message: message ? { id: String(control.message.id ?? message), text: message } : null,
+    message: message
+      ? { id: String(control.message.id ?? message), text: message, until: messageUntil(control) }
+      : null,
     page: url ? { id: String(control.page.id ?? url), url } : null,
     // The bottom bar (date, week, slide dots and clock) is shown unless hidden; when hidden, the clock can still be
     // shown on its own.
@@ -184,9 +186,18 @@ export function normalizeControl(raw) {
   }
 }
 
-// The text of a flash command, or null.
-export function flashText(command) {
-  return command?.type === 'flash' ? text(command.text, MESSAGE_MAX_LENGTH) : null
+// When a message set to clear by itself is taken down (server time, ms), or null for one shown until taken down. It
+// has the server time it was put up (`at`) and for how long (`duration`, at most an hour).
+function messageUntil(control) {
+  const { at, duration } = control.message
+  return typeof at === 'number' && typeof duration === 'number' && duration > 0 && duration <= 3600000
+    ? at + duration
+    : null
+}
+
+// Whether a message is shown at the given server time.
+export function messageShown(message, serverNow) {
+  return !!message && (message.until === null || serverNow < message.until)
 }
 
 // Whether a command should still be run, given the server's current time.
@@ -290,7 +301,7 @@ export function useSlideshowRemote({ onCommand = () => {} } = {}) {
 
   onBeforeUnmount(stop)
 
-  return { control, report }
+  return { control, report, serverNow: () => serverClock.now() }
 }
 
 function randomId() {

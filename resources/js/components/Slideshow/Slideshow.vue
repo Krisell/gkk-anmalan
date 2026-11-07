@@ -47,10 +47,10 @@
       </Transition>
     </main>
 
-    <!-- A message from the live control (/admin/slideshow), shown until it is taken down. -->
+    <!-- A message from the live control (/admin/slideshow), shown until it is taken down (or by itself after a while). -->
     <Transition name="slideshow-message">
       <div
-        v-if="control.message && !hidesMessage"
+        v-if="messageShown(control.message, serverTime) && !hidesMessage"
         :key="control.message.id"
         class="shrink-0 bg-amber-300 text-gkk py-[2vh] text-center font-semibold leading-tight text-balance text-[min(3.4vw,5.8vh)]"
         :class="floatingClock ? 'px-[15vw]' : 'px-[4vw]'"
@@ -111,24 +111,8 @@
       </div>
     </footer>
 
-    <!-- A flash from the live control, over everything (also a web page): first the whole screen, then down where the
-         message bar is, then gone. -->
-    <Transition name="slideshow-flash">
-      <div
-        v-if="flash"
-        :key="flash.id"
-        class="slideshow-flash absolute inset-x-0 z-50 flex items-center justify-center overflow-hidden bg-amber-300 text-center text-gkk shadow-[0_-1vh_4vh_rgba(0,0,0,0.15)]"
-        :class="[
-          { 'slideshow-flash-bar': flash.phase === 'bar' },
-          floatingClock && flash.phase === 'bar' ? 'px-[15vw]' : 'px-[5vw]',
-        ]"
-      >
-        <span class="slideshow-flash-text font-bold leading-tight text-balance">{{ flash.text }}</span>
-      </div>
-    </Transition>
-
     <!-- The clock on its own, when the bottom bar is hidden from the live control: bottom right, over everything
-         (a web page, the message bar and a flash). -->
+         (a web page and the message bar). -->
     <div
       v-if="floatingClock"
       class="absolute bottom-[2vh] right-[2vw] z-[60] flex items-baseline rounded-[1.4vh] bg-gkk px-[1.4vw] py-[1.1vh] text-white leading-none tabular-nums whitespace-nowrap shadow-xl shadow-black/20"
@@ -153,11 +137,9 @@ import { onValue, ref as databaseRef } from 'firebase/database'
 import { liveDatabase } from '../../live/remote/firebase.js'
 import axios from 'axios'
 import {
-  FLASH_BAR_MS,
-  FLASH_FULL_MS,
   PAGE_KEY,
-  flashText,
   inRotation,
+  messageShown,
   nextInRotation,
   pageLabel,
   rotation,
@@ -290,14 +272,9 @@ let slideInterval = null
 
 // The live control (/admin/slideshow): choose the slides in the rotation, hold a slide, show a message or a web page,
 // step or reload.
-const { control, report } = useSlideshowRemote({
-  onCommand: (command) => {
-    const { type } = command
-    if (type === 'flash') {
-      showFlash(flashText(command))
-    } else if (type === 'clearFlash') {
-      clearFlash()
-    } else if (type === 'next') {
+const { control, report, serverNow } = useSlideshowRemote({
+  onCommand: ({ type }) => {
+    if (type === 'next') {
       nextSlide()
     } else if (type === 'previous') {
       previousSlide()
@@ -306,6 +283,10 @@ const { control, report } = useSlideshowRemote({
     }
   },
 })
+
+// The server's time, for taking down a message that clears by itself (the screen's own clock may be off).
+const serverTime = ref(serverNow())
+setInterval(() => (serverTime.value = serverNow()), 1000)
 
 const heldIndex = computed(() =>
   control.value.slide ? slides.value.findIndex((slide) => slideKey(slide) === control.value.slide) : -1,
@@ -402,29 +383,6 @@ function restartInterval() {
   slideCycle.value++
 }
 
-// A flash: over the whole screen first, then down in the message bar for a while, then gone. A new one replaces it.
-const flash = ref(null)
-let flashTimers = []
-
-function clearFlash() {
-  flashTimers.forEach(clearTimeout)
-  flashTimers = []
-  flash.value = null
-}
-
-function showFlash(text) {
-  if (!text) {
-    return
-  }
-  flashTimers.forEach(clearTimeout)
-  const id = `${Date.now()}`
-  flash.value = { id, text, phase: 'full' }
-  flashTimers = [
-    setTimeout(() => (flash.value = { id, text, phase: 'bar' }), FLASH_FULL_MS),
-    setTimeout(() => (flash.value = null), FLASH_FULL_MS + FLASH_BAR_MS),
-  ]
-}
-
 document.body.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') {
     nextSlide()
@@ -467,54 +425,6 @@ document.body.addEventListener('keydown', (e) => {
 
 .slideshow-message-enter-from,
 .slideshow-message-leave-to {
-  opacity: 0;
-  transform: translateY(100%);
-}
-
-/* The flash fills the screen above the bottom bar, then shrinks down to a bar where the message bar is. */
-.slideshow-flash {
-  --flash-bar-h: 12vh;
-  top: 0;
-  bottom: var(--footer-h);
-  transition: top 1200ms cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.slideshow-flash-bar {
-  top: calc(100% - var(--footer-h) - var(--flash-bar-h));
-}
-
-.slideshow-flash-text {
-  font-size: min(7vw, 13vh);
-  transition: font-size 1200ms cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.slideshow-flash-bar .slideshow-flash-text {
-  font-size: min(3.2vw, 5.4vh);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
-}
-
-.slideshow-flash-enter-active {
-  transition:
-    opacity 500ms ease,
-    transform 500ms ease;
-}
-
-.slideshow-flash-leave-active {
-  transition:
-    opacity 600ms ease,
-    transform 600ms ease;
-}
-
-.slideshow-flash-enter-from {
-  opacity: 0;
-  transform: scale(1.04);
-}
-
-.slideshow-flash-leave-to {
   opacity: 0;
   transform: translateY(100%);
 }
