@@ -41,6 +41,7 @@ import AdminSignatureRequest from './components/AdminSignatureRequest.vue'
 import AdminSignatureRequests from './components/AdminSignatureRequests.vue'
 import LagSM from './components/LagSM.vue'
 import PointsHighScore from './components/PointsHighScore.vue'
+import Secretariat from './components/Secretariat/Secretariat.vue'
 
 window.axios = axios
 
@@ -111,6 +112,7 @@ app.component('GkkAdminSignatureRequest', AdminSignatureRequest)
 app.component('GkkAdminSignatureRequests', AdminSignatureRequests)
 app.component('LagSM', LagSM)
 app.component('GkkPointsHighScore', PointsHighScore)
+app.component('GkkSecretariat', Secretariat)
 
 if (!window.location.hostname.endsWith('.test')) {
   Sentry.init({
