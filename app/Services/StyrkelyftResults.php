@@ -111,7 +111,8 @@ class StyrkelyftResults
     {
         $response = self::get(self::API, [
             'start_date' => $start->toDateString(),
-            'end_date' => $end->toDateString(),
+            // The API's end_date is exclusive: a result on that day is left out.
+            'end_date' => $end->addDay()->toDateString(),
             'page_size' => self::PAGE_SIZE,
         ]);
         $results = $response->json('results') ?? [];

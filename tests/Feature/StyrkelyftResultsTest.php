@@ -117,10 +117,11 @@ test('equalling the record is not a record, unless it is the registered lift its
 test('the results are fetched a month at a time, and a month too large for a page is split', function () {
     Http::fake(function (Request $request) {
         \parse_str(\parse_url($request->url(), PHP_URL_QUERY) ?? '', $query);
+        // end_date is exclusive.
         $days = (\strtotime($query['end_date']) - \strtotime($query['start_date'])) / 86400;
 
         // More than fits on a page, unless at most a week.
-        return $days > 6
+        return $days > 7
             ? Http::response(['results' => [], 'next' => StyrkelyftResults::API.'?page=2'])
             : Http::response(['next' => null, 'results' => [styrkelyftResult([
                 'id' => \crc32($query['start_date']),
@@ -135,11 +136,12 @@ test('the results are fetched a month at a time, and a month too large for a pag
 
         return [$query['start_date'], $query['end_date']];
     });
-    // Every day from the start to today in exactly one window of at most a week.
-    $leaves = $windows->filter(fn ($w) => (\strtotime($w[1]) - \strtotime($w[0])) / 86400 <= 6)->sortBy(0)->values();
+    // Every day from the start to today, including today, in exactly one window of at most a week (end_date is
+    // exclusive).
+    $leaves = $windows->filter(fn ($w) => (\strtotime($w[1]) - \strtotime($w[0])) / 86400 <= 7)->sortBy(0)->values();
     expect($leaves->first()[0])->toBe('2026-09-01');
-    expect($leaves->last()[1])->toBe('2026-11-01');
-    $leaves->sliding(2)->each(fn ($pair) => expect(\date('Y-m-d', \strtotime($pair->first()[1].' +1 day')))->toBe($pair->last()[0]));
+    expect($leaves->last()[1])->toBe('2026-11-02');
+    $leaves->sliding(2)->each(fn ($pair) => expect($pair->first()[1])->toBe($pair->last()[0]));
     expect($results)->toHaveCount($leaves->count());
 });
 
