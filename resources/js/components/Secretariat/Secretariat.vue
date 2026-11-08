@@ -133,21 +133,151 @@
           </form>
         </div>
       </section>
+      <!-- Welcome sign -->
+      <section class="mt-14">
+        <h2 class="text-sm font-bold uppercase tracking-[0.18em] text-gkk-light">Välkomstskylt</h2>
+        <p class="mt-1 text-gkk-light">A4 liggande, svartvitt – till entrén eller tävlingsflaket.</p>
+
+        <form
+          class="mt-5 grid gap-6 rounded-2xl bg-white/90 p-5 shadow-xl shadow-gkk/10 ring-1 ring-gkk/10 lg:grid-cols-[1.4fr_1fr]"
+          @submit.prevent="print(welcome.title.trim(), welcome.from.trim())"
+        >
+          <div class="overflow-hidden rounded-lg ring-1 ring-black/10">
+            <Platslapp :text="welcome.title.trim()" :sub-text="welcome.from.trim()" placeholder="Välkomna" preview />
+          </div>
+          <div class="flex flex-col gap-4">
+            <label class="block">
+              <span class="text-xs font-bold uppercase tracking-[0.14em] text-gkk-light">Rubrik</span>
+              <textarea
+                v-model="welcome.title"
+                rows="3"
+                class="mt-1.5 resize-none w-full rounded-xl border-0 bg-white px-4 py-2.5 text-gkk shadow-sm ring-1 ring-gkk/15 placeholder:text-gkk-lightest focus:ring-2 focus:ring-gkk"
+              ></textarea>
+            </label>
+            <label class="block">
+              <span class="text-xs font-bold uppercase tracking-[0.14em] text-gkk-light">Avsändare</span>
+              <textarea
+                v-model="welcome.from"
+                rows="3"
+                class="mt-1.5 resize-none w-full rounded-xl border-0 bg-white px-4 py-2.5 text-gkk shadow-sm ring-1 ring-gkk/15 placeholder:text-gkk-lightest focus:ring-2 focus:ring-gkk"
+              ></textarea>
+            </label>
+            <div class="mt-auto flex items-center justify-between gap-3">
+              <button type="button" class="text-sm font-medium text-gkk-light hover:text-gkk" @click="resetWelcome">
+                Återställ
+              </button>
+              <button
+                type="submit"
+                :disabled="!welcome.title.trim()"
+                class="inline-flex items-center gap-2 rounded-full bg-gkk px-5 py-2.5 font-bold text-white shadow-lg shadow-gkk/20 transition hover:bg-gkk-light disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Printer class="h-4 w-4 text-amber-300" :stroke-width="2" />
+                Skriv ut
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Stream splash screens -->
+      <section class="mt-14">
+        <div class="flex flex-wrap items-start gap-2 sm:items-center">
+          <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gkk text-amber-300">
+            <Youtube class="h-5 w-5" :stroke-width="1.75" />
+          </div>
+          <div>
+            <h2 class="text-sm font-bold uppercase tracking-[0.18em] text-gkk-light">Bilder till sändningen</h2>
+            <p class="text-gkk-light">
+              1920×1080 PNG – som bild i OBS före start och i pauser, eller som miniatyr på YouTube.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="mt-5 grid gap-4 rounded-2xl bg-white/90 p-5 shadow-xl shadow-gkk/10 ring-1 ring-gkk/10 md:grid-cols-[1fr_1fr_auto] md:items-end"
+        >
+          <label class="block">
+            <span class="text-xs font-bold uppercase tracking-[0.14em] text-gkk-light">Tävling</span>
+            <input
+              v-model="stream.competition"
+              type="text"
+              class="mt-1.5 w-full rounded-xl border-0 bg-white px-4 py-2.5 text-gkk shadow-sm ring-1 ring-gkk/15 placeholder:text-gkk-lightest focus:ring-2 focus:ring-gkk"
+            />
+          </label>
+          <label class="block">
+            <span class="text-xs font-bold uppercase tracking-[0.14em] text-gkk-light">Datum och plats</span>
+            <input
+              v-model="stream.info"
+              type="text"
+              class="mt-1.5 w-full rounded-xl border-0 bg-white px-4 py-2.5 text-gkk shadow-sm ring-1 ring-gkk/15 placeholder:text-gkk-lightest focus:ring-2 focus:ring-gkk"
+            />
+          </label>
+          <button type="button" class="py-2.5 text-sm font-medium text-gkk-light hover:text-gkk" @click="resetStream">
+            Återställ
+          </button>
+        </div>
+
+        <div class="mt-5 grid gap-5 md:grid-cols-2">
+          <div
+            v-for="(screen, index) in screens"
+            :key="index"
+            class="rounded-2xl p-3 shadow-xl ring-1 ring-gkk/10"
+            :class="screen.custom ? 'bg-gkk shadow-gkk/20' : 'bg-white/90 shadow-gkk/10'"
+          >
+            <div class="overflow-hidden rounded-lg ring-1 ring-black/10">
+              <StreamSplash
+                :ref="(el) => (splashes[index] = el)"
+                :kicker="stream.competition"
+                :title="screen.custom ? customSplash : screen.title"
+                :sub-text="stream.info"
+                placeholder="Egen text"
+              />
+            </div>
+            <div class="mt-3 flex items-center gap-2 px-1">
+              <span v-if="!screen.custom" class="min-w-0 flex-1 truncate font-bold text-gkk">{{ screen.title }}</span>
+              <input
+                v-else
+                v-model="customSplash"
+                type="text"
+                maxlength="60"
+                placeholder="Skriv egen text…"
+                aria-label="Egen bild till sändningen"
+                class="min-w-0 flex-1 rounded-full border-0 bg-white/10 px-4 py-1.5 text-white placeholder:text-white/50 focus:bg-white/15 focus:ring-2 focus:ring-amber-300"
+              />
+              <button
+                type="button"
+                :disabled="screen.custom && !customSplash.trim()"
+                class="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40"
+                :class="
+                  screen.custom
+                    ? 'bg-amber-300 text-gkk hover:bg-amber-200'
+                    : 'bg-gkk/5 text-gkk hover:bg-gkk hover:text-white'
+                "
+                @click="splashes[index].download(fileName(screen.custom ? customSplash : screen.title))"
+              >
+                <Download class="h-4 w-4" :stroke-width="2" />
+                Ladda ner
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
 
     <!-- The sheet that is printed: off screen, and alone on the page when printing (see resources/views/sek.blade.php). -->
     <Teleport to="body">
       <div class="platslapp-print" aria-hidden="true">
-        <Platslapp ref="printSheet" :text="printText" />
+        <Platslapp ref="printSheet" :text="printText" :sub-text="printSubText" />
       </div>
     </Teleport>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { Database, ExternalLink, MonitorPlay, Presentation, Printer, Ticket } from 'lucide-vue-next'
+import { reactive, ref, watch } from 'vue'
+import { Database, Download, ExternalLink, MonitorPlay, Presentation, Printer, Ticket, Youtube } from 'lucide-vue-next'
 import Platslapp from './Platslapp.vue'
+import StreamSplash from './StreamSplash.vue'
 
 const LOGO = 'https://goteborg-kraftsportklubb.web.app/img/logo-min.png'
 
@@ -186,14 +316,66 @@ const SIGNS = ['Pant', 'Skräp', 'Invägning', 'Ställningshöjder']
 
 const custom = ref('')
 const printText = ref('')
+const printSubText = ref('')
 const printSheet = ref()
 
-async function print(text) {
+async function print(text, subText = '') {
   if (!text) {
     return
   }
   printText.value = text
+  printSubText.value = subText
   await printSheet.value.fit()
   window.print()
+}
+
+// The texts of the welcome sign and the stream's splash screens are remembered in this browser until the next
+// competition, so they only need to be typed once.
+function remembered(key, defaults) {
+  let saved = {}
+  try {
+    saved = JSON.parse(localStorage.getItem(key) ?? '{}') ?? {}
+  } catch {
+    // Not remembered (e.g. a private window): the defaults.
+  }
+  const state = reactive({ ...defaults, ...saved })
+  watch(state, () => {
+    try {
+      localStorage.setItem(key, JSON.stringify(state))
+    } catch {
+      // Not remembered, but still used on this page.
+    }
+  })
+  const reset = () => Object.assign(state, defaults)
+  return [state, reset]
+}
+
+const [welcome, resetWelcome] = remembered('sek.welcome', {
+  title: 'Välkomna till Distriktsmästerskapen i Klassisk Styrkelyft',
+  from: 'Göteborg Kraftsportklubb och Västra Götalands Styrkelyftförbund',
+})
+
+const [stream, resetStream] = remembered('sek.stream', {
+  competition: 'DM i klassisk styrkelyft 2026',
+  info: 'Lördag 14 november · Friskis & Svettis Majorna, Göteborg',
+})
+
+const screens = [
+  { title: 'Sändningen börjar snart' },
+  { title: 'Paus – vi är snart tillbaka' },
+  { title: 'Tack för att ni tittade!' },
+  { custom: true },
+]
+const customSplash = ref('')
+const splashes = []
+
+function fileName(title) {
+  return [stream.competition, title]
+    .join(' ')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 }
 </script>

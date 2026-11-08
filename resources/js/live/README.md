@@ -167,6 +167,18 @@ goes live. None of them needs `?competition=`.
 In the demo editor, _Skylt_ (or the **K** key) previews the slates. Slates have the stinger's blue, slightly transparent,
 as a full-screen background; in the demo the results list and slates come and go with the stinger.
 
+### The club's slideshow on the stream
+
+_Bildspel_ under _Visas nu_ on the control page shows the club's slideshow (`/slideshow`, the hall's screen) full
+screen on the stream, coming and going with the stinger like the slates. It is meant for breaks: hold the DM slide
+for the timetable, or put "Nästa grupp startar 14:30" in the message bar, from the slideshow's live control
+(`/admin/slideshow`). The overlay loads it (`/slideshow?stream=1`) in the background as soon as it starts, so it is
+ready when chosen, and keeps it loaded.
+
+There is one slideshow control, so the stream and the hall's screen show the same slides and messages. The exception
+is a web page shown instead of the slideshow (_Visa en webbsida_, e.g. the warm-up hall screen): the stream keeps
+showing the slides. In the slideshow's live control the stream is listed among the screens as _Sändningen: …_.
+
 ### Scene transition (stinger)
 
 `obs/gkk-stinger.webm` is a 1.2-second transition in club colours: diagonal bands sweep across, cover the whole
@@ -187,7 +199,7 @@ iPad /live/control ──writes──▶ Realtime Database live/… ──pushes
 
 - **Data** (`remote/controlState.js` normalizes all of it):
   - `control`: what is shown (`mode`: `auto`, `list` with `listGroup` for another group than the one on the platform,
-    `slate` with `slate` start/pause/end and `pauseTime`, or `hidden`), the competition's name, a message, and whether
+    `slate` with `slate` start/pause/end and `pauseTime`, `slideshow`, or `hidden`), the competition's name, a message, and whether
     the lifter card and the results list between rounds are on. (Commentator names are supported by the overlay but
     not offered on the control page for now.)
   - `commands`: one-off actions `{ type, at }` (`pb`, `list`, `commentators`, `skip`). The overlay runs only those given

@@ -15,13 +15,21 @@
         <div ref="box" class="flex h-full w-full items-center justify-center overflow-hidden">
           <p
             ref="label"
-            class="w-full text-center font-black uppercase leading-[1.02] tracking-tight break-normal hyphens-none"
-            :class="{ 'text-black/15': !text }"
+            class="w-full text-center font-black leading-[1.02] tracking-tight text-balance break-normal hyphens-none"
+            :class="{ uppercase: !subText, 'text-black/15': !text }"
           >
             {{ text || placeholder }}
           </p>
         </div>
       </div>
+
+      <!-- A smaller line under the text, e.g. who welcomes the lifters. -->
+      <p
+        v-if="subText"
+        class="mx-auto mb-[6mm] max-w-[230mm] text-center text-[11mm] font-semibold leading-tight text-balance"
+      >
+        {{ subText }}
+      </p>
     </div>
   </div>
 </template>
@@ -36,6 +44,7 @@ const SHEET_WIDTH = (297 / 25.4) * 96
 const props = defineProps({
   text: { type: String, default: '' },
   placeholder: { type: String, default: 'Din text' },
+  subText: { type: String, default: '' },
   preview: { type: Boolean, default: false },
 })
 
@@ -77,7 +86,7 @@ onMounted(() => {
 })
 onBeforeUnmount(() => observer?.disconnect())
 
-watch(() => props.text, fit)
+watch(() => [props.text, props.subText], fit)
 
 defineExpose({ fit })
 </script>

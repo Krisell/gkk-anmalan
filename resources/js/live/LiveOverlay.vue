@@ -29,6 +29,18 @@
       />
       <img v-else-if="showBackdrop" :src="demoBackdrop" alt="" class="backdrop" />
 
+      <!-- The club's slideshow (/slideshow), from the remote control: loaded in the background from the start, so that
+           it is ready when it is shown under the stinger. What it shows is controlled from /admin/slideshow. -->
+      <iframe
+        v-if="remote"
+        :src="slideshowUrl"
+        class="slideshow"
+        :class="{ shown: showSlideshow }"
+        title="Bildspel"
+        tabindex="-1"
+        aria-hidden="true"
+      />
+
       <Transition name="board">
         <Slate
           v-if="showSlate"
@@ -112,7 +124,7 @@
 
     <!-- Our logo in the corner, on every view except the results list (it has our logo in its heading) and the
          stinger (a transition). -->
-    <CornerBug v-if="view !== 'stinger' && view !== 'scoreboard' && !showScoreboard && !hideAll" />
+    <CornerBug v-if="view !== 'stinger' && view !== 'scoreboard' && !showScoreboard && !showSlideshow && !hideAll" />
 
     <!-- The stinger as an in-page transition when the results list or a slate comes or goes. -->
     <Stinger v-if="stinger" :key="stinger" class="in-page-stinger" />
@@ -315,8 +327,13 @@ const showSlate = computed(() => displayMode.value === 'slate' || remoteMode.val
 const slateKind = computed(() => (editorState ? editorState.slate : control.value.slate))
 const slateTime = computed(() => (editorState ? demoPauseTime : control.value.pauseTime))
 
+// The club's slideshow, from the remote control. It has the club's logo in its own bottom bar, so the corner graphic
+// is hidden too. The preview on the control page doesn't report itself as one of the slideshow's screens.
+const showSlideshow = computed(() => remoteMode.value === 'slideshow')
+const slideshowUrl = `/slideshow?stream=1${flag('preview') ? '&preview=1' : ''}`
+
 // Full-screen graphics replace the lower third, the lifter card and the corner graphic while shown.
-const fullScreen = computed(() => showScoreboard.value || showSlate.value)
+const fullScreen = computed(() => showScoreboard.value || showSlate.value || showSlideshow.value)
 
 // The competition's name: the demo editor's field, the remote control's, or ?title=….
 const eventTitle = computed(() => editorState?.title?.trim() || control.value.title || title || null)
@@ -377,7 +394,9 @@ watch(
   (result) => {
     const endsRound = result && (editorState ? editorState.lastInRound : result.confirmed && result.endsRound)
     const key = result && `${result.id}:${result.shownAt}`
-    if (!showRoundBoards || !control.value.roundBoards || !endsRound || key === roundBoardFor) {
+    // Not over a slate or the slideshow chosen from the remote control.
+    const covered = ['slate', 'slideshow'].includes(remoteMode.value)
+    if (!showRoundBoards || !control.value.roundBoards || !endsRound || key === roundBoardFor || covered) {
       return
     }
 
@@ -823,7 +842,7 @@ const hideAll = computed(() => remoteMode.value === 'hidden')
 watch(
   () => control.value.mode,
   (mode) => {
-    const fullScreenModes = ['list', 'slate']
+    const fullScreenModes = ['list', 'slate', 'slideshow']
     if (fullScreenModes.includes(mode) || fullScreenModes.includes(remoteMode.value)) {
       withStinger(() => {
         remoteMode.value = mode
@@ -898,6 +917,9 @@ const onAir = computed(() => {
   const name = displayed.value?.name ?? ''
   if (hideAll.value) {
     return 'Ingen grafik'
+  }
+  if (showSlideshow.value) {
+    return 'Bildspel'
   }
   if (showSlate.value) {
     return `Skylt: ${{ start: 'Startar snart', pause: 'Paus', end: 'Tack för idag' }[slateKind.value] ?? slateKind.value}`
@@ -1033,6 +1055,21 @@ onBeforeUnmount(() => {
 code {
   font-size: 0.9em;
   color: var(--overlay-silver);
+}
+
+/* The slideshow, kept loaded but invisible until it is chosen from the remote control. */
+.slideshow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.slideshow.shown {
+  visibility: visible;
 }
 
 .in-page-stinger {

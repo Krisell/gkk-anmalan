@@ -272,7 +272,16 @@ let slideInterval = null
 
 // The live control (/admin/slideshow): choose the slides in the rotation, hold a slide, show a message or a web page,
 // step or reload.
-const { control, report, serverNow } = useSlideshowRemote({
+//
+// The broadcast shows the slideshow too, on command from the live overlay's remote control (/slideshow?stream=1 in the
+// overlay, see resources/js/live/README.md). It follows the same control, so a held slide or a message is shown both
+// in the hall and on the stream, except a web page shown on the hall's screen (e.g. the warm-up hall screen): the
+// stream keeps showing the slides. It reports itself as "Sändningen", and the control page's preview of the overlay
+// (&preview=1) doesn't report itself at all.
+const params = new URLSearchParams(window.location.search)
+const stream = params.get('stream') === '1'
+const remote = useSlideshowRemote({
+  presence: params.get('preview') !== '1',
   onCommand: ({ type }) => {
     if (type === 'next') {
       nextSlide()
@@ -283,6 +292,9 @@ const { control, report, serverNow } = useSlideshowRemote({
     }
   },
 })
+const control = stream ? computed(() => ({ ...remote.control.value, page: null })) : remote.control
+const report = stream ? (entry) => remote.report({ ...entry, showing: `Sändningen: ${entry.showing}` }) : remote.report
+const { serverNow } = remote
 
 // The server's time, for taking down a message that clears by itself (the screen's own clock may be off).
 const serverTime = ref(serverNow())

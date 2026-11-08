@@ -221,7 +221,7 @@ export function onlineScreens(presence, now) {
  *
  * If the connection drops, the last control state stays in effect and the slideshow carries on.
  */
-export function useSlideshowRemote({ onCommand = () => {} } = {}) {
+export function useSlideshowRemote({ onCommand = () => {}, presence = true } = {}) {
   const database = liveDatabase()
   const control = shallowRef(normalizeControl(null))
   let connected = false
@@ -266,7 +266,7 @@ export function useSlideshowRemote({ onCommand = () => {} } = {}) {
   let reported = { slide: '', showing: '', held: false }
 
   function write() {
-    if (connected) {
+    if (connected && presence) {
       set(session, { at: serverTimestamp(), ...reported }).catch(() => {})
     }
   }
@@ -274,7 +274,7 @@ export function useSlideshowRemote({ onCommand = () => {} } = {}) {
   unsubscribes.push(
     onValue(databaseRef(database, '.info/connected'), (snapshot) => {
       connected = snapshot.val() === true
-      if (connected) {
+      if (connected && presence) {
         onDisconnect(session)
           .remove()
           .then(write)

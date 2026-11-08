@@ -72,6 +72,10 @@
           <span>Nästa grupp startar</span>
           <input v-model="draft.pauseTime" type="time" @change="save({ pauseTime: draft.pauseTime || null })" />
         </label>
+        <p class="hint">
+          Bildspel visar klubbens bildspel, samma som på hallens skärm. Vad som visas – t.ex. tidsschemat eller ett
+          meddelande – styrs från <a href="/admin/slideshow" target="_blank" rel="noopener">/admin/slideshow</a>.
+        </p>
       </section>
 
       <section v-if="groups.length" class="card">
@@ -186,6 +190,7 @@ const SHOWN = [
   { key: 'start', label: 'Startar snart', mode: 'slate', slate: 'start' },
   { key: 'pause', label: 'Paus', mode: 'slate', slate: 'pause' },
   { key: 'end', label: 'Tack för idag', mode: 'slate', slate: 'end' },
+  { key: 'slideshow', label: 'Bildspel', mode: 'slideshow' },
   { key: 'hidden', label: 'Ingen grafik', mode: 'hidden' },
 ]
 

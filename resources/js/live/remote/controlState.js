@@ -9,9 +9,10 @@
  * Everything coming from the database is normalized here, so a missing or odd value never breaks the overlay.
  */
 
-// What the overlay shows: 'auto' (follows the competition), 'hidden' (no graphics at all), 'list' (the results list)
-// or 'slate' (a full-screen message, see SLATES).
-export const MODES = ['auto', 'hidden', 'list', 'slate']
+// What the overlay shows: 'auto' (follows the competition), 'hidden' (no graphics at all), 'list' (the results list),
+// 'slate' (a full-screen message, see SLATES) or 'slideshow' (the club's slideshow, as on the hall's screen, controlled
+// from /admin/slideshow).
+export const MODES = ['auto', 'hidden', 'list', 'slate', 'slideshow']
 export const SLATES = ['start', 'pause', 'end']
 export const COMMANDS = ['pb', 'skip', 'list', 'commentators']
 

@@ -39,6 +39,10 @@ describe('normalizeControl', () => {
     })
   })
 
+  it('can show the club slideshow', () => {
+    expect(normalizeControl({ mode: 'slideshow' }).mode).toBe('slideshow')
+  })
+
   it('ignores an empty message and an invalid pause time', () => {
     const control = normalizeControl({ message: { id: 'm1', text: '   ' }, pauseTime: 'snart' })
     expect(control.message).toBeNull()
