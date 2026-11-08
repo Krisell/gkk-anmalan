@@ -124,3 +124,11 @@ test('the publish command publishes the version', function () {
 
     expect(publishedVersions())->toBe([SlideshowSnapshot::build()['version']]);
 });
+
+test('the slideshow can be framed by our own pages, such as the live overlay', function () {
+    foreach (['/slideshow', '/slides-for-screen', '/slideshow?stream=1'] as $url) {
+        $this->get($url)
+            ->assertOk()
+            ->assertHeader('Content-Security-Policy', "frame-ancestors 'self'");
+    }
+});

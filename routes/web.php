@@ -278,9 +278,13 @@ Route::prefix('sign')->controller(SignatureController::class)->middleware('signe
     Route::post('/{signer:token}', 'store')->name('sign.store');
 });
 
-Route::view('/slides-for-screen', 'slides')->name('slides');
+// The hall screen's slideshow. The live overlay shows it too (Bildspel on /live/control), in a frame. Laravel Cloud's
+// edge adds "X-Frame-Options: deny" to every response; browsers ignore that header when frame-ancestors is set, so
+// this lets our own pages (and only them) frame the slideshow.
+$slideshow = fn () => response()->view('slides')->header('Content-Security-Policy', "frame-ancestors 'self'");
+Route::get('/slides-for-screen', $slideshow)->name('slides');
 // A shorter address for the same screen, e.g. for typing it on the screen's own device.
-Route::view('/slideshow', 'slides');
+Route::get('/slideshow', $slideshow);
 
 Route::prefix('live')->controller(LiveOverlayController::class)->group(function () {
     Route::get('overlay', 'show')->name('live.overlay');
