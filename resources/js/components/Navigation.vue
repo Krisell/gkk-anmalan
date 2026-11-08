@@ -271,6 +271,13 @@ export default {
           admin: true,
         },
         {
+          href: '/admin/minutes',
+          title: 'Protokoll',
+          description: 'Skriv mötesprotokoll',
+          icon: 'book',
+          admin: true,
+        },
+        {
           href: '/admin/activity-logs',
           title: 'Aktivitetslogg',
           description: 'Se vad som hänt',

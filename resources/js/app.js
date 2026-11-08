@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, defineAsyncComponent } from 'vue'
 import * as Sentry from '@sentry/vue'
 import { firebaseConfig } from './firebaseConfig.js'
 
@@ -42,6 +42,7 @@ import AdminSignatureRequests from './components/AdminSignatureRequests.vue'
 import LagSM from './components/LagSM.vue'
 import PointsHighScore from './components/PointsHighScore.vue'
 import Secretariat from './components/Secretariat/Secretariat.vue'
+import AdminMinutesList from './components/Minutes/AdminMinutesList.vue'
 
 window.axios = axios
 
@@ -113,6 +114,12 @@ app.component('GkkAdminSignatureRequests', AdminSignatureRequests)
 app.component('LagSM', LagSM)
 app.component('GkkPointsHighScore', PointsHighScore)
 app.component('GkkSecretariat', Secretariat)
+app.component('GkkAdminMinutesList', AdminMinutesList)
+// Loaded on demand, so the rich text editor (Tiptap) is only downloaded on the minutes page.
+app.component(
+  'GkkAdminMinutesEditor',
+  defineAsyncComponent(() => import('./components/Minutes/AdminMinutesEditor.vue')),
+)
 
 if (!window.location.hostname.endsWith('.test')) {
   Sentry.init({

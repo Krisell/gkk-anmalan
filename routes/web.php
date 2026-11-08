@@ -24,6 +24,8 @@ use App\Http\Controllers\LagSMController;
 use App\Http\Controllers\LicenseAdminController;
 use App\Http\Controllers\LiveControlController;
 use App\Http\Controllers\LiveOverlayController;
+use App\Http\Controllers\MeetingMinutesController;
+use App\Http\Controllers\MeetingMinutesReviewController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NewsEmailController;
 use App\Http\Controllers\PaymentController;
@@ -109,6 +111,7 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('member-documents')->group(function () {
             Route::get('/', [DocumentController::class, 'index'])->middleware(EnsureAgreementsAreSignedMiddleware::class);
+            Route::get('/minutes/{minutes}', [MeetingMinutesReviewController::class, 'published']);
         });
 
         Route::prefix('events')->group(function () {
@@ -207,6 +210,20 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
         });
     });
 
+    Route::prefix('minutes')->controller(MeetingMinutesController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('/new', 'create');
+        Route::post('/', 'store');
+        Route::get('/{minutes}', 'edit');
+        Route::get('/{minutes}/print', 'print');
+        Route::put('/{minutes}', 'update');
+        Route::delete('/{minutes}', 'destroy');
+        Route::post('/{minutes}/review', 'requestReview');
+        Route::post('/{minutes}/reopen', 'reopen');
+        Route::post('/{minutes}/publish', 'publish');
+        Route::delete('/{minutes}/publish', 'unpublish');
+    });
+
     Route::prefix('documents')->group(function () {
         Route::get('/', [DocumentsAdministratorController::class, 'index']);
         Route::post('/', [DocumentsAdministratorController::class, 'store']);
@@ -271,6 +288,13 @@ Route::middleware(['auth', SuperadminMiddleware::class])->prefix('fn')->group(fu
     Route::get('printtemplates', [FortnoxIntegrationController::class, 'printtemplates']);
     Route::get('activation', [FortnoxIntegrationController::class, 'activation'])->name('fortnox.activation');
     Route::get('disconnect', [FortnoxIntegrationController::class, 'disconnect'])->name('fortnox.disconnect');
+});
+
+// The adjuster's review of meeting minutes, through a signed link shared by an admin.
+Route::prefix('minutes/{minutes}/review')->controller(MeetingMinutesReviewController::class)->middleware('signed')->group(function () {
+    Route::get('/', 'show')->name('minutes.review');
+    Route::post('/approve', 'approve')->name('minutes.review.approve');
+    Route::post('/changes', 'requestChanges')->name('minutes.review.changes');
 });
 
 Route::prefix('sign')->controller(SignatureController::class)->middleware('signed')->group(function () {
