@@ -8,8 +8,15 @@ import { firebaseConfig } from '../../firebaseConfig.js'
  * For local testing, ?firebaseEmulator=<host> (only on a local site) uses the Firebase emulators instead
  * (`firebase emulators:start --only auth,database` in the project root).
  */
-export function liveFirebaseApp() {
-  return getApps().length ? getApp() : initializeApp(firebaseConfig)
+// The default app is for pages that only read (the overlay, the slideshow screen). A page that signs in uses an app of
+// its own (see SIGN_IN_APPS), because Firebase keeps one signed-in user per app, shared by all tabs: otherwise signing
+// in to the slideshow's control in one tab would sign the live control out in another, and the other way round.
+export const SIGN_IN_APPS = Object.freeze({ liveControl: 'live-control', slideshowAdmin: 'slideshow-admin' })
+
+const DEFAULT_APP = '[DEFAULT]'
+
+export function liveFirebaseApp(name = DEFAULT_APP) {
+  return getApps().some((app) => app.name === name) ? getApp(name) : initializeApp(firebaseConfig, name)
 }
 
 const LOCAL_HOSTS = /(^localhost$|^127\.0\.0\.1$|\.test$)/
@@ -19,15 +26,16 @@ export function emulatorHost() {
   return host && LOCAL_HOSTS.test(window.location.hostname) ? host : null
 }
 
-let database = null
+const databases = new Map()
 
-export function liveDatabase() {
-  if (!database) {
-    database = getDatabase(liveFirebaseApp())
+export function liveDatabase(name = DEFAULT_APP) {
+  if (!databases.has(name)) {
+    const database = getDatabase(liveFirebaseApp(name))
     const host = emulatorHost()
     if (host) {
       connectDatabaseEmulator(database, host, 9000)
     }
+    databases.set(name, database)
   }
-  return database
+  return databases.get(name)
 }

@@ -233,7 +233,7 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { onAuthStateChanged, signInWithCustomToken, signOut } from 'firebase/auth'
 import { onValue, push, ref as databaseRef, serverTimestamp, update } from 'firebase/database'
 import { liveAuth } from '../remote/auth.js'
-import { emulatorHost, liveDatabase } from '../remote/firebase.js'
+import { SIGN_IN_APPS, emulatorHost, liveDatabase } from '../remote/firebase.js'
 import { MESSAGE_MAX_LENGTH, normalizeCompetition, normalizeControl } from '../remote/controlState.js'
 import { normalizeResults } from '../normalize.js'
 import { youTubeId } from '../sources/delayedSource.js'
@@ -262,8 +262,8 @@ const busy = ref(false)
 const error = ref(null)
 const signedIn = ref(false)
 
-const auth = liveAuth()
-const database = liveDatabase()
+const auth = liveAuth(SIGN_IN_APPS.liveControl)
+const database = liveDatabase(SIGN_IN_APPS.liveControl)
 
 const current = ref(normalizeControl(null))
 const presence = ref({})

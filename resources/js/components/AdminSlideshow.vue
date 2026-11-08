@@ -241,7 +241,7 @@ import { ExternalLink, Globe, MessageSquare, Pause, Pin } from 'lucide-vue-next'
 import Breadcrumbs from './ui/Breadcrumbs.vue'
 import SlideList from './Slideshow/SlideList.vue'
 import { liveAuth } from '../live/remote/auth.js'
-import { liveDatabase } from '../live/remote/firebase.js'
+import { SIGN_IN_APPS, liveDatabase } from '../live/remote/firebase.js'
 import { watchServerClock } from '../live/remote/serverClock.js'
 import {
   MESSAGE_AUTO_CLEAR_MS,
@@ -272,7 +272,7 @@ const card = 'rounded-sm bg-white p-4 shadow-sm sm:p-6'
 const inputClass =
   'min-w-0 flex-1 basis-56 appearance-none rounded-sm px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-hidden focus:border-blue-300'
 
-const database = liveDatabase()
+const database = liveDatabase(SIGN_IN_APPS.slideshowAdmin)
 // The server's time, for when a message that clears by itself is taken down.
 const serverClock = watchServerClock(database)
 const signedIn = ref(false)
@@ -293,7 +293,7 @@ onMounted(async () => {
   ticker = setInterval(() => (now.value = serverClock.now()), 5000)
 
   try {
-    await signInWithCustomToken(liveAuth(), jwt)
+    await signInWithCustomToken(liveAuth(SIGN_IN_APPS.slideshowAdmin), jwt)
   } catch {
     error.value = 'Kunde inte ansluta till skärmarna. Ladda om sidan och försök igen.'
     return
