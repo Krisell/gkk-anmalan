@@ -55,55 +55,59 @@
         </div>
       </section>
 
-      <section class="card">
-        <h2>Tävling</h2>
-        <p v-if="current.competition" class="on-air chosen">
-          Grafiken följer: {{ competitionLabel(current.competition) }}
-        </p>
-        <p v-else class="hint">Välj vilken tävling grafiken i OBS ska följa.</p>
-        <p v-if="fixedInObs" class="error chosen">
-          Grafiken i OBS visar tävling {{ onAir.competition }}, eftersom den står i OBS-adressen. Ta bort
-          <code>?competition=…</code> ur adressen i OBS för att styra tävlingen härifrån.
-        </p>
+      <!-- Until a competition is chosen this comes first; after that it moves to the bottom, so that what is used during
+           the broadcast is at the top (e.g. on a phone). -->
+      <Teleport defer to="#competition-at-bottom" :disabled="!current.competition">
+        <section class="card">
+          <h2>Tävling</h2>
+          <p v-if="current.competition" class="on-air chosen">
+            Grafiken följer: {{ competitionLabel(current.competition) }}
+          </p>
+          <p v-else class="hint">Välj vilken tävling grafiken i OBS ska följa.</p>
+          <p v-if="fixedInObs" class="error chosen">
+            Grafiken i OBS visar tävling {{ onAir.competition }}, eftersom den står i OBS-adressen. Ta bort
+            <code>?competition=…</code> ur adressen i OBS för att styra tävlingen härifrån.
+          </p>
 
-        <div v-if="pendingCompetition" class="confirm">
-          <span>Byta grafiken till {{ competitionLabel(pendingCompetition) }}?</span>
-          <button class="button primary" @click="chooseCompetition(pendingCompetition)">Byt tävling</button>
-          <button class="button" @click="pendingCompetition = null">Avbryt</button>
-        </div>
+          <div v-if="pendingCompetition" class="confirm">
+            <span>Byta grafiken till {{ competitionLabel(pendingCompetition) }}?</span>
+            <button class="button primary" @click="chooseCompetition(pendingCompetition)">Byt tävling</button>
+            <button class="button" @click="pendingCompetition = null">Avbryt</button>
+          </div>
 
-        <p v-if="liveCompetitionsState === 'loading'" class="hint">Hämtar tävlingar live på Powerlifting Live…</p>
-        <p v-else-if="liveCompetitionsState === 'error'" class="hint">
-          Kunde inte hämta tävlingarna från Powerlifting Live. Ange tävlingens id nedan.
-        </p>
-        <p v-else-if="!liveCompetitions.length" class="hint">Inga tävlingar live på Powerlifting Live just nu.</p>
-        <div v-else class="choices competitions">
-          <button
-            v-for="competition in liveCompetitions"
-            :key="competition.id"
-            class="button choice group"
-            :class="{ active: current.competition === String(competition.id) }"
-            @click="pickCompetition(String(competition.id))"
-          >
-            <span>{{ competition.name }}</span>
-            <span class="group-status">{{ competition.date ?? competition.id }}</span>
-          </button>
-        </div>
+          <p v-if="liveCompetitionsState === 'loading'" class="hint">Hämtar tävlingar live på Powerlifting Live…</p>
+          <p v-else-if="liveCompetitionsState === 'error'" class="hint">
+            Kunde inte hämta tävlingarna från Powerlifting Live. Ange tävlingens id nedan.
+          </p>
+          <p v-else-if="!liveCompetitions.length" class="hint">Inga tävlingar live på Powerlifting Live just nu.</p>
+          <div v-else class="choices competitions">
+            <button
+              v-for="competition in liveCompetitions"
+              :key="competition.id"
+              class="button choice group"
+              :class="{ active: current.competition === String(competition.id) }"
+              @click="pickCompetition(String(competition.id))"
+            >
+              <span>{{ competition.name }}</span>
+              <span class="group-status">{{ competition.date ?? competition.id }}</span>
+            </button>
+          </div>
 
-        <div class="message-row competition-id">
-          <input
-            v-model.trim="draft.competition"
-            class="grow"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            maxlength="9"
-            placeholder="Tävlingens id i Powerlifting Live, t.ex. 3001"
-            @keydown.enter.prevent="pickTyped"
-          />
-          <button class="button" :disabled="!normalizeCompetition(draft.competition)" @click="pickTyped">Välj</button>
-          <button class="button" @click="loadLiveCompetitions">Uppdatera listan</button>
-        </div>
-      </section>
+          <div class="message-row competition-id">
+            <input
+              v-model.trim="draft.competition"
+              class="grow"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              maxlength="9"
+              placeholder="Tävlingens id i Powerlifting Live, t.ex. 3001"
+              @keydown.enter.prevent="pickTyped"
+            />
+            <button class="button" :disabled="!normalizeCompetition(draft.competition)" @click="pickTyped">Välj</button>
+            <button class="button" @click="loadLiveCompetitions">Uppdatera listan</button>
+          </div>
+        </section>
+      </Teleport>
 
       <section class="card">
         <h2>Visas nu</h2>
@@ -213,6 +217,8 @@
           <input v-model.number="testDelay" type="number" min="0" max="120" step="1" class="short" />
         </label>
       </section>
+
+      <div id="competition-at-bottom" />
 
       <p v-if="error" class="error">{{ error }}</p>
       <footer class="footer">
@@ -721,7 +727,8 @@ h2 {
 
 .choices {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  /* Two per row on a phone, so that the controls used during the broadcast fit near the top. */
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 10px;
 }
 
