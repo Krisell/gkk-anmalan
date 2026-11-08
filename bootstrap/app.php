@@ -1,18 +1,22 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\DatabaseMaintenanceMiddleware;
 use App\Http\Middleware\EnsureUserIsNotInactivatedMiddleware;
 use App\Http\Middleware\LogVisitsMiddleware;
 use App\Http\Middleware\LowercaseEmails;
 use App\Http\Middleware\RedirectToMainDomainMiddleware;
+use App\Http\Middleware\SuperadminMiddleware;
 use App\Providers\AppServiceProvider;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
@@ -58,11 +62,17 @@ return Application::configure(basePath: \dirname(__DIR__))
             EnsureUserIsNotInactivatedMiddleware::class,
         ]);
 
+        // Everything that decides who may make a request runs before the route model binding, so that a guest or a
+        // non-admin never gets a database lookup (or a 404 that tells whether an id exists) on a route they can't use.
         $middleware->priority([
             StartSession::class,
             ShareErrorsFromSession::class,
+            AuthenticatesRequests::class,
             ThrottleRequests::class,
             AuthenticateSession::class,
+            AdminMiddleware::class,
+            SuperadminMiddleware::class,
+            ValidateSignature::class,
             SubstituteBindings::class,
             Authorize::class,
         ]);
