@@ -1,8 +1,8 @@
 # OBS setup for competition streams
 
 How the club's streaming laptop (Windows, OBS) is configured. The laptop is used only for competition streams, so
-everything below is set once and saved; per competition only the competition id and name change (see the checklist at
-the end). Background on the overlay itself is in [README.md](README.md).
+everything below is set once and saved; per competition only the competition (chosen on the iPad) changes, see the
+checklist at the end. Background on the overlay itself is in [README.md](README.md).
 
 ## Hardware
 
@@ -85,12 +85,17 @@ The broadcast runs in **one scene**: the overlay follows the competition by itse
 and end slates, messages, PB stamps, results of earlier groups, hiding all graphics) is done from the control page on an iPad
 (see [Remote control](#remote-control-ipad)). OBS only needs touching to start and stop the stream.
 
-`<site>` is `https://goteborgkk.se` and `<id>` the Powerlifting Live competition id.
+`<site>` is `https://goteborgkk.se`.
 
 | Hotkey | Scene   | Sources (top to bottom)                                                                      |
 | ------ | ------- | -------------------------------------------------------------------------------------------- |
-| F1     | Tävling | Browser `<site>/live/overlay?competition=<id>`, camera, microphone                           |
+| F1     | Tävling | Browser `<site>/live/overlay`, camera, microphone                                            |
 | F2     | Demo    | Browser `<site>/live/overlay?demo=true`, camera (for testing and rehearsals, no iPad needed) |
+
+The Tävling overlay has no competition in its address: it follows the competition chosen on the iPad (_Tävling_ on
+the control page), and starts over on a new one when another is chosen. It remembers the last one, so it also starts
+without Firebase. `?competition=<id>` in the address still works and then wins over the iPad (the control page warns
+about it); use it as a fallback if the remote control isn't working.
 
 Every Browser source: width **1920**, height **1080**, _Shutdown source when not visible_ **off**, default custom CSS.
 
@@ -115,6 +120,7 @@ Every Browser source: width **1920**, height **1080**, _Shutdown source when not
 
 | Section                 | What it does                                                                                                    |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Tävling                 | Which competition the overlay follows: the ones live on Powerlifting Live now, or an id. Switching asks first   |
 | Visas nu                | Automatik (follows the competition), Resultatlista, Startar snart / Paus / Tack för idag (slates), Ingen grafik |
 | Resultat per grupp      | The results list of any group, e.g. an earlier finished one (each group marked Klar, Pågår or Ej startad)       |
 | Snabbknappar            | PB stamp for the lifter on screen, the results list for 10 s, skip what is shown                                |
@@ -144,9 +150,10 @@ and choose the camera.
 
 ## Per competition
 
-1. Find the competition id: the `id` in Powerlifting Live URLs, or on <https://se.powerliftinglive.com/xml.php>.
-2. Update `competition=` in the Tävling scene's overlay.
-3. On the iPad (signed in), set the competition's name under _Inställningar_.
+1. On the iPad (signed in), choose the competition under _Tävling_. It is listed once Powerlifting Live shows it as
+   live; otherwise type its id (the `id` in Powerlifting Live URLs, or on <https://se.powerliftinglive.com/xml.php>).
+2. Check the competition's name under _Inställningar_ (filled in from Powerlifting Live if it was empty).
+3. Nothing changes in OBS.
 4. At the venue: test upload speed, connect the camera, check View → Stats (no dropped frames), and check that the
    iPad says the overlay in OBS is online.
 5. On the iPad choose _Startar snart_. Manage Broadcast: check title, visibility and thumbnail, then _Create broadcast

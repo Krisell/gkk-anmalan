@@ -14,6 +14,10 @@
       />
     </template>
 
+    <div v-else-if="!source && followsControl" class="config-error">
+      Välj tävling på kontrollsidan, <code>/live/control</code>.
+    </div>
+
     <div v-else-if="!source" class="config-error">
       Ange tävling i adressen, t.ex. <code>/live/overlay?competition=3001</code>, eller testa med
       <code>/live/overlay?demo=true</code>.
@@ -170,7 +174,13 @@ const params = new URLSearchParams(window.location.search)
 const flag = (name, fallback = false) =>
   params.has(name) ? !['0', 'false', 'no'].includes(params.get(name)) : fallback
 
-const competition = params.get('competition')
+// The competition: from the address, or (without ?competition=) the one chosen on the control page, see
+// live-overlay.js.
+const props = defineProps({
+  competition: { type: String, default: null },
+  followsControl: { type: Boolean, default: false },
+})
+const competition = props.competition ?? params.get('competition')
 // ?demo=true opens the demo editor (everything set by hand); ?demo=scenario steps through a simulated competition.
 const demoSource = flag('demo') && params.get('demo') === 'scenario' ? createDemoSource() : null
 const editorState = flag('demo') && !demoSource ? reactive(defaultEditorState()) : null

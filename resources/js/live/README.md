@@ -4,6 +4,7 @@ A transparent broadcast overlay showing the current lifter, attempt and requeste
 result (with referee lights) of each attempt. It is rendered by OBS as a Browser Source on top of the camera.
 
 ```
+/live/overlay                      the competition chosen on the control page (see Remote control)
 /live/overlay?competition=3001     live data from Powerlifting Live competition 3001
 /live/overlay?demo=true            simulated competition, no network requests
 ```
@@ -198,7 +199,9 @@ iPad /live/control ──writes──▶ Realtime Database live/… ──pushes
 ```
 
 - **Data** (`remote/controlState.js` normalizes all of it):
-  - `control`: what is shown (`mode`: `auto`, `list` with `listGroup` for another group than the one on the platform,
+  - `control`: the competition the overlay follows (`competition`, used when its address has no `?competition=`;
+    `live-overlay.js` mounts the overlay anew when it changes, and remembers it in the browser source's storage, so
+    the overlay also starts without Firebase), what is shown (`mode`: `auto`, `list` with `listGroup` for another group than the one on the platform,
     `slate` with `slate` start/pause/end and `pauseTime`, `slideshow`, or `hidden`), the competition's name, a message, and whether
     the lifter card and the results list between rounds are on. (Commentator names are supported by the overlay but
     not offered on the control page for now.)

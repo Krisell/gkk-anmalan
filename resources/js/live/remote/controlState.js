@@ -17,6 +17,7 @@ export const SLATES = ['start', 'pause', 'end']
 export const COMMANDS = ['pb', 'skip', 'list', 'commentators']
 
 export const DEFAULT_CONTROL = Object.freeze({
+  competition: null, // the Powerlifting Live competition id the overlay follows, unless its address sets one
   mode: 'auto',
   listGroup: null, // the results list of another group than the one on the platform, e.g. 'Grupp 03'
   slate: 'start',
@@ -40,6 +41,7 @@ export function normalizeControl(raw) {
   const message = text(control.message?.text, MESSAGE_MAX_LENGTH)
 
   return {
+    competition: normalizeCompetition(control.competition),
     mode: MODES.includes(control.mode) ? control.mode : DEFAULT_CONTROL.mode,
     listGroup: text(control.listGroup, 40),
     slate: SLATES.includes(control.slate) ? control.slate : DEFAULT_CONTROL.slate,
@@ -50,6 +52,12 @@ export function normalizeControl(raw) {
     intros: control.intros !== false,
     roundBoards: control.roundBoards !== false,
   }
+}
+
+// A Powerlifting Live competition id ("3001" or 3001), or null.
+export function normalizeCompetition(value) {
+  const id = typeof value === 'number' ? String(value) : typeof value === 'string' ? value.trim() : ''
+  return /^[0-9]{1,9}$/.test(id) && Number(id) > 0 ? id : null
 }
 
 // "Anna Svensson, Erik Berg" (as typed on the control page) or a list of names.

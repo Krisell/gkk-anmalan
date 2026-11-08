@@ -56,6 +56,56 @@
       </section>
 
       <section class="card">
+        <h2>Tävling</h2>
+        <p v-if="current.competition" class="on-air chosen">
+          Grafiken följer: {{ competitionLabel(current.competition) }}
+        </p>
+        <p v-else class="hint">Välj vilken tävling grafiken i OBS ska följa.</p>
+        <p v-if="fixedInObs" class="error chosen">
+          Grafiken i OBS visar tävling {{ onAir.competition }}, eftersom den står i OBS-adressen. Ta bort
+          <code>?competition=…</code> ur adressen i OBS för att styra tävlingen härifrån.
+        </p>
+
+        <div v-if="pendingCompetition" class="confirm">
+          <span>Byta grafiken till {{ competitionLabel(pendingCompetition) }}?</span>
+          <button class="button primary" @click="chooseCompetition(pendingCompetition)">Byt tävling</button>
+          <button class="button" @click="pendingCompetition = null">Avbryt</button>
+        </div>
+
+        <p v-if="liveCompetitionsState === 'loading'" class="hint">Hämtar tävlingar live på Powerlifting Live…</p>
+        <p v-else-if="liveCompetitionsState === 'error'" class="hint">
+          Kunde inte hämta tävlingarna från Powerlifting Live. Ange tävlingens id nedan.
+        </p>
+        <p v-else-if="!liveCompetitions.length" class="hint">Inga tävlingar live på Powerlifting Live just nu.</p>
+        <div v-else class="choices competitions">
+          <button
+            v-for="competition in liveCompetitions"
+            :key="competition.id"
+            class="button choice group"
+            :class="{ active: current.competition === String(competition.id) }"
+            @click="pickCompetition(String(competition.id))"
+          >
+            <span>{{ competition.name }}</span>
+            <span class="group-status">{{ competition.date ?? competition.id }}</span>
+          </button>
+        </div>
+
+        <div class="message-row competition-id">
+          <input
+            v-model.trim="draft.competition"
+            class="grow"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="9"
+            placeholder="Tävlingens id i Powerlifting Live, t.ex. 3001"
+            @keydown.enter.prevent="pickTyped"
+          />
+          <button class="button" :disabled="!normalizeCompetition(draft.competition)" @click="pickTyped">Välj</button>
+          <button class="button" @click="loadLiveCompetitions">Uppdatera listan</button>
+        </div>
+      </section>
+
+      <section class="card">
         <h2>Visas nu</h2>
         <div class="choices">
           <button
@@ -178,7 +228,7 @@ import { onAuthStateChanged, signInWithCustomToken, signOut } from 'firebase/aut
 import { onValue, push, ref as databaseRef, serverTimestamp, update } from 'firebase/database'
 import { liveAuth } from '../remote/auth.js'
 import { emulatorHost, liveDatabase } from '../remote/firebase.js'
-import { MESSAGE_MAX_LENGTH, normalizeControl } from '../remote/controlState.js'
+import { MESSAGE_MAX_LENGTH, normalizeCompetition, normalizeControl } from '../remote/controlState.js'
 import { normalizeResults } from '../normalize.js'
 import { youTubeId } from '../sources/delayedSource.js'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
@@ -212,13 +262,16 @@ const database = liveDatabase()
 const current = ref(normalizeControl(null))
 const presence = ref({})
 const now = ref(Date.now())
-const draft = reactive({ title: '', pauseTime: '', message: '' })
+const draft = reactive({ title: '', pauseTime: '', message: '', competition: '' })
 
 let unsubscribes = []
 
 onAuthStateChanged(auth, async (user) => {
   signedIn.value = Boolean(user && (await user.getIdTokenResult()).claims.liveControl === true)
   listen()
+  if (signedIn.value && liveCompetitionsState.value !== 'loaded') {
+    void loadLiveCompetitions()
+  }
 })
 
 async function signIn() {
@@ -332,10 +385,67 @@ const overlayStatus = computed(() => {
   return { kind: latest.feed === 'live' ? 'online' : 'warning', text: `I sändning: ${latest.showing}${feed}` }
 })
 
-// The preview: the overlay itself, for the competition the overlay in OBS shows, following the control like that one,
-// scaled to fit.
+// The competition: the overlay in OBS follows the one chosen here, unless its address in OBS has ?competition=.
+const liveCompetitions = ref([])
+const liveCompetitionsState = ref('idle')
+const pendingCompetition = ref(null)
+
+async function loadLiveCompetitions() {
+  liveCompetitionsState.value = 'loading'
+  try {
+    const response = await fetch('/live/competitions', { headers: { Accept: 'application/json' } })
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`)
+    }
+    liveCompetitions.value = (await response.json()).competitions ?? []
+    liveCompetitionsState.value = 'loaded'
+  } catch {
+    liveCompetitionsState.value = 'error'
+  }
+}
+
+function competitionLabel(id) {
+  const known = liveCompetitions.value.find((competition) => String(competition.id) === id)
+  return known ? `${known.name} (${id})` : `tävling ${id}`
+}
+
+// Switching away from a chosen competition is confirmed first, since it changes what is on air.
+function pickCompetition(id) {
+  if (id === current.value.competition) {
+    pendingCompetition.value = null
+  } else if (current.value.competition) {
+    pendingCompetition.value = id
+  } else {
+    void chooseCompetition(id)
+  }
+}
+
+function pickTyped() {
+  const id = normalizeCompetition(draft.competition)
+  if (id) {
+    pickCompetition(id)
+    draft.competition = ''
+  }
+}
+
+async function chooseCompetition(id) {
+  pendingCompetition.value = null
+  const name = liveCompetitions.value.find((competition) => String(competition.id) === id)?.name
+  // The competition's name on the slates, if none has been given yet.
+  const title = !current.value.title && name ? { title: name.slice(0, 80) } : {}
+  await save({ competition: id, ...title })
+}
+
+const fixedInObs = computed(
+  () =>
+    Boolean(onAir.value?.competition && current.value.competition) &&
+    onAir.value.competition !== current.value.competition,
+)
+
+// The preview: the overlay itself, for the competition the overlay in OBS shows (or the one chosen here, while the
+// overlay isn't running), following the control like that one, scaled to fit.
 const overlayUrl = document.body.dataset.overlayUrl
-const previewCompetition = computed(() => onAir.value?.competition ?? null)
+const previewCompetition = computed(() => onAir.value?.competition ?? current.value.competition ?? null)
 
 // Testing against someone else's stream (e.g. SM): a video behind the preview, and the preview's graphics delayed to
 // match it. Remembered on this device only.
@@ -707,6 +817,29 @@ input:not([type='checkbox']) {
 input:focus {
   outline: none;
   border-color: #9fb4ff;
+}
+
+.chosen {
+  margin: 0 0 14px;
+}
+
+.competitions {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.competition-id {
+  margin-top: 14px;
+}
+
+.confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--navy-deep);
 }
 
 .message-row {

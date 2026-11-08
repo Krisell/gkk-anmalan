@@ -3,6 +3,7 @@ import {
   COMMAND_MAX_AGE_MS,
   DEFAULT_CONTROL,
   isFreshCommand,
+  normalizeCompetition,
   normalizeControl,
   parseNames,
 } from '../../../resources/js/live/remote/controlState.js'
@@ -16,6 +17,7 @@ describe('normalizeControl', () => {
   it('reads what the control page saved', () => {
     expect(
       normalizeControl({
+        competition: ' 3001 ',
         mode: 'slate',
         listGroup: ' Grupp 03 ',
         slate: 'pause',
@@ -27,6 +29,7 @@ describe('normalizeControl', () => {
         roundBoards: false,
       }),
     ).toEqual({
+      competition: '3001',
       mode: 'slate',
       listGroup: 'Grupp 03',
       slate: 'pause',
@@ -47,6 +50,22 @@ describe('normalizeControl', () => {
     const control = normalizeControl({ message: { id: 'm1', text: '   ' }, pauseTime: 'snart' })
     expect(control.message).toBeNull()
     expect(control.pauseTime).toBeNull()
+  })
+})
+
+describe('normalizeCompetition', () => {
+  it('accepts a Powerlifting Live id as a string or a number', () => {
+    expect(normalizeCompetition('3001')).toBe('3001')
+    expect(normalizeCompetition(3001)).toBe('3001')
+  })
+
+  it('rejects anything else', () => {
+    expect(normalizeCompetition(null)).toBeNull()
+    expect(normalizeCompetition('')).toBeNull()
+    expect(normalizeCompetition('0')).toBeNull()
+    expect(normalizeCompetition('30a1')).toBeNull()
+    expect(normalizeCompetition('1234567890')).toBeNull()
+    expect(normalizeCompetition(-3)).toBeNull()
   })
 })
 
