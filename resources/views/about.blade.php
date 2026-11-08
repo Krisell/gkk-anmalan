@@ -2,18 +2,11 @@
 
 @section('content')
 @php
-  $firebase = 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2F';
-  $board = [
-    ['Carl Öberg', 'Ordförande', 'https://goteborg-kraftsportklubb.web.app/img/stryrelsen_carl-1.jpeg'],
-    ['Jenny Karlsson', 'Kassör', $firebase.'jenny.png?alt=media&token=8c1c612e-75ca-4eac-849e-e5ef0b060f67'],
-    ['Martin Sandström Krisell', 'Sekreterare', 'https://avatars.githubusercontent.com/u/25909128?v=4'],
-    ['Albin Björkman', 'Ledamot', 'https://goteborg-kraftsportklubb.web.app/img/styrelsen_albin.jpg'],
-    ['Ida Anemyr', 'Ledamot', $firebase.'Ida.png?alt=media&token=371aa963-19a4-494a-9146-3fe63a0562ed'],
-    ['Maximus Sörnes Andersson', 'Ledamot', $firebase.'maximus2.png?alt=media&token=0e728e58-5db1-42b5-99c8-6ef86a53ff8e'],
-    ['Oscar Jörgensen', 'Ledamot', null],
-    ['Simon Böttcher', 'Suppleant', null],
-    ['Philip Waagiström', 'Suppleant', $firebase.'Philip.png?alt=media&token=5018ed03-a106-4999-95da-d5db596e4e8a'],
-  ];
+  // "Vem kontaktar jag om …?" – one row per area, sorted alphabetically.
+  $contacts = $board
+    ->flatMap(fn ($m) => collect($m->areas)->map(fn ($area) => ['area' => $area, 'name' => $m->name, 'email' => $m->email]))
+    ->sortBy('area', SORT_NATURAL | SORT_FLAG_CASE)
+    ->values();
 @endphp
 
 <x-page-hero image="https://goteborg-kraftsportklubb.web.app/img/mark-min.jpg" eyebrow="Sedan 1933" title="Om GKK">
@@ -83,26 +76,58 @@
 </section>
 
 {{-- Förtroendevalda --}}
+@if ($board->isNotEmpty())
 <section class="mx-auto max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">
   <x-section-heading eyebrow="Styrelsen" title="Förtroendevalda 2026" />
   <ul role="list" class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-5">
-    @foreach ($board as [$name, $role, $photo])
-      <li class="group rounded-2xl bg-white p-5 text-center shadow-md shadow-gkk/5 ring-1 ring-gray-900/5 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+    @foreach ($board as $member)
+      <li class="group flex flex-col rounded-2xl bg-white p-5 text-center shadow-md shadow-gkk/5 ring-1 ring-gray-900/5 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
         <div class="mx-auto h-20 w-20 overflow-hidden rounded-full ring-4 ring-gkk/10 transition group-hover:ring-gkk/25 sm:h-24 sm:w-24">
-          @if ($photo)
-            <img class="h-full w-full object-cover" src="{{ $photo }}" alt="{{ $name }}">
+          @if ($member->photo_url)
+            <img class="h-full w-full object-cover" src="{{ $member->photo_url }}" alt="{{ $member->name }}">
           @else
             <div class="flex h-full w-full items-center justify-center bg-gkk text-xl font-bold text-white sm:text-2xl" aria-hidden="true">
-              {{ mb_substr($name, 0, 1) . mb_substr(strrchr($name, ' '), 1, 1) }}
+              {{ $member->initials() }}
             </div>
           @endif
         </div>
-        <h3 class="mt-4 text-sm font-semibold text-gray-900">{{ $name }}</h3>
-        <p class="mt-1 text-xs font-semibold {{ $role === 'Suppleant' ? 'text-gray-500' : 'text-gkk-light' }}">{{ $role }}</p>
+        <h3 class="mt-4 text-sm font-semibold text-gray-900">{{ $member->name }}</h3>
+        <p class="mt-1 text-xs font-semibold {{ $member->role === 'Suppleant' ? 'text-gray-500' : 'text-gkk-light' }}">{{ $member->role }}</p>
+        @if ($member->areas)
+          <p class="mt-3 text-xs leading-relaxed text-gray-600">{{ implode(' · ', $member->areas) }}</p>
+        @endif
+        @if ($member->email)
+          <a href="mailto:{{ $member->email }}" class="mt-auto inline-flex items-center justify-center gap-1.5 break-all pt-3 text-xs font-medium text-gkk hover:text-gkk-light" title="{{ $member->email }}">
+            <i class="fa fa-envelope" aria-hidden="true"></i>{{ $member->email }}
+          </a>
+        @endif
       </li>
     @endforeach
   </ul>
+
+  @if ($contacts->isNotEmpty())
+    <div class="mt-12 rounded-3xl bg-gkk/5 p-6 ring-1 ring-gkk/10 sm:p-8">
+      <h3 class="text-lg font-bold text-gkk">Vem kontaktar jag om …?</h3>
+      <p class="mt-1 text-sm text-gray-600">
+        Hittar du inte det du söker? Skriv till <a href="mailto:info@gkk-styrkelyft.se" class="font-medium text-gkk underline decoration-gkk/30 underline-offset-4 hover:decoration-gkk">info@gkk-styrkelyft.se</a>.
+      </p>
+      <dl class="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+        @foreach ($contacts as $contact)
+          <div class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-900/5">
+            <dt class="text-xs font-semibold uppercase tracking-wider text-gray-500">{{ $contact['area'] }}</dt>
+            <dd class="mt-1">
+              <span class="font-semibold text-gray-900">{{ $contact['name'] }}</span>
+              @if ($contact['email'])
+                <a href="mailto:{{ $contact['email'] }}" class="block break-all text-sm text-gkk hover:text-gkk-light">{{ $contact['email'] }}</a>
+              @endif
+            </dd>
+          </div>
+        @endforeach
+      </dl>
+    </div>
+  @endif
 </section>
+@endif
 
 {{-- Historia --}}
 <section class="mx-auto max-w-7xl px-4 pt-24 sm:px-6 lg:px-8">

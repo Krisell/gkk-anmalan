@@ -278,6 +278,13 @@ export default {
           admin: true,
         },
         {
+          href: '/admin/board',
+          title: 'Styrelsen',
+          description: 'Om GKK-sidan',
+          icon: 'id-card-o',
+          admin: true,
+        },
+        {
           href: '/admin/activity-logs',
           title: 'Aktivitetslogg',
           description: 'Se vad som hänt',

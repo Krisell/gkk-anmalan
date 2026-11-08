@@ -43,6 +43,7 @@ import LagSM from './components/LagSM.vue'
 import PointsHighScore from './components/PointsHighScore.vue'
 import Secretariat from './components/Secretariat/Secretariat.vue'
 import AdminMinutesList from './components/Minutes/AdminMinutesList.vue'
+import AdminBoard from './components/Board/AdminBoard.vue'
 
 window.axios = axios
 
@@ -115,6 +116,7 @@ app.component('LagSM', LagSM)
 app.component('GkkPointsHighScore', PointsHighScore)
 app.component('GkkSecretariat', Secretariat)
 app.component('GkkAdminMinutesList', AdminMinutesList)
+app.component('GkkAdminBoard', AdminBoard)
 // Loaded on demand, so the rich text editor (Tiptap) is only downloaded on the minutes page.
 app.component(
   'GkkAdminMinutesEditor',

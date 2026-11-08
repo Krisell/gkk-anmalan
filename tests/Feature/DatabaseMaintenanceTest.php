@@ -16,7 +16,7 @@ test('public pages that do not need the database still work', function () {
     enableDatabaseMaintenance();
 
     $this->get('/')->assertOk()->assertDontSee('Vi flyttar till en ny server');
-    $this->get('/gkk')->assertOk();
+    $this->get('/gkk')->assertOk()->assertSee('Om GKK')->assertDontSee('Förtroendevalda');
 });
 
 test('anything that queries the database shows the maintenance page', function () {

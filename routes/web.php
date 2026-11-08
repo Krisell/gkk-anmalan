@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminPaymentsController;
 use App\Http\Controllers\AdminPaymentToolsController;
 use App\Http\Controllers\AdminSlideshowController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BoardMemberController;
 use App\Http\Controllers\CompetitionAdminTaskController;
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\CompetitionRegistrationController;
@@ -208,6 +209,14 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->group(func
             Route::get('/{item}/recipients', [NewsEmailController::class, 'recipients']);
             Route::post('/{item}/send', [NewsEmailController::class, 'send']);
         });
+    });
+
+    Route::prefix('board')->controller(BoardMemberController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::post('/order', 'order');
+        Route::put('/{member}', 'update');
+        Route::delete('/{member}', 'destroy');
     });
 
     Route::prefix('minutes')->controller(MeetingMinutesController::class)->group(function () {

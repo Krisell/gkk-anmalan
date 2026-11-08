@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DatabaseMaintenanceException;
+use App\Models\BoardMember;
 use App\Models\CompetitionAdminTask;
 use App\Models\Event;
 use App\Models\NewsItem;
@@ -41,7 +43,14 @@ class HomeController extends Controller
 
     public function about()
     {
-        return view('about', ['site' => 'about']);
+        try {
+            $board = BoardMember::ordered()->get();
+        } catch (DatabaseMaintenanceException) {
+            // The rest of the page needs no database, so it stays up during maintenance, without the board.
+            $board = collect();
+        }
+
+        return view('about', ['site' => 'about', 'board' => $board]);
     }
 
     public function provaPa()
