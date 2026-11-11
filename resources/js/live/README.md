@@ -188,6 +188,14 @@ set _Transition Point Type_ to _Time_ and the point to **600 ms** (when the pict
 with transparency, rendered from `?view=stinger` by
 `node resources/js/live/tools/render-stinger.mjs https://<site>/live/overlay?view=stinger` (needs ffmpeg).
 
+## Pause music
+
+The overlay plays every audio file in `assets/music/` (see the README there) when _Pausmusik_ is turned on on the
+control page, shuffled and over and over, fading in and out (`pauseMusic.js`). It is a switch of its own, not tied to
+what is shown, with a volume (`music`, `musicVolume` in the control data). Only the overlay in OBS plays it, not the
+control page's preview. OBS plays it only with _Control audio via OBS_ on in the browser source (see
+[OBS-SETUP.md](OBS-SETUP.md)). Only royalty-free music: YouTube's Content ID may otherwise interrupt the stream.
+
 ## Remote control
 
 The overlay can be controlled from another device, typically an iPad at the venue, through **Firebase's Realtime

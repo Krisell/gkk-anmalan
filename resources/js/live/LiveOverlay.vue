@@ -172,6 +172,7 @@ import { createEditorSource, defaultEditorState } from './sources/editorSource.j
 import { createDelayedSource, youTubeId } from './sources/delayedSource.js'
 import { initialOverlayState, reduceOverlayState, RESULT_DURATION_MS } from './overlayState.js'
 import { useRemoteControl } from './remote/useRemoteControl.js'
+import { usePauseMusic } from './pauseMusic.js'
 import { DEFAULT_CONTROL } from './remote/controlState.js'
 import demoBackdrop from './assets/demo-backdrop.jpg'
 
@@ -243,6 +244,9 @@ const remote =
     ? useRemoteControl(liveCompetition, { onCommand: runCommand, presence: !flag('preview') })
     : null
 const control = computed(() => remote?.control.value ?? DEFAULT_CONTROL)
+
+// Pause music, turned on and off from the control page; only from the overlay in OBS, not the control page's preview.
+usePauseMusic(() => control.value, { enabled: Boolean(remote) && !flag('preview') })
 
 // Result/transition state, advanced only when the normalized snapshot changes.
 const state = shallowRef(initialOverlayState())

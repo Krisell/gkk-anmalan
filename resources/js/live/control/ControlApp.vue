@@ -193,6 +193,35 @@
       </section>
 
       <section class="card">
+        <h2>Pausmusik</h2>
+        <template v-if="MUSIC_TRACKS.length">
+          <div class="choices">
+            <button class="button choice" :class="{ active: !current.music }" @click="save({ music: false })">
+              Av
+            </button>
+            <button class="button choice" :class="{ active: current.music }" @click="save({ music: true })">På</button>
+          </div>
+          <label class="field inline volume">
+            <span>Volym</span>
+            <input
+              v-model.number="draft.musicVolume"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              @change="save({ musicVolume: draft.musicVolume })"
+            />
+            <span class="volume-value">{{ Math.round(draft.musicVolume * 100) }} %</span>
+          </label>
+          <p class="hint">
+            Spelas i sändningen tills du stänger av den, oavsett vad som visas. Tonas in och ut. Höj eller sänk ljudet i
+            OBS mixer om nivån inte stämmer mot mikrofonen.
+          </p>
+        </template>
+        <p v-else class="hint">Ingen musik är tillagd ännu (se resources/js/live/assets/music/).</p>
+      </section>
+
+      <section class="card">
         <h2>Meddelande</h2>
         <p class="hint">Visas uppe till vänster tills du tar bort det.</p>
         <div class="message-row">
@@ -277,7 +306,8 @@ import { onAuthStateChanged, signInWithCustomToken, signOut } from 'firebase/aut
 import { onValue, push, ref as databaseRef, serverTimestamp, update } from 'firebase/database'
 import { liveAuth } from '../remote/auth.js'
 import { SIGN_IN_APPS, emulatorHost, liveDatabase } from '../remote/firebase.js'
-import { MESSAGE_MAX_LENGTH, normalizeCompetition, normalizeControl } from '../remote/controlState.js'
+import { DEFAULT_CONTROL, MESSAGE_MAX_LENGTH, normalizeCompetition, normalizeControl } from '../remote/controlState.js'
+import { MUSIC_TRACKS } from '../pauseMusic.js'
 import { IMAGE_TEXT_MAX_LENGTH } from '../streamImages.js'
 import { normalizeResults } from '../normalize.js'
 import { youTubeId } from '../sources/delayedSource.js'
@@ -319,7 +349,15 @@ const database = liveDatabase(SIGN_IN_APPS.liveControl)
 const current = ref(normalizeControl(null))
 const presence = ref({})
 const now = ref(Date.now())
-const draft = reactive({ title: '', pauseTime: '', message: '', competition: '', imageText: '', imageInfo: '' })
+const draft = reactive({
+  musicVolume: DEFAULT_CONTROL.musicVolume,
+  title: '',
+  pauseTime: '',
+  message: '',
+  competition: '',
+  imageText: '',
+  imageInfo: '',
+})
 
 let unsubscribes = []
 
@@ -382,6 +420,7 @@ function listen() {
         draft.pauseTime = current.value.pauseTime ?? ''
         draft.imageText = current.value.imageText ?? ''
         draft.imageInfo = current.value.imageInfo ?? ''
+        draft.musicVolume = current.value.musicVolume
       }
     }),
     onValue(databaseRef(database, `${path}/presence`), (snapshot) => (presence.value = snapshot.val() ?? {})),
@@ -914,6 +953,21 @@ input:focus {
 
 .competition-id {
   margin-top: 14px;
+}
+
+.volume input[type='range'] {
+  flex: 1 1 160px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  accent-color: #f6c945;
+}
+
+.volume-value {
+  min-width: 3.5em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .confirm {

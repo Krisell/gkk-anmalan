@@ -5,6 +5,7 @@ import {
   isFreshCommand,
   normalizeCompetition,
   normalizeControl,
+  normalizeVolume,
   parseNames,
 } from '../../../resources/js/live/remote/controlState.js'
 
@@ -47,6 +48,8 @@ describe('normalizeControl', () => {
       commentators: ['Anna Svensson', 'Erik Berg'],
       intros: false,
       roundBoards: false,
+      music: false,
+      musicVolume: 0.5,
     })
   })
 
@@ -66,6 +69,22 @@ describe('normalizeControl', () => {
     const control = normalizeControl({ message: { id: 'm1', text: '   ' }, pauseTime: 'snart' })
     expect(control.message).toBeNull()
     expect(control.pauseTime).toBeNull()
+  })
+})
+
+describe('pause music', () => {
+  it('is off unless turned on, at half volume by default', () => {
+    expect(normalizeControl(null)).toMatchObject({ music: false, musicVolume: 0.5 })
+    expect(normalizeControl({ music: 'yes' }).music).toBe(false)
+    expect(normalizeControl({ music: true, musicVolume: 0.8 })).toMatchObject({ music: true, musicVolume: 0.8 })
+  })
+
+  it('keeps the volume between 0 and 1, in steps of 5 %', () => {
+    expect(normalizeVolume(1.7)).toBe(1)
+    expect(normalizeVolume(-1)).toBe(0)
+    expect(normalizeVolume(0.33)).toBe(0.35)
+    expect(normalizeVolume('0.8')).toBe(0.5)
+    expect(normalizeVolume(Number.NaN)).toBe(0.5)
   })
 })
 

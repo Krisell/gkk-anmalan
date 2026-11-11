@@ -97,7 +97,12 @@ the control page), and starts over on a new one when another is chosen. It remem
 without Firebase. `?competition=<id>` in the address still works and then wins over the iPad (the control page warns
 about it); use it as a fallback if the remote control isn't working.
 
-Every Browser source: width **1920**, height **1080**, _Shutdown source when not visible_ **off**, default custom CSS.
+Every Browser source: width **1920**, height **1080**, _Shutdown source when not visible_ **off**, _Control audio via
+OBS_ **on**, default custom CSS.
+
+_Control audio via OBS_ sends the overlay's sound (the pause music, see below) into the stream as its own channel in
+the Audio Mixer, where its level can be set against the microphone. Without it the music would play out of the
+laptop's speakers instead.
 
 - **Add the camera once** (+ → Video Capture Device → _Iriun Webcam_, right-click → Transform → _Fit to screen_), and in
   the other scenes use + → Video Capture Device → **Add Existing**. Changing camera is then a matter of changing
@@ -124,6 +129,7 @@ Every Browser source: width **1920**, height **1080**, _Shutdown source when not
 | Visas nu                | Automatik (follows the competition), Resultatlista, Startar snart / Paus / Tack för idag (slates), Bildspel, Ingen grafik; under Bilder the full-screen images from /sek, or one with your own text |
 | Resultat per grupp      | The results list of any group, e.g. an earlier finished one (each group marked Klar, Pågår or Ej startad)                                                                                           |
 | Snabbknappar            | PB stamp for the lifter on screen, the results list for 10 s, skip what is shown                                                                                                                    |
+| Pausmusik               | Music in the stream (royalty-free, see `assets/music/`), on and off by hand whatever is shown, with a volume                                                                                        |
 | Meddelande              | A message top left (e.g. "Rekordförsök!"), shown until taken down                                                                                                                                   |
 | Inställningar           | The competition's name on the slates and images, the date and place on the images, the big lifter card and the results list between rounds on/off                                                   |
 | Testa mot en videoström | Only for testing, only on that device: another broadcast (e.g. SM) behind the preview, with a delay                                                                                                 |

@@ -33,6 +33,8 @@ export const DEFAULT_CONTROL = Object.freeze({
   commentators: [], // names for the commentator strap
   intros: true, // the big lifter card when a new lifter is called
   roundBoards: true, // the results list between rounds
+  music: false, // pause music, played by the overlay in OBS (see pauseMusic.js), on and off by hand
+  musicVolume: 0.5, // 0–1
 })
 
 export const MESSAGE_MAX_LENGTH = 120
@@ -60,7 +62,17 @@ export function normalizeControl(raw) {
     commentators: parseNames(control.commentators),
     intros: control.intros !== false,
     roundBoards: control.roundBoards !== false,
+    music: control.music === true,
+    musicVolume: normalizeVolume(control.musicVolume),
   }
+}
+
+// The pause music's volume, 0–1, in steps of 0.05.
+export function normalizeVolume(value) {
+  const volume = Number(value)
+  return typeof value === 'number' && Number.isFinite(volume)
+    ? Math.round(Math.min(1, Math.max(0, volume)) * 20) / 20
+    : DEFAULT_CONTROL.musicVolume
 }
 
 // A Powerlifting Live competition id ("3001" or 3001), or null.
