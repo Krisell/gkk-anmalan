@@ -61,10 +61,37 @@ export function usePauseMusic(settings, { enabled = true, tracks = MUSIC_TRACKS 
       await audio.play()
       failures = 0
     } catch (error) {
-      // Autoplay refused (a browser without OBS's permission) or a file that can't be played.
-      if (error?.name !== 'NotAllowedError' && ++failures < MAX_FAILURES) {
+      if (error?.name === 'NotAllowedError') {
+        // Autoplay refused: a browser (not OBS) only plays sound after a click or key press in the page, e.g. when
+        // testing the overlay in a browser tab. Start then, if the music is still on.
+        console.info('[live-overlay] Pausmusiken startar när du klickar i sidan (webbläsarens autoplay-spärr).')
+        unlockOnInteraction()
+      } else if (++failures < MAX_FAILURES) {
         next()
       }
+    }
+  }
+
+  let waitingForInteraction = false
+  function unlock() {
+    stopWaiting()
+    if (target > 0 && audio.paused) {
+      // Fade in from silence, as when turned on (the volume already went up while the browser refused to play).
+      audio.volume = 0
+      void play()
+      fade()
+    }
+  }
+  function stopWaiting() {
+    waitingForInteraction = false
+    window.removeEventListener('pointerdown', unlock, true)
+    window.removeEventListener('keydown', unlock, true)
+  }
+  function unlockOnInteraction() {
+    if (!waitingForInteraction) {
+      waitingForInteraction = true
+      window.addEventListener('pointerdown', unlock, true)
+      window.addEventListener('keydown', unlock, true)
     }
   }
 
@@ -110,6 +137,7 @@ export function usePauseMusic(settings, { enabled = true, tracks = MUSIC_TRACKS 
 
   onBeforeUnmount(() => {
     stop()
+    stopWaiting()
     clearInterval(fadeTimer)
     audio.pause()
     audio.remove()
