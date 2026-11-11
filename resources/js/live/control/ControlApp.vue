@@ -130,6 +130,40 @@
           Bildspel visar klubbens bildspel, samma som på hallens skärm. Vad som visas – t.ex. tidsschemat eller ett
           meddelande – styrs från <a href="/admin/slideshow" target="_blank" rel="noopener">/admin/slideshow</a>.
         </p>
+
+        <h3>Bilder</h3>
+        <p class="hint">
+          Samma bilder som på <a href="/sek" target="_blank" rel="noopener">/sek</a>, över hela bilden. Paus visar när
+          nästa grupp startar; annars står datum och plats från Inställningar under rubriken.
+        </p>
+        <div class="choices">
+          <button
+            v-for="choice in IMAGE_CHOICES"
+            :key="choice.key"
+            class="button choice"
+            :class="{ active: shown === choice.key }"
+            @click="save({ mode: 'image', image: choice.image })"
+          >
+            {{ choice.label }}
+          </button>
+        </div>
+        <div class="message-row image-row">
+          <input
+            v-model="draft.imageText"
+            class="grow"
+            :maxlength="IMAGE_TEXT_MAX_LENGTH"
+            placeholder="Egen bild, t.ex. Prisutdelning"
+            @keydown.enter.prevent="showImageText"
+          />
+          <button
+            class="button"
+            :class="{ active: shown === 'image-custom' }"
+            :disabled="!draft.imageText.trim()"
+            @click="showImageText"
+          >
+            Visa egen bild
+          </button>
+        </div>
       </section>
 
       <section v-if="groups.length" class="card">
@@ -188,6 +222,15 @@
           <span>Tävlingens namn (på skyltarna)</span>
           <input v-model="draft.title" maxlength="80" @change="save({ title: draft.title.trim() || null })" />
         </label>
+        <label class="field">
+          <span>Datum och plats (på bilderna)</span>
+          <input
+            v-model="draft.imageInfo"
+            maxlength="120"
+            placeholder="T.ex. Lördag 14 november · Friskis & Svettis Majorna, Göteborg"
+            @change="save({ imageInfo: draft.imageInfo.trim() || null })"
+          />
+        </label>
         <label class="toggle">
           <input type="checkbox" :checked="current.intros" @change="save({ intros: $event.target.checked })" />
           <span>Stort lyftarkort när en ny lyftare ropas upp</span>
@@ -235,6 +278,7 @@ import { onValue, push, ref as databaseRef, serverTimestamp, update } from 'fire
 import { liveAuth } from '../remote/auth.js'
 import { SIGN_IN_APPS, emulatorHost, liveDatabase } from '../remote/firebase.js'
 import { MESSAGE_MAX_LENGTH, normalizeCompetition, normalizeControl } from '../remote/controlState.js'
+import { IMAGE_TEXT_MAX_LENGTH } from '../streamImages.js'
 import { normalizeResults } from '../normalize.js'
 import { youTubeId } from '../sources/delayedSource.js'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
@@ -248,6 +292,13 @@ const SHOWN = [
   { key: 'end', label: 'Tack för idag', mode: 'slate', slate: 'end' },
   { key: 'slideshow', label: 'Bildspel', mode: 'slideshow' },
   { key: 'hidden', label: 'Ingen grafik', mode: 'hidden' },
+]
+
+// The stream's images from /sek (the custom one has its own field).
+const IMAGE_CHOICES = [
+  { key: 'image-start', label: 'Börjar snart', image: 'start' },
+  { key: 'image-pause', label: 'Paus', image: 'pause' },
+  { key: 'image-end', label: 'Tack för att ni tittade', image: 'end' },
 ]
 
 const GROUP_STATUS = { upcoming: 'Ej startad', ongoing: 'Pågår', done: 'Klar' }
@@ -268,7 +319,7 @@ const database = liveDatabase(SIGN_IN_APPS.liveControl)
 const current = ref(normalizeControl(null))
 const presence = ref({})
 const now = ref(Date.now())
-const draft = reactive({ title: '', pauseTime: '', message: '', competition: '' })
+const draft = reactive({ title: '', pauseTime: '', message: '', competition: '', imageText: '', imageInfo: '' })
 
 let unsubscribes = []
 
@@ -329,6 +380,8 @@ function listen() {
       if (!(focused instanceof HTMLInputElement) || focused.type === 'checkbox') {
         draft.title = current.value.title ?? ''
         draft.pauseTime = current.value.pauseTime ?? ''
+        draft.imageText = current.value.imageText ?? ''
+        draft.imageInfo = current.value.imageInfo ?? ''
       }
     }),
     onValue(databaseRef(database, `${path}/presence`), (snapshot) => (presence.value = snapshot.val() ?? {})),
@@ -358,6 +411,13 @@ function show(choice) {
   void save(choice.slate ? { mode: choice.mode, slate: choice.slate } : { mode: choice.mode, listGroup: null })
 }
 
+function showImageText() {
+  const text = draft.imageText.trim().slice(0, IMAGE_TEXT_MAX_LENGTH)
+  if (text) {
+    void save({ mode: 'image', image: 'custom', imageText: text })
+  }
+}
+
 function showMessage(text) {
   const trimmed = text.trim().slice(0, MESSAGE_MAX_LENGTH)
   if (trimmed) {
@@ -369,6 +429,9 @@ function showMessage(text) {
 const shown = computed(() => {
   if (current.value.mode === 'list' && current.value.listGroup) {
     return null // shown under "Resultat per grupp"
+  }
+  if (current.value.mode === 'image') {
+    return `image-${current.value.image}`
   }
   return current.value.mode === 'slate' ? current.value.slate : current.value.mode
 })
@@ -720,6 +783,20 @@ h2 {
   font-size: 22px;
 }
 
+h3 {
+  margin: 26px 0 14px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--silver);
+}
+
+.image-row {
+  margin-top: 10px;
+}
+
 .hint {
   margin: -6px 0 14px;
   color: var(--silver);
@@ -806,7 +883,8 @@ h2 {
   flex-direction: row;
   align-items: center;
   gap: 14px;
-  margin: 16px 0 0;
+  /* The hint under it pulls itself up (it usually follows a heading), so this keeps them apart. */
+  margin: 16px 0 20px;
 }
 
 input:not([type='checkbox']) {

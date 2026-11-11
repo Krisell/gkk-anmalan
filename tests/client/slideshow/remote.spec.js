@@ -161,12 +161,6 @@ describe('slides', () => {
   it('lists the DM, Swish and GM slides first in the live control', () => {
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
     expect(controlOrder(all).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'records', 'slide-1', 'lokalregler'])
-    expect(all.filter((slide) => slide.hidesMessage).map(slideKey)).toEqual([
-      'lokalregler',
-      'dm2026',
-      'swish',
-      'gm2027',
-    ])
   })
 
   it('steps past the slides that are not in the rotation', () => {

@@ -50,7 +50,7 @@
     <!-- A message from the live control (/admin/slideshow), shown until it is taken down (or by itself after a while). -->
     <Transition name="slideshow-message">
       <div
-        v-if="messageShown(control.message, serverTime) && !hidesMessage"
+        v-if="messageShown(control.message, serverTime)"
         :key="control.message.id"
         class="shrink-0 bg-amber-300 text-gkk py-[2vh] text-center font-semibold leading-tight text-balance text-[min(3.4vw,5.8vh)]"
         :class="floatingClock ? 'px-[15vw]' : 'px-[4vw]'"
@@ -310,12 +310,8 @@ const held = computed(() => control.value.paused || heldIndex.value >= 0 || !!co
 const floatingClock = computed(() => !control.value.footer && control.value.clock)
 // No slide in the rotation and none held: the club's logo is shown.
 const showLogo = computed(() => state.value === 'loaded' && currentSlide.value < 0 && !control.value.page)
-// A slide held from the live control is shown over a web page. Some slides (the DM welcome) use the whole screen,
-// without the message bar.
+// A slide held from the live control is shown over a web page.
 const slideOverPage = computed(() => !!control.value.page && heldIndex.value >= 0)
-const hidesMessage = computed(
-  () => (!control.value.page || slideOverPage.value) && !!slides.value[currentSlide.value]?.hidesMessage,
-)
 
 watch([heldIndex, held], () => {
   if (heldIndex.value >= 0) {

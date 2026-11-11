@@ -133,6 +133,62 @@
           </form>
         </div>
       </section>
+      <!-- Signpost -->
+      <section class="mt-14">
+        <h2 class="text-sm font-bold uppercase tracking-[0.18em] text-gkk-light">Vägvisare</h2>
+        <p class="mt-1 text-gkk-light">
+          A4 liggande, svartvitt – välj åt vilket håll varje plats ligger från där skylten sitter. Platserna ordnas
+          efter riktning, och mitten döljer en plats.
+        </p>
+
+        <form
+          class="mt-5 grid gap-6 rounded-2xl bg-white/90 p-5 shadow-xl shadow-gkk/10 ring-1 ring-gkk/10 lg:grid-cols-[1.4fr_1fr]"
+          @submit.prevent="printSignpost"
+        >
+          <div class="self-start overflow-hidden rounded-lg ring-1 ring-black/10">
+            <Vagvisare :items="signpost" :kicker="stream.competition.trim()" preview />
+          </div>
+          <div class="flex flex-col gap-5">
+            <div class="grid grid-cols-2 gap-x-4 gap-y-5">
+              <fieldset v-for="item in signpost" :key="item.label">
+                <legend class="text-xs font-bold uppercase tracking-[0.14em] text-gkk-light">{{ item.label }}</legend>
+                <div class="mt-2 grid w-max grid-cols-3 gap-1">
+                  <button
+                    v-for="choice in COMPASS"
+                    :key="choice.direction"
+                    type="button"
+                    :aria-label="`${item.label}: ${choice.name}`"
+                    :aria-pressed="item.direction === choice.direction"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg ring-1 transition"
+                    :class="
+                      item.direction === choice.direction
+                        ? 'bg-gkk text-amber-300 ring-gkk'
+                        : 'bg-white text-gkk-light ring-gkk/15 hover:bg-gkk/5 hover:text-gkk'
+                    "
+                    @click="item.direction = choice.direction"
+                  >
+                    <component :is="choice.icon" class="h-5 w-5" :stroke-width="2.25" />
+                  </button>
+                </div>
+              </fieldset>
+            </div>
+            <div class="mt-auto flex items-center justify-between gap-3">
+              <button type="button" class="text-sm font-medium text-gkk-light hover:text-gkk" @click="resetSignpost">
+                Återställ
+              </button>
+              <button
+                type="submit"
+                :disabled="!signpost.some((item) => item.direction)"
+                class="inline-flex items-center gap-2 rounded-full bg-gkk px-5 py-2.5 font-bold text-white shadow-lg shadow-gkk/20 transition hover:bg-gkk-light disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Printer class="h-4 w-4 text-amber-300" :stroke-width="2" />
+                Skriv ut
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
       <!-- Welcome sign -->
       <section class="mt-14">
         <h2 class="text-sm font-bold uppercase tracking-[0.18em] text-gkk-light">Välkomstskylt</h2>
@@ -266,18 +322,44 @@
 
     <!-- The sheet that is printed: off screen, and alone on the page when printing (see resources/views/sek.blade.php). -->
     <Teleport to="body">
-      <div class="platslapp-print" aria-hidden="true">
-        <Platslapp ref="printSheet" :text="printText" :sub-text="printSubText" />
+      <div class="sign-print" aria-hidden="true">
+        <Vagvisare
+          v-if="printing === 'signpost'"
+          ref="printSheet"
+          :items="signpost"
+          :kicker="stream.competition.trim()"
+        />
+        <Platslapp v-else ref="printSheet" :text="printText" :sub-text="printSubText" />
       </div>
     </Teleport>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref, watch } from 'vue'
-import { Database, Download, ExternalLink, MonitorPlay, Presentation, Printer, Ticket, Youtube } from 'lucide-vue-next'
+import { nextTick, reactive, ref, watch } from 'vue'
+import {
+  ArrowDown,
+  ArrowDownLeft,
+  ArrowDownRight,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ArrowUpLeft,
+  ArrowUpRight,
+  Database,
+  Download,
+  ExternalLink,
+  EyeOff,
+  MonitorPlay,
+  Presentation,
+  Printer,
+  Ticket,
+  Youtube,
+} from 'lucide-vue-next'
 import Platslapp from './Platslapp.vue'
 import StreamSplash from './StreamSplash.vue'
+import Vagvisare from './Vagvisare.vue'
+import { STREAM_IMAGES } from '../../live/streamImages.js'
 
 const LOGO = 'https://goteborg-kraftsportklubb.web.app/img/logo-min.png'
 
@@ -318,6 +400,15 @@ const custom = ref('')
 const printText = ref('')
 const printSubText = ref('')
 const printSheet = ref()
+// Which sign is printed: a Platslapp or the signpost.
+const printing = ref('')
+
+async function printSheetAs(kind) {
+  printing.value = kind
+  await nextTick()
+  await printSheet.value.fit()
+  window.print()
+}
 
 async function print(text, subText = '') {
   if (!text) {
@@ -325,9 +416,31 @@ async function print(text, subText = '') {
   }
   printText.value = text
   printSubText.value = subText
-  await printSheet.value.fit()
-  window.print()
+  await printSheetAs('platslapp')
 }
+
+// The signpost: where each place is from where the sign is posted, which differs from sign to sign. In the order of
+// the compass on the page, with no direction in the middle.
+const COMPASS = [
+  { direction: 'nw', name: 'snett framåt vänster', icon: ArrowUpLeft },
+  { direction: 'n', name: 'rakt fram', icon: ArrowUp },
+  { direction: 'ne', name: 'snett framåt höger', icon: ArrowUpRight },
+  { direction: 'w', name: 'vänster', icon: ArrowLeft },
+  { direction: '', name: 'visas inte', icon: EyeOff },
+  { direction: 'e', name: 'höger', icon: ArrowRight },
+  { direction: 'sw', name: 'snett bakåt vänster', icon: ArrowDownLeft },
+  { direction: 's', name: 'bakåt', icon: ArrowDown },
+  { direction: 'se', name: 'snett bakåt höger', icon: ArrowDownRight },
+]
+const SIGNPOST = [
+  { label: 'Tävling', direction: 'n' },
+  { label: 'Uppvärmning', direction: 'e' },
+  { label: 'Invägning', direction: 'w' },
+  { label: 'Omklädning', direction: 's' },
+]
+const signpost = reactive(SIGNPOST.map((item) => ({ ...item })))
+const resetSignpost = () => SIGNPOST.forEach((item, index) => Object.assign(signpost[index], item))
+const printSignpost = () => printSheetAs('signpost')
 
 // The texts of the welcome sign and the stream's splash screens are remembered in this browser until the next
 // competition, so they only need to be typed once.
@@ -360,12 +473,8 @@ const [stream, resetStream] = remembered('sek.stream', {
   info: 'Lördag 14 november · Friskis & Svettis Majorna, Göteborg',
 })
 
-const screens = [
-  { title: 'Sändningen börjar snart' },
-  { title: 'Paus – vi är snart tillbaka' },
-  { title: 'Tack för att ni tittade!' },
-  { custom: true },
-]
+// The same images can be shown in the stream's overlay, from the control page (/live/control).
+const screens = [...Object.values(STREAM_IMAGES).map((title) => ({ title })), { custom: true }]
 const customSplash = ref('')
 const splashes = []
 

@@ -112,11 +112,10 @@ export function rotation(slides, records = [], results = []) {
       ? [{ type: 'Resultat', data: { results }, rotates: true, duration: resultsLayout(results.length).durationMs }]
       : []),
     ...own.map((slide) => ({ ...slide, rotates: slide.is_visible === true })),
-    // These use the whole screen: the message bar is hidden while they are shown.
-    { type: 'Lokalregler', data: {}, rotates: true, hidesMessage: true },
-    { type: 'Dm2026', data: {}, rotates: false, hidesMessage: true },
-    { type: 'Swish', data: {}, rotates: false, hidesMessage: true },
-    { type: 'Gm2027', data: {}, rotates: false, hidesMessage: true },
+    { type: 'Lokalregler', data: {}, rotates: true },
+    { type: 'Dm2026', data: {}, rotates: false },
+    { type: 'Swish', data: {}, rotates: false },
+    { type: 'Gm2027', data: {}, rotates: false },
   ]
 }
 

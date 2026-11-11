@@ -1,3 +1,5 @@
+import { IMAGE_TEXT_MAX_LENGTH, STREAM_IMAGES } from '../streamImages.js'
+
 /**
  * The remote control's data in Firebase's Realtime Database, under live/ (one broadcast at a time):
  *
@@ -10,10 +12,11 @@
  */
 
 // What the overlay shows: 'auto' (follows the competition), 'hidden' (no graphics at all), 'list' (the results list),
-// 'slate' (a full-screen message, see SLATES) or 'slideshow' (the club's slideshow, as on the hall's screen, controlled
-// from /admin/slideshow).
-export const MODES = ['auto', 'hidden', 'list', 'slate', 'slideshow']
+// 'slate' (a full-screen message, see SLATES), 'image' (one of the stream's images from /sek, see IMAGES) or
+// 'slideshow' (the club's slideshow, as on the hall's screen, controlled from /admin/slideshow).
+export const MODES = ['auto', 'hidden', 'list', 'slate', 'image', 'slideshow']
 export const SLATES = ['start', 'pause', 'end']
+export const IMAGES = [...Object.keys(STREAM_IMAGES), 'custom']
 export const COMMANDS = ['pb', 'skip', 'list', 'commentators']
 
 export const DEFAULT_CONTROL = Object.freeze({
@@ -23,6 +26,9 @@ export const DEFAULT_CONTROL = Object.freeze({
   slate: 'start',
   pauseTime: null, // when the next group starts, e.g. '14:30', for the pause slate
   title: null, // the competition's name, for the slates
+  image: 'start',
+  imageText: null, // the text of the custom image
+  imageInfo: null, // the line under the images' title, e.g. the date and place
   message: null, // { id, text }: a message shown until it is taken down
   commentators: [], // names for the commentator strap
   intros: true, // the big lifter card when a new lifter is called
@@ -47,6 +53,9 @@ export function normalizeControl(raw) {
     slate: SLATES.includes(control.slate) ? control.slate : DEFAULT_CONTROL.slate,
     pauseTime: /^\d{1,2}[:.]\d{2}$/.test(control.pauseTime ?? '') ? control.pauseTime.replace('.', ':') : null,
     title: text(control.title, 80),
+    image: IMAGES.includes(control.image) ? control.image : DEFAULT_CONTROL.image,
+    imageText: text(control.imageText, IMAGE_TEXT_MAX_LENGTH),
+    imageInfo: text(control.imageInfo, 120),
     message: message ? { id: String(control.message.id ?? message), text: message } : null,
     commentators: parseNames(control.commentators),
     intros: control.intros !== false,

@@ -118,15 +118,15 @@ Every Browser source: width **1920**, height **1080**, _Shutdown source when not
 3. The top of the page shows what OBS is showing right now, and the status in the corner says whether the overlay in
    OBS is online.
 
-| Section                 | What it does                                                                                                    |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Tävling                 | Which competition the overlay follows: the ones live on Powerlifting Live now, or an id. Switching asks first   |
-| Visas nu                | Automatik (follows the competition), Resultatlista, Startar snart / Paus / Tack för idag (slates), Ingen grafik |
-| Resultat per grupp      | The results list of any group, e.g. an earlier finished one (each group marked Klar, Pågår or Ej startad)       |
-| Snabbknappar            | PB stamp for the lifter on screen, the results list for 10 s, skip what is shown                                |
-| Meddelande              | A message top left (e.g. "Rekordförsök!"), shown until taken down                                               |
-| Inställningar           | The competition's name on the slates, the big lifter card and the results list between rounds on/off            |
-| Testa mot en videoström | Only for testing, only on that device: another broadcast (e.g. SM) behind the preview, with a delay             |
+| Section                 | What it does                                                                                                                                                                                        |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tävling                 | Which competition the overlay follows: the ones live on Powerlifting Live now, or an id. Switching asks first                                                                                       |
+| Visas nu                | Automatik (follows the competition), Resultatlista, Startar snart / Paus / Tack för idag (slates), Bildspel, Ingen grafik; under Bilder the full-screen images from /sek, or one with your own text |
+| Resultat per grupp      | The results list of any group, e.g. an earlier finished one (each group marked Klar, Pågår or Ej startad)                                                                                           |
+| Snabbknappar            | PB stamp for the lifter on screen, the results list for 10 s, skip what is shown                                                                                                                    |
+| Meddelande              | A message top left (e.g. "Rekordförsök!"), shown until taken down                                                                                                                                   |
+| Inställningar           | The competition's name on the slates and images, the date and place on the images, the big lifter card and the results list between rounds on/off                                                   |
+| Testa mot en videoström | Only for testing, only on that device: another broadcast (e.g. SM) behind the preview, with a delay                                                                                                 |
 
 The pause slate shows _Nästa grupp startar_ with the time set under _Visas nu_. Several iPads or phones can be signed in
 at once; they all see the same state.

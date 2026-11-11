@@ -1,18 +1,17 @@
 <template>
-  <!-- An A4 sign (landscape), drawn at its real size. As a preview it is scaled down to the width it is given; the
-       text is fitted to the sheet itself, so the preview shows the same lines and size as the printed sheet. -->
-  <div ref="frame" :class="preview ? 'relative aspect-[297/210] w-full overflow-hidden' : ''">
-    <div
-      class="platslapp-sheet flex flex-col bg-white text-black"
-      :class="preview ? 'absolute left-0 top-0 origin-top-left' : ''"
-      :style="preview ? { transform: `scale(${scale})` } : {}"
-    >
-      <header class="mt-[8mm] flex justify-center">
-        <img class="h-[44mm] w-[44mm] object-contain grayscale" :src="LOGO" alt="Göteborg Kraftsportklubb" />
-      </header>
+  <!-- An A4 sign (landscape) with one text, in the look of the slideshow's GM slide: the club's crest between two
+       hairlines, the text as large as fits, and a short bar under it. The text is fitted to the sheet itself, so the
+       preview shows the same lines and size as the printed sheet. -->
+  <SignSheet :preview="preview" plates="sides">
+    <div class="flex h-full flex-col items-center px-[26mm] pb-[16mm] pt-[12mm]">
+      <div class="flex w-full items-center gap-[7mm]">
+        <span class="h-[0.5mm] flex-1 rounded-full bg-black/25"></span>
+        <img class="h-[36mm] w-[36mm] object-contain grayscale" :src="LOGO" alt="Göteborg Kraftsportklubb" />
+        <span class="h-[0.5mm] flex-1 rounded-full bg-black/25"></span>
+      </div>
 
-      <div class="min-h-0 flex-1 px-[22mm] py-[10mm]">
-        <div ref="box" class="flex h-full w-full items-center justify-center overflow-hidden">
+      <div ref="box" class="flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden mt-[6mm]">
+        <div ref="content" class="flex w-full flex-col items-center">
           <p
             ref="label"
             class="w-full text-center font-black leading-[1.02] tracking-tight text-balance break-normal hyphens-none"
@@ -20,26 +19,26 @@
           >
             {{ text || placeholder }}
           </p>
+          <span class="mt-[7mm] h-[2.2mm] w-[26mm] shrink-0 rounded-full bg-black"></span>
+
+          <!-- A smaller line under the text, e.g. who welcomes the lifters. -->
+          <p
+            v-if="subText"
+            class="mt-[7mm] max-w-[220mm] text-center text-[10mm] font-semibold leading-tight text-black/75 text-balance"
+          >
+            {{ subText }}
+          </p>
         </div>
       </div>
-
-      <!-- A smaller line under the text, e.g. who welcomes the lifters. -->
-      <p
-        v-if="subText"
-        class="mx-auto mb-[6mm] max-w-[230mm] text-center text-[11mm] font-semibold leading-tight text-balance"
-      >
-        {{ subText }}
-      </p>
     </div>
-  </div>
+  </SignSheet>
 </template>
 
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
+import SignSheet from './SignSheet.vue'
 
 const LOGO = 'https://goteborg-kraftsportklubb.web.app/img/logo-min.png'
-// 297mm at the 96 dpi of CSS pixels.
-const SHEET_WIDTH = (297 / 25.4) * 96
 
 const props = defineProps({
   text: { type: String, default: '' },
@@ -48,12 +47,11 @@ const props = defineProps({
   preview: { type: Boolean, default: false },
 })
 
-const frame = ref()
 const box = ref()
+const content = ref()
 const label = ref()
-const scale = ref(0.25)
 
-// The largest font size at which the text fits the sheet, without breaking a word.
+// The largest font size at which the text (and the bar and line under it) fits the sheet, without breaking a word.
 async function fit() {
   await nextTick()
   await document.fonts?.ready
@@ -61,7 +59,7 @@ async function fit() {
   if (!el || !box.value) {
     return
   }
-  const fits = () => el.scrollWidth <= box.value.clientWidth && el.scrollHeight <= box.value.clientHeight
+  const fits = () => el.scrollWidth <= el.clientWidth && content.value.offsetHeight <= box.value.clientHeight
   let low = 8
   let high = 1000
   while (high - low > 1) {
@@ -76,28 +74,8 @@ async function fit() {
   el.style.fontSize = `${low}px`
 }
 
-let observer
-onMounted(() => {
-  fit()
-  if (props.preview) {
-    observer = new ResizeObserver(([entry]) => (scale.value = entry.contentRect.width / SHEET_WIDTH))
-    observer.observe(frame.value)
-  }
-})
-onBeforeUnmount(() => observer?.disconnect())
-
+onMounted(fit)
 watch(() => [props.text, props.subText], fit)
 
 defineExpose({ fit })
 </script>
-
-<style scoped>
-.platslapp-sheet {
-  width: 297mm;
-  height: 210mm;
-  padding: 14mm 16mm;
-  box-sizing: border-box;
-  print-color-adjust: exact;
-  -webkit-print-color-adjust: exact;
-}
-</style>

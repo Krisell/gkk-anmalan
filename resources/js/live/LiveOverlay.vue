@@ -55,6 +55,13 @@
         />
       </Transition>
 
+      <!-- One of the stream's images from /sek, in the slideshow's light look: opaque, so nothing shows through. -->
+      <Transition name="board">
+        <div v-if="showImage" :key="`image-${control.image}`" class="stream-image">
+          <StreamSplash :kicker="eventTitle ?? ''" :title="imageTitle" :sub-text="imageSubText" placeholder="" />
+        </div>
+      </Transition>
+
       <Transition name="board">
         <Scoreboard
           v-if="showScoreboard"
@@ -126,9 +133,11 @@
       />
     </div>
 
-    <!-- Our logo in the corner, on every view except the results list (it has our logo in its heading) and the
-         stinger (a transition). -->
-    <CornerBug v-if="view !== 'stinger' && view !== 'scoreboard' && !showScoreboard && !showSlideshow && !hideAll" />
+    <!-- Our logo in the corner, on every view except the results list and the stream images (they have our logo) and
+         the stinger (a transition). -->
+    <CornerBug
+      v-if="view !== 'stinger' && view !== 'scoreboard' && !showScoreboard && !showSlideshow && !showImage && !hideAll"
+    />
 
     <!-- The stinger as an in-page transition when the results list or a slate comes or goes. -->
     <Stinger v-if="stinger" :key="stinger" class="in-page-stinger" />
@@ -152,6 +161,8 @@ import CommentatorStrap from './components/CommentatorStrap.vue'
 import Stinger from './components/Stinger.vue'
 import InfoStrap from './components/InfoStrap.vue'
 import RefereePanel from './components/RefereePanel.vue'
+import StreamSplash from '../components/Secretariat/StreamSplash.vue'
+import { STREAM_IMAGES } from './streamImages.js'
 import { useLiveFeed } from './useLiveFeed.js'
 import { useGroupResults } from './useGroupResults.js'
 import { createHttpSource } from './sources/httpSource.js'
@@ -342,8 +353,21 @@ const slateTime = computed(() => (editorState ? demoPauseTime : control.value.pa
 const showSlideshow = computed(() => remoteMode.value === 'slideshow')
 const slideshowUrl = `/slideshow?stream=1${flag('preview') ? '&preview=1' : ''}`
 
+// One of the stream's images, from the remote control. The pause image says when the next group starts, if that has
+// been set; otherwise the line under the title is the one given on the control page, or today's date.
+const showImage = computed(() => remoteMode.value === 'image')
+const imageTitle = computed(() =>
+  control.value.image === 'custom' ? (control.value.imageText ?? '') : (STREAM_IMAGES[control.value.image] ?? ''),
+)
+const today = new Intl.DateTimeFormat('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date())
+const imageSubText = computed(() =>
+  control.value.image === 'pause' && control.value.pauseTime
+    ? `Nästa grupp startar ${control.value.pauseTime}`
+    : (control.value.imageInfo ?? today.charAt(0).toUpperCase() + today.slice(1)),
+)
+
 // Full-screen graphics replace the lower third, the lifter card and the corner graphic while shown.
-const fullScreen = computed(() => showScoreboard.value || showSlate.value || showSlideshow.value)
+const fullScreen = computed(() => showScoreboard.value || showSlate.value || showImage.value || showSlideshow.value)
 
 // The competition's name: the demo editor's field, the remote control's, or ?title=….
 const eventTitle = computed(() => editorState?.title?.trim() || control.value.title || title || null)
@@ -404,8 +428,8 @@ watch(
   (result) => {
     const endsRound = result && (editorState ? editorState.lastInRound : result.confirmed && result.endsRound)
     const key = result && `${result.id}:${result.shownAt}`
-    // Not over a slate or the slideshow chosen from the remote control.
-    const covered = ['slate', 'slideshow'].includes(remoteMode.value)
+    // Not over a slate, an image or the slideshow chosen from the remote control.
+    const covered = ['slate', 'image', 'slideshow'].includes(remoteMode.value)
     if (!showRoundBoards || !control.value.roundBoards || !endsRound || key === roundBoardFor || covered) {
       return
     }
@@ -852,7 +876,7 @@ const hideAll = computed(() => remoteMode.value === 'hidden')
 watch(
   () => control.value.mode,
   (mode) => {
-    const fullScreenModes = ['list', 'slate', 'slideshow']
+    const fullScreenModes = ['list', 'slate', 'image', 'slideshow']
     if (fullScreenModes.includes(mode) || fullScreenModes.includes(remoteMode.value)) {
       withStinger(() => {
         remoteMode.value = mode
@@ -930,6 +954,9 @@ const onAir = computed(() => {
   }
   if (showSlideshow.value) {
     return 'Bildspel'
+  }
+  if (showImage.value) {
+    return `Bild: ${imageTitle.value}`
   }
   if (showSlate.value) {
     return `Skylt: ${{ start: 'Startar snart', pause: 'Paus', end: 'Tack för idag' }[slateKind.value] ?? slateKind.value}`
@@ -1080,6 +1107,17 @@ code {
 
 .slideshow.shown {
   visibility: visible;
+}
+
+.stream-image {
+  position: absolute;
+  inset: 0;
+}
+
+.stream-image :deep(canvas) {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .in-page-stinger {

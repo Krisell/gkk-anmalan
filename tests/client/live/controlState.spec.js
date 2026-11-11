@@ -11,7 +11,9 @@ import {
 describe('normalizeControl', () => {
   it('falls back to the automatic defaults when nothing has been set', () => {
     expect(normalizeControl(null)).toEqual({ ...DEFAULT_CONTROL })
-    expect(normalizeControl({ mode: 'party', slate: 'lunch', intros: 'yes' })).toEqual({ ...DEFAULT_CONTROL })
+    expect(normalizeControl({ mode: 'party', slate: 'lunch', image: 'lunch', intros: 'yes' })).toEqual({
+      ...DEFAULT_CONTROL,
+    })
   })
 
   it('reads what the control page saved', () => {
@@ -23,6 +25,9 @@ describe('normalizeControl', () => {
         slate: 'pause',
         pauseTime: '14.30',
         title: '  DM Klassisk styrkelyft 2026 ',
+        image: 'custom',
+        imageText: ' Prisutdelning ',
+        imageInfo: ' Lördag 14 november ',
         message: { id: 'm1', text: ' Rekordförsök! ' },
         commentators: 'Anna Svensson, , Erik Berg',
         intros: false,
@@ -35,6 +40,9 @@ describe('normalizeControl', () => {
       slate: 'pause',
       pauseTime: '14:30',
       title: 'DM Klassisk styrkelyft 2026',
+      image: 'custom',
+      imageText: 'Prisutdelning',
+      imageInfo: 'Lördag 14 november',
       message: { id: 'm1', text: 'Rekordförsök!' },
       commentators: ['Anna Svensson', 'Erik Berg'],
       intros: false,
@@ -44,6 +52,14 @@ describe('normalizeControl', () => {
 
   it('can show the club slideshow', () => {
     expect(normalizeControl({ mode: 'slideshow' }).mode).toBe('slideshow')
+  })
+
+  it('can show one of the stream images, but only a known one', () => {
+    expect(normalizeControl({ mode: 'image', image: 'pause' })).toMatchObject({ mode: 'image', image: 'pause' })
+    expect(normalizeControl({ mode: 'image', image: 'lunch', imageText: '   ' })).toMatchObject({
+      image: 'start',
+      imageText: null,
+    })
   })
 
   it('ignores an empty message and an invalid pause time', () => {
