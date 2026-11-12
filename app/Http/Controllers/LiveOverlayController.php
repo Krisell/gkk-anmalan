@@ -55,6 +55,10 @@ class LiveOverlayController extends Controller
         'total', 'place', 'wilks',
     ];
 
+    private const START_LIST_FIELDS = [
+        'id', 'name', 'team', 'group', 'lot', 'sex', 'category', 'weightclass', 'weightclass_short_alt', 'license',
+    ];
+
     public function show()
     {
         // The warm-up hall screen (?view=hall) is shown inside our own slideshow (/slides-for-screen, "Visa en
@@ -104,6 +108,31 @@ class LiveOverlayController extends Controller
         }
 
         return response()->json($results)->header('Cache-Control', 'no-store');
+    }
+
+    /**
+     * Every lifter of the competition with their group, lot and license number, for the printed start lists and
+     * competition cards on /sek. Admins only: the license number holds the lifter's date of birth, so the public
+     * results (above) leave it out.
+     */
+    public function startLists(int $competition)
+    {
+        $lifters = Cache::remember("powerliftinglive.start-lists.{$competition}", self::RESULTS_CACHE_SECONDS, function () use ($competition) {
+            $topics = $this->fetchTopics($competition, ['scoresheet' => 'scoresheet']);
+
+            return $topics === null ? null : \array_values(\array_map(
+                fn ($lifter) => Arr::only($lifter, self::START_LIST_FIELDS),
+                \array_filter($topics['scoresheet']['lifters'] ?? [], 'is_array'),
+            ));
+        });
+
+        if ($lifters === null) {
+            Cache::forget("powerliftinglive.start-lists.{$competition}");
+
+            return response()->json(['error' => 'Powerlifting Live is unavailable'], 502)->header('Cache-Control', 'no-store');
+        }
+
+        return response()->json(['lifters' => $lifters])->header('Cache-Control', 'no-store');
     }
 
     /**

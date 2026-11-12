@@ -252,3 +252,31 @@ it('has an empty list when the front page has no live competitions', function ()
 
     $this->getJson('/live/competitions')->assertOk()->assertExactJson(['competitions' => []]);
 });
+
+it('serves admins the start lists with lot and license numbers', function () {
+    Http::fake(['*' => Http::response(['lifters' => [[
+        'id' => '1', 'name' => 'Anna Andersson', 'team' => 'Göteborg KK', 'group' => 'Grupp 3', 'lot' => '27',
+        'sex' => 'f', 'category' => 'Senior', 'weightclass' => '63', 'weightclass_short_alt' => null,
+        'license' => '010101ab1', 'place' => '1', 'lifts' => ['SQ1' => '120.0'],
+    ], 'not a lifter']])]);
+    loginAdmin();
+
+    $this->getJson('/live/start-lists/3261')
+        ->assertOk()
+        ->assertExactJson(['lifters' => [[
+            'id' => '1', 'name' => 'Anna Andersson', 'team' => 'Göteborg KK', 'group' => 'Grupp 3', 'lot' => '27',
+            'sex' => 'f', 'category' => 'Senior', 'weightclass' => '63', 'weightclass_short_alt' => null,
+            'license' => '010101ab1',
+        ]]]);
+});
+
+it('keeps the license numbers of the start lists from guests and members', function () {
+    Http::fake();
+
+    $this->getJson('/live/start-lists/3261')->assertUnauthorized();
+
+    login();
+    $this->getJson('/live/start-lists/3261')->assertUnauthorized();
+
+    Http::assertNothingSent();
+});

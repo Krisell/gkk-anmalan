@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { normalizeFeed, normalizeNextGroup, normalizeResults } from '../../../resources/js/live/normalize.js'
+import {
+  normalizeFeed,
+  normalizeNextGroup,
+  normalizeResults,
+  normalizeStartLists,
+} from '../../../resources/js/live/normalize.js'
 
 // Shapes follow Powerlifting Live's feed.php topics (as trimmed by LiveOverlayController); names are fictional.
 const lifter = {
@@ -321,5 +326,82 @@ describe('normalizeNextGroup', () => {
     expect(normalizeNextGroup({})).toBeNull()
     expect(normalizeNextGroup({ lifters: [] })).toBeNull()
     expect(normalizeNextGroup(null)).toBeNull()
+  })
+})
+
+describe('normalizeStartLists', () => {
+  const lifter = (id, group, lot, sex = 'f', extra = {}) => ({
+    id,
+    name: `Lyftare ${id}`,
+    team: 'Göteborg KK',
+    group,
+    lot,
+    sex,
+    category: 'Senior',
+    weightclass: '63',
+    weightclass_short_alt: null,
+    ...extra,
+  })
+
+  it('lists each group by lot number, groups in natural order', () => {
+    const groups = normalizeStartLists({
+      lifters: [
+        lifter('1', 'Grupp 10', '3'),
+        lifter('2', 'Grupp 2', '12'),
+        lifter('3', 'Grupp 2', '9'),
+        lifter('4', 'Grupp 2', '10'),
+      ],
+    })
+
+    expect(groups.map((group) => group.name)).toEqual(['Grupp 2', 'Grupp 10'])
+    expect(groups[0].lifters.map((entry) => entry.lot)).toEqual([9, 10, 12])
+    expect(groups[0].lifters[0]).toEqual({
+      id: '3',
+      lot: 9,
+      name: 'Lyftare 3',
+      team: 'Göteborg KK',
+      category: 'Senior',
+      weightClass: '63',
+      license: null,
+      sex: 'f',
+    })
+  })
+
+  it('puts lifters without a lot last, by name', () => {
+    const [group] = normalizeStartLists({
+      lifters: [lifter('b', 'Grupp 1', null), lifter('a', 'Grupp 1', ''), lifter('c', 'Grupp 1', '4')],
+    })
+
+    expect(group.lifters.map((entry) => [entry.id, entry.lot])).toEqual([
+      ['c', 4],
+      ['a', null],
+      ['b', null],
+    ])
+  })
+
+  it('tells whether a group is women, men or both', () => {
+    const groups = normalizeStartLists({
+      lifters: [
+        lifter('1', 'Grupp 1', 1, 'f'),
+        lifter('2', 'Grupp 2', 2, 'm'),
+        lifter('3', 'Grupp 3', 3, 'f'),
+        lifter('4', 'Grupp 3', 4, 'm'),
+      ],
+    })
+
+    expect(groups.map((group) => group.sex)).toEqual(['f', 'm', null])
+  })
+
+  it('prefers the short weight class name and survives odd data', () => {
+    const [group] = normalizeStartLists({
+      lifters: [lifter('1', 'Grupp 1', 1, 'f', { weightclass: '84', weightclass_short_alt: '84+' }), null, 'x'],
+    })
+
+    expect(group.lifters).toHaveLength(1)
+    expect(group.lifters[0].weightClass).toBe('84+')
+
+    const [withLicense] = normalizeStartLists({ lifters: [lifter('1', 'Grupp 1', 1, 'f', { license: '010101ab1' })] })
+    expect(withLicense.lifters[0].license).toBe('010101ab1')
+    expect(normalizeStartLists(null)).toEqual([])
   })
 })

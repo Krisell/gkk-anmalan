@@ -115,6 +115,47 @@ export function normalizeResults(raw) {
 }
 
 /**
+ * Every group of the competition (/live/results/{id}) as start lists, for the printed start lists that are also the
+ * weigh-in order: the lifters of each group by their lot number (lifters not yet drawn last, by name).
+ *
+ * StartList: { name, sex: 'f' | 'm' | null (both, or unknown), lifters: [{ id, lot, name, team, category, weightClass, license, sex }] }
+ * (license: the lifter's license number, only in the admins' /live/start-lists/{id}; null otherwise)
+ */
+export function normalizeStartLists(raw) {
+  const lifters = (Array.isArray(raw?.lifters) ? raw.lifters : []).filter(
+    (lifter) => lifter && typeof lifter === 'object',
+  )
+  const groups = new Map()
+  for (const lifter of lifters) {
+    const name = toText(lifter.group) ?? 'Okänd grupp'
+    groups.set(name, [...(groups.get(name) ?? []), lifter])
+  }
+
+  return [...groups.entries()]
+    .sort(([a], [b]) => a.localeCompare(b, 'sv', { numeric: true }))
+    .map(([name, members]) => {
+      const sexes = new Set(members.map((lifter) => toText(lifter.sex)?.toLowerCase()))
+      const startList = members
+        .map((lifter) => ({
+          id: toText(lifter.id),
+          lot: toInt(lifter.lot),
+          name: toText(lifter.name) ?? '',
+          team: toText(lifter.team),
+          category: toText(lifter.category),
+          weightClass: toText(lifter.weightclass_short_alt) ?? toText(lifter.weightclass),
+          license: toText(lifter.license),
+          sex: ['f', 'm'].includes(toText(lifter.sex)?.toLowerCase()) ? toText(lifter.sex).toLowerCase() : null,
+        }))
+        .sort((a, b) => (a.lot ?? Infinity) - (b.lot ?? Infinity) || a.name.localeCompare(b.name, 'sv'))
+      return {
+        name,
+        sex: sexes.size === 1 && ['f', 'm'].includes([...sexes][0]) ? [...sexes][0] : null,
+        lifters: startList,
+      }
+    })
+}
+
+/**
  * The start order of the group that lifts next (/live/next-group/{id}), for the warm-up hall: Powerlifting Live's own
  * "Nästa grupp" list, in its order. With groups lifting in turns the next block can be the same group in the next
  * discipline, so the discipline (and attempt) is part of it.
