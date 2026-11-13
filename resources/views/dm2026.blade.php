@@ -3,7 +3,7 @@
 @section('content')
 @php
   $img = 'https://goteborg-kraftsportklubb.web.app/img/';
-  $startlistsUrl = 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor%20DM%20SL%202026.pdf?alt=media&token=c9306e6a-fb85-4df6-8c85-7854b716fb0b';
+  $startlistsUrl = 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor.pdf?alt=media&token=2d1cbeb4-d654-4f7e-ad97-611284235657';
 
   $facts = [
     ['icon' => 'calendar', 'label' => 'Datum', 'value' => '14 november', 'note' => 'Lördag, första start 09:30'],
