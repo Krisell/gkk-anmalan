@@ -3,7 +3,7 @@
 @section('content')
 @php
   $img = 'https://goteborg-kraftsportklubb.web.app/img/';
-  $startlistsUrl = 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor.pdf?alt=media&token=2d1cbeb4-d654-4f7e-ad97-611284235657';
+  $startlistsUrl = 'https://firebasestorage.googleapis.com/v0/b/goteborg-kraftsportklubb.appspot.com/o/static%2FStartlistor.pdf?alt=media&token=8002136d-6aaa-40d9-a980-875efa756db9';
 
   $facts = [
     ['icon' => 'calendar', 'label' => 'Datum', 'value' => '14 november', 'note' => 'Lördag, första start 09:30'],
