@@ -273,6 +273,20 @@ describe('normalizeResults', () => {
     expect(groups[0].scoreboard.disciplines).toEqual(['SQ', 'BP', 'DL'])
   })
 
+  it("gives a group without declared openers the competition's disciplines", () => {
+    const groups = normalizeResults({
+      lifters: [lifter('1', 'Grupp 01', '57', 1, { BP1: '60' }), lifter('2', 'Grupp 02', '63', null, {})],
+    })
+
+    expect(groups[1].scoreboard.disciplines).toEqual(['BP'])
+  })
+
+  it('assumes a full powerlifting competition before anyone has declared anything', () => {
+    const groups = normalizeResults({ lifters: [lifter('1', 'Grupp 02', '63', null, {})] })
+
+    expect(groups[0].scoreboard.disciplines).toEqual(['SQ', 'BP', 'DL'])
+  })
+
   it('marks a bench press group done once the bench press is finished', () => {
     const groups = normalizeResults({
       lifters: [

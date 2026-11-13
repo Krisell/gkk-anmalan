@@ -146,6 +146,25 @@
             Det ser inte ut som en webbadress. Skriv t.ex. se.powerliftinglive.com
           </p>
 
+          <!-- The broadcast graphics (/live/overlay), showing what the live control below has chosen. -->
+          <div class="mt-6 flex flex-wrap items-center gap-3 border-t border-gray-200 pt-4">
+            <div class="min-w-0 flex-1 basis-56">
+              <h3 class="font-semibold">Sändningsgrafik</h3>
+              <p class="text-sm text-gray-600">
+                Samma grafik som i sändningen, för tävlingen och läget som är valda i livegrafiken.
+              </p>
+            </div>
+            <span v-if="current.page?.url === overlayUrl()" class="shrink-0 text-sm text-green-700">Visas nu</span>
+            <button
+              v-else
+              :class="secondaryButtonClass"
+              class="shrink-0"
+              @click="save({ page: { id: Date.now().toString(36), url: overlayUrl() } })"
+            >
+              Visa
+            </button>
+          </div>
+
           <!-- The warm-up hall screen (/live/hall) for a competition that is live on Powerlifting Live. -->
           <div class="mt-6 border-t border-gray-200 pt-4">
             <div class="flex flex-wrap items-center gap-3">
@@ -434,6 +453,12 @@ async function loadCompetitions() {
   } catch {
     hall.value = { state: 'error', competitions: [] }
   }
+}
+
+// As a preview: the hall's screen isn't the broadcast, so it doesn't report itself as on air, play the pause music or
+// count as one of the slideshow's screens.
+function overlayUrl() {
+  return pageUrl(`${window.location.origin}/live/overlay?preview=1`)
 }
 
 function hallUrl(id) {

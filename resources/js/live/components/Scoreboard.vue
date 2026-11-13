@@ -147,7 +147,10 @@ const columns = computed(() => {
 })
 
 const gridColumns = computed(
-  () => `64px minmax(0, 1fr) ${classColumn.value ? '260px ' : ''}repeat(${columns.value.length}, 112px) 116px 136px`,
+  // repeat(0, …) is invalid and would drop the whole template (every cell on a line of its own), so no lift columns
+  // (nothing declared anywhere yet) leaves it out.
+  () =>
+    `64px minmax(0, 1fr) ${classColumn.value ? '260px ' : ''}${columns.value.length ? `repeat(${columns.value.length}, 112px) ` : ''}116px 136px`,
 )
 
 const classLabel = (lifter) => competitionClass(lifter).label

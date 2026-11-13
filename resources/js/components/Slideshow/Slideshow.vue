@@ -38,7 +38,8 @@
           v-if="control.page"
           :key="control.page.id"
           :src="control.page.url"
-          class="absolute inset-0 z-10 w-full h-full border-0 bg-white"
+          class="absolute inset-0 z-10 w-full h-full border-0"
+          :class="isOverlay(control.page.url) ? 'bg-gkk' : 'bg-white'"
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
           allow="autoplay; fullscreen"
           referrerpolicy="no-referrer"
@@ -147,6 +148,16 @@ import {
   slideLabel,
   useSlideshowRemote,
 } from './remote.js'
+
+// The broadcast graphics (/live/overlay) are transparent (OBS lays them over the camera); here they get the club's navy
+// behind them instead of the white that other pages get.
+const isOverlay = (url) => {
+  try {
+    return new URL(url).pathname.replace(/\/$/, '') === '/live/overlay'
+  } catch {
+    return false
+  }
+}
 
 const FOOTER_HEIGHT = 'clamp(2.5rem,9vh,7rem)'
 

@@ -105,11 +105,15 @@ export function normalizeResults(raw) {
     const name = toText(lifter.group) ?? 'Okänd grupp'
     groups.set(name, [...(groups.get(name) ?? []), lifter])
   }
+  // The disciplines of the whole competition, so that a group whose lifters haven't declared any openers yet still
+  // gets its columns; a full powerlifting competition before anyone has declared anything.
+  const declared = disciplinesOf(lifters)
+  const competitionDisciplines = declared.length ? declared : DISCIPLINES
 
   return [...groups.entries()]
     .sort(([a], [b]) => a.localeCompare(b, 'sv', { numeric: true }))
     .map(([name, members]) => {
-      const scoreboard = normalizeScoreboard(sortForResults(members), null)
+      const scoreboard = normalizeScoreboard(sortForResults(members), null, competitionDisciplines)
       return { name, status: groupStatus(scoreboard), scoreboard }
     })
 }
@@ -222,12 +226,18 @@ export function groupStatus({ lifters, disciplines }) {
   return lifters.every(finished) ? 'done' : 'ongoing'
 }
 
-function normalizeScoreboard(rawLifters, discipline) {
-  const lifters = (Array.isArray(rawLifters) ? rawLifters : []).filter((lifter) => lifter && typeof lifter === 'object')
-  // A discipline belongs to the competition if it is the current one or anyone has declared a weight in it.
-  const disciplines = DISCIPLINES.filter(
-    (d) => d === discipline || lifters.some((lifter) => [1, 2, 3].some((n) => toWeight(lifter.lifts?.[`${d}${n}`]))),
+// A discipline belongs to the competition if anyone has declared a weight in it.
+function disciplinesOf(lifters) {
+  return DISCIPLINES.filter((d) =>
+    lifters.some((lifter) => [1, 2, 3].some((n) => toWeight(lifter?.lifts?.[`${d}${n}`]))),
   )
+}
+
+function normalizeScoreboard(rawLifters, discipline, known = []) {
+  const lifters = (Array.isArray(rawLifters) ? rawLifters : []).filter((lifter) => lifter && typeof lifter === 'object')
+  // The current discipline, the ones known from elsewhere (the rest of the competition) and the declared ones.
+  const declared = disciplinesOf(lifters)
+  const disciplines = DISCIPLINES.filter((d) => d === discipline || known.includes(d) || declared.includes(d))
   // Powerlifting Live's points ('wilks') always use the powerlifting formula; for bench press they are computed here.
   const benchOnly = disciplines.length === 1 && disciplines[0] === 'BP'
 
