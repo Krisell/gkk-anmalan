@@ -105,6 +105,9 @@
           />
         </Transition>
 
+        <!-- "PB ALERT" from the live control's PB button, as on the broadcast, over everything. -->
+        <PbStamp v-if="pb" :key="pb.key" :attempt="pb.attempt" />
+
         <!-- Old data stays up (better than an empty screen in the warm-up hall), but says how old it is. -->
         <div v-if="staleSince" class="stale">Ej uppdaterat sedan {{ staleSince }}</div>
       </template>
@@ -119,6 +122,8 @@ import CompetitionPicker from './components/CompetitionPicker.vue'
 import LifterIntro from './components/LifterIntro.vue'
 import RefereePanel from './components/RefereePanel.vue'
 import Scoreboard from './components/Scoreboard.vue'
+import PbStamp from './components/PbStamp.vue'
+import { useRemoteControl } from './remote/useRemoteControl.js'
 import { disciplineName, formatWeight } from './format.js'
 import { createHttpSource } from './sources/httpSource.js'
 import { createRefereeFeed, refereeFeedUrl } from './sources/refereeFeed.js'
@@ -154,6 +159,27 @@ const feed = competition ? useLiveFeed(createHttpSource(competition, referee)) :
 const nextGroupFeed = competition ? useNextGroup(competition) : null
 
 const snapshot = computed(() => feed?.snapshot.value ?? null)
+
+// The live control's PB button (/live/control) stamps "PB ALERT" here too, with the lifter just judged (or, before any,
+// the one on the platform). Only the PB command is followed; the rest of the control is for the broadcast. The hall
+// screen doesn't report itself as on air (presence), and without Firebase it simply carries on.
+const PB_MS = 3400
+const pb = shallowRef(null)
+let pbTimer = null
+if (competition && flag('pb')) {
+  useRemoteControl(competition, {
+    presence: false,
+    onCommand: (command) => {
+      if (command.type === 'pb') {
+        clearTimeout(pbTimer)
+        const attempt = judged.value ?? snapshot.value?.lastResult ?? snapshot.value?.current ?? null
+        pb.value = { key: (pb.value?.key ?? 0) + 1, attempt }
+        pbTimer = setTimeout(() => (pb.value = null), PB_MS)
+      }
+    },
+  })
+}
+onBeforeUnmount(() => clearTimeout(pbTimer))
 const next = computed(() => nextGroupFeed?.nextGroup.value ?? null)
 
 // The next group's lifters are listed in columns of up to 4 (5 for a large group), top to bottom, then left to right.
