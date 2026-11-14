@@ -234,8 +234,9 @@
         <label class="toggle">
           <input type="checkbox" :checked="current.autoPb" @change="save({ autoPb: $event.target.checked })" />
           <span>
-            Automatisk PB-stämpel – i sändningen och på hallens skärmar, några sekunder efter lyftarkortet och när
-            klockan startar, om försöket slår lyftarens bästa registrerade resultat i grenen (inte totalen)
+            Automatisk PB-stämpel – om försöket slår lyftarens bästa registrerade resultat i grenen (inte totalen): på
+            lyftarkortet, och i sändningen ”PB-försök” till vänster från att klockan startar till domslutet (”Nytt PB!”
+            om godkänt); på hallens skärmar när klockan startar
           </span>
         </label>
         <div class="choices">
@@ -267,7 +268,7 @@
       <section class="card">
         <h2>Snabbknappar</h2>
         <div class="choices">
-          <button class="button action" @click="command('pb')">PB-stämpel</button>
+          <button class="button action" @click="command('pb')">PB-försök</button>
           <button class="button action" @click="command('list')">Resultatlistan (10 s)</button>
           <button class="button action" @click="command('skip')">Hoppa över</button>
         </div>

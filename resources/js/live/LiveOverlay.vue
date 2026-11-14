@@ -137,7 +137,9 @@
         <InfoStrap v-if="control.message" :key="control.message.id" :text="control.message.text" />
       </div>
 
-      <PbStamp v-if="pb && !pb.corner" :key="pb.key" :attempt="pb.attempt" :side="pb.side" :good="pb.good" />
+      <Transition name="pb-badge">
+        <PbBadge v-if="pbLift && !fullScreen && !roundBoard" :key="pbLift.attempt.id" :good="pbLift.good" />
+      </Transition>
 
       <DemoControls
         v-if="demoSource && showControls"
@@ -200,6 +202,7 @@ import Scoreboard from './components/Scoreboard.vue'
 import Podium from './components/Podium.vue'
 import { podiumOf } from './podium.js'
 import PbStamp from './components/PbStamp.vue'
+import PbBadge from './components/PbBadge.vue'
 import { useAutoPb } from './autoPb.js'
 import { useLifterBests } from './useLifterBests.js'
 import CornerBug from './components/CornerBug.vue'
@@ -934,31 +937,73 @@ function clearEditorResult() {
   state.value = { ...state.value, result: null }
 }
 
-// "PB ALERT" stamp, triggered with P or from the live control (shown for the stamp's 3.4 s animation): a PB attempt
-// coming up, with the lifter on the platform below it.
+// The automatic "PB ALERT" stamp on the corner of the big lifter card when a PB attempt's lifter is called (shown for
+// the stamp's 3.4 s animation).
 const PB_MS = 3400
 const pb = shallowRef(null)
 let pbTimer = null
 
-// Announced before the lift: the lifter called to the platform, with the weight they are about to attempt, also while
-// the previous lifter's result is still on screen.
-// By hand and when the clock starts it is to the right, off the lifter; automatically when the lifter is called it is on
-// the corner of the big lifter card (corner), or without a card large in the middle, before the lifter is at the bar;
-// a PB attempt judged good gets "NYTT PB!" to the right.
-function showPb(
-  attempt = feed?.snapshot.value?.current ?? displayed.value,
-  { side = true, corner = false, good = false } = {},
-) {
+function showPb(attempt) {
   clearTimeout(pbTimer)
-  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt, side, corner, good }
+  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt, corner: true }
   pbTimer = setTimeout(() => (pb.value = null), PB_MS)
 }
+
+// "PB-försök" on the left during a PB attempt, blinking until the decision: from when the clock starts (automatically,
+// see autoPb.js), or by hand (P, or the live control's button) for the lifter called to the platform. A good lift turns
+// it into "NYTT PB!" for PB_GOOD_MS; after a failed one it just goes. It never stays longer than PB_LIFT_MAX_MS.
+const PB_GOOD_MS = 5000
+const PB_LIFT_MAX_MS = 2 * 60 * 1000
+const pbLift = shallowRef(null) // { attempt, good, since }
+let pbLiftTimer = null
+
+function startPbLift(attempt = feed?.snapshot.value?.current ?? displayed.value) {
+  if (!attempt || attempt.outcome || pbLift.value?.attempt.id === attempt.id) {
+    return
+  }
+  clearTimeout(pbLiftTimer)
+  pbLift.value = { attempt, good: false, since: Date.now() }
+  pbLiftTimer = setTimeout(endPbLift, PB_LIFT_MAX_MS)
+}
+
+function goodPbLift(attempt) {
+  if (pbLift.value?.good && pbLift.value.attempt.id === attempt.id) {
+    return
+  }
+  clearTimeout(pbLiftTimer)
+  pbLift.value = { attempt, good: true, since: Date.now() }
+  pbLiftTimer = setTimeout(endPbLift, PB_GOOD_MS)
+}
+
+function endPbLift() {
+  clearTimeout(pbLiftTimer)
+  pbLift.value = null
+}
+
+// The decision (the lights, or the recorded result) of the attempt; any other lifter's result since it started means it
+// was missed, and it goes too.
+watch(
+  () => state.value.result,
+  (result) => {
+    const lift = pbLift.value
+    if (!lift || lift.good || !result?.outcome || result.shownAt < lift.since) {
+      return
+    }
+    if (result.id === lift.attempt.id && result.outcome === 'good') {
+      goodPbLift(result)
+    } else {
+      endPbLift()
+    }
+  },
+)
 
 // Esc (via OBS "Interact") cuts short whatever is on screen: the introduction, or else a shown result.
 function skip() {
   if (pb.value) {
     clearTimeout(pbTimer)
     pb.value = null
+  } else if (pbLift.value) {
+    endPbLift()
   } else if (roundBoard.value) {
     withStinger(stopRoundBoard)
   } else if (intro.value) {
@@ -1071,15 +1116,15 @@ if (lifterBests) {
     clock: () => feed?.snapshot.value?.clock ?? null,
     enabled: () => control.value.autoPb,
     bestsFor: (lifterId) => lifterBests.bests.value[lifterId],
-    show: (attempt, moment) => showPb(attempt, { side: moment === 'clock', corner: moment === 'card' }),
+    show: (attempt, moment) => (moment === 'card' ? showPb(attempt) : startPbLift(attempt)),
     result: () => state.value.result,
-    showGood: (attempt) => showPb(attempt, { good: true }),
+    showGood: goodPbLift,
   })
 }
 
 function runCommand(command) {
   if (command.type === 'pb') {
-    showPb()
+    startPbLift()
   } else if (command.type === 'skip') {
     skip()
   } else if (command.type === 'list') {
@@ -1154,7 +1199,7 @@ function onKeydown(event) {
   }
 
   if (event.key.toLowerCase() === 'p' && !event.metaKey && !event.ctrlKey && !event.altKey) {
-    showPb()
+    startPbLift()
     event.preventDefault()
     return
   }
@@ -1210,6 +1255,7 @@ onBeforeUnmount(() => {
   clearTimeout(awaitTimer)
   clearTimeout(introTimer)
   clearTimeout(pbTimer)
+  clearTimeout(pbLiftTimer)
   clearTimeout(commentatorTimer)
   endFlight()
   roundBoardTimers.forEach(clearTimeout)

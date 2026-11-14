@@ -8,7 +8,8 @@ import { compareWithBests } from './control/personalBest.js'
  *   without a card (the same lifter again, or the cards turned off) AFTER_CALL_MS after nothing covers the picture,
  * - when the attempt clock starts (once per attempt); if the card, the lights or a result are up then, as soon as
  *   they are gone. Both are shown, however close together.
- * And, if `showGood` is given (the broadcast), once more when such an attempt is judged good ("NYTT PB!").
+ * (On the broadcast the clock's is "PB-försök", which stays until the decision.) And, if `showGood` is given (the
+ * broadcast), when such an attempt is judged good ("NYTT PB!").
  *
  * attempt(): the attempt coming up (no outcome), or null; card(): the attempt on the big lifter card, or null;
  * busy(): whether the card, the lights or a result cover the picture; clock(): the clock's seconds, or null when it
