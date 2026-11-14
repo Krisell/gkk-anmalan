@@ -92,7 +92,7 @@
           :key="`${control.podiumGroup}-${control.podiumClass}`"
           :label="podium.label"
           :group="control.podiumGroup"
-          :lifters="podium.lifters.slice(Math.max(0, podium.lifters.length - control.podiumPlaces))"
+          :lifters="podiumLifters"
           :coefficient="podium.coefficient"
           :instant="instant"
         />
@@ -131,12 +131,6 @@
         :names="commentators.names"
       />
 
-      <!-- Top left: the permanent note, small, with the messages below it. -->
-      <div v-if="control.note || control.message" class="notices">
-        <InfoStrap v-if="control.note" :key="`note:${control.note}`" :text="control.note" small />
-        <InfoStrap v-if="control.message" :key="control.message.id" :text="control.message.text" />
-      </div>
-
       <Transition name="pb-badge">
         <PbBadge v-if="pbLift && !fullScreen && !roundBoard" :key="pbLift.attempt.id" :good="pbLift.good" />
       </Transition>
@@ -169,6 +163,12 @@
         :current-id="feed.snapshot.value?.current?.id ?? null"
         :result-id="state.result?.id ?? null"
       />
+    </div>
+
+    <!-- Top left: the permanent note, small, with the messages below it; also with "Ingen grafik". -->
+    <div v-if="!standaloneView && source && (control.note || control.message)" class="notices">
+      <InfoStrap v-if="control.note" :key="`note:${control.note}`" :text="control.note" small />
+      <InfoStrap v-if="control.message" :key="control.message.id" :text="control.message.text" />
     </div>
 
     <!-- Our logo in the corner, on every view except the results list and the stream images (they have our logo) and
@@ -1054,7 +1054,11 @@ const groupResults = remote
 const podium = computed(() =>
   podiumGroup.value && groupResults?.value ? podiumOf(groupResults.value.scoreboard, control.value.podiumClass) : null,
 )
-const showPodium = computed(() => Boolean(podium.value?.lifters.length))
+// From the highest place chosen on the control page down (bronze first, then silver and bronze, then all).
+const podiumLifters = computed(
+  () => podium.value?.lifters.filter((lifter) => lifter.place >= control.value.podiumFrom) ?? [],
+)
+const showPodium = computed(() => podiumLifters.value.length > 0)
 const board = computed(() => {
   const snapshot = feed?.snapshot.value
   const other = groupResults?.value

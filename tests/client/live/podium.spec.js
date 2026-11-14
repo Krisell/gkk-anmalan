@@ -29,9 +29,9 @@ const scoreboard = {
 describe('podiumClasses', () => {
   it("lists a group's classes once each, in the results list's order", () => {
     expect(podiumClasses(scoreboard)).toEqual([
-      { key: '74|Senior', label: '-74 kg · Senior' },
-      { key: '83|Senior', label: '-83 kg · Senior' },
-      { key: 'm|Ungdom koefficient', label: 'Ungdom koefficient' },
+      { key: '74|Senior', label: '-74 kg · Senior', places: 3 },
+      { key: '83|Senior', label: '-83 kg · Senior', places: 1 },
+      { key: 'm|Ungdom koefficient', label: 'Ungdom koefficient', places: 2 },
     ])
     expect(podiumClasses(null)).toEqual([])
   })

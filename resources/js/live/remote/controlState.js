@@ -27,8 +27,7 @@ export const DEFAULT_CONTROL = Object.freeze({
   listGroup: null, // the results list of another group than the one on the platform, e.g. 'Grupp 03'
   podiumGroup: null, // the podium's group, e.g. 'Grupp 03'
   podiumClass: null, // and class in it: competitionClass(lifter).key (see format.js), e.g. '74|Senior'
-  podiumPlaces: 3, // how many of the podium's places are shown, from the last: 1 bronze only, 2 also silver, 3 all
-  podiumStepwise: false, // a podium chosen on the control page starts with bronze only, the rest added by hand
+  podiumFrom: 1, // the podium's highest place shown, with the ones below it: 3 bronze only, 2 silver and bronze, 1 all
   instant: false, // changes of what is shown without the stinger and entrance animations (the prize ceremony)
   slate: 'start',
   pauseTime: null, // when the next group starts, e.g. '14:30', for the pause slate
@@ -63,8 +62,7 @@ export function normalizeControl(raw) {
     listGroup: text(control.listGroup, 40),
     podiumGroup: text(control.podiumGroup, 40),
     podiumClass: text(control.podiumClass, 100),
-    podiumPlaces: [1, 2, 3].includes(control.podiumPlaces) ? control.podiumPlaces : DEFAULT_CONTROL.podiumPlaces,
-    podiumStepwise: control.podiumStepwise === true,
+    podiumFrom: [1, 2, 3].includes(control.podiumFrom) ? control.podiumFrom : DEFAULT_CONTROL.podiumFrom,
     instant: control.instant === true,
     slate: SLATES.includes(control.slate) ? control.slate : DEFAULT_CONTROL.slate,
     pauseTime: /^\d{1,2}[:.]\d{2}$/.test(control.pauseTime ?? '') ? control.pauseTime.replace('.', ':') : null,

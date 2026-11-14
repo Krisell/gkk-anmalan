@@ -5,13 +5,19 @@ import { competitionClass, isCoefficientClass } from './format.js'
  * (normalizeResults in normalize.js).
  */
 
-// The classes of a group, in the results list's order: [{ key, label }].
+// The classes of a group, in the results list's order: [{ key, label, places }], places being how many podium places are
+// taken (3 with a bronze).
 export function podiumClasses(scoreboard) {
   const classes = new Map()
   for (const lifter of scoreboard?.lifters ?? []) {
     const { key, label } = competitionClass(lifter)
     if (!classes.has(key)) {
-      classes.set(key, { key, label: label ?? 'Okänd klass' })
+      classes.set(key, { key, label: label ?? 'Okänd klass', places: 0 })
+    }
+    // The podium's lowest place (3 bronze, …), 0 when nobody is placed yet.
+    const entry = classes.get(key)
+    if (lifter.place >= 1 && lifter.place <= 3) {
+      entry.places = Math.max(entry.places, lifter.place)
     }
   }
   return [...classes.values()]

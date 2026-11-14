@@ -195,49 +195,54 @@
           </button>
         </div>
 
-        <h3>Pall{{ podiumGroup ? ` – ${podiumGroup.name}` : '' }}</h3>
+        <h3>Pall</h3>
         <p class="hint">
-          Guld, silver och brons i en klass, nederst i bild. Uppifrån och ned efter placering, så det spelar ingen roll
-          hur lyftarna står på pallen.
+          Välj grupp här (byter inte det som visas), och sedan vad som ska visas i varje klass: brons, silver (med
+          brons) eller guld (alla tre). Uppifrån och ned efter placering, så det spelar ingen roll hur lyftarna står på
+          pallen.
         </p>
-        <div v-if="podiumGroup" class="choices">
+        <div class="choices">
           <button
-            v-for="podiumClass in podiumGroup.classes"
-            :key="podiumClass.key"
+            v-for="group in groups"
+            :key="group.name"
             class="button choice"
-            :class="{
-              active:
-                current.mode === 'podium' &&
-                current.podiumGroup === podiumGroup.name &&
-                current.podiumClass === podiumClass.key,
-            }"
-            @click="
-              save({
-                mode: 'podium',
-                podiumGroup: podiumGroup.name,
-                podiumClass: podiumClass.key,
-                podiumPlaces: current.podiumStepwise ? 1 : 3,
-              })
-            "
+            :class="{ active: podiumGroup?.name === group.name }"
+            @click="lastPodiumGroup = group.name"
           >
-            {{ podiumClass.label }}
+            {{ group.name }}
           </button>
         </div>
-        <p v-else class="hint">Välj en grupp ovan, så visas dess klasser här.</p>
-        <label class="toggle">
-          <input
-            type="checkbox"
-            :checked="current.podiumStepwise"
-            @change="save({ podiumStepwise: $event.target.checked })"
-          />
-          <span>Steg för steg – brons först, sedan lägger du till silver och guld</span>
-        </label>
-        <div v-if="current.mode === 'podium' && current.podiumPlaces < 3" class="choices">
-          <button class="button primary" @click="save({ podiumPlaces: current.podiumPlaces + 1 })">
-            {{ current.podiumPlaces === 1 ? 'Visa silver' : 'Visa guld' }}
-          </button>
-          <button class="button" @click="save({ podiumPlaces: 3 })">Visa alla</button>
+        <div v-if="podiumGroup" class="podium-classes">
+          <div v-for="podiumClass in podiumGroup.classes" :key="podiumClass.key" class="podium-class">
+            <span class="podium-label">{{ podiumClass.label }}</span>
+            <span class="podium-places">
+              <button
+                v-for="place in PODIUM_PLACES.filter((entry) => entry.place <= podiumClass.places)"
+                :key="place.place"
+                class="button choice"
+                :class="{
+                  active:
+                    current.mode === 'podium' &&
+                    current.podiumGroup === podiumGroup.name &&
+                    current.podiumClass === podiumClass.key &&
+                    current.podiumFrom === place.place,
+                }"
+                @click="
+                  save({
+                    mode: 'podium',
+                    podiumGroup: podiumGroup.name,
+                    podiumClass: podiumClass.key,
+                    podiumFrom: place.place,
+                  })
+                "
+              >
+                {{ place.label }}
+              </button>
+              <span v-if="!podiumClass.places" class="hint">Inga placeringar än</span>
+            </span>
+          </div>
         </div>
+        <p v-else class="hint">Välj en grupp, så visas dess klasser här.</p>
       </section>
 
       <section v-if="platform" class="card">
@@ -454,6 +459,13 @@ const IMAGE_CHOICES = [
 ]
 
 const GROUP_STATUS = { upcoming: 'Ej startad', ongoing: 'Pågår', done: 'Klar' }
+
+// The podium buttons of each class, bronze first: each shows its place and the ones below it.
+const PODIUM_PLACES = [
+  { place: 3, label: 'Brons' },
+  { place: 2, label: 'Silver' },
+  { place: 1, label: 'Guld' },
+]
 
 const PRESETS = ['Rekordförsök!', 'Juryn överväger', 'Prisutdelning efter gruppen', 'Tack till våra funktionärer!']
 
@@ -1104,6 +1116,32 @@ h3 {
 .hint {
   margin: -6px 0 14px;
   color: var(--silver);
+}
+
+.podium-classes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.podium-class {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.podium-label {
+  flex: 1 1 160px;
+  font-weight: 600;
+}
+
+.podium-places {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(88px, 1fr));
+  gap: 8px;
+  flex: 2 1 280px;
 }
 
 .choices {

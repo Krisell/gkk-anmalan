@@ -41,8 +41,7 @@ describe('normalizeControl', () => {
       listGroup: 'Grupp 03',
       podiumGroup: null,
       podiumClass: null,
-      podiumPlaces: 3,
-      podiumStepwise: false,
+      podiumFrom: 1,
       instant: false,
       slate: 'pause',
       pauseTime: '14:30',
@@ -144,14 +143,11 @@ describe('prize ceremony', () => {
     ).toMatchObject({ mode: 'podium', podiumGroup: 'Grupp 03', podiumClass: '74|Senior', instant: true })
   })
 
-  it('shows the places from bronze up, all of them unless told otherwise', () => {
-    expect(normalizeControl(null)).toMatchObject({ podiumPlaces: 3, podiumStepwise: false })
-    expect(normalizeControl({ podiumPlaces: 1, podiumStepwise: true })).toMatchObject({
-      podiumPlaces: 1,
-      podiumStepwise: true,
-    })
-    expect(normalizeControl({ podiumPlaces: 4 }).podiumPlaces).toBe(3)
-    expect(normalizeControl({ podiumPlaces: '2' }).podiumPlaces).toBe(3)
+  it('shows the places from the one chosen down, all of them unless told otherwise', () => {
+    expect(normalizeControl(null).podiumFrom).toBe(1)
+    expect(normalizeControl({ podiumFrom: 3 }).podiumFrom).toBe(3)
+    expect(normalizeControl({ podiumFrom: 4 }).podiumFrom).toBe(1)
+    expect(normalizeControl({ podiumFrom: '2' }).podiumFrom).toBe(1)
   })
 
   it('animates changes unless turned off', () => {
