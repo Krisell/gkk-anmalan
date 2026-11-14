@@ -23,7 +23,7 @@
       <code>/live/overlay?demo=true</code>.
     </div>
 
-    <div v-else class="graphics" :class="{ off: hideAll }">
+    <div v-else class="graphics" :class="{ off: hideAll, instant }">
       <iframe
         v-if="videoId"
         :src="`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1`"
@@ -72,7 +72,7 @@
         </div>
       </Transition>
 
-      <Transition name="board">
+      <Transition :name="instant ? '' : 'board'">
         <Scoreboard
           v-if="showScoreboard"
           :key="activationKey"
@@ -81,6 +81,20 @@
           :group="board.group"
           :current-lifter-id="board.currentLifterId"
           :final="board.final"
+          :instant="instant"
+        />
+      </Transition>
+
+      <!-- The prize ceremony: gold, silver and bronze of one class, at the bottom over the camera picture. -->
+      <Transition :name="instant ? '' : 'board'">
+        <Podium
+          v-if="showPodium"
+          :key="`${control.podiumGroup}-${control.podiumClass}`"
+          :label="podium.label"
+          :group="control.podiumGroup"
+          :lifters="podium.lifters"
+          :coefficient="podium.coefficient"
+          :instant="instant"
         />
       </Transition>
 
@@ -171,6 +185,8 @@ import DebugStatus from './components/DebugStatus.vue'
 import DemoControls from './components/DemoControls.vue'
 import DemoEditor from './components/DemoEditor.vue'
 import Scoreboard from './components/Scoreboard.vue'
+import Podium from './components/Podium.vue'
+import { podiumOf } from './podium.js'
 import PbStamp from './components/PbStamp.vue'
 import CornerBug from './components/CornerBug.vue'
 import Slate from './components/Slate.vue'
@@ -391,9 +407,16 @@ const imageSubText = computed(() =>
     : (control.value.imageInfo ?? today.charAt(0).toUpperCase() + today.slice(1)),
 )
 
-// Full-screen graphics replace the lower third, the lifter card and the corner graphic while shown.
+// Full-screen graphics replace the lower third, the lifter card and the corner graphic while shown. So does the
+// podium, which isn't full-screen but is where the lower third would be.
 const fullScreen = computed(
-  () => showScoreboard.value || showSlate.value || showImage.value || showSlideshow.value || showSchedule.value,
+  () =>
+    showScoreboard.value ||
+    showSlate.value ||
+    showImage.value ||
+    showSlideshow.value ||
+    showSchedule.value ||
+    showPodium.value,
 )
 
 // The competition's name: the demo editor's field, the remote control's, or ?title=….
@@ -456,7 +479,7 @@ watch(
     const endsRound = result && (editorState ? editorState.lastInRound : result.confirmed && result.endsRound)
     const key = result && `${result.id}:${result.shownAt}`
     // Not over a slate, an image, the slideshow or the schedule chosen from the remote control.
-    const covered = ['slate', 'image', 'slideshow', 'schedule'].includes(remoteMode.value)
+    const covered = ['slate', 'image', 'slideshow', 'schedule', 'podium'].includes(remoteMode.value)
     if (!showRoundBoards || !control.value.roundBoards || !endsRound || key === roundBoardFor || covered) {
       return
     }
@@ -897,21 +920,26 @@ function skip() {
 }
 
 // Remote control: what it asks the overlay to show. The results list and the slates come and go under the stinger,
-// like separate OBS scenes; hiding all graphics fades them out.
+// like separate OBS scenes; hiding all graphics fades them out. With "Utan animation" (instant, for quick changes
+// during the prize ceremony) everything changes at once instead, without the stinger or entrance animations.
+const instant = computed(() => control.value.instant)
 const remoteMode = ref(control.value.mode)
 const hideAll = computed(() => remoteMode.value === 'hidden')
 watch(
   () => control.value.mode,
   (mode) => {
-    const fullScreenModes = ['list', 'slate', 'image', 'slideshow', 'schedule']
-    if (fullScreenModes.includes(mode) || fullScreenModes.includes(remoteMode.value)) {
-      withStinger(() => {
-        remoteMode.value = mode
-        if (mode !== 'auto') {
-          stopRoundBoard()
-          cancelIntro()
-        }
-      })
+    const change = () => {
+      remoteMode.value = mode
+      if (mode !== 'auto') {
+        stopRoundBoard()
+        cancelIntro()
+      }
+    }
+    const fullScreenModes = ['list', 'slate', 'image', 'slideshow', 'schedule', 'podium']
+    if (instant.value) {
+      change()
+    } else if (fullScreenModes.includes(mode) || fullScreenModes.includes(remoteMode.value)) {
+      withStinger(change)
     } else {
       remoteMode.value = mode
     }
@@ -919,9 +947,20 @@ watch(
 )
 
 // The results list: of the group on the platform, or (from the remote control) of another group, e.g. an earlier one.
-// A group that hasn't started is shown as a start list with the declared openers.
+// A group that hasn't started is shown as a start list with the declared openers. The podium's group is fetched the
+// same way.
 const listGroup = computed(() => (remote && remoteMode.value === 'list' ? control.value.listGroup : null))
-const groupResults = remote ? useGroupResults(liveCompetition, listGroup) : null
+const podiumGroup = computed(() => (remote && remoteMode.value === 'podium' ? control.value.podiumGroup : null))
+const groupResults = remote
+  ? useGroupResults(
+      liveCompetition,
+      computed(() => listGroup.value ?? podiumGroup.value),
+    )
+  : null
+const podium = computed(() =>
+  podiumGroup.value && groupResults?.value ? podiumOf(groupResults.value.scoreboard, control.value.podiumClass) : null,
+)
+const showPodium = computed(() => Boolean(podium.value?.lifters.length))
 const board = computed(() => {
   const snapshot = feed?.snapshot.value
   const other = groupResults?.value
@@ -990,6 +1029,12 @@ const onAir = computed(() => {
   }
   if (showSlate.value) {
     return `Skylt: ${{ start: 'Startar snart', pause: 'Paus', end: 'Tack för idag' }[slateKind.value] ?? slateKind.value}`
+  }
+  if (showPodium.value) {
+    return `Pall: ${podium.value.label}`
+  }
+  if (remoteMode.value === 'podium') {
+    return 'Pall: hämtar resultat…'
   }
   if (showScoreboard.value) {
     return board.value.final ? `Resultat: ${board.value.group}` : 'Resultatlista'
@@ -1163,6 +1208,10 @@ code {
 
 .graphics.off {
   opacity: 0;
+}
+
+.graphics.instant {
+  transition: none;
 }
 
 .board-leave-active {

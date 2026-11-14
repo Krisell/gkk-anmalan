@@ -13,9 +13,10 @@ import { IMAGE_TEXT_MAX_LENGTH, STREAM_IMAGES } from '../streamImages.js'
 
 // What the overlay shows: 'auto' (follows the competition), 'hidden' (no graphics at all), 'list' (the results list),
 // 'slate' (a full-screen message, see SLATES), 'image' (one of the stream's images from /sek, see IMAGES) or
-// 'slideshow' (the club's slideshow, as on the hall's screen, controlled from /admin/slideshow) or 'schedule' (the
-// slideshow's DM 2026 slide with the day's schedule, on the stream only: the hall's screens are left alone).
-export const MODES = ['auto', 'hidden', 'list', 'slate', 'image', 'slideshow', 'schedule']
+// 'slideshow' (the club's slideshow, as on the hall's screen, controlled from /admin/slideshow), 'schedule' (the
+// slideshow's DM 2026 slide with the day's schedule, on the stream only: the hall's screens are left alone) or
+// 'podium' (gold, silver and bronze of one class, at the bottom over the camera, for the prize ceremony).
+export const MODES = ['auto', 'hidden', 'list', 'slate', 'image', 'slideshow', 'schedule', 'podium']
 export const SLATES = ['start', 'pause', 'end']
 export const IMAGES = [...Object.keys(STREAM_IMAGES), 'custom']
 export const COMMANDS = ['pb', 'skip', 'list', 'commentators']
@@ -24,6 +25,9 @@ export const DEFAULT_CONTROL = Object.freeze({
   competition: null, // the Powerlifting Live competition id the overlay follows, unless its address sets one
   mode: 'auto',
   listGroup: null, // the results list of another group than the one on the platform, e.g. 'Grupp 03'
+  podiumGroup: null, // the podium's group, e.g. 'Grupp 03'
+  podiumClass: null, // and class in it: competitionClass(lifter).key (see format.js), e.g. '74|Senior'
+  instant: false, // changes of what is shown without the stinger and entrance animations (the prize ceremony)
   slate: 'start',
   pauseTime: null, // when the next group starts, e.g. '14:30', for the pause slate
   title: null, // the competition's name, for the slates
@@ -53,6 +57,9 @@ export function normalizeControl(raw) {
     competition: normalizeCompetition(control.competition),
     mode: MODES.includes(control.mode) ? control.mode : DEFAULT_CONTROL.mode,
     listGroup: text(control.listGroup, 40),
+    podiumGroup: text(control.podiumGroup, 40),
+    podiumClass: text(control.podiumClass, 100),
+    instant: control.instant === true,
     slate: SLATES.includes(control.slate) ? control.slate : DEFAULT_CONTROL.slate,
     pauseTime: /^\d{1,2}[:.]\d{2}$/.test(control.pauseTime ?? '') ? control.pauseTime.replace('.', ':') : null,
     title: text(control.title, 80),

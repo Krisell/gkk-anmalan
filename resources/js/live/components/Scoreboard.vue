@@ -3,7 +3,7 @@
     <div
       ref="board"
       class="board"
-      :class="{ 'strong-highlight': strongHighlight, compact }"
+      :class="{ 'strong-highlight': strongHighlight, compact, instant }"
       :style="{
         '--row-height': `${rowHeight}px`,
         '--columns': gridColumns,
@@ -93,6 +93,9 @@ const props = defineProps({
   fit: { type: Boolean, default: false },
   // The lifter's bodyweight before the club (the warm-up hall screen).
   showBodyWeight: { type: Boolean, default: false },
+  // No entrance animation, and another group replaces the list at once instead of folding it up and down (quick
+  // changes during the prize ceremony).
+  instant: { type: Boolean, default: false },
 })
 
 // What is shown. Normally the props, but when another group is chosen while the list is up, the list folds up, and
@@ -247,7 +250,7 @@ watch(
     const next = snapshot()
     if (switching) {
       pending = next
-    } else if (next.group !== view.value.group && body.value) {
+    } else if (next.group !== view.value.group && body.value && !props.instant) {
       void switchTo(next)
     } else {
       view.value = next
@@ -506,6 +509,18 @@ function cell(lifter, column) {
 
 .strong-highlight .lifter.active .name {
   color: #f6c945;
+}
+
+/* Shown at once. The rows keep the active lifter's pulse, which isn't an entrance. */
+.instant,
+.instant .body,
+.instant .group,
+.instant .lifter {
+  animation: none;
+}
+
+.strong-highlight.instant .lifter.active {
+  animation: active-pulse 2.4s ease-in-out infinite;
 }
 
 @keyframes active-pulse {

@@ -38,6 +38,9 @@ describe('normalizeControl', () => {
       competition: '3001',
       mode: 'slate',
       listGroup: 'Grupp 03',
+      podiumGroup: null,
+      podiumClass: null,
+      instant: false,
       slate: 'pause',
       pauseTime: '14:30',
       title: 'DM Klassisk styrkelyft 2026',
@@ -126,5 +129,18 @@ describe('isFreshCommand', () => {
     expect(isFreshCommand({ type: 'self-destruct', at: 100_000 }, 100_000)).toBe(false)
     expect(isFreshCommand({ type: 'pb' }, 100_000)).toBe(false)
     expect(isFreshCommand(null, 100_000)).toBe(false)
+  })
+})
+
+describe('prize ceremony', () => {
+  it('shows the podium of a class of a group', () => {
+    expect(
+      normalizeControl({ mode: 'podium', podiumGroup: ' Grupp 03 ', podiumClass: '74|Senior', instant: true }),
+    ).toMatchObject({ mode: 'podium', podiumGroup: 'Grupp 03', podiumClass: '74|Senior', instant: true })
+  })
+
+  it('animates changes unless turned off', () => {
+    expect(normalizeControl(null).instant).toBe(false)
+    expect(normalizeControl({ instant: 'yes' }).instant).toBe(false)
   })
 })

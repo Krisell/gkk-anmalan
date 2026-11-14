@@ -173,6 +173,15 @@
       <section v-if="groups.length" class="card">
         <h2>Resultat per grupp</h2>
         <p class="hint">Visar gruppens resultatlista i sändningen tills du väljer något annat.</p>
+        <label class="toggle">
+          <input type="checkbox" :checked="current.instant" @change="save({ instant: $event.target.checked })" />
+          <span>Utan animation – byten direkt, t.ex. under prisutdelningen</span>
+        </label>
+        <div class="choices">
+          <button class="button choice" :class="{ active: shown === 'hidden' }" @click="save({ mode: 'hidden' })">
+            Ingen grafik
+          </button>
+        </div>
         <div class="choices">
           <button
             v-for="group in groups"
@@ -185,6 +194,29 @@
             <span class="group-status" :class="group.status">{{ GROUP_STATUS[group.status] }}</span>
           </button>
         </div>
+
+        <h3>Pall{{ podiumGroup ? ` – ${podiumGroup.name}` : '' }}</h3>
+        <p class="hint">
+          Guld, silver och brons i en klass, nederst i bild. Uppifrån och ned efter placering, så det spelar ingen roll
+          hur lyftarna står på pallen.
+        </p>
+        <div v-if="podiumGroup" class="choices">
+          <button
+            v-for="podiumClass in podiumGroup.classes"
+            :key="podiumClass.key"
+            class="button choice"
+            :class="{
+              active:
+                current.mode === 'podium' &&
+                current.podiumGroup === podiumGroup.name &&
+                current.podiumClass === podiumClass.key,
+            }"
+            @click="save({ mode: 'podium', podiumGroup: podiumGroup.name, podiumClass: podiumClass.key })"
+          >
+            {{ podiumClass.label }}
+          </button>
+        </div>
+        <p v-else class="hint">Välj en grupp ovan, så visas dess klasser här.</p>
       </section>
 
       <section class="card">
@@ -314,6 +346,7 @@ import { DEFAULT_CONTROL, MESSAGE_MAX_LENGTH, normalizeCompetition, normalizeCon
 import { MUSIC_TRACKS } from '../pauseMusic.js'
 import { IMAGE_TEXT_MAX_LENGTH } from '../streamImages.js'
 import { normalizeResults } from '../normalize.js'
+import { podiumClasses } from '../podium.js'
 import { youTubeId } from '../sources/delayedSource.js'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
 
@@ -625,8 +658,23 @@ function remember(key, value) {
   }
 }
 
-// The competition's groups, for showing the results of another group (e.g. an earlier one), refreshed every minute.
+// The competition's groups, for showing the results of another group (e.g. an earlier one), and their classes, for the
+// podiums; refreshed every minute.
 const groups = ref([])
+// The group whose podiums are offered: the one whose podium or results list is shown, or was last (so that they stay
+// while switching to "Ingen grafik" and back during the ceremony).
+const lastPodiumGroup = ref(null)
+watch(
+  () =>
+    current.value.mode === 'podium'
+      ? current.value.podiumGroup
+      : current.value.mode === 'list'
+        ? current.value.listGroup
+        : null,
+  (name) => name && (lastPodiumGroup.value = name),
+  { immediate: true },
+)
+const podiumGroup = computed(() => groups.value.find((group) => group.name === lastPodiumGroup.value) ?? null)
 let groupsTimer = null
 
 async function loadGroups() {
@@ -637,7 +685,11 @@ async function loadGroups() {
         headers: { Accept: 'application/json' },
       })
       if (response.ok) {
-        groups.value = normalizeResults(await response.json()).map(({ name, status }) => ({ name, status }))
+        groups.value = normalizeResults(await response.json()).map(({ name, status, scoreboard }) => ({
+          name,
+          status,
+          classes: podiumClasses(scoreboard),
+        }))
       }
     } catch {
       // Keep the list we have.
