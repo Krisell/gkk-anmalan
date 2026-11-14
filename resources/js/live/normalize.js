@@ -5,6 +5,7 @@
  * Snapshot: {
  *   discipline: 'SQ' | 'BP' | 'DL' | null,   competition's current discipline
  *   group: string | null,
+ *   resultsGroup: string | null,             the group the scoresheet (lastResult, scoreboard) is of
  *   current: Attempt | null,                 lifter on the platform (next in line)
  *   next: Attempt | null,                    lifter after that
  *   order: [{ lifterId, name, team, discipline, attempt, weight }]   the lifting order, starting with current
@@ -61,6 +62,7 @@ export function normalizeFeed(raw) {
   return {
     discipline,
     group: toText(nextLifters.info?.current_group ?? scoresheet.info?.current_group),
+    resultsGroup: toText(scoresheet.info?.current_group),
     current: currentEntry ? normalizeCurrent(currentEntry, discipline, round) : null,
     next: nextEntry ? normalizeCurrent(nextEntry, discipline, null) : null,
     order: entries.map((entry, index) => {

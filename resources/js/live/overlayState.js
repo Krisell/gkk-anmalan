@@ -17,6 +17,9 @@
  * just before the result. Only a different lifter on the platform counts (the demo editor changes attempts in place),
  * and a lifter who is only moved back (a changed weight) isn't waited for: they are still in line.
  *
+ * When the secretariat switches group, the scoresheet's last lifts are the new group's, e.g. their last squat from an
+ * hour ago: they are old news like the baseline, not results (nor is the round over).
+ *
  * A recorded result gets endsRound when it was the last lift of a round: the lifter called next is on another
  * attempt or discipline, or nobody is called (the group is done). The overlay then shows the results list.
  */
@@ -30,6 +33,7 @@ export function initialOverlayState() {
     initialized: false,
     seenResultId: null,
     seenDecisionId: null,
+    resultsGroup: null,
     platform: null,
     awaiting: null,
     result: null,
@@ -45,6 +49,7 @@ export function reduceOverlayState(state, snapshot, now) {
       initialized: true,
       seenResultId: lastResult?.id ?? null,
       seenDecisionId: decision?.id ?? null,
+      resultsGroup: snapshot.resultsGroup ?? null,
       platform: snapshot.current,
       awaiting: null,
       result: null,
@@ -52,7 +57,10 @@ export function reduceOverlayState(state, snapshot, now) {
   }
 
   const newDecision = decision && decision.id !== state.seenDecisionId ? decision : null
-  const newResult = lastResult && lastResult.id !== state.seenResultId ? lastResult : null
+  const groupSwitched = Boolean(
+    state.resultsGroup && snapshot.resultsGroup && snapshot.resultsGroup !== state.resultsGroup,
+  )
+  const newResult = lastResult && lastResult.id !== state.seenResultId && !groupSwitched ? lastResult : null
   let result = state.result
 
   if (newResult) {
@@ -82,8 +90,9 @@ export function reduceOverlayState(state, snapshot, now) {
     initialized: true,
     seenResultId: lastResult?.id ?? state.seenResultId,
     seenDecisionId: decision?.id ?? state.seenDecisionId,
+    resultsGroup: snapshot.resultsGroup ?? state.resultsGroup,
     platform: snapshot.current,
-    awaiting: newResult || newDecision ? null : awaitedAttempt(state, snapshot, now),
+    awaiting: newResult || newDecision || groupSwitched ? null : awaitedAttempt(state, snapshot, now),
     result,
   }
 }

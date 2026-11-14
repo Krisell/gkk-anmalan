@@ -6,8 +6,8 @@ function attempt(id, extra = {}) {
   return { id, lifterId, name: `Lifter ${lifterId}`, attempts: [], outcome: null, ...extra }
 }
 
-function snapshot({ current = null, next = null, lastResult = null, decision = null } = {}) {
-  return { discipline: 'SQ', group: null, current, next, lastResult, decision }
+function snapshot({ current = null, next = null, lastResult = null, decision = null, resultsGroup = null } = {}) {
+  return { discipline: 'SQ', group: resultsGroup, resultsGroup, current, next, lastResult, decision }
 }
 
 const lights = (...values) => values.map((good) => ({ good, cards: [] }))
@@ -23,6 +23,31 @@ function run(snapshots) {
 }
 
 describe('reduceOverlayState', () => {
+  it("does not show the new group's old last lift when the secretariat switches group", () => {
+    const states = run([
+      snapshot({ current: attempt('5:BP3'), resultsGroup: 'Grupp 5' }),
+      // The last lift of group 5: shown, and it ends the round.
+      snapshot({ current: null, lastResult: attempt('5:BP3', { outcome: 'good' }), resultsGroup: 'Grupp 5' }),
+      // Switched to group 6, whose last lift was a squat long ago.
+      snapshot({
+        current: attempt('6:BP1'),
+        lastResult: attempt('9:SQ3', { discipline: 'SQ', attempt: 3, outcome: 'failed' }),
+        resultsGroup: 'Grupp 6',
+      }),
+      // Group 6's first bench is a result again.
+      snapshot({
+        current: attempt('7:BP1'),
+        lastResult: attempt('6:BP1', { outcome: 'good' }),
+        resultsGroup: 'Grupp 6',
+      }),
+    ])
+
+    expect(states[1].result.id).toBe('5:BP3')
+    expect(states[2].result.id).toBe('5:BP3')
+    expect(states[2].awaiting).toBeNull()
+    expect(states[3].result.id).toBe('6:BP1')
+  })
+
   it('does not show results that already existed when the overlay started', () => {
     const [state] = run([
       snapshot({

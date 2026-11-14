@@ -212,6 +212,7 @@ describe('normalizeFeed', () => {
     expect(normalizeFeed(empty)).toEqual({
       discipline: 'DL',
       group: 'Grupp 06',
+      resultsGroup: null,
       current: null,
       next: null,
       order: [],
@@ -227,6 +228,7 @@ describe('normalizeFeed', () => {
     expect(normalizeFeed(null)).toEqual({
       discipline: null,
       group: null,
+      resultsGroup: null,
       current: null,
       next: null,
       order: [],
