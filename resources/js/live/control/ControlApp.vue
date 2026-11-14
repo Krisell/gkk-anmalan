@@ -235,7 +235,7 @@
           <input type="checkbox" :checked="current.autoPb" @change="save({ autoPb: $event.target.checked })" />
           <span>
             Automatisk PB-stämpel – i sändningen och på hallens skärmar, några sekunder efter lyftarkortet och när
-            klockan startar, om försöket (eller totalen) slår lyftarens bästa registrerade resultat
+            klockan startar, om försöket slår lyftarens bästa registrerade resultat i grenen (inte totalen)
           </span>
         </label>
         <div class="choices">

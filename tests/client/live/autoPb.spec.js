@@ -21,6 +21,13 @@ describe('isPbAttempt', () => {
     expect(isPbAttempt(attempt({ weight: 65 }), BESTS)).toBe(false)
     expect(isPbAttempt(attempt(), { found: false })).toBe(false)
     expect(isPbAttempt(attempt(), undefined)).toBe(false)
+    // Only the lift counts: a deadlift below the best, with a total above the best total, is not a PB here.
+    const deadlift = attempt({
+      discipline: 'DL',
+      weight: 150,
+      lifts: { SQ: [{ weight: 150, outcome: 'good' }], BP: [{ weight: 70, outcome: 'good' }] },
+    })
+    expect(isPbAttempt(deadlift, { found: true, bests: { ...BESTS.bests, total: { value: 300 } } })).toBe(false)
   })
 })
 
@@ -28,11 +35,15 @@ describe('useAutoPb', () => {
   let scope
   let state
   let shown
+  let moments
+  let good
 
   beforeEach(() => {
     vi.useFakeTimers()
     shown = []
-    state = { attempt: ref(null), busy: ref(false), clock: ref(null), enabled: ref(true) }
+    state = { attempt: ref(null), busy: ref(false), clock: ref(null), enabled: ref(true), result: ref(null) }
+    moments = []
+    good = []
     scope = effectScope()
     scope.run(() =>
       useAutoPb({
@@ -41,7 +52,12 @@ describe('useAutoPb', () => {
         clock: () => state.clock.value,
         enabled: () => state.enabled.value,
         bestsFor: () => BESTS,
-        show: (shownAttempt) => shown.push(shownAttempt.id),
+        show: (shownAttempt, moment) => {
+          shown.push(shownAttempt.id)
+          moments.push(moment)
+        },
+        result: () => state.result.value,
+        showGood: (judged) => good.push(judged.id),
       }),
     )
   })
@@ -80,6 +96,7 @@ describe('useAutoPb', () => {
 
     await startClock()
     expect(shown).toEqual(['7:BP2', '7:BP2'])
+    expect(moments).toEqual(['card', 'clock'])
   })
 
   it('shows it after the call when there is no card (the same lifter again)', async () => {
@@ -131,5 +148,26 @@ describe('useAutoPb', () => {
     await uncover()
     vi.advanceTimersByTime(AFTER_CARD_MS)
     expect(shown).toEqual(['7:BP2', '8:BP2'])
+  })
+
+  it('says "NYTT PB!" once when a PB attempt is judged good', async () => {
+    state.result.value = attempt({ outcome: null })
+    await nextTick()
+    state.result.value = attempt({ outcome: 'good' })
+    await nextTick()
+    state.result.value = { ...attempt({ outcome: 'good' }), confirmed: true }
+    await nextTick()
+    expect(good).toEqual(['7:BP2'])
+  })
+
+  it('says nothing for a failed PB attempt, a good lift below the best, or when turned off', async () => {
+    state.result.value = attempt({ outcome: 'failed' })
+    await nextTick()
+    state.result.value = attempt({ id: '7:BP1', weight: 62.5, outcome: 'good' })
+    await nextTick()
+    state.enabled.value = false
+    state.result.value = attempt({ id: '7:BP3', weight: 70, outcome: 'good' })
+    await nextTick()
+    expect(good).toEqual([])
   })
 })

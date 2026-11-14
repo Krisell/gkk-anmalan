@@ -125,7 +125,7 @@
 
       <InfoStrap v-if="control.message" :key="control.message.id" :text="control.message.text" />
 
-      <PbStamp v-if="pb" :key="pb.key" :attempt="pb.attempt" side />
+      <PbStamp v-if="pb" :key="pb.key" :attempt="pb.attempt" :side="pb.side" :good="pb.good" />
 
       <DemoControls
         v-if="demoSource && showControls"
@@ -903,9 +903,11 @@ let pbTimer = null
 
 // Announced before the lift: the lifter called to the platform, with the weight they are about to attempt, also while
 // the previous lifter's result is still on screen.
-function showPb(attempt = feed?.snapshot.value?.current ?? displayed.value) {
+// By hand and when the clock starts it is to the right, off the lifter; a few seconds after the big lifter card, before
+// the lifter is at the bar, it is large in the middle; a PB attempt judged good gets "NYTT PB!" to the right.
+function showPb(attempt = feed?.snapshot.value?.current ?? displayed.value, { side = true, good = false } = {}) {
   clearTimeout(pbTimer)
-  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt }
+  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt, side, good }
   pbTimer = setTimeout(() => (pb.value = null), PB_MS)
 }
 
@@ -1025,7 +1027,9 @@ if (lifterBests) {
     clock: () => feed?.snapshot.value?.clock ?? null,
     enabled: () => control.value.autoPb,
     bestsFor: (lifterId) => lifterBests.bests.value[lifterId],
-    show: showPb,
+    show: (attempt, moment) => showPb(attempt, { side: moment !== 'card' }),
+    result: () => state.value.result,
+    showGood: (attempt) => showPb(attempt, { good: true }),
   })
 }
 

@@ -1,8 +1,8 @@
 <template>
-  <div class="pb" :class="{ side }">
+  <div class="pb" :class="{ side, good }">
     <div class="stamp">
-      <div class="text">PB ALERT</div>
-      <div v-if="detail" class="detail">{{ detail }}</div>
+      <div class="text">{{ good ? 'NYTT PB!' : 'PB ALERT' }}</div>
+      <div v-if="detail && !good" class="detail">{{ detail }}</div>
     </div>
   </div>
 </template>
@@ -17,6 +17,8 @@ const props = defineProps({
   // On the broadcast: to the right, above the referee lights, so that the lifter in the middle of the picture stays
   // visible (the stamp can come while they are on the platform). Centred otherwise (the hall screens).
   side: { type: Boolean, default: false },
+  // A PB attempt judged good: "NYTT PB!" in green, without the lifter (who is on screen with the result).
+  good: { type: Boolean, default: false },
 })
 
 const detail = computed(() => {
@@ -73,6 +75,16 @@ const detail = computed(() => {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #ffffff;
+}
+
+.pb.good {
+  --pb-ink: #4fd88a;
+}
+
+.good .stamp {
+  box-shadow:
+    0 0 0 4px rgba(20, 28, 54, 0.6),
+    0 0 60px rgba(79, 216, 138, 0.45);
 }
 
 .pb.side {
