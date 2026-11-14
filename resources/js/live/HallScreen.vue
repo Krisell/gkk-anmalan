@@ -160,8 +160,8 @@ const nextGroupFeed = competition ? useNextGroup(competition) : null
 
 const snapshot = computed(() => feed?.snapshot.value ?? null)
 
-// The live control's PB button (/live/control) stamps "PB ALERT" here too, with the lifter just judged (or, before any,
-// the one on the platform). Only the PB command is followed; the rest of the control is for the broadcast. The hall
+// The live control's PB button (/live/control) stamps "PB ALERT" here too: a PB attempt coming up, with the lifter on
+// the platform and the weight. Only the PB command is followed; the rest of the control is for the broadcast. The hall
 // screen doesn't report itself as on air (presence), and without Firebase it simply carries on.
 const PB_MS = 3400
 const pb = shallowRef(null)
@@ -172,7 +172,7 @@ if (competition && flag('pb')) {
     onCommand: (command) => {
       if (command.type === 'pb') {
         clearTimeout(pbTimer)
-        const attempt = judged.value ?? snapshot.value?.lastResult ?? snapshot.value?.current ?? null
+        const attempt = snapshot.value?.current ?? null
         pb.value = { key: (pb.value?.key ?? 0) + 1, attempt }
         pbTimer = setTimeout(() => (pb.value = null), PB_MS)
       }

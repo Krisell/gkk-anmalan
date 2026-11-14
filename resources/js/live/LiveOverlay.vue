@@ -893,15 +893,18 @@ function clearEditorResult() {
   state.value = { ...state.value, result: null }
 }
 
-// "PB ALERT" stamp, triggered with P for now (shown for the stamp's 3.4 s animation). The lifter on screen is
-// shown below it.
+// "PB ALERT" stamp, triggered with P or from the live control (shown for the stamp's 3.4 s animation): a PB attempt
+// coming up, with the lifter on the platform below it.
 const PB_MS = 3400
 const pb = shallowRef(null)
 let pbTimer = null
 
 function showPb() {
   clearTimeout(pbTimer)
-  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt: displayed.value }
+  // Announced before the lift: the lifter called to the platform, with the weight they are about to attempt, also while
+  // the previous lifter's result is still on screen.
+  const attempt = feed?.snapshot.value?.current ?? displayed.value
+  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt }
   pbTimer = setTimeout(() => (pb.value = null), PB_MS)
 }
 
