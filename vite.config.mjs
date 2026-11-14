@@ -42,6 +42,7 @@ export default defineConfig({
             'resources/js/app.js',
             'resources/js/live/live-overlay.js',
             'resources/js/live/control/live-control.js',
+            'resources/js/live/speaker/live-speaker.js',
           ],
           refresh: true,
         }),

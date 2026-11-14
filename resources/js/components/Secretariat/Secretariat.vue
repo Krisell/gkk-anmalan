@@ -519,6 +519,7 @@ import {
   Printer,
   RefreshCw,
   Ticket,
+  Trophy,
   Youtube,
 } from 'lucide-vue-next'
 import Platslapp from './Platslapp.vue'
@@ -560,6 +561,13 @@ const LINKS = [
     text: 'Bildspelet för hallens skärm – resultat, rekord och meddelanden.',
     href: '/slides-for-screen',
     host: '/slides-for-screen',
+  },
+  {
+    icon: Trophy,
+    title: 'Resultat för speakern',
+    text: 'Alla grupper per starttid, klass för klass – t.ex. för prisutdelningen.',
+    href: '/live/speaker',
+    host: '/live/speaker',
   },
 ]
 

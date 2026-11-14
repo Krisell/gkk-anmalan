@@ -291,3 +291,7 @@ test('many screens at one venue (one public IP) can poll the feed without being 
     }
     $this->getJson('/live/next-group/3001')->assertStatus(200);
 });
+
+test("the speaker's results are a page of their own at /live/speaker", function () {
+    $this->get('/live/speaker')->assertOk()->assertSee('id="live-speaker"', false);
+});

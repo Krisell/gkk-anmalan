@@ -323,6 +323,8 @@ Route::prefix('live')->controller(LiveOverlayController::class)->group(function 
     Route::get('overlay', 'show')->name('live.overlay');
     // The warm-up hall screen (the overlay page's ?view=hall), with a list of competitions to pick from.
     Route::get('hall', 'show')->name('live.hall');
+    // The speaker's results, e.g. for the prize ceremony: every group of a start time, not following the stream.
+    Route::view('speaker', 'live-speaker')->name('live.speaker');
     Route::get('competitions', 'competitions')->middleware('throttle:live-competitions');
     Route::get('feed/{competition}', 'feed')->whereNumber('competition')->middleware('throttle:live-feed')->name('live.feed');
     Route::get('results/{competition}', 'results')->whereNumber('competition')->middleware('throttle:live-feed');
