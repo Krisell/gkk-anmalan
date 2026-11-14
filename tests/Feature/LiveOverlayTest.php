@@ -295,3 +295,59 @@ test('many screens at one venue (one public IP) can poll the feed without being 
 test("the speaker's results are a page of their own at /live/speaker", function () {
     $this->get('/live/speaker')->assertOk()->assertSee('id="live-speaker"', false);
 });
+
+it("looks up the lifter's best classic results in the federation's database, without passing on the license", function () {
+    Http::fake([
+        'se.powerliftinglive.com/*' => Http::response(['lifters' => [[
+            'id' => '7', 'name' => 'Anna Andersson', 'group' => 'Grupp 3', 'license' => '010101ab1',
+        ]]]),
+        'data-api.styrkelyft.se/api/people*' => Http::response(['results' => [[
+            'id' => 55, 'first_name' => 'Anna', 'last_name' => 'Andersson', 'license_id' => '010101ab1',
+        ]]]),
+        'data-api.styrkelyft.se/api/results*' => Http::response(['results' => [
+            styrkelyftResult(['id' => 1, 'squat' => 120.0, 'benchpress' => 60.0, 'deadlift' => 150.0, 'total' => 330.0, 'group' => ['start' => '2025-03-01T10:00:00+01:00']]),
+            styrkelyftResult(['id' => 2, 'squat' => 125.0, 'benchpress' => 57.5, 'deadlift' => 145.0, 'total' => 327.5, 'group' => ['start' => '2025-10-01T10:00:00+01:00']]),
+            styrkelyftResult(['id' => 3, 'competition_type' => ['name' => 'CBP'], 'squat' => null, 'benchpress' => 62.5, 'deadlift' => null, 'total' => null, 'group' => ['start' => '2025-06-01T10:00:00+01:00']]),
+            // Equipped results and disqualifications don't count.
+            styrkelyftResult(['id' => 4, 'competition_type' => ['name' => 'EPL'], 'squat' => 200.0, 'group' => ['start' => '2025-07-01T10:00:00+01:00']]),
+            styrkelyftResult(['id' => 5, 'disqualified' => true, 'deadlift' => 200.0, 'group' => ['start' => '2025-08-01T10:00:00+01:00']]),
+        ]]),
+    ]);
+
+    $this->getJson('/live/lifter-bests/3261/7')
+        ->assertOk()
+        ->assertJsonMissingPath('license')
+        ->assertJson([
+            'lifter' => ['id' => '7', 'name' => 'Anna Andersson'],
+            'found' => true,
+            'competitions' => 3,
+            'bests' => [
+                'squat' => ['value' => 125, 'date' => '2025-10-01'],
+                'bench' => ['value' => 62.5, 'date' => '2025-06-01'],
+                'deadlift' => ['value' => 150, 'date' => '2025-03-01'],
+                'total' => ['value' => 330, 'date' => '2025-03-01'],
+            ],
+        ]);
+    expect(\json_encode($this->getJson('/live/lifter-bests/3261/7')->json()))->not->toContain('010101ab1');
+    Http::assertSent(fn (Request $request) => \str_contains($request->url(), 'license_id=010101ab1'));
+    Http::assertSent(fn (Request $request) => \str_contains($request->url(), 'person=55'));
+});
+
+it('says when the lifter is not in the federation database, or not in the competition', function () {
+    Http::fake([
+        'se.powerliftinglive.com/*' => Http::response(['lifters' => [['id' => '7', 'name' => 'Anna Andersson', 'license' => 'x']]]),
+        'data-api.styrkelyft.se/*' => Http::response(['results' => []]),
+    ]);
+
+    $this->getJson('/live/lifter-bests/3261/7')->assertOk()->assertJson(['found' => false]);
+    $this->getJson('/live/lifter-bests/3261/8')->assertNotFound();
+});
+
+it('reports when the federation database cannot be reached', function () {
+    Http::fake([
+        'se.powerliftinglive.com/*' => Http::response(['lifters' => [['id' => '7', 'name' => 'Anna Andersson', 'license' => 'x']]]),
+        'data-api.styrkelyft.se/*' => Http::response('', 500),
+    ]);
+
+    $this->getJson('/live/lifter-bests/3261/7')->assertStatus(502);
+});

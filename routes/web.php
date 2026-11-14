@@ -329,6 +329,7 @@ Route::prefix('live')->controller(LiveOverlayController::class)->group(function 
     Route::get('feed/{competition}', 'feed')->whereNumber('competition')->middleware('throttle:live-feed')->name('live.feed');
     Route::get('results/{competition}', 'results')->whereNumber('competition')->middleware('throttle:live-feed');
     Route::get('next-group/{competition}', 'nextGroup')->whereNumber('competition')->middleware('throttle:live-feed');
+    Route::get('lifter-bests/{competition}/{lifter}', 'lifterBests')->whereNumber(['competition', 'lifter'])->middleware('throttle:live-lifter-bests');
     // With license numbers, for the start lists and competition cards on /sek.
     Route::get('start-lists/{competition}', 'startLists')->whereNumber('competition')->middleware(['auth', AdminMiddleware::class]);
 });

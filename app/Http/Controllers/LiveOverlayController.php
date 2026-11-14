@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\StyrkelyftResults;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
@@ -117,6 +118,56 @@ class LiveOverlayController extends Controller
      */
     public function startLists(int $competition)
     {
+        $lifters = $this->startList($competition);
+
+        if ($lifters === null) {
+            return response()->json(['error' => 'Powerlifting Live is unavailable'], 502)->header('Cache-Control', 'no-store');
+        }
+
+        return response()->json(['lifters' => $lifters])->header('Cache-Control', 'no-store');
+    }
+
+    /**
+     * A lifter's best registered results in the Swedish Powerlifting Federation's results database, for the live
+     * control ("Kolla PB"): whether the attempt on the platform would be a personal best. Found by the license number
+     * in Powerlifting Live, which isn't passed on (it holds the date of birth); the results are public on
+     * data.styrkelyft.se anyway.
+     */
+    public function lifterBests(int $competition, int $lifter)
+    {
+        $lifters = $this->startList($competition);
+
+        if ($lifters === null) {
+            return response()->json(['error' => 'Powerlifting Live is unavailable'], 502)->header('Cache-Control', 'no-store');
+        }
+
+        $entry = collect($lifters)->first(fn ($candidate) => (string) ($candidate['id'] ?? '') === (string) $lifter);
+        $license = \trim((string) ($entry['license'] ?? ''));
+
+        if ($entry === null || $license === '') {
+            return response()->json(['error' => 'No license number for the lifter'], 404)->header('Cache-Control', 'no-store');
+        }
+
+        try {
+            $bests = StyrkelyftResults::personalBests($license);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return response()->json(['error' => 'The results database is unavailable'], 502)->header('Cache-Control', 'no-store');
+        }
+
+        return response()->json([
+            'lifter' => ['id' => (string) $entry['id'], 'name' => $entry['name'] ?? null],
+            'found' => $bests !== null,
+            ...($bests ?? []),
+        ])->header('Cache-Control', 'no-store');
+    }
+
+    /**
+     * Every lifter of the competition with the start list fields, or null when Powerlifting Live can't be reached.
+     */
+    private function startList(int $competition): ?array
+    {
         $lifters = Cache::remember("powerliftinglive.start-lists.{$competition}", self::RESULTS_CACHE_SECONDS, function () use ($competition) {
             $topics = $this->fetchTopics($competition, ['scoresheet' => 'scoresheet']);
 
@@ -128,11 +179,9 @@ class LiveOverlayController extends Controller
 
         if ($lifters === null) {
             Cache::forget("powerliftinglive.start-lists.{$competition}");
-
-            return response()->json(['error' => 'Powerlifting Live is unavailable'], 502)->header('Cache-Control', 'no-store');
         }
 
-        return response()->json(['lifters' => $lifters])->header('Cache-Control', 'no-store');
+        return $lifters;
     }
 
     /**

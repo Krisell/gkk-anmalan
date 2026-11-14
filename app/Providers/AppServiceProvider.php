@@ -54,6 +54,8 @@ class AppServiceProvider extends ServiceProvider
         // so this only guards against runaway clients: room for ~25 screens.
         RateLimiter::for('live-feed', fn (Request $request) => Limit::perMinute(2000)->by($request->ip()));
         RateLimiter::for('live-competitions', fn (Request $request) => Limit::perMinute(120)->by($request->ip()));
+        // A lifter's bests from the federation's results database, looked up from the live control (cached per lifter).
+        RateLimiter::for('live-lifter-bests', fn (Request $request) => Limit::perMinute(60)->by($request->ip()));
 
         // The screen slideshow polls a published snapshot of the slides and club records (see SlideshowSnapshot).
         Slide::saved(fn () => SlideshowSnapshot::publishSoon());

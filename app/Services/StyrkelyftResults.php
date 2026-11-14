@@ -309,6 +309,50 @@ class StyrkelyftResults
         return $records;
     }
 
+    /**
+     * A lifter's best registered classic results (CPL, and the bench press also from CBP), by license number, for the
+     * live control: whether the attempt on the platform would be a personal best. Null when the federation has no one
+     * with that license number. Today's competition isn't registered yet, so it is never counted.
+     *
+     * @return array{name: string, competitions: int, bests: array<string, array{value: float, date: string, competition: string}|null>}|null
+     */
+    public static function personalBests(string $license): ?array
+    {
+        return Cache::remember('styrkelyft.personal-bests.'.\md5(\mb_strtolower($license)), 15 * 60, function () use ($license) {
+            $person = self::get('https://data-api.styrkelyft.se/api/people', ['license_id' => $license])->json('results.0');
+
+            if (! \is_array($person) || ! isset($person['id'])) {
+                return null;
+            }
+
+            $results = collect(self::get(self::API, ['person' => $person['id'], 'page_size' => self::PAGE_SIZE])->json('results') ?? [])
+                ->filter(fn ($result) => \is_array($result) && ! ($result['disqualified'] ?? false))
+                ->map(fn ($result) => self::normalize($result))
+                ->filter(fn ($result) => $result !== null && \in_array($result['type'], ['CPL', 'CBP'], true));
+
+            $bests = [];
+
+            foreach (\array_keys(self::LIFTS) as $lift) {
+                $best = $results
+                    ->filter(fn ($result) => $result[$lift] !== null)
+                    // The heaviest, and the first time it was lifted.
+                    ->sortBy([[$lift, 'desc'], ['date', 'asc']])
+                    ->first();
+                $bests[$lift] = $best === null ? null : [
+                    'value' => $best[$lift],
+                    'date' => $best['date'],
+                    'competition' => $best['competition'],
+                ];
+            }
+
+            return [
+                'name' => \trim(($person['first_name'] ?? '').' '.($person['last_name'] ?? '')),
+                'competitions' => $results->count(),
+                'bests' => $bests,
+            ];
+        });
+    }
+
     public static function key(string $gender, string $weightClass, string $event): string
     {
         return $gender.'|'.$weightClass.'|'.$event;

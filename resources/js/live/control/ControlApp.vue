@@ -219,6 +219,42 @@
         <p v-else class="hint">Välj en grupp ovan, så visas dess klasser här.</p>
       </section>
 
+      <section v-if="platform" class="card">
+        <h2>Lyftaren på tur</h2>
+        <p class="on-air chosen">
+          {{ platform.name }} · {{ disciplineName(platform.discipline) }} försök {{ platform.attempt }} ·
+          {{ formatWeight(platform.weight) }} kg
+        </p>
+        <p class="hint">
+          Bästa registrerade resultat (klassiskt) i förbundets resultatdatabas, data.styrkelyft.se. Dagens tävling är
+          inte med. Hämtas av sig självt på sista försöket i varje gren.
+        </p>
+        <div class="choices">
+          <button class="button action" :disabled="bestsState.loading" @click="loadBests(platform.lifterId, true)">
+            {{ bestsState.loading ? 'Hämtar…' : 'Kolla PB' }}
+          </button>
+        </div>
+        <p v-if="bestsState.error" class="error">{{ bestsState.error }}</p>
+        <template v-else-if="platformBests">
+          <p v-if="!platformBests.found" class="hint">Finns inte i resultatdatabasen (ingen licens hittad).</p>
+          <template v-else>
+            <ul class="bests">
+              <li v-for="row in platformComparison" :key="row.key" :class="row.verdict">
+                <span>{{ row.label }} {{ formatWeight(row.weight) }} kg</span>
+                <strong>{{ VERDICTS[row.verdict] }}</strong>
+                <span v-if="row.best" class="best-from">
+                  Bästa {{ formatWeight(row.best.value) }} kg · {{ row.best.competition }} {{ row.best.date }}
+                </span>
+              </li>
+            </ul>
+            <p class="hint">
+              Alla bästa: knäböj {{ bestText('squat') }} · bänk {{ bestText('bench') }} · mark
+              {{ bestText('deadlift') }} · total {{ bestText('total') }} ({{ platformBests.competitions }} tävlingar)
+            </p>
+          </template>
+        </template>
+      </section>
+
       <section class="card">
         <h2>Snabbknappar</h2>
         <div class="choices">
@@ -345,10 +381,12 @@ import { SIGN_IN_APPS, emulatorHost, liveDatabase } from '../remote/firebase.js'
 import { DEFAULT_CONTROL, MESSAGE_MAX_LENGTH, normalizeCompetition, normalizeControl } from '../remote/controlState.js'
 import { MUSIC_TRACKS } from '../pauseMusic.js'
 import { IMAGE_TEXT_MAX_LENGTH } from '../streamImages.js'
-import { normalizeResults } from '../normalize.js'
+import { normalizeFeed, normalizeResults } from '../normalize.js'
 import { podiumClasses } from '../podium.js'
 import { youTubeId } from '../sources/delayedSource.js'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
+import { AUTO_ATTEMPT, compareWithBests } from './personalBest.js'
+import { disciplineName, formatWeight } from '../format.js'
 
 // "Visas nu": the overlay's mode, with the slates as separate choices.
 const SHOWN = [
@@ -705,11 +743,89 @@ watch(previewCompetition, (competition, previous) => {
   }
 })
 
+// The lifter on the platform, from the feed (polled while signed in), and their best registered results, looked up
+// on "Kolla PB" or by themselves on a discipline's last attempt. Kept per lifter for the session; the server caches
+// them too.
+const VERDICTS = { pb: 'Nytt PB', equal: 'Tangerar PB', below: 'Under PB', first: 'Första registrerade' }
+const platform = ref(null)
+const bests = ref({})
+const bestsState = reactive({ loading: false, error: null })
+let platformTimer = null
+
+async function loadPlatform() {
+  clearTimeout(platformTimer)
+  if (signedIn.value && previewCompetition.value) {
+    try {
+      const response = await fetch(`/live/feed/${encodeURIComponent(previewCompetition.value)}`, {
+        headers: { Accept: 'application/json' },
+      })
+      if (response.ok) {
+        platform.value = normalizeFeed(await response.json()).current
+      }
+    } catch {
+      // Keep the lifter we have.
+    }
+  }
+  platformTimer = setTimeout(loadPlatform, 5000)
+}
+
+async function loadBests(lifterId, again = false) {
+  if (!lifterId || !previewCompetition.value || (bests.value[lifterId] && !again)) {
+    return
+  }
+  bestsState.loading = true
+  bestsState.error = null
+  try {
+    const response = await fetch(
+      `/live/lifter-bests/${encodeURIComponent(previewCompetition.value)}/${encodeURIComponent(lifterId)}`,
+      { headers: { Accept: 'application/json' } },
+    )
+    if (response.status === 404) {
+      bests.value = { ...bests.value, [lifterId]: { found: false } }
+    } else if (!response.ok) {
+      throw new Error()
+    } else {
+      bests.value = { ...bests.value, [lifterId]: await response.json() }
+    }
+  } catch {
+    bestsState.error = 'Kunde inte hämta från resultatdatabasen. Försök igen.'
+  } finally {
+    bestsState.loading = false
+  }
+}
+
+const platformBests = computed(() => (platform.value ? (bests.value[platform.value.lifterId] ?? null) : null))
+const platformComparison = computed(() => compareWithBests(platform.value, platformBests.value?.bests))
+
+function bestText(lift) {
+  const best = platformBests.value?.bests?.[lift]
+  return best ? `${formatWeight(best.value)} kg` : '–'
+}
+
+watch(
+  () => platform.value && `${platform.value.lifterId}:${platform.value.discipline}${platform.value.attempt}`,
+  () => {
+    bestsState.error = null
+    if (platform.value?.attempt === AUTO_ATTEMPT) {
+      void loadBests(platform.value.lifterId)
+    }
+  },
+)
+
+watch(previewCompetition, () => {
+  platform.value = null
+  bests.value = {}
+})
+
 let ticker = null
-onMounted(() => (ticker = setInterval(() => (now.value = Date.now()), 5000)))
+onMounted(() => {
+  ticker = setInterval(() => (now.value = Date.now()), 5000)
+  void loadPlatform()
+})
 onBeforeUnmount(() => {
   clearInterval(ticker)
   clearTimeout(groupsTimer)
+  clearTimeout(platformTimer)
   observer?.disconnect()
   unsubscribes.forEach((unsubscribe) => unsubscribe())
 })
@@ -885,6 +1001,45 @@ h3 {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: var(--silver);
+}
+
+.bests {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bests li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 10px 14px;
+  border-left: 4px solid var(--silver);
+  border-radius: 8px;
+  background: var(--navy-deep);
+  font-size: 18px;
+}
+
+.bests li.pb,
+.bests li.first {
+  border-left-color: var(--good);
+}
+
+.bests li.pb strong {
+  color: #6fd59a;
+}
+
+.bests li.below strong {
+  color: var(--silver);
+}
+
+.best-from {
+  flex-basis: 100%;
+  font-size: 14px;
   color: var(--silver);
 }
 
