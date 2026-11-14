@@ -74,7 +74,9 @@
           </ol>
         </section>
 
-        <!-- Over the list, one at a time (the one leaving fades out before the next comes in):
+        <!-- Over the list (but below the lifting order, which stays visible, e.g. for the speaker: the next lifter is
+             often called while the lights are still up), one at a time (the one leaving fades out before the next
+             comes in):
              - the referee lights, very large in the middle, with the card of the lifter being judged: each lamp as its
                referee decides, then the decision,
              - the large lifter card when a new lifter is called to the platform, as on the broadcast. -->
@@ -87,14 +89,20 @@
           :duration="{ enter: lights ? FADE_MS : 2800, leave: lights ? FADE_MS : FLIP_OUT_MS }"
           @after-enter="(el) => el.classList.contains('verdict') && (lampsShown = true)"
         >
-          <div v-if="lights" key="lights" class="verdict">
+          <div v-if="lights" key="lights" class="verdict" :style="belowOrder">
             <!-- The lamps come once the card is in, so it is always clear whose lift it was; their place is kept. -->
             <div class="lamps-slot">
               <RefereePanel v-if="lampsShown" :lights="lights" large />
             </div>
             <LifterIntro v-if="judged" :key="judged.lifterId" :attempt="judged" class="verdict-card" />
           </div>
-          <LifterIntro v-else-if="intro" :key="intro.lifterId" :attempt="intro" class="hall-intro" />
+          <LifterIntro
+            v-else-if="intro"
+            :key="intro.lifterId"
+            :attempt="intro"
+            class="hall-intro"
+            :style="belowOrder"
+          />
         </Transition>
 
         <!-- Old data stays up (better than an empty screen in the warm-up hall), but says how old it is. -->
@@ -173,6 +181,8 @@ const orderLayout = computed(() => {
 const orderHeight = computed(() =>
   order.value.length ? orderLayout.value.rows * (orderLayout.value.rowHeight + 6) - 6 + 24 + 4 : 0,
 )
+// The lights and the lifter card are centered in the space below the lifting order, which stays above them.
+const belowOrder = computed(() => ({ top: `${orderHeight.value}px` }))
 
 // The canvas is 1920 px wide and as high as the frame's shape allows (on the club's TV, the slideshow's bar takes some
 // of the height), so that no space is lost to bands at the sides or top.
@@ -352,6 +362,8 @@ const staleSince = computed(() => {
   position: absolute;
   top: 0;
   left: 0;
+  /* Above the scrim, the lights and the lifter card. */
+  z-index: 3;
   width: 1920px;
   box-sizing: border-box;
   display: flex;
