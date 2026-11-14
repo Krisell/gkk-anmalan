@@ -26,6 +26,10 @@
               <span class="order-weight">{{ formatWeight(entry.weight) }}</span>
             </li>
           </ol>
+          <!-- The attempt clock, while it runs. -->
+          <span v-if="clockLeft != null" class="clock" :class="{ ending: clockLeft <= CLOCK_ENDING_SECONDS }">
+            {{ clockText }}
+          </span>
         </section>
 
         <div class="board-area" :style="{ top: `${orderHeight}px`, height: `${boardHeight}px` }">
@@ -285,6 +289,38 @@ const now = ref(Date.now())
 const ticker = setInterval(() => (now.value = Date.now()), 5000)
 onBeforeUnmount(() => clearInterval(ticker))
 
+// Attempt clock (?clock=0 turns it off): Powerlifting Live publishes the seconds left when it starts, and the screen
+// counts down from there, as the broadcast does (LowerThird.vue). Unlike the broadcast, it shows the last seconds too
+// (in red): this is for the lifters and coaches.
+const CLOCK_ENDING_SECONDS = 10
+const showClock = flag('clock')
+const clockEndsAt = ref(null)
+const clockNow = ref(Date.now())
+let clockTicker = null
+watch(
+  () => (showClock ? (snapshot.value?.clock ?? null) : null),
+  (seconds) => {
+    clearInterval(clockTicker)
+    clockNow.value = Date.now()
+    clockEndsAt.value = seconds ? clockNow.value + seconds * 1000 : null
+    if (seconds) {
+      clockTicker = setInterval(() => (clockNow.value = Date.now()), 200)
+    }
+  },
+)
+onBeforeUnmount(() => clearInterval(clockTicker))
+const clockLeft = computed(() => {
+  if (!clockEndsAt.value) {
+    return null
+  }
+  const left = Math.ceil((clockEndsAt.value - clockNow.value) / 1000)
+  return left > 0 ? left : null
+})
+const clockText = computed(() => {
+  const left = clockLeft.value ?? 0
+  return `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`
+})
+
 const staleSince = computed(() => {
   const times = [feed?.lastSuccessAt.value, nextGroupFeed?.lastSuccessAt.value].filter((at) => at != null)
   const oldest = times.length ? Math.min(...times) : null
@@ -396,6 +432,27 @@ const staleSince = computed(() => {
   font-size: calc(var(--row) * 0.58);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+/* Centered on the first line, as tall as it. */
+.clock {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: var(--row);
+  padding: 0 16px;
+  border-radius: 6px;
+  background: #f6c945;
+  color: var(--overlay-navy);
+  font-family: var(--overlay-font);
+  font-size: calc(var(--row) * 0.8);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.clock.ending {
+  background: var(--overlay-failed);
+  color: #ffffff;
 }
 
 .board-area {
