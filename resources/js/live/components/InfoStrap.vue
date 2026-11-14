@@ -1,6 +1,5 @@
 <template>
   <div class="info">
-    <span class="eyebrow">Info</span>
     <span class="text">{{ text }}</span>
   </div>
 </template>
@@ -26,21 +25,10 @@ defineProps({
   border-radius: 10px;
   overflow: hidden;
   background: var(--overlay-panel);
+  /* The silver edge marks it as a message. */
+  border-left: 12px solid var(--overlay-silver);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4);
   animation: info-in var(--motion-slow) var(--motion-enter) both;
-}
-
-.eyebrow {
-  display: flex;
-  align-items: center;
-  padding: 0 22px;
-  background: var(--overlay-silver);
-  font-family: var(--overlay-font);
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--overlay-navy-deep);
 }
 
 .text {
