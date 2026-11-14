@@ -1,7 +1,9 @@
 <template>
   <div class="pb-badge" :class="{ good }">
     <Transition name="flip" mode="out-in">
-      <span :key="good ? 'good' : 'attempt'" class="label">{{ good ? 'Nytt PB!' : 'PB-försök' }}</span>
+      <span :key="good ? 'good' : 'attempt'" class="label">
+        <span v-for="line in good ? ['Nytt', 'PB!'] : ['PB-', 'försök']" :key="line" class="line">{{ line }}</span>
+      </span>
     </Transition>
   </div>
 </template>
@@ -15,7 +17,8 @@ defineProps({
 
 <style scoped>
 /*
-  "PB-försök" on the broadcast during a PB attempt: on the left, clear of the lifter in the middle, blinking slowly
+  "PB-försök" on the broadcast during a PB attempt: bottom left, next to the lifter's lower third (and clear of the
+  lifter and the spotters in the picture), in two lines to fit beside it, blinking slowly
   until the decision. A good lift flips it over into "NYTT PB!"; a failed one just fades it away.
 */
 .pb-badge {
@@ -23,9 +26,9 @@ defineProps({
   --pb-glow: rgba(245, 197, 66, 0.5);
 
   position: absolute;
-  top: 300px;
+  bottom: var(--safe-y);
   left: var(--safe-x);
-  padding: 12px 34px 14px;
+  padding: 12px 26px 14px;
   border: 6px solid var(--pb-ink);
   border-radius: 14px;
   background: rgba(20, 28, 54, 0.82);
@@ -43,9 +46,9 @@ defineProps({
 .label {
   display: block;
   font-family: var(--overlay-font);
-  font-size: 64px;
+  font-size: 52px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 0.95;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -110,6 +113,10 @@ defineProps({
   transform: translateX(-40px);
 }
 
+.line {
+  display: block;
+}
+
 @keyframes badge-in {
   from {
     opacity: 0;
@@ -149,7 +156,7 @@ defineProps({
   }
   to {
     opacity: 0;
-    transform: scale(1.5, 2);
+    transform: scale(1.35);
   }
 }
 </style>
