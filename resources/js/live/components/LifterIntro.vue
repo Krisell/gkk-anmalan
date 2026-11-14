@@ -383,15 +383,20 @@ const rows = computed(() =>
   opacity: 0;
 }
 
+/* A label on the panel colour, so that it reads over any picture. */
 .upcoming-title {
+  display: inline-block;
   margin-bottom: 10px;
+  padding: 8px 18px 7px;
+  border-radius: 8px;
+  background: var(--overlay-panel-deep);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
   font-family: var(--overlay-font);
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--overlay-silver);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  color: #ffffff;
 }
 
 .upcoming-list {

@@ -36,6 +36,7 @@ const detail = computed(() => {
 /* A rubber stamp across the middle of the screen: it drops in large, lands with a small bounce, then fades. */
 .pb {
   --pb-ink: #f5c542;
+  --pb-rotate: -12deg;
 
   position: absolute;
   inset: 0;
@@ -54,7 +55,7 @@ const detail = computed(() => {
     0 0 60px rgba(245, 197, 66, 0.45);
   color: var(--pb-ink);
   text-align: center;
-  transform: rotate(-12deg);
+  transform: rotate(var(--pb-rotate));
   animation:
     stamp-in 450ms cubic-bezier(0.2, 0.8, 0.3, 1.2) both,
     stamp-out 400ms ease-in 3000ms both;
@@ -113,8 +114,13 @@ const detail = computed(() => {
   top: 0;
   right: 0;
   display: block;
-  transform: translate(34%, -72%);
+  transform: translate(46%, -88%);
   z-index: 1;
+}
+
+/* Tilted the other way, up from the corner. */
+.pb.corner {
+  --pb-rotate: 12deg;
 }
 
 .corner .stamp {
@@ -130,22 +136,22 @@ const detail = computed(() => {
 @keyframes stamp-in {
   from {
     opacity: 0;
-    transform: rotate(-12deg) scale(2.4);
+    transform: rotate(var(--pb-rotate)) scale(2.4);
   }
   60% {
     opacity: 1;
-    transform: rotate(-12deg) scale(0.94);
+    transform: rotate(var(--pb-rotate)) scale(0.94);
   }
   to {
     opacity: 1;
-    transform: rotate(-12deg) scale(1);
+    transform: rotate(var(--pb-rotate)) scale(1);
   }
 }
 
 @keyframes stamp-out {
   to {
     opacity: 0;
-    transform: rotate(-12deg) scale(1.08);
+    transform: rotate(var(--pb-rotate)) scale(1.08);
   }
 }
 </style>
