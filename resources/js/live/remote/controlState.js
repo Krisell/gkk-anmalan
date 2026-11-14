@@ -13,8 +13,9 @@ import { IMAGE_TEXT_MAX_LENGTH, STREAM_IMAGES } from '../streamImages.js'
 
 // What the overlay shows: 'auto' (follows the competition), 'hidden' (no graphics at all), 'list' (the results list),
 // 'slate' (a full-screen message, see SLATES), 'image' (one of the stream's images from /sek, see IMAGES) or
-// 'slideshow' (the club's slideshow, as on the hall's screen, controlled from /admin/slideshow).
-export const MODES = ['auto', 'hidden', 'list', 'slate', 'image', 'slideshow']
+// 'slideshow' (the club's slideshow, as on the hall's screen, controlled from /admin/slideshow) or 'schedule' (the
+// slideshow's DM 2026 slide with the day's schedule, on the stream only: the hall's screens are left alone).
+export const MODES = ['auto', 'hidden', 'list', 'slate', 'image', 'slideshow', 'schedule']
 export const SLATES = ['start', 'pause', 'end']
 export const IMAGES = [...Object.keys(STREAM_IMAGES), 'custom']
 export const COMMANDS = ['pb', 'skip', 'list', 'commentators']

@@ -180,6 +180,10 @@ There is one slideshow control, so the stream and the hall's screen show the sam
 is a web page shown instead of the slideshow (_Visa en webbsida_, e.g. the warm-up hall screen): the stream keeps
 showing the slides. In the slideshow's live control the stream is listed among the screens as _Sändningen: …_.
 
+_Tidsschema_ (under _Bilder_) shows only the DM slide with the day's schedule, on the stream only: a second frame,
+`/slideshow?stream=1&slide=dm2026`, holds that slide whatever the slideshow control does, without its message, and
+isn't listed among the screens. The hall's screens are left alone.
+
 ### Scene transition (stinger)
 
 `obs/gkk-stinger.webm` is a 1.2-second transition in club colours: diagonal bands sweep across, cover the whole

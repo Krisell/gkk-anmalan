@@ -57,6 +57,10 @@ describe('normalizeControl', () => {
     expect(normalizeControl({ mode: 'slideshow' }).mode).toBe('slideshow')
   })
 
+  it("can show the day's schedule", () => {
+    expect(normalizeControl({ mode: 'schedule' }).mode).toBe('schedule')
+  })
+
   it('can show one of the stream images, but only a known one', () => {
     expect(normalizeControl({ mode: 'image', image: 'pause' })).toMatchObject({ mode: 'image', image: 'pause' })
     expect(normalizeControl({ mode: 'image', image: 'lunch', imageText: '   ' })).toMatchObject({

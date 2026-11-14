@@ -289,10 +289,14 @@ let slideInterval = null
 // in the hall and on the stream, except a web page shown on the hall's screen (e.g. the warm-up hall screen): the
 // stream keeps showing the slides. It reports itself as "Sändningen", and the control page's preview of the overlay
 // (&preview=1) doesn't report itself at all.
+//
+// With &slide=<key> (the live control's Tidsschema, e.g. slide=dm2026) the stream shows only that slide, whatever the
+// hall's screens show: no rotation, no message, and it doesn't report itself (it is not one of the slideshow's screens).
 const params = new URLSearchParams(window.location.search)
 const stream = params.get('stream') === '1'
+const streamSlide = stream ? params.get('slide') : null
 const remote = useSlideshowRemote({
-  presence: params.get('preview') !== '1',
+  presence: params.get('preview') !== '1' && !streamSlide,
   onCommand: ({ type }) => {
     if (type === 'next') {
       nextSlide()
@@ -303,7 +307,13 @@ const remote = useSlideshowRemote({
     }
   },
 })
-const control = stream ? computed(() => ({ ...remote.control.value, page: null })) : remote.control
+const control = stream
+  ? computed(() => ({
+      ...remote.control.value,
+      page: null,
+      ...(streamSlide ? { slide: streamSlide, paused: true, message: null } : {}),
+    }))
+  : remote.control
 const report = stream ? (entry) => remote.report({ ...entry, showing: `Sändningen: ${entry.showing}` }) : remote.report
 const { serverNow } = remote
 

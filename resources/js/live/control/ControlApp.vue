@@ -134,7 +134,8 @@
         <h3>Bilder</h3>
         <p class="hint">
           Samma bilder som på <a href="/sek" target="_blank" rel="noopener">/sek</a>, över hela bilden. Paus visar när
-          nästa grupp startar; annars står datum och plats från Inställningar under rubriken.
+          nästa grupp startar; annars står datum och plats från Inställningar under rubriken. Tidsschema är bildspelets
+          DM-bild, bara i sändningen (hallens skärmar påverkas inte).
         </p>
         <div class="choices">
           <button
@@ -145,6 +146,9 @@
             @click="save({ mode: 'image', image: choice.image })"
           >
             {{ choice.label }}
+          </button>
+          <button class="button choice" :class="{ active: shown === 'schedule' }" @click="save({ mode: 'schedule' })">
+            Tidsschema
           </button>
         </div>
         <div class="message-row image-row">

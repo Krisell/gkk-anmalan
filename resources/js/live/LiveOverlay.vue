@@ -44,6 +44,16 @@
         tabindex="-1"
         aria-hidden="true"
       />
+      <!-- The day's schedule (the slideshow's DM 2026 slide on its own), loaded in the background in the same way. -->
+      <iframe
+        v-if="remote"
+        :src="scheduleUrl"
+        class="slideshow"
+        :class="{ shown: showSchedule }"
+        title="Tidsschema"
+        tabindex="-1"
+        aria-hidden="true"
+      />
 
       <Transition name="board">
         <Slate
@@ -136,7 +146,15 @@
     <!-- Our logo in the corner, on every view except the results list and the stream images (they have our logo) and
          the stinger (a transition). -->
     <CornerBug
-      v-if="view !== 'stinger' && view !== 'scoreboard' && !showScoreboard && !showSlideshow && !showImage && !hideAll"
+      v-if="
+        view !== 'stinger' &&
+        view !== 'scoreboard' &&
+        !showScoreboard &&
+        !showSlideshow &&
+        !showSchedule &&
+        !showImage &&
+        !hideAll
+      "
     />
 
     <!-- The stinger as an in-page transition when the results list or a slate comes or goes. -->
@@ -356,6 +374,9 @@ const slateTime = computed(() => (editorState ? demoPauseTime : control.value.pa
 // is hidden too. The preview on the control page doesn't report itself as one of the slideshow's screens.
 const showSlideshow = computed(() => remoteMode.value === 'slideshow')
 const slideshowUrl = `/slideshow?stream=1${flag('preview') ? '&preview=1' : ''}`
+// The day's schedule: the slideshow's DM 2026 slide, held on the stream only (the hall's screens are left alone).
+const showSchedule = computed(() => remoteMode.value === 'schedule')
+const scheduleUrl = '/slideshow?stream=1&slide=dm2026'
 
 // One of the stream's images, from the remote control. The pause image says when the next group starts, if that has
 // been set; otherwise the line under the title is the one given on the control page, or today's date.
@@ -371,7 +392,9 @@ const imageSubText = computed(() =>
 )
 
 // Full-screen graphics replace the lower third, the lifter card and the corner graphic while shown.
-const fullScreen = computed(() => showScoreboard.value || showSlate.value || showImage.value || showSlideshow.value)
+const fullScreen = computed(
+  () => showScoreboard.value || showSlate.value || showImage.value || showSlideshow.value || showSchedule.value,
+)
 
 // The competition's name: the demo editor's field, the remote control's, or ?title=….
 const eventTitle = computed(() => editorState?.title?.trim() || control.value.title || title || null)
@@ -432,8 +455,8 @@ watch(
   (result) => {
     const endsRound = result && (editorState ? editorState.lastInRound : result.confirmed && result.endsRound)
     const key = result && `${result.id}:${result.shownAt}`
-    // Not over a slate, an image or the slideshow chosen from the remote control.
-    const covered = ['slate', 'image', 'slideshow'].includes(remoteMode.value)
+    // Not over a slate, an image, the slideshow or the schedule chosen from the remote control.
+    const covered = ['slate', 'image', 'slideshow', 'schedule'].includes(remoteMode.value)
     if (!showRoundBoards || !control.value.roundBoards || !endsRound || key === roundBoardFor || covered) {
       return
     }
@@ -880,7 +903,7 @@ const hideAll = computed(() => remoteMode.value === 'hidden')
 watch(
   () => control.value.mode,
   (mode) => {
-    const fullScreenModes = ['list', 'slate', 'image', 'slideshow']
+    const fullScreenModes = ['list', 'slate', 'image', 'slideshow', 'schedule']
     if (fullScreenModes.includes(mode) || fullScreenModes.includes(remoteMode.value)) {
       withStinger(() => {
         remoteMode.value = mode
@@ -958,6 +981,9 @@ const onAir = computed(() => {
   }
   if (showSlideshow.value) {
     return 'Bildspel'
+  }
+  if (showSchedule.value) {
+    return 'Tidsschema'
   }
   if (showImage.value) {
     return `Bild: ${imageTitle.value}`
