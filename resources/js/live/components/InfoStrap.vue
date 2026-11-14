@@ -1,5 +1,5 @@
 <template>
-  <div class="info">
+  <div class="info" :class="{ small }">
     <span class="text">{{ text }}</span>
   </div>
 </template>
@@ -7,6 +7,8 @@
 <script setup>
 defineProps({
   text: { type: String, required: true },
+  // The permanent note: smaller, above the messages.
+  small: { type: Boolean, default: false },
 })
 </script>
 
@@ -16,9 +18,6 @@ defineProps({
   area, where nothing else is shown. It slides in and stays until it is taken down.
 */
 .info {
-  position: absolute;
-  top: var(--safe-y);
-  left: var(--safe-x);
   display: flex;
   align-items: stretch;
   max-width: 1300px;
@@ -37,6 +36,17 @@ defineProps({
   font-size: 40px;
   font-weight: 700;
   line-height: 1.1;
+}
+
+.info.small {
+  border-left-width: 8px;
+  border-radius: 8px;
+}
+
+.small .text {
+  padding: 9px 22px 10px;
+  font-size: 26px;
+  font-weight: 600;
 }
 
 @keyframes info-in {

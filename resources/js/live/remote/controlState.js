@@ -35,6 +35,7 @@ export const DEFAULT_CONTROL = Object.freeze({
   imageText: null, // the text of the custom image
   imageInfo: null, // the line under the images' title, e.g. the date and place
   message: null, // { id, text }: a message shown until it is taken down
+  note: null, // a small permanent note above the messages, e.g. that the sound is off
   commentators: [], // names for the commentator strap
   intros: true, // the big lifter card when a new lifter is called
   roundBoards: true, // the results list between rounds
@@ -68,6 +69,7 @@ export function normalizeControl(raw) {
     imageText: text(control.imageText, IMAGE_TEXT_MAX_LENGTH),
     imageInfo: text(control.imageInfo, 120),
     message: message ? { id: String(control.message.id ?? message), text: message } : null,
+    note: text(control.note, MESSAGE_MAX_LENGTH),
     commentators: parseNames(control.commentators),
     intros: control.intros !== false,
     roundBoards: control.roundBoards !== false,

@@ -131,7 +131,11 @@
         :names="commentators.names"
       />
 
-      <InfoStrap v-if="control.message" :key="control.message.id" :text="control.message.text" />
+      <!-- Top left: the permanent note, small, with the messages below it. -->
+      <div v-if="control.note || control.message" class="notices">
+        <InfoStrap v-if="control.note" :key="`note:${control.note}`" :text="control.note" small />
+        <InfoStrap v-if="control.message" :key="control.message.id" :text="control.message.text" />
+      </div>
 
       <PbStamp v-if="pb && !pb.corner" :key="pb.key" :attempt="pb.attempt" :side="pb.side" :good="pb.good" />
 
@@ -1218,6 +1222,16 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.notices {
+  position: absolute;
+  top: var(--safe-y);
+  left: var(--safe-x);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
 .backdrop {
   position: absolute;
   inset: 0;

@@ -324,6 +324,21 @@
           </button>
         </div>
         <p v-if="current.message" class="on-air">I sändning: ”{{ current.message.text }}”</p>
+
+        <h3>Fast notis</h3>
+        <p class="hint">Liten, ovanför meddelandena, och ligger kvar medan andra meddelanden visas och tas bort.</p>
+        <div class="message-row">
+          <input
+            v-model="draft.note"
+            class="grow"
+            :maxlength="MESSAGE_MAX_LENGTH"
+            placeholder="T.ex. Ljudet är tillsvidare avstängt"
+            @keydown.enter.prevent="saveNote"
+          />
+          <button class="button primary" :disabled="!draft.note.trim()" @click="saveNote">Visa</button>
+          <button class="button" :disabled="!current.note" @click="removeNote">Ta bort</button>
+        </div>
+        <p v-if="current.note" class="on-air">I sändning: ”{{ current.note }}”</p>
       </section>
 
       <section class="card">
@@ -439,6 +454,7 @@ const draft = reactive({
   title: '',
   pauseTime: '',
   message: '',
+  note: '',
   competition: '',
   imageText: '',
   imageInfo: '',
@@ -505,6 +521,7 @@ function listen() {
         draft.pauseTime = current.value.pauseTime ?? ''
         draft.imageText = current.value.imageText ?? ''
         draft.imageInfo = current.value.imageInfo ?? ''
+        draft.note = current.value.note ?? ''
         draft.musicVolume = current.value.musicVolume
       }
     }),
@@ -540,6 +557,18 @@ function showImageText() {
   if (text) {
     void save({ mode: 'image', image: 'custom', imageText: text })
   }
+}
+
+function saveNote() {
+  const text = draft.note.trim().slice(0, MESSAGE_MAX_LENGTH)
+  if (text) {
+    void save({ note: text })
+  }
+}
+
+function removeNote() {
+  draft.note = ''
+  void save({ note: null })
 }
 
 function showMessage(text) {
