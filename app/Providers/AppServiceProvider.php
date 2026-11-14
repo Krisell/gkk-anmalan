@@ -49,6 +49,12 @@ class AppServiceProvider extends ServiceProvider
         // the same network (the venue's), which must not use up the attempts.
         RateLimiter::for('live-control-pin', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
 
+        // The live screens and overlays poll the feed every second, all from the venue's one public IP: a plain
+        // throttle:300,1 (shared by all routes using it) ran out with about five screens. Upstream requests are cached,
+        // so this only guards against runaway clients: room for ~25 screens.
+        RateLimiter::for('live-feed', fn (Request $request) => Limit::perMinute(2000)->by($request->ip()));
+        RateLimiter::for('live-competitions', fn (Request $request) => Limit::perMinute(120)->by($request->ip()));
+
         // The screen slideshow polls a published snapshot of the slides and club records (see SlideshowSnapshot).
         Slide::saved(fn () => SlideshowSnapshot::publishSoon());
         Slide::deleted(fn () => SlideshowSnapshot::publishSoon());

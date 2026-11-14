@@ -280,3 +280,14 @@ it('keeps the license numbers of the start lists from guests and members', funct
 
     Http::assertNothingSent();
 });
+
+test('many screens at one venue (one public IP) can poll the feed without being throttled', function () {
+    $topics = powerliftingLiveTopics();
+    fakePowerliftingLive($topics);
+
+    // Eight screens polling the feed every second for a minute, plus the next group and results now and then.
+    foreach (\range(1, 480) as $i) {
+        $this->getJson('/live/feed/3001')->assertOk();
+    }
+    $this->getJson('/live/next-group/3001')->assertStatus(200);
+});
