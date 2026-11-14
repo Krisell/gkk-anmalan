@@ -1,8 +1,8 @@
 <template>
-  <div class="pb" :class="{ side, good }">
+  <div class="pb" :class="{ side, corner, good }">
     <div class="stamp">
       <div class="text">{{ good ? 'NYTT PB!' : 'PB ALERT' }}</div>
-      <div v-if="detail && !good" class="detail">{{ detail }}</div>
+      <div v-if="detail && !good && !corner" class="detail">{{ detail }}</div>
     </div>
   </div>
 </template>
@@ -17,6 +17,8 @@ const props = defineProps({
   // On the broadcast: to the right, above the referee lights, so that the lifter in the middle of the picture stays
   // visible (the stamp can come while they are on the platform). Centred otherwise (the hall screens).
   side: { type: Boolean, default: false },
+  // On the corner of the big lifter card (in LifterIntro's slot), which already says who and what weight.
+  corner: { type: Boolean, default: false },
   // A PB attempt judged good: "NYTT PB!" in green, without the lifter (who is on screen with the result).
   good: { type: Boolean, default: false },
 })
@@ -103,6 +105,26 @@ const detail = computed(() => {
 
 .side .detail {
   font-size: 32px;
+}
+
+/* Straddling the card's top right corner, over the weight. */
+.pb.corner {
+  inset: auto;
+  top: 0;
+  right: 0;
+  display: block;
+  transform: translate(34%, -72%);
+  z-index: 1;
+}
+
+.corner .stamp {
+  padding: 10px 36px 14px;
+  border-width: 9px;
+}
+
+.corner .text {
+  font-size: 104px;
+  white-space: nowrap;
 }
 
 @keyframes stamp-in {

@@ -96,17 +96,13 @@
             </div>
             <LifterIntro v-if="judged" :key="judged.lifterId" :attempt="judged" class="verdict-card" />
           </div>
-          <LifterIntro
-            v-else-if="intro"
-            :key="intro.lifterId"
-            :attempt="intro"
-            class="hall-intro"
-            :style="belowOrder"
-          />
+          <LifterIntro v-else-if="intro" :key="intro.lifterId" :attempt="intro" class="hall-intro" :style="belowOrder">
+            <PbStamp v-if="pb?.corner" :key="pb.key" :attempt="pb.attempt" corner />
+          </LifterIntro>
         </Transition>
 
         <!-- "PB ALERT" from the live control's PB button, as on the broadcast, over everything. -->
-        <PbStamp v-if="pb" :key="pb.key" :attempt="pb.attempt" />
+        <PbStamp v-if="pb && !pb.corner" :key="pb.key" :attempt="pb.attempt" />
 
         <!-- Old data stays up (better than an empty screen in the warm-up hall), but says how old it is. -->
         <div v-if="staleSince" class="stale">Ej uppdaterat sedan {{ staleSince }}</div>
@@ -356,9 +352,10 @@ const pb = shallowRef(null)
 let pbTimer = null
 onBeforeUnmount(() => clearTimeout(pbTimer))
 
-function showPb(attempt = snapshot.value?.current ?? null) {
+// Centred over everything, or (automatically when the lifter is called) on the corner of the lifter card.
+function showPb(attempt = snapshot.value?.current ?? null, { corner = false } = {}) {
   clearTimeout(pbTimer)
-  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt }
+  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt, corner }
   pbTimer = setTimeout(() => (pb.value = null), PB_MS)
 }
 
@@ -378,11 +375,12 @@ if (lifterBests) {
   )
   useAutoPb({
     attempt: () => snapshot.value?.current ?? null,
+    card: () => intro.value,
     busy: () => Boolean(intro.value || lights.value),
     clock: () => snapshot.value?.clock ?? null,
     enabled: () => remote.control.value.autoPb,
     bestsFor: (lifterId) => lifterBests.bests.value[lifterId],
-    show: showPb,
+    show: (attempt, moment) => showPb(attempt, { corner: moment === 'card' }),
   })
 }
 </script>

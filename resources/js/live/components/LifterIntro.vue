@@ -1,61 +1,79 @@
 <template>
   <div class="intro">
-    <div class="card">
-      <div class="main">
-        <div v-if="crest" class="brand">
-          <img :src="crest" :alt="attempt.team ?? ''" class="logo" />
-        </div>
+    <div class="card-place">
+      <div class="card">
+        <div class="main">
+          <div v-if="crest" class="brand">
+            <img :src="crest" :alt="attempt.team ?? ''" class="logo" />
+          </div>
 
-        <div class="who">
-          <div class="eyebrow">På flaket</div>
-          <div class="name" :class="{ long: (attempt.name ?? '').length > 18 }">
-            {{ attempt.name ?? 'Okänd lyftare' }}
+          <div class="who">
+            <div class="eyebrow">På flaket</div>
+            <div class="name" :class="{ long: (attempt.name ?? '').length > 18 }">
+              {{ attempt.name ?? 'Okänd lyftare' }}
+            </div>
+            <div v-if="meta.length" class="meta">
+              <span v-for="(part, index) in meta" :key="index" class="meta-part">{{ part }}</span>
+            </div>
           </div>
-          <div v-if="meta.length" class="meta">
-            <span v-for="(part, index) in meta" :key="index" class="meta-part">{{ part }}</span>
-          </div>
-        </div>
 
-        <div class="lift">
-          <div class="eyebrow">
-            <span v-if="discipline">{{ discipline }}</span>
-            <span v-if="attempt.attempt">Försök {{ attempt.attempt }}</span>
-          </div>
-          <div class="weight">
-            <span class="weight-value" :class="weightSize">{{ weight }}</span>
-            <span class="unit">kg</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="stats">
-        <!-- Three fixed places, filled from the right: the current discipline is always in the last one. -->
-        <div class="disciplines">
-          <div
-            v-for="(row, index) in rows"
-            :key="row.discipline"
-            class="stat discipline"
-            :data-discipline="row.discipline"
-            :style="{ gridColumn: 4 - (rows.length - index) }"
-          >
-            <div class="eyebrow">{{ row.name }}</div>
-            <div class="slots">
-              <div v-for="(slot, slotIndex) in row.slots" :key="slotIndex" class="slot" :class="slot.state">
-                {{ slot.label }}
-              </div>
+          <div class="lift">
+            <div class="eyebrow">
+              <span v-if="discipline">{{ discipline }}</span>
+              <span v-if="attempt.attempt">Försök {{ attempt.attempt }}</span>
+            </div>
+            <div class="weight">
+              <span class="weight-value" :class="weightSize">{{ weight }}</span>
+              <span class="unit">kg</span>
             </div>
           </div>
         </div>
 
-        <div class="spacer" />
+        <div class="stats">
+          <!-- Three fixed places, filled from the right: the current discipline is always in the last one. -->
+          <div class="disciplines">
+            <div
+              v-for="(row, index) in rows"
+              :key="row.discipline"
+              class="stat discipline"
+              :data-discipline="row.discipline"
+              :style="{ gridColumn: 4 - (rows.length - index) }"
+            >
+              <div class="eyebrow">{{ row.name }}</div>
+              <div class="slots">
+                <div v-for="(slot, slotIndex) in row.slots" :key="slotIndex" class="slot" :class="slot.state">
+                  {{ slot.label }}
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <div v-if="attempt.total" class="stat">
-          <div class="eyebrow">Total</div>
-          <div class="value">{{ formatWeight(attempt.total) }} <small>kg</small></div>
+          <div class="spacer" />
+
+          <div v-if="attempt.total" class="stat">
+            <div class="eyebrow">Total</div>
+            <div class="value">{{ formatWeight(attempt.total) }} <small>kg</small></div>
+          </div>
+          <div v-if="attempt.place" class="stat">
+            <div class="eyebrow">Placering</div>
+            <div class="value">{{ attempt.place }}</div>
+          </div>
         </div>
-        <div v-if="attempt.place" class="stat">
-          <div class="eyebrow">Placering</div>
-          <div class="value">{{ attempt.place }}</div>
+      </div>
+      <!-- On the card's corner, e.g. the PB stamp. -->
+      <slot />
+    </div>
+
+    <!-- On the broadcast: the next lifters in the lifting order, in the room below the card. -->
+    <div v-if="upcoming.length" class="upcoming" :class="{ leaving }">
+      <div class="upcoming-title">Därefter</div>
+      <div class="upcoming-list">
+        <div v-for="entry in upcoming" :key="entry.lifterId" class="upcoming-entry">
+          <div class="upcoming-name">{{ entry.name ?? 'Okänd lyftare' }}</div>
+          <div class="upcoming-lift">
+            <span v-if="entry.weight" class="upcoming-weight">{{ formatWeight(entry.weight) }} kg</span>
+            <span v-if="entry.attempt" class="upcoming-attempt">Försök {{ entry.attempt }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -71,6 +89,10 @@ import { disciplineName, formatWeight, formatWeightClass } from '../format.js'
 const props = defineProps({
   // The normalized Attempt of the lifter just called to the platform.
   attempt: { type: Object, required: true },
+  // The next lifters in the lifting order ({ lifterId, name, discipline, attempt, weight }), shown below the card.
+  upcoming: { type: Array, default: () => [] },
+  // The card is leaving (into the lower third): the list goes first.
+  leaving: { type: Boolean, default: false },
 })
 
 // The lifter's club crest, if we have one; no crest rather than ours (see clubs.js).
@@ -114,6 +136,10 @@ const rows = computed(() =>
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.card-place {
+  position: relative;
 }
 
 .card {
@@ -343,6 +369,83 @@ const rows = computed(() =>
   text-decoration-thickness: 2px;
 }
 
+/* Kept clear of the centered card, at the bottom of the picture. */
+.upcoming {
+  position: absolute;
+  left: 50%;
+  bottom: 64px;
+  width: 1320px;
+  transform: translateX(-50%);
+  transition: opacity 250ms ease-in;
+}
+
+.upcoming.leaving {
+  opacity: 0;
+}
+
+.upcoming-title {
+  margin-bottom: 10px;
+  font-family: var(--overlay-font);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--overlay-silver);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.upcoming-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.upcoming-entry {
+  min-width: 0;
+  padding: 14px 20px 16px;
+  border-radius: 10px;
+  background: var(--overlay-panel);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.upcoming-name {
+  font-family: var(--overlay-font);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.upcoming-lift {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 6px;
+  white-space: nowrap;
+}
+
+.upcoming-weight {
+  font-family: var(--overlay-font);
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.upcoming-attempt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--overlay-silver);
+}
+
 /* Enter: the card flips around into view, then its contents slide into place. */
 .intro-enter-active .card {
   animation: card-flip-in 1400ms var(--motion-enter) both;
@@ -378,6 +481,27 @@ const rows = computed(() =>
 
 .intro-enter-active .stats > * {
   animation: rise 700ms var(--motion-enter) 1050ms both;
+}
+
+.intro-enter-active .upcoming-title,
+.intro-enter-active .upcoming-entry {
+  animation: rise 600ms var(--motion-enter) 1400ms both;
+}
+
+.intro-enter-active .upcoming-entry:nth-child(2) {
+  animation-delay: 1480ms;
+}
+
+.intro-enter-active .upcoming-entry:nth-child(3) {
+  animation-delay: 1560ms;
+}
+
+.intro-enter-active .upcoming-entry:nth-child(4) {
+  animation-delay: 1640ms;
+}
+
+.intro-enter-active .upcoming-entry:nth-child(5) {
+  animation-delay: 1720ms;
 }
 
 @keyframes card-flip-in {

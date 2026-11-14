@@ -99,7 +99,15 @@
       </Transition>
 
       <Transition name="intro" :duration="{ enter: 2800, leave: 0 }">
-        <LifterIntro v-if="intro && displayed && !fullScreen && !commentators" :key="intro.id" :attempt="intro" />
+        <LifterIntro
+          v-if="intro && displayed && !fullScreen && !commentators"
+          :key="intro.id"
+          :attempt="intro"
+          :upcoming="introUpcoming"
+          :leaving="Boolean(exiting)"
+        >
+          <PbStamp v-if="pb?.corner && !exiting" :key="pb.key" :attempt="pb.attempt" corner />
+        </LifterIntro>
       </Transition>
 
       <Transition :name="exiting ? '' : 'panel'">
@@ -125,7 +133,7 @@
 
       <InfoStrap v-if="control.message" :key="control.message.id" :text="control.message.text" />
 
-      <PbStamp v-if="pb" :key="pb.key" :attempt="pb.attempt" :side="pb.side" :good="pb.good" />
+      <PbStamp v-if="pb && !pb.corner" :key="pb.key" :attempt="pb.attempt" :side="pb.side" :good="pb.good" />
 
       <DemoControls
         v-if="demoSource && showControls"
@@ -266,7 +274,12 @@ const title = params.get('title')
 // In the demo editor the lifter card is shown and hidden by hand instead.
 const showIntros = flag('intro', true) && !editorState && !scoreboardView && !standaloneView
 // How long the lifter introduction stays up (?introSeconds=N); shorter in the demo so the flow is quick to watch.
+// On air it stays INTRO_EXTRA_MS longer, unless the attempt clock is started: then it leaves after INTRO_MS (at once
+// if that has passed), so that the lifter on the way to the bar is seen.
 const INTRO_MS = (Number(params.get('introSeconds')) || (demoSource ? 3.5 : 5)) * 1000
+const INTRO_EXTRA_MS = demoSource ? 0 : 5000
+// The next lifters shown below the card.
+const INTRO_UPCOMING = 5
 // A competition photo standing in for the camera, so the demo shows the complete picture in a browser.
 // Hidden inside OBS (which exposes window.obsstudio), where the real camera or a test video is underneath.
 const showBackdrop = Boolean(demoSource || editorState) && flag('backdrop', !window.obsstudio)
@@ -297,6 +310,7 @@ const exiting = ref(null)
 let exitAnimations = []
 let introducedLifterId = null
 let introTimer = null
+let introShownAt = null
 
 watch(
   () => feed?.snapshot.value,
@@ -555,8 +569,27 @@ function considerIntro(attempt) {
   introducedLifterId = attempt.lifterId
   intro.value = attempt
   clearTimeout(introTimer)
-  introTimer = setTimeout(endIntro, INTRO_MS)
+  introShownAt = Date.now()
+  introTimer = setTimeout(endIntro, feed?.snapshot.value?.clock ? INTRO_MS : INTRO_MS + INTRO_EXTRA_MS)
 }
+
+// The clock started while the card is up: it leaves after INTRO_MS, not the extra time.
+watch(
+  () => Boolean(feed?.snapshot.value?.clock),
+  (running) => {
+    if (running && introShownAt != null && intro.value && !exiting.value) {
+      clearTimeout(introTimer)
+      introTimer = setTimeout(endIntro, Math.max(0, introShownAt + INTRO_MS - Date.now()))
+    }
+  },
+)
+
+// The lifters after the one on the card, in the lifting order.
+const introUpcoming = computed(() => {
+  const order = feed?.snapshot.value?.order ?? []
+  const index = intro.value ? order.findIndex((entry) => entry.lifterId === intro.value.lifterId) : -1
+  return index < 0 ? [] : order.slice(index + 1, index + 1 + INTRO_UPCOMING)
+})
 
 function cancelIntro() {
   if (editorState?.mode === 'card') {
@@ -564,6 +597,7 @@ function cancelIntro() {
   }
   endFlight()
   clearTimeout(introTimer)
+  introShownAt = null
   exitAnimations.forEach((animation) => animation.cancel())
   exitAnimations = []
   intro.value = null
@@ -572,6 +606,7 @@ function cancelIntro() {
 
 async function endIntro() {
   clearTimeout(introTimer)
+  introShownAt = null
   if (!intro.value || exiting.value) {
     return
   }
@@ -903,11 +938,15 @@ let pbTimer = null
 
 // Announced before the lift: the lifter called to the platform, with the weight they are about to attempt, also while
 // the previous lifter's result is still on screen.
-// By hand and when the clock starts it is to the right, off the lifter; a few seconds after the big lifter card, before
-// the lifter is at the bar, it is large in the middle; a PB attempt judged good gets "NYTT PB!" to the right.
-function showPb(attempt = feed?.snapshot.value?.current ?? displayed.value, { side = true, good = false } = {}) {
+// By hand and when the clock starts it is to the right, off the lifter; automatically when the lifter is called it is on
+// the corner of the big lifter card (corner), or without a card large in the middle, before the lifter is at the bar;
+// a PB attempt judged good gets "NYTT PB!" to the right.
+function showPb(
+  attempt = feed?.snapshot.value?.current ?? displayed.value,
+  { side = true, corner = false, good = false } = {},
+) {
   clearTimeout(pbTimer)
-  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt, side, good }
+  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt, side, corner, good }
   pbTimer = setTimeout(() => (pb.value = null), PB_MS)
 }
 
@@ -1015,6 +1054,7 @@ if (lifterBests) {
   )
   useAutoPb({
     attempt: () => feed?.snapshot.value?.current ?? null,
+    card: () => (exiting.value ? null : intro.value),
     busy: () =>
       Boolean(
         intro.value ||
@@ -1027,7 +1067,7 @@ if (lifterBests) {
     clock: () => feed?.snapshot.value?.clock ?? null,
     enabled: () => control.value.autoPb,
     bestsFor: (lifterId) => lifterBests.bests.value[lifterId],
-    show: (attempt, moment) => showPb(attempt, { side: moment !== 'card' }),
+    show: (attempt, moment) => showPb(attempt, { side: moment === 'clock', corner: moment === 'card' }),
     result: () => state.value.result,
     showGood: (attempt) => showPb(attempt, { good: true }),
   })

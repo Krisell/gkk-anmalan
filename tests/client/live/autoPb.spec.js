@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { effectScope, nextTick, ref } from 'vue'
-import { AFTER_CARD_MS, isPbAttempt, useAutoPb } from '../../../resources/js/live/autoPb.js'
+import { AFTER_CALL_MS, CARD_DELAY_MS, isPbAttempt, useAutoPb } from '../../../resources/js/live/autoPb.js'
 
 const BESTS = {
   found: true,
@@ -41,14 +41,22 @@ describe('useAutoPb', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     shown = []
-    state = { attempt: ref(null), busy: ref(false), clock: ref(null), enabled: ref(true), result: ref(null) }
+    state = {
+      attempt: ref(null),
+      card: ref(null),
+      busy: ref(false),
+      clock: ref(null),
+      enabled: ref(true),
+      result: ref(null),
+    }
     moments = []
     good = []
     scope = effectScope()
     scope.run(() =>
       useAutoPb({
         attempt: () => state.attempt.value,
-        busy: () => state.busy.value,
+        card: () => state.card.value,
+        busy: () => state.busy.value || Boolean(state.card.value),
         clock: () => state.clock.value,
         enabled: () => state.enabled.value,
         bestsFor: () => BESTS,
@@ -67,14 +75,16 @@ describe('useAutoPb', () => {
     vi.useRealTimers()
   })
 
-  async function call(next, { covered = true } = {}) {
+  // The lifter is called: with the big card (the default), or without it (e.g. the same lifter again).
+  async function call(next, { withCard = true, covered = false } = {}) {
     state.attempt.value = next
+    state.card.value = withCard ? next : null
     state.busy.value = covered
     await nextTick()
   }
 
-  async function uncover() {
-    state.busy.value = false
+  async function cardDown() {
+    state.card.value = null
     await nextTick()
   }
 
@@ -83,70 +93,79 @@ describe('useAutoPb', () => {
     await nextTick()
   }
 
-  it('shows the stamp a few seconds after the card is down, and again when the clock starts', async () => {
+  it('shows the stamp on the card once it is in, and again when the clock starts', async () => {
     await call(attempt())
-    vi.advanceTimersByTime(AFTER_CARD_MS * 2)
-    expect(shown).toEqual([]) // the card is still up
-
-    await uncover()
-    vi.advanceTimersByTime(AFTER_CARD_MS - 1)
+    vi.advanceTimersByTime(CARD_DELAY_MS - 1)
     expect(shown).toEqual([])
     vi.advanceTimersByTime(1)
-    expect(shown).toEqual(['7:BP2'])
+    expect(moments).toEqual(['card'])
+
+    await cardDown()
+    vi.advanceTimersByTime(AFTER_CALL_MS * 2)
+    expect(moments).toEqual(['card']) // not again after the card
 
     await startClock()
     expect(shown).toEqual(['7:BP2', '7:BP2'])
     expect(moments).toEqual(['card', 'clock'])
   })
 
-  it('shows it after the call when there is no card (the same lifter again)', async () => {
-    await call(attempt(), { covered: false })
-    vi.advanceTimersByTime(AFTER_CARD_MS)
-    expect(shown).toEqual(['7:BP2'])
+  it('shows it after the call when there is no card', async () => {
+    await call(attempt(), { withCard: false })
+    vi.advanceTimersByTime(AFTER_CALL_MS)
+    expect(moments).toEqual(['call'])
   })
 
-  it('waits for the card when the clock starts while it is up', async () => {
+  it('shows it to the side after the call when the clock is already running', async () => {
+    await call(attempt(), { withCard: false, covered: true })
+    await startClock()
+    state.busy.value = false
+    await nextTick()
+    vi.advanceTimersByTime(AFTER_CALL_MS)
+    expect(moments).toEqual(['clock', 'clock'])
+  })
+
+  it('shows the clock stamp once the card is down when the clock starts while it is up', async () => {
     await call(attempt())
     await startClock()
-    expect(shown).toEqual([])
-    await uncover()
-    vi.advanceTimersByTime(AFTER_CARD_MS)
-    expect(shown).toEqual(['7:BP2'])
+    vi.advanceTimersByTime(CARD_DELAY_MS)
+    expect(moments).toEqual(['card'])
+    await cardDown()
+    expect(moments).toEqual(['card', 'clock'])
   })
 
   it('shows it once per attempt and moment, also when the clock is restarted', async () => {
-    await call(attempt(), { covered: false })
-    vi.advanceTimersByTime(AFTER_CARD_MS)
+    await call(attempt(), { withCard: false })
+    vi.advanceTimersByTime(AFTER_CALL_MS)
     await startClock()
     state.clock.value = null
     await nextTick()
     await startClock()
     state.busy.value = true
     await nextTick()
-    await uncover()
-    vi.advanceTimersByTime(AFTER_CARD_MS)
+    state.busy.value = false
+    await nextTick()
+    vi.advanceTimersByTime(AFTER_CALL_MS)
     expect(shown).toEqual(['7:BP2', '7:BP2'])
   })
 
   it('shows nothing for an attempt below the best, or when turned off', async () => {
-    await call(attempt({ id: '7:BP1', weight: 62.5 }), { covered: false })
-    vi.advanceTimersByTime(AFTER_CARD_MS)
+    await call(attempt({ id: '7:BP1', weight: 62.5 }))
+    vi.advanceTimersByTime(CARD_DELAY_MS)
     await startClock()
 
     state.clock.value = null
     state.enabled.value = false
-    await call(attempt(), { covered: false })
-    vi.advanceTimersByTime(AFTER_CARD_MS)
+    await call(attempt())
+    vi.advanceTimersByTime(CARD_DELAY_MS)
     await startClock()
     expect(shown).toEqual([])
   })
 
   it('starts over for the next lifter', async () => {
-    await call(attempt(), { covered: false })
-    vi.advanceTimersByTime(AFTER_CARD_MS)
+    await call(attempt())
+    vi.advanceTimersByTime(CARD_DELAY_MS)
     await call(attempt({ id: '8:BP2', lifterId: '8' }))
-    await uncover()
-    vi.advanceTimersByTime(AFTER_CARD_MS)
+    vi.advanceTimersByTime(CARD_DELAY_MS)
     expect(shown).toEqual(['7:BP2', '8:BP2'])
   })
 
