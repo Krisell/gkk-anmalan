@@ -124,6 +124,8 @@ import RefereePanel from './components/RefereePanel.vue'
 import Scoreboard from './components/Scoreboard.vue'
 import PbStamp from './components/PbStamp.vue'
 import { useRemoteControl } from './remote/useRemoteControl.js'
+import { useAutoPb } from './autoPb.js'
+import { useLifterBests } from './useLifterBests.js'
 import { disciplineName, formatWeight } from './format.js'
 import { createHttpSource } from './sources/httpSource.js'
 import { createRefereeFeed, refereeFeedUrl } from './sources/refereeFeed.js'
@@ -160,26 +162,6 @@ const nextGroupFeed = competition ? useNextGroup(competition) : null
 
 const snapshot = computed(() => feed?.snapshot.value ?? null)
 
-// The live control's PB button (/live/control) stamps "PB ALERT" here too: a PB attempt coming up, with the lifter on
-// the platform and the weight. Only the PB command is followed; the rest of the control is for the broadcast. The hall
-// screen doesn't report itself as on air (presence), and without Firebase it simply carries on.
-const PB_MS = 3400
-const pb = shallowRef(null)
-let pbTimer = null
-if (competition && flag('pb')) {
-  useRemoteControl(competition, {
-    presence: false,
-    onCommand: (command) => {
-      if (command.type === 'pb') {
-        clearTimeout(pbTimer)
-        const attempt = snapshot.value?.current ?? null
-        pb.value = { key: (pb.value?.key ?? 0) + 1, attempt }
-        pbTimer = setTimeout(() => (pb.value = null), PB_MS)
-      }
-    },
-  })
-}
-onBeforeUnmount(() => clearTimeout(pbTimer))
 const next = computed(() => nextGroupFeed?.nextGroup.value ?? null)
 
 // The next group's lifters are listed in columns of up to 4 (5 for a large group), top to bottom, then left to right.
@@ -364,6 +346,45 @@ const staleSince = computed(() => {
     ? new Date(oldest).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })
     : null
 })
+
+// The live control's PB button (/live/control) stamps "PB ALERT" here too: a PB attempt coming up, with the lifter on
+// the platform and the weight; and so does the automatic PB stamp, when turned on there (see autoPb.js), at the same
+// moments as on the broadcast. Only these are followed; the rest of the control is for the broadcast. The hall screen
+// doesn't report itself as on air (presence), and without Firebase it simply carries on.
+const PB_MS = 3400
+const pb = shallowRef(null)
+let pbTimer = null
+onBeforeUnmount(() => clearTimeout(pbTimer))
+
+function showPb(attempt = snapshot.value?.current ?? null) {
+  clearTimeout(pbTimer)
+  pb.value = { key: (pb.value?.key ?? 0) + 1, attempt }
+  pbTimer = setTimeout(() => (pb.value = null), PB_MS)
+}
+
+const remote =
+  competition && flag('pb')
+    ? useRemoteControl(competition, {
+        presence: false,
+        onCommand: (command) => command.type === 'pb' && showPb(),
+      })
+    : null
+const lifterBests = remote ? useLifterBests(() => competition) : null
+if (lifterBests) {
+  watch(
+    () => remote.control.value.autoPb && order.value.slice(0, 2).map((entry) => entry.lifterId),
+    (ids) => ids && lifterBests.want(ids),
+    { immediate: true },
+  )
+  useAutoPb({
+    attempt: () => snapshot.value?.current ?? null,
+    busy: () => Boolean(intro.value || lights.value),
+    clock: () => snapshot.value?.clock ?? null,
+    enabled: () => remote.control.value.autoPb,
+    bestsFor: (lifterId) => lifterBests.bests.value[lifterId],
+    show: showPb,
+  })
+}
 </script>
 
 <style scoped>

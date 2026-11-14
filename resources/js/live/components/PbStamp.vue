@@ -1,5 +1,5 @@
 <template>
-  <div class="pb">
+  <div class="pb" :class="{ side }">
     <div class="stamp">
       <div class="text">PB ALERT</div>
       <div v-if="detail" class="detail">{{ detail }}</div>
@@ -14,6 +14,9 @@ import { formatWeight } from '../format.js'
 const props = defineProps({
   // The attempt on screen when the stamp was triggered, if any.
   attempt: { type: Object, default: null },
+  // On the broadcast: to the right, above the referee lights, so that the lifter in the middle of the picture stays
+  // visible (the stamp can come while they are on the platform). Centred otherwise (the hall screens).
+  side: { type: Boolean, default: false },
 })
 
 const detail = computed(() => {
@@ -70,6 +73,24 @@ const detail = computed(() => {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #ffffff;
+}
+
+.pb.side {
+  place-items: start end;
+  padding: 230px 90px 0 0;
+}
+
+.side .stamp {
+  padding: 12px 40px 16px;
+  border-width: 9px;
+}
+
+.side .text {
+  font-size: 128px;
+}
+
+.side .detail {
+  font-size: 32px;
 }
 
 @keyframes stamp-in {

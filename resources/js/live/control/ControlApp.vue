@@ -227,11 +227,20 @@
         </p>
         <p class="hint">
           Bästa registrerade resultat (klassiskt) i förbundets resultatdatabas, data.styrkelyft.se. Dagens tävling är
-          inte med. Hämtas av sig självt på sista försöket i varje gren.
+          inte med. Hämtas av sig självt för alla i gruppen och sparas i den här webbläsaren över dagen
+          <template v-if="bestsProgress.total">({{ bestsProgress.done }} av {{ bestsProgress.total }} hämtade)</template
+          >.
         </p>
+        <label class="toggle">
+          <input type="checkbox" :checked="current.autoPb" @change="save({ autoPb: $event.target.checked })" />
+          <span>
+            Automatisk PB-stämpel – i sändningen och på hallens skärmar, några sekunder efter lyftarkortet och när
+            klockan startar, om försöket (eller totalen) slår lyftarens bästa registrerade resultat
+          </span>
+        </label>
         <div class="choices">
-          <button class="button action" :disabled="bestsState.loading" @click="loadBests(platform.lifterId, true)">
-            {{ bestsState.loading ? 'Hämtar…' : 'Kolla PB' }}
+          <button class="button action" :disabled="bestsState.loading" @click="refreshPlatformBests">
+            {{ bestsState.loading ? 'Hämtar…' : platformBests ? 'Hämta igen' : 'Kolla PB' }}
           </button>
         </div>
         <p v-if="bestsState.error" class="error">{{ bestsState.error }}</p>
@@ -385,7 +394,8 @@ import { normalizeFeed, normalizeResults } from '../normalize.js'
 import { podiumClasses } from '../podium.js'
 import { youTubeId } from '../sources/delayedSource.js'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
-import { AUTO_ATTEMPT, compareWithBests } from './personalBest.js'
+import { compareWithBests } from './personalBest.js'
+import { useLifterBests } from '../useLifterBests.js'
 import { disciplineName, formatWeight } from '../format.js'
 
 // "Visas nu": the overlay's mode, with the slates as separate choices.
@@ -743,12 +753,14 @@ watch(previewCompetition, (competition, previous) => {
   }
 })
 
-// The lifter on the platform, from the feed (polled while signed in), and their best registered results, looked up
-// on "Kolla PB" or by themselves on a discipline's last attempt. Kept per lifter for the session; the server caches
-// them too.
+// The lifter on the platform, from the feed (polled while signed in), and the best registered results of everyone in
+// the group, looked up one at a time as they appear (the lifter on the platform first) and kept in this browser for
+// the day (see useLifterBests.js); "Hämta igen" looks the lifter on the platform up again.
 const VERDICTS = { pb: 'Nytt PB', equal: 'Tangerar PB', below: 'Under PB', first: 'Första registrerade' }
 const platform = ref(null)
-const bests = ref({})
+const groupLifterIds = ref([])
+const lifterBests = useLifterBests(() => previewCompetition.value)
+const bests = lifterBests.bests
 const bestsState = reactive({ loading: false, error: null })
 let platformTimer = null
 
@@ -760,42 +772,38 @@ async function loadPlatform() {
         headers: { Accept: 'application/json' },
       })
       if (response.ok) {
-        platform.value = normalizeFeed(await response.json()).current
+        const snapshot = normalizeFeed(await response.json())
+        platform.value = snapshot.current
+        groupLifterIds.value = [
+          ...new Set([
+            ...snapshot.order.map((entry) => entry.lifterId),
+            ...snapshot.scoreboard.lifters.map((lifter) => lifter.id),
+          ]),
+        ].filter(Boolean)
+        lifterBests.want([platform.value?.lifterId, ...groupLifterIds.value])
       }
     } catch {
-      // Keep the lifter we have.
+      // Keep the lifters we have.
     }
   }
   platformTimer = setTimeout(loadPlatform, 5000)
 }
 
-async function loadBests(lifterId, again = false) {
-  if (!lifterId || !previewCompetition.value || (bests.value[lifterId] && !again)) {
-    return
-  }
+async function refreshPlatformBests() {
   bestsState.loading = true
   bestsState.error = null
-  try {
-    const response = await fetch(
-      `/live/lifter-bests/${encodeURIComponent(previewCompetition.value)}/${encodeURIComponent(lifterId)}`,
-      { headers: { Accept: 'application/json' } },
-    )
-    if (response.status === 404) {
-      bests.value = { ...bests.value, [lifterId]: { found: false } }
-    } else if (!response.ok) {
-      throw new Error()
-    } else {
-      bests.value = { ...bests.value, [lifterId]: await response.json() }
-    }
-  } catch {
+  if (!(await lifterBests.refresh(platform.value?.lifterId))) {
     bestsState.error = 'Kunde inte hämta från resultatdatabasen. Försök igen.'
-  } finally {
-    bestsState.loading = false
   }
+  bestsState.loading = false
 }
 
 const platformBests = computed(() => (platform.value ? (bests.value[platform.value.lifterId] ?? null) : null))
 const platformComparison = computed(() => compareWithBests(platform.value, platformBests.value?.bests))
+const bestsProgress = computed(() => {
+  const ids = groupLifterIds.value
+  return { done: ids.filter((id) => bests.value[id]).length, total: ids.length }
+})
 
 function bestText(lift) {
   const best = platformBests.value?.bests?.[lift]
@@ -803,18 +811,13 @@ function bestText(lift) {
 }
 
 watch(
-  () => platform.value && `${platform.value.lifterId}:${platform.value.discipline}${platform.value.attempt}`,
-  () => {
-    bestsState.error = null
-    if (platform.value?.attempt === AUTO_ATTEMPT) {
-      void loadBests(platform.value.lifterId)
-    }
-  },
+  () => platform.value?.lifterId,
+  () => (bestsState.error = null),
 )
 
 watch(previewCompetition, () => {
   platform.value = null
-  bests.value = {}
+  groupLifterIds.value = []
 })
 
 let ticker = null

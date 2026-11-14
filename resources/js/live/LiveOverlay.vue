@@ -125,7 +125,7 @@
 
       <InfoStrap v-if="control.message" :key="control.message.id" :text="control.message.text" />
 
-      <PbStamp v-if="pb" :key="pb.key" :attempt="pb.attempt" />
+      <PbStamp v-if="pb" :key="pb.key" :attempt="pb.attempt" side />
 
       <DemoControls
         v-if="demoSource && showControls"
@@ -188,6 +188,8 @@ import Scoreboard from './components/Scoreboard.vue'
 import Podium from './components/Podium.vue'
 import { podiumOf } from './podium.js'
 import PbStamp from './components/PbStamp.vue'
+import { useAutoPb } from './autoPb.js'
+import { useLifterBests } from './useLifterBests.js'
 import CornerBug from './components/CornerBug.vue'
 import Slate from './components/Slate.vue'
 import ReplayTag from './components/ReplayTag.vue'
@@ -899,11 +901,10 @@ const PB_MS = 3400
 const pb = shallowRef(null)
 let pbTimer = null
 
-function showPb() {
+// Announced before the lift: the lifter called to the platform, with the weight they are about to attempt, also while
+// the previous lifter's result is still on screen.
+function showPb(attempt = feed?.snapshot.value?.current ?? displayed.value) {
   clearTimeout(pbTimer)
-  // Announced before the lift: the lifter called to the platform, with the weight they are about to attempt, also while
-  // the previous lifter's result is still on screen.
-  const attempt = feed?.snapshot.value?.current ?? displayed.value
   pb.value = { key: (pb.value?.key ?? 0) + 1, attempt }
   pbTimer = setTimeout(() => (pb.value = null), PB_MS)
 }
@@ -1000,6 +1001,33 @@ const refereeLights = computed(() => {
 const COMMENTATORS_MS = 9800
 const commentators = shallowRef(null)
 let commentatorTimer = null
+
+// The automatic PB stamp (see autoPb.js), when turned on from the live control: the bests of the lifter on the
+// platform and the next one are looked up ahead.
+const lifterBests = liveCompetition && remote ? useLifterBests(() => liveCompetition) : null
+if (lifterBests) {
+  watch(
+    () => control.value.autoPb && [feed?.snapshot.value?.current?.lifterId, feed?.snapshot.value?.next?.lifterId],
+    (ids) => ids && lifterBests.want(ids),
+    { deep: true, immediate: true },
+  )
+  useAutoPb({
+    attempt: () => feed?.snapshot.value?.current ?? null,
+    busy: () =>
+      Boolean(
+        intro.value ||
+        state.value.result ||
+        state.value.awaiting ||
+        refereeLights.value ||
+        fullScreen.value ||
+        roundBoard.value,
+      ),
+    clock: () => feed?.snapshot.value?.clock ?? null,
+    enabled: () => control.value.autoPb,
+    bestsFor: (lifterId) => lifterBests.bests.value[lifterId],
+    show: showPb,
+  })
+}
 
 function runCommand(command) {
   if (command.type === 'pb') {

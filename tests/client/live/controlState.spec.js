@@ -51,6 +51,7 @@ describe('normalizeControl', () => {
       commentators: ['Anna Svensson', 'Erik Berg'],
       intros: false,
       roundBoards: false,
+      autoPb: false,
       music: false,
       musicVolume: 0.5,
     })

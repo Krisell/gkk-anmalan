@@ -318,7 +318,7 @@ class StyrkelyftResults
      */
     public static function personalBests(string $license): ?array
     {
-        return Cache::remember('styrkelyft.personal-bests.'.\md5(\mb_strtolower($license)), 15 * 60, function () use ($license) {
+        return Cache::remember('styrkelyft.personal-bests.'.\md5(\mb_strtolower($license)), 6 * 60 * 60, function () use ($license) {
             $person = self::get('https://data-api.styrkelyft.se/api/people', ['license_id' => $license])->json('results.0');
 
             if (! \is_array($person) || ! isset($person['id'])) {

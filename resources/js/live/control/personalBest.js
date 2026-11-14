@@ -6,9 +6,6 @@
 
 const LIFTS = { SQ: 'squat', BP: 'bench', DL: 'deadlift' }
 
-// The last round of a discipline is when the bests are looked up by themselves.
-export const AUTO_ATTEMPT = 3
-
 /**
  * @param current the snapshot's current attempt (normalizeFeed): discipline, attempt, weight, lifts
  * @param bests the bests by lift ('squat', 'bench', 'deadlift', 'total'): { value, date, competition } or null
