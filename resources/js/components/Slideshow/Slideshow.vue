@@ -16,18 +16,22 @@
         </div>
       </Transition>
 
+      <!-- A slide held while a web page is shown goes over the page (on the screen's background, as its own layer so
+           that slides with a background of their own, like the DM slide, keep it), so the page keeps running
+           underneath and is where it was when the slide is let go. -->
+      <div
+        v-if="slideOverPage"
+        class="absolute inset-0 z-20 bg-linear-to-br from-slate-50 via-white to-slate-100"
+      ></div>
+
       <template v-for="(slide, index) in slides" :key="index">
         <Transition name="slideshow-fade">
-          <!-- A slide held while a web page is shown goes over the page (with the screen's background), so the page
-               keeps running underneath and is where it was when the slide is let go. -->
           <Component
             :is="component(slide.type)"
             v-bind="slide.data"
             v-show="currentSlide == index"
             class="absolute inset-0 w-full h-full"
-            :class="
-              slideOverPage && currentSlide == index ? 'z-20 bg-linear-to-br from-slate-50 via-white to-slate-100' : ''
-            "
+            :class="slideOverPage && currentSlide == index ? 'z-20' : ''"
           />
         </Transition>
       </template>
