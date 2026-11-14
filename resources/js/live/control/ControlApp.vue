@@ -211,12 +211,33 @@
                 current.podiumGroup === podiumGroup.name &&
                 current.podiumClass === podiumClass.key,
             }"
-            @click="save({ mode: 'podium', podiumGroup: podiumGroup.name, podiumClass: podiumClass.key })"
+            @click="
+              save({
+                mode: 'podium',
+                podiumGroup: podiumGroup.name,
+                podiumClass: podiumClass.key,
+                podiumPlaces: current.podiumStepwise ? 1 : 3,
+              })
+            "
           >
             {{ podiumClass.label }}
           </button>
         </div>
         <p v-else class="hint">Välj en grupp ovan, så visas dess klasser här.</p>
+        <label class="toggle">
+          <input
+            type="checkbox"
+            :checked="current.podiumStepwise"
+            @change="save({ podiumStepwise: $event.target.checked })"
+          />
+          <span>Steg för steg – brons först, sedan lägger du till silver och guld</span>
+        </label>
+        <div v-if="current.mode === 'podium' && current.podiumPlaces < 3" class="choices">
+          <button class="button primary" @click="save({ podiumPlaces: current.podiumPlaces + 1 })">
+            {{ current.podiumPlaces === 1 ? 'Visa silver' : 'Visa guld' }}
+          </button>
+          <button class="button" @click="save({ podiumPlaces: 3 })">Visa alla</button>
+        </div>
       </section>
 
       <section v-if="platform" class="card">

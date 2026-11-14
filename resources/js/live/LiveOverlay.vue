@@ -92,7 +92,7 @@
           :key="`${control.podiumGroup}-${control.podiumClass}`"
           :label="podium.label"
           :group="control.podiumGroup"
-          :lifters="podium.lifters"
+          :lifters="podium.lifters.slice(Math.max(0, podium.lifters.length - control.podiumPlaces))"
           :coefficient="podium.coefficient"
           :instant="instant"
         />

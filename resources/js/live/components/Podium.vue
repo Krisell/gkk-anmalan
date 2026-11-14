@@ -9,7 +9,12 @@
     </header>
     <!-- Top to bottom by place, not in the order the lifters stand on the podium (which we can't know). -->
     <ol class="places">
-      <li v-for="(lifter, index) in lifters" :key="lifter.id ?? index" class="place" :class="MEDALS[lifter.place]">
+      <li
+        v-for="(lifter, index) in lifters"
+        :key="lifter.id ?? index"
+        class="place"
+        :class="[MEDALS[lifter.place], { added: !initial.has(lifter.id ?? index) }]"
+      >
         <span class="medal">{{ lifter.place }}</span>
         <span class="who">
           <span class="name">{{ lifter.name ?? 'Okänd lyftare' }}</span>
@@ -32,8 +37,11 @@ import { formatPoints, formatWeight } from '../format.js'
  * Gold, silver and bronze of one class, for the prize ceremony: at the bottom left, over the camera picture, listed
  * top to bottom by place (the lifters may stand in any order on the podium). A coefficient class is placed by points,
  * so it shows those instead of the total. `instant` leaves out the entrance animation.
+ *
+ * In the stepwise ceremony the places come one at a time, from the last (bronze first): the panel grows upwards, and
+ * each place added later opens up above the ones shown.
  */
-defineProps({
+const props = defineProps({
   // The class's name, e.g. '-74 kg · Senior'.
   label: { type: String, default: '' },
   group: { type: String, default: null },
@@ -44,6 +52,9 @@ defineProps({
 })
 
 const MEDALS = { 1: 'gold', 2: 'silver', 3: 'bronze' }
+
+// The places shown from the start; the others are added.
+const initial = new Set(props.lifters.map((lifter, index) => lifter.id ?? index))
 </script>
 
 <style scoped>
@@ -125,6 +136,14 @@ const MEDALS = { 1: 'gold', 2: 'silver', 3: 'bronze' }
   animation-delay: 550ms;
 }
 
+/* A place added after the start: opens up (the panel grows upwards from the bottom), then slides in. */
+.place.added {
+  overflow: hidden;
+  animation:
+    open 450ms var(--motion-enter) both,
+    slide-in 500ms var(--motion-enter) 300ms both;
+}
+
 .silver {
   --metal: #b9c0cc;
   --metal-light: #f1f4f8;
@@ -199,8 +218,18 @@ const MEDALS = { 1: 'gold', 2: 'silver', 3: 'bronze' }
 }
 
 .instant .heading,
-.instant .place {
+.instant .place,
+.instant .place.added {
   animation: none;
+}
+
+@keyframes open {
+  from {
+    height: 0;
+  }
+  to {
+    height: 92px;
+  }
 }
 
 @keyframes slide-in {
