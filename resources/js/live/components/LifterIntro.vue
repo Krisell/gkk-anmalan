@@ -54,7 +54,18 @@
             <div class="eyebrow">Total</div>
             <div class="value">{{ formatWeight(attempt.total) }} <small>kg</small></div>
           </div>
-          <div v-if="attempt.place" class="stat">
+          <!-- With the live control's placings: now, and if the attempt is good, e.g. 4 → 2. -->
+          <div v-if="placing" class="stat placing">
+            <div class="eyebrow">{{ placing.now === placing.after ? 'Placering' : 'Placering · om godkänt' }}</div>
+            <div class="value">
+              <template v-if="placing.now !== placing.after">
+                <span class="place-now">{{ placing.now ?? '–' }}</span>
+                <span class="place-arrow">→</span>
+              </template>
+              <span class="place-after" :class="{ better: placing.now !== placing.after }">{{ placing.after }}</span>
+            </div>
+          </div>
+          <div v-else-if="attempt.place" class="stat">
             <div class="eyebrow">Placering</div>
             <div class="value">{{ attempt.place }}</div>
           </div>
@@ -93,6 +104,8 @@ const props = defineProps({
   upcoming: { type: Array, default: () => [] },
   // The card is leaving (into the lower third): the list goes first.
   leaving: { type: Boolean, default: false },
+  // The place now and if the attempt is good ({ now, after }, see placing.js), instead of the current place.
+  placing: { type: Object, default: null },
 })
 
 // The lifter's club crest, if we have one; no crest rather than ours (see clubs.js).
@@ -327,6 +340,25 @@ const rows = computed(() =>
 .stat .eyebrow {
   font-size: 18px;
   letter-spacing: 0.14em;
+}
+
+.placing .value {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.place-now {
+  color: var(--overlay-silver);
+}
+
+.place-arrow {
+  font-size: 30px;
+  color: var(--overlay-silver);
+}
+
+.place-after.better {
+  color: #4fd88a;
 }
 
 .value small {

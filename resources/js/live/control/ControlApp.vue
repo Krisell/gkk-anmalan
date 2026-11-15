@@ -395,6 +395,13 @@
           />
           <span>Resultatlista mellan omgångarna</span>
         </label>
+        <label class="toggle">
+          <input type="checkbox" :checked="current.placing" @change="save({ placing: $event.target.checked })" />
+          <span>
+            Placering på lyftarkortet: nu och om försöket blir godkänt, t.ex. ”4 → 2”, inom viktklassen i gruppen (för
+            tävlingar med placeringar och medaljer)
+          </span>
+        </label>
       </section>
 
       <section class="card">

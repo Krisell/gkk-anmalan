@@ -55,6 +55,7 @@ describe('normalizeControl', () => {
       intros: false,
       roundBoards: false,
       autoPb: false,
+      placing: false,
       music: false,
       musicVolume: 0.5,
     })
@@ -80,6 +81,14 @@ describe('normalizeControl', () => {
     const control = normalizeControl({ message: { id: 'm1', text: '   ' }, pauseTime: 'snart' })
     expect(control.message).toBeNull()
     expect(control.pauseTime).toBeNull()
+  })
+})
+
+describe('placings on the lifter card', () => {
+  it('are off unless turned on', () => {
+    expect(normalizeControl(null).placing).toBe(false)
+    expect(normalizeControl({ placing: 'yes' }).placing).toBe(false)
+    expect(normalizeControl({ placing: true }).placing).toBe(true)
   })
 })
 

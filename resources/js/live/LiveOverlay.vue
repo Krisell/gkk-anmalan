@@ -105,6 +105,7 @@
           :attempt="intro"
           :upcoming="introUpcoming"
           :leaving="Boolean(exiting)"
+          :placing="introPlacing"
         >
           <PbStamp v-if="pb?.corner && !exiting" :key="pb.key" :attempt="pb.attempt" corner />
         </LifterIntro>
@@ -201,6 +202,7 @@ import DemoEditor from './components/DemoEditor.vue'
 import Scoreboard from './components/Scoreboard.vue'
 import Podium from './components/Podium.vue'
 import { podiumOf } from './podium.js'
+import { placing } from './placing.js'
 import PbStamp from './components/PbStamp.vue'
 import PbBadge from './components/PbBadge.vue'
 import { useAutoPb } from './autoPb.js'
@@ -597,6 +599,12 @@ const introUpcoming = computed(() => {
   const index = intro.value ? order.findIndex((entry) => entry.lifterId === intro.value.lifterId) : -1
   return index < 0 ? [] : order.slice(index + 1, index + 1 + INTRO_UPCOMING)
 })
+
+// The place now and if the attempt is good, when turned on in the live control (or with ?placing=1).
+const showPlacing = flag('placing', false)
+const introPlacing = computed(() =>
+  intro.value && (control.value.placing || showPlacing) ? placing(intro.value, feed?.snapshot.value?.scoreboard) : null,
+)
 
 function cancelIntro() {
   if (editorState?.mode === 'card') {

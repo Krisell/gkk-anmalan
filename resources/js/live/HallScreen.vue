@@ -96,7 +96,14 @@
             </div>
             <LifterIntro v-if="judged" :key="judged.lifterId" :attempt="judged" class="verdict-card" />
           </div>
-          <LifterIntro v-else-if="intro" :key="intro.lifterId" :attempt="intro" class="hall-intro" :style="belowOrder">
+          <LifterIntro
+            v-else-if="intro"
+            :key="intro.lifterId"
+            :attempt="intro"
+            :placing="introPlacing"
+            class="hall-intro"
+            :style="belowOrder"
+          >
             <PbStamp v-if="pb?.corner" :key="pb.key" :attempt="pb.attempt" corner />
           </LifterIntro>
         </Transition>
@@ -127,6 +134,7 @@ import { createHttpSource } from './sources/httpSource.js'
 import { createRefereeFeed, refereeFeedUrl } from './sources/refereeFeed.js'
 import { useLiveFeed } from './useLiveFeed.js'
 import { useNextGroup } from './useNextGroup.js'
+import { placing } from './placing.js'
 import { initialHallState, readyToIntroduce, reduceHallState } from './hallState.js'
 
 /**
@@ -366,6 +374,13 @@ const remote =
         onCommand: (command) => command.type === 'pb' && showPb(),
       })
     : null
+// The place now and if the attempt is good on the lifter card, when turned on in the live control (or with ?placing=1).
+const showPlacing = flag('placing', false)
+const introPlacing = computed(() =>
+  intro.value && (remote?.control.value.placing || showPlacing)
+    ? placing(intro.value, snapshot.value?.scoreboard)
+    : null,
+)
 const lifterBests = remote ? useLifterBests(() => competition) : null
 if (lifterBests) {
   watch(

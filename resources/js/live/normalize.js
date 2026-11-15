@@ -30,7 +30,7 @@
  *
  * Scoreboard: {
  *   disciplines: ['SQ', 'BP', 'DL'],         the disciplines of the competition (a bench-only meet: ['BP'])
- *   lifters: [{ id, name, team, weightClass, category, sex, bodyWeight, place, total, points, lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 } }]
+ *   lifters: [{ id, name, team, weightClass, category, sex, bodyWeight, classic, place, total, points, lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 } }]
  *                                            ordered by competition class (see competitionClass in format.js; the
  *                                            first lifter of a class decides where it comes), then by place
  *                                            points: IPF GL points (Powerlifting Live calls the field 'wilks'; for
@@ -254,6 +254,8 @@ function normalizeScoreboard(rawLifters, discipline, known = []) {
         category: toText(lifter.category),
         sex: lifter.sex === 'm' || lifter.sex === 'f' ? lifter.sex : null,
         bodyWeight: toWeight(lifter.weight),
+        // Powerlifting Live's 'raw' is '1' for classic, '0' for equipped.
+        classic: String(lifter.raw ?? '1') !== '0',
         place: toPlace(lifter.place),
         total: toWeight(lifter.total),
         points: benchOnly
@@ -261,7 +263,6 @@ function normalizeScoreboard(rawLifters, discipline, known = []) {
               total: toWeight(lifter.total),
               bodyWeight: toWeight(lifter.weight),
               sex: lifter.sex === 'm' || lifter.sex === 'f' ? lifter.sex : null,
-              // Powerlifting Live's 'raw' is '1' for classic, '0' for equipped.
               classic: String(lifter.raw ?? '1') !== '0',
               event: 'bench',
             })

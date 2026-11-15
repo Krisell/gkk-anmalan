@@ -41,6 +41,7 @@ export const DEFAULT_CONTROL = Object.freeze({
   intros: true, // the big lifter card when a new lifter is called
   roundBoards: true, // the results list between rounds
   autoPb: false, // the PB stamp by itself for an attempt above the lifter's registered best (see autoPb.js)
+  placing: false, // the place now and if the attempt is good on the big lifter card (see placing.js)
   music: false, // pause music, played by the overlay in OBS (see pauseMusic.js), on and off by hand
   musicVolume: 0.5, // 0–1
 })
@@ -76,6 +77,7 @@ export function normalizeControl(raw) {
     intros: control.intros !== false,
     roundBoards: control.roundBoards !== false,
     autoPb: control.autoPb === true,
+    placing: control.placing === true,
     music: control.music === true,
     musicVolume: normalizeVolume(control.musicVolume),
   }
