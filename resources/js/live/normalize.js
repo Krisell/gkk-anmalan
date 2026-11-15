@@ -23,7 +23,8 @@
  *   attempts: [{ weight, outcome }] x 3      the lifter's attempts in this discipline
  *   lifts: { SQ, BP, DL: [{ weight, outcome }] x 3 }   all of the lifter's attempts
  *   total: number | null,                    the lifter's current total
- *   place: number | null
+ *   place: number | null,
+ *   classic: boolean                         false for equipped
  * }
  *
  * Decision: { id: string, lights: [{ good: boolean, cards: ['red'|'yellow'|'blue'] }] x 3 (left, center, right) }
@@ -58,13 +59,20 @@ export function normalizeFeed(raw) {
   )
   const [currentEntry, nextEntry] = entries
   const [lastEntry] = Array.isArray(scoresheet.last_lifts) ? scoresheet.last_lifts : []
+  const scoreboard = normalizeScoreboard(scoresheet.lifters, discipline)
+  // Classic or equipped, from the results list: the lifting order's entries don't say.
+  const withClassic = (attempt) =>
+    attempt && {
+      ...attempt,
+      classic: scoreboard.lifters.find((lifter) => lifter.id === attempt.lifterId)?.classic ?? attempt.classic,
+    }
 
   return {
     discipline,
     group: toText(nextLifters.info?.current_group ?? scoresheet.info?.current_group),
     resultsGroup: toText(scoresheet.info?.current_group),
-    current: currentEntry ? normalizeCurrent(currentEntry, discipline, round) : null,
-    next: nextEntry ? normalizeCurrent(nextEntry, discipline, null) : null,
+    current: currentEntry ? withClassic(normalizeCurrent(currentEntry, discipline, round)) : null,
+    next: nextEntry ? withClassic(normalizeCurrent(nextEntry, discipline, null)) : null,
     order: entries.map((entry, index) => {
       const {
         lifterId,
@@ -76,10 +84,10 @@ export function normalizeFeed(raw) {
       } = normalizeCurrent(entry, discipline, index === 0 ? round : null)
       return { lifterId, name, team, discipline: d, attempt, weight }
     }),
-    lastResult: lastEntry ? normalizeLastLift(lastEntry) : null,
+    lastResult: lastEntry ? withClassic(normalizeLastLift(lastEntry)) : null,
     decision: normalizeDecision(raw?.decision),
     signals: normalizeSignals(raw?.referee_signals),
-    scoreboard: normalizeScoreboard(scoresheet.lifters, discipline),
+    scoreboard,
     clock: normalizeClock(raw?.clock),
   }
 }
@@ -332,6 +340,8 @@ function buildAttempt(lifter, fallbackLifterId, discipline, attempt, weight, out
     lifts: Object.fromEntries(DISCIPLINES.map((d) => [d, disciplineAttempts(lifts, d)])),
     total: toWeight(lifter.total),
     place: toPlace(lifter.place),
+    // Powerlifting Live's 'raw' is '1' for classic, '0' for equipped; classic unless told otherwise.
+    classic: String(lifter.raw ?? '1') !== '0',
   }
 }
 

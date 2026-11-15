@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { compareWithBests } from '../../../resources/js/live/control/personalBest.js'
+import { bestsFor, compareWithBests } from '../../../resources/js/live/control/personalBest.js'
 
 const bests = {
   squat: { value: 140, date: '2025-03-01', competition: 'SM' },
@@ -45,5 +45,22 @@ describe('compareWithBests', () => {
   it('is empty without bests or an attempt', () => {
     expect(compareWithBests({ discipline: 'SQ', weight: 100 }, null)).toEqual([])
     expect(compareWithBests(null, bests)).toEqual([])
+  })
+})
+
+describe('bestsFor', () => {
+  const equipped = { squat: { value: 200, date: '2025-07-01', competition: 'SM' } }
+
+  it('compares a classic lifter with classic results and an equipped one with equipped results', () => {
+    const answer = { found: true, bests, equipped_bests: equipped }
+    expect(bestsFor({ classic: true }, answer)).toBe(bests)
+    expect(bestsFor({}, answer)).toBe(bests)
+    expect(bestsFor({ classic: false }, answer)).toBe(equipped)
+  })
+
+  it('has none for a lifter not in the database, or an answer without the equipped results', () => {
+    expect(bestsFor({ classic: true }, { found: false })).toBeNull()
+    expect(bestsFor({ classic: true }, null)).toBeNull()
+    expect(bestsFor({ classic: false }, { found: true, bests })).toBeNull()
   })
 })

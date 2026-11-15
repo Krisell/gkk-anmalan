@@ -29,6 +29,25 @@ describe('isPbAttempt', () => {
     })
     expect(isPbAttempt(deadlift, { found: true, bests: { ...BESTS.bests, total: { value: 300 } } })).toBe(false)
   })
+
+  it('is never a PB in the first competition: there is nothing registered to beat', () => {
+    const none = { squat: null, bench: null, deadlift: null, total: null }
+    expect(isPbAttempt(attempt(), { found: true, competitions: 0, bests: none })).toBe(false)
+    // Nor in a lift never registered before, e.g. the squat of a lifter who has only competed in bench press.
+    expect(
+      isPbAttempt(attempt({ discipline: 'SQ', weight: 100 }), {
+        found: true,
+        bests: { ...none, bench: { value: 65 } },
+      }),
+    ).toBe(false)
+  })
+
+  it('compares an equipped lifter with equipped results only', () => {
+    const answer = { ...BESTS, equipped_bests: { squat: null, bench: { value: 90 }, deadlift: null, total: null } }
+    expect(isPbAttempt(attempt({ classic: false, weight: 80 }), answer)).toBe(false)
+    expect(isPbAttempt(attempt({ classic: false, weight: 92.5 }), answer)).toBe(true)
+    expect(isPbAttempt(attempt({ classic: true, weight: 80 }), answer)).toBe(true)
+  })
 })
 
 describe('useAutoPb', () => {

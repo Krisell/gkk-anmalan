@@ -8,7 +8,7 @@
         '--row-height': `${rowHeight}px`,
         '--columns': gridColumns,
         '--row-delay': `${rowDelay}ms`,
-        width: `${width}px`,
+        width: `${boardWidth}px`,
         marginTop: `${top}px`,
       }"
     >
@@ -36,6 +36,10 @@
             </div>
             <div class="cell total">Total</div>
             <div class="cell points">IPF-poäng</div>
+            <template v-if="prognosis">
+              <div class="cell prognosis total">Prog. total</div>
+              <div class="cell prognosis">Prog. poäng</div>
+            </template>
           </div>
 
           <template v-for="(row, index) in rows" :key="row.key">
@@ -57,6 +61,12 @@
               </div>
               <div class="cell total">{{ row.lifter.total ? formatWeight(row.lifter.total) : '–' }}</div>
               <div class="cell points">{{ formatPoints(row.lifter.points) }}</div>
+              <template v-if="prognosis">
+                <div class="cell prognosis total">{{ prognosisLabel(row.lifter) }}</div>
+                <div class="cell prognosis points">
+                  {{ formatPoints(prognosisPoints(row.lifter, view.scoreboard.disciplines)) }}
+                </div>
+              </template>
             </div>
           </template>
         </div>
@@ -70,6 +80,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch 
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
 import { competitionClass, disciplineName, formatBodyWeight, formatPoints, formatWeight } from '../format.js'
 import { groupStatus } from '../normalize.js'
+import { prognosisPoints, prognosisTotal } from '../prognosis.js'
 
 const props = defineProps({
   // The normalized Scoreboard (see normalize.js).
@@ -119,6 +130,21 @@ const title = computed(() => {
   return view.value.final || status === 'done' ? 'Resultat' : 'Resultatlista – Pågående tävling'
 })
 
+// While the group lifts (and in the start list, from the openers): the total and points if every declared attempt is
+// good (see prognosis.js). Not for finished results, where they are the total and the points.
+const prognosis = computed(() => !view.value.final && groupStatus(view.value.scoreboard) !== 'done')
+
+// The prognosis columns take room from the names; the list gets wider for them, up to 1760 px (the broadcast's 1920
+// less the margins).
+const boardWidth = computed(() =>
+  prognosis.value ? Math.max(props.width, Math.min(props.width + 200, 1760)) : props.width,
+)
+
+function prognosisLabel(lifter) {
+  const total = prognosisTotal(lifter, view.value.scoreboard.disciplines)
+  return total ? formatWeight(total) : '–'
+}
+
 const SHORT_NAMES = { SQ: 'Knäböj', BP: 'Bänk', DL: 'Mark' }
 
 const disciplineTitle = computed(() => disciplineName(view.value.discipline))
@@ -153,7 +179,7 @@ const gridColumns = computed(
   // repeat(0, …) is invalid and would drop the whole template (every cell on a line of its own), so no lift columns
   // (nothing declared anywhere yet) leaves it out.
   () =>
-    `64px minmax(0, 1fr) ${classColumn.value ? '260px ' : ''}${columns.value.length ? `repeat(${columns.value.length}, 112px) ` : ''}116px 136px`,
+    `64px minmax(0, 1fr) ${classColumn.value ? '260px ' : ''}${columns.value.length ? `repeat(${columns.value.length}, 112px) ` : ''}116px 136px${prognosis.value ? ' 136px 136px' : ''}`,
 )
 
 const classLabel = (lifter) => competitionClass(lifter).label
@@ -602,6 +628,26 @@ function cell(lifter, column) {
 
 .lifter .cell.empty {
   background: rgba(255, 255, 255, 0.04);
+}
+
+.columns .prognosis {
+  letter-spacing: 0.08em;
+}
+
+/* The prognosis: muted and italic, set apart from the results by a line. */
+.cell.prognosis.total {
+  margin-left: 8px;
+  border-left: 1px solid var(--overlay-divider);
+}
+
+.lifter .cell.prognosis {
+  font-style: italic;
+  color: var(--overlay-silver);
+}
+
+.lifter .cell.prognosis.total {
+  font-size: 1.15em;
+  font-weight: 600;
 }
 
 .lifter .cell.points {

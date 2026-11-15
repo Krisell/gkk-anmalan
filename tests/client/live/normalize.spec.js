@@ -120,6 +120,14 @@ describe('normalizeFeed', () => {
     expect(normalizeFeed(feed({ clock: { clock: -5 } })).clock).toBeNull()
   })
 
+  it('tells classic from equipped by the results list, as the lifting order does not say', () => {
+    expect(normalizeFeed(feed()).current.classic).toBe(true)
+    const raw = feed()
+    raw.scoresheet.lifters = [{ ...lifter, raw: '0' }]
+    expect(normalizeFeed(raw).current.classic).toBe(false)
+    expect(normalizeFeed(raw).scoreboard.lifters[0].classic).toBe(false)
+  })
+
   it('builds the results list of the current group', () => {
     const raw = feed()
     raw.scoresheet.lifters = [

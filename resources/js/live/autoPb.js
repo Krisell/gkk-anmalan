@@ -1,5 +1,5 @@
 import { onScopeDispose, watch } from 'vue'
-import { compareWithBests } from './control/personalBest.js'
+import { bestsFor as bestsOfAttempt, compareWithBests } from './control/personalBest.js'
 
 /**
  * The automatic PB stamp (the live control's "Automatisk PB-stämpel"): for an attempt above the lifter's best
@@ -20,9 +20,9 @@ export const CARD_DELAY_MS = 1800
 export const AFTER_CALL_MS = 3000
 
 export function isPbAttempt(attempt, lifterBests) {
-  return (
-    Boolean(lifterBests?.found) &&
-    compareWithBests(attempt, lifterBests.bests).some((row) => row.key !== 'total' && row.verdict === 'pb')
+  // Never for a lifter without results (e.g. their first competition): every lift is then 'first', not 'pb'.
+  return compareWithBests(attempt, bestsOfAttempt(attempt, lifterBests)).some(
+    (row) => row.key !== 'total' && row.verdict === 'pb',
   )
 }
 

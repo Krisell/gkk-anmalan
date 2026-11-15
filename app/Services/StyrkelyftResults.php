@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Result;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Throwable;
@@ -310,15 +311,16 @@ class StyrkelyftResults
     }
 
     /**
-     * A lifter's best registered classic results (CPL, and the bench press also from CBP), by license number, for the
-     * live control: whether the attempt on the platform would be a personal best. Null when the federation has no one
-     * with that license number. Today's competition isn't registered yet, so it is never counted.
+     * A lifter's best registered results, by license number, for the live control: whether the attempt on the platform
+     * would be a personal best. Classic (CPL, and the bench press also from CBP) and equipped (EPL and EBP) apart, as
+     * the lifter competes in one or the other. Null when the federation has no one with that license number. Today's
+     * competition isn't registered yet, so it is never counted.
      *
-     * @return array{name: string, competitions: int, bests: array<string, array{value: float, date: string, competition: string}|null>}|null
+     * @return array{name: string, competitions: int, bests: array<string, array{value: float, date: string, competition: string}|null>, equipped_competitions: int, equipped_bests: array<string, array{value: float, date: string, competition: string}|null>}|null
      */
     public static function personalBests(string $license): ?array
     {
-        return Cache::remember('styrkelyft.personal-bests.'.\md5(\mb_strtolower($license)), 6 * 60 * 60, function () use ($license) {
+        return Cache::remember('styrkelyft.personal-bests.v2.'.\md5(\mb_strtolower($license)), 6 * 60 * 60, function () use ($license) {
             $person = self::get('https://data-api.styrkelyft.se/api/people', ['license_id' => $license])->json('results.0');
 
             if (! \is_array($person) || ! isset($person['id'])) {
@@ -328,29 +330,43 @@ class StyrkelyftResults
             $results = collect(self::get(self::API, ['person' => $person['id'], 'page_size' => self::PAGE_SIZE])->json('results') ?? [])
                 ->filter(fn ($result) => \is_array($result) && ! ($result['disqualified'] ?? false))
                 ->map(fn ($result) => self::normalize($result))
-                ->filter(fn ($result) => $result !== null && \in_array($result['type'], ['CPL', 'CBP'], true));
-
-            $bests = [];
-
-            foreach (\array_keys(self::LIFTS) as $lift) {
-                $best = $results
-                    ->filter(fn ($result) => $result[$lift] !== null)
-                    // The heaviest, and the first time it was lifted.
-                    ->sortBy([[$lift, 'desc'], ['date', 'asc']])
-                    ->first();
-                $bests[$lift] = $best === null ? null : [
-                    'value' => $best[$lift],
-                    'date' => $best['date'],
-                    'competition' => $best['competition'],
-                ];
-            }
+                ->filter();
+            $classic = $results->filter(fn ($result) => \in_array($result['type'], ['CPL', 'CBP'], true));
+            $equipped = $results->filter(fn ($result) => \in_array($result['type'], ['EPL', 'EBP'], true));
 
             return [
                 'name' => \trim(($person['first_name'] ?? '').' '.($person['last_name'] ?? '')),
-                'competitions' => $results->count(),
-                'bests' => $bests,
+                'competitions' => $classic->count(),
+                'bests' => self::bestsOf($classic),
+                'equipped_competitions' => $equipped->count(),
+                'equipped_bests' => self::bestsOf($equipped),
             ];
         });
+    }
+
+    /**
+     * The heaviest result in each lift, the first time it was lifted; null for a lift never registered.
+     *
+     * @param  Collection<int, array<string, mixed>>  $results
+     * @return array<string, array{value: float, date: string, competition: string}|null>
+     */
+    private static function bestsOf($results): array
+    {
+        $bests = [];
+
+        foreach (\array_keys(self::LIFTS) as $lift) {
+            $best = $results
+                ->filter(fn ($result) => $result[$lift] !== null)
+                ->sortBy([[$lift, 'desc'], ['date', 'asc']])
+                ->first();
+            $bests[$lift] = $best === null ? null : [
+                'value' => $best[$lift],
+                'date' => $best['date'],
+                'competition' => $best['competition'],
+            ];
+        }
+
+        return $bests;
     }
 
     public static function key(string $gender, string $weightClass, string $event): string

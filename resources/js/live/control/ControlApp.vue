@@ -252,8 +252,9 @@
           {{ formatWeight(platform.weight) }} kg
         </p>
         <p class="hint">
-          Bästa registrerade resultat (klassiskt) i förbundets resultatdatabas, data.styrkelyft.se. Dagens tävling är
-          inte med. Hämtas av sig självt för alla i gruppen och sparas i den här webbläsaren över dagen
+          Bästa registrerade resultat ({{ platform.classic === false ? 'utrustat' : 'klassiskt' }}) i förbundets
+          resultatdatabas, data.styrkelyft.se. Dagens tävling är inte med. Hämtas av sig självt för alla i gruppen och
+          sparas i den här webbläsaren över dagen
           <template v-if="bestsProgress.total">({{ bestsProgress.done }} av {{ bestsProgress.total }} hämtade)</template
           >.
         </p>
@@ -285,7 +286,10 @@
             </ul>
             <p class="hint">
               Alla bästa: knäböj {{ bestText('squat') }} · bänk {{ bestText('bench') }} · mark
-              {{ bestText('deadlift') }} · total {{ bestText('total') }} ({{ platformBests.competitions }} tävlingar)
+              {{ bestText('deadlift') }} · total {{ bestText('total') }} ({{
+                platform.classic === false ? platformBests.equipped_competitions : platformBests.competitions
+              }}
+              tävlingar)
             </p>
           </template>
         </template>
@@ -443,7 +447,7 @@ import { normalizeFeed, normalizeResults } from '../normalize.js'
 import { podiumClasses } from '../podium.js'
 import { youTubeId } from '../sources/delayedSource.js'
 import { BROADCASTER_LOGO as logo } from '../clubs.js'
-import { compareWithBests } from './personalBest.js'
+import { bestsFor, compareWithBests } from './personalBest.js'
 import { useLifterBests } from '../useLifterBests.js'
 import { disciplineName, formatWeight } from '../format.js'
 
@@ -869,14 +873,16 @@ async function refreshPlatformBests() {
 }
 
 const platformBests = computed(() => (platform.value ? (bests.value[platform.value.lifterId] ?? null) : null))
-const platformComparison = computed(() => compareWithBests(platform.value, platformBests.value?.bests))
+// Classic or equipped, as the lifter competes today.
+const platformBestsByEquipment = computed(() => bestsFor(platform.value, platformBests.value))
+const platformComparison = computed(() => compareWithBests(platform.value, platformBestsByEquipment.value))
 const bestsProgress = computed(() => {
   const ids = groupLifterIds.value
   return { done: ids.filter((id) => bests.value[id]).length, total: ids.length }
 })
 
 function bestText(lift) {
-  const best = platformBests.value?.bests?.[lift]
+  const best = platformBestsByEquipment.value?.[lift]
   return best ? `${formatWeight(best.value)} kg` : '–'
 }
 

@@ -7,6 +7,17 @@
 const LIFTS = { SQ: 'squat', BP: 'bench', DL: 'deadlift' }
 
 /**
+ * The lifter's bests (the /live/lifter-bests answer) that the attempt is compared with: classic for a classic lifter,
+ * equipped for an equipped one. Null without an answer (or an answer from before the equipped bests were looked up).
+ */
+export function bestsFor(attempt, lifterBests) {
+  if (!lifterBests?.found) {
+    return null
+  }
+  return (attempt?.classic === false ? lifterBests.equipped_bests : lifterBests.bests) ?? null
+}
+
+/**
  * @param current the snapshot's current attempt (normalizeFeed): discipline, attempt, weight, lifts
  * @param bests the bests by lift ('squat', 'bench', 'deadlift', 'total'): { value, date, competition } or null
  * @returns [{ key, label, weight, best, verdict: 'pb' | 'equal' | 'below' | 'first' }]
