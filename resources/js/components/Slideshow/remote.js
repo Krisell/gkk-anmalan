@@ -84,6 +84,7 @@ const BUILT_IN_KEYS = {
   Gm2027: 'gm2027',
   Swish: 'swish',
   Lokalregler: 'lokalregler',
+  Julfest2026: 'julfest2026',
 }
 const BUILT_IN_LABELS = {
   Klubbrekord: 'Senaste klubbrekorden',
@@ -92,13 +93,16 @@ const BUILT_IN_LABELS = {
   Gm2027: 'Götalandsmästerskapen 2027',
   Swish: 'Swisha en gåva till GKK',
   Lokalregler: 'Lokalregler',
+  Julfest2026: 'Julfest 2026',
 }
+// The day after the Christmas party (5 December 2026), when its slide leaves the rotation by itself.
+const JULFEST_OVER = new Date('2026-12-06T00:00:00').getTime()
 const SLIDE_KEY = new RegExp(`^(${Object.values(BUILT_IN_KEYS).join('|')}|slide-\\d{1,9})$`)
 
 /**
  * All the screen's slides, in the order they rotate: the latest club records, GKK's competition results from the last
- * 30 days (when there are any), the club's own slides, the house rules, the DM welcome, the Swish slide and the
- * invitation to the Götaland championships 2027.
+ * 30 days (when there are any), the club's own slides, the house rules, the DM welcome, the Swish slide, the
+ * invitation to the Götaland championships 2027 and the Christmas party (in the rotation by default until the party).
  *
  * Which of them rotate is chosen in the live control (see inRotation); `rotates` is the default for a slide that has
  * not been chosen there: the club's own slides as they are set to visible or hidden, and the built-in ones as below.
@@ -116,6 +120,7 @@ export function rotation(slides, records = [], results = []) {
     { type: 'Dm2026', data: {}, rotates: false },
     { type: 'Swish', data: {}, rotates: false },
     { type: 'Gm2027', data: {}, rotates: false },
+    { type: 'Julfest2026', data: {}, rotates: Date.now() < JULFEST_OVER },
   ]
 }
 
@@ -139,7 +144,7 @@ export function nextInRotation(slides, index, direction = 1, control = null) {
 }
 
 // The live control lists these first, in this order, before the rest of the slides (in the order they rotate).
-const PINNED = ['Dm2026', 'Swish', 'Gm2027']
+const PINNED = ['Dm2026', 'Swish', 'Gm2027', 'Julfest2026']
 
 export function controlOrder(slides) {
   const pinned = PINNED.flatMap((type) => slides.filter((slide) => slide.type === type))

@@ -135,6 +135,7 @@ import KlubbrekordSlide from './KlubbrekordSlide.vue'
 import ResultatSlide from './ResultatSlide.vue'
 import Dm2026Slide from './Dm2026Slide.vue'
 import Gm2027Slide from './Gm2027Slide.vue'
+import JulfestSlide from './JulfestSlide.vue'
 import LokalreglerSlide from './LokalreglerSlide.vue'
 import SwishSlide from './SwishSlide.vue'
 import { getISOWeek, getSwedishMonthName } from '../../utils/date'
@@ -265,6 +266,10 @@ function component(type) {
 
   if (type === 'Gm2027') {
     return Gm2027Slide
+  }
+
+  if (type === 'Julfest2026') {
+    return JulfestSlide
   }
 
   if (type === 'Swish') {

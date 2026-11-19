@@ -14,7 +14,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { CalendarDays, Flag, Medal, QrCode, ScrollText, Trophy } from 'lucide-vue-next'
+import { CalendarDays, Flag, Gift, Medal, QrCode, ScrollText, Trophy } from 'lucide-vue-next'
 import SlidePreview from './SlidePreview.vue'
 
 const props = defineProps({ slide: { type: Object, required: true } })
@@ -26,6 +26,7 @@ const ICONS = {
   Gm2027: CalendarDays,
   Swish: QrCode,
   Lokalregler: ScrollText,
+  Julfest2026: Gift,
 }
 const icon = computed(() => ICONS[props.slide.type] ?? null)
 // The DM and GM slides are dark on the screen.

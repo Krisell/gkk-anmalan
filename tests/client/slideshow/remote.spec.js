@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vite-plus/test'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import {
   COMMAND_MAX_AGE_MS,
   PRESENCE_TIMEOUT_MS,
@@ -115,6 +115,13 @@ describe('web pages', () => {
 })
 
 describe('slides', () => {
+  // After the Christmas party, whose slide is in the rotation by default only until then.
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-12-10T12:00:00'))
+  })
+  afterEach(() => vi.useRealTimers())
+
   it('has a stable key for each slide, including the club records', () => {
     expect(slideKey({ type: 'Klubbrekord', data: {} })).toBe('records')
     expect(slideKey({ id: 7, type: 'Slide', data: {} })).toBe('slide-7')
@@ -128,9 +135,18 @@ describe('slides', () => {
       { id: 2, type: 'Slide', data: {}, is_visible: false },
     ]
     const all = rotation(slides)
-    expect(all.map(slideKey)).toEqual(['records', 'slide-1', 'slide-2', 'lokalregler', 'dm2026', 'swish', 'gm2027'])
+    expect(all.map(slideKey)).toEqual([
+      'records',
+      'slide-1',
+      'slide-2',
+      'lokalregler',
+      'dm2026',
+      'swish',
+      'gm2027',
+      'julfest2026',
+    ])
     expect(all.filter((slide) => inRotation(slide, null)).map(slideKey)).toEqual(['records', 'slide-1', 'lokalregler'])
-    expect(rotation(null)).toHaveLength(5)
+    expect(rotation(null)).toHaveLength(6)
   })
 
   it('follows the rotation chosen in the live control, and the defaults for the rest', () => {
@@ -150,7 +166,16 @@ describe('slides', () => {
 
   it('rotates the competition results after the club records, only when there are any', () => {
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }], [], [{ id: 5 }])
-    expect(all.map(slideKey)).toEqual(['records', 'results', 'slide-1', 'lokalregler', 'dm2026', 'swish', 'gm2027'])
+    expect(all.map(slideKey)).toEqual([
+      'records',
+      'results',
+      'slide-1',
+      'lokalregler',
+      'dm2026',
+      'swish',
+      'gm2027',
+      'julfest2026',
+    ])
     expect(inRotation(all[1], null)).toBe(true)
     expect(all[1].data.results).toEqual([{ id: 5 }])
     expect(slideLabel(all[1])).toBe('Senaste tävlingsresultaten')
@@ -158,13 +183,37 @@ describe('slides', () => {
     expect(rotation([], [], null).map(slideKey)).not.toContain('results')
   })
 
+  it('rotates the Christmas party slide by default until the party', () => {
+    vi.setSystemTime(new Date('2026-12-05T20:00:00'))
+    const party = rotation([]).find((slide) => slide.type === 'Julfest2026')
+    expect(inRotation(party, null)).toBe(true)
+    expect(slideLabel(party)).toBe('Julfest 2026')
+    expect(inRotation(party, normalizeControl({ rotation: { julfest2026: false } }))).toBe(false)
+
+    vi.setSystemTime(new Date('2026-12-06T08:00:00'))
+    expect(
+      inRotation(
+        rotation([]).find((slide) => slide.type === 'Julfest2026'),
+        null,
+      ),
+    ).toBe(false)
+  })
+
   it('lists the DM, Swish and GM slides first in the live control', () => {
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
-    expect(controlOrder(all).map(slideKey)).toEqual(['dm2026', 'swish', 'gm2027', 'records', 'slide-1', 'lokalregler'])
+    expect(controlOrder(all).map(slideKey)).toEqual([
+      'dm2026',
+      'swish',
+      'gm2027',
+      'julfest2026',
+      'records',
+      'slide-1',
+      'lokalregler',
+    ])
   })
 
   it('steps past the slides that are not in the rotation', () => {
-    // records, slide-1, lokalregler, dm2026, swish, gm2027
+    // records, slide-1, lokalregler, dm2026, swish, gm2027, julfest2026
     const all = rotation([{ id: 1, type: 'Slide', data: {}, is_visible: true }])
     expect(nextInRotation(all, 0)).toBe(1)
     expect(nextInRotation(all, 1)).toBe(2) // on to the house rules
