@@ -41,116 +41,34 @@
         </div>
       </header>
 
-      <!-- One card per result; the cards grow to fill the slide, and the last row is centred. With more than three rows,
-           the cards keep the size of three rows and scroll slowly (see results.js), faded at the edges. -->
+      <!-- Two results at a time, side by side, turning to the next two like the page of a book: the right-hand card
+           (the leaf) swings over the spine to the left, its back showing the next left-hand card, and uncovers the
+           next right-hand card beneath it. -->
       <div
-        ref="viewport"
-        class="relative min-h-0 flex-1"
-        :class="{ 'overflow-hidden': layout.scrolls, 'slideshow-results-fade': layout.scrolls }"
-        :style="{ '--gap': 'min(1.4vw, 2.4vh)', containerType: 'size' }"
+        class="slideshow-book relative grid min-h-0 flex-1 grid-cols-2 gap-[var(--gap)]"
+        :style="{ '--gap': 'min(2vw, 3.6vh)', '--flip': `${FLIP_MS}ms` }"
       >
-        <div
-          ref="list"
-          class="flex flex-wrap justify-center gap-[var(--gap)]"
-          :class="layout.scrolls ? 'py-[var(--gap)]' : 'h-full content-stretch'"
-        >
-          <article
-            v-for="result in results"
-            :key="result.id"
-            class="relative flex min-w-0 flex-col overflow-hidden rounded-[1.6vh] ring-1"
-            :class="
-              result.records.length
-                ? 'bg-linear-to-br from-white/[0.14] to-amber-300/[0.08] ring-amber-300/60 shadow-[0_0_4vh_rgba(246,201,69,0.18)]'
-                : 'bg-white/[0.08] ring-white/10'
-            "
-            :style="cardStyle"
-          >
-            <div
-              v-if="result.records.length"
-              class="slideshow-shine absolute top-0 right-0 flex items-center gap-[0.35em] overflow-hidden rounded-bl-[1.2vh] bg-amber-300 px-[0.9em] py-[0.35em] text-[0.62em] font-extrabold uppercase tracking-[0.14em] text-gkk"
-            >
-              <Crown class="h-[1.1em] w-[1.1em]" stroke-width="2.75" />
-              Klubbrekord
-            </div>
+        <div ref="viewport" class="relative min-w-0 [container-type:size]">
+          <ResultCard v-if="current[0]" :key="current[0].id" :result="current[0]" />
+          <div v-if="flipping" class="slideshow-shade-under pointer-events-none absolute inset-0 rounded-[1.6vh]"></div>
+        </div>
+        <div class="relative min-w-0 [container-type:size]">
+          <ResultCard v-if="under[1]" :key="under[1].id" :result="under[1]" />
+          <div
+            v-if="flipping"
+            class="slideshow-shade-revealed pointer-events-none absolute inset-0 rounded-[1.6vh]"
+          ></div>
+        </div>
 
-            <div class="flex min-h-0 flex-1 flex-col justify-between gap-[0.6em] p-[0.9em]">
-              <div class="min-w-0">
-                <div class="flex items-center gap-[0.5em] pr-[7em] text-[0.62em] font-medium text-white/60">
-                  <span class="whitespace-nowrap tabular-nums">{{ formatDate(result.date) }}</span>
-                  <span class="h-[0.3em] w-[0.3em] shrink-0 rounded-full bg-white/30"></span>
-                  <span class="truncate">{{ competitionName(result.competition) }}</span>
-                </div>
-                <h2 class="mt-[0.25em] truncate text-[1.45em] font-bold leading-tight">{{ result.name }}</h2>
-                <!-- One line: whatever doesn't fit is cut, never pushing the lifts out of the card. -->
-                <div
-                  class="mt-[0.35em] flex flex-nowrap items-center gap-[0.4em] overflow-hidden text-[0.62em] font-semibold whitespace-nowrap"
-                >
-                  <span class="shrink-0 rounded-full bg-white/12 px-[0.7em] py-[0.2em]">{{ classLabel(result) }}</span>
-                  <span
-                    v-if="result.rank"
-                    class="flex shrink-0 items-center gap-[0.3em] rounded-full px-[0.7em] py-[0.2em]"
-                    :class="medalClass(result.rank)"
-                  >
-                    <Medal v-if="result.rank <= 3" class="h-[1.1em] w-[1.1em]" stroke-width="2.5" />
-                    {{ placement(result.rank) }} plats
-                  </span>
-                  <span
-                    v-if="result.points"
-                    class="shrink-0 rounded-full bg-white/12 px-[0.7em] py-[0.2em] tabular-nums"
-                  >
-                    {{ formatPoints(result.points) }} GL
-                  </span>
-                  <span v-if="ageLabel(result)" class="rounded-full bg-white/12 px-[0.7em] py-[0.2em] text-white/75">
-                    {{ ageLabel(result) }}
-                  </span>
-                  <span v-if="result.equipped" class="rounded-full bg-white/12 px-[0.7em] py-[0.2em] text-white/75">
-                    Utrustat
-                  </span>
-                </div>
-              </div>
-
-              <div
-                class="grid items-stretch gap-[0.4em]"
-                :class="result.bench_only ? 'grid-cols-1' : 'grid-cols-[1fr_1fr_1fr_1.75fr]'"
-              >
-                <template v-if="!result.bench_only">
-                  <div
-                    v-for="lift in LIFTS"
-                    :key="lift.key"
-                    class="flex min-w-0 flex-col justify-center rounded-[0.45em] px-[0.4em] py-[0.35em]"
-                    :class="isRecord(result, lift.key) ? 'bg-amber-300 text-gkk' : 'bg-white/[0.07]'"
-                  >
-                    <div
-                      class="flex items-center gap-[0.25em] text-[0.55em] font-semibold uppercase tracking-wider"
-                      :class="isRecord(result, lift.key) ? 'text-gkk/80' : 'text-white/55'"
-                    >
-                      {{ lift.label }}
-                      <Crown v-if="isRecord(result, lift.key)" class="h-[1.1em] w-[1.1em]" stroke-width="2.75" />
-                    </div>
-                    <div class="text-[0.95em] font-bold leading-tight tabular-nums whitespace-nowrap">
-                      {{ formatKg(result[lift.key]) }}
-                    </div>
-                  </div>
-                </template>
-
-                <div
-                  class="flex min-w-0 flex-col justify-center rounded-[0.45em] px-[0.6em] py-[0.35em]"
-                  :class="isRecord(result, heroLift(result)) ? 'bg-amber-300 text-gkk' : 'bg-white text-gkk'"
-                >
-                  <div
-                    class="flex items-center gap-[0.25em] text-[0.55em] font-bold uppercase tracking-wider text-gkk/70"
-                  >
-                    {{ result.bench_only ? 'Bänkpress' : 'Total' }}
-                    <Crown v-if="isRecord(result, heroLift(result))" class="h-[1.1em] w-[1.1em]" stroke-width="2.75" />
-                  </div>
-                  <div class="text-[1.45em] font-extrabold leading-none tabular-nums whitespace-nowrap">
-                    {{ formatKg(result[heroLift(result)])
-                    }}<span class="ml-[0.15em] text-[0.5em] font-semibold">kg</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
+        <div v-if="flipping" class="slideshow-leaf absolute inset-y-0 right-0 w-[calc(50%-var(--gap)/2)]">
+          <div class="slideshow-face absolute inset-0 [container-type:size]">
+            <ResultCard v-if="current[1]" :result="current[1]" />
+            <div class="slideshow-shade-front absolute inset-0 rounded-[1.6vh]"></div>
+          </div>
+          <div class="slideshow-face slideshow-face-back absolute inset-0 [container-type:size]">
+            <ResultCard v-if="next[0]" :result="next[0]" />
+            <div class="slideshow-shade-back absolute inset-0 rounded-[1.6vh]"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -158,9 +76,10 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, useTemplateRef } from 'vue'
-import { Crown, Medal } from 'lucide-vue-next'
-import { SCROLL_PAUSE_MS, resultsLayout } from './results.js'
+import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
+import { Crown } from 'lucide-vue-next'
+import ResultCard from './ResultCard.vue'
+import { FLIP_MS, PAGE_MS, resultPages } from './results.js'
 
 const { results } = defineProps({
   // GKK's results from the last 30 days, newest first (App\Services\StyrkelyftResults, in the slideshow snapshot).
@@ -171,140 +90,153 @@ const { results } = defineProps({
   },
 })
 
-const LIFTS = [
-  { key: 'squat', label: 'Böj' },
-  { key: 'bench', label: 'Bänk' },
-  { key: 'deadlift', label: 'Mark' },
-]
-
 const competitions = computed(() => new Set(results.map((result) => result.competition)).size)
 const lifters = computed(() => new Set(results.map((result) => result.name)).size)
 const recordCount = computed(() => results.reduce((count, result) => count + (result.records?.length ?? 0), 0))
 
-// As many columns as fit the results nicely on a wide screen; the text scales with the size of the cards.
-const layout = computed(() => resultsLayout(results.length))
+const pages = computed(() => resultPages(results))
+const page = ref(0)
+const flipping = ref(false)
+const nextPage = computed(() => (page.value + 1) % Math.max(pages.value.length, 1))
+const current = computed(() => pages.value[page.value] ?? [])
+const next = computed(() => pages.value[nextPage.value] ?? [])
+// Beneath the leaf on the right: the next page's card while turning, else this page's.
+const under = computed(() => (flipping.value ? next.value : current.value))
 
-const cardStyle = computed(() => {
-  const { columns, visibleRows, scrolls } = layout.value
-  const width = `((100cqw - ${columns - 1} * var(--gap)) / ${columns})`
-  // While scrolling, the list has a gap above and below, so the first and last rows aren't cut by the fade.
-  const area = scrolls ? '(100cqh - 2 * var(--gap))' : '100cqh'
-  const height = `((${area} - ${visibleRows - 1} * var(--gap)) / ${visibleRows})`
-  // The base text size, from the size of a card (in the card area, which is smaller while a message is shown): a card
-  // holds about 10 lines of it, and its lifts about 19 characters across. Capped, so a single card isn't huge.
-  return {
-    width: `calc${width}`,
-    height: `calc${height}`,
-    fontSize: `min(calc(${width} / 19), calc(${height} / 10), 5vh)`,
-  }
-})
-
-// The scroll: started from the top each time the slide comes on screen (the slideshow hides the others with
-// display: none, which an IntersectionObserver sees), and stopped when it goes. A pause at the top, down to the
-// bottom, a pause there, and back again, so a slide held from the live control keeps showing them all.
+// The pages: from the first each time the slide comes on screen (the slideshow hides the others with display: none,
+// which an IntersectionObserver sees), turned every 5 seconds, and stopped when it goes. After the last page it turns
+// back to the first, so a slide held from the live control keeps showing them all.
 const viewport = useTemplateRef('viewport')
-const list = useTemplateRef('list')
-let scroll = null
+let pageTimer = null
+let flipTimer = null
 let observer = null
 
-function startScroll() {
-  stopScroll()
-  const distance = list.value.scrollHeight - viewport.value.clientHeight
-  if (!layout.value.scrolls || distance <= 0) {
-    return
+function start() {
+  stop()
+  page.value = 0
+  if (pages.value.length > 1) {
+    pageTimer = setInterval(turn, PAGE_MS)
   }
-  const { scrollMs } = layout.value
-  const total = SCROLL_PAUSE_MS + scrollMs + SCROLL_PAUSE_MS
-  scroll = list.value.animate(
-    [
-      { transform: 'translateY(0)', offset: 0 },
-      { transform: 'translateY(0)', offset: SCROLL_PAUSE_MS / total, easing: 'ease-in-out' },
-      { transform: `translateY(${-distance}px)`, offset: (SCROLL_PAUSE_MS + scrollMs) / total },
-      { transform: `translateY(${-distance}px)`, offset: 1 },
-    ],
-    { duration: total, iterations: Infinity, direction: 'alternate' },
-  )
 }
 
-function stopScroll() {
-  scroll?.cancel()
-  scroll = null
+function turn() {
+  flipping.value = true
+  flipTimer = setTimeout(() => {
+    page.value = nextPage.value
+    flipping.value = false
+  }, FLIP_MS)
+}
+
+function stop() {
+  clearInterval(pageTimer)
+  clearTimeout(flipTimer)
+  pageTimer = flipTimer = null
+  flipping.value = false
 }
 
 onMounted(() => {
-  observer = new IntersectionObserver(([entry]) => (entry.isIntersecting ? startScroll() : stopScroll()))
+  observer = new IntersectionObserver(([entry]) => (entry.isIntersecting ? start() : stop()))
   observer.observe(viewport.value)
 })
 
 onBeforeUnmount(() => {
   observer?.disconnect()
-  stopScroll()
+  stop()
 })
-
-function heroLift(result) {
-  return result.bench_only ? 'bench' : 'total'
-}
-
-function isRecord(result, lift) {
-  return result.records?.includes(lift) ?? false
-}
-
-// "Veteran (50-59 år)" → "Veteran 50–59"; a senior is not labelled, as most are.
-function ageLabel(result) {
-  const label = result.age_category ?? ''
-  if (!label || label === 'Senior') {
-    return null
-  }
-  const ages = label.match(/\((\d+)\s*-\s*(\d+)/)
-  return ages ? `${label.replace(/\s*\(.*$/, '')} ${ages[1]}–${ages[2]}` : label.replace(/\s*\(.*$/, '')
-}
-
-function classLabel(result) {
-  const weightClass = result.weight_class.endsWith('+')
-    ? `+${result.weight_class.slice(0, -1)}`
-    : `-${result.weight_class}`
-  return `${result.gender === 'F' ? 'Damer' : 'Herrar'} ${weightClass} kg`
-}
-
-// "2026 SM Klassisk styrkelyft" → "SM Klassisk styrkelyft", "2026 - Järnvägspressen - Serie 4" → "Järnvägspressen - Serie 4"
-function competitionName(name) {
-  return name.replace(/^\d{4}\s*[-–]?\s*/, '') || name
-}
-
-function placement(rank) {
-  return `${rank}:${[1, 2].includes(rank % 10) && ![11, 12].includes(rank % 100) ? 'a' : 'e'}`
-}
-
-function medalClass(rank) {
-  return (
-    { 1: 'bg-amber-300 text-gkk', 2: 'bg-slate-200 text-gkk', 3: 'bg-orange-300 text-gkk' }[rank] ??
-    'bg-white/12 text-white/80'
-  )
-}
-
-const kg = new Intl.NumberFormat('sv-SE', { maximumFractionDigits: 1 })
-const points = new Intl.NumberFormat('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-
-function formatKg(value) {
-  return value ? kg.format(value) : '–'
-}
-
-function formatPoints(value) {
-  return points.format(value)
-}
-
-function formatDate(date) {
-  return new Date(`${date}T12:00:00`).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short' })
-}
 </script>
 
 <style scoped>
-/* The scrolling cards fade out at the top and bottom edges. */
-.slideshow-results-fade {
-  mask-image: linear-gradient(to bottom, transparent, black var(--gap), black calc(100% - var(--gap)), transparent);
+/* The book: the leaf turns over the spine, in the middle of the gap between the two cards. */
+.slideshow-book {
+  perspective: 260vw;
 }
 
-/* A slow glint over the club record badges. */
+.slideshow-leaf {
+  transform-style: preserve-3d;
+  transform-origin: calc(var(--gap) / -2) 50%;
+  animation: slideshow-turn var(--flip) cubic-bezier(0.45, 0.05, 0.3, 1) forwards;
+}
+
+.slideshow-face {
+  backface-visibility: hidden;
+}
+
+.slideshow-face-back {
+  transform: rotateY(180deg);
+}
+
+@keyframes slideshow-turn {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(-180deg);
+  }
+}
+
+/* Light and shadow as the paper turns: its front darkens as it lifts, its back brightens as it lands, the card it
+   uncovers comes out of its shadow and the card it lands on goes into it. */
+.slideshow-shade-front,
+.slideshow-shade-back,
+.slideshow-shade-under,
+.slideshow-shade-revealed {
+  animation-duration: var(--flip);
+  animation-timing-function: cubic-bezier(0.45, 0.05, 0.3, 1);
+  animation-fill-mode: forwards;
+}
+
+.slideshow-shade-front {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.1));
+  animation-name: slideshow-shade-in;
+}
+
+.slideshow-shade-back {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.1));
+  animation-name: slideshow-shade-out;
+}
+
+.slideshow-shade-revealed {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.15));
+  animation-name: slideshow-shade-out;
+}
+
+.slideshow-shade-under {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.15));
+  animation-name: slideshow-shade-in-late;
+}
+
+@keyframes slideshow-shade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideshow-shade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideshow-shade-in-late {
+  0%,
+  50% {
+    opacity: 0;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* A slow glint over the club record badge. */
 .slideshow-shine::after {
   content: '';
   position: absolute;

@@ -12,7 +12,7 @@ import {
 } from 'firebase/database'
 import { liveDatabase } from '../../live/remote/firebase.js'
 import { watchServerClock } from '../../live/remote/serverClock.js'
-import { resultsLayout } from './results.js'
+import { resultsDuration } from './results.js'
 
 /**
  * Live control of the screen slideshow (/slides-for-screen) from /admin/slideshow, through Firebase's Realtime
@@ -107,9 +107,9 @@ export function rotation(slides, records = [], results = []) {
   const own = Array.isArray(slides) ? slides.filter((slide) => slide && typeof slide === 'object') : []
   return [
     { type: 'Klubbrekord', data: { records }, rotates: true },
-    // Shown for longer when there are so many results that they scroll.
+    // Shown until every page of results has been shown.
     ...(Array.isArray(results) && results.length
-      ? [{ type: 'Resultat', data: { results }, rotates: true, duration: resultsLayout(results.length).durationMs }]
+      ? [{ type: 'Resultat', data: { results }, rotates: true, duration: resultsDuration(results.length) }]
       : []),
     ...own.map((slide) => ({ ...slide, rotates: slide.is_visible === true })),
     { type: 'Lokalregler', data: {}, rotates: true },

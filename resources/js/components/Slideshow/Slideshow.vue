@@ -279,7 +279,7 @@ function component(type) {
 }
 
 const currentSlide = ref(0)
-// Each slide is shown for 30 seconds, or its own time (the competition results when they scroll).
+// Each slide is shown for 30 seconds, or its own time (the competition results, until all their pages are shown).
 const slideDuration = computed(() => slides.value[currentSlide.value]?.duration ?? 30 * 1000)
 // Incremented on every slide change so the progress bar animation restarts
 const slideCycle = ref(0)
