@@ -9,7 +9,7 @@
 
           <div class="who">
             <div class="eyebrow">På flaket</div>
-            <div class="name" :class="{ long: (attempt.name ?? '').length > 18 }">
+            <div class="name" :class="nameSize">
               {{ attempt.name ?? 'Okänd lyftare' }}
             </div>
             <div v-if="meta.length" class="meta">
@@ -111,6 +111,12 @@ const props = defineProps({
 // The lifter's club crest, if we have one; no crest rather than ours (see clubs.js).
 const crest = computed(() => clubCrest(props.attempt.team))
 
+// Long names get smaller, and wrap onto a second line rather than being cut off.
+const nameSize = computed(() => {
+  const length = (props.attempt.name ?? '').length
+  return length > 26 ? 'longer' : length > 14 ? 'long' : ''
+})
+
 const discipline = computed(() => disciplineName(props.attempt.discipline))
 
 // The weight is the largest text on the card; longer weights ("97,5", "202,5") get a smaller size to fit the box.
@@ -191,7 +197,7 @@ const rows = computed(() =>
 .main {
   display: flex;
   align-items: stretch;
-  height: 250px;
+  min-height: 250px;
 }
 
 .brand {
@@ -226,8 +232,8 @@ const rows = computed(() =>
 
 .name {
   /*
-    Room above the capitals for the dots and rings of Å, Ä and Ö, which the tight line height and the clipping (for
-    the ellipsis of long names) would otherwise cut off; the negative margin keeps the card's layout unchanged.
+    Room above the capitals for the dots and rings of Å, Ä and Ö, which the tight line height would otherwise let
+    touch the eyebrow; the negative margin keeps the card's layout unchanged.
   */
   margin-top: calc(6px - 0.14em);
   padding-top: 0.14em;
@@ -236,13 +242,23 @@ const rows = computed(() =>
   font-weight: 700;
   line-height: 0.95;
   text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* A name too long for one line wraps (evenly over the two), and the card grows to fit it. */
+  text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
 .name.long {
-  font-size: 72px;
+  font-size: 76px;
+}
+
+.name.longer {
+  font-size: 64px;
+}
+
+/* Room between two lines for the dots of Å, Ä and Ö. */
+.name.long,
+.name.longer {
+  line-height: 1.04;
 }
 
 .meta {
