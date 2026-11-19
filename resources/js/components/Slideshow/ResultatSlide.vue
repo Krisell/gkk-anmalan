@@ -29,6 +29,16 @@
             <div class="mt-[0.5vh] text-white/65">lyftare</div>
           </div>
           <div
+            v-if="pbCount"
+            class="rounded-[1.2vh] bg-emerald-400 px-[1.2vw] py-[1vh] text-center text-gkk shadow-lg shadow-emerald-400/20"
+          >
+            <div class="flex items-center justify-center gap-[0.3em] text-[2em] font-bold leading-none tabular-nums">
+              <TrendingUp class="h-[0.8em] w-[0.8em]" stroke-width="2.5" />
+              {{ pbCount }}
+            </div>
+            <div class="mt-[0.5vh] font-semibold">personbästan</div>
+          </div>
+          <div
             v-if="recordCount"
             class="slideshow-shine relative overflow-hidden rounded-[1.2vh] bg-amber-300 px-[1.2vw] py-[1vh] text-center text-gkk shadow-lg shadow-amber-300/20"
           >
@@ -77,7 +87,7 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
-import { Crown } from 'lucide-vue-next'
+import { Crown, TrendingUp } from 'lucide-vue-next'
 import ResultCard from './ResultCard.vue'
 import { FLIP_MS, PAGE_MS, resultPages } from './results.js'
 
@@ -92,6 +102,10 @@ const { results } = defineProps({
 
 const competitions = computed(() => new Set(results.map((result) => result.competition)).size)
 const lifters = computed(() => new Set(results.map((result) => result.name)).size)
+// Lifts heavier than the lifter's earlier best; a debut's lifts aren't counted.
+const pbCount = computed(() =>
+  results.reduce((count, result) => count + (result.debut ? 0 : (result.personal_bests?.length ?? 0)), 0),
+)
 const recordCount = computed(() => results.reduce((count, result) => count + (result.records?.length ?? 0), 0))
 
 const pages = computed(() => resultPages(results))

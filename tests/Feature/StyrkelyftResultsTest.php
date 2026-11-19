@@ -156,3 +156,39 @@ test('a page after the first keeps its filters, and a result on two pages is kep
     expect(collect(StyrkelyftResults::fetch('2026-10-24'))->pluck('id')->sort()->values()->all())->toBe([1, 2]);
     Http::assertSent(fn (Request $request) => $request->url() === $next);
 });
+
+test('a lift heavier than the lifter\'s best at earlier competitions is a personal best, and a first competition a debut', function () {
+    $stella = ['person' => ['id' => 42]];
+    $ida = ['person' => ['id' => 43, 'first_name' => 'Ida'], 'id' => 2];
+    Http::fake(function (Request $request) use ($stella, $ida) {
+        \parse_str(\parse_url($request->url(), PHP_URL_QUERY) ?? '', $query);
+        $results = match ($query['person'] ?? null) {
+            '42' => [
+                styrkelyftResult($stella),
+                // Earlier: a heavier bench press, a lighter squat and deadlift; a heavier equipped total doesn't count.
+                styrkelyftResult([...$stella, 'id' => 10, 'group' => ['start' => '2026-03-01T10:00:00+01:00'], 'squat' => 140.0, 'benchpress' => 110.0, 'deadlift' => 170.0, 'total' => 420.0]),
+                styrkelyftResult([...$stella, 'id' => 11, 'group' => ['start' => '2026-04-01T10:00:00+02:00'], 'competition_type' => ['name' => 'EPL'], 'total' => 500.0]),
+            ],
+            '43' => [styrkelyftResult($ida)],
+            default => [styrkelyftResult($stella), styrkelyftResult($ida)],
+        };
+
+        return Http::response(['count' => \count($results), 'next' => null, 'results' => $results]);
+    });
+
+    // Newest first; on the same day, the higher id.
+    [$second, $first] = StyrkelyftResults::recent();
+
+    // The deadlift only equals the earlier best.
+    expect($first)->toMatchArray(['person_id' => 42, 'personal_bests' => ['squat', 'total'], 'debut' => false]);
+    expect($second)->toMatchArray(['person_id' => 43, 'personal_bests' => [], 'debut' => true]);
+});
+
+test('without the lifter\'s earlier results, nothing is marked', function () {
+    Http::fake([
+        'data-api.styrkelyft.se/api/results?person*' => Http::response('Bad gateway', 502),
+        'data-api.styrkelyft.se/*' => Http::response(['count' => 1, 'next' => null, 'results' => [styrkelyftResult(['person' => ['id' => 42]])]]),
+    ]);
+
+    expect(StyrkelyftResults::recent()[0])->toMatchArray(['personal_bests' => null, 'debut' => null]);
+});

@@ -70,7 +70,7 @@ class StyrkelyftResults
         }
 
         // The club records are applied on every build, so that registering a record shows on the slide right away.
-        return \array_slice(self::withRecords(self::within($fetched, self::DAYS)), 0, self::MAX);
+        return self::withPersonalBests(\array_slice(self::withRecords(self::within($fetched, self::DAYS)), 0, self::MAX));
     }
 
     /**
@@ -162,6 +162,7 @@ class StyrkelyftResults
 
         return [
             'id' => $result['id'],
+            'person_id' => $person['id'] ?? null,
             'date' => \substr($start, 0, 10),
             'competition' => \trim($result['group']['competition']['name'] ?? ''),
             'name' => \trim(($person['first_name'] ?? '').' '.($person['last_name'] ?? '')),
@@ -249,6 +250,74 @@ class StyrkelyftResults
         });
 
         return $marked->reverse()->values()->all();
+    }
+
+    /**
+     * Marks the personal bests: each lift heavier than the lifter's best in it at earlier competitions, classic (CPL,
+     * and the bench press also from CBP) and equipped (EPL and EBP) apart, as on the live overlay (personalBests). A
+     * lifter's first competition of the kind is a debut instead. Both are null when the lifter's results can't be
+     * fetched; after one fails, the rest aren't tried, so a slow API doesn't hold up the build.
+     *
+     * @param  list<array<string, mixed>>  $results
+     * @return list<array<string, mixed>>
+     */
+    public static function withPersonalBests(array $results): array
+    {
+        $failed = false;
+
+        return \array_map(function ($result) use (&$failed) {
+            $kinds = $result['equipped'] ? ['EPL', 'EBP'] : ['CPL', 'CBP'];
+            $history = null;
+
+            if (! $failed && ($result['person_id'] ?? null) !== null && \in_array($result['type'], $kinds, true)) {
+                try {
+                    $history = self::history($result['person_id']);
+                } catch (Throwable $e) {
+                    report($e);
+                    $failed = true;
+                }
+            }
+
+            if ($history === null) {
+                return [...$result, 'personal_bests' => null, 'debut' => null];
+            }
+
+            $earlier = \array_filter($history, fn ($other) => $other['date'] < $result['date'] && \in_array($other['type'], $kinds, true));
+            $bests = [];
+
+            foreach (\array_keys(self::LIFTS) as $lift) {
+                $value = $result[$lift] ?? null;
+                // A bench press competition only counts for the bench press.
+                $before = \array_filter(\array_map(fn ($other) => $other[$lift] ?? null, $lift === 'bench'
+                    ? $earlier
+                    : \array_filter($earlier, fn ($other) => ! $other['bench_only'])));
+
+                if ($value !== null && $before && $value > \max($before)) {
+                    $bests[] = $lift;
+                }
+            }
+
+            return [...$result, 'personal_bests' => $bests, 'debut' => ! $earlier];
+        }, $results);
+    }
+
+    /**
+     * All of a lifter's results (by the federation's id of the person), kept for a day: only results before the one
+     * shown are compared, so a day old list is enough.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private static function history(int $personId): array
+    {
+        return Cache::remember("styrkelyft.history.{$personId}", 24 * 60 * 60, fn () => collect(
+            self::get(self::API, ['person' => $personId, 'page_size' => self::PAGE_SIZE])->json('results') ?? [],
+        )
+            ->filter(fn ($result) => \is_array($result) && ! ($result['disqualified'] ?? false))
+            ->map(fn ($result) => self::normalize($result))
+            ->filter()
+            ->map(fn ($result) => \array_intersect_key($result, \array_flip(['id', 'date', 'type', 'bench_only', ...\array_keys(self::LIFTS)])))
+            ->values()
+            ->all());
     }
 
     /**
