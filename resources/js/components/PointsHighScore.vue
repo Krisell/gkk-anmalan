@@ -148,56 +148,59 @@
       </div>
     </template>
 
-    <!-- The team test: who is picked, their sum, and a clear way to start over. -->
-    <Transition
-      enter-from-class="translate-y-full opacity-0"
-      leave-to-class="translate-y-full opacity-0"
-      enter-active-class="transition duration-300 ease-out"
-      leave-active-class="transition duration-200 ease-in"
-    >
-      <div v-if="team.length" class="fixed inset-x-0 bottom-0 z-30 px-4 pb-4 sm:px-6">
-        <div
-          class="mx-auto flex max-w-4xl flex-col gap-3 rounded-2xl bg-gkk p-4 text-white shadow-2xl shadow-gkk/30 sm:flex-row sm:items-center sm:gap-6 sm:px-6"
-        >
-          <div class="min-w-0 flex-1">
-            <div class="text-xs font-semibold uppercase tracking-wider text-white/60">
-              Lagtest · {{ team.length }} av {{ TEAM_SIZE }} lyftare
+    <!-- The team test: who is picked, their sum, and a clear way to start over. Moved to the body, as the inside
+         layout's fade-in (.page-transition) leaves a transform that would pin a fixed bar to the page, not the screen. -->
+    <Teleport to="body">
+      <Transition
+        enter-from-class="translate-y-full opacity-0"
+        leave-to-class="translate-y-full opacity-0"
+        enter-active-class="transition duration-300 ease-out"
+        leave-active-class="transition duration-200 ease-in"
+      >
+        <div v-if="team.length" class="fixed inset-x-0 bottom-0 z-30 px-4 pb-4 sm:px-6">
+          <div
+            class="mx-auto flex max-w-4xl flex-col gap-3 rounded-2xl bg-gkk p-4 text-white shadow-2xl shadow-gkk/30 sm:flex-row sm:items-center sm:gap-6 sm:px-6"
+          >
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-semibold uppercase tracking-wider text-white/60">
+                Lagtest · {{ team.length }} av {{ TEAM_SIZE }} lyftare
+              </div>
+              <div class="mt-2 flex flex-wrap gap-1.5">
+                <button
+                  v-for="member in team"
+                  :key="member.key"
+                  type="button"
+                  class="flex items-center gap-1.5 rounded-full bg-white/12 py-1 pr-2 pl-3 text-sm font-medium hover:bg-white/20"
+                  :title="`Ta bort ${member.name}`"
+                  @click="remove(member.key)"
+                >
+                  {{ member.name }}
+                  <span class="text-white/60 tabular-nums">{{ formatPoints(memberPoints(member)) }}</span>
+                  <X class="size-3.5 text-white/70" stroke-width="2.5" />
+                </button>
+              </div>
             </div>
-            <div class="mt-2 flex flex-wrap gap-1.5">
+
+            <div class="flex items-center justify-between gap-5 sm:justify-end">
+              <div class="text-right">
+                <div class="text-xs font-semibold uppercase tracking-wider text-white/60">Summa</div>
+                <div class="text-3xl font-extrabold tracking-tight tabular-nums">
+                  {{ formatPoints(teamSum) }}<span class="ml-1 text-sm font-semibold text-white/60">GL</span>
+                </div>
+              </div>
               <button
-                v-for="member in team"
-                :key="member.key"
                 type="button"
-                class="flex items-center gap-1.5 rounded-full bg-white/12 py-1 pr-2 pl-3 text-sm font-medium hover:bg-white/20"
-                :title="`Ta bort ${member.name}`"
-                @click="remove(member.key)"
+                class="flex shrink-0 items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-bold text-gkk shadow-sm hover:bg-gray-100"
+                @click="reset"
               >
-                {{ member.name }}
-                <span class="text-white/60 tabular-nums">{{ formatPoints(memberPoints(member)) }}</span>
-                <X class="size-3.5 text-white/70" stroke-width="2.5" />
+                <RotateCcw class="size-4" stroke-width="2.5" />
+                Rensa
               </button>
             </div>
           </div>
-
-          <div class="flex items-center justify-between gap-5 sm:justify-end">
-            <div class="text-right">
-              <div class="text-xs font-semibold uppercase tracking-wider text-white/60">Summa</div>
-              <div class="text-3xl font-extrabold tracking-tight tabular-nums">
-                {{ formatPoints(teamSum) }}<span class="ml-1 text-sm font-semibold text-white/60">GL</span>
-              </div>
-            </div>
-            <button
-              type="button"
-              class="flex shrink-0 items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-bold text-gkk shadow-sm hover:bg-gray-100"
-              @click="reset"
-            >
-              <RotateCcw class="size-4" stroke-width="2.5" />
-              Rensa
-            </button>
-          </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
