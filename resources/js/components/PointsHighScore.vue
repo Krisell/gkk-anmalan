@@ -82,58 +82,128 @@
       </button>
     </div>
 
-    <div v-else class="mt-10 grid items-start gap-6 lg:grid-cols-2">
-      <section
-        v-for="gender in GENDERS"
-        :key="gender.value"
-        class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-900/5"
-      >
-        <div class="flex items-center justify-between bg-gkk px-5 py-4 text-white">
-          <h2 class="text-lg font-semibold">{{ gender.label }}</h2>
-          <span class="text-sm text-white/60">{{ list(gender.value).length }} lyftare</span>
-        </div>
+    <template v-else>
+      <p class="mt-8 flex items-center gap-2 text-sm text-gray-500">
+        <UsersRound class="size-4 shrink-0 text-gkk" stroke-width="2.25" />
+        Lagtest: klicka på upp till {{ TEAM_SIZE }} lyftare för att se lagets summa.
+      </p>
 
-        <ol v-if="list(gender.value).length" class="divide-y divide-gray-100">
-          <li
-            v-for="(item, index) in list(gender.value)"
-            :key="item.id ?? `${item.name}-${index}`"
-            class="flex items-center gap-4 px-5 py-3.5"
-          >
-            <span
-              class="flex size-8 shrink-0 items-center justify-center rounded-full bg-gray-100 text-sm font-bold text-gray-500 tabular-nums"
+      <div class="mt-4 grid items-start gap-6 lg:grid-cols-2" :class="{ 'pb-40 sm:pb-28': team.length }">
+        <section
+          v-for="gender in GENDERS"
+          :key="gender.value"
+          class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-900/5"
+        >
+          <div class="flex items-center justify-between bg-gkk px-5 py-4 text-white">
+            <h2 class="text-lg font-semibold">{{ gender.label }}</h2>
+            <span class="text-sm text-white/60">{{ list(gender.value).length }} lyftare</span>
+          </div>
+
+          <ol v-if="list(gender.value).length" class="divide-y divide-gray-100">
+            <li v-for="(item, index) in list(gender.value)" :key="item.id ?? `${item.name}-${index}`">
+              <!-- Picked for the team test; once someone is picked, the others fade, and when the team is full they
+                 can't be picked. -->
+              <button
+                type="button"
+                class="flex w-full items-center gap-4 px-5 py-3.5 text-left transition duration-200"
+                :class="rowClass(gender.value, item)"
+                :aria-pressed="isPicked(gender.value, item)"
+                :disabled="teamFull && !isPicked(gender.value, item)"
+                @click="toggle(gender.value, item)"
+              >
+                <span
+                  class="flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums transition-colors"
+                  :class="isPicked(gender.value, item) ? 'bg-gkk text-white' : 'bg-gray-100 text-gray-500'"
+                >
+                  <Check v-if="isPicked(gender.value, item)" class="size-4" stroke-width="3" />
+                  <template v-else>{{ index + 1 }}</template>
+                </span>
+
+                <div class="min-w-0 flex-1">
+                  <div class="truncate font-semibold text-gray-900">{{ item.name }}</div>
+                  <div class="mt-0.5 text-sm text-gray-500 tabular-nums">
+                    {{ resultLine(item) }}
+                  </div>
+                  <!-- The points against the leader's. -->
+                  <div class="mt-2 h-1 overflow-hidden rounded-full bg-gray-100">
+                    <div
+                      class="h-full rounded-full bg-gkk/35"
+                      :style="{ width: `${barWidth(gender.value, item)}%` }"
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="shrink-0 text-right">
+                  <div class="text-xl font-extrabold tracking-tight text-gray-900 tabular-nums">
+                    {{ formatPoints(points(item)) }}
+                  </div>
+                  <div class="text-xs font-medium uppercase tracking-wider text-gray-400">GL</div>
+                </div>
+              </button>
+            </li>
+          </ol>
+
+          <p v-else class="px-5 py-12 text-center text-gray-500">Inga resultat ännu i år.</p>
+        </section>
+      </div>
+    </template>
+
+    <!-- The team test: who is picked, their sum, and a clear way to start over. -->
+    <Transition
+      enter-from-class="translate-y-full opacity-0"
+      leave-to-class="translate-y-full opacity-0"
+      enter-active-class="transition duration-300 ease-out"
+      leave-active-class="transition duration-200 ease-in"
+    >
+      <div v-if="team.length" class="fixed inset-x-0 bottom-0 z-30 px-4 pb-4 sm:px-6">
+        <div
+          class="mx-auto flex max-w-4xl flex-col gap-3 rounded-2xl bg-gkk p-4 text-white shadow-2xl shadow-gkk/30 sm:flex-row sm:items-center sm:gap-6 sm:px-6"
+        >
+          <div class="min-w-0 flex-1">
+            <div class="text-xs font-semibold uppercase tracking-wider text-white/60">
+              Lagtest · {{ team.length }} av {{ TEAM_SIZE }} lyftare
+            </div>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              <button
+                v-for="member in team"
+                :key="member.key"
+                type="button"
+                class="flex items-center gap-1.5 rounded-full bg-white/12 py-1 pr-2 pl-3 text-sm font-medium hover:bg-white/20"
+                :title="`Ta bort ${member.name}`"
+                @click="remove(member.key)"
+              >
+                {{ member.name }}
+                <span class="text-white/60 tabular-nums">{{ formatPoints(memberPoints(member)) }}</span>
+                <X class="size-3.5 text-white/70" stroke-width="2.5" />
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-5 sm:justify-end">
+            <div class="text-right">
+              <div class="text-xs font-semibold uppercase tracking-wider text-white/60">Summa</div>
+              <div class="text-3xl font-extrabold tracking-tight tabular-nums">
+                {{ formatPoints(teamSum) }}<span class="ml-1 text-sm font-semibold text-white/60">GL</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="flex shrink-0 items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-bold text-gkk shadow-sm hover:bg-gray-100"
+              @click="reset"
             >
-              {{ index + 1 }}
-            </span>
-
-            <div class="min-w-0 flex-1">
-              <div class="truncate font-semibold text-gray-900">{{ item.name }}</div>
-              <div class="mt-0.5 text-sm text-gray-500 tabular-nums">
-                {{ resultLine(item) }}
-              </div>
-              <!-- The points against the leader's. -->
-              <div class="mt-2 h-1 overflow-hidden rounded-full bg-gray-100">
-                <div class="h-full rounded-full bg-gkk/35" :style="{ width: `${barWidth(gender.value, item)}%` }"></div>
-              </div>
-            </div>
-
-            <div class="shrink-0 text-right">
-              <div class="text-xl font-extrabold tracking-tight text-gray-900 tabular-nums">
-                {{ formatPoints(points(item)) }}
-              </div>
-              <div class="text-xs font-medium uppercase tracking-wider text-gray-400">GL</div>
-            </div>
-          </li>
-        </ol>
-
-        <p v-else class="px-5 py-12 text-center text-gray-500">Inga resultat ännu i år.</p>
-      </section>
-    </div>
+              <RotateCcw class="size-4" stroke-width="2.5" />
+              Rensa
+            </button>
+          </div>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { Trophy } from 'lucide-vue-next'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { Check, RotateCcw, Trophy, UsersRound, X } from 'lucide-vue-next'
 
 const EVENTS = [
   { value: 'ksl', label: 'Styrkelyft' },
@@ -143,6 +213,8 @@ const GENDERS = [
   { value: 'men', label: 'Herrar' },
   { value: 'women', label: 'Damer' },
 ]
+
+const TEAM_SIZE = 4
 
 const currentYear = new Date().getFullYear()
 const event = ref('ksl')
@@ -209,7 +281,66 @@ async function fetchRanking() {
   }
 }
 
-onMounted(fetchRanking)
+// The team test, for each discipline on its own (the points differ): up to four lifters, men and women alike, each
+// kept by gender and name. Escape starts over, as does the Rensa button.
+const picked = ref({ ksl: [], kbp: [] })
+const team = computed(() => picked.value[event.value])
+const teamFull = computed(() => team.value.length >= TEAM_SIZE)
+
+function memberKey(gender, item) {
+  return `${gender}:${item.name}`
+}
+
+function isPicked(gender, item) {
+  return team.value.some((member) => member.key === memberKey(gender, item))
+}
+
+function toggle(gender, item) {
+  const key = memberKey(gender, item)
+  if (isPicked(gender, item)) {
+    remove(key)
+  } else if (!teamFull.value) {
+    picked.value[event.value] = [...team.value, { key, gender, name: item.name }]
+  }
+}
+
+function remove(key) {
+  picked.value[event.value] = team.value.filter((member) => member.key !== key)
+}
+
+function reset() {
+  picked.value[event.value] = []
+}
+
+function memberPoints(member) {
+  const item = list(member.gender).find((other) => memberKey(member.gender, other) === member.key)
+  return item ? points(item) : 0
+}
+
+const teamSum = computed(() => team.value.reduce((sum, member) => sum + memberPoints(member), 0))
+
+function rowClass(gender, item) {
+  if (isPicked(gender, item)) {
+    return 'bg-gkk/[0.06] shadow-[inset_3px_0_0_var(--color-gkk)]'
+  }
+  if (!team.value.length) {
+    return 'hover:bg-gray-50'
+  }
+  return teamFull.value ? 'cursor-not-allowed opacity-35' : 'opacity-45 hover:bg-gray-50 hover:opacity-80'
+}
+
+function onKeydown(e) {
+  if (e.key === 'Escape' && team.value.length) {
+    reset()
+  }
+}
+
+onMounted(() => {
+  fetchRanking()
+  window.addEventListener('keydown', onKeydown)
+})
+
+onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 
 function list(gender) {
   return ranking.value[gender][event.value]
