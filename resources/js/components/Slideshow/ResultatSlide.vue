@@ -89,7 +89,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
 import { Crown, TrendingUp } from 'lucide-vue-next'
 import ResultCard from './ResultCard.vue'
-import { FLIP_MS, PAGE_MS, resultPages } from './results.js'
+import { FLIP_MS, pageDuration, resultPages } from './results.js'
 
 const { results } = defineProps({
   // GKK's results from the last 30 days, newest first (App\Services\StyrkelyftResults, in the slideshow snapshot).
@@ -118,7 +118,7 @@ const next = computed(() => pages.value[nextPage.value] ?? [])
 const under = computed(() => (flipping.value ? next.value : current.value))
 
 // The pages: from the first each time the slide comes on screen (the slideshow hides the others with display: none,
-// which an IntersectionObserver sees), turned every 5 seconds, and stopped when it goes. After the last page it turns
+// which an IntersectionObserver sees), each shown for its time (see results.js), and stopped when it goes. After the last page it turns
 // back to the first, so a slide held from the live control keeps showing them all.
 const viewport = useTemplateRef('viewport')
 let pageTimer = null
@@ -129,12 +129,18 @@ function start() {
   stop()
   page.value = 0
   if (pages.value.length > 1) {
-    pageTimer = setInterval(turn, PAGE_MS)
+    schedule(0)
   }
+}
+
+// The page is on screen from the moment it starts turning in, so its time counts from there.
+function schedule(index) {
+  pageTimer = setTimeout(turn, pageDuration(pages.value[index]))
 }
 
 function turn() {
   flipping.value = true
+  schedule(nextPage.value)
   flipTimer = setTimeout(() => {
     page.value = nextPage.value
     flipping.value = false
@@ -142,7 +148,7 @@ function turn() {
 }
 
 function stop() {
-  clearInterval(pageTimer)
+  clearTimeout(pageTimer)
   clearTimeout(flipTimer)
   pageTimer = flipTimer = null
   flipping.value = false

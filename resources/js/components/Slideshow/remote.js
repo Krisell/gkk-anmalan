@@ -109,7 +109,7 @@ export function rotation(slides, records = [], results = []) {
     { type: 'Klubbrekord', data: { records }, rotates: true },
     // Shown until every page of results has been shown.
     ...(Array.isArray(results) && results.length
-      ? [{ type: 'Resultat', data: { results }, rotates: true, duration: resultsDuration(results.length) }]
+      ? [{ type: 'Resultat', data: { results }, rotates: true, duration: resultsDuration(results) }]
       : []),
     ...own.map((slide) => ({ ...slide, rotates: slide.is_visible === true })),
     { type: 'Lokalregler', data: {}, rotates: true },
