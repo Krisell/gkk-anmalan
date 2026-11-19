@@ -1,14 +1,16 @@
 <template>
   <!-- One result on the results slide (ResultatSlide.vue). It fills its place there, which is a size container: the
-       text scales with it, a card holding about 14 lines of the base size and 22 characters across. -->
+       text scales with it, a card holding about 18 lines of the base size and 22 characters across. Whatever still
+       doesn't fit (a name on two lines, an unusual screen) is shrunk to fit (see fit). -->
   <article
+    ref="card"
     class="relative flex h-full w-full min-w-0 flex-col justify-between gap-[0.7em] overflow-hidden rounded-[1.6vh] bg-gkk p-[0.9em] ring-1"
     :class="
       result.records.length
         ? 'bg-linear-to-br from-white/[0.14] to-amber-300/[0.08] ring-amber-300/60 shadow-[0_0_4vh_rgba(246,201,69,0.18)]'
         : 'bg-linear-to-br from-white/[0.09] to-white/[0.05] ring-white/10'
     "
-    style="font-size: min(100cqw / 22, 100cqh / 14, 6vh)"
+    :style="{ fontSize: `calc(min(100cqw / 22, 100cqh / 18, 6vh) * ${scale})` }"
   >
     <div
       v-if="result.records.length"
@@ -116,7 +118,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef } from 'vue'
 import { Crown, Medal, TrendingUp } from 'lucide-vue-next'
 
 const { result } = defineProps({
@@ -131,6 +133,32 @@ const LIFTS = [
   { key: 'bench', label: 'Bänk' },
   { key: 'deadlift', label: 'Mark' },
 ]
+
+// Shrinks the text until the card's content fits it, whenever the card changes size (also when its slide comes on
+// screen: hidden, it has no size). Nearly everything is sized in em, so the content shrinks in step with the text.
+const card = useTemplateRef('card')
+const scale = ref(1)
+let resizeObserver = null
+
+async function fit() {
+  scale.value = 1
+  await nextTick()
+  for (let attempt = 0; attempt < 3 && card.value; attempt++) {
+    const { clientHeight, scrollHeight } = card.value
+    if (!clientHeight || scrollHeight <= clientHeight + 1) {
+      return
+    }
+    scale.value *= (clientHeight / scrollHeight) * 0.98
+    await nextTick()
+  }
+}
+
+onMounted(() => {
+  resizeObserver = new ResizeObserver(() => fit())
+  resizeObserver.observe(card.value)
+})
+
+onBeforeUnmount(() => resizeObserver?.disconnect())
 
 const heroLift = computed(() => (result.bench_only ? 'bench' : 'total'))
 
