@@ -1,209 +1,173 @@
 <template>
-  <div class="container mx-auto max-w-3xl">
-    <Breadcrumbs class="mb-6" title="Admin - Dokument" />
-
-    <div class="flex flex-col">
-      <div
-        v-for="(folder, folderIndex) in sortedFolders"
-        :key="folder.id"
-        class="py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+  <div class="container mx-auto max-w-3xl px-4 pb-16 lg:px-0">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <Breadcrumbs :items="[{ name: 'Dokument', href: '/member-documents' }]" title="Hantera dokument" />
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 rounded-full bg-gkk px-4 py-2 text-sm font-semibold text-white shadow-xs transition hover:bg-gkk-light"
+        @click="openNewFolder"
       >
-        <div
-          class="align-middle inline-block min-w-full shadow-sm overflow-hidden sm:rounded-lg border-b border-gray-200"
-        >
-          <table class="min-w-full">
-            <thead>
-              <tr>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  {{ folder.name }}
-                  <span
-                    v-if="folder.only_administrators"
-                    class="ml-2 inline-flex items-center rounded-full bg-gkk/10 px-2 py-0.5 text-[10px] font-semibold normal-case tracking-normal text-gkk"
-                  >
-                    Endast administratörer
-                  </span>
-                </th>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                ></th>
-                <th
-                  class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  <div class="flex justify-end">
-                    <svg
-                      v-if="folderIndex < folders.length - 1"
-                      @click="moveDown(folderIndex)"
-                      v-tooltip.left="'Flytta ner mapp'"
-                      class="w-6 ml-2 text-gkk-light hover:text-gkk cursor-pointer"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#000"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
+        <FolderPlus class="size-4" stroke-width="2.25" />
+        Ny mapp
+      </button>
+    </div>
+    <p class="mt-4 text-gray-500">
+      Lägg till, byt namn på och ordna klubbens dokument. Mappar markerade
+      <span class="font-medium text-gray-700">Endast administratörer</span> syns inte för medlemmar.
+    </p>
 
-                    <svg
-                      v-if="folderIndex > 0"
-                      @click="moveUp(folderIndex)"
-                      v-tooltip.left="'Flytta upp mapp'"
-                      class="w-6 ml-2 text-gkk-light hover:text-gkk cursor-pointer"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#000"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <polyline points="18 15 12 9 6 15" />
-                    </svg>
+    <label class="relative mt-6 block">
+      <span class="sr-only">Sök dokument</span>
+      <Search class="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-gray-400" />
+      <input
+        v-model="query"
+        type="search"
+        :placeholder="`Sök bland ${documentCount} dokument`"
+        class="block w-full rounded-full border-0 bg-white py-3 pr-4 pl-12 text-gray-900 shadow-xs ring-1 ring-gray-900/10 placeholder:text-gray-400 focus:ring-2 focus:ring-gkk focus:outline-hidden"
+      />
+    </label>
 
-                    <svg
-                      v-tooltip.left="'Redigera mappnamn'"
-                      class="w-6 ml-2 text-gkk-light hover:text-gkk cursor-pointer"
-                      @click="editFolder(folder)"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                      ></path>
-                      <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-
-                    <svg
-                      v-tooltip.left="'Radera mapp'"
-                      v-if="folder.documents.length === 0"
-                      class="w-6 ml-2 text-gkk-light hover:text-gkk cursor-pointer"
-                      @click="deleteFolder(folder)"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      ></path>
-                    </svg>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white">
-              <tr v-for="document in folder.documents" :key="document.id">
-                <td class="px-2 py-2 whitespace-no-wrap border-b border-gray-200">
-                  <div class="flex items-center">
-                    <div class="ml-4">
-                      <div class="text-sm leading-5 font-medium text-gray-900">
-                        <i class="fa fa-file-o mr-4"></i>{{ document.name }}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-
-                <td class="px-6 py-2 whitespace-no-wrap border-b border-gray-200 flex justify-end">
-                  <Button @click="show(document)">Visa</Button>
-                </td>
-
-                <td class="px-6 whitespace-no-wrap border-b border-gray-200" style="width: 80px">
-                  <div class="flex justify-end">
-                    <svg
-                      v-tooltip="'Redigera namn'"
-                      class="w-6 text-gkk-light hover:text-gkk cursor-pointer"
-                      @click="confirmEdit(document)"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                      ></path>
-                      <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    <svg
-                      v-tooltip="'Radera dokument'"
-                      class="w-6 ml-2 text-gkk-light hover:text-gkk cursor-pointer"
-                      @click="confirmDelete(document)"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      ></path>
-                    </svg>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="flex justify-center mt-6">
-          <Button @click="addDocumentToFolder(folder)"
-            ><i class="fa fa-plus mr-2"></i>Nytt dokument i mappen {{ folder.name }}</Button
+    <div ref="folderList" class="mt-6 space-y-3">
+      <section
+        v-for="{ folder, documents } in visibleFolders"
+        :key="folder.id"
+        class="overflow-hidden rounded-2xl bg-white shadow-xs ring-1 ring-gray-900/5"
+      >
+        <div class="flex items-center gap-1 pr-2 sm:pr-3">
+          <!-- Drag to reorder. Hidden while searching, as only some folders are shown then. -->
+          <button
+            v-if="!searching"
+            type="button"
+            class="drag-handle ml-1.5 flex h-12 w-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-gray-300 transition hover:bg-gray-100 hover:text-gkk active:cursor-grabbing sm:ml-2"
+            title="Dra för att flytta mappen"
+            aria-label="Dra för att flytta mappen"
           >
-        </div>
-      </div>
-
-      <div class="mt-10 rounded-xl border border-gray-200 bg-gray-50 p-5 sm:p-6">
-        <div class="mb-5 text-center">
-          <h2 class="text-lg font-semibold text-gray-900">Ny mapp</h2>
-          <p class="mt-1 text-sm text-gray-500">Skapa en mapp för att samla relaterade dokument.</p>
-        </div>
-
-        <div class="mx-auto max-w-md space-y-4">
-          <div>
-            <label for="new-folder-name" class="mb-1 block text-sm font-medium text-gray-700">Mappnamn</label>
-            <input
-              id="new-folder-name"
-              v-model="newFolderName"
-              name="name"
-              placeholder="Till exempel styrelseprotokoll"
-              class="block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-gkk focus:outline-hidden focus:ring-1 focus:ring-gkk sm:text-sm"
-            />
-          </div>
-
-          <label
-            class="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-white p-3 text-left transition-colors hover:border-gkk/40"
+            <GripVertical class="size-5" />
+          </button>
+          <button
+            type="button"
+            class="flex min-w-0 flex-1 items-center gap-3 py-3.5 text-left"
+            :class="searching ? 'pl-4 sm:pl-5' : 'pl-1'"
+            :aria-expanded="isOpen(folder)"
+            @click="toggle(folder)"
           >
-            <input
-              v-model="newFolderOnlyAdministrators"
-              type="checkbox"
-              class="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-gkk focus:ring-gkk"
-            />
-            <span>
-              <span class="block text-sm font-medium text-gray-800">Endast administratörer</span>
-              <span class="block text-xs text-gray-500">Mappen och dess dokument visas inte för medlemmar.</span>
+            <span class="hidden size-10 shrink-0 items-center justify-center rounded-xl bg-gkk/5 text-gkk sm:flex">
+              <FolderOpen v-if="isOpen(folder)" class="size-5" stroke-width="2" />
+              <Folder v-else class="size-5" stroke-width="2" />
             </span>
-          </label>
+            <span class="min-w-0 flex-1">
+              <span class="block font-semibold break-words text-gray-900">{{ folder.name }}</span>
+              <span class="flex flex-wrap items-center gap-x-2 text-sm text-gray-500">
+                {{ folder.documents.length }} dokument
+                <span
+                  v-if="folder.only_administrators"
+                  class="inline-flex items-center gap-1 text-xs font-semibold text-gkk"
+                >
+                  <Lock class="size-3" stroke-width="2.5" />
+                  Endast administratörer
+                </span>
+              </span>
+            </span>
+            <ChevronDown
+              class="size-5 shrink-0 text-gray-400 transition-transform duration-200"
+              :class="{ 'rotate-180': isOpen(folder) }"
+            />
+          </button>
 
-          <div class="flex justify-center pt-1">
-            <Button @click="newFolder"><i class="fa fa-plus mr-2"></i>Skapa ny mapp</Button>
+          <div class="flex shrink-0 items-center border-l border-gray-100 pl-1 sm:pl-2">
+            <button
+              type="button"
+              :class="iconButton"
+              title="Redigera mappen"
+              aria-label="Redigera mappen"
+              @click="editFolder(folder)"
+            >
+              <Pencil class="size-4" />
+            </button>
+            <button
+              type="button"
+              :class="[iconButton, 'hover:bg-red-50 hover:text-red-600']"
+              :disabled="folder.documents.length > 0"
+              :title="folder.documents.length > 0 ? 'Bara tomma mappar kan raderas' : 'Radera mappen'"
+              aria-label="Radera mappen"
+              @click="deleteFolder(folder)"
+            >
+              <Trash2 class="size-4" />
+            </button>
           </div>
         </div>
-      </div>
+
+        <div v-show="isOpen(folder)" class="border-t border-gray-100">
+          <ul class="divide-y divide-gray-100">
+            <li
+              v-for="document in documents"
+              :key="document.id"
+              class="flex items-center gap-3 py-2.5 pr-2 pl-4 sm:pr-3 sm:pl-5"
+            >
+              <span
+                class="flex size-9 shrink-0 items-center justify-center rounded-lg"
+                :class="documentType(document.url).classes"
+              >
+                <component :is="documentType(document.url).icon" class="size-[18px]" stroke-width="2" />
+              </span>
+              <a
+                :href="document.url"
+                target="_blank"
+                rel="noopener"
+                class="group min-w-0 flex-1"
+                :title="`Öppna ${document.name}`"
+              >
+                <span class="flex items-center gap-1.5 font-medium break-words text-gray-900 group-hover:text-gkk">
+                  <span class="min-w-0">{{ document.name }}</span>
+                  <ExternalLink class="size-3.5 shrink-0 text-gray-300 group-hover:text-gkk" />
+                </span>
+                <span class="block text-xs text-gray-500">{{ documentType(document.url).label }}</span>
+              </a>
+              <div class="flex shrink-0 items-center">
+                <button
+                  type="button"
+                  :class="iconButton"
+                  title="Redigera dokumentet"
+                  aria-label="Redigera dokumentet"
+                  @click="confirmEdit(document)"
+                >
+                  <Pencil class="size-4" />
+                </button>
+                <button
+                  type="button"
+                  :class="[iconButton, 'hover:bg-red-50 hover:text-red-600']"
+                  title="Radera dokumentet"
+                  aria-label="Radera dokumentet"
+                  @click="confirmDelete(document)"
+                >
+                  <Trash2 class="size-4" />
+                </button>
+              </div>
+            </li>
+          </ul>
+
+          <p v-if="!folder.documents.length" class="px-5 pt-5 text-center text-sm text-gray-500">Mappen är tom.</p>
+
+          <div class="p-3">
+            <button
+              type="button"
+              class="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-2.5 text-sm font-semibold text-gkk transition hover:border-gkk/40 hover:bg-gkk/5"
+              @click="addDocumentToFolder(folder)"
+            >
+              <Plus class="size-4" stroke-width="2.5" />
+              Lägg till dokument
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div
+      v-if="!visibleFolders.length"
+      class="mt-6 rounded-2xl bg-white px-6 py-12 text-center text-gray-500 ring-1 ring-gray-900/5"
+    >
+      <template v-if="searching">Inga dokument matchar ”{{ query.trim() }}”.</template>
+      <template v-else>Det finns inga mappar ännu. Skapa en för att komma igång.</template>
     </div>
 
     <Modal
@@ -211,103 +175,171 @@
       :title="`Är du säker på att du vill radera ${selectedDocument && selectedDocument.name}?`"
     >
       <template #footer="{ close }">
-        <div class="flex gap-2 items-center justify-center mt-4">
-          <Button type="secondary" @click="close">Nej</Button>
+        <div class="mt-4 flex items-center justify-center gap-2">
+          <Button type="secondary" @click="close">Avbryt</Button>
           <Button type="danger" @click="deleteDocument">Radera</Button>
         </div>
       </template>
     </Modal>
 
-    <Modal ref="editDocumentModal" title="Redigera dokumentets namn">
-      <div v-if="selectedDocument">
-        <div class="mt-1 relative rounded-md shadow-xs">
-          <input
-            type="text"
-            v-model="selectedDocument.name"
-            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
-          />
+    <Modal ref="editDocumentModal" title="Redigera dokumentet" size="lg">
+      <div v-if="selectedDocument" class="space-y-4 text-left">
+        <div>
+          <label for="edit-document-name" :class="labelClass">Namn</label>
+          <input id="edit-document-name" v-model="selectedDocument.name" type="text" :class="inputClass" />
+        </div>
+        <div>
+          <label for="edit-document-url" :class="labelClass">Länk</label>
+          <input id="edit-document-url" v-model="selectedDocument.url" type="text" :class="inputClass" />
         </div>
       </div>
 
       <template #footer="{ close }">
-        <div class="flex gap-2 items-center justify-center mt-4">
-          <Button type="secondary" @click="close">Stäng</Button>
-          <Button type="danger" @click="editDocument">Uppdatera namn</Button>
+        <div class="mt-6 flex items-center justify-center gap-2">
+          <Button type="secondary" @click="close">Avbryt</Button>
+          <Button
+            class="disabled:cursor-not-allowed disabled:opacity-50"
+            :disabled="!selectedDocument || !selectedDocument.name.trim() || !selectedDocument.url.trim()"
+            @click="editDocument"
+          >
+            Spara
+          </Button>
         </div>
       </template>
     </Modal>
 
-    <Modal ref="addDocumentModal" title="Lägg till dokument/länk">
-      <div class="flex mb-6 items-center justify-center bg-grey-lighter">
-        <h1 class="p-10 text-center">Ladda upp en fil, eller ange valfri URL till en fil eller webbsida.</h1>
+    <Modal ref="addDocumentModal" :title="`Nytt dokument i ${chosenFolder ? chosenFolder.name : 'mappen'}`" size="lg">
+      <div class="space-y-4 text-left">
         <label
-          class="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer"
+          class="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed px-4 py-6 text-center transition"
+          :class="
+            newDocument.url && uploadStatus !== 'pending'
+              ? 'border-green-300 bg-green-50'
+              : 'border-gray-300 hover:border-gkk/40 hover:bg-gkk/5'
+          "
         >
-          <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-            <path
-              d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z"
-            />
-          </svg>
-          <div v-if="uploadStatus === 'pending'">Laddar upp ...</div>
-          <div v-else>
-            <span v-if="newDocument.url.length > 0" class="mt-2 text-base leading-normal">Välj annan fil</span>
-            <span v-else class="mt-2 text-base leading-normal">Ladda upp fil</span>
-          </div>
-          <input @change="upload" ref="fileUpload" type="file" class="hidden" />
+          <LoaderCircle v-if="uploadStatus === 'pending'" class="size-8 animate-spin text-gkk" />
+          <CloudUpload v-else class="size-8" :class="newDocument.url ? 'text-green-600' : 'text-gkk'" />
+          <span v-if="uploadStatus === 'pending'" class="text-sm font-medium text-gray-700">Laddar upp…</span>
+          <span v-else-if="uploadStatus === 'done'" class="text-sm font-medium text-green-700">
+            Filen är uppladdad · välj en annan
+          </span>
+          <span v-else class="text-sm font-medium text-gray-700">Välj en fil att ladda upp</span>
+          <span v-if="uploadStatus === 'failed'" class="text-sm text-red-600">Uppladdningen misslyckades.</span>
+          <input ref="fileUpload" type="file" class="hidden" @change="upload" />
         </label>
-      </div>
-      <div class="mt-1 relative rounded-md shadow-xs">
-        <input
-          type="text"
-          v-model="newDocument.name"
-          placeholder="Namn"
-          class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
-        />
-      </div>
-      <div class="mt-1 relative rounded-md shadow-xs">
-        <input
-          type="text"
-          v-model="newDocument.url"
-          placeholder="URL"
-          class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
-        />
+
+        <div class="flex items-center gap-3 text-xs font-medium tracking-wider text-gray-400 uppercase">
+          <span class="h-px flex-1 bg-gray-200"></span>
+          eller ange en länk
+          <span class="h-px flex-1 bg-gray-200"></span>
+        </div>
+
+        <div>
+          <label for="new-document-name" :class="labelClass">Namn</label>
+          <input
+            id="new-document-name"
+            v-model="newDocument.name"
+            type="text"
+            placeholder="Till exempel Protokoll årsmöte 2026"
+            :class="inputClass"
+          />
+        </div>
+        <div>
+          <label for="new-document-url" :class="labelClass">Länk</label>
+          <input
+            id="new-document-url"
+            v-model="newDocument.url"
+            type="text"
+            placeholder="https://"
+            :class="inputClass"
+          />
+        </div>
       </div>
 
       <template #footer="{ close }">
-        <div class="flex gap-2 items-center justify-center mt-4">
-          <Button type="secondary" @click="close">Stäng</Button>
-          <Button type="danger" @click="addDocument">Lägg till dokument</Button>
+        <div class="mt-6 flex items-center justify-center gap-2">
+          <Button type="secondary" @click="close">Avbryt</Button>
+          <Button
+            class="disabled:cursor-not-allowed disabled:opacity-50"
+            :disabled="!newDocument.name.trim() || !newDocument.url.trim() || uploadStatus === 'pending'"
+            @click="addDocument"
+          >
+            Lägg till dokument
+          </Button>
         </div>
       </template>
     </Modal>
 
-    <Modal ref="editFolderModal" title="Redigera mappens namn">
-      <div v-if="selectedFolder">
-        <div class="mt-1 relative rounded-md shadow-xs">
-          <input
-            v-model="selectedFolder.name"
-            class="form-input block w-full sm:text-sm sm:leading-5 border-gray-300 rounded-md p-2 border"
-          />
+    <Modal ref="editFolderModal" title="Redigera mappen" size="lg">
+      <div v-if="selectedFolder" class="space-y-4 text-left">
+        <div>
+          <label for="edit-folder-name" :class="labelClass">Mappnamn</label>
+          <input id="edit-folder-name" v-model="selectedFolder.name" type="text" :class="inputClass" />
         </div>
-        <label
-          class="mt-4 flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-700"
-        >
+        <label :class="checkboxCard">
           <input
             v-model="selectedFolder.only_administrators"
             type="checkbox"
-            class="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-gkk focus:ring-gkk"
+            class="mt-0.5 size-4 shrink-0 rounded border-gray-300 text-gkk focus:ring-gkk"
           />
           <span>
-            <span class="block font-medium text-gray-800">Endast administratörer</span>
+            <span class="block text-sm font-medium text-gray-800">Endast administratörer</span>
             <span class="block text-xs text-gray-500">Mappen och dess dokument visas inte för medlemmar.</span>
           </span>
         </label>
       </div>
 
       <template #footer="{ close }">
-        <div class="flex gap-2 items-center justify-center mt-4">
-          <Button type="secondary" @click="close">Stäng</Button>
-          <Button type="danger" @click="editFolderConfirm">Uppdatera namn</Button>
+        <div class="mt-6 flex items-center justify-center gap-2">
+          <Button type="secondary" @click="close">Avbryt</Button>
+          <Button
+            class="disabled:cursor-not-allowed disabled:opacity-50"
+            :disabled="!selectedFolder || !selectedFolder.name.trim()"
+            @click="editFolderConfirm"
+          >
+            Spara
+          </Button>
+        </div>
+      </template>
+    </Modal>
+
+    <Modal ref="newFolderModal" title="Ny mapp" size="lg">
+      <div class="space-y-4 text-left">
+        <p class="text-sm text-gray-500">Skapa en mapp för att samla relaterade dokument. Den läggs sist i listan.</p>
+        <div>
+          <label for="new-folder-name" :class="labelClass">Mappnamn</label>
+          <input
+            id="new-folder-name"
+            v-model="newFolderName"
+            type="text"
+            placeholder="Till exempel Protokoll 2027"
+            :class="inputClass"
+          />
+        </div>
+        <label :class="checkboxCard">
+          <input
+            v-model="newFolderOnlyAdministrators"
+            type="checkbox"
+            class="mt-0.5 size-4 shrink-0 rounded border-gray-300 text-gkk focus:ring-gkk"
+          />
+          <span>
+            <span class="block text-sm font-medium text-gray-800">Endast administratörer</span>
+            <span class="block text-xs text-gray-500">Mappen och dess dokument visas inte för medlemmar.</span>
+          </span>
+        </label>
+      </div>
+
+      <template #footer="{ close }">
+        <div class="mt-6 flex items-center justify-center gap-2">
+          <Button type="secondary" @click="close">Avbryt</Button>
+          <Button
+            class="disabled:cursor-not-allowed disabled:opacity-50"
+            :disabled="!newFolderName.trim()"
+            @click="newFolder"
+          >
+            Skapa mapp
+          </Button>
         </div>
       </template>
     </Modal>
@@ -315,16 +347,60 @@
 </template>
 
 <script>
+import Sortable from 'sortablejs'
+import { useToast } from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-sugar.css'
+import {
+  ChevronDown,
+  CloudUpload,
+  ExternalLink,
+  Folder,
+  FolderOpen,
+  FolderPlus,
+  GripVertical,
+  LoaderCircle,
+  Lock,
+  Pencil,
+  Plus,
+  Search,
+  Trash2,
+} from 'lucide-vue-next'
 import Breadcrumbs from './ui/Breadcrumbs.vue'
 import FirebaseFileUpload from '../modules/FirebaseFileUpload.js'
 import Button from './ui/Button.vue'
 import Modal from './ui/Modal.vue'
+import { documentType, matchesSearch } from '../modules/DocumentType.js'
 
 export default {
-  components: { Breadcrumbs, Button, Modal },
+  components: {
+    Breadcrumbs,
+    Button,
+    ChevronDown,
+    CloudUpload,
+    ExternalLink,
+    Folder,
+    FolderOpen,
+    FolderPlus,
+    GripVertical,
+    LoaderCircle,
+    Lock,
+    Modal,
+    Pencil,
+    Plus,
+    Search,
+    Trash2,
+  },
   props: ['jwt', 'folders'],
   data() {
+    // A copy of the folders in their set order, that dragging rearranges.
+    const folderList = [...this.folders].sort((a, b) => a.order - b.order)
+    const first = folderList[0]
+
     return {
+      folderList,
+      query: '',
+      // The first folder starts open, as that's usually where new documents go.
+      expanded: first ? { [first.id]: true } : {},
       newFolderName: '',
       newFolderOnlyAdministrators: false,
       uploadStatus: '',
@@ -335,59 +411,117 @@ export default {
       selectedDocument: null,
       selectedFolder: null,
       chosenFolder: null,
+      iconButton:
+        'flex size-8 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gkk/5 hover:text-gkk disabled:pointer-events-none disabled:opacity-30',
+      labelClass: 'mb-1 block text-sm font-medium text-gray-700',
+      inputClass:
+        'block w-full rounded-lg border-0 px-3 py-2 text-gray-900 ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-gkk sm:text-sm',
+      checkboxCard:
+        'flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-left transition-colors hover:border-gkk/40',
     }
   },
   computed: {
-    sortedFolders() {
-      this.folders.sort((a, b) => a.order - b.order)
-      return this.folders
+    searching() {
+      return this.query.trim().length > 0
+    },
+    documentCount() {
+      return this.folderList.reduce((sum, folder) => sum + folder.documents.length, 0)
+    },
+    // Every folder with the documents matching the search (all of them when the folder's own name matches). While
+    // searching, folders without a match are hidden.
+    visibleFolders() {
+      const query = this.query.trim()
+
+      return this.folderList
+        .map((folder) => ({
+          folder,
+          documents:
+            !query || matchesSearch(folder.name, query)
+              ? folder.documents
+              : folder.documents.filter((document) => matchesSearch(document.name, query)),
+        }))
+        .filter(({ folder, documents }) => !query || documents.length > 0 || matchesSearch(folder.name, query))
     },
   },
-  methods: {
-    async moveUp(index) {
-      const newFolderOrder = [
-        ...this.folders.slice(0, index - 1),
-        this.folders[index],
-        this.folders[index - 1],
-        ...this.folders.slice(index + 1),
-      ]
-
-      await Promise.all(
-        newFolderOrder.map((folder, index) =>
-          axios.post(`/admin/document-folders/${folder.id}`, {
-            name: folder.name,
-            order: index + 1,
-            only_administrators: folder.only_administrators,
-          }),
-        ),
-      )
-
-      window.location.reload()
+  watch: {
+    // Only the full list can be reordered, so dragging is off while searching.
+    searching(searching) {
+      this.sortable?.option('disabled', searching)
     },
-    async moveDown(index) {
-      const newFolderOrder = [
-        ...this.folders.slice(0, index),
-        this.folders[index + 1],
-        this.folders[index],
-        ...this.folders.slice(index + 2),
-      ]
+  },
+  mounted() {
+    // Sortable moves the folder in the DOM; it is put back right away and the list is reordered instead, so that Vue
+    // stays in charge of the DOM.
+    this.sortable = Sortable.create(this.$refs.folderList, {
+      handle: '.drag-handle',
+      // Sortable's own dragging rather than the browser's, so the card itself follows the pointer.
+      forceFallback: true,
+      fallbackClass: 'folder-dragging',
+      animation: 150,
+      ghostClass: 'folder-ghost',
+      chosenClass: 'folder-chosen',
+      onEnd: ({ item, from, oldIndex, newIndex }) => {
+        item.remove()
+        from.insertBefore(item, from.children[oldIndex] ?? null)
+        void this.move(oldIndex, newIndex)
+      },
+    })
+  },
+  beforeUnmount() {
+    this.sortable?.destroy()
+  },
+  methods: {
+    documentType,
+    isOpen(folder) {
+      return this.searching || !!this.expanded[folder.id]
+    },
+    toggle(folder) {
+      this.expanded = { ...this.expanded, [folder.id]: !this.expanded[folder.id] }
+    },
+    // Moves a folder in the list right away, then saves the new order of the folders whose place changed. If saving
+    // fails, the list goes back to how it was.
+    async move(oldIndex, newIndex) {
+      if (oldIndex === newIndex) {
+        return
+      }
 
-      await Promise.all(
-        newFolderOrder.map((folder, index) =>
-          axios.post(`/admin/document-folders/${folder.id}`, {
-            name: folder.name,
-            order: index + 1,
-            only_administrators: folder.only_administrators,
-          }),
-        ),
-      )
+      const previous = this.folderList.map((folder) => ({ folder, order: folder.order }))
+      const list = [...this.folderList]
+      list.splice(newIndex, 0, ...list.splice(oldIndex, 1))
+      this.folderList = list
 
-      window.location.reload()
+      const changed = list.filter((folder, index) => +folder.order !== index + 1)
+      list.forEach((folder, index) => (folder.order = index + 1))
+
+      try {
+        await Promise.all(
+          changed.map((folder) =>
+            window.axios.post(`/admin/document-folders/${folder.id}`, {
+              name: folder.name,
+              order: folder.order,
+              only_administrators: folder.only_administrators,
+            }),
+          ),
+        )
+      } catch {
+        previous.forEach(({ folder, order }) => (folder.order = order))
+        this.folderList = previous.map(({ folder }) => folder)
+        useToast().error('Det gick inte att spara mapparnas ordning. Försök igen.', { position: 'top' })
+      }
+    },
+    openNewFolder() {
+      this.newFolderName = ''
+      this.newFolderOnlyAdministrators = false
+      this.$refs.newFolderModal.show()
     },
     async newFolder() {
+      if (!this.newFolderName.trim()) {
+        return
+      }
+
       await window.axios.post('/admin/document-folders', {
-        name: this.newFolderName,
-        order: +this.folders.sort((a, b) => b.order - a.order)[0].order + 1,
+        name: this.newFolderName.trim(),
+        order: Math.max(0, ...this.folderList.map((folder) => +folder.order)) + 1,
         only_administrators: this.newFolderOnlyAdministrators,
       })
       window.location.reload()
@@ -398,23 +532,22 @@ export default {
     },
     addDocumentToFolder(folder) {
       this.chosenFolder = folder
+      this.newDocument = { name: '', url: '' }
+      this.uploadStatus = ''
       this.$refs.addDocumentModal.show()
     },
     addDocument() {
-      if (this.newDocument.name.length === 0 || this.newDocument.url.length === 0) {
+      if (!this.newDocument.name.trim() || !this.newDocument.url.trim()) {
         return
       }
 
       window.axios
         .post(`/admin/documents`, {
-          name: this.newDocument.name,
-          url: this.newDocument.url,
+          name: this.newDocument.name.trim(),
+          url: this.newDocument.url.trim(),
           document_folder_id: this.chosenFolder.id,
         })
         .then(() => window.location.reload())
-    },
-    show(document) {
-      window.open(document.url)
     },
     confirmDelete(document) {
       this.selectedDocument = JSON.parse(JSON.stringify(document))
@@ -445,19 +578,43 @@ export default {
       window.location.reload()
     },
     async upload() {
-      this.uploadStatus = 'pending'
       const file = this.$refs.fileUpload.files[0]
-
       if (!file) {
         return
       }
 
-      const extension = file.name.split('.')[file.name.split('.').length - 1]
-      let url = await FirebaseFileUpload.upload(this.jwt, file, extension)
-      this.uploadStatus = ''
-      this.newDocument.name = file.name
-      this.newDocument.url = url
+      this.uploadStatus = 'pending'
+      try {
+        const extension = file.name.split('.').pop()
+        this.newDocument.url = await FirebaseFileUpload.upload(this.jwt, file, extension)
+        // Suggest the file name, without its extension, unless a name is already written.
+        if (!this.newDocument.name.trim()) {
+          this.newDocument.name = file.name.replace(/\.[^.]+$/, '')
+        }
+        this.uploadStatus = 'done'
+      } catch {
+        this.uploadStatus = 'failed'
+      }
     },
   },
 }
 </script>
+
+<style scoped>
+.folder-ghost {
+  opacity: 0.4;
+  outline: 2px dashed var(--color-gkk);
+  outline-offset: 2px;
+}
+
+.folder-chosen {
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.15);
+}
+
+/* The copy of the card that follows the pointer. */
+:global(.folder-dragging) {
+  opacity: 0.95 !important;
+  box-shadow: 0 20px 40px -10px rgb(0 0 0 / 0.25);
+  cursor: grabbing;
+}
+</style>

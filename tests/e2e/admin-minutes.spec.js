@@ -87,10 +87,11 @@ test('Minutes are reviewed by the adjuster and published to Dokument', async ({ 
 
   await login(page, { first_name: 'Vanlig', last_name: 'Medlem' })
   await page.goto('/member-documents')
-  await expect(page.getByText(/Styrelsemöte \d+, \d{4} \(/)).toBeVisible()
+  const minutesLink = page.getByRole('link', { name: /Styrelsemöte \d+, \d{4} \(/ })
+  await expect(minutesLink).toBeVisible()
 
   const popup = page.waitForEvent('popup')
-  await page.getByRole('button', { name: 'Visa' }).click()
+  await minutesLink.click()
   const published = await popup
   await expect(published.getByText('En budget godkändes.')).toBeVisible()
   await expect(published.getByText(/Justerat .* av Philip Waagiström/)).toBeVisible()

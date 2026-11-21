@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Result;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Throwable;
@@ -416,11 +415,12 @@ class StyrkelyftResults
     /**
      * The heaviest result in each lift, the first time it was lifted; null for a lift never registered.
      *
-     * @param  Collection<int, array<string, mixed>>  $results
+     * @param  iterable<array<string, mixed>>  $results
      * @return array<string, array{value: float, date: string, competition: string}|null>
      */
-    private static function bestsOf($results): array
+    private static function bestsOf(iterable $results): array
     {
+        $results = collect($results);
         $bests = [];
 
         foreach (\array_keys(self::LIFTS) as $lift) {
