@@ -209,7 +209,7 @@ export default {
       return this.user && ['admin', 'superadmin'].includes(this.user.role)
     },
     today() {
-      return moment().locale('sv').format('D MMMM YYYY')
+      return `${moment().date()} ${Date.month(moment())} ${moment().year()}`
     },
     cards() {
       const member = [
