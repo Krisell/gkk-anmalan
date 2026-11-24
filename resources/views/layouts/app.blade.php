@@ -32,7 +32,7 @@
 <body class="bg-gray-50 h-full min-h-full">
 @yield('css')
 
-<div id="app" class="mt-16">
+<div id="app" class="mt-16 @if (!empty($site)) flex min-h-[calc(100dvh-4rem)] flex-col @endif">
 <gkk-header 
     :user='@json(auth()->user())' 
     :site='@json($site ?? '')' 
@@ -40,9 +40,13 @@
     :impersonating='@json(session()->has('original_impersonating_user'))'
 ></gkk-header>
 
-<main class="mt-16 @yield('main-class', 'page-transition-subtle')">
+<main class="{{ !empty($site) ? 'flex-1' : 'mt-16' }} @yield('main-class', 'page-transition-subtle')">
 @yield('content')
 </main>
+
+@if (!empty($site))
+<x-site-footer />
+@endif
 
 </div>
 
