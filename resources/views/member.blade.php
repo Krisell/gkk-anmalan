@@ -96,17 +96,15 @@
         </div>
       </div>
 
-      <div class="mt-6 flex items-start gap-3 rounded-2xl bg-white/10 px-4 py-3 text-sm font-medium leading-relaxed text-white ring-1 ring-white/15">
-        <span class="flex h-[1.625em] shrink-0 items-center">
-          <i class="fa fa-calendar text-gkk-lightest"></i>
-        </span>
-        <span>Från och med juli reduceras avgiften med 50 % för resten av året.</span>
-      </div>
-
-      <div class="mt-auto pt-6">
-        <p class="border-t border-white/15 pt-5 text-sm leading-relaxed text-white/75">
-          Inkluderar träningsavgift och ger tillgång till föreningens lokal och utrustning. Entré till Friskis krävs också.
-        </p>
+      <div class="mt-auto pt-8">
+        <div class="space-y-2 border-t border-white/15 pt-5">
+          <p class="text-sm leading-relaxed text-white/75">
+            Inkluderar träningsavgift och ger tillgång till föreningens lokal och utrustning. Entré till Friskis krävs också.
+          </p>
+          <p class="text-xs leading-relaxed text-white/60">
+            För nya medlemmar reduceras avgiften med 50 % från och med juli för resten av året.
+          </p>
+        </div>
       </div>
     </div>
 
